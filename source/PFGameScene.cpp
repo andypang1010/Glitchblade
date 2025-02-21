@@ -26,7 +26,7 @@
 #include "PFDudeModel.h"
 #include "PFSpinner.h"
 #include "PFRopeBridge.h"
-#include "PFBullet.h"
+#include "GBProjectile.h"
 
 #include <ctime>
 #include <string>
@@ -62,38 +62,37 @@ using namespace cugl::audio;
 #define WALL_COUNT  2
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
-	{16.0f, 18.0f,  0.0f, 18.0f,  0.0f,  0.0f,
-      1.0f,  0.0f,  1.0f, 17.0f, 16.0f, 17.0f },
-	{32.0f, 18.0f, 16.0f, 18.0f, 16.0f, 17.0f,
-     31.0f, 17.0f, 31.0f,  0.0f, 32.0f,  0.0f }
+    {
+        16.0f, 18.0f,  
+        0.0f, 18.0f,  
+        0.0f,  0.0f,
+        1.0f,  0.0f,  
+        1.0f, 17.0f,
+        16.0f, 17.0f 
+    },
+    {
+        32.0f, 18.0f, 
+        16.0f, 18.0f, 
+        16.0f, 17.0f,
+        31.0f, 17.0f,
+        31.0f,  0.0f, 
+        32.0f,  0.0f 
+    }
 };
 
-/** The number of platforms */
-#define PLATFORM_VERTS  8
-#define PLATFORM_COUNT  10
+/** The number of ground vertices */
+#define GROUND_VERTS  8
 
-/** The outlines of all of the platforms */
-float PLATFORMS[PLATFORM_COUNT][PLATFORM_VERTS] = {
-	{ 1.0f, 3.0f, 1.0f, 2.5f, 6.0f, 2.5f, 6.0f, 3.0f},
-	{ 6.0f, 4.0f, 6.0f, 2.5f, 9.0f, 2.5f, 9.0f, 4.0f},
-	{23.0f, 4.0f,23.0f, 2.5f,31.0f, 2.5f,31.0f, 4.0f},
-	{26.0f, 5.5f,26.0f, 5.0f,28.0f, 5.0f,28.0f, 5.5f},
-	{29.0f, 7.0f,29.0f, 6.5f,31.0f, 6.5f,31.0f, 7.0f},
-	{24.0f, 8.5f,24.0f, 8.0f,27.0f, 8.0f,27.0f, 8.5f},
-	{29.0f,10.0f,29.0f, 9.5f,31.0f, 9.5f,31.0f,10.0f},
-	{23.0f,11.5f,23.0f,11.0f,27.0f,11.0f,27.0f,11.5f},
-	{19.0f,12.5f,19.0f,12.0f,23.0f,12.0f,23.0f,12.5f},
-	{ 1.0f,12.5f, 1.0f,12.0f, 7.0f,12.0f, 7.0f,12.5f}
+/** The outlines of the ground */
+float GROUND[GROUND_VERTS] { 
+    0.0f, 0.0f, 
+    DEFAULT_WIDTH, 0.0f, 
+    DEFAULT_WIDTH, 2.0f, 
+    0.0f, 2.0f
 };
 
-/** The goal door position */
-float GOAL_POS[] = { 4.0f,14.0f};
-/** The position of the spinning barrier */
-float SPIN_POS[] = {13.0f,12.5f};
 /** The initial position of the dude */
 float DUDE_POS[] = { 2.5f, 5.0f};
-/** The position of the rope bridge */
-float BRIDGE_POS[] = {9.0f, 3.8f};
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -101,18 +100,16 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 #define DEFAULT_GRAVITY -28.9f
 /** The density for most physics objects */
 #define BASIC_DENSITY   0.0f
-/** The density for a bullet */
+/** The density for a projectile */
 #define HEAVY_DENSITY   10.0f
 /** Friction of most platforms */
 #define BASIC_FRICTION  0.4f
 /** The restitution for all physics objects */
 #define BASIC_RESTITUTION   0.1f
-/** The width of the rope bridge */
-#define BRIDGE_WIDTH    14.0f
-/** Offset for bullet when firing */
-#define BULLET_OFFSET   0.5f
-/** The speed of the bullet after firing */
-#define BULLET_SPEED   20.0f
+/** Offset for pojectile when firing */
+#define PROJECTILE_OFFSET   0.5f
+/** The speed of the projectile after firing */
+#define PROJECTILE_SPEED   20.0f
 /** The number of frame to wait before reinitializing the game */
 #define EXIT_COUNT      240
 
@@ -122,15 +119,13 @@ float BRIDGE_POS[] = {9.0f, 3.8f};
 /** The key for the earth texture in the asset manager */
 #define EARTH_TEXTURE   "earth"
 /** The key for the win door texture in the asset manager */
-#define GOAL_TEXTURE    "goal"
-/** The key for the win door texture in the asset manager */
-#define BULLET_TEXTURE  "bullet"
-/** The name of a bullet (for object identification) */
-#define BULLET_NAME     "bullet"
-/** The name of a wall (for object identification) */
-#define WALL_NAME       "wall"
+#define PROJECTILE_TEXTURE  "bullet"
+
+#define ENEMY_NAME      "enemy"
+#define PROJECTILE_NAME "projectile"
+
 /** The name of a platform (for object identification) */
-#define PLATFORM_NAME   "platform"
+#define GROUND_NAME   "ground"
 /** The font for victory/failure messages */
 #define MESSAGE_FONT    "retro"
 /** The message for winning the game */
@@ -353,9 +348,6 @@ void GameScene::reset() {
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
     _avatar = nullptr;
-    _goalDoor = nullptr;
-    _spinner = nullptr;
-    _ropebridge = nullptr;
       
     setFailure(false);
     setComplete(false);
@@ -375,34 +367,14 @@ void GameScene::reset() {
  */
 void GameScene::populate() {
     
-    
-#pragma mark : Goal door
-	std::shared_ptr<Texture> image = _assets->get<Texture>(GOAL_TEXTURE);
+	std::shared_ptr<Texture> image;
 	std::shared_ptr<scene2::PolygonNode> sprite;
 	std::shared_ptr<scene2::WireNode> draw;
-
-	// Create obstacle
-	Vec2 goalPos = GOAL_POS;
-	Size goalSize(image->getSize().width/_scale,
-	image->getSize().height/_scale);
-	_goalDoor = physics2::BoxObstacle::alloc(goalPos,goalSize);
-	
-	// Set the physics attributes
-	_goalDoor->setBodyType(b2_staticBody);
-	_goalDoor->setDensity(0.0f);
-	_goalDoor->setFriction(0.0f);
-	_goalDoor->setRestitution(0.0f);
-	_goalDoor->setSensor(true);
-
-	// Add the scene graph nodes to this object
-	sprite = scene2::PolygonNode::allocWithTexture(image);
-	_goalDoor->setDebugColor(DEBUG_COLOR);
-	addObstacle(_goalDoor, sprite);
+    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
 
 #pragma mark : Walls
 	// All walls and platforms share the same texture
-	image  = _assets->get<Texture>(EARTH_TEXTURE);
-	std::string wname = "wall";
+    image = Texture::alloc(1,1,Texture::PixelFormat::RGBA);
 	for (int ii = 0; ii < WALL_COUNT; ii++) {
 		std::shared_ptr<physics2::PolygonObstacle> wallobj;
 
@@ -416,8 +388,7 @@ void GameScene::populate() {
 
 		wallobj = physics2::PolygonObstacle::allocWithAnchor(wall,Vec2::ANCHOR_CENTER);
 		// You cannot add constant "".  Must stringify
-		wallobj->setName(std::string(WALL_NAME)+strtool::to_string(ii));
-		wallobj->setName(wname);
+		wallobj->setName(std::string(ENEMY_NAME));
 
 		// Set the physics attributes
 		wallobj->setBodyType(b2_staticBody);
@@ -431,69 +402,32 @@ void GameScene::populate() {
 		addObstacle(wallobj,sprite,1);  // All walls share the same texture
 	}
 
-#pragma mark : Platforms
-	for (int ii = 0; ii < PLATFORM_COUNT; ii++) {
-		std::shared_ptr<physics2::PolygonObstacle> platobj;
-		Poly2 platform(reinterpret_cast<Vec2*>(PLATFORMS[ii]),4);
+#pragma mark : GROUND
+    image = _assets->get<Texture>(EARTH_TEXTURE);
 
-		EarclipTriangulator triangulator;
-		triangulator.set(platform.vertices);
-		triangulator.calculate();
-		platform.setIndices(triangulator.getTriangulation());
-        triangulator.clear();
+	std::shared_ptr<physics2::PolygonObstacle> groundObj;
+	Poly2 ground(reinterpret_cast<Vec2*>(GROUND),4);
 
-        platobj = physics2::PolygonObstacle::allocWithAnchor(platform,Vec2::ANCHOR_CENTER);
-		// You cannot add constant "".  Must stringify
-		platobj->setName(std::string(PLATFORM_NAME)+strtool::to_string(ii));
+	EarclipTriangulator triangulator;
+	triangulator.set(ground.vertices);
+	triangulator.calculate();
+	ground.setIndices(triangulator.getTriangulation());
+    triangulator.clear();
 
-		// Set the physics attributes
-		platobj->setBodyType(b2_staticBody);
-		platobj->setDensity(BASIC_DENSITY);
-		platobj->setFriction(BASIC_FRICTION);
-		platobj->setRestitution(BASIC_RESTITUTION);
-		platobj->setDebugColor(DEBUG_COLOR);
+    groundObj = physics2::PolygonObstacle::allocWithAnchor(ground,Vec2::ANCHOR_CENTER);
+	// You cannot add constant "".  Must stringify
+	groundObj->setName(std::string(GROUND_NAME));
 
-		platform *= _scale;
-		sprite = scene2::PolygonNode::allocWithTexture(image,platform);
-		addObstacle(platobj,sprite,1);
-	}
+	// Set the physics attributes
+	groundObj->setBodyType(b2_staticBody);
+	groundObj->setDensity(BASIC_DENSITY);
+	groundObj->setFriction(BASIC_FRICTION);
+	groundObj->setRestitution(BASIC_RESTITUTION);
+	groundObj->setDebugColor(DEBUG_COLOR);
 
-#pragma mark : Spinner
-	Vec2 spinPos = SPIN_POS;
-    image = _assets->get<Texture>(SPINNER_TEXTURE);
-	_spinner = Spinner::alloc(spinPos,image->getSize()/_scale,_scale);
-    _spinner->setTexture(image);
-	std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-    
-    // With refactor, must be added manually
-    // Add the node to the world before calling setSceneNode,
-    _worldnode->addChild(node);
-    _spinner->setSceneNode(node);
-
-    _spinner->setDrawScale(_scale);
-    _spinner->setDebugColor(DEBUG_COLOR);
-    _spinner->setDebugScene(_debugnode);
-    _spinner->activate(_world);
-
-#pragma mark : Rope Bridge
-	Vec2 bridgeStart = BRIDGE_POS;
-	Vec2 bridgeEnd   = bridgeStart;
-	bridgeEnd.x += BRIDGE_WIDTH;
-    image = _assets->get<Texture>(BRIDGE_TEXTURE);
-    
-	_ropebridge = RopeBridge::alloc(bridgeStart,bridgeEnd,image->getSize()/_scale,_scale);
-    _ropebridge->setTexture(image);
-	node = scene2::SceneNode::alloc();
-
-    // With refactor, must be added manually
-    // Add the node to the world before calling setSceneNode,
-    _worldnode->addChild(node);
-    _ropebridge->setSceneNode(node);
-    
-    _ropebridge->setDrawScale(_scale);
-    _ropebridge->setDebugColor(DEBUG_COLOR);
-    _ropebridge->setDebugScene(_debugnode);
-    _ropebridge->activate(_world);
+	ground *= _scale;
+	sprite = scene2::PolygonNode::allocWithTexture(image,ground);
+    addObstacle(groundObj, sprite, 1);
 
 #pragma mark : Dude
 	Vec2 dudePos = DUDE_POS;
@@ -715,17 +649,12 @@ void GameScene::fixedUpdate(float step) {
 void GameScene::postUpdate(float remain) {
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
-    
-    // TODO: Update this demo to support interpolation
-    // We can interpolate the rope bridge and spinner as we have the data structures
-    _spinner->update(remain);
-    _ropebridge->update(remain);
 
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
     _avatar->setShooting(_input.didFire());
     if (_avatar->isShooting()) {
-        createBullet();
+        createProjectile();
     }
 
     // Record failure if necessary.
@@ -785,49 +714,51 @@ void GameScene::setFailure(bool value) {
 
 
 /**
- * Add a new bullet to the world and send it in the right direction.
+ * Add a new projectile to the world and send it in the right direction.
  */
-void GameScene::createBullet() {
-	float offset = BULLET_OFFSET;
+void GameScene::createProjectile() {
+	float offset = PROJECTILE_OFFSET;
 	Vec2 pos = _avatar->getPosition();
 	pos.x += (_avatar->isFacingRight() ? offset : -offset);
 
-	std::shared_ptr<Texture> image = _assets->get<Texture>(BULLET_TEXTURE);
+	std::shared_ptr<Texture> image = _assets->get<Texture>(PROJECTILE_TEXTURE);
 	float radius = 0.5f*image->getSize().width/_scale;
 
-	std::shared_ptr<Bullet> bullet = Bullet::alloc(pos, radius);
-	bullet->setName(BULLET_NAME);
-	bullet->setDensity(HEAVY_DENSITY);
-	bullet->setBullet(true);
-	bullet->setGravityScale(0);
-	bullet->setDebugColor(DEBUG_COLOR);
-	bullet->setDrawScale(_scale);
+    // Change last parameter to test player-fired or regular projectile
+	std::shared_ptr<Projectile> projectile = Projectile::alloc(pos, radius, true);
+	projectile->setName(PROJECTILE_NAME);
+	projectile->setDensity(HEAVY_DENSITY);
+	projectile->setBullet(true);
+	projectile->setGravityScale(0);
+	projectile->setDebugColor(DEBUG_COLOR);
+	projectile->setDrawScale(_scale);
+    projectile->setSensor(true);
 
 	std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-	bullet->setSceneNode(sprite);
+	projectile->setSceneNode(sprite);
 
 	// Compute position and velocity
-	float speed  = (_avatar->isFacingRight() ? BULLET_SPEED : -BULLET_SPEED);
-	bullet->setVX(speed);
-	addObstacle(bullet, sprite, 5);
+	float speed  = (_avatar->isFacingRight() ? PROJECTILE_SPEED : -PROJECTILE_SPEED);
+	projectile->setVX(speed);
+	addObstacle(projectile, sprite, 5);
 
 	std::shared_ptr<Sound> source = _assets->get<Sound>(PEW_EFFECT);
 	AudioEngine::get()->play(PEW_EFFECT,source, false, EFFECT_VOLUME, true);
 }
 
 /**
- * Removes a new bullet from the world.
+ * Removes a new projectile from the world.
  *
- * @param  bullet   the bullet to remove
+ * @param  projectile   the projectile to remove
  */
-void GameScene::removeBullet(Bullet* bullet) {
-  // do not attempt to remove a bullet that has already been removed
-	if (bullet->isRemoved()) {
+void GameScene::removeProjectile(Projectile* projectile) {
+  // do not attempt to remove a projectile that has already been removed
+	if (projectile->isRemoved()) {
 		return;
 	}
-	_worldnode->removeChild(bullet->getSceneNode());
-	bullet->setDebugScene(nullptr);
-	bullet->markRemoved(true);
+	_worldnode->removeChild(projectile->getSceneNode());
+	projectile->setDebugScene(nullptr);
+	projectile->markRemoved(true);
 
 	std::shared_ptr<Sound> source = _assets->get<Sound>(POP_EFFECT);
 	AudioEngine::get()->play(POP_EFFECT,source,false,EFFECT_VOLUME, true);
@@ -858,25 +789,73 @@ void GameScene::beginContact(b2Contact* contact) {
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
     
-	// Test bullet collision with world
-	if (bd1->getName() == BULLET_NAME && bd2 != _avatar.get()) {
-		removeBullet((Bullet*)bd1);
-	} else if (bd2->getName() == BULLET_NAME && bd1 != _avatar.get()) {
-		removeBullet((Bullet*)bd2);
-	}
+    // Player-Enemy Collision
+    if (bd1->getName() == ENEMY_NAME && bd2 == _avatar.get()) {
+        CULog("Enemy collides with player");
+    }
+    else if (bd2->getName() == ENEMY_NAME && bd1 == _avatar.get()) {
+        CULog("Enemy collides with player");
+    }
 
-	// See if we have landed on the ground.
+    // Player-Projectile Collision
+    if (bd1 == _avatar.get() && bd2->getName() == PROJECTILE_NAME) {
+        if (!((Projectile*)bd2)->getIsPlayerFired()) {
+            CULog("Player Damaged");
+            removeProjectile((Projectile*)bd2);
+        }
+        else {
+            CULog("IGNORE COLLISION");
+        }
+    }
+    else if (bd2 == _avatar.get() && bd1->getName() == PROJECTILE_NAME) {
+        if (!((Projectile*)bd1)->getIsPlayerFired()) {
+            CULog("Player Damaged");
+            removeProjectile((Projectile*)bd2);
+        }
+        else {
+            CULog("IGNORE COLLISION");
+        }
+    }
+
+    // Enemy-Enemy Collision
+    if (bd1->getName() == ENEMY_NAME && bd2->getName() == ENEMY_NAME) {
+        CULog("Enemy collides with enemy");
+    }
+
+    // Projectile-Projectile Collision
+    if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == PROJECTILE_NAME) {
+        CULog("Projectile collides with projectile");
+        removeProjectile((Projectile*) bd1);
+        removeProjectile((Projectile*) bd2);
+    }
+
+    // Enemy-Projectile Collision
+    if (bd1->getName() == ENEMY_NAME && bd2->getName() == PROJECTILE_NAME) {
+
+        if (((Projectile*)bd2)->getIsPlayerFired()) {
+            CULog("Enemy Damaged");
+            removeProjectile((Projectile*) bd2);
+        }
+        else {
+            CULog("IGNORE COLLISION");
+        }
+    }
+    else if (bd2->getName() == ENEMY_NAME && bd1->getName() == PROJECTILE_NAME) {
+        if (((Projectile*)bd1)->getIsPlayerFired()) {
+            CULog("Enemy Damaged");
+            removeProjectile((Projectile*)bd2);
+        }
+        else {
+            CULog("IGNORE COLLISION");
+        }
+    }
+
+	// Player-Ground Collision
 	if ((_avatar->getSensorName() == fd2 && _avatar.get() != bd1) ||
 		(_avatar->getSensorName() == fd1 && _avatar.get() != bd2)) {
 		_avatar->setGrounded(true);
 		// Could have more than one ground
 		_sensorFixtures.emplace(_avatar.get() == bd1 ? fix2 : fix1);
-	}
-
-	// If we hit the "win" door, we are done
-	if((bd1 == _avatar.get()   && bd2 == _goalDoor.get()) ||
-		(bd1 == _goalDoor.get() && bd2 == _avatar.get())) {
-		setComplete(true);
 	}
 }
 

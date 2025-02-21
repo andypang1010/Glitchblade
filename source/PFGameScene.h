@@ -31,7 +31,7 @@
 #include <unordered_set>
 #include <vector>
 #include "PFInput.h"
-#include "PFBullet.h"
+#include "GBProjectile.h"
 #include "PFDudeModel.h"
 #include "PFRopeBridge.h"
 #include "PFSpinner.h"
@@ -74,14 +74,8 @@ protected:
     float _scale;
 
     // Physics objects for the game
-    /** Reference to the goalDoor (for collision detection) */
-    std::shared_ptr<physics2::BoxObstacle>    _goalDoor;
     /** Reference to the player avatar */
     std::shared_ptr<DudeModel>			  _avatar;
-    /** Reference to the spinning barrier */
-    std::shared_ptr<Spinner>			  _spinner;
-    /** Reference to the rope bridge */
-    std::shared_ptr<RopeBridge>			  _ropebridge;
 
     /** Whether we have completed this "game" */
     bool _complete;
@@ -379,14 +373,14 @@ public:
     /**
     * Adds a new bullet to the world and sends it in the right direction.
     */
-    void createBullet();
+    void createProjectile();
 
     /**
     * Removes the input Bullet from the world.
     *
     * @param  bullet   the bullet to remove
     */
-    void removeBullet(Bullet* bullet);
+    void removeProjectile(Projectile* bullet);
 
   };
 

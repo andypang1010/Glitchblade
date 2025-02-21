@@ -1,15 +1,14 @@
 //
-//  PFBullet.cpp
-//  PlatformDemo
+//  GBProjectile.cpp
 //
 //  This class is a simple extension of WheelObstacle in order to simplify the
-//  process of adding and removing Bullets from the game world, as well as for
-//  drawing the sprite of the bullet.
+//  process of adding and removing Projectiles from the game world, as well as for
+//  drawing the sprite of the projectile.
 //
 //  Author:  Walker White and Anthony Perello
 //  Version: 2/9/21
 //
-#include "PFBullet.h"
+#include "GBProjectile.h"
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
@@ -29,7 +28,7 @@ using namespace cugl::scene2;
  *
  * @param delta Number of seconds since last animation frame
  */
-void Bullet::update(float dt) {
+void Projectile::update(float dt) {
 	WheelObstacle::update(dt);
 
 	if (_node != nullptr) {
@@ -39,12 +38,12 @@ void Bullet::update(float dt) {
 }
 
 /**
- * Disposes all resources and assets of this Bullet
+ * Disposes all resources and assets of this Projectile
  *
  * Any assets owned by this object will be immediately released.  Once
- * disposed, a Bullet may not be used until it is initialized again.
+ * disposed, a Projectile may not be used until it is initialized again.
  */
-void Bullet::dispose() {
+void Projectile::dispose() {
 	_node = nullptr;
 }
 
