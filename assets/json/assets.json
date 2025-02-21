@@ -1,0 +1,77 @@
+{
+	"textures": {
+		"earth": {
+			"file":     "textures/earthtile.png",
+            "wrapS":    "repeat",
+            "wrapT":    "repeat"
+		},
+        "dude": {
+            "file":     "textures/dude.png"
+        },
+        "spinner": {
+            "file":     "textures/barrier.png"
+        },
+        "bridge": {
+            "file":      "textures/ropebridge.png"
+        },
+        "bullet": {
+            "file":      "textures/bullet.png"
+        },
+        "goal": {
+            "file":      "textures/goaldoor.png"
+        },
+        "dpad": {
+            "file":     "textures/dpad.png",
+            "wrapS":     "clamp",
+            "wrapT":     "clamp",
+            "atlas":     {
+                "up"   : [0,     0, 127, 127],
+                "down" : [128,   0, 255, 127],
+                "left" : [0,   128, 127, 255],
+                "right": [128, 128, 255, 255]
+            }
+        }
+	},
+    "sounds": {
+        "game": {
+            "type":     "sample",
+            "file":     "sounds/DD_Main.ogg",
+            "stream":   true,
+            "volume":   0.5
+        },
+        "win": {
+            "type":     "sample",
+            "file":     "sounds/DD_Victory.ogg",
+            "stream":   true,
+            "volume":   0.5
+        },
+        "lose": {
+            "type":     "sample",
+            "file":     "sounds/DD_Failure.ogg",
+            "stream":   true,
+            "volume":   0.5
+        },
+        "jump": {
+            "type":     "sample",
+            "file":     "sounds/jump.wav",
+            "volume":   0.5
+        },
+        "pew": {
+            "type":     "sample",
+            "file":     "sounds/pew.wav",
+            "volume":   0.5
+        },
+        "pop": {
+            "type":     "sample",
+            "file":     "sounds/plop.wav",
+            "volume":   0.5
+        }                
+    },
+	"fonts": {
+		"retro": {
+			"file":     "fonts/RetroGame.ttf",
+			"size":     64
+		}
+
+	}
+}

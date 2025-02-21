@@ -1,0 +1,27 @@
+---
+name: Glitchblade # The application display name
+short: GB # A shortened name for reference
+appid: edu.cornell.gdiac.glitchblade # Application identifier for Mac, iOS, Android
+suffix: GE19D122
+
+build: build # The build directory (targets are each a subdirectory)
+assets: assets # The folder with the game assets (do not list asset)
+icon: icon.png
+
+orientation: landscape # The orientation for mobile devices
+
+sources: # The list of the source code files
+  - source/*.cpp
+  - source/*.h
+
+modules:
+  - audio # We need sound
+  - physics2 # We need the physics libraries
+  - scene2 # We want the 2d UI
+
+# This must be one of portrait, landscape, portrait-flipped, landscape-flipped,
+targets: # The target platforms to build for
+  - android # Android Studio
+  - apple # XCode (note macOS and iOS use one project)
+  - windows # Windows Sisual Studio
+  - cmake # This supports all Desktop platform GBA5AF6 GBA5AF6 GA5CAA5 GC9EE55 G607B7B5

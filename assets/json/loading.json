@@ -1,0 +1,168 @@
+{
+	"textures": {
+		"logo": {
+			"file":      "textures/cugl-logo.png",
+            "wrapS":     "clamp",
+            "wrapT":     "clamp",
+            "minfilter": "linear",
+            "magfilter": "linear"
+		},
+        "name": {
+            "file":      "textures/cugl-name.png",
+            "wrapS":     "clamp",
+            "wrapT":     "clamp",
+            "minfilter": "linear",
+            "magfilter": "linear"
+        },
+        "play": {
+            "file":      "textures/cugl-play.png",
+            "wrapS":     "clamp",
+            "wrapT":     "clamp",
+            "minfilter": "linear",
+            "magfilter": "linear"
+        },
+        "progress": {
+            "file":      "textures/progress.png",
+            "wrapS":     "clamp",
+            "wrapT":     "clamp",
+            "minfilter": "linear",
+            "magfilter": "linear",
+            "atlas":     {
+                "background" : [0,    0, 320, 45],
+                "foreground" : [24,  45, 296, 90],
+                "leftcap"    : [0,   45,  24, 90],
+                "rightcap"   : [296, 45, 320, 90]
+            }
+        }
+	},
+    "scene2s" : {
+        "load" : {
+            "type"      : "Solid",
+            "format"    : {
+                "type" : "Anchored"
+            },
+            "data" : {
+                "color": [239,61,49,255],
+                "size" : [1024,576]
+            },
+            "children"  : {
+                "before" : {
+                    "type"   : "Node",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "children"  : {
+                        "logo"  : {
+                            "type"   : "Image",
+                            "format"    : {
+                                "type" : "Anchored"
+                            },
+                            "data"   : {
+                                "texture"  : "logo",
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 0.75
+                            },
+                            "layout" : {
+                                "x_anchor" : "center",
+                                "y_anchor" : "middle",
+                                "y_offset" : 115,
+                                "absolute" : true
+                            }
+                        },
+                        "name"  : {
+                            "type"   : "Image",
+                            "format"    : {
+                                "type" : "Anchored"
+                            },
+                            "data"   : {
+                                "texture"  : "name",
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 0.75
+                            },
+                            "layout" : {
+                                "x_anchor" : "center",
+                                "y_anchor" : "middle",
+                                "y_offset" : -55,
+                                "absolute" : true
+                            }
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "fill",
+                        "y_anchor" : "fill"
+                    }
+                },
+                "after" : {
+                    "type"   : "Node",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "children"  : {
+                        "logo"  : {
+                            "type"   : "Image",
+                            "format"    : {
+                                "type" : "Anchored"
+                            },
+                            "data"   : {
+                                "texture"  : "logo",
+                                "anchor"   : [0.5,0.5],
+                                "scale"    : 0.75
+                            },
+                            "layout" : {
+                                "x_anchor" : "center",
+                                "y_anchor" : "middle",
+                                "y_offset" : 115,
+                                "absolute" : true
+                            }
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "fill",
+                        "y_anchor" : "fill"
+                    }
+                },
+                "play"  : {
+                    "type"   : "Button",
+                    "data"   : {
+                        "upnode"   : "up",
+                        "pushable" : [144,280,240,184,280,144,320,184,416,280,320,376,280,416,184,376],
+                        "visible"  : false,
+                        "pushsize" : true,
+                        "anchor"   : [0.5,0.5],
+                        "scale"    : 0.8
+                    },
+                    "children" : {
+                        "up"       : {
+                            "type"   : "Image",
+                            "data"   : {
+                                "texture"  : "play"
+                            }
+                        }
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "y_offset" : -115,
+                        "absolute" : true
+                    }
+                },
+                "bar"  : {
+                    "type"   : "Progress",
+                    "data"   : {
+                        "anchor"     : [0.5,0.5],
+                        "background" : "progress_background",
+                        "foreground" : "progress_foreground",
+                        "left_cap"   : "progress_leftcap",
+                        "right_cap"  : "progress_rightcap"
+                    },
+                    "layout" : {
+                        "x_anchor" : "center",
+                        "y_anchor" : "middle",
+                        "y_offset" : -175,
+                        "absolute" : true
+                    }
+                }
+            }
+        }
+    }
+}
