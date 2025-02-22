@@ -1,5 +1,5 @@
 //
-//  PFGameScene.h
+//  GBGameScene.h
 //  PlatformDemo
 //
 //  This is the most important class in this demo.  This class manages the gameplay
@@ -23,18 +23,16 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#ifndef __PF_GAME_SCENE_H__
-#define __PF_GAME_SCENE_H__
+#ifndef __GB_GAME_SCENE_H__
+#define __GB_GAME_SCENE_H__
 #include <cugl/cugl.h>
 #include <box2d/b2_world_callbacks.h>
 #include <box2d/b2_fixture.h>
 #include <unordered_set>
 #include <vector>
-#include "PFInput.h"
+#include "GBInput.h"
 #include "GBProjectile.h"
-#include "PFDudeModel.h"
-#include "PFRopeBridge.h"
-#include "PFSpinner.h"
+#include "GBDudeModel.h"
 
 using namespace cugl;
 
@@ -75,7 +73,9 @@ protected:
 
     // Physics objects for the game
     /** Reference to the player avatar */
-    std::shared_ptr<DudeModel>			  _avatar;
+    std::shared_ptr<DudeModel>			  _player;
+    /** Reference to the player avatar */
+    std::shared_ptr<DudeModel>			  _testEnemy;
 
     /** Whether we have completed this "game" */
     bool _complete;
@@ -384,4 +384,4 @@ public:
 
   };
 
-#endif /* __PF_GAME_SCENE_H__ */
+#endif /* __GB_GAME_SCENE_H__ */

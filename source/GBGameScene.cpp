@@ -1,5 +1,5 @@
 //
-//  PFGameScene.cpp
+//  GBGameScene.cpp
 //  PlatformDemo
 //
 //  This is the most important class in this demo.  This class manages the gameplay
@@ -19,13 +19,11 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#include "PFGameScene.h"
+#include "GBGameScene.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
-#include "PFDudeModel.h"
-#include "PFSpinner.h"
-#include "PFRopeBridge.h"
+#include "GBDudeModel.h"
 #include "GBProjectile.h"
 
 #include <ctime>
@@ -60,39 +58,68 @@ using namespace cugl::audio;
 /** The wall vertices */
 #define WALL_VERTS 12
 #define WALL_COUNT  2
+#define WALL_THICKNESS 3
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
     {
-        16.0f, 18.0f,  
-        0.0f, 18.0f,  
+        DEFAULT_WIDTH / 2, DEFAULT_HEIGHT,  
+        0.0f, DEFAULT_HEIGHT,  
         0.0f,  0.0f,
-        1.0f,  0.0f,  
-        1.0f, 17.0f,
-        16.0f, 17.0f 
+        WALL_THICKNESS,  0.0f,  
+        WALL_THICKNESS, DEFAULT_HEIGHT - WALL_THICKNESS,
+        DEFAULT_WIDTH / 2, DEFAULT_HEIGHT - WALL_THICKNESS 
     },
     {
-        32.0f, 18.0f, 
-        16.0f, 18.0f, 
-        16.0f, 17.0f,
-        31.0f, 17.0f,
-        31.0f,  0.0f, 
-        32.0f,  0.0f 
+        DEFAULT_WIDTH, DEFAULT_HEIGHT, 
+        DEFAULT_WIDTH / 2, DEFAULT_HEIGHT,
+        DEFAULT_WIDTH / 2, DEFAULT_HEIGHT - WALL_THICKNESS,
+        DEFAULT_WIDTH - WALL_THICKNESS, DEFAULT_HEIGHT - WALL_THICKNESS,
+        DEFAULT_WIDTH - WALL_THICKNESS,  0.0f,
+        DEFAULT_WIDTH,  0.0f 
     }
 };
 
+//#define WALL_VERTS  8
+//#define WALL_COUNT  3
+//#define WALL_THICKNESS 3
+
+/** The outlines of the walls */
+//float WALL[WALL_COUNT][WALL_VERTS]{
+//    {
+//        0.0f, 0.0f,
+//        WALL_THICKNESS, 0.0f,
+//        WALL_THICKNESS, DEFAULT_HEIGHT,
+//        0.0f, DEFAULT_HEIGHT
+//    },
+//    {
+//        DEFAULT_WIDTH, 0.0f,
+//        DEFAULT_WIDTH - WALL_THICKNESS, 0.0f,
+//        DEFAULT_WIDTH - WALL_THICKNESS, DEFAULT_HEIGHT,
+//        DEFAULT_WIDTH, DEFAULT_HEIGHT
+//    },
+//    {
+//        0.0f, DEFAULT_HEIGHT,
+//        DEFAULT_WIDTH, DEFAULT_HEIGHT,
+//        DEFAULT_WIDTH, DEFAULT_HEIGHT - WALL_THICKNESS,
+//        0.0f, DEFAULT_HEIGHT - WALL_THICKNESS
+//    }
+//};
+
 /** The number of ground vertices */
 #define GROUND_VERTS  8
+#define GROUND_THICKNESS 4
 
 /** The outlines of the ground */
 float GROUND[GROUND_VERTS] { 
     0.0f, 0.0f, 
     DEFAULT_WIDTH, 0.0f, 
-    DEFAULT_WIDTH, 2.0f, 
-    0.0f, 2.0f
+    DEFAULT_WIDTH, GROUND_THICKNESS, 
+    0.0f, GROUND_THICKNESS
 };
 
 /** The initial position of the dude */
 float DUDE_POS[] = { 2.5f, 5.0f};
+float ENEMY_POS[] = { 12.5f, 5.0f };
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -175,7 +202,7 @@ GameScene::GameScene() : Scene2(),
 	_worldnode(nullptr),
 	_debugnode(nullptr),
 	_world(nullptr),
-	_avatar(nullptr),
+	_player(nullptr),
 	_complete(false),
 	_debug(false)
 {    
@@ -347,7 +374,7 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    _avatar = nullptr;
+    _player = nullptr;
       
     setFailure(false);
     setComplete(false);
@@ -388,7 +415,7 @@ void GameScene::populate() {
 
 		wallobj = physics2::PolygonObstacle::allocWithAnchor(wall,Vec2::ANCHOR_CENTER);
 		// You cannot add constant "".  Must stringify
-		wallobj->setName(std::string(ENEMY_NAME));
+		wallobj->setName(std::string(GROUND_NAME));
 
 		// Set the physics attributes
 		wallobj->setBodyType(b2_staticBody);
@@ -433,11 +460,22 @@ void GameScene::populate() {
 	Vec2 dudePos = DUDE_POS;
 	node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(DUDE_TEXTURE);
-	_avatar = DudeModel::alloc(dudePos,image->getSize()/_scale,_scale);
+	_player = DudeModel::alloc(dudePos,image->getSize() /_scale,_scale);
 	sprite = scene2::PolygonNode::allocWithTexture(image);
-	_avatar->setSceneNode(sprite);
-	_avatar->setDebugColor(DEBUG_COLOR);
-	addObstacle(_avatar,sprite); // Put this at the very front
+	_player->setSceneNode(sprite);
+	_player->setDebugColor(DEBUG_COLOR);
+	addObstacle(_player,sprite); // Put this at the very front
+
+#pragma mark : Test Enemy
+    Vec2 enemyPos = ENEMY_POS;
+    node = scene2::SceneNode::alloc();
+    image = _assets->get<Texture>(DUDE_TEXTURE);
+    _testEnemy = DudeModel::alloc(dudePos, image->getSize() / _scale, _scale);
+    sprite = scene2::PolygonNode::allocWithTexture(image);
+    _testEnemy->setSceneNode(sprite);
+    _testEnemy->setDebugColor(DEBUG_COLOR);
+    _testEnemy->setName(std::string(ENEMY_NAME));
+    addObstacle(_testEnemy, sprite); // Put this at the very front
 
 	// Play the background music on a loop.
 	std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
@@ -519,11 +557,11 @@ void GameScene::update(float timestep) {
         _rightnode->setVisible(false);
     }
     
-	_avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
-	_avatar->setJumping( _input.didJump());
-	_avatar->applyForce();
+	_player->setMovement(_input.getHorizontal()*_player->getForce());
+	_player->setJumping( _input.didJump());
+	_player->applyForce();
 
-	if (_avatar->isJumping() && _avatar->isGrounded()) {
+	if (_player->isJumping() && _player->isGrounded()) {
 		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
 		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
 	}
@@ -582,11 +620,11 @@ void GameScene::preUpdate(float dt) {
         _rightnode->setVisible(false);
     }
     
-	_avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
-	_avatar->setJumping( _input.didJump());
-	_avatar->applyForce();
+	_player->setMovement(_input.getHorizontal()*_player->getForce());
+	_player->setJumping( _input.didJump());
+	_player->applyForce();
 
-	if (_avatar->isJumping() && _avatar->isGrounded()) {
+	if (_player->isJumping() && _player->isGrounded()) {
 		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
 		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
 	}
@@ -652,13 +690,13 @@ void GameScene::postUpdate(float remain) {
 
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
-    _avatar->setShooting(_input.didFire());
-    if (_avatar->isShooting()) {
+    _player->setShooting(_input.didFire());
+    if (_player->isShooting()) {
         createProjectile();
     }
 
     // Record failure if necessary.
-    if (!_failed && _avatar->getY() < 0) {
+    if (!_failed && _player->getY() < 0) {
         setFailure(true);
     }
 
@@ -718,8 +756,8 @@ void GameScene::setFailure(bool value) {
  */
 void GameScene::createProjectile() {
 	float offset = PROJECTILE_OFFSET;
-	Vec2 pos = _avatar->getPosition();
-	pos.x += (_avatar->isFacingRight() ? offset : -offset);
+	Vec2 pos = _player->getPosition();
+	pos.x += (_player->isFacingRight() ? offset : -offset);
 
 	std::shared_ptr<Texture> image = _assets->get<Texture>(PROJECTILE_TEXTURE);
 	float radius = 0.5f*image->getSize().width/_scale;
@@ -738,7 +776,7 @@ void GameScene::createProjectile() {
 	projectile->setSceneNode(sprite);
 
 	// Compute position and velocity
-	float speed  = (_avatar->isFacingRight() ? PROJECTILE_SPEED : -PROJECTILE_SPEED);
+	float speed  = (_player->isFacingRight() ? PROJECTILE_SPEED : -PROJECTILE_SPEED);
 	projectile->setVX(speed);
 	addObstacle(projectile, sprite, 5);
 
@@ -788,45 +826,48 @@ void GameScene::beginContact(b2Contact* contact) {
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
-    
+
     // Player-Enemy Collision
-    if (bd1->getName() == ENEMY_NAME && bd2 == _avatar.get()) {
+    if (bd1->getName() == ENEMY_NAME && bd2 == _player.get()) {
         CULog("Enemy collides with player");
+
+        // TODO: If player is attacking, damage enemy; otherwise, do nothing
     }
-    else if (bd2->getName() == ENEMY_NAME && bd1 == _avatar.get()) {
+    else if (bd2->getName() == ENEMY_NAME && bd1 == _player.get()) {
         CULog("Enemy collides with player");
+
+        // TODO: If player is attacking, damage enemy; otherwise, do nothing
     }
 
     // Player-Projectile Collision
-    if (bd1 == _avatar.get() && bd2->getName() == PROJECTILE_NAME) {
+    if (bd1 == _player.get() && bd2->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd2)->getIsPlayerFired()) {
             CULog("Player Damaged");
             removeProjectile((Projectile*)bd2);
         }
-        else {
-            CULog("IGNORE COLLISION");
-        }
     }
-    else if (bd2 == _avatar.get() && bd1->getName() == PROJECTILE_NAME) {
+    else if (bd2 == _player.get() && bd1->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
             CULog("Player Damaged");
             removeProjectile((Projectile*)bd2);
         }
-        else {
-            CULog("IGNORE COLLISION");
-        }
     }
 
-    // Enemy-Enemy Collision
-    if (bd1->getName() == ENEMY_NAME && bd2->getName() == ENEMY_NAME) {
-        CULog("Enemy collides with enemy");
-    }
+    // TODO: Shield-Enemy Collision
+
+    // TODO: Shield-Projectile Collision
 
     // Projectile-Projectile Collision
     if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == PROJECTILE_NAME) {
-        CULog("Projectile collides with projectile");
-        removeProjectile((Projectile*) bd1);
-        removeProjectile((Projectile*) bd2);
+        
+        // Destroy if one is fired by player and the other is not
+        if (
+            ((Projectile*)bd1)->getIsPlayerFired() && !((Projectile*)bd2)->getIsPlayerFired() ||
+            ((Projectile*)bd2)->getIsPlayerFired() && !((Projectile*)bd1)->getIsPlayerFired()
+           ) {
+            removeProjectile((Projectile*) bd1);
+            removeProjectile((Projectile*) bd2);
+        }
     }
 
     // Enemy-Projectile Collision
@@ -836,26 +877,21 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Enemy Damaged");
             removeProjectile((Projectile*) bd2);
         }
-        else {
-            CULog("IGNORE COLLISION");
-        }
     }
     else if (bd2->getName() == ENEMY_NAME && bd1->getName() == PROJECTILE_NAME) {
         if (((Projectile*)bd1)->getIsPlayerFired()) {
             CULog("Enemy Damaged");
             removeProjectile((Projectile*)bd2);
         }
-        else {
-            CULog("IGNORE COLLISION");
-        }
     }
 
 	// Player-Ground Collision
-	if ((_avatar->getSensorName() == fd2 && _avatar.get() != bd1) ||
-		(_avatar->getSensorName() == fd1 && _avatar.get() != bd2)) {
-		_avatar->setGrounded(true);
+	if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
+		(_player->getSensorName() == fd1 && _player.get() != bd2)) {
+		_player->setGrounded(true);
+
 		// Could have more than one ground
-		_sensorFixtures.emplace(_avatar.get() == bd1 ? fix2 : fix1);
+		_sensorFixtures.emplace(_player.get() == bd1 ? fix2 : fix1);
 	}
 }
 
@@ -879,11 +915,11 @@ void GameScene::endContact(b2Contact* contact) {
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
 
-	if ((_avatar->getSensorName() == fd2 && _avatar.get() != bd1) ||
-		(_avatar->getSensorName() == fd1 && _avatar.get() != bd2)) {
-		_sensorFixtures.erase(_avatar.get() == bd1 ? fix2 : fix1);
+	if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
+		(_player->getSensorName() == fd1 && _player.get() != bd2)) {
+		_sensorFixtures.erase(_player.get() == bd1 ? fix2 : fix1);
 		if (_sensorFixtures.empty()) {
-			_avatar->setGrounded(false);
+			_player->setGrounded(false);
 		}
 	}
 }

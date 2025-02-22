@@ -1,5 +1,5 @@
 //
-//  PFSpinner.h
+//  GBSpinner.h
 //  PlatformerDemo
 //
 //  This class provides a spinning rectangle on a fixed pin, as ComplexObstacles
@@ -17,8 +17,8 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#ifndef __PF_SPINNER_H__
-#define __PF_SPINNER_H__
+#ifndef __GB_SPINNER_H__
+#define __GB_SPINNER_H__
 #include <cugl/cugl.h>
 
 using namespace cugl;
@@ -380,4 +380,4 @@ public:
 	void update(float delta);
 };
 
-#endif /* __PF_SPINNER_H__ */
+#endif /* __GB_SPINNER_H__ */

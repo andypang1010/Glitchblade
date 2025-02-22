@@ -1,5 +1,5 @@
 //
-//  PFRopeBridge.cpp
+//  GBRopeBridge.cpp
 //  PlatformerDemo
 //
 //  This module provides the connected ropebridge from 3152. This time it is fully
@@ -19,7 +19,7 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#include "PFRopeBridge.h"
+#include "GBRopeBridge.h"
 
 #include <cugl/cugl.h>
 #include <box2d/b2_revolute_joint.h>

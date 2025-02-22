@@ -1,5 +1,5 @@
 //
-//  PFRopeBridge.h
+//  GBRopeBridge.h
 //  PlatformerDemo
 //
 //  This module provides the connected ropebridge from 3152. This time it is fully
@@ -19,8 +19,8 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#ifndef __PF_ROPE_BRIDGE_H__
-#define __PF_ROPE_BRIDGE_H__
+#ifndef __GB_ROPE_BRIDGE_H__
+#define __GB_ROPE_BRIDGE_H__
 #include <cugl/cugl.h>
 
 using namespace cugl;
@@ -394,4 +394,4 @@ public:
 
 };
 
-#endif /* __PF_ROPE_BRIDGE_H__ */
+#endif /* __GB_ROPE_BRIDGE_H__ */

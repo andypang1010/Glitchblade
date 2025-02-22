@@ -1,5 +1,5 @@
 //
-//  PFInput.h
+//  GBInput.h
 //  PlatformDemo
 //
 //  This input controller is primarily designed for keyboard control.  On mobile
@@ -12,8 +12,8 @@
 //  Author:  Walker White and Anthony Perello
 //  Version: 2/9/21
 //
-#ifndef __PF_INPUT_H__
-#define __PF_INPUT_H__
+#ifndef __GB_INPUT_H__
+#define __GB_INPUT_H__
 #include <cugl/cugl.h>
 #include <unordered_set>
 
@@ -344,4 +344,4 @@ public:
   
 };
 
-#endif /* __PF_INPUT_H__ */
+#endif /* __GB_INPUT_H__ */
