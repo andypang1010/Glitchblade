@@ -78,16 +78,29 @@ class DudeModel : public physics2::CapsuleObstacle {
 private:
 	/** This macro disables the copy constructor (not allowed on physics objects) */
 	CU_DISALLOW_COPY_AND_ASSIGN(DudeModel);
-
 protected:
 	/** The current horizontal movement of the character */
 	float _movement;
 	/** Which direction is the character facing */
 	bool _faceRight;
-	/** How long until we can jump again */
+	/** How long until we can jump again in animation frames */
 	int  _jumpCooldown;
+    /** How long until we can jump again in frames*/
+    int  _dashCooldown;
+    /** How long until we can guard again in frames */
+    int  _guardCooldown;
 	/** Whether we are actively jumping */
 	bool _isJumping;
+    /** Whether we are actively dashing left*/
+    bool _isDashingLeft;
+    /** Whether we are actively dashing right*/
+    bool _isDashingRight;
+    /** Whether we are actively guarding*/
+    bool _isGuarding;
+    /** Whether we are actively parrying*/
+    bool _isParrying;
+    /** Whether we have a (swallowed) projectile*/
+    bool _hasProjectile;
 	/** How long until we can shoot again */
 	int  _shootCooldown;
 	/** Whether our feet are on the ground */
@@ -100,7 +113,9 @@ protected:
 	std::string _sensorName;
 	/** The node for debugging the sensor */
 	std::shared_ptr<scene2::WireNode> _sensorNode;
-
+    /** The guard field when guard is active */
+    std::shared_ptr<physics2::WheelObstacle> _guardField;
+    
 	/** The scene graph node for the Dude. */
 	std::shared_ptr<scene2::SceneNode> _node;
 	/** The scale between the physics world and the screen (MUST BE UNIFORM) */
@@ -370,6 +385,41 @@ public:
      *
      * @param value whether the dude is actively jumping.
      */
+    /**
+     * Sets whether the dude is actively dashing left.
+     *
+     * @param value whether the dude is actively dashing left.
+     */
+    bool isDashingLeft() { return _isDashingLeft && _dashCooldown <= 0; };
+    /**
+     * Sets whether the dude is actively dashing right.
+     *
+     * @param value whether the dude is actively dashing right.
+     */
+    bool isDashingRight() { return _isDashingRight && _dashCooldown <= 0; };
+    /**
+     * Sets whether the dude is actively guarding.
+     *
+     * @param value whether the dude is actively guarding.
+     */
+    bool isGuarding() { return _isGuarding && _guardCooldown <= 0; };
+    /**
+     * Sets whether the dude is actively parrying.
+     *
+     * @param value whether the dude is actively dashing left.
+     */
+    bool isParrying() { return _isJumping && _jumpCooldown <= 0; };
+    /**
+     * Sets whether the dude has a swallowed projectile.
+     *
+     * @param value whether the dude has a swallowed projectile..
+     */
+    bool hasProjectile() { return _hasProjectile; };
+    
+    void setHasProjectile(bool value) { _hasProjectile = value; }
+    void setGuarding(bool value) { _isGuarding = value; }
+    void setDashingLeft(bool value) { _isDashingLeft = value; }
+    void setDashingRight(bool value) { _isDashingRight = value; }
     void setJumping(bool value) { _isJumping = value; }
     
     /**

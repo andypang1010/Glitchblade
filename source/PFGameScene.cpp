@@ -650,7 +650,9 @@ void GameScene::preUpdate(float dt) {
     
 	_avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
 	_avatar->setJumping( _input.didJump());
-	_avatar->applyForce();
+    _avatar->setDashingLeft(_input.didDashLeft());
+    _avatar->setDashingRight(_input.didDashRight());
+    _avatar->applyForce();
 
 	if (_avatar->isJumping() && _avatar->isGrounded()) {
 		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);

@@ -49,7 +49,7 @@ private:
     bool  _keyFire;
     /** Whether the reset key is down */
     bool  _keyReset;
-    /** Whether the debug key is down */
+    /** Whether the debug key is down (Z)*/
     bool  _keyDebug;
     /** Whether the exit key is down */
     bool  _keyExit;
@@ -57,6 +57,12 @@ private:
     bool  _keyLeft;
     /** Whether the right arrow key is down */
     bool  _keyRight;
+    /** Whether the left dash key is down (A)*/
+    bool  _keyLdash;
+    /** Whether the right dash key is down (D) */
+    bool  _keyRdash;
+    /** Whether the guard key is down (spacebar) */
+    bool  _keyGuard;
   
 protected:
     // INPUT RESULTS
@@ -68,8 +74,14 @@ protected:
     bool _exitPressed;
     /** Whether the fire action was chosen. */
     bool _firePressed;
+    /** Whether the left dash action was chosen. */
+    bool _ldashPressed;
+    /** Whether the right dash action was chosen. */
+    bool _rdashPressed;
     /** Whether the jump action was chosen. */
     bool _jumpPressed;
+    /** Whether the guard action was chosen. */
+    bool _guardPressed;
     /** How much did we move horizontally? */
     float _horizontal;
 
@@ -261,7 +273,7 @@ public:
      *
      * -1 = left, 1 = right, 0 = still
      *
-     * @return the amount of sideways movement.
+     * @return the amount of sideways strafing movement. 
      */
 	float getHorizontal() const { return _horizontal; }
 
@@ -271,6 +283,26 @@ public:
      * @return if the jump button was pressed.
      */
 	float didJump() const { return _jumpPressed; }
+    /**
+     * Returns if the left dash button was pressed.
+     *
+     * @return if the left dash button was pressed.
+     */
+    float didDashLeft() const { return _ldashPressed; }
+
+    /**
+     * Returns if the right dash button was pressed.
+     *
+     * @return if the right dash button was pressed.
+     */
+    float didDashRight() const { return _rdashPressed; }
+
+    /**
+     * Returns if the guard button was pressed.
+     *
+     * @return if the guard button was pressed.
+     */
+    float didGuard() const { return _guardPressed; }
 
     /**
      * Returns true if the fire button was pressed.

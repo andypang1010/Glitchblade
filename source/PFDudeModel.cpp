@@ -54,6 +54,12 @@
 #define JUMP_COOLDOWN   5
 /** Cooldown (in animation frames) for shooting */
 #define SHOOT_COOLDOWN  20
+/** Cooldown (in frames) for guard */
+#define GUARD_COOLDOWN  30
+/** Cooldown (in frames) for dash */
+#define DASH_COOLDOWN  30
+/** Duration (in frames) for guard */
+#define GUARD_DURATION  120
 /** The amount to shrink the body fixture (vertically) relative to the image */
 #define DUDE_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -66,6 +72,8 @@
 #define DUDE_DENSITY    1.0f
 /** The impulse for the character jump */
 #define DUDE_JUMP       5.5f
+/** The impulse for the character dash-attack */
+#define DUDE_DASH       20.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -106,10 +114,16 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
         _isGrounded = false;
         _isShooting = false;
         _isJumping  = false;
+        _isDashingLeft = false;
+        _isDashingRight = false;
+        _isGuarding = false;
+        _isParrying = false;
+        _hasProjectile = false;
         _faceRight  = true;
-        
         _shootCooldown = 0;
         _jumpCooldown  = 0;
+        _dashCooldown = 0;
+        _guardCooldown = 0;
         return true;
     }
     return false;
@@ -176,6 +190,11 @@ void DudeModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
+    
+    // Guard fixture
+    //_guardField->createFixtures();
+    //_guardField->setSensor(true);
+    
 }
 
 /**
@@ -205,6 +224,7 @@ void DudeModel::dispose() {
     _core = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
+    _guardField = nullptr;
 }
 
 /**
@@ -244,6 +264,20 @@ void DudeModel::applyForce() {
         b2Vec2 force(0, DUDE_JUMP);
         _body->ApplyLinearImpulse(force,_body->GetPosition(),true);
     }
+    
+    // Dash!
+    if (isDashingLeft()){
+        CULog("dashing left\n");
+        b2Vec2 force(-DUDE_DASH,0);
+        _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
+    }
+    
+    if (isDashingRight()){
+        CULog("dashing right\n");
+        b2Vec2 force(DUDE_DASH,0);
+        _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
+    }
+    
 }
 
 /**
@@ -255,10 +289,10 @@ void DudeModel::applyForce() {
  */
 void DudeModel::update(float dt) {
     // Apply cooldowns
-    if (isJumping()) {
+    if (isJumping() && isGrounded()) {
+        CULog("isJumping is true");
         _jumpCooldown = JUMP_COOLDOWN;
     } else {
-        // Only cooldown while grounded
         _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown-1 : 0);
     }
     
@@ -266,6 +300,20 @@ void DudeModel::update(float dt) {
         _shootCooldown = SHOOT_COOLDOWN;
     } else {
         _shootCooldown = (_shootCooldown > 0 ? _shootCooldown-1 : 0);
+    }
+    
+    if (isDashingLeft() || isDashingRight()) {
+        _dashCooldown = DASH_COOLDOWN;
+    }
+    else {
+        _dashCooldown = (_dashCooldown > 0 ? _dashCooldown-1 : 0);
+    }
+    
+    if (isGuarding()) {
+        _guardCooldown = GUARD_COOLDOWN;
+    }
+    else {
+        _guardCooldown = (_guardCooldown > 0 ? _guardCooldown-1 : 0);
     }
     
     CapsuleObstacle::update(dt);

@@ -21,13 +21,25 @@ using namespace cugl;
 /** The key to use for reseting the game */
 #define RESET_KEY KeyCode::R
 /** The key for toggling the debug display */
-#define DEBUG_KEY KeyCode::D
+#define DEBUG_KEY KeyCode::Z
 /** The key for exitting the game */
 #define EXIT_KEY  KeyCode::ESCAPE
+
+// player action keys
 /** The key for firing a bullet */
 #define FIRE_KEY KeyCode::SPACE
 /** The key for jumping up */
 #define JUMP_KEY KeyCode::ARROW_UP
+/** The key for strafing left */
+#define LEFT_KEY KeyCode::ARROW_LEFT
+/** The key for strafing right */
+#define RIGHT_KEY KeyCode::ARROW_RIGHT
+/** The key for dashing left */
+#define LDASH_KEY KeyCode::A
+/** The key for dashing right */
+#define RDASH_KEY KeyCode::D
+/** The key for guarding */
+#define GUARD_KEY KeyCode::SPACE
 
 /** How close we need to be for a multi touch */
 #define NEAR_TOUCH      100
@@ -76,6 +88,9 @@ _debugPressed(false),
 _exitPressed(false),
 _firePressed(false),
 _jumpPressed(false),
+_rdashPressed(false),
+_ldashPressed(false),
+_guardPressed(false),
 _keyJump(false),
 _keyFire(false),
 _keyReset(false),
@@ -169,9 +184,11 @@ void PlatformInput::update(float dt) {
     _keyExit   = keys->keyPressed(EXIT_KEY);
     _keyFire   = keys->keyPressed(FIRE_KEY);
     _keyJump   = keys->keyPressed(JUMP_KEY);
-
-    _keyLeft = keys->keyDown(KeyCode::ARROW_LEFT);
-    _keyRight = keys->keyDown(KeyCode::ARROW_RIGHT);
+    _keyLeft = keys->keyDown(LEFT_KEY);
+    _keyRight = keys->keyDown(RIGHT_KEY);
+    _keyLdash = keys->keyDown(LDASH_KEY);
+    _keyRdash = keys->keyDown(RDASH_KEY);
+    _keyGuard = keys->keyDown(GUARD_KEY);
 #endif
 
     _resetPressed = _keyReset;
@@ -179,6 +196,10 @@ void PlatformInput::update(float dt) {
     _exitPressed  = _keyExit;
 	_firePressed  = _keyFire;
 	_jumpPressed  = _keyJump;
+    _ldashPressed = _keyLdash;
+    _rdashPressed = _keyRdash;
+    
+
 
 	// Directional controls
 	_horizontal = 0.0f;
