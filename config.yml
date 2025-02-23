@@ -13,6 +13,8 @@ orientation: landscape # The orientation for mobile devices
 sources: # The list of the source code files
   - source/*.cpp
   - source/*.h
+  - source/discordsdk/*.cpp
+  - source/discordsdk/*.h
 
 modules:
   - audio # We need sound

@@ -1,5 +1,5 @@
 //
-//  PFApp.h
+//  GBApp.h
 //  Platform Demo
 //  This is the root class for your game.  The file main.cpp accesses this class
 //  to run the application.  While you could put most of your game logic in
@@ -11,7 +11,7 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/17
 //
-#include "PFApp.h"
+#include "GBApp.h"
 
 using namespace cugl;
 using namespace cugl::graphics;
@@ -31,7 +31,7 @@ using namespace cugl::audio;
  * very last line.  This ensures that the state will transition to FOREGROUND,
  * causing the application to run.
  */
-void PlatformApp::onStartup() {
+void GlitchbladeApp::onStartup() {
     _assets = AssetManager::alloc();
     _batch  = SpriteBatch::alloc();
     
@@ -70,7 +70,7 @@ void PlatformApp::onStartup() {
  * very last line.  This ensures that the state will transition to NONE,
  * causing the application to be deleted.
  */
-void PlatformApp::onShutdown() {
+void GlitchbladeApp::onShutdown() {
     _loading.dispose();
     _gameplay.dispose();
     _assets = nullptr;
@@ -98,7 +98,7 @@ void PlatformApp::onShutdown() {
  * Otherwise, the audio thread may persist while the application is in
  * the background.
  */
-void PlatformApp::onSuspend() {
+void GlitchbladeApp::onSuspend() {
     AudioEngine::get()->pause();
 }
 
@@ -112,7 +112,7 @@ void PlatformApp::onSuspend() {
  * If you are using audio, you should use this method to resume any audio
  * paused before app suspension.
  */
-void PlatformApp::onResume() {
+void GlitchbladeApp::onResume() {
     AudioEngine::get()->resume();
 }
 
@@ -131,7 +131,7 @@ void PlatformApp::onResume() {
  *
  * @param dt    The amount of time (in seconds) since the last frame
  */
-void PlatformApp::update(float dt) {
+void GlitchbladeApp::update(float dt) {
     if (!_loaded && _loading.isActive()) {
         _loading.update(0.01f);
     } else if (!_loaded) {
@@ -167,7 +167,7 @@ void PlatformApp::update(float dt) {
  *
  * @param dt    The amount of time (in seconds) since the last frame
  */
-void PlatformApp::preUpdate(float dt) {
+void GlitchbladeApp::preUpdate(float dt) {
     _gameplay.preUpdate(dt);
 }
 
@@ -192,7 +192,7 @@ void PlatformApp::preUpdate(float dt) {
  * not be used to process user input (as no user input is recorded between
  * {@link #preUpdate} and {@link #postUpdate}) or to animate models.
  */
-void PlatformApp::fixedUpdate() {
+void GlitchbladeApp::fixedUpdate() {
     // Compute time to report to game scene version of fixedUpdate
     float time = getFixedStep()/1000000.0f;
     _gameplay.fixedUpdate(time);
@@ -221,7 +221,7 @@ void PlatformApp::fixedUpdate() {
  *
  * @param dt    The amount of time (in seconds) since the last frame
  */
-void PlatformApp::postUpdate(float dt) {
+void GlitchbladeApp::postUpdate(float dt) {
     // Compute time to report to game scene version of postUpdate
     float time = getFixedRemainder()/1000000.0f;
     _gameplay.postUpdate(time);
@@ -236,7 +236,7 @@ void PlatformApp::postUpdate(float dt) {
  * When overriding this method, you do not need to call the parent method
  * at all. The default implmentation does nothing.
  */
-void PlatformApp::draw() {
+void GlitchbladeApp::draw() {
     if (!_loaded) {
         _loading.render();
     } else {
