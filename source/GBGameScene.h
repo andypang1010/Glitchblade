@@ -375,7 +375,7 @@ public:
     /**
     * Adds a new bullet to the world and sends it in the right direction.
     */
-    void createProjectile(Vec2 pos, bool right);
+    void createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired);
 
     /**
     * Removes the input Bullet from the world.

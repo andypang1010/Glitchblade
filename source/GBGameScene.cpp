@@ -125,6 +125,12 @@ float ENEMY_POS[] = { 12.5f, 5.0f };
 Vec2 LEFT_BULLET = { 5.0f, 5.0f };
 Vec2 RIGHT_BULLET = { 27.5f, 5.0f };
 
+/** Directions */
+Vec2 LEFT = { -1.0f, 0.0f };
+Vec2 RIGHT = { 1.0f, 0.0f };
+Vec2 UP = { 0.0f, 1.0f };
+Vec2 DOWN = { 0.0f, -1.0f };
+
 #pragma mark -
 #pragma mark Physics Constants
 /** The new heavier gravity for this world (so it is not so floaty) */
@@ -188,7 +194,7 @@ Vec2 RIGHT_BULLET = { 27.5f, 5.0f };
 /** The image for the right dpad/joystick */
 #define RIGHT_IMAGE     "dpad_right"
 /** The fire rate for spawned bullets */
-#define BULLET_SPAWN_RATE     50.0f
+#define BULLET_SPAWN_RATE     30.0f
 
 /** Color to outline the physics nodes */
 #define DEBUG_COLOR     Color4::YELLOW
@@ -705,15 +711,19 @@ void GameScene::postUpdate(float remain) {
     // Otherwise, it looks like bullet appears far away
     _player->setShooting(_input.didFire());
     if (_player->isShooting()) {
-        createProjectile(_player->getPosition(), _player->isFacingRight());
+        createProjectile(_player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true);
     }
 
     if (_bulletTimer <= 0) {
-        if (rand() % 2 == 0) {
-            createProjectile(LEFT_BULLET, true);
+        int r = rand() % 3;
+        if (r == 0) {
+            createProjectile(LEFT_BULLET, RIGHT, false);
         }
-        else {
-            createProjectile(RIGHT_BULLET, false);
+        else if(r == 1){
+            createProjectile(RIGHT_BULLET, LEFT, false);
+        }
+        else { // Bullet from above
+            createProjectile(Vec2(rand()%22 + 5, 12.5), DOWN, false);
         }
         _bulletTimer = BULLET_SPAWN_RATE;
     }
@@ -783,7 +793,7 @@ void GameScene::setFailure(bool value) {
 /**
  * Add a new projectile to the world and send it in the right direction.
  */
-void GameScene::createProjectile(Vec2 pos, bool right) {
+void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
     float offset = PROJECTILE_OFFSET;
     // pos.x += (_player->isFacingRight() ? offset : -offset);
 
@@ -799,13 +809,14 @@ void GameScene::createProjectile(Vec2 pos, bool right) {
     projectile->setDebugColor(DEBUG_COLOR);
     projectile->setDrawScale(_scale);
     projectile->setSensor(true);
+    projectile->setIsPlayerFired(isPlayerFired);
 
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     projectile->setSceneNode(sprite);
 
     // Compute position and velocity
-    float speed = (right ? PROJECTILE_SPEED : -PROJECTILE_SPEED);
-    projectile->setVX(speed);
+    Vec2 speed = direction.getNormalization()*PROJECTILE_SPEED;
+    projectile->setLinearVelocity(speed);
     addObstacle(projectile, sprite, 5);
 
     std::shared_ptr<Sound> source = _assets->get<Sound>(PEW_EFFECT);
