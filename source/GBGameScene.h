@@ -85,7 +85,9 @@ protected:
     bool _failed;
     /** Countdown active for winning or losing */
     int _countdown;
-      
+    /** Countdown active for winning or losing */
+    int _bulletTimer;
+
     /** Mark set to handle more sophisticated collision callbacks */
     std::unordered_set<b2Fixture*> _sensorFixtures;
 
@@ -373,7 +375,7 @@ public:
     /**
     * Adds a new bullet to the world and sends it in the right direction.
     */
-    void createProjectile();
+    void createProjectile(Vec2 pos, bool right);
 
     /**
     * Removes the input Bullet from the world.
