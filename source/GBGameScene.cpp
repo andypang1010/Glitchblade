@@ -143,16 +143,23 @@ float ENEMY_POS[] = { 12.5f, 5.0f };
 
 #pragma mark -
 #pragma mark Asset Constants
-/** The key for the earth texture in the asset manager */
-#define EARTH_TEXTURE   "earth"
-/** The key for the win door texture in the asset manager */
+
+///////////////// TEXTURES //////////////////////////////////
+/** The key for the ground texture in the asset manager */
+#define GROUND_TEXTURE  "ground"
+/** The key for the background texture in the asset manager */
+#define BKGD_TEXTURE    "background"
+/** The key for the projectile texture in the asset manager */
 #define PROJECTILE_TEXTURE  "bullet"
 
+///////////////// NAMES /////////////////////////////////////
 #define ENEMY_NAME      "enemy"
 #define PROJECTILE_NAME "projectile"
-
 /** The name of a platform (for object identification) */
 #define GROUND_NAME   "ground"
+
+
+
 /** The font for victory/failure messages */
 #define MESSAGE_FONT    "retro"
 /** The message for winning the game */
@@ -292,8 +299,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     Vec2 offset((_size.width-SCENE_WIDTH)/2.0f,(_size.height-SCENE_HEIGHT)/2.0f);
 
     // Create the scene graph
-    std::shared_ptr<Texture> image;
-    _worldnode = scene2::SceneNode::alloc();
+    std::shared_ptr<Texture> image = _assets->get<Texture>(BKGD_TEXTURE);
+    _worldnode = scene2::PolygonNode::allocWithTexture(image);
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(offset);
 
@@ -338,7 +345,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     setDebug(false);
     
     // XNA nostalgia
-    Application::get()->setClearColor(Color4f::CORNFLOWER);
+    Application::get()->setClearColor(Color4f::GRAY);
     return true;
 }
 
@@ -430,7 +437,7 @@ void GameScene::populate() {
 	}
 
 #pragma mark : GROUND
-    image = _assets->get<Texture>(EARTH_TEXTURE);
+    image = _assets->get<Texture>(GROUND_TEXTURE);
 
 	std::shared_ptr<physics2::PolygonObstacle> groundObj;
 	Poly2 ground(reinterpret_cast<Vec2*>(GROUND),4);
