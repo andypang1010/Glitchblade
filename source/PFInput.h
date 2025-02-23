@@ -82,6 +82,10 @@ protected:
     bool _jumpPressed;
     /** Whether the guard action was chosen. */
     bool _guardPressed;
+    /** Whether the strafe left action was chosen. */
+    bool _leftPressed;
+    /** Whether the strafe right action was chosen. */
+    bool _rightPressed;
     /** How much did we move horizontally? */
     float _horizontal;
 
@@ -278,43 +282,56 @@ public:
 	float getHorizontal() const { return _horizontal; }
 
     /**
-     * Returns if the jump button was pressed.
+     * Returns if the jump input was received.
      *
-     * @return if the jump button was pressed.
+     * @return if the jump input was received.
      */
 	float didJump() const { return _jumpPressed; }
     /**
-     * Returns if the left dash button was pressed.
+     * Returns if the left strafe input was received.
      *
-     * @return if the left dash button was pressed.
+     * @return if the left strafe input was received.
+     */
+    float didStrafeLeft() const { return _leftPressed; }
+
+    /**
+     * Returns if the right strafe input was received.
+     *
+     * @return if the right strafe input was received.
+     */
+    float didStrafeRight() const { return _rightPressed; }
+    /**
+     * Returns if the left dash input was received.
+     *
+     * @return if the left dash input was received.
      */
     float didDashLeft() const { return _ldashPressed; }
 
     /**
-     * Returns if the right dash button was pressed.
+     * Returns if the right dash input was received.
      *
-     * @return if the right dash button was pressed.
+     * @return if the right dash input was received.
      */
     float didDashRight() const { return _rdashPressed; }
 
     /**
-     * Returns if the guard button was pressed.
+     * Returns if the guard input was received.
      *
-     * @return if the guard button was pressed.
+     * @return if the guard input was received.
      */
     float didGuard() const { return _guardPressed; }
 
     /**
-     * Returns true if the fire button was pressed.
+     * Returns true if the fire input was received.
      *
-     * @return true if the fire button was pressed.
+     * @return true if the fire input was received.
      */
 	bool didFire() const { return _firePressed; }
 
     /**
-     * Returns true if the reset button was pressed.
+     * Returns true if the reset input was received.
      *
-     * @return true if the reset button was pressed.
+     * @return true if the reset input was received.
      */
 	bool didReset() const { return _resetPressed; }
 
@@ -326,9 +343,9 @@ public:
 	bool didDebug() const { return _debugPressed; }
 
 	/**
-	 * Returns true if the exit button was pressed.
+	 * Returns true if the exit input was received.
 	 *
-	 * @return true if the exit button was pressed.
+	 * @return true if the exit input was received.
 	 */
 	bool didExit() const { return _exitPressed; }
     

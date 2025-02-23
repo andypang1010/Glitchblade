@@ -84,29 +84,36 @@ protected:
 	/** Which direction is the character facing */
 	bool _faceRight;
 	/** How long until we can jump again in animation frames */
-	int  _jumpCooldown;
+	int  _jumpCooldownRem;
     /** How long until we can jump again in frames*/
-    int  _dashCooldown;
+    int  _dashCooldownRem;
     /** How long until we can guard again in frames */
-    int  _guardCooldown;
-	/** Whether we are actively jumping */
-	bool _isJumping;
-    /** Whether we are actively dashing left*/
-    bool _isDashingLeft;
-    /** Whether we are actively dashing right*/
-    bool _isDashingRight;
-    /** Whether we are actively guarding*/
-    bool _isGuarding;
-    /** Whether we are actively parrying*/
-    bool _isParrying;
+    int  _guardCooldownRem;
+    /** How many frames remaining in the guard (0 when guard is not active) */
+    int  _guardRem;
+    /** How many frames remaining in the parry (0 when parry is not active) */
+    int  _parryRem;
+	/** Whether we are actively inputting jumping */
+	bool _isJumpInput;
+    /** Whether we are actively inputting strafe left*/
+    bool _isStrafeLeft;
+    /** Whether we are actively inputting strafe right*/
+    bool _isStrafeRight;
+    /** Whether we are actively inputting dash left*/
+    bool _isDashLeftInput;
+    /** Whether we are actively inputting dash right*/
+    bool _isDashRightInput;
+    /** Whether we are actively inputting the guard*/
+    bool _isGuardInput;
     /** Whether we have a (swallowed) projectile*/
     bool _hasProjectile;
-	/** How long until we can shoot again */
-	int  _shootCooldown;
+    /** Whether we are actively inputting shoot */
+    bool _isShootInput;
+	/** How long until we can shoot again in animation frames*/
+	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
 	bool _isGrounded;
-	/** Whether we are actively shooting */
-	bool _isShooting;
+
 	/** Ground sensor to represent our feet */
 	b2Fixture*  _sensorFixture;
 	/** Reference to the sensor name (since a constant cannot have a pointer) */
@@ -364,64 +371,135 @@ public:
      *
      * @return true if the dude is actively firing.
      */
-    bool isShooting() const { return _isShooting && _shootCooldown <= 0; }
-    
+    bool isShooting() const { return _isShootInput && _shootCooldownRem <= 0; }
+    /**
+     * Returns true if the dude is actively strafing left.
+     *
+     * @return true if the dude is actively strafing left.
+     */
+    void setStrafeLeft(bool value) {_isStrafeLeft = value;};
+
+    /**
+     * Sets whether the dude is actively strafing right.
+     *
+     * @param value whether the dude is actively strafing right.
+     */
+    void setStrafeRight(bool value) {_isStrafeRight = value;};
+
+    /**
+     * Sets whether the dude has a swallowed projectile.
+     *
+     * @param value whether the dude has a swallowed projectile.
+     */
+    void setHasProjectile(bool value) { _hasProjectile = value; }
+
+    /**
+     * Sets whether the dude is beginning dash left
+     *
+     * @param value whether the dude is beginning dash left.
+     */
+    void setDashLeftInput(bool value) { _isDashLeftInput = value; }
+
+    /**
+     * Sets whether the dude is beginning dash right.
+     *
+     * @param value whether the dude is beginning dash right.
+     */
+    void setDashRightInput(bool value) { _isDashRightInput = value; }
+
+    /**
+     * Sets whether the dude is actively trying to jump.
+     *
+     * @param value whether the dude is actively trying to jump.
+     */
+    void setJumpInput(bool value) { _isJumpInput = value; }
+
     /**
      * Sets whether the dude is actively firing.
      *
      * @param value whether the dude is actively firing.
      */
-    void setShooting(bool value) { _isShooting = value; }
+    void setShootInput(bool value) { _isShootInput = value; }
+    /**
+     * Sets whether the dude is inputting guard
+     *
+     * @param value whether the dude is inputting guard
+     */
+    void setGuardInput(bool value) { _isGuardInput = value; }
+    /**
+     * Sets whether the dude is actively strafing left.
+     *
+     * @param value whether the dude is actively strafing left.
+     */
+    bool isStrafeLeft() { return _isStrafeLeft; };
+    /**
+     * Sets whether the dude is actively strafing right.
+     *
+     * @return true if whether the dude is actively strafing right.
+     */
+    bool isStrafeRight() { return _isStrafeRight; };
+    /**
+     * Returns true if if the dude is actively trying to jump and jump cooldown is ready (regardless if on the ground).
+     *
+     * @return true if the dude is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
+     */
+    bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
     
     /**
-     * Returns true if the dude is actively jumping.
-     *
-     * @return true if the dude is actively jumping.
-     */
-    bool isJumping() const { return _isJumping && _jumpCooldown <= 0; }
-    
-    /**
-     * Sets whether the dude is actively jumping.
-     *
-     * @param value whether the dude is actively jumping.
-     */
-    /**
-     * Sets whether the dude is actively dashing left.
+     * Returns true if the dude is actively dashing left.
      *
      * @param value whether the dude is actively dashing left.
      */
-    bool isDashingLeft() { return _isDashingLeft && _dashCooldown <= 0; };
+    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0; };
     /**
-     * Sets whether the dude is actively dashing right.
+     * Returns true if the dude is actively dashing right.
      *
      * @param value whether the dude is actively dashing right.
      */
-    bool isDashingRight() { return _isDashingRight && _dashCooldown <= 0; };
+    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0; };
     /**
-     * Sets whether the dude is actively guarding.
+     * Returns true if the dude is dashing
      *
-     * @param value whether the dude is actively guarding.
+     * @return value whether the dude is dashing either direction.
      */
-    bool isGuarding() { return _isGuarding && _guardCooldown <= 0; };
+    bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); };
     /**
-     * Sets whether the dude is actively parrying.
+     * Returns true if the dude is inputting a movement action/
      *
-     * @param value whether the dude is actively dashing left.
+     * @return value whether the dude is performing a movement action.
      */
-    bool isParrying() { return _isJumping && _jumpCooldown <= 0; };
+    bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()); };
+    
     /**
-     * Sets whether the dude has a swallowed projectile.
+     *  Returns true if the dude is currently beginning guard action.
      *
-     * @param value whether the dude has a swallowed projectile..
+     * @return value whether the dude is beginning guard action.
      */
+    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; };
+      /**
+     * Returns true if the dude has a swallowed projectile.
+     *
+     * @return value whether the dude has a swallowed projectile.
+     */
+    /**
+     * Returns true ifr the dude is actively guarding.
+     *
+     * @return value whether the dude is actively guarding.
+     */
+    bool isGuardActive() { return  _guardRem > 0; };
+    /**
+     * Returns true if the dude is actively parrying.
+     *
+     * @return value whether the dude is actively dashing left.
+     */
+    bool isParryActive() { return _parryRem > 0; };
+    /**
+     * Returns true ifthe dude has a swallowed projectile.
+     *
+     * @return value whether the dude has a swallowed projectile.
+     */
+    
     bool hasProjectile() { return _hasProjectile; };
-    
-    void setHasProjectile(bool value) { _hasProjectile = value; }
-    void setGuarding(bool value) { _isGuarding = value; }
-    void setDashingLeft(bool value) { _isDashingLeft = value; }
-    void setDashingRight(bool value) { _isDashingRight = value; }
-    void setJumping(bool value) { _isJumping = value; }
-    
     /**
      * Returns true if the dude is on the ground.
      *
@@ -477,7 +555,6 @@ public:
      */
     bool isFacingRight() const { return _faceRight; }
 
-    
 #pragma mark -
 #pragma mark Physics Methods
     /**

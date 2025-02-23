@@ -586,13 +586,15 @@ void GameScene::update(float timestep) {
     }
     
 	_avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
-	_avatar->setJumping( _input.didJump());
+	_avatar->setJumpInput( _input.didJump());
+    _avatar->setGuardInput(_input.didGuard());
 	_avatar->applyForce();
 
-	if (_avatar->isJumping() && _avatar->isGrounded()) {
+	if (_avatar->isJumpBegin() && _avatar->isGrounded()) {
 		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
 		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
 	}
+    
 	
 	// Turn the physics engine crank.
     _world->update(timestep);
@@ -649,12 +651,15 @@ void GameScene::preUpdate(float dt) {
     }
     
 	_avatar->setMovement(_input.getHorizontal()*_avatar->getForce());
-	_avatar->setJumping( _input.didJump());
-    _avatar->setDashingLeft(_input.didDashLeft());
-    _avatar->setDashingRight(_input.didDashRight());
+    _avatar->setStrafeLeft(_input.didStrafeLeft());
+    _avatar->setStrafeRight(_input.didStrafeRight());
+	_avatar->setJumpInput( _input.didJump());
+    _avatar->setDashLeftInput(_input.didDashLeft());
+    _avatar->setDashRightInput(_input.didDashRight());
+    _avatar->setGuardInput(_input.didGuard());
     _avatar->applyForce();
 
-	if (_avatar->isJumping() && _avatar->isGrounded()) {
+	if (_avatar->isJumpBegin() && _avatar->isGrounded()) {
 		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
 		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
 	}
@@ -725,7 +730,7 @@ void GameScene::postUpdate(float remain) {
 
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
-    _avatar->setShooting(_input.didFire());
+    _avatar->setShootInput(_input.didFire());
     if (_avatar->isShooting()) {
         createBullet();
     }

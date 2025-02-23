@@ -39,7 +39,7 @@ using namespace cugl;
 /** The key for dashing right */
 #define RDASH_KEY KeyCode::D
 /** The key for guarding */
-#define GUARD_KEY KeyCode::SPACE
+#define GUARD_KEY KeyCode::S
 
 /** How close we need to be for a multi touch */
 #define NEAR_TOUCH      100
@@ -198,16 +198,19 @@ void PlatformInput::update(float dt) {
 	_jumpPressed  = _keyJump;
     _ldashPressed = _keyLdash;
     _rdashPressed = _keyRdash;
+    _leftPressed = _keyLeft;
+    _rightPressed = _keyRight;
+    _guardPressed = _keyGuard;
     
 
 
 	// Directional controls
 	_horizontal = 0.0f;
-	if (_keyRight) {
-		_horizontal += 1.0f;
-	}
-	if (_keyLeft) {
+	if (_leftPressed) {
 		_horizontal -= 1.0f;
+	}
+	if (_rightPressed) {
+		_horizontal += 1.0f;
 	}
 
 // If it does not support keyboard, we must reset "virtual" keyboard
@@ -217,6 +220,11 @@ void PlatformInput::update(float dt) {
     _keyDebug = false;
     _keyJump  = false;
     _keyFire  = false;
+    _keyLeft = false;
+    _keyRight = false;
+    _keyGuard = false;
+    _keyLdash = false;
+    _keyRdash = false;
 #endif
 }
 
@@ -229,7 +237,11 @@ void PlatformInput::clear() {
     _exitPressed  = false;
     _jumpPressed = false;
     _firePressed = false;
-    
+    _leftPressed = false;
+    _rightPressed = false;
+    _rdashPressed = false;
+    _ldashPressed = false;
+    _guardPressed = false;
 }
 
 #pragma mark -

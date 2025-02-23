@@ -60,6 +60,8 @@
 #define DASH_COOLDOWN  30
 /** Duration (in frames) for guard */
 #define GUARD_DURATION  120
+/** Duration (in frames) for parry */
+#define PARRY_DURATION  30
 /** The amount to shrink the body fixture (vertically) relative to the image */
 #define DUDE_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -112,18 +114,21 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
         
         // Gameplay attributes
         _isGrounded = false;
-        _isShooting = false;
-        _isJumping  = false;
-        _isDashingLeft = false;
-        _isDashingRight = false;
-        _isGuarding = false;
-        _isParrying = false;
+        _isShootInput = false;
+        _isJumpInput  = false;
+        _isStrafeLeft = false;
+        _isStrafeRight = false;
+        _isDashLeftInput = false;
+        _isDashRightInput = false;
+        _isGuardInput = false;
         _hasProjectile = false;
         _faceRight  = true;
-        _shootCooldown = 0;
-        _jumpCooldown  = 0;
-        _dashCooldown = 0;
-        _guardCooldown = 0;
+        _shootCooldownRem = 0;
+        _jumpCooldownRem  = 0;
+        _dashCooldownRem = 0;
+        _guardCooldownRem = 0;
+        _guardRem = 0;
+        _parryRem= 0;
         return true;
     }
     return false;
@@ -260,26 +265,26 @@ void DudeModel::applyForce() {
     }
     
     // Jump!
-    if (isJumping() && isGrounded()) {
+    if (isJumpBegin() && isGrounded()) {
         b2Vec2 force(0, DUDE_JUMP);
         _body->ApplyLinearImpulse(force,_body->GetPosition(),true);
     }
     
     // Dash!
-    if (isDashingLeft()){
+    if (isDashLeftBegin()){
         CULog("dashing left\n");
         b2Vec2 force(-DUDE_DASH,0);
         _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
     }
     
-    if (isDashingRight()){
+    if (isDashRightBegin()){
         CULog("dashing right\n");
         b2Vec2 force(DUDE_DASH,0);
         _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
     }
     
 }
-
+#pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
  *
@@ -289,35 +294,68 @@ void DudeModel::applyForce() {
  */
 void DudeModel::update(float dt) {
     // Apply cooldowns
-    if (isJumping() && isGrounded()) {
+    
+#pragma mark Guard and Parry timing
+    // guard cooldown first for most recent movement inputs
+    if (isGuardActive()){
+        //just for logging end of parry
+        bool parry_active = isParryActive();
+        // If robot moves, guard is cancelled
+        if (isMoveBegin()){
+            _guardRem = 0;
+            _parryRem = 0;
+            CULog("Parry and Guard ended due to movement\n");
+        }
+        else{
+            _guardRem = (_guardRem > 0 ? _guardRem -1 : 0);
+            _parryRem= (_parryRem > 0 ? _parryRem -1 : 0);
+            
+            //The rest of this block is for logging end of guard&parry
+            if (parry_active && (_parryRem == 0)){
+                CULog("Parry completed during guard\n");
+            }
+            if (_guardRem == 0){
+                CULog("Guard completed full duration\n");
+            }
+        }
+    }
+    // guard not active, update cooldown
+    else {
+        _guardCooldownRem = (_guardCooldownRem > 0 ? _guardCooldownRem -1 : 0);
+    }
+    if (isJumpBegin() && isGrounded()) {
         CULog("isJumping is true");
-        _jumpCooldown = JUMP_COOLDOWN;
+        _jumpCooldownRem = JUMP_COOLDOWN;
     } else {
-        _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown-1 : 0);
+        _jumpCooldownRem = (_jumpCooldownRem > 0 ? _jumpCooldownRem-1 : 0);
     }
     
     if (isShooting()) {
-        _shootCooldown = SHOOT_COOLDOWN;
+        _shootCooldownRem = SHOOT_COOLDOWN;
     } else {
-        _shootCooldown = (_shootCooldown > 0 ? _shootCooldown-1 : 0);
+        _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
     }
     
-    if (isDashingLeft() || isDashingRight()) {
-        _dashCooldown = DASH_COOLDOWN;
+    if (isDashBegin()) {
+
+        _dashCooldownRem = DASH_COOLDOWN;
     }
     else {
-        _dashCooldown = (_dashCooldown > 0 ? _dashCooldown-1 : 0);
+        _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
+    }
+    // player inputs guard and cooldown is ready
+    if (isGuardBegin()) {
+        CULog("Beginning guard\n");
+        _guardCooldownRem = GUARD_COOLDOWN;
+        _guardRem = GUARD_DURATION;
+        // begin parry
+        CULog("Beginning parry\n");
+        _parryRem = PARRY_DURATION;
+        
     }
     
-    if (isGuarding()) {
-        _guardCooldown = GUARD_COOLDOWN;
-    }
-    else {
-        _guardCooldown = (_guardCooldown > 0 ? _guardCooldown-1 : 0);
-    }
-    
+#pragma mark Update player physics
     CapsuleObstacle::update(dt);
-    
     if (_node != nullptr) {
         _node->setPosition(getPosition()*_drawScale);
         _node->setAngle(getAngle());
