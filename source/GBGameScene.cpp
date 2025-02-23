@@ -922,8 +922,8 @@ void GameScene::beginContact(b2Contact* contact) {
     //    if (_player.isParrying()) {
     //        CULog("Parried projectile");
 
-    //        if (!_player.getHasSwallowedProjectile()) {
-    //            _player.setHasSwallowedProjectile(true);
+    //        if (!_player.getHasProjectile()) {
+    //            _player.setHasProjectile(true);
     //        }
 
     //        removeProjectile((Projectile*)bd2);
@@ -943,8 +943,8 @@ void GameScene::beginContact(b2Contact* contact) {
     //    if (_player.isParrying()) {
     //        CULog("Parried projectile");
 
-    //        if (!_player.getHasSwallowedProjectile()) {
-    //            _player.setHasSwallowedProjectile(true);
+    //        if (!_player.getHasProjectile()) {
+    //            _player.setHasProjectile(true);
     //        }
 
     //        removeProjectile((Projectile*)bd2);
