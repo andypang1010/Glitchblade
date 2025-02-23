@@ -38,10 +38,10 @@
 #endif
 
 #if __has_include("discordsdk/discord.h")
-#include "GBDiscordPresence.h"
-#define DISCORD_SDK_AVAILABLE 1
+    #include "GBDiscordPresence.h"
+    #define DISCORD_SDK_AVAILABLE 1
 #else
-#define DISCORD_SDK_AVAILABLE 0
+    #define DISCORD_SDK_AVAILABLE 0
 #endif
 
 using namespace cugl;
