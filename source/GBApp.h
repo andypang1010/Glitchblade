@@ -1,5 +1,5 @@
 //
-//  PFApp.h
+//  GBApp.h
 //  Platform Demo
 //  This is the root class for your game.  The file main.cpp accesses this class
 //  to run the application.  While you could put most of your game logic in
@@ -11,15 +11,15 @@
 //  Author: Walker White and Anthony Perello
 //  Version: 2/9/17
 //
-#ifndef __PF_APP_H__
-#define __PF_APP_H__
+#ifndef __GB_APP_H__
+#define __GB_APP_H__
 #include <cugl/cugl.h>
-#include "PFGameScene.h"
+#include "GBGameScene.h"
 
 /**
  * This class represents the application root for the platform demo.
  */
-class PlatformApp : public cugl::Application {
+class GlitchbladeApp : public cugl::Application {
 protected:
     /** The global sprite batch for drawing (only want one of these) */
     std::shared_ptr<cugl::graphics::SpriteBatch> _batch;
@@ -46,7 +46,7 @@ public:
      * of initialization from the constructor allows main.cpp to perform
      * advanced configuration of the application before it starts.
      */
-    PlatformApp() : cugl::Application(), _loaded(false) {}
+    GlitchbladeApp() : cugl::Application(), _loaded(false) {}
     
     /**
      * Disposes of this application, releasing all resources.
@@ -55,7 +55,7 @@ public:
      * It simply calls the dispose() method in Application.  There is nothing
      * special to do here.
      */
-    ~PlatformApp() { }
+    ~GlitchbladeApp() { }
     
     
 #pragma mark Application State
@@ -206,4 +206,4 @@ public:
      */
     virtual void draw() override;
 };
-#endif /* __PF_APP_H__ */
+#endif /* __GB_APP_H__ */

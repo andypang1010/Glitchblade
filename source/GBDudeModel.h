@@ -1,5 +1,5 @@
 //
-//  PFDudeModel.h
+//  GBDudeModel.h
 //  PlatformDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -41,8 +41,8 @@
 //  Author:  Walker White and Anthony Perello
 //  Version: 2/9/21
 //
-#ifndef __PF_DUDE_MODEL_H__
-#define __PF_DUDE_MODEL_H__
+#ifndef __GB_DUDE_MODEL_H__
+#define __GB_DUDE_MODEL_H__
 #include <cugl/cugl.h>
 
 using namespace cugl;
@@ -595,4 +595,4 @@ public:
 	
 };
 
-#endif /* __PF_DUDE_MODEL_H__ */
+#endif /* __GB_DUDE_MODEL_H__ */

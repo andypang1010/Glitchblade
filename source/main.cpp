@@ -28,7 +28,7 @@
 //  Version: 7/1/16
 
 // Include your application class
-#include "PFApp.h"
+#include "GBApp.h"
 
 using namespace cugl;
 
@@ -43,11 +43,11 @@ using namespace cugl;
  */
 int main(int argc, char * argv[]) {
     // Change this to your application class
-    PlatformApp app;
+    GlitchbladeApp app;
     
     // Set the properties of your application
-    app.setName("Platform Demo");
-    app.setOrganization("GDIAC");
+    app.setName("Glitchblade");
+    app.setOrganization("Heptabyte");
     app.setHighDPI(true);
 
     //app.setFullscreen(true);

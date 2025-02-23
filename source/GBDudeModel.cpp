@@ -1,5 +1,5 @@
 //
-//  PFDudeModel.cpp
+//  GBDudeModel.cpp
 //  PlatformDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -41,7 +41,7 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/17
 //
-#include "PFDudeModel.h"
+#include "GBDudeModel.h"
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>

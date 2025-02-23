@@ -1,5 +1,5 @@
 //
-//  PFGameScene.h
+//  GBGameScene.h
 //  PlatformDemo
 //
 //  This is the most important class in this demo.  This class manages the gameplay
@@ -11,7 +11,7 @@
 //  have done this, we wanted to highlight the issues of connecting physics
 //  objects to scene graph objects.  Hence we include all of the API calls.
 //
-//  WARNING: There are a lot of shortcuts in this design that will do not adapt 
+//  WARNING: There are a lot of shortcuts in this design that will do not adapt
 //  well to data driven design. This demo has a lot of simplifications to make
 //  it a bit easier to see how everything fits together. However, the model
 //  classes and how they are initialized will need to be changed if you add
@@ -23,18 +23,23 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#ifndef __PF_GAME_SCENE_H__
-#define __PF_GAME_SCENE_H__
+#ifndef __GB_GAME_SCENE_H__
+#define __GB_GAME_SCENE_H__
 #include <cugl/cugl.h>
 #include <box2d/b2_world_callbacks.h>
 #include <box2d/b2_fixture.h>
 #include <unordered_set>
 #include <vector>
-#include "PFInput.h"
-#include "PFBullet.h"
-#include "PFDudeModel.h"
-#include "PFRopeBridge.h"
-#include "PFSpinner.h"
+#include "GBInput.h"
+<<<<<<< HEAD
+#include "GBProjectile.h"
+#include "GBDudeModel.h"
+=======
+#include "GBBullet.h"
+#include "GBDudeModel.h"
+#include "GBRopeBridge.h"
+#include "GBSpinner.h"
+>>>>>>> fd88916c00735a7574c04a0efd54f6274e134bf4
 
 using namespace cugl;
 
@@ -74,14 +79,10 @@ protected:
     float _scale;
 
     // Physics objects for the game
-    /** Reference to the goalDoor (for collision detection) */
-    std::shared_ptr<physics2::BoxObstacle>    _goalDoor;
     /** Reference to the player avatar */
-    std::shared_ptr<DudeModel>			  _avatar;
-    /** Reference to the spinning barrier */
-    std::shared_ptr<Spinner>			  _spinner;
-    /** Reference to the rope bridge */
-    std::shared_ptr<RopeBridge>			  _ropebridge;
+    std::shared_ptr<DudeModel>              _player;
+    /** Reference to the player avatar */
+    std::shared_ptr<DudeModel>              _testEnemy;
 
     /** Whether we have completed this "game" */
     bool _complete;
@@ -241,55 +242,55 @@ public:
      *
      * @param value whether the level is completed.
      */
-	void setComplete(bool value);
+    void setComplete(bool value);
 
-	/**
-	* Returns true if the level is failed.
-	*
-	* If true, the level will reset after a countdown
-	*
-	* @return true if the level is failed.
-	*/
-	bool isFailure() const { return _failed; }
+    /**
+    * Returns true if the level is failed.
+    *
+    * If true, the level will reset after a countdown
+    *
+    * @return true if the level is failed.
+    */
+    bool isFailure() const { return _failed; }
 
-	/**
-	* Sets whether the level is failed.
-	*
-	* If true, the level will reset after a countdown
-	*
-	* @param value whether the level is failed.
-	*/
-	void setFailure(bool value);
+    /**
+    * Sets whether the level is failed.
+    *
+    * If true, the level will reset after a countdown
+    *
+    * @param value whether the level is failed.
+    */
+    void setFailure(bool value);
     
 #pragma mark -
 #pragma mark Collision Handling
-	/**
-	* Processes the start of a collision
-	*
-	* This method is called when we first get a collision between two objects.  We use
-	* this method to test if it is the "right" kind of collision.  In particular, we
-	* use it to test if we make it to the win door.  We also us it to eliminate bullets.
-	*
-	* @param  contact  The two bodies that collided
-	*/
-	void beginContact(b2Contact* contact);
+    /**
+    * Processes the start of a collision
+    *
+    * This method is called when we first get a collision between two objects.  We use
+    * this method to test if it is the "right" kind of collision.  In particular, we
+    * use it to test if we make it to the win door.  We also us it to eliminate bullets.
+    *
+    * @param  contact  The two bodies that collided
+    */
+    void beginContact(b2Contact* contact);
 
-	/**
-	* Processes the end of a collision
-	*
-	* This method is called when we no longer have a collision between two objects.  
-	* We use this method allow the character to jump again.
-	*
-	* @param  contact  The two bodies that collided
-	*/
-	void endContact(b2Contact* contact);
+    /**
+    * Processes the end of a collision
+    *
+    * This method is called when we no longer have a collision between two objects.
+    * We use this method allow the character to jump again.
+    *
+    * @param  contact  The two bodies that collided
+    */
+    void endContact(b2Contact* contact);
 
 #pragma mark -
 #pragma mark Gameplay Handling
     /**
      * The method called to update the game mode.
      *
-     * This is the nondeterministic version of a physics simulation. It is 
+     * This is the nondeterministic version of a physics simulation. It is
      * provided for comparison purposes only.
      *
      * @param timestep  The amount of time (in seconds) since the last frame
@@ -379,15 +380,15 @@ public:
     /**
     * Adds a new bullet to the world and sends it in the right direction.
     */
-    void createBullet();
+    void createProjectile();
 
     /**
     * Removes the input Bullet from the world.
     *
     * @param  bullet   the bullet to remove
     */
-    void removeBullet(Bullet* bullet);
+    void removeProjectile(Projectile* bullet);
 
   };
 
-#endif /* __PF_GAME_SCENE_H__ */
+#endif /* __GB_GAME_SCENE_H__ */
