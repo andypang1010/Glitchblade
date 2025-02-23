@@ -5,8 +5,11 @@
             "wrapS":    "repeat",
             "wrapT":    "repeat"
 		},
-        "dude": {
-            "file":     "textures/dude.png"
+        "player": {
+            "file":     "textures/player.png"
+        },
+        "enemy": {
+            "file":     "textures/enemy.png"
         },
         "spinner": {
             "file":     "textures/barrier.png"

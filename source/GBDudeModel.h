@@ -51,6 +51,7 @@ using namespace cugl;
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
 #define DUDE_TEXTURE    "player"
+#define ENEMY_TEXTURE   "enemy"
 /** Identifier to allow us to track the sensor in ContactListener */
 #define SENSOR_NAME     "dudesensor"
 
@@ -58,11 +59,11 @@ using namespace cugl;
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
-#define DUDE_FORCE      20.0f
+#define DUDE_FORCE      50.0f
 /** The amount to slow the character down */
-#define DUDE_DAMPING    10.0f
+#define DUDE_DAMPING    30.0f
 /** The maximum character speed */
-#define DUDE_MAXSPEED   5.0f
+#define DUDE_MAXSPEED   10.0f
 
 
 #pragma mark -

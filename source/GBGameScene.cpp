@@ -105,8 +105,6 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
 //    }
 //};
 
-#define ENEMY_TEXTURE "dude"
-
 /** The number of ground vertices */
 #define GROUND_VERTS  8
 #define GROUND_THICKNESS 4
@@ -480,8 +478,8 @@ void GameScene::populate() {
     addObstacle(_testEnemy, sprite); // Put this at the very front
 
 	// Play the background music on a loop.
-	std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
-    AudioEngine::get()->getMusicQueue()->play(source, true, MUSIC_VOLUME);
+	/*std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
+    AudioEngine::get()->getMusicQueue()->play(source, true, MUSIC_VOLUME);*/
 }
 
 /**
