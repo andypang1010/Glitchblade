@@ -28,7 +28,7 @@
 //  Version: 7/1/16
 
 // Include your application class
-#include "PFApp.h"
+#include "GBApp.h"
 
 using namespace cugl;
 

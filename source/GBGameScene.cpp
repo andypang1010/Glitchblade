@@ -1,5 +1,5 @@
 //
-//  PFGameScene.cpp
+//  GBGameScene.cpp
 //  PlatformDemo
 //
 //  This is the most important class in this demo.  This class manages the gameplay
@@ -19,14 +19,14 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#include "PFGameScene.h"
+#include "GBGameScene.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
-#include "PFDudeModel.h"
-#include "PFSpinner.h"
-#include "PFRopeBridge.h"
-#include "PFBullet.h"
+#include "GBDudeModel.h"
+#include "GBSpinner.h"
+#include "GBRopeBridge.h"
+#include "GBBullet.h"
 
 #include <ctime>
 #include <string>

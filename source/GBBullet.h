@@ -1,5 +1,5 @@
 //
-//  PFBullet.h
+//  GBBullet.h
 //  PlatformDemo
 //
 //  This class is a simple extension of WheelObstacle in order to simplify the process of adding and removing Bullets
@@ -8,8 +8,8 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/17
 //
-#ifndef __PF_BULLET_MODEL_H__
-#define __PF_BULLET_MODEL_H__
+#ifndef __GB_BULLET_MODEL_H__
+#define __GB_BULLET_MODEL_H__
 #include <cugl/cugl.h>
 
 using namespace cugl;
@@ -126,4 +126,4 @@ public:
 
 };
 
-#endif /* __PF_BULLET_MODEL_H__ */
+#endif /* __GB_BULLET_MODEL_H__ */

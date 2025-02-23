@@ -1,5 +1,5 @@
 //
-//  PFApp.h
+//  GBApp.h
 //  Platform Demo
 //  This is the root class for your game.  The file main.cpp accesses this class
 //  to run the application.  While you could put most of your game logic in
@@ -11,7 +11,7 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/17
 //
-#include "PFApp.h"
+#include "GBApp.h"
 
 using namespace cugl;
 using namespace cugl::graphics;

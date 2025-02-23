@@ -1,5 +1,5 @@
 //
-//  PFSpinner.cpp
+//  GBSpinner.cpp
 //  PlatformerDemo
 //
 //  This class provides a spinning rectangle on a fixed pin, as ComplexObstacles
@@ -17,7 +17,7 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#include "PFSpinner.h"
+#include "GBSpinner.h"
 #include <cugl/cugl.h>
 #include <box2d/b2_revolute_joint.h>
 #include <box2d/b2_world.h>

@@ -1,5 +1,5 @@
 //
-//  PFBullet.cpp
+//  GBBullet.cpp
 //  PlatformDemo
 //
 //  This class is a simple extension of WheelObstacle in order to simplify the
@@ -9,7 +9,7 @@
 //  Author:  Walker White and Anthony Perello
 //  Version: 2/9/21
 //
-#include "PFBullet.h"
+#include "GBBullet.h"
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>

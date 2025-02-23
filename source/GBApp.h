@@ -1,5 +1,5 @@
 //
-//  PFApp.h
+//  GBApp.h
 //  Platform Demo
 //  This is the root class for your game.  The file main.cpp accesses this class
 //  to run the application.  While you could put most of your game logic in
@@ -11,10 +11,10 @@
 //  Author: Walker White and Anthony Perello
 //  Version: 2/9/17
 //
-#ifndef __PF_APP_H__
-#define __PF_APP_H__
+#ifndef __GB_APP_H__
+#define __GB_APP_H__
 #include <cugl/cugl.h>
-#include "PFGameScene.h"
+#include "GBGameScene.h"
 
 /**
  * This class represents the application root for the platform demo.
@@ -206,4 +206,4 @@ public:
      */
     virtual void draw() override;
 };
-#endif /* __PF_APP_H__ */
+#endif /* __GB_APP_H__ */
