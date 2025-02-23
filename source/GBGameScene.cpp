@@ -943,6 +943,14 @@ void GameScene::beginContact(b2Contact* contact) {
         }
     }
 
+    // Projectile-Environment Collision
+    if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == GROUND_NAME) {
+        removeProjectile((Projectile*)bd1);
+    }
+    else if (bd2->getName() == PROJECTILE_NAME && bd1->getName() == GROUND_NAME) {
+        removeProjectile((Projectile*)bd2);
+    }
+
     // Enemy-Projectile Collision
     if (bd1->getName() == ENEMY_NAME && bd2->getName() == PROJECTILE_NAME) {
 
