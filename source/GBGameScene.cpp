@@ -470,7 +470,7 @@ void GameScene::populate() {
     Vec2 enemyPos = ENEMY_POS;
     node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(DUDE_TEXTURE);
-    _testEnemy = DudeModel::alloc(dudePos, image->getSize() / _scale, _scale);
+    _testEnemy = DudeModel::alloc(enemyPos, image->getSize() / _scale, _scale);
     sprite = scene2::PolygonNode::allocWithTexture(image);
     _testEnemy->setSceneNode(sprite);
     _testEnemy->setDebugColor(DEBUG_COLOR);
@@ -853,9 +853,82 @@ void GameScene::beginContact(b2Contact* contact) {
         }
     }
 
-    // TODO: Shield-Enemy Collision
+    //// TODO: Shield-Enemy Collision
+    //if (bd1->getName() == ENEMY_NAME && bd2->getName() == _player.getShieldName() &&
+    //    ((EnemyModel*)bd1)->isAttacking()) {
 
-    // TODO: Shield-Projectile Collision
+    //    if (_player.isParrying()) {
+    //        CULog("Parried enemy attack");
+
+    //        // TODO: Resolve collision by having enemy stop outside of shield
+    //    }
+    //    else if (_player.isGuarding()) {
+    //        CULog("Guarded enemy attack");
+
+    //        // TODO: Damage player by 50% of enemy attack damage
+
+    //        // TODO: Resolve collision by having enemy stop outside
+    //    }
+    //}
+    //else if (bd2->getName() == ENEMY_NAME && bd1->getName() == _player.getShieldName() &&
+    //    ((EnemyModel*)bd2)->isAttacking()) {
+
+    //    if (_player.isParrying()) {
+    //        CULog("Parried enemy attack");
+
+    //        // TODO: Resolve collision by having enemy stop outside of shield
+    //    }
+    //    else if (_player.isGuarding()) {
+    //        CULog("Guarded enemy attack");
+
+    //        // TODO: Damage player by 50% of enemy attack damage
+
+    //        // TODO: Resolve collision by having enemy stop outside
+    //    }
+    //}
+
+    //// TODO: Shield-Projectile Collision
+    //if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == _player.getShieldName() &&
+    //    !((Projectile*)bd1)->getIsPlayerFired()) {
+
+    //    if (_player.isParrying()) {
+    //        CULog("Parried projectile");
+
+    //        if (!_player.getHasSwallowedProjectile()) {
+    //            _player.setHasSwallowedProjectile(true);
+    //        }
+
+    //        removeProjectile((Projectile*)bd2);
+    //    }
+
+    //    else if (_player.isGuarding()) {
+    //        CULog("Guarded projectile");
+
+    //        // TODO: Damage player by 50% of enemy attack damage
+    //        removeProjectile((Projectile*)bd2);
+    //    }
+    //}
+
+    //else if (bd2->getName() == PROJECTILE_NAME && bd1->getName() == _player.getShieldName() &&
+    //    !((Projectile*)bd2)->getIsPlayerFired()) {
+
+    //    if (_player.isParrying()) {
+    //        CULog("Parried projectile");
+
+    //        if (!_player.getHasSwallowedProjectile()) {
+    //            _player.setHasSwallowedProjectile(true);
+    //        }
+
+    //        removeProjectile((Projectile*)bd2);
+    //    }
+
+    //    else if (_player.isGuarding()) {
+    //        CULog("Guarded projectile");
+
+    //        // TODO: Damage player by 50% of enemy attack damage
+    //        removeProjectile((Projectile*)bd2);
+    //    }
+    //}
 
     // Projectile-Projectile Collision
     if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == PROJECTILE_NAME) {
