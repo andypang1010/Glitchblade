@@ -1,10 +1,6 @@
 //
-<<<<<<< HEAD:source/GBProjectile.cpp
 //  GBProjectile.cpp
-=======
-//  GBBullet.cpp
 //  PlatformDemo
->>>>>>> fd88916c00735a7574c04a0efd54f6274e134bf4:source/GBBullet.cpp
 //
 //  This class is a simple extension of WheelObstacle in order to simplify the
 //  process of adding and removing Projectiles from the game world, as well as for
@@ -13,11 +9,7 @@
 //  Author:  Walker White and Anthony Perello
 //  Version: 2/9/21
 //
-<<<<<<< HEAD:source/GBProjectile.cpp
 #include "GBProjectile.h"
-=======
-#include "GBBullet.h"
->>>>>>> fd88916c00735a7574c04a0efd54f6274e134bf4:source/GBBullet.cpp
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>

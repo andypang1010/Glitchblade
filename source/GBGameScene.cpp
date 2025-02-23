@@ -24,13 +24,7 @@
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
 #include "GBDudeModel.h"
-<<<<<<< HEAD
 #include "GBProjectile.h"
-=======
-#include "GBSpinner.h"
-#include "GBRopeBridge.h"
-#include "GBBullet.h"
->>>>>>> fd88916c00735a7574c04a0efd54f6274e134bf4
 
 #include <ctime>
 #include <string>

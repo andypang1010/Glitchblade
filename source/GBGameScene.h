@@ -31,15 +31,8 @@
 #include <unordered_set>
 #include <vector>
 #include "GBInput.h"
-<<<<<<< HEAD
 #include "GBProjectile.h"
 #include "GBDudeModel.h"
-=======
-#include "GBBullet.h"
-#include "GBDudeModel.h"
-#include "GBRopeBridge.h"
-#include "GBSpinner.h"
->>>>>>> fd88916c00735a7574c04a0efd54f6274e134bf4
 
 using namespace cugl;
 
