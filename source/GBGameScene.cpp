@@ -105,6 +105,8 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
 //    }
 //};
 
+#define ENEMY_TEXTURE "dude"
+
 /** The number of ground vertices */
 #define GROUND_VERTS  8
 #define GROUND_THICKNESS 4
@@ -469,7 +471,7 @@ void GameScene::populate() {
 #pragma mark : Test Enemy
     Vec2 enemyPos = ENEMY_POS;
     node = scene2::SceneNode::alloc();
-    image = _assets->get<Texture>(DUDE_TEXTURE);
+    image = _assets->get<Texture>(ENEMY_TEXTURE);
     _testEnemy = DudeModel::alloc(enemyPos, image->getSize() / _scale, _scale);
     sprite = scene2::PolygonNode::allocWithTexture(image);
     _testEnemy->setSceneNode(sprite);

@@ -50,7 +50,7 @@ using namespace cugl;
 #pragma mark -
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
-#define DUDE_TEXTURE    "dude"
+#define DUDE_TEXTURE    "player"
 /** Identifier to allow us to track the sensor in ContactListener */
 #define SENSOR_NAME     "dudesensor"
 
