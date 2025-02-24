@@ -608,6 +608,7 @@ void GameScene::update(float timestep) {
 		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
 		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
 	}
+    
 	
 	// Turn the physics engine crank.
     _world->update(timestep);

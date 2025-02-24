@@ -62,6 +62,8 @@
 #define GUARD_DURATION  120
 /** Duration (in frames) for parry */
 #define PARRY_DURATION  30
+/** Duration (in frames) for dash- affects friction*/
+#define DASH_DURATION  10
 /** The amount to shrink the body fixture (vertically) relative to the image */
 #define DUDE_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -70,6 +72,8 @@
 #define DUDE_SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT   0.1f
+/** The amount to shrink the radius of the shield relative to the image width */
+#define SHIELD_RADIUS 2.0f
 /** The density of the character */
 #define DUDE_DENSITY    1.0f
 /** The impulse for the character jump */
@@ -233,10 +237,15 @@ void DudeModel::createFixtures() {
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
     
-    // Guard fixture
-    //_guardField->createFixtures();
-    //_guardField->setSensor(true);
-    
+    // create shield circle fixture
+    b2FixtureDef shieldDef;
+    b2CircleShape shieldShape;
+    shieldShape.m_radius = SHIELD_RADIUS;
+    shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
+    shieldDef.isSensor = true;
+    shieldDef.shape = &sensorShape;
+    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
+    _shieldFixture = _body->CreateFixture(&shieldDef);
 }
 
 /**
@@ -266,7 +275,7 @@ void DudeModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
-    _guardField = nullptr;
+    _shieldNode = nullptr;
 }
 
 /**
@@ -280,48 +289,47 @@ void DudeModel::applyForce() {
     }
     
     // Don't want to be moving. Damp out player motion
-    if (getMovement() == 0.0f) {
+    if (getMovement() == 0.0f && !isDashActive()) {
         if (isGrounded()) {
             // Instant friction on the ground
             b2Vec2 vel = _body->GetLinearVelocity();
             vel.x = 0; // If you set y, you will stop a jump in place
             _body->SetLinearVelocity(vel);
         } else {
-            // Damping factor in the air
+            //             Damping factor in the air
             b2Vec2 force(-getDamping()*getVX(),0);
-            _body->ApplyForce(force,_body->GetPosition(),true);
+            _body->ApplyForceToCenter(force,true);
         }
     }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed()) {
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-    } else {
-        b2Vec2 force(getMovement(),0);
-        _body->ApplyForce(force,_body->GetPosition(),true);
-    }
-    
+#pragma mark strafe force
+    CULog("Applying strafe force %f",getMovement());
+    b2Vec2 force(getMovement(),0);
+    _body->ApplyForceToCenter(force,true);
+#pragma mark jump force
     // Jump!
     if (isJumpBegin() && isGrounded()) {
         b2Vec2 force(0, DUDE_JUMP);
-        _body->ApplyLinearImpulse(force,_body->GetPosition(),true);
+        _body->ApplyLinearImpulseToCenter(force,true);
     }
-    
+#pragma mark dash force
     // Dash!
     if (isDashLeftBegin()){
         CULog("dashing left\n");
         b2Vec2 force(-DUDE_DASH,0);
-        _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
-        faceLeft();
+        _body->ApplyLinearImpulseToCenter(force, true);
     }
     
     if (isDashRightBegin()){
         CULog("dashing right\n");
         b2Vec2 force(DUDE_DASH,0);
-        _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
-        faceRight();
+        _body->ApplyLinearImpulseToCenter(force, true);
     }
-    
+    // Velocity too high, clamp it
+    if (fabs(getVX()) >= getMaxSpeed()) {
+        CULog("clamping velocity");
+        setVX(SIGNUM(getVX())*getMaxSpeed());
+        
+    }
 }
 #pragma mark Cooldowns
 /**
@@ -370,18 +378,18 @@ void DudeModel::update(float dt) {
     }
     
     if (isShooting()) {
-        CULog("isShooting is true");
         _shootCooldownRem = SHOOT_COOLDOWN;
     } else {
         _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
     }
     
     if (isDashBegin()) {
-        CULog("isDashBegin is true");
+        _dashRem = DASH_DURATION;
         _dashCooldownRem = DASH_COOLDOWN;
     }
     else {
         _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
+        _dashRem = (_dashRem > 0 ? _dashRem-1 : 0);
     }
     // player inputs guard and cooldown is ready
     if (isGuardBegin()) {
@@ -393,6 +401,8 @@ void DudeModel::update(float dt) {
         _parryRem = PARRY_DURATION;
         
     }
+    
+    CapsuleObstacle::update(dt);
     
     BoxObstacle::update(dt);
     if (_node != nullptr) {
@@ -415,12 +425,16 @@ void DudeModel::resetDebug() {
     BoxObstacle::resetDebug();
     float w = DUDE_SSHRINK*_dimension.width;
     float h = SENSOR_HEIGHT;
-    Poly2 poly(Rect(-w/2.0f,-h/2.0f,w,h));
-
-    _sensorNode = scene2::WireNode::allocWithTraversal(poly, poly2::Traversal::INTERIOR);
+    Poly2 dudePoly(Rect(-w/2.0f,-h/2.0f,w,h));
+    _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
-    _debug->addChild(_sensorNode);
+    
+    Poly2 shieldPoly;
+    shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, SHIELD_RADIUS);
+    _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
+    _shieldNode->setColor(DEBUG_COLOR);
+    
 }
 
 

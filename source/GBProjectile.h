@@ -17,14 +17,14 @@ using namespace cugl;
 #pragma mark Projectile Model
 class Projectile : public physics2::WheelObstacle {
 private:
-	/** This macro disables the copy constructor (not allowed on physics objects) */
-	CU_DISALLOW_COPY_AND_ASSIGN(Projectile);
+    /** This macro disables the copy constructor (not allowed on physics objects) */
+    CU_DISALLOW_COPY_AND_ASSIGN(Projectile);
 
 protected:
-	/** The scene graph node for the Projectile. */
-	std::shared_ptr<scene2::SceneNode> _node;
-	/** The scale between the physics world and the screen (MUST BE UNIFORM) */
-	float _drawScale;
+    /** The scene graph node for the Projectile. */
+    std::shared_ptr<scene2::SceneNode> _node;
+    /** The scale between the physics world and the screen (MUST BE UNIFORM) */
+    float _drawScale;
     bool _isPlayerFired;
 
 public:
@@ -89,7 +89,7 @@ public:
     /**
      * Sets the scene graph node representing this Projectile.
      *
-     * @param node  The scene graph node representing this Projectile, which has 
+     * @param node  The scene graph node representing this Projectile, which has
      *              been added to the world node already.
      */
     void setSceneNode(const std::shared_ptr<scene2::SceneNode>& node) {
@@ -132,14 +132,14 @@ public:
 
 #pragma mark -
 #pragma mark Physics Methods
-	/**
-	* Updates the object's physics state (NOT GAME LOGIC).
-	*
-	* We use this method to reset cooldowns.
-	*
-	* @param delta Number of seconds since last animation frame
-	*/
-	void update(float dt) override;
+    /**
+    * Updates the object's physics state (NOT GAME LOGIC).
+    *
+    * We use this method to reset cooldowns.
+    *
+    * @param delta Number of seconds since last animation frame
+    */
+    void update(float dt) override;
 
 
 

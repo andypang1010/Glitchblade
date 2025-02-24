@@ -52,8 +52,10 @@ using namespace cugl;
 /** The texture for the character avatar */
 #define DUDE_TEXTURE    "player"
 #define ENEMY_TEXTURE   "enemy"
-/** Identifier to allow us to track the sensor in ContactListener */
+/** Identifier to allow us to track the player sensor in ContactListener */
 #define SENSOR_NAME     "dudesensor"
+#define SHIELD_SENSOR_NAME      "shield"
+
 
 
 #pragma mark -
@@ -92,6 +94,8 @@ protected:
 	int  _jumpCooldownRem;
     /** How long until we can jump again in frames*/
     int  _dashCooldownRem;
+    /** How many frames remaining in the dash animation (affects friciton)*/
+    int  _dashRem;
     /** How long until we can guard again in frames */
     int  _guardCooldownRem;
     /** How many frames remaining in the guard (0 when guard is not active) */
@@ -123,10 +127,15 @@ protected:
 	b2Fixture*  _sensorFixture;
 	/** Reference to the sensor name (since a constant cannot have a pointer) */
 	std::string _sensorName;
-	/** The node for debugging the sensor */
+	/** The node for debugging the ground sensor */
 	std::shared_ptr<scene2::WireNode> _sensorNode;
-    /** The guard field when guard is active */
-    std::shared_ptr<physics2::WheelObstacle> _guardField;
+    /** Ground sensor to represent our feet */
+    b2Fixture*  _shieldFixture;
+    /** Reference to the sensor name (since a constant cannot have a pointer) */
+    std::string _shieldName;
+    /** The node for debugging the ground sensor */
+    std::shared_ptr<scene2::WireNode> _shieldNode;
+    /** The guard shield when guard is active */
     
 	/** The scene graph node for the Dude. */
 	std::shared_ptr<scene2::SceneNode> _node;
@@ -151,7 +160,7 @@ public:
      * This constructor does not initialize any of the dude values beyond
      * the defaults.  To use a DudeModel, you must call init().
      */
-    DudeModel() : BoxObstacle(), _sensorName(SENSOR_NAME) { }
+    DudeModel() : BoxObstacle(), _sensorName(SENSOR_NAME), _shieldName(SHIELD_SENSOR_NAME) { }
     
     /**
      * Destroys this DudeModel, releasing all resources.
@@ -524,17 +533,22 @@ public:
      */
     bool isGuardActive() { return  _guardRem > 0; };
     /**
+     * Returns true if the dude is in a dash animation.
+     *
+     * @return value whether the dude is in a dash animation.
+     */
+    bool isDashActive() { return _dashRem > 0; };
+    /**
      * Returns true if the dude is actively parrying.
      *
-     * @return value whether the dude is actively dashing left.
+     * @return value whether the dude is actively parrying.
      */
     bool isParryActive() { return _parryRem > 0; };
     /**
-     * Returns true ifthe dude has a swallowed projectile.
+     * Returns true if the dude has a swallowed projectile.
      *
      * @return value whether the dude has a swallowed projectile.
      */
-    
     bool hasProjectile() { return _hasProjectile; };
     /**
      * Returns true if the dude is on the ground.
@@ -560,9 +574,9 @@ public:
     float getForce() const { return DUDE_FORCE; }
     
     /**
-     * Returns ow hard the brakes are applied to get a dude to stop moving
+     * Returns How hard the brakes are applied to get a dude to stop moving
      *
-     * @return ow hard the brakes are applied to get a dude to stop moving
+     * @return How hard the brakes are applied to get a dude to stop moving
      */
     float getDamping() const { return DUDE_DAMPING; }
     
@@ -583,6 +597,14 @@ public:
      * @return the name of the ground sensor
      */
     std::string* getSensorName() { return &_sensorName; }
+    /**
+     * Returns the name of the shield sensor
+     *
+     * This is used by ContactListener
+     *
+     * @return the name of the shield sensor
+     */
+    std::string* getShieldName() { return &_shieldName; }
     
     /**
      * Returns true if this character is facing right

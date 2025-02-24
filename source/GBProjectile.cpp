@@ -31,10 +31,10 @@ using namespace cugl::scene2;
 void Projectile::update(float dt) {
 	WheelObstacle::update(dt);
 
-	if (_node != nullptr) {
-		_node->setPosition(getPosition()*_drawScale);
-		_node->setAngle(getAngle());
-	}
+    if (_node != nullptr) {
+        _node->setPosition(getPosition()*_drawScale);
+        _node->setAngle(getAngle());
+    }
 }
 
 /**
