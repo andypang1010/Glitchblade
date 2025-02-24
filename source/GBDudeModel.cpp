@@ -402,8 +402,6 @@ void DudeModel::update(float dt) {
         
     }
     
-    CapsuleObstacle::update(dt);
-    
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition()*_drawScale);
