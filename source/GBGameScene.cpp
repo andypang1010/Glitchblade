@@ -830,6 +830,8 @@ void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     projectile->setSceneNode(sprite);
 
+    sprite->flipHorizontal(direction.x < 0);
+
     // Compute position and velocity
     Vec2 speed = direction.getNormalization()*PROJECTILE_SPEED;
     projectile->setLinearVelocity(speed);
