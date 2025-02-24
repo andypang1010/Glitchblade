@@ -150,7 +150,7 @@ float ENEMY_POS[] = { 12.5f, 5.0f };
 /** The key for the background texture in the asset manager */
 #define BKGD_TEXTURE    "background"
 /** The key for the projectile texture in the asset manager */
-#define PROJECTILE_TEXTURE  "bullet"
+#define PROJECTILE_TEXTURE  "projectile"
 
 ///////////////// NAMES /////////////////////////////////////
 #define ENEMY_NAME      "enemy"
