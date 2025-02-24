@@ -263,7 +263,7 @@ void DudeModel::releaseFixtures() {
  * disposed, a DudeModel may not be used until it is initialized again.
  */
 void DudeModel::dispose() {
-    //_core = nullptr;
+    _geometry = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
     _guardField = nullptr;

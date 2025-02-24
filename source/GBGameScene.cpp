@@ -122,8 +122,8 @@ float DUDE_POS[] = { 2.5f, 5.0f };
 float ENEMY_POS[] = { 12.5f, 5.0f };
 
 /** Bullet Spawn Points */
-Vec2 LEFT_BULLET = { 5.0f, 6.0f };
-Vec2 RIGHT_BULLET = { 27.5f, 6.0f };
+Vec2 LEFT_BULLET = { 5.0f, 9.0f };
+Vec2 RIGHT_BULLET = { 27.5f, 13.0f };
 
 /** Directions */
 Vec2 LEFT = { -1.0f, 0.0f };
@@ -537,6 +537,49 @@ void GameScene::addObstacle(const std::shared_ptr<physics2::Obstacle>& obj,
     }
 }
 
+/**
+* Sets whether the level is completed.
+*
+* If true, the level will advance after a countdown
+*
+* @param value whether the level is completed.
+*/
+void GameScene::setComplete(bool value) {
+    bool change = _complete != value;
+    _complete = value;
+    if (value && change) {
+        std::shared_ptr<Sound> source = _assets->get<Sound>(WIN_MUSIC);
+        AudioEngine::get()->getMusicQueue()->play(source, false, MUSIC_VOLUME);
+        _winnode->setVisible(true);
+        _countdown = EXIT_COUNT;
+    }
+    else if (!value) {
+        _winnode->setVisible(false);
+        _countdown = -1;
+    }
+}
+
+/**
+ * Sets whether the level is failed.
+ *
+ * If true, the level will reset after a countdown
+ *
+ * @param value whether the level is failed.
+ */
+void GameScene::setFailure(bool value) {
+    _failed = value;
+    if (value) {
+        std::shared_ptr<Sound> source = _assets->get<Sound>(LOSE_MUSIC);
+        AudioEngine::get()->getMusicQueue()->play(source, false, MUSIC_VOLUME);
+        _losenode->setVisible(true);
+        _countdown = EXIT_COUNT;
+    }
+    else {
+        _losenode->setVisible(false);
+        _countdown = -1;
+    }
+}
+
 
 #pragma mark -
 #pragma mark Physics Handling
@@ -728,16 +771,14 @@ void GameScene::postUpdate(float remain) {
     }
 
     if (_bulletTimer <= 0) {
-        int r = rand() % 3;
+        int r = rand() % 2;
         if (r == 0) {
             createProjectile(LEFT_BULLET, RIGHT, false);
         }
         else if(r == 1){
             createProjectile(RIGHT_BULLET, LEFT, false);
         }
-        else { // Bullet from above
-            createProjectile(Vec2(rand()%22 + 5, 12.5), DOWN, false);
-        }
+
         _bulletTimer = BULLET_SPAWN_RATE;
     }
     else {
@@ -758,51 +799,6 @@ void GameScene::postUpdate(float remain) {
     }
 }
 
-
-/**
-* Sets whether the level is completed.
-*
-* If true, the level will advance after a countdown
-*
-* @param value whether the level is completed.
-*/
-void GameScene::setComplete(bool value) {
-    bool change = _complete != value;
-    _complete = value;
-    if (value && change) {
-        std::shared_ptr<Sound> source = _assets->get<Sound>(WIN_MUSIC);
-        AudioEngine::get()->getMusicQueue()->play(source, false, MUSIC_VOLUME);
-        _winnode->setVisible(true);
-        _countdown = EXIT_COUNT;
-    }
-    else if (!value) {
-        _winnode->setVisible(false);
-        _countdown = -1;
-    }
-}
-
-/**
- * Sets whether the level is failed.
- *
- * If true, the level will reset after a countdown
- *
- * @param value whether the level is failed.
- */
-void GameScene::setFailure(bool value) {
-    _failed = value;
-    if (value) {
-        std::shared_ptr<Sound> source = _assets->get<Sound>(LOSE_MUSIC);
-        AudioEngine::get()->getMusicQueue()->play(source, false, MUSIC_VOLUME);
-        _losenode->setVisible(true);
-        _countdown = EXIT_COUNT;
-    }
-    else {
-        _losenode->setVisible(false);
-        _countdown = -1;
-    }
-}
-
-
 /**
  * Add a new projectile to the world and send it in the right direction.
  */
@@ -817,7 +813,7 @@ void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
     float radius = 0.5f * image->getSize().width / _scale;
 
     // Change last parameter to test player-fired or regular projectile
-    std::shared_ptr<Projectile> projectile = Projectile::alloc(pos, radius, true);
+    std::shared_ptr<Projectile> projectile = Projectile::alloc(pos, radius, isPlayerFired);
     projectile->setName(PROJECTILE_NAME);
     projectile->setDensity(HEAVY_DENSITY);
     projectile->setBullet(true);
@@ -902,13 +898,15 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Player Damaged, remaining HP %f", _player->getHP());
             _player->damage(20);
             removeProjectile((Projectile*)bd2);
+            setFailure(_player->getHP() <= 0);
         }
     }
     else if (bd2 == _player.get() && bd1->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
             CULog("Player Damaged, remaining HP %f", _player->getHP());
             _player->damage(20);
-            removeProjectile((Projectile*)bd2);
+            removeProjectile((Projectile*)bd1);
+            setFailure(_player->getHP() <= 0);
         }
     }
 
@@ -1017,13 +1015,15 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Enemy Damaged, remaining HP %f", ((DudeModel*)bd1)->getHP());
             ((DudeModel*)bd1)->damage(20);
             removeProjectile((Projectile*)bd2);
+            setComplete(((DudeModel*)bd1)->getHP() <= 0);
         }
     }
     else if (bd2->getName() == ENEMY_NAME && bd1->getName() == PROJECTILE_NAME) {
         if (((Projectile*)bd1)->getIsPlayerFired()) {
             CULog("Enemy Damaged, remaining HP %f", ((DudeModel*)bd2)->getHP());
             ((DudeModel*)bd2)->damage(20);
-            removeProjectile((Projectile*)bd2);
+            removeProjectile((Projectile*)bd1);
+            setComplete(((DudeModel*)bd1)->getHP() <= 0);
         }
     }
 
