@@ -201,7 +201,7 @@ Vec2 DOWN = { 0.0f, -1.0f };
 /** The image for the right dpad/joystick */
 #define RIGHT_IMAGE     "dpad_right"
 /** The fire rate for spawned bullets */
-#define BULLET_SPAWN_RATE     30.0f
+#define BULLET_SPAWN_RATE     50.0f
 
 /** Color to outline the physics nodes */
 #define DEBUG_COLOR     Color4::YELLOW
