@@ -49,7 +49,7 @@ private:
     bool  _keyFire;
     /** Whether the reset key is down */
     bool  _keyReset;
-    /** Whether the debug key is down */
+    /** Whether the debug key is down (Z)*/
     bool  _keyDebug;
     /** Whether the exit key is down */
     bool  _keyExit;
@@ -57,6 +57,12 @@ private:
     bool  _keyLeft;
     /** Whether the right arrow key is down */
     bool  _keyRight;
+    /** Whether the left dash key is down (A)*/
+    bool  _keyLdash;
+    /** Whether the right dash key is down (D) */
+    bool  _keyRdash;
+    /** Whether the guard key is down (spacebar) */
+    bool  _keyGuard;
   
 protected:
     // INPUT RESULTS
@@ -68,8 +74,18 @@ protected:
     bool _exitPressed;
     /** Whether the fire action was chosen. */
     bool _firePressed;
+    /** Whether the left dash action was chosen. */
+    bool _ldashPressed;
+    /** Whether the right dash action was chosen. */
+    bool _rdashPressed;
     /** Whether the jump action was chosen. */
     bool _jumpPressed;
+    /** Whether the guard action was chosen. */
+    bool _guardPressed;
+    /** Whether the strafe left action was chosen. */
+    bool _leftPressed;
+    /** Whether the strafe right action was chosen. */
+    bool _rightPressed;
     /** How much did we move horizontally? */
     float _horizontal;
 
@@ -261,28 +277,61 @@ public:
      *
      * -1 = left, 1 = right, 0 = still
      *
-     * @return the amount of sideways movement.
+     * @return the amount of sideways strafing movement. 
      */
 	float getHorizontal() const { return _horizontal; }
 
     /**
-     * Returns if the jump button was pressed.
+     * Returns if the jump input was received.
      *
-     * @return if the jump button was pressed.
+     * @return if the jump input was received.
      */
 	float didJump() const { return _jumpPressed; }
+    /**
+     * Returns if the left strafe input was received.
+     *
+     * @return if the left strafe input was received.
+     */
+    float didStrafeLeft() const { return _leftPressed; }
 
     /**
-     * Returns true if the fire button was pressed.
+     * Returns if the right strafe input was received.
      *
-     * @return true if the fire button was pressed.
+     * @return if the right strafe input was received.
+     */
+    float didStrafeRight() const { return _rightPressed; }
+    /**
+     * Returns if the left dash input was received.
+     *
+     * @return if the left dash input was received.
+     */
+    float didDashLeft() const { return _ldashPressed; }
+
+    /**
+     * Returns if the right dash input was received.
+     *
+     * @return if the right dash input was received.
+     */
+    float didDashRight() const { return _rdashPressed; }
+
+    /**
+     * Returns if the guard input was received.
+     *
+     * @return if the guard input was received.
+     */
+    float didGuard() const { return _guardPressed; }
+
+    /**
+     * Returns true if the fire input was received.
+     *
+     * @return true if the fire input was received.
      */
 	bool didFire() const { return _firePressed; }
 
     /**
-     * Returns true if the reset button was pressed.
+     * Returns true if the reset input was received.
      *
-     * @return true if the reset button was pressed.
+     * @return true if the reset input was received.
      */
 	bool didReset() const { return _resetPressed; }
 
@@ -294,9 +343,9 @@ public:
 	bool didDebug() const { return _debugPressed; }
 
 	/**
-	 * Returns true if the exit button was pressed.
+	 * Returns true if the exit input was received.
 	 *
-	 * @return true if the exit button was pressed.
+	 * @return true if the exit input was received.
 	 */
 	bool didExit() const { return _exitPressed; }
     

@@ -46,7 +46,3 @@ void Projectile::update(float dt) {
 void Projectile::dispose() {
 	_node = nullptr;
 }
-
-
-
-

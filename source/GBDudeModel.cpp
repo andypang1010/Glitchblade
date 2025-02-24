@@ -54,6 +54,14 @@
 #define JUMP_COOLDOWN   5
 /** Cooldown (in animation frames) for shooting */
 #define SHOOT_COOLDOWN  20
+/** Cooldown (in frames) for guard */
+#define GUARD_COOLDOWN  30
+/** Cooldown (in frames) for dash */
+#define DASH_COOLDOWN  30
+/** Duration (in frames) for guard */
+#define GUARD_DURATION  120
+/** Duration (in frames) for parry */
+#define PARRY_DURATION  30
 /** The amount to shrink the body fixture (vertically) relative to the image */
 #define DUDE_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -66,6 +74,8 @@
 #define DUDE_DENSITY    1.0f
 /** The impulse for the character jump */
 #define DUDE_JUMP       42.5f
+/** The impulse for the character dash-attack */
+#define DUDE_DASH       100.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -104,12 +114,21 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
         
         // Gameplay attributes
         _isGrounded = false;
-        _isShooting = false;
-        _isJumping  = false;
+        _isShootInput = false;
+        _isJumpInput  = false;
+        _isStrafeLeft = false;
+        _isStrafeRight = false;
+        _isDashLeftInput = false;
+        _isDashRightInput = false;
+        _isGuardInput = false;
+        _hasProjectile = false;
         _faceRight  = true;
-        
-        _shootCooldown = 0;
-        _jumpCooldown  = 0;
+        _shootCooldownRem = 0;
+        _jumpCooldownRem  = 0;
+        _dashCooldownRem = 0;
+        _guardCooldownRem = 0;
+        _guardRem = 0;
+        _parryRem= 0;
         return true;
     }
     return false;
@@ -139,6 +158,32 @@ void DudeModel::setMovement(float value) {
         image->flipHorizontal(!image->isFlipHorizontal());
     }
     _faceRight = face;
+}
+
+/**
+* Make the sprite face left
+*/
+void DudeModel::faceLeft() {
+    if (_faceRight == true) {
+        _faceRight = false;
+        scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
+        if (image != nullptr) {
+            image->flipHorizontal(!image->isFlipHorizontal());
+        }
+    }
+}
+
+/**
+* Make the sprite face right
+*/
+void DudeModel::faceRight() {
+    if (_faceRight == false) {
+        _faceRight = true;
+        scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
+        if (image != nullptr) {
+            image->flipHorizontal(!image->isFlipHorizontal());
+        }
+    }
 }
 
 
@@ -176,6 +221,11 @@ void DudeModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
+    
+    // Guard fixture
+    //_guardField->createFixtures();
+    //_guardField->setSensor(true);
+    
 }
 
 /**
@@ -205,6 +255,7 @@ void DudeModel::dispose() {
     //_core = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
+    _guardField = nullptr;
 }
 
 /**
@@ -240,12 +291,28 @@ void DudeModel::applyForce() {
     }
     
     // Jump!
-    if (isJumping() && isGrounded()) {
+    if (isJumpBegin() && isGrounded()) {
         b2Vec2 force(0, DUDE_JUMP);
         _body->ApplyLinearImpulse(force,_body->GetPosition(),true);
     }
+    
+    // Dash!
+    if (isDashLeftBegin()){
+        CULog("dashing left\n");
+        b2Vec2 force(-DUDE_DASH,0);
+        _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
+        faceLeft();
+    }
+    
+    if (isDashRightBegin()){
+        CULog("dashing right\n");
+        b2Vec2 force(DUDE_DASH,0);
+        _body->ApplyLinearImpulse(force, _body->GetPosition(), true);
+        faceRight();
+    }
+    
 }
-
+#pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
  *
@@ -255,21 +322,68 @@ void DudeModel::applyForce() {
  */
 void DudeModel::update(float dt) {
     // Apply cooldowns
-    if (isJumping()) {
-        _jumpCooldown = JUMP_COOLDOWN;
+    
+#pragma mark Guard and Parry timing
+    // guard cooldown first for most recent movement inputs
+    if (isGuardActive()){
+        //just for logging end of parry
+        bool parry_active = isParryActive();
+        // If robot moves, guard is cancelled
+        if (isMoveBegin()){
+            _guardRem = 0;
+            _parryRem = 0;
+            CULog("Parry and Guard ended due to movement\n");
+        }
+        else{
+            _guardRem = (_guardRem > 0 ? _guardRem -1 : 0);
+            _parryRem= (_parryRem > 0 ? _parryRem -1 : 0);
+            
+            //The rest of this block is for logging end of guard&parry
+            if (parry_active && (_parryRem == 0)){
+                CULog("Parry completed during guard\n");
+            }
+            if (_guardRem == 0){
+                CULog("Guard completed full duration\n");
+            }
+        }
+    }
+    // guard not active, update cooldown
+    else {
+        _guardCooldownRem = (_guardCooldownRem > 0 ? _guardCooldownRem -1 : 0);
+    }
+    if (isJumpBegin() && isGrounded()) {
+        CULog("isJumping is true");
+        _jumpCooldownRem = JUMP_COOLDOWN;
     } else {
-        // Only cooldown while grounded
-        _jumpCooldown = (_jumpCooldown > 0 ? _jumpCooldown-1 : 0);
+        _jumpCooldownRem = (_jumpCooldownRem > 0 ? _jumpCooldownRem-1 : 0);
     }
     
     if (isShooting()) {
-        _shootCooldown = SHOOT_COOLDOWN;
+        CULog("isShooting is true");
+        _shootCooldownRem = SHOOT_COOLDOWN;
     } else {
-        _shootCooldown = (_shootCooldown > 0 ? _shootCooldown-1 : 0);
+        _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
+    }
+    
+    if (isDashBegin()) {
+        CULog("isDashBegin is true");
+        _dashCooldownRem = DASH_COOLDOWN;
+    }
+    else {
+        _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
+    }
+    // player inputs guard and cooldown is ready
+    if (isGuardBegin()) {
+        CULog("Beginning guard\n");
+        _guardCooldownRem = GUARD_COOLDOWN;
+        _guardRem = GUARD_DURATION;
+        // begin parry
+        CULog("Beginning parry\n");
+        _parryRem = PARRY_DURATION;
+        
     }
     
     BoxObstacle::update(dt);
-    
     if (_node != nullptr) {
         _node->setPosition(getPosition()*_drawScale);
         _node->setAngle(getAngle());

@@ -126,7 +126,7 @@ public:
      *
      * @param isPlayerFired
      */
-    void setIsPlayerFired(bool isPlayerFired) {
+    void setIsPlayerFired(float isPlayerFired) {
         _isPlayerFired = isPlayerFired;
     }
 

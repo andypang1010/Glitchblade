@@ -30,6 +30,20 @@
 // Include your application class
 #include "GBApp.h"
 
+#if __has_include("discordsdk/discord.h")
+    #include "GBDiscordPresence.h"
+    #define DISCORD_SDK_AVAILABLE 1
+#else
+    #define DISCORD_SDK_AVAILABLE 0
+#endif
+
+#if __has_include("discordsdk/discord.h")
+    #include "GBDiscordPresence.h"
+    #define DISCORD_SDK_AVAILABLE 1
+#else
+    #define DISCORD_SDK_AVAILABLE 0
+#endif
+
 using namespace cugl;
 
 /**
@@ -60,7 +74,19 @@ int main(int argc, char * argv[]) {
     }
     
     app.onStartup();
+
+    // Start Discord presence
+    #if DISCORD_SDK_AVAILABLE
+        GlitchbladeDiscordPresence::startPresence();
+    #endif
+
     while (app.step());
+
+    // Stop Discord presence
+    #if DISCORD_SDK_AVAILABLE
+        GlitchbladeDiscordPresence::stopPresence();
+    #endif
+    
     app.onShutdown();
 
     exit(0);    // Necessary to quit on mobile devices

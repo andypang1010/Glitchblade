@@ -579,17 +579,18 @@ void GameScene::update(float timestep) {
         _leftnode->setVisible(false);
         _rightnode->setVisible(false);
     }
+    
+	_player->setMovement(_input.getHorizontal()*_player->getForce());
+	_player->setJumpInput( _input.didJump());
+    _player->setGuardInput(_input.didGuard());
+	_player->applyForce();
 
-    _player->setMovement(_input.getHorizontal() * _player->getForce());
-    _player->setJumping(_input.didJump());
-    _player->applyForce();
-
-    if (_player->isJumping() && _player->isGrounded()) {
-        std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
-        AudioEngine::get()->play(JUMP_EFFECT, source, false, EFFECT_VOLUME);
-    }
-
-    // Turn the physics engine crank.
+	if (_player->isJumpBegin() && _player->isGrounded()) {
+		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
+		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+	}
+	
+	// Turn the physics engine crank.
     _world->update(timestep);
 }
 
@@ -645,14 +646,19 @@ void GameScene::preUpdate(float dt) {
         _leftnode->setVisible(false);
         _rightnode->setVisible(false);
     }
-
-    _player->setMovement(_input.getHorizontal() * _player->getForce());
-    _player->setJumping(_input.didJump());
+    
+    _player->setMovement(_input.getHorizontal()*_player->getForce());
+    _player->setStrafeLeft(_input.didStrafeLeft());
+    _player->setStrafeRight(_input.didStrafeRight());
+	_player->setJumpInput( _input.didJump());
+    _player->setDashLeftInput(_input.didDashLeft());
+    _player->setDashRightInput(_input.didDashRight());
+    _player->setGuardInput(_input.didGuard());
     _player->applyForce();
 
-    if (_player->isJumping() && _player->isGrounded()) {
-        std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
-        AudioEngine::get()->play(JUMP_EFFECT, source, false, EFFECT_VOLUME);
+    if (_player->isJumpBegin() && _player->isGrounded()) {
+      std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
+      AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
     }
 
 }
@@ -716,7 +722,7 @@ void GameScene::postUpdate(float remain) {
 
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
-    _player->setShooting(_input.didFire());
+    _player->setShootInput(_input.didFire());
     if (_player->isShooting()) {
         createProjectile(_player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true);
     }
