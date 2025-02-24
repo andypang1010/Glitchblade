@@ -79,32 +79,6 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
     }
 };
 
-//#define WALL_VERTS  8
-//#define WALL_COUNT  3
-//#define WALL_THICKNESS 3
-
-/** The outlines of the walls */
-//float WALL[WALL_COUNT][WALL_VERTS]{
-//    {
-//        0.0f, 0.0f,
-//        WALL_THICKNESS, 0.0f,
-//        WALL_THICKNESS, DEFAULT_HEIGHT,
-//        0.0f, DEFAULT_HEIGHT
-//    },
-//    {
-//        DEFAULT_WIDTH, 0.0f,
-//        DEFAULT_WIDTH - WALL_THICKNESS, 0.0f,
-//        DEFAULT_WIDTH - WALL_THICKNESS, DEFAULT_HEIGHT,
-//        DEFAULT_WIDTH, DEFAULT_HEIGHT
-//    },
-//    {
-//        0.0f, DEFAULT_HEIGHT,
-//        DEFAULT_WIDTH, DEFAULT_HEIGHT,
-//        DEFAULT_WIDTH, DEFAULT_HEIGHT - WALL_THICKNESS,
-//        0.0f, DEFAULT_HEIGHT - WALL_THICKNESS
-//    }
-//};
-
 /** The number of ground vertices */
 #define GROUND_VERTS  8
 #define GROUND_THICKNESS 4
@@ -122,8 +96,8 @@ float DUDE_POS[] = { 2.5f, 5.0f };
 float ENEMY_POS[] = { 12.5f, 5.0f };
 
 /** Bullet Spawn Points */
-Vec2 LEFT_BULLET = { 5.0f, 9.0f };
-Vec2 RIGHT_BULLET = { 27.5f, 13.0f };
+Vec2 LEFT_BULLET = { WALL_THICKNESS + 1.5f, 9.0f };
+Vec2 RIGHT_BULLET = { DEFAULT_WIDTH - WALL_THICKNESS - 1.5f, 13.0f };
 
 /** Directions */
 Vec2 LEFT = { -1.0f, 0.0f };
