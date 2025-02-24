@@ -505,9 +505,9 @@ public:
      */
     bool isDashActive() { return _dashRem > 0; };
     /**
-     * Returns true if the dude is actively dashing.
+     * Returns true if the dude is actively parrying.
      *
-     * @return value whether the dude is actively  parrying.
+     * @return value whether the dude is actively parrying.
      */
     bool isParryActive() { return _parryRem > 0; };
     /**
@@ -568,7 +568,7 @@ public:
      *
      * This is used by ContactListener
      *
-     * @return the name of the ground sensor
+     * @return the name of the shield sensor
      */
     std::string* getShieldName() { return &_shieldName; }
     
