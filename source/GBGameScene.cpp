@@ -58,7 +58,7 @@ using namespace cugl::audio;
 /** The wall vertices */
 #define WALL_VERTS 12
 #define WALL_COUNT  2
-#define WALL_THICKNESS 3
+#define WALL_THICKNESS 1
 
 float WALL[WALL_COUNT][WALL_VERTS] = {
     {
@@ -122,8 +122,8 @@ float DUDE_POS[] = { 2.5f, 5.0f };
 float ENEMY_POS[] = { 12.5f, 5.0f };
 
 /** Bullet Spawn Points */
-Vec2 LEFT_BULLET = { 5.0f, 5.0f };
-Vec2 RIGHT_BULLET = { 27.5f, 5.0f };
+Vec2 LEFT_BULLET = { 5.0f, 6.0f };
+Vec2 RIGHT_BULLET = { 27.5f, 6.0f };
 
 /** Directions */
 Vec2 LEFT = { -1.0f, 0.0f };
@@ -801,8 +801,11 @@ void GameScene::setFailure(bool value) {
  * Add a new projectile to the world and send it in the right direction.
  */
 void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
-    float offset = PROJECTILE_OFFSET;
-    // pos.x += (_player->isFacingRight() ? offset : -offset);
+	float offset = PROJECTILE_OFFSET;
+    if (isPlayerFired) {
+        pos.x += (_player->isFacingRight() ? offset : -offset);
+        pos.y += 0.5f;
+    }
 
     std::shared_ptr<Texture> image = _assets->get<Texture>(PROJECTILE_TEXTURE);
     float radius = 0.5f * image->getSize().width / _scale;

@@ -65,7 +65,7 @@
 /** The density of the character */
 #define DUDE_DENSITY    1.0f
 /** The impulse for the character jump */
-#define DUDE_JUMP       125.5f
+#define DUDE_JUMP       42.5f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -97,7 +97,7 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
     nsize.height *= DUDE_VSHRINK;
     _drawScale = scale;
     
-    if (CapsuleObstacle::init(pos,nsize)) {
+    if (BoxObstacle::init(pos,nsize)) {
         setDensity(DUDE_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
@@ -154,7 +154,7 @@ void DudeModel::createFixtures() {
         return;
     }
     
-    CapsuleObstacle::createFixtures();
+    BoxObstacle::createFixtures();
     b2FixtureDef sensorDef;
     sensorDef.density = DUDE_DENSITY;
     sensorDef.isSensor = true;
@@ -188,7 +188,7 @@ void DudeModel::releaseFixtures() {
         return;
     }
     
-    CapsuleObstacle::releaseFixtures();
+    BoxObstacle::releaseFixtures();
     if (_sensorFixture != nullptr) {
         _body->DestroyFixture(_sensorFixture);
         _sensorFixture = nullptr;
@@ -202,7 +202,7 @@ void DudeModel::releaseFixtures() {
  * disposed, a DudeModel may not be used until it is initialized again.
  */
 void DudeModel::dispose() {
-    _core = nullptr;
+    //_core = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
 }
@@ -268,7 +268,7 @@ void DudeModel::update(float dt) {
         _shootCooldown = (_shootCooldown > 0 ? _shootCooldown-1 : 0);
     }
     
-    CapsuleObstacle::update(dt);
+    BoxObstacle::update(dt);
     
     if (_node != nullptr) {
         _node->setPosition(getPosition()*_drawScale);
@@ -287,7 +287,7 @@ void DudeModel::update(float dt) {
  * the texture (e.g. a circular shape attached to a square texture).
  */
 void DudeModel::resetDebug() {
-    CapsuleObstacle::resetDebug();
+    BoxObstacle::resetDebug();
     float w = DUDE_SSHRINK*_dimension.width;
     float h = SENSOR_HEIGHT;
     Poly2 poly(Rect(-w/2.0f,-h/2.0f,w,h));
