@@ -765,6 +765,7 @@ void GameScene::createProjectile() {
 	float offset = PROJECTILE_OFFSET;
 	Vec2 pos = _player->getPosition();
 	pos.x += (_player->isFacingRight() ? offset : -offset);
+    pos.y += 0.5f;
 
 	std::shared_ptr<Texture> image = _assets->get<Texture>(PROJECTILE_TEXTURE);
 	float radius = 0.5f*image->getSize().width/_scale;
