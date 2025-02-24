@@ -1,10 +1,11 @@
 {
 	"textures": {
-		"earth": {
-			"file":     "textures/earthtile.png",
-            "wrapS":    "repeat",
-            "wrapT":    "repeat"
+		"background": {
+			"file":     "textures/background.png"
 		},
+        "ground": {
+            "file":     "textures/ground.png"
+        },
         "player": {
             "file":     "textures/player.png"
         },
@@ -17,8 +18,8 @@
         "bridge": {
             "file":      "textures/ropebridge.png"
         },
-        "bullet": {
-            "file":      "textures/bullet.png"
+        "projectile": {
+            "file":      "textures/projectile.png"
         },
         "goal": {
             "file":      "textures/goaldoor.png"
