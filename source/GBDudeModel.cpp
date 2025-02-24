@@ -113,6 +113,7 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
+        _hp = DUDE_MAXHP;
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput  = false;
@@ -137,6 +138,16 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
 
 #pragma mark -
 #pragma mark Attribute Properties
+
+/**
+* Reduces the health of this character.
+*
+* @param value the amount of hp reduction.
+*/
+void DudeModel::damage(float value) { 
+    _hp -= value; 
+    _hp = _hp < 0 ? 0 : _hp;
+}
 
 /**
  * Sets left/right movement of this character.

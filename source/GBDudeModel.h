@@ -64,6 +64,8 @@ using namespace cugl;
 #define DUDE_DAMPING    30.0f
 /** The maximum character speed */
 #define DUDE_MAXSPEED   10.0f
+/** The maximum character hp */
+#define DUDE_MAXHP   100.0f
 
 
 #pragma mark -
@@ -80,6 +82,8 @@ private:
 	/** This macro disables the copy constructor (not allowed on physics objects) */
 	CU_DISALLOW_COPY_AND_ASSIGN(DudeModel);
 protected:
+    /** This character's remaining health */
+    float _hp;
 	/** The current horizontal movement of the character */
 	float _movement;
 	/** Which direction is the character facing */
@@ -349,6 +353,27 @@ public:
     
 #pragma mark -
 #pragma mark Attribute Properties
+    /**
+     * Returns the remaining health of this character.
+     *
+     * @return HP of this character.
+     */
+    float getHP() const { return _hp; }
+
+    /**
+     * Sets the remaining health of this character.
+     * 
+     * @param value the new hp.
+     */
+    void setHP(float value) { _hp = value; }
+
+    /**
+     * Reduces the health of this character.
+     * 
+     * @param value the amount of hp reduction.
+     */
+    void damage(float value);
+
     /**
      * Returns left/right movement of this character.
      *

@@ -897,13 +897,15 @@ void GameScene::beginContact(b2Contact* contact) {
     // Player-Projectile Collision
     if (bd1 == _player.get() && bd2->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd2)->getIsPlayerFired()) {
-            CULog("Player Damaged");
+            CULog("Player Damaged, remaining HP %f", _player->getHP());
+            _player->damage(20);
             removeProjectile((Projectile*)bd2);
         }
     }
     else if (bd2 == _player.get() && bd1->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
-            CULog("Player Damaged");
+            CULog("Player Damaged, remaining HP %f", _player->getHP());
+            _player->damage(20);
             removeProjectile((Projectile*)bd2);
         }
     }
@@ -1010,13 +1012,15 @@ void GameScene::beginContact(b2Contact* contact) {
     if (bd1->getName() == ENEMY_NAME && bd2->getName() == PROJECTILE_NAME) {
 
         if (((Projectile*)bd2)->getIsPlayerFired()) {
-            CULog("Enemy Damaged");
+            CULog("Enemy Damaged, remaining HP %f", ((DudeModel*)bd1)->getHP());
+            ((DudeModel*)bd1)->damage(20);
             removeProjectile((Projectile*)bd2);
         }
     }
     else if (bd2->getName() == ENEMY_NAME && bd1->getName() == PROJECTILE_NAME) {
         if (((Projectile*)bd1)->getIsPlayerFired()) {
-            CULog("Enemy Damaged");
+            CULog("Enemy Damaged, remaining HP %f", ((DudeModel*)bd2)->getHP());
+            ((DudeModel*)bd2)->damage(20);
             removeProjectile((Projectile*)bd2);
         }
     }
