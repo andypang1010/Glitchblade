@@ -527,29 +527,30 @@ public:
      * @return value whether the dude has a swallowed projectile.
      */
     /**
-     * Returns true ifr the dude is actively guarding.
+     * Returns true ifrthe dude is actively guarding.
      *
      * @return value whether the dude is actively guarding.
      */
-    bool isGuardActive() { return  _guardRem > 0; };
-    /**
-     * Returns true if the dude is in a dash animation.
-     *
-     * @return value whether the dude is in a dash animation.
-     */
-    bool isDashActive() { return _dashRem > 0; };
+    bool isGuardActive() { return  _guardRem > 0 || isGuardBegin(); };
+
     /**
      * Returns true if the dude is actively parrying.
      *
      * @return value whether the dude is actively parrying.
      */
-    bool isParryActive() { return _parryRem > 0; };
+    bool isParryActive() { return _parryRem > 0 || isGuardBegin(); };
     /**
      * Returns true if the dude has a swallowed projectile.
      *
      * @return value whether the dude has a swallowed projectile.
      */
     bool hasProjectile() { return _hasProjectile; };
+    /**
+     * Returns true if the dude is in a dash animation.
+     *
+     * @return value whether the dude is in a dash animation.
+     */
+    bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
     /**
      * Returns true if the dude is on the ground.
      *

@@ -55,7 +55,7 @@
 /** Cooldown (in animation frames) for shooting */
 #define SHOOT_COOLDOWN  20
 /** Cooldown (in frames) for guard */
-#define GUARD_COOLDOWN  30
+#define GUARD_COOLDOWN  60
 /** Cooldown (in frames) for dash */
 #define DASH_COOLDOWN  30
 /** Duration (in frames) for guard */
@@ -63,7 +63,7 @@
 /** Duration (in frames) for parry */
 #define PARRY_DURATION  30
 /** Duration (in frames) for dash- affects friction*/
-#define DASH_DURATION  10
+#define DASH_DURATION  8
 /** The amount to shrink the body fixture (vertically) relative to the image */
 #define DUDE_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -79,7 +79,7 @@
 /** The impulse for the character jump */
 #define DUDE_JUMP       42.5f
 /** The impulse for the character dash-attack */
-#define DUDE_DASH       100.0f
+#define DUDE_DASH       75.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -302,7 +302,6 @@ void DudeModel::applyForce() {
         }
     }
 #pragma mark strafe force
-    CULog("Applying strafe force %f",getMovement());
     b2Vec2 force(getMovement(),0);
     _body->ApplyForceToCenter(force,true);
 #pragma mark jump force
@@ -325,7 +324,7 @@ void DudeModel::applyForce() {
         _body->ApplyLinearImpulseToCenter(force, true);
     }
     // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed()) {
+    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
         CULog("clamping velocity");
         setVX(SIGNUM(getVX())*getMaxSpeed());
         
@@ -344,7 +343,7 @@ void DudeModel::update(float dt) {
     
 #pragma mark Guard and Parry timing
     // guard cooldown first for most recent movement inputs
-    if (isGuardActive()){
+    if (isGuardActive() && !isGuardBegin()){
         //just for logging end of parry
         bool parry_active = isParryActive();
         // If robot moves, guard is cancelled
@@ -388,8 +387,10 @@ void DudeModel::update(float dt) {
         _dashCooldownRem = DASH_COOLDOWN;
     }
     else {
-        _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
         _dashRem = (_dashRem > 0 ? _dashRem-1 : 0);
+        if (_dashRem == 0){
+            _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
+        }
     }
     // player inputs guard and cooldown is ready
     if (isGuardBegin()) {
@@ -399,7 +400,6 @@ void DudeModel::update(float dt) {
         // begin parry
         CULog("Beginning parry\n");
         _parryRem = PARRY_DURATION;
-        
     }
     
     BoxObstacle::update(dt);
@@ -423,7 +423,7 @@ void DudeModel::resetDebug() {
     BoxObstacle::resetDebug();
     float w = DUDE_SSHRINK*_dimension.width;
     float h = SENSOR_HEIGHT;
-    Poly2 dudePoly(Rect(-w/2.0f,-h/2.0f,w,h));
+    Poly2 dudePoly(Rect(-w/0.1f,-h/2.0f,w,h));
     _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
