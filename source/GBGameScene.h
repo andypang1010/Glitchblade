@@ -33,6 +33,7 @@
 #include "GBInput.h"
 #include "GBProjectile.h"
 #include "GBDudeModel.h"
+#include "GBEnemyModel.h"
 
 using namespace cugl;
 
@@ -75,7 +76,7 @@ protected:
     /** Reference to the player avatar */
     std::shared_ptr<DudeModel>			  _player;
     /** Reference to the player avatar */
-    std::shared_ptr<DudeModel>			  _testEnemy;
+    std::shared_ptr<EnemyModel>			  _testEnemy;
 
     /** Whether we have completed this "game" */
     bool _complete;

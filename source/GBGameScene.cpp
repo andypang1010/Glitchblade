@@ -24,6 +24,7 @@
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
 #include "GBDudeModel.h"
+#include "GBEnemyModel.h"
 #include "GBProjectile.h"
 
 #include <ctime>
@@ -124,6 +125,10 @@ Vec2 DOWN = { 0.0f, -1.0f };
 /** The number of frame to wait before reinitializing the game */
 #define EXIT_COUNT      240
 
+#pragma mark -
+#pragma mark Testing Constants
+/** The radius for enemy to initial attack */
+#define ENEMY_ATTACK_RADIUS     5.0f
 
 #pragma mark -
 #pragma mark Asset Constants
@@ -177,7 +182,7 @@ Vec2 DOWN = { 0.0f, -1.0f };
 /** The image for the right dpad/joystick */
 #define RIGHT_IMAGE     "dpad_right"
 /** The fire rate for spawned bullets */
-#define BULLET_SPAWN_RATE     50.0f
+#define BULLET_SPAWN_RATE     150.0f
 
 /** Color to outline the physics nodes */
 #define DEBUG_COLOR     Color4::YELLOW
@@ -466,7 +471,7 @@ void GameScene::populate() {
     Vec2 enemyPos = ENEMY_POS;
     node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(ENEMY_TEXTURE);
-    _testEnemy = DudeModel::alloc(enemyPos, image->getSize() / _scale, _scale);
+    _testEnemy = EnemyModel::alloc(enemyPos, image->getSize() / _scale, _scale);
     sprite = scene2::PolygonNode::allocWithTexture(image);
     _testEnemy->setSceneNode(sprite);
     _testEnemy->setDebugColor(DEBUG_COLOR);
@@ -608,8 +613,8 @@ void GameScene::update(float timestep) {
 		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
 		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
 	}
-    
-	
+
+    	
 	// Turn the physics engine crank.
     _world->update(timestep);
 }
@@ -675,6 +680,15 @@ void GameScene::preUpdate(float dt) {
     _player->setDashRightInput(_input.didDashRight());
     _player->setGuardInput(_input.didGuard());
     _player->applyForce();
+
+    float dist = _testEnemy->getPosition().x - _player->getPosition().x;
+    float dir_val = dist > 0 ? -1 : 1;
+    _testEnemy->setMovement(dir_val * _testEnemy->getForce());
+    _testEnemy->setStrafeLeft(dist > 0);
+    _testEnemy->setStrafeRight(dist < 0);
+    _testEnemy->setDashLeftInput(dist > 0 && dist < ENEMY_ATTACK_RADIUS);
+    _testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
+    _testEnemy->applyForce();
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
       std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
@@ -806,7 +820,7 @@ void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
     sprite->flipHorizontal(direction.x < 0);
 
     // Compute position and velocity
-    Vec2 speed = direction.getNormalization()*PROJECTILE_SPEED;
+    Vec2 speed = isPlayerFired ? direction.getNormalization()*PROJECTILE_SPEED : direction.getNormalization() * PROJECTILE_SPEED / 2;
     projectile->setLinearVelocity(speed);
     addObstacle(projectile, sprite, 5);
 
@@ -860,29 +874,59 @@ void GameScene::beginContact(b2Contact* contact) {
     // Player-Enemy Collision
     if (bd1->getName() == ENEMY_NAME && bd2 == _player.get()) {
         CULog("Enemy collides with player");
-
-        // TODO: If player is attacking, damage enemy; otherwise, do nothing
+        if (_testEnemy->isDashActive() && !_player->isDashActive()) {
+            _player->damage(20);
+            _testEnemy->setDashRem(0);
+            CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
+        }
+        else if (_testEnemy->isDashActive() && _player->isDashActive()) {
+            _player->damage(20);
+            _testEnemy->setDashRem(0);
+            _player->setDashRem(0);
+            CULog("Attacks canceled");
+        }
+        else if (!_testEnemy->isDashActive() && _player->isDashActive()) {
+            _testEnemy->damage(20);
+            _player->setDashRem(0);
+            CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
+            setComplete(_testEnemy->getHP() <= 0);
+        }
     }
     else if (bd2->getName() == ENEMY_NAME && bd1 == _player.get()) {
         CULog("Enemy collides with player");
-
-        // TODO: If player is attacking, damage enemy; otherwise, do nothing
+        if (_testEnemy->isDashActive() && !_player->isDashActive()) {
+            _player->damage(20);
+            _testEnemy->setDashRem(0);
+            CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
+        }
+        else if (_testEnemy->isDashActive() && _player->isDashActive()) {
+            _player->damage(20);
+            _testEnemy->setDashRem(0);
+            _player->setDashRem(0);
+            CULog("Attacks canceled");
+        }
+        else if (!_testEnemy->isDashActive() && _player->isDashActive()) {
+            _testEnemy->damage(20);
+            _player->setDashRem(0);
+            CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
+            setComplete(_testEnemy->getHP() <= 0);
+        }
     }
 
     // Player-Projectile Collision
     if (bd1 == _player.get() && bd2->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd2)->getIsPlayerFired()) {
-            CULog("Player Damaged, remaining HP %f", _player->getHP());
             _player->damage(20);
             removeProjectile((Projectile*)bd2);
+            CULog("Player Damaged, remaining HP %f", _player->getHP());
             setFailure(_player->getHP() <= 0);
         }
     }
     else if (bd2 == _player.get() && bd1->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
-            CULog("Player Damaged, remaining HP %f", _player->getHP());
             _player->damage(20);
             removeProjectile((Projectile*)bd1);
+            CULog("Player Damaged, remaining HP %f", _player->getHP());
             setFailure(_player->getHP() <= 0);
         }
     }
@@ -986,18 +1030,18 @@ void GameScene::beginContact(b2Contact* contact) {
     if (bd1->getName() == ENEMY_NAME && bd2->getName() == PROJECTILE_NAME) {
 
         if (((Projectile*)bd2)->getIsPlayerFired()) {
-            CULog("Enemy Damaged, remaining HP %f", ((DudeModel*)bd1)->getHP());
-            ((DudeModel*)bd1)->damage(20);
+            CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd1)->getHP());
+            ((EnemyModel*)bd1)->damage(20);
             removeProjectile((Projectile*)bd2);
-            setComplete(((DudeModel*)bd1)->getHP() <= 0);
+            setComplete(((EnemyModel*)bd1)->getHP() <= 0);
         }
     }
     else if (bd2->getName() == ENEMY_NAME && bd1->getName() == PROJECTILE_NAME) {
         if (((Projectile*)bd1)->getIsPlayerFired()) {
-            CULog("Enemy Damaged, remaining HP %f", ((DudeModel*)bd2)->getHP());
-            ((DudeModel*)bd2)->damage(20);
+            CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd2)->getHP());
+            ((EnemyModel*)bd2)->damage(20);
             removeProjectile((Projectile*)bd1);
-            setComplete(((DudeModel*)bd1)->getHP() <= 0);
+            setComplete(((EnemyModel*)bd1)->getHP() <= 0);
         }
     }
 
