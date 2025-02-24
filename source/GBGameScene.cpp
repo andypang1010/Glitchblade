@@ -159,8 +159,10 @@ Vec2 DOWN = { 0.0f, -1.0f };
 #define GROUND_TEXTURE  "ground"
 /** The key for the background texture in the asset manager */
 #define BKGD_TEXTURE    "background"
-/** The key for the projectile texture in the asset manager */
+/** The key for the regular projectile texture in the asset manager */
 #define PROJECTILE_TEXTURE  "projectile"
+/** The key for the player projectile texture in the asset manager */
+#define PLAYER_PROJECTILE_TEXTURE "player-projectile"
 
 ///////////////// NAMES /////////////////////////////////////
 #define ENEMY_NAME      "enemy"
@@ -809,7 +811,7 @@ void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
         pos.y += 0.5f;
     }
 
-    std::shared_ptr<Texture> image = _assets->get<Texture>(PROJECTILE_TEXTURE);
+    std::shared_ptr<Texture> image = _assets->get<Texture>(isPlayerFired ? PLAYER_PROJECTILE_TEXTURE : PROJECTILE_TEXTURE);
     float radius = 0.5f * image->getSize().width / _scale;
 
     // Change last parameter to test player-fired or regular projectile

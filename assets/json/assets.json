@@ -21,6 +21,9 @@
         "projectile": {
             "file":      "textures/projectile.png"
         },
+        "player-projectile": {
+            "file":      "textures/player-projectile.png"
+        },
         "goal": {
             "file":      "textures/goaldoor.png"
         },
