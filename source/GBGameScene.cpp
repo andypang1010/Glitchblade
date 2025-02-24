@@ -920,48 +920,45 @@ void GameScene::beginContact(b2Contact* contact) {
     //    }
     //}
 
-    //// TODO: Shield-Projectile Collision
-    //if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == _player.getShieldName() &&
-    //    !((Projectile*)bd1)->getIsPlayerFired()) {
+    // Shield-Projectile Collision
+    if (bd1->getName() == PROJECTILE_NAME && fd2 == _player->getShieldName() &&
+        !((Projectile*)bd1)->getIsPlayerFired()) {
 
-    //    if (_player.isParrying()) {
-    //        CULog("Parried projectile");
+        if (_player->isParryActive()) {
+            CULog("Parried projectile");
 
-    //        if (!_player.getHasProjectile()) {
-    //            _player.setHasProjectile(true);
-    //        }
+            if (!_player->hasProjectile()) {
+                _player->setHasProjectile(true);
+            }
 
-    //        removeProjectile((Projectile*)bd2);
-    //    }
+            removeProjectile((Projectile*)bd1);
+        }
+        else if (_player->isGuardActive()) {
+            CULog("Guarded projectile");
 
-    //    else if (_player.isGuarding()) {
-    //        CULog("Guarded projectile");
+            _player->damage(10);
+            removeProjectile((Projectile*)bd1);
+        }
+    }
+    else if (bd2->getName() == PROJECTILE_NAME && fd1 == _player->getShieldName() &&
+        !((Projectile*)bd2)->getIsPlayerFired()) {
 
-    //        // TODO: Damage player by 50% of enemy attack damage
-    //        removeProjectile((Projectile*)bd2);
-    //    }
-    //}
+        if (_player->isParryActive()) {
+            CULog("Parried projectile");
 
-    //else if (bd2->getName() == PROJECTILE_NAME && bd1->getName() == _player.getShieldName() &&
-    //    !((Projectile*)bd2)->getIsPlayerFired()) {
+            if (!_player->hasProjectile()) {
+                _player->setHasProjectile(true);
+            }
 
-    //    if (_player.isParrying()) {
-    //        CULog("Parried projectile");
+            removeProjectile((Projectile*)bd2);
+        }
+        else if (_player->isGuardActive()) {
+            CULog("Guarded projectile");
 
-    //        if (!_player.getHasProjectile()) {
-    //            _player.setHasProjectile(true);
-    //        }
-
-    //        removeProjectile((Projectile*)bd2);
-    //    }
-
-    //    else if (_player.isGuarding()) {
-    //        CULog("Guarded projectile");
-
-    //        // TODO: Damage player by 50% of enemy attack damage
-    //        removeProjectile((Projectile*)bd2);
-    //    }
-    //}
+            _player->damage(10);
+            removeProjectile((Projectile*)bd2);
+        }
+    }
 
     // Projectile-Projectile Collision
     if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == PROJECTILE_NAME) {
