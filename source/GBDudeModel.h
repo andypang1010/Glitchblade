@@ -596,7 +596,7 @@ public:
      *
      * @return the name of the ground sensor
      */
-    std::string* getSensorName() { return &_sensorName; }
+    std::string* getGroundSensorName() { return &_sensorName; }
     /**
      * Returns the name of the shield sensor
      *
@@ -604,7 +604,7 @@ public:
      *
      * @return the name of the shield sensor
      */
-    std::string* getShieldName() { return &_shieldName; }
+    std::string* getShieldSensorName() { return &_shieldName; }
     
     /**
      * Returns true if this character is facing right

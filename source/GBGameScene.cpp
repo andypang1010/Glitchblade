@@ -148,6 +148,8 @@ Vec2 DOWN = { 0.0f, -1.0f };
 
 /** The font for victory/failure messages */
 #define MESSAGE_FONT    "retro"
+/** The font for debug UI */
+#define DEBUG_FONT      "debug"
 /** The message for winning the game */
 #define WIN_MESSAGE     "VICTORY!"
 /** The color of the win message */
@@ -310,6 +312,15 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _losenode->setForeground(LOSE_COLOR);
     setFailure(false);
 
+    _playerHPNode = scene2::Label::allocWithText("HP: ", _assets->get<Font>(DEBUG_FONT));
+    _playerHPNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _playerHPNode->setForeground(Color4::CYAN);
+    _playerHPNode->setPosition(35, 80);
+
+    _enemyHPNode = scene2::Label::allocWithText("HP: ", _assets->get<Font>(DEBUG_FONT));
+    _enemyHPNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _enemyHPNode->setForeground(Color4::RED);
+    _enemyHPNode->setPosition(45, 90);
 
     _leftnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(LEFT_IMAGE));
     _leftnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_RIGHT);
@@ -349,6 +360,8 @@ void GameScene::dispose() {
         _debugnode = nullptr;
         _winnode = nullptr;
         _losenode = nullptr;
+        _playerHPNode = nullptr;
+        _enemyHPNode = nullptr;
         _leftnode = nullptr;
         _rightnode = nullptr;
         _complete = false;
@@ -472,6 +485,9 @@ void GameScene::populate() {
     _testEnemy->setDebugColor(DEBUG_COLOR);
     _testEnemy->setName(std::string(ENEMY_NAME));
     addObstacle(_testEnemy, sprite); // Put this at the very front
+
+    _player->getSceneNode()->addChild(_playerHPNode);
+    _testEnemy->getSceneNode()->addChild(_enemyHPNode);
 
 	// Play the background music on a loop.
 	/*std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
@@ -676,6 +692,10 @@ void GameScene::preUpdate(float dt) {
     _player->setGuardInput(_input.didGuard());
     _player->applyForce();
 
+    
+    _playerHPNode->setText(std::to_string((int)_player->getHP()));
+    _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
+
     if (_player->isJumpBegin() && _player->isGrounded()) {
       std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
       AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
@@ -861,12 +881,16 @@ void GameScene::beginContact(b2Contact* contact) {
     if (bd1->getName() == ENEMY_NAME && bd2 == _player.get()) {
         CULog("Enemy collides with player");
 
-        // TODO: If player is attacking, damage enemy; otherwise, do nothing
+        if (_player->isDashActive()) {
+            ((DudeModel*)bd1)->damage(20);
+        }
     }
     else if (bd2->getName() == ENEMY_NAME && bd1 == _player.get()) {
         CULog("Enemy collides with player");
 
-        // TODO: If player is attacking, damage enemy; otherwise, do nothing
+        if (_player->isDashActive()) {
+            ((DudeModel*)bd2)->damage(20);
+        }
     }
 
     // Player-Projectile Collision
@@ -922,7 +946,7 @@ void GameScene::beginContact(b2Contact* contact) {
     //}
 
     // Shield-Projectile Collision
-    if (bd1->getName() == PROJECTILE_NAME && fd2 == _player->getShieldName() &&
+    if (bd1->getName() == PROJECTILE_NAME && fd2 == _player->getShieldSensorName() &&
         !((Projectile*)bd1)->getIsPlayerFired()) {
 
         if (_player->isParryActive()) {
@@ -941,7 +965,7 @@ void GameScene::beginContact(b2Contact* contact) {
             removeProjectile((Projectile*)bd1);
         }
     }
-    else if (bd2->getName() == PROJECTILE_NAME && fd1 == _player->getShieldName() &&
+    else if (bd2->getName() == PROJECTILE_NAME && fd1 == _player->getShieldSensorName() &&
         !((Projectile*)bd2)->getIsPlayerFired()) {
 
         if (_player->isParryActive()) {
@@ -1002,8 +1026,8 @@ void GameScene::beginContact(b2Contact* contact) {
     }
 
     // Player-Ground Collision
-    if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
-        (_player->getSensorName() == fd1 && _player.get() != bd2)) {
+    if ((_player->getGroundSensorName() == fd2 && _player.get() != bd1) ||
+        (_player->getGroundSensorName() == fd1 && _player.get() != bd2)) {
         _player->setGrounded(true);
 
         // Could have more than one ground
@@ -1031,8 +1055,8 @@ void GameScene::endContact(b2Contact* contact) {
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
 
-    if ((_player->getSensorName() == fd2 && _player.get() != bd1) ||
-        (_player->getSensorName() == fd1 && _player.get() != bd2)) {
+    if ((_player->getGroundSensorName() == fd2 && _player.get() != bd1) ||
+        (_player->getGroundSensorName() == fd1 && _player.get() != bd2)) {
         _sensorFixtures.erase(_player.get() == bd1 ? fix2 : fix1);
         if (_sensorFixtures.empty()) {
             _player->setGrounded(false);
