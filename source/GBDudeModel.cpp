@@ -315,12 +315,14 @@ void DudeModel::applyForce() {
     if (isDashLeftBegin()){
         CULog("dashing left\n");
         b2Vec2 force(-DUDE_DASH,0);
+        faceLeft();
         _body->ApplyLinearImpulseToCenter(force, true);
     }
     
     if (isDashRightBegin()){
         CULog("dashing right\n");
         b2Vec2 force(DUDE_DASH,0);
+        faceRight();
         _body->ApplyLinearImpulseToCenter(force, true);
     }
     // Velocity too high, clamp it

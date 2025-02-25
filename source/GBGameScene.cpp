@@ -776,6 +776,9 @@ void GameScene::postUpdate(float remain) {
         _bulletTimer -= 1;
     }
 
+    setComplete(_testEnemy->getHP() <= 0);
+    setFailure(_player->getHP() <= 0);
+
     // Record failure if necessary.
     if (!_failed && _player->getY() < 0) {
         setFailure(true);
@@ -873,43 +876,37 @@ void GameScene::beginContact(b2Contact* contact) {
 
     // Player-Enemy Collision
     if (bd1->getName() == ENEMY_NAME && bd2 == _player.get()) {
-        CULog("Enemy collides with player");
-        if (_testEnemy->isDashActive() && !_player->isDashActive()) {
+        if (((EnemyModel*)bd1)->isDashActive() && !_player->isDashActive()) {
             _player->damage(20);
-            _testEnemy->setDashRem(0);
+            ((EnemyModel*)bd1)->setDashRem(0);
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
-        else if (_testEnemy->isDashActive() && _player->isDashActive()) {
-            _player->damage(20);
-            _testEnemy->setDashRem(0);
-            _player->setDashRem(0);
-            CULog("Attacks canceled");
-        }
-        else if (!_testEnemy->isDashActive() && _player->isDashActive()) {
-            _testEnemy->damage(20);
+        else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
+            ((EnemyModel*)bd1)->damage(20);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
-            setComplete(_testEnemy->getHP() <= 0);
+        }
+        else if (((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
+            ((EnemyModel*)bd1)->setDashRem(0);
+            _player->setDashRem(0);
+            CULog("Attacks canceled");
         }
     }
     else if (bd2->getName() == ENEMY_NAME && bd1 == _player.get()) {
-        CULog("Enemy collides with player");
-        if (_testEnemy->isDashActive() && !_player->isDashActive()) {
+        if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {
             _player->damage(20);
-            _testEnemy->setDashRem(0);
+            ((EnemyModel*)bd2)->setDashRem(0);
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
-        else if (_testEnemy->isDashActive() && _player->isDashActive()) {
-            _player->damage(20);
-            _testEnemy->setDashRem(0);
-            _player->setDashRem(0);
-            CULog("Attacks canceled");
-        }
-        else if (!_testEnemy->isDashActive() && _player->isDashActive()) {
-            _testEnemy->damage(20);
+        else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
+            ((EnemyModel*)bd2)->damage(20);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
-            setComplete(_testEnemy->getHP() <= 0);
+        }
+        else if (((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
+            ((EnemyModel*)bd2)->setDashRem(0);
+            _player->setDashRem(0);
+            CULog("Attacks canceled");
         }
     }
 
@@ -919,7 +916,6 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->damage(20);
             removeProjectile((Projectile*)bd2);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
-            setFailure(_player->getHP() <= 0);
         }
     }
     else if (bd2 == _player.get() && bd1->getName() == PROJECTILE_NAME) {
@@ -927,7 +923,6 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->damage(20);
             removeProjectile((Projectile*)bd1);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
-            setFailure(_player->getHP() <= 0);
         }
     }
 
@@ -1033,7 +1028,6 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd1)->getHP());
             ((EnemyModel*)bd1)->damage(20);
             removeProjectile((Projectile*)bd2);
-            setComplete(((EnemyModel*)bd1)->getHP() <= 0);
         }
     }
     else if (bd2->getName() == ENEMY_NAME && bd1->getName() == PROJECTILE_NAME) {
@@ -1041,7 +1035,6 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd2)->getHP());
             ((EnemyModel*)bd2)->damage(20);
             removeProjectile((Projectile*)bd1);
-            setComplete(((EnemyModel*)bd1)->getHP() <= 0);
         }
     }
 
