@@ -53,8 +53,10 @@ using namespace cugl;
 #define DUDE_TEXTURE    "player"
 #define ENEMY_TEXTURE   "enemy"
 /** Identifier to allow us to track the player sensor in ContactListener */
+#define BODY_NAME      "body"
 #define SENSOR_NAME     "dudesensor"
 #define SHIELD_SENSOR_NAME      "shield"
+
 
 
 
@@ -122,7 +124,9 @@ protected:
 	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
 	bool _isGrounded;
-
+    
+    
+    std::string _bodyName;
 	/** Ground sensor to represent our feet */
 	b2Fixture*  _sensorFixture;
 	/** Reference to the sensor name (since a constant cannot have a pointer) */
@@ -160,7 +164,7 @@ public:
      * This constructor does not initialize any of the dude values beyond
      * the defaults.  To use a DudeModel, you must call init().
      */
-    DudeModel() : BoxObstacle(), _sensorName(SENSOR_NAME), _shieldName(SHIELD_SENSOR_NAME) { }
+    DudeModel() : BoxObstacle(), _sensorName(SENSOR_NAME), _shieldName(SHIELD_SENSOR_NAME), _bodyName(BODY_NAME) { }
     
     /**
      * Destroys this DudeModel, releasing all resources.
@@ -588,7 +592,14 @@ public:
      * @return the upper limit on dude left-right movement.
      */
     float getMaxSpeed() const { return DUDE_MAXSPEED; }
-    
+    /**
+     * Returns the name of the body fixture
+     *
+     * This is used by ContactListener
+     *
+     * @return the name of the body fixture
+     */
+    std::string* getBodyName() { return &_bodyName; }
     /**
      * Returns the name of the ground sensor
      *

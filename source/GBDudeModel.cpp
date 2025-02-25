@@ -73,7 +73,7 @@
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT   0.1f
 /** The amount to shrink the radius of the shield relative to the image width */
-#define SHIELD_RADIUS 2.0f
+#define SHIELD_RADIUS 3.0f
 /** The density of the character */
 #define DUDE_DENSITY    1.0f
 /** The impulse for the character jump */
@@ -215,6 +215,13 @@ void DudeModel::createFixtures() {
     }
     
     BoxObstacle::createFixtures();
+    
+    // give name to initial body fixture for collision handling
+    b2Fixture* bodyFix = _body->GetFixtureList();
+    if (bodyFix) {
+        bodyFix->GetUserData().pointer = reinterpret_cast<uintptr_t>(getBodyName());
+    }
+    
     b2FixtureDef sensorDef;
     sensorDef.density = DUDE_DENSITY;
     sensorDef.isSensor = true;
@@ -241,11 +248,12 @@ void DudeModel::createFixtures() {
     b2FixtureDef shieldDef;
     b2CircleShape shieldShape;
     shieldShape.m_radius = SHIELD_RADIUS;
-    shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
+    shieldShape.m_p.Set(0,0);//center of body
     shieldDef.isSensor = true;
-    shieldDef.shape = &sensorShape;
+    shieldDef.shape = &shieldShape;
     shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
     _shieldFixture = _body->CreateFixture(&shieldDef);
+    
 }
 
 /**
@@ -288,7 +296,8 @@ void DudeModel::applyForce() {
         return;
     }
     
-    // Don't want to be moving. Damp out player motion
+    // Don't want to be moving.f Damp out player motion
+    // Don't want to be moving.f Damp out player motion
     if (getMovement() == 0.0f && !isDashActive()) {
         if (isGrounded()) {
             // Instant friction on the ground
@@ -302,7 +311,6 @@ void DudeModel::applyForce() {
         }
     }
 #pragma mark strafe force
-    CULog("Applying strafe force %f",getMovement());
     b2Vec2 force(getMovement(),0);
     _body->ApplyForceToCenter(force,true);
 #pragma mark jump force
@@ -326,7 +334,7 @@ void DudeModel::applyForce() {
     }
     // Velocity too high, clamp it
     if (fabs(getVX()) >= getMaxSpeed()) {
-        CULog("clamping velocity");
+        //CULog("clamping velocity");
         setVX(SIGNUM(getVX())*getMaxSpeed());
         
     }
@@ -352,6 +360,7 @@ void DudeModel::update(float dt) {
             _guardRem = 0;
             _parryRem = 0;
             CULog("Parry and Guard ended due to movement\n");
+            _shieldNode->setColor(DEBUG_COLOR);
         }
         else{
             _guardRem = (_guardRem > 0 ? _guardRem -1 : 0);
@@ -359,10 +368,12 @@ void DudeModel::update(float dt) {
             
             //The rest of this block is for logging end of guard&parry
             if (parry_active && (_parryRem == 0)){
+                _shieldNode->setColor(Color4::BLUE);
                 CULog("Parry completed during guard\n");
             }
             if (_guardRem == 0){
                 CULog("Guard completed full duration\n");
+                _shieldNode->setColor(DEBUG_COLOR);
             }
         }
     }
@@ -394,6 +405,7 @@ void DudeModel::update(float dt) {
     // player inputs guard and cooldown is ready
     if (isGuardBegin()) {
         CULog("Beginning guard\n");
+        _shieldNode->setColor(Color4::GREEN);
         _guardCooldownRem = GUARD_COOLDOWN;
         _guardRem = GUARD_DURATION;
         // begin parry
@@ -429,9 +441,13 @@ void DudeModel::resetDebug() {
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
     
     Poly2 shieldPoly;
-    shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, SHIELD_RADIUS);
+    shieldPoly = PolyFactory().makeNgon(10000,0, SHIELD_RADIUS, 20);
     _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
+    _shieldNode->setPosition(Vec2(_debug->getContentSize()/2));
     _shieldNode->setColor(DEBUG_COLOR);
+
+    _debug->addChild(_sensorNode);
+    _debug->addChild(_shieldNode);
     
 }
 

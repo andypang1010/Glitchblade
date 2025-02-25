@@ -832,9 +832,33 @@ void GameScene::removeProjectile(Projectile* projectile) {
     AudioEngine::get()->play(POP_EFFECT, source, false, EFFECT_VOLUME, true);
 }
 
-
 #pragma mark -
 #pragma mark Collision Handling
+
+/**Checks obstacle and fixture to see if it is an enemy body fixture.**/
+bool GameScene::isEnemyBody(physics2::Obstacle* b, const std::string* f ) {
+    return (b->getName() == ENEMY_NAME && f == _testEnemy->getBodyName());
+}
+/**Checks obstacle and fixture to see if it the player body fixture.**/
+bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
+    return (b == _player.get() && f == _player->getBodyName());
+}
+
+/**
+ Checks if contact is projectile hitting player shield and returns the Projectile if so, else NULL.
+ */
+Projectile* GameScene::getProjectileHitShield(physics2::Obstacle* bd1, std::string* fd1,
+                                              physics2::Obstacle* bd2, std::string* fd2) const {
+    if (bd1->getName() == PROJECTILE_NAME && fd2 == _player->getShieldName() &&
+        !((Projectile*)bd1)->getIsPlayerFired() && _player->isGuardActive()) {
+        return (Projectile*)bd1;
+    }
+    if (bd2->getName() == PROJECTILE_NAME && fd1 == _player->getShieldName() &&
+        !((Projectile*)bd2)->getIsPlayerFired() && _player->isGuardActive()) {
+        return (Projectile*)bd2;
+    }
+    return nullptr;
+}
 /**
  * Processes the start of a collision
  *
@@ -847,30 +871,38 @@ void GameScene::removeProjectile(Projectile* projectile) {
 void GameScene::beginContact(b2Contact* contact) {
     b2Fixture* fix1 = contact->GetFixtureA();
     b2Fixture* fix2 = contact->GetFixtureB();
+    
+
 
     b2Body* body1 = fix1->GetBody();
     b2Body* body2 = fix2->GetBody();
 
     std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
     std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
+    
+    if (!fix1->GetUserData().pointer || !fix2->GetUserData().pointer) {
+        //CULog("Error: fix1 or fix2 has null user data.");//projectiles don't have names so they will error
+    }
+        else{
+            CULog("fix1 is %s and fix2 is %s", fd1->c_str(), fd2->c_str());
+        }
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
-
+    
     // Player-Enemy Collision
-    if (bd1->getName() == ENEMY_NAME && bd2 == _player.get()) {
+    if (isEnemyBody(bd1, fd1) && isPlayerBody(bd2,fd2)) {
         CULog("Enemy collides with player");
-
-        // TODO: If player is attacking, damage enemy; otherwise, do nothing
+        // TODO: If player is attacking, damage enemy; otherwise, do nothing.
     }
-    else if (bd2->getName() == ENEMY_NAME && bd1 == _player.get()) {
+    else if (isPlayerBody(bd1,fd1) && isEnemyBody(bd2, fd2)) {
         CULog("Enemy collides with player");
-
-        // TODO: If player is attacking, damage enemy; otherwise, do nothing
+        // TODO: If player is attacking, damage enemy; otherwise, do nothing. REFACTOR TO NOT REPEAT CODE
+        // TODO: REFACTOR TO NOT REPEAT CODE!!!
     }
 
     // Player-Projectile Collision
-    if (bd1 == _player.get() && bd2->getName() == PROJECTILE_NAME) {
+    if (isPlayerBody(bd1, fd1) && bd2->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd2)->getIsPlayerFired()) {
             CULog("Player Damaged, remaining HP %f", _player->getHP());
             _player->damage(20);
@@ -878,13 +910,14 @@ void GameScene::beginContact(b2Contact* contact) {
             setFailure(_player->getHP() <= 0);
         }
     }
-    else if (bd2 == _player.get() && bd1->getName() == PROJECTILE_NAME) {
+    else if (isPlayerBody(bd2, fd2) && bd1->getName() == PROJECTILE_NAME) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
             CULog("Player Damaged, remaining HP %f", _player->getHP());
             _player->damage(20);
             removeProjectile((Projectile*)bd1);
             setFailure(_player->getHP() <= 0);
         }
+        // TODO: REFACTOR TO NOT REPEAT CODE!!!
     }
 
     //// TODO: Shield-Enemy Collision
@@ -922,8 +955,8 @@ void GameScene::beginContact(b2Contact* contact) {
     //}
 
     // Shield-Projectile Collision
-    if (bd1->getName() == PROJECTILE_NAME && fd2 == _player->getShieldName() &&
-        !((Projectile*)bd1)->getIsPlayerFired()) {
+    Projectile* shieldHit = getProjectileHitShield(bd1, fd1, bd2, fd2);
+    if (shieldHit){
 
         if (_player->isParryActive()) {
             CULog("Parried projectile");
@@ -931,34 +964,14 @@ void GameScene::beginContact(b2Contact* contact) {
             if (!_player->hasProjectile()) {
                 _player->setHasProjectile(true);
             }
-
-            removeProjectile((Projectile*)bd1);
         }
-        else if (_player->isGuardActive()) {
+        else {
             CULog("Guarded projectile");
 
             _player->damage(10);
-            removeProjectile((Projectile*)bd1);
+            removeProjectile(shieldHit);
         }
-    }
-    else if (bd2->getName() == PROJECTILE_NAME && fd1 == _player->getShieldName() &&
-        !((Projectile*)bd2)->getIsPlayerFired()) {
-
-        if (_player->isParryActive()) {
-            CULog("Parried projectile");
-
-            if (!_player->hasProjectile()) {
-                _player->setHasProjectile(true);
-            }
-
-            removeProjectile((Projectile*)bd2);
-        }
-        else if (_player->isGuardActive()) {
-            CULog("Guarded projectile");
-
-            _player->damage(10);
-            removeProjectile((Projectile*)bd2);
-        }
+        removeProjectile(shieldHit);
     }
 
     // Projectile-Projectile Collision
@@ -966,8 +979,8 @@ void GameScene::beginContact(b2Contact* contact) {
 
         // Destroy if one is fired by player and the other is not
         if (
-            ((Projectile*)bd1)->getIsPlayerFired() && !((Projectile*)bd2)->getIsPlayerFired() ||
-            ((Projectile*)bd2)->getIsPlayerFired() && !((Projectile*)bd1)->getIsPlayerFired()
+            (((Projectile*)bd1)->getIsPlayerFired() && !((Projectile*)bd2)->getIsPlayerFired()) ||
+            (((Projectile*)bd2)->getIsPlayerFired() && !((Projectile*)bd1)->getIsPlayerFired())
             ) {
             removeProjectile((Projectile*)bd1);
             removeProjectile((Projectile*)bd2);
