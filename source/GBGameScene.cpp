@@ -785,8 +785,9 @@ void GameScene::postUpdate(float remain) {
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
     _player->setShootInput(_input.didFire());
-    if (_player->isShooting()) {
+    if (_player->isShooting() && _player->hasProjectile()) {
         createProjectile(_player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true);
+        _player->setHasProjectile(false);
     }
 
     if (_bulletTimer <= 0) {
@@ -1026,7 +1027,6 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Guarded projectile");
 
             _player->damage(10);
-            removeProjectile(shieldHit);
         }
         removeProjectile(shieldHit);
     }
