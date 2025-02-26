@@ -41,8 +41,8 @@
 //  Author:  Walker White and Anthony Perello
 //  Version: 2/9/21
 //
-#ifndef __GB_DUDE_MODEL_H__
-#define __GB_DUDE_MODEL_H__
+#ifndef __GB_ENEMY_MODEL_H__
+#define __GB_ENEMY_MODEL_H__
 #include <cugl/cugl.h>
 
 using namespace cugl;
@@ -50,30 +50,28 @@ using namespace cugl;
 #pragma mark -
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
-#define DUDE_TEXTURE    "player"
 #define ENEMY_TEXTURE   "enemy"
 /** Identifier to allow us to track the player sensor in ContactListener */
-#define BODY_NAME      "body"
-#define SENSOR_NAME     "dudesensor"
-#define SHIELD_SENSOR_NAME      "shield"
-
+#define ENEMY_BODY_NAME      "enemybody"
+#define ENEMY_SENSOR_NAME     "enemysensor"
+#define ENEMY_SHIELD_SENSOR_NAME      "shield"
 
 
 
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
-#define DUDE_FORCE      50.0f
+#define ENEMY_FORCE      20.0f
 /** The amount to slow the character down */
-#define DUDE_DAMPING    30.0f
+#define ENEMY_DAMPING    30.0f
 /** The maximum character speed */
-#define DUDE_MAXSPEED   10.0f
+#define ENEMY_MAXSPEED   10.0f
 /** The maximum character hp */
-#define DUDE_MAXHP   100.0f
+#define ENEMY_MAXHP   100.0f
 
 
 #pragma mark -
-#pragma mark Dude Model
+#pragma mark Enemy Model
 /**
 * Player avatar for the plaform game.
 *
@@ -81,10 +79,10 @@ using namespace cugl;
 * experience, using a rectangular shape for a character will regularly snag
 * on a platform.  The round shapes on the end caps lead to smoother movement.
 */
-class DudeModel : public physics2::BoxObstacle {
+class EnemyModel : public physics2::BoxObstacle {
 private:
 	/** This macro disables the copy constructor (not allowed on physics objects) */
-	CU_DISALLOW_COPY_AND_ASSIGN(DudeModel);
+	CU_DISALLOW_COPY_AND_ASSIGN(EnemyModel);
 protected:
     /** This character's remaining health */
     float _hp;
@@ -104,6 +102,8 @@ protected:
     int  _guardRem;
     /** How many frames remaining in the parry (0 when parry is not active) */
     int  _parryRem;
+    /** How many frames remaining in enemy stun */
+    int _stunRem;
 	/** Whether we are actively inputting jumping */
 	bool _isJumpInput;
     /** Whether we are actively inputting strafe left*/
@@ -124,8 +124,7 @@ protected:
 	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
 	bool _isGrounded;
-    
-    
+
     std::string _bodyName;
 	/** Ground sensor to represent our feet */
 	b2Fixture*  _sensorFixture;
@@ -164,12 +163,12 @@ public:
      * This constructor does not initialize any of the dude values beyond
      * the defaults.  To use a DudeModel, you must call init().
      */
-    DudeModel() : BoxObstacle(), _sensorName(SENSOR_NAME), _shieldName(SHIELD_SENSOR_NAME), _bodyName(BODY_NAME) { }
+    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _shieldName(ENEMY_SHIELD_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) { }
     
     /**
      * Destroys this DudeModel, releasing all resources.
      */
-    virtual ~DudeModel(void) { dispose(); }
+    virtual ~EnemyModel(void) { dispose(); }
     
     /**
      * Disposes all resources and assets of this DudeModel
@@ -261,8 +260,8 @@ public:
 	 *
 	 * @return  A newly allocated DudeModel at the origin
 	 */
-	static std::shared_ptr<DudeModel> alloc() {
-		std::shared_ptr<DudeModel> result = std::make_shared<DudeModel>();
+	static std::shared_ptr<EnemyModel> alloc() {
+		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
 		return (result->init() ? result : nullptr);
 	}
 
@@ -280,8 +279,8 @@ public:
 	 *
 	 * @return  A newly allocated DudeModel at the given position
 	 */
-	static std::shared_ptr<DudeModel> alloc(const Vec2& pos) {
-		std::shared_ptr<DudeModel> result = std::make_shared<DudeModel>();
+	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos) {
+		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
 		return (result->init(pos) ? result : nullptr);
 	}
 
@@ -300,8 +299,8 @@ public:
 	 *
 	 * @return  A newly allocated DudeModel at the given position with the given scale
 	 */
-	static std::shared_ptr<DudeModel> alloc(const Vec2& pos, const Size& size) {
-		std::shared_ptr<DudeModel> result = std::make_shared<DudeModel>();
+	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos, const Size& size) {
+		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
 		return (result->init(pos, size) ? result : nullptr);
 	}
 
@@ -321,8 +320,8 @@ public:
 	 *
 	 * @return  A newly allocated DudeModel at the given position with the given scale
 	 */
-	static std::shared_ptr<DudeModel> alloc(const Vec2& pos, const Size& size, float scale) {
-		std::shared_ptr<DudeModel> result = std::make_shared<DudeModel>();
+	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos, const Size& size, float scale) {
+		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
 		return (result->init(pos, size, scale) ? result : nullptr);
 	}
     
@@ -556,11 +555,23 @@ public:
      */
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
     /**
-     * Sets the dash duration of the player.
+     * Sets the dash duration of this enemy.
      *
      * @param value new dash duration.
      */
     void setDashRem(int value) { _dashRem = value; };
+    /**
+     * Sets the stun duration of this enemy.
+     *
+     * @param value new stun duration.
+     */
+    void setStun(int value) { _stunRem = value; };
+    /**
+     * Checks if enemy is stunned.
+     *
+     * @return whether the enemy is stunned.
+     */
+    bool isStunned() { return _stunRem>0; };
     /**
      * Returns true if the dude is on the ground.
      *
@@ -582,14 +593,14 @@ public:
      *
      * @return how much force to apply to get the dude moving
      */
-    float getForce() const { return DUDE_FORCE; }
+    float getForce() const { return ENEMY_FORCE; }
     
     /**
      * Returns How hard the brakes are applied to get a dude to stop moving
      *
      * @return How hard the brakes are applied to get a dude to stop moving
      */
-    float getDamping() const { return DUDE_DAMPING; }
+    float getDamping() const { return ENEMY_DAMPING; }
     
     /**
      * Returns the upper limit on dude left-right movement.
@@ -598,15 +609,8 @@ public:
      *
      * @return the upper limit on dude left-right movement.
      */
-    float getMaxSpeed() const { return DUDE_MAXSPEED; }
-    /**
-     * Returns the name of the body fixture
-     *
-     * This is used by ContactListener
-     *
-     * @return the name of the body fixture
-     */
-    std::string* getBodyName() { return &_bodyName; }
+    float getMaxSpeed() const { return ENEMY_MAXSPEED; }
+    
     /**
      * Returns the name of the ground sensor
      *
@@ -614,7 +618,7 @@ public:
      *
      * @return the name of the ground sensor
      */
-    std::string* getGroundSensorName() { return &_sensorName; }
+    std::string* getSensorName() { return &_sensorName; }
     /**
      * Returns the name of the shield sensor
      *
@@ -630,6 +634,15 @@ public:
      * @return true if this character is facing right
      */
     bool isFacingRight() const { return _faceRight; }
+
+    /**
+     * Returns the name of the body fixture
+     *
+     * This is used by ContactListener
+     *
+     * @return the name of the body fixture
+     */
+    std::string* getBodyName() { return &_bodyName; }
 
 #pragma mark -
 #pragma mark Physics Methods
@@ -671,4 +684,4 @@ public:
 	
 };
 
-#endif /* __GB_DUDE_MODEL_H__ */
+#endif /* __GB_ENEMY_MODEL_H__ */

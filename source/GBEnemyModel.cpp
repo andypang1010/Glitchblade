@@ -41,7 +41,7 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/17
 //
-#include "GBDudeModel.h"
+#include "GBEnemyModel.h"
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
@@ -51,35 +51,33 @@
 #pragma mark -
 #pragma mark Physics Constants
 /** Cooldown (in animation frames) for jumping */
-#define JUMP_COOLDOWN   5
+#define ENEMY_JUMP_COOLDOWN   5
 /** Cooldown (in animation frames) for shooting */
-#define SHOOT_COOLDOWN  20
+#define ENEMY_SHOOT_COOLDOWN  20
 /** Cooldown (in frames) for guard */
-#define GUARD_COOLDOWN  15
+#define ENEMY_GUARD_COOLDOWN  60
 /** Cooldown (in frames) for dash */
-#define DASH_COOLDOWN  30
+#define ENEMY_DASH_COOLDOWN  100
 /** Duration (in frames) for guard */
-#define GUARD_DURATION  60
-/** Duration (in frames) for parry */
-#define PARRY_DURATION  24
+#define ENEMY_GUARD_DURATION  120
 /** Duration (in frames) for dash- affects friction*/
-#define DASH_DURATION  8
+#define ENEMY_DASH_DURATION  8
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define DUDE_VSHRINK  0.95f
+#define ENEMY_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define DUDE_HSHRINK  0.7f
+#define ENEMY_HSHRINK  0.7f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define DUDE_SSHRINK  0.6f
+#define ENEMY_SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
-#define SENSOR_HEIGHT   0.1f
+#define ENEMY_SENSOR_HEIGHT   0.1f
 /** The amount to shrink the radius of the shield relative to the image width */
-#define SHIELD_RADIUS 2.0f
+#define ENEMY_SHIELD_RADIUS 2.0f
 /** The density of the character */
-#define DUDE_DENSITY    1.0f
+#define ENEMY_DENSITY    1.0f
 /** The impulse for the character jump */
-#define DUDE_JUMP       42.5f
+#define ENEMY_JUMP       42.5f
 /** The impulse for the character dash-attack */
-#define DUDE_DASH       75.0f
+#define ENEMY_DASH       100.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -105,19 +103,19 @@ using namespace cugl;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
+bool EnemyModel::init(const Vec2& pos, const Size& size, float scale) {
     Size nsize = size;
-    nsize.width  *= DUDE_HSHRINK;
-    nsize.height *= DUDE_VSHRINK;
+    nsize.width  *= ENEMY_HSHRINK;
+    nsize.height *= ENEMY_VSHRINK;
     _drawScale = scale;
     
     if (BoxObstacle::init(pos,nsize)) {
-        setDensity(DUDE_DENSITY);
+        setDensity(ENEMY_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
-        _hp = DUDE_MAXHP;
+        _hp = ENEMY_MAXHP;
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput  = false;
@@ -134,6 +132,7 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
         _guardCooldownRem = 0;
         _guardRem = 0;
         _parryRem= 0;
+        _stunRem = 0;
         return true;
     }
     return false;
@@ -148,7 +147,7 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
 *
 * @param value the amount of hp reduction.
 */
-void DudeModel::damage(float value) { 
+void EnemyModel::damage(float value) {
     _hp -= value; 
     _hp = _hp < 0 ? 0 : _hp;
 }
@@ -160,7 +159,7 @@ void DudeModel::damage(float value) {
  *
  * @param value left/right movement of this character.
  */
-void DudeModel::setMovement(float value) {
+void EnemyModel::setMovement(float value) {
     _movement = value;
     bool face = _movement > 0;
     if (_movement == 0 || _faceRight == face) {
@@ -178,7 +177,7 @@ void DudeModel::setMovement(float value) {
 /**
 * Make the sprite face left
 */
-void DudeModel::faceLeft() {
+void EnemyModel::faceLeft() {
     if (_faceRight == true) {
         _faceRight = false;
         scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
@@ -191,7 +190,7 @@ void DudeModel::faceLeft() {
 /**
 * Make the sprite face right
 */
-void DudeModel::faceRight() {
+void EnemyModel::faceRight() {
     if (_faceRight == false) {
         _faceRight = true;
         scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
@@ -209,51 +208,43 @@ void DudeModel::faceRight() {
  *
  * This is the primary method to override for custom physics objects
  */
-void DudeModel::createFixtures() {
+void EnemyModel::createFixtures() {
     if (_body == nullptr) {
         return;
     }
     
     BoxObstacle::createFixtures();
-    
-    // give name to initial body fixture for collision handling
-    b2Fixture* bodyFix = _body->GetFixtureList();
-    if (bodyFix) {
-        bodyFix->GetUserData().pointer = reinterpret_cast<uintptr_t>(getBodyName());
-    }
-    
     b2FixtureDef sensorDef;
-    sensorDef.density = DUDE_DENSITY;
+    sensorDef.density = ENEMY_DENSITY;
     sensorDef.isSensor = true;
     
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -DUDE_SSHRINK*getWidth()/2.0f;
-    corners[0].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
-    corners[1].x = -DUDE_SSHRINK*getWidth()/2.0f;
-    corners[1].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[2].x =  DUDE_SSHRINK*getWidth()/2.0f;
-    corners[2].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[3].x =  DUDE_SSHRINK*getWidth()/2.0f;
-    corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
+    corners[0].x = -ENEMY_SSHRINK*getWidth()/2.0f;
+    corners[0].y = (-getHeight()+ENEMY_SENSOR_HEIGHT)/2.0f;
+    corners[1].x = -ENEMY_SSHRINK*getWidth()/2.0f;
+    corners[1].y = (-getHeight()-ENEMY_SENSOR_HEIGHT)/2.0f;
+    corners[2].x = ENEMY_SSHRINK*getWidth()/2.0f;
+    corners[2].y = (-getHeight()-ENEMY_SENSOR_HEIGHT)/2.0f;
+    corners[3].x = ENEMY_SSHRINK*getWidth()/2.0f;
+    corners[3].y = (-getHeight()+ENEMY_SENSOR_HEIGHT)/2.0f;
     
     b2PolygonShape sensorShape;
     sensorShape.Set(corners,4);
     
     sensorDef.shape = &sensorShape;
-    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getGroundSensorName());
+    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
     
     // create shield circle fixture
     b2FixtureDef shieldDef;
     b2CircleShape shieldShape;
-    shieldShape.m_radius = SHIELD_RADIUS;
-    shieldShape.m_p.Set(0,0);//center of body
+    shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
+    shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
     shieldDef.isSensor = true;
-    shieldDef.shape = &shieldShape;
+    shieldDef.shape = &sensorShape;
     shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
     _shieldFixture = _body->CreateFixture(&shieldDef);
-    
 }
 
 /**
@@ -261,7 +252,7 @@ void DudeModel::createFixtures() {
  *
  * This is the primary method to override for custom physics objects.
  */
-void DudeModel::releaseFixtures() {
+void EnemyModel::releaseFixtures() {
     if (_body != nullptr) {
         return;
     }
@@ -279,7 +270,7 @@ void DudeModel::releaseFixtures() {
  * Any assets owned by this object will be immediately released.  Once
  * disposed, a DudeModel may not be used until it is initialized again.
  */
-void DudeModel::dispose() {
+void EnemyModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
@@ -291,13 +282,12 @@ void DudeModel::dispose() {
  *
  * This method should be called after the force attribute is set.
  */
-void DudeModel::applyForce() {
+void EnemyModel::applyForce() {
     if (!isEnabled()) {
         return;
     }
     
-    // Don't want to be moving.f Damp out player motion
-    // Don't want to be moving.f Damp out player motion
+    // Don't want to be moving. Damp out player motion
     if (getMovement() == 0.0f && !isDashActive()) {
         if (isGrounded()) {
             // Instant friction on the ground
@@ -310,35 +300,39 @@ void DudeModel::applyForce() {
             _body->ApplyForceToCenter(force,true);
         }
     }
-#pragma mark strafe force
-    b2Vec2 force(getMovement(),0);
-    _body->ApplyForceToCenter(force,true);
-#pragma mark jump force
-    // Jump!
-    if (isJumpBegin() && isGrounded()) {
-        b2Vec2 force(0, DUDE_JUMP);
-        _body->ApplyLinearImpulseToCenter(force,true);
-    }
-#pragma mark dash force
-    // Dash!
-    if (isDashLeftBegin()){
-        CULog("dashing left\n");
-        b2Vec2 force(-DUDE_DASH,0);
-        faceLeft();
-        _body->ApplyLinearImpulseToCenter(force, true);
-    }
-    
-    if (isDashRightBegin()){
-        CULog("dashing right\n");
-        b2Vec2 force(DUDE_DASH,0);
-        faceRight();
-        _body->ApplyLinearImpulseToCenter(force, true);
+
+    if (!isStunned()) {
+        #pragma mark strafe force
+        b2Vec2 force(getMovement(), 0);
+        _body->ApplyForceToCenter(force, true);
+        #pragma mark jump force
+        // Jump!
+        if (isJumpBegin() && isGrounded()) {
+            b2Vec2 force(0, ENEMY_JUMP);
+            _body->ApplyLinearImpulseToCenter(force, true);
+        }
+        #pragma mark dash force
+        // Dash!
+        if (isDashLeftBegin()) {
+            CULog("dashing left\n");
+            b2Vec2 force(-ENEMY_DASH, 0);
+            faceLeft();
+            _body->ApplyLinearImpulseToCenter(force, true);
+        }
+
+        if (isDashRightBegin()) {
+            CULog("dashing right\n");
+            b2Vec2 force(ENEMY_DASH, 0);
+            faceRight();
+            _body->ApplyLinearImpulseToCenter(force, true);
+        }
     }
     // Velocity too high, clamp it
     if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
-        //CULog("clamping velocity");
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-        
+        setVX(SIGNUM(getVX()) * getMaxSpeed());
+    }
+    if (isStunned()) {
+        setVX(getVX()/3);
     }
 }
 #pragma mark Cooldowns
@@ -349,7 +343,7 @@ void DudeModel::applyForce() {
  *
  * @param delta Number of seconds since last animation frame
  */
-void DudeModel::update(float dt) {
+void EnemyModel::update(float dt) {
     // Apply cooldowns
     
 #pragma mark Guard and Parry timing
@@ -357,17 +351,23 @@ void DudeModel::update(float dt) {
     if (isGuardActive() && !isGuardBegin()){
         //just for logging end of parry
         bool parry_active = isParryActive();
-        _guardRem = (_guardRem > 0 ? _guardRem -1 : 0);
-        _parryRem= (_parryRem > 0 ? _parryRem -1 : 0);
-            
-        //The rest of this block is for logging end of guard&parry
-        if (parry_active && (_parryRem == 0)){
-            _shieldNode->setColor(Color4::BLUE);
-            CULog("Parry completed during guard\n");
+        // If robot moves, guard is cancelled
+        if (isMoveBegin()){
+            _guardRem = 0;
+            _parryRem = 0;
+            CULog("Parry and Guard ended due to movement\n");
         }
-        if (_guardRem == 0){
-            CULog("Guard completed full duration\n");
-            _shieldNode->setColor(DEBUG_COLOR);
+        else{
+            _guardRem = (_guardRem > 0 ? _guardRem -1 : 0);
+            _parryRem= (_parryRem > 0 ? _parryRem -1 : 0);
+            
+            //The rest of this block is for logging end of guard&parry
+            if (parry_active && (_parryRem == 0)){
+                CULog("Parry completed during guard\n");
+            }
+            if (_guardRem == 0){
+                CULog("Guard completed full duration\n");
+            }
         }
     }
     // guard not active, update cooldown
@@ -376,20 +376,20 @@ void DudeModel::update(float dt) {
     }
     if (isJumpBegin() && isGrounded()) {
         CULog("isJumping is true");
-        _jumpCooldownRem = JUMP_COOLDOWN;
+        _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
     } else {
         _jumpCooldownRem = (_jumpCooldownRem > 0 ? _jumpCooldownRem-1 : 0);
     }
     
     if (isShooting()) {
-        _shootCooldownRem = SHOOT_COOLDOWN;
+        _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;
     } else {
         _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
     }
     
     if (isDashBegin()) {
-        _dashRem = DASH_DURATION;
-        _dashCooldownRem = DASH_COOLDOWN;
+        _dashRem = ENEMY_DASH_DURATION;
+        _dashCooldownRem = ENEMY_DASH_COOLDOWN;
     }
     else {
         _dashRem = (_dashRem > 0 ? _dashRem-1 : 0);
@@ -400,12 +400,13 @@ void DudeModel::update(float dt) {
     // player inputs guard and cooldown is ready
     if (isGuardBegin()) {
         CULog("Beginning guard\n");
-        _shieldNode->setColor(Color4::GREEN);
-        _guardCooldownRem = GUARD_COOLDOWN;
-        _guardRem = GUARD_DURATION;
-        // begin parry
-        CULog("Beginning parry\n");
-        _parryRem = PARRY_DURATION;
+        _guardCooldownRem = ENEMY_GUARD_COOLDOWN;
+        _guardRem = ENEMY_GUARD_DURATION;
+    }
+
+    if (isStunned()) {
+        CULog("Enemy stunned\n");
+        _stunRem -= 1;
     }
     
     BoxObstacle::update(dt);
@@ -425,23 +426,19 @@ void DudeModel::update(float dt) {
  * This is very useful when the fixtures have a very different shape than
  * the texture (e.g. a circular shape attached to a square texture).
  */
-void DudeModel::resetDebug() {
+void EnemyModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = DUDE_SSHRINK*_dimension.width;
-    float h = SENSOR_HEIGHT;
+    float w = ENEMY_SSHRINK*_dimension.width;
+    float h = ENEMY_SENSOR_HEIGHT;
     Poly2 dudePoly(Rect(-w/0.1f,-h/2.0f,w,h));
     _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
     
     Poly2 shieldPoly;
-    shieldPoly = PolyFactory().makeNgon(10000,0, SHIELD_RADIUS, 20);
+    shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, ENEMY_SHIELD_RADIUS);
     _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldNode->setPosition(Vec2(_debug->getContentSize()/2));
     _shieldNode->setColor(DEBUG_COLOR);
-
-    _debug->addChild(_sensorNode);
-    _debug->addChild(_shieldNode);
     
 }
 

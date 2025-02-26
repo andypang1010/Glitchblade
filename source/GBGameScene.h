@@ -33,6 +33,7 @@
 #include "GBInput.h"
 #include "GBProjectile.h"
 #include "GBDudeModel.h"
+#include "GBEnemyModel.h"
 
 using namespace cugl;
 
@@ -61,6 +62,12 @@ protected:
     std::shared_ptr<scene2::Label> _winnode;
     /** Reference to the lose message label */
     std::shared_ptr<scene2::Label> _losenode;
+    /** Reference to the player HP label */
+    std::shared_ptr<scene2::Label> _playerHPNode;
+    /** Reference to the enemy HP label */
+    std::shared_ptr<scene2::Label> _enemyHPNode;
+    /** Reference to the enemy stun label */
+    std::shared_ptr<scene2::Label> _enemyStunNode;
     /** Reference to the left joystick image */
     std::shared_ptr<scene2::PolygonNode> _leftnode;
     /** Reference to the right joystick image */
@@ -75,7 +82,7 @@ protected:
     /** Reference to the player avatar */
     std::shared_ptr<DudeModel>			  _player;
     /** Reference to the player avatar */
-    std::shared_ptr<DudeModel>			  _testEnemy;
+    std::shared_ptr<EnemyModel>			  _testEnemy;
 
     /** Whether we have completed this "game" */
     bool _complete;
@@ -318,6 +325,12 @@ public:
      */
     Projectile* getProjectileHitShield(physics2::Obstacle* bd1, std::string* fd1,
                                                 physics2::Obstacle* bd2, std::string* fd2) const;
+
+    /**
+ Checks if contact is projectile hitting player shield and returns the Projectile if so, else NULL.
+ */
+    Projectile* getEnemyHitShield(physics2::Obstacle* bd1, std::string* fd1,
+        physics2::Obstacle* bd2, std::string* fd2) const;
 
 #pragma mark -
 #pragma mark Gameplay Handling
