@@ -75,10 +75,14 @@
         }                
     },
 	"fonts": {
-		"retro": {
-			"file":     "fonts/RetroGame.ttf",
-			"size":     64
-		}
+    "retro": {
+      "file": "fonts/RetroGame.ttf",
+      "size": 64
+    },
+    "debug": {
+      "file": "fonts/RetroGame.ttf",
+      "size":  14
+    }
 
 	}
 }

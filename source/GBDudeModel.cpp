@@ -234,7 +234,7 @@ void DudeModel::createFixtures() {
     sensorShape.Set(corners,4);
     
     sensorDef.shape = &sensorShape;
-    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
+    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getGroundSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
     
     // create shield circle fixture
@@ -244,7 +244,7 @@ void DudeModel::createFixtures() {
     shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
     shieldDef.isSensor = true;
     shieldDef.shape = &sensorShape;
-    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
+    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldSensorName());
     _shieldFixture = _body->CreateFixture(&shieldDef);
 }
 
