@@ -90,15 +90,9 @@ protected:
     float _horizontal;
 
 #pragma mark Internal Touch Management   
-	// The screen is divided into four zones: Left, Bottom, Right and Main/
+	// The screen is divided into two zones: Left, Right 
 	// These are all shown in the diagram below.
-	//
-	//   |---------------|
-	//   |   |       |   |
-	//   | L |   M   | R |
-	//   |   |       |   |
-	//   -----------------
-	//
+    //
 	// The meaning of any touch depends on the zone it begins in.
 
 	/** Information representing a single "touch" (possibly multi-finger) */
@@ -119,9 +113,27 @@ protected:
 		LEFT,
 		/** The touch was in the right zone (as shown above) */
 		RIGHT,
-		/** The touch was in the main zone (as shown above) */
-		MAIN
 	};
+    	/** Enumeration identifying a zone type for the current touch */
+	enum class ZoneType {
+		/** The touch was in the swiping zone (default left)*/
+		SWIPE,
+		/** The touch was in the strafe/joystick zone (default right) */
+		STRAFE,
+	};
+        /** Enumeration identifying a swipe type */
+    enum class SwipeType {
+        /** Swiped left for left dash */
+        LEFTDASH,
+        /** Swiped right for right dash */
+        RIGHTDASH,
+        /** Swiped up (for jump) */
+        JUMP,
+        /** Swiped down (for guard) */
+        GUARD,
+        /** The "swipe" did not meet the swipe threshold */
+        NONE,
+    };
 
 	/** The bounds of the entire game screen (in touch coordinates) */
     cugl::Rect _tbounds;
@@ -190,22 +202,21 @@ protected:
      * will also move the joystick anchor if the touch position moves
      * too far.
      *
-     * @param  pos  the current joystick position
      */
-    void processJoystick(const cugl::Vec2 pos);
+    void processJoystick();
     
     /**
-     * Returns a nonzero value if this is a quick left or right swipe
+     * Returns an enum indicating the type of swipe
      *
-     * The function returns -1 if it is left swipe and 1 if it is a right swipe.
+     * The function returns LEFTDASH, RIGHTDASH, JUMP, GUARD, or NO
      *
      * @param  start    the start position of the candidate swipe
      * @param  stop     the end position of the candidate swipe
      * @param  current  the current timestamp of the gesture
      *
-     * @return a nonzero value if this is a quick left or right swipe
+     * @return an Enum indicating the type of swipe
      */
-	int processSwipe(const cugl::Vec2 start, const cugl::Vec2 stop, cugl::Timestamp current);
+    SwipeType processSwipe(const cugl::Vec2 start, const cugl::Vec2 stop, cugl::Timestamp current);
   
 public:
 #pragma mark -

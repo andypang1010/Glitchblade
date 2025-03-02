@@ -500,6 +500,7 @@ void GameScene::populate() {
     _player->getSceneNode()->addChild(_playerHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyStunNode);
+    // _testEnemy->setEnabled(false); // May want to set this to false for testing
 
 	// Play the background music on a loop.
 	/*std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);

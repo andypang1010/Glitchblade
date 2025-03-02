@@ -52,26 +52,19 @@ using namespace cugl;
 #define JSTICK_RADIUS    25
 /** How far to display the virtual joystick above the finger */
 #define JSTICK_OFFSET    80
-/** How far we must swipe up for a jump gesture */
-#define SWIPE_LENGTH    50
+/** How far we must swipe up for swipe gestures */
+#define SWIPE_LENGTH    100
 /** How fast a double click must be in milliseconds */
 #define DOUBLE_CLICK    400
 
-// The screen is divided into four zones: Left, Bottom, Right and Main/
+// The screen is divided into two zones: Left and RIGHT (split down the middle)
 // These are all shown in the diagram below.
-//
-//   |---------------|
-//   |   |       |   |
-//   | L |   M   | R |
-//   |   |       |   |
-//   |---------------|
-//
 // The meaning of any touch depends on the zone it begins in.
 
 /** The portion of the screen used for the left zone */
-#define LEFT_ZONE       0.35f
+#define LEFT_ZONE  0.5f
 /** The portion of the screen used for the right zone */
-#define RIGHT_ZONE      0.35f
+#define RIGHT_ZONE 0.5
 
 #pragma mark -
 #pragma mark Input Controller
@@ -91,6 +84,11 @@ _jumpPressed(false),
 _rdashPressed(false),
 _ldashPressed(false),
 _guardPressed(false),
+_keyGuard(false),
+_keyLdash(false),
+_keyRdash(false),
+_leftPressed(false),
+_rightPressed(false),
 _keyJump(false),
 _keyFire(false),
 _keyReset(false),
@@ -225,6 +223,10 @@ void PlatformInput::update(float dt) {
     _keyGuard = false;
     _keyLdash = false;
     _keyRdash = false;
+        if (_joystick){
+        CULog("Calling process joystick\n");
+        processJoystick();
+    }
 #endif
 }
 
@@ -281,8 +283,6 @@ PlatformInput::Zone PlatformInput::getZone(const Vec2 pos) const {
 		return Zone::LEFT;
 	} else if (_rzone.contains(pos)) {
 		return Zone::RIGHT;
-	} else if (_tbounds.contains(pos)) {
-		return Zone::MAIN;
 	}
 	return Zone::UNDEFINED;
 }
@@ -312,61 +312,72 @@ Vec2 PlatformInput::touch2Screen(const Vec2 pos) const {
  * will also move the joystick anchor if the touch position moves
  * too far.
  *
- * @param  pos  the current joystick position
  */
-void PlatformInput::processJoystick(const cugl::Vec2 pos) {
-    Vec2 diff =  _ltouch.position-pos;
-
-    // Reset the anchor if we drifted too far
-    if (diff.lengthSquared() > JSTICK_RADIUS*JSTICK_RADIUS) {
-        diff.normalize();
-        diff *= (JSTICK_RADIUS+JSTICK_DEADZONE)/2;
-        _ltouch.position = pos+diff;
-    }
-    _ltouch.position.y = pos.y;
-    _joycenter = touch2Screen(_ltouch.position);
-    _joycenter.y += JSTICK_OFFSET;
-    
+void PlatformInput::processJoystick() {
+    Vec2 diff =  _rtouch.position-_joycenter;
+    CULog("position is (%f,%f) and joycenter is (%f, %f)", _rtouch.position.x, _rtouch.position.y, _joycenter.x, _joycenter.y);
+    CULog("diff is (%f, %f)",diff.x,diff.y);
     if (std::fabsf(diff.x) > JSTICK_DEADZONE) {
-        _joystick = true;
         if (diff.x > 0) {
-            _keyLeft = true;
-            _keyRight = false;
-        } else {
             _keyLeft = false;
             _keyRight = true;
+        } else {
+            _keyLeft = true;
+            _keyRight = false;
         }
-    } else {
-        _joystick = false;
-        _keyLeft = false;
-        _keyRight = false;
     }
 }
 
 /**
- * Returns a nonzero value if this is a quick left or right swipe
- *
- * The function returns -1 if it is left swipe and 1 if it is a right swipe.
- *
- * @param  start    the start position of the candidate swipe
- * @param  stop     the end position of the candidate swipe
- * @param  current  the current timestamp of the gesture
- *
- * @return a nonzero value if this is a quick left or right swipe
- */
-int PlatformInput::processSwipe(const Vec2 start, const Vec2 stop, Timestamp current) {
-	// Look for swipes up that are "long enough"
-	float xdiff = (stop.x-start.x);
-    float thresh = SWIPE_LENGTH;
-    if (xdiff > thresh) {
-        return 1;
-    } else if (xdiff < thresh * -1) {
-        return -1;
-    }
-	return 0;
+* Returns an vector of the swipe direction
+*
+* The function returns a vector representing the X difference and Y difference respectively
+*
+* @param  start    the start position of the candidate swipe
+* @param  stop     the end position of the candidate swipe
+* @param  current  the current timestamp of the gesture
+*
+* @return a Vec2 indicating the vector of the swipe
+*/
+Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
+    return (stop - start);
 }
 
+/**
+* Returns an enum indicating the type of swipe
+*
+* The function returns LEFTDASH, RIGHTDASH, JUMP, GUARD, or NO
+*
+* @param  start    the start position of the candidate swipe
+* @param  stop     the end position of the candidate swipe
+* @param  current  the current timestamp of the gesture
+*
+* @return an Enum indicating the type of swipe
+*/
+ PlatformInput::SwipeType PlatformInput::processSwipe(const Vec2 start, const Vec2 stop, Timestamp current) {
+	float xdiff = (stop.x-start.x);
+    float ydiff = (stop.y - start.y);
+    float thresh = SWIPE_LENGTH;
+    float absxdiff = std::abs(xdiff);
+    float absydiff = std::abs(ydiff);
 
+    bool xpass = absxdiff > thresh;
+    bool ypass = absydiff > thresh;
+
+    // Ensure at least one axis has passed the threshold
+    if (xpass || ypass) {
+        // X magnitude > Y magnitude (so X must have passed AND be dominant axis)
+        if (absxdiff > absydiff) {
+            return (xdiff > 0) ? SwipeType::RIGHTDASH : SwipeType::LEFTDASH;
+        // Y magnitude > X magnitude (so Y must have passed AND be dominant axis)
+        } else {
+            return (ydiff > 0) ? SwipeType::GUARD : SwipeType::JUMP;
+        }
+    }
+    
+    // Return NONE if one of the other swipe types haven't been returned already
+    return SwipeType::NONE;
+}
 
 #pragma mark -
 #pragma mark Touch and Mouse Callbacks
@@ -381,17 +392,14 @@ void PlatformInput::touchBeganCB(const TouchEvent& event, bool focus) {
     Vec2 pos = event.position;
     Zone zone = getZone(pos);
     switch (zone) {
-        case Zone::LEFT:
+        case Zone::LEFT: // may change to allow switching sides
+            //SWIPING CONTROLS
             // Only process if no touch in zone
             if (_ltouch.touchids.empty()) {
                 // Left is the floating joystick
                 _ltouch.position = event.position;
                 _ltouch.timestamp.mark();
                 _ltouch.touchids.insert(event.touch);
-
-                _joystick = true;
-                _joycenter = touch2Screen(event.position);
-                _joycenter.y += JSTICK_OFFSET;
             }
             break;
         case Zone::RIGHT:
@@ -403,23 +411,10 @@ void PlatformInput::touchBeganCB(const TouchEvent& event, bool focus) {
                 _rtouch.timestamp.mark();
                 _rtouch.touchids.insert(event.touch);
                 _hasJumped = false;
-            }
-            break;
-        case Zone::MAIN:
-            // Only check for double tap in Main if nothing else down
-            if (_ltouch.touchids.empty() && _rtouch.touchids.empty() && _mtouch.touchids.empty()) {
-                _keyDebug = (event.timestamp.ellapsedMillis(_mtime) <= DOUBLE_CLICK);
-            }
-            
-            // Keep count of touches in Main zone if next to each other.
-            if (_mtouch.touchids.empty()) {
-                _mtouch.position = event.position;
-                _mtouch.touchids.insert(event.touch);
-            } else {
-                Vec2 offset = event.position-_mtouch.position;
-                if (offset.lengthSquared() < NEAR_TOUCH*NEAR_TOUCH) {
-                    _mtouch.touchids.insert(event.touch);
-                }
+
+                _joystick = true;
+                _joycenter = touch2Screen(event.position);
+                _joycenter.y += JSTICK_OFFSET;
             }
             break;
         default:
@@ -441,18 +436,12 @@ void PlatformInput::touchEndedCB(const TouchEvent& event, bool focus) {
     Zone zone = getZone(pos);
     if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
         _ltouch.touchids.clear();
+    } else if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
         _keyLeft = false;
         _keyRight = false;
         _joystick = false;
-    } else if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
-        _hasJumped = false;
         _rtime = event.timestamp;
         _rtouch.touchids.clear();
-    } else if (zone == Zone::MAIN) {
-        if (_mtouch.touchids.find(event.touch) != _mtouch.touchids.end()) {
-            _mtouch.touchids.erase(event.touch);
-        }
-        _mtime = event.timestamp;
     }
 }
 
@@ -466,23 +455,40 @@ void PlatformInput::touchEndedCB(const TouchEvent& event, bool focus) {
  */
 void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous, bool focus) {
     Vec2 pos = event.position;
-    // Only check for swipes in the main zone if there is more than one finger.
-    if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
-        processJoystick(pos);
-    } else if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
-        if (!_hasJumped) {
-            if ((_rtouch.position.y-pos.y) > SWIPE_LENGTH) {
+    // this logic should change if we want to allow switching input sides
+    if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
+        _rtouch.position = touch2Screen(pos);
+    //swipe side
+    } else if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
+        SwipeType s_type = processSwipe(_ltouch.position, event.position, event.timestamp);
+
+        switch (s_type) {
+            case SwipeType::LEFTDASH:
+                CULog("SWIPE TYPE IS LEFTDASH");
+                _keyLdash = true;
+                break;
+            case SwipeType::RIGHTDASH:
+                CULog("SWIPE TYPE IS RIGHTDASH");
+                _keyRdash = true;
+                break;
+            case SwipeType::JUMP:
+                CULog("SWIPE TYPE IS JUMP");
                 _keyJump = true;
-                _hasJumped = true;
-            }
+                break;
+            case SwipeType::GUARD:
+                CULog("SWIPE TYPE IS GUARD");
+                break;
+            case SwipeType::NONE:
+                CULog("SWIPE TYPE IS NONE");
+                break;
+            default:
+                CULog("Why is this printing :|");
+                break;
         }
-    } else if (_mtouch.touchids.size() > 1) {
-        // We only process multifinger swipes in main
-        int swipe = processSwipe(_mtouch.position, event.position, event.timestamp);
-        if (swipe == 1) {
-            _keyReset = true;
-        } else if (swipe == -1) {
-            _keyExit = true;
+
+        // If we have used a swipe type, then clear that touch instance
+        if (s_type != SwipeType::NONE) {
+            clearTouchInstance(_ltouch);
         }
     }
 }
