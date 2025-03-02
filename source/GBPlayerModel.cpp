@@ -1,5 +1,5 @@
 //
-//  GBDudeModel.cpp
+//  GBPlayerModel.cpp
 //  PlatformDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -41,7 +41,7 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/17
 //
-#include "GBDudeModel.h"
+#include "GBPlayerModel.h"
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
@@ -105,7 +105,7 @@ using namespace cugl;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
+bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
     Size nsize = size;
     nsize.width  *= DUDE_HSHRINK;
     nsize.height *= DUDE_VSHRINK;
@@ -148,7 +148,7 @@ bool DudeModel::init(const Vec2& pos, const Size& size, float scale) {
 *
 * @param value the amount of hp reduction.
 */
-void DudeModel::damage(float value) { 
+void PlayerModel::damage(float value) { 
     _hp -= value; 
     _hp = _hp < 0 ? 0 : _hp;
 }
@@ -160,7 +160,7 @@ void DudeModel::damage(float value) {
  *
  * @param value left/right movement of this character.
  */
-void DudeModel::setMovement(float value) {
+void PlayerModel::setMovement(float value) {
     _movement = value;
     bool face = _movement > 0;
     if (_movement == 0 || _faceRight == face) {
@@ -178,7 +178,7 @@ void DudeModel::setMovement(float value) {
 /**
 * Make the sprite face left
 */
-void DudeModel::faceLeft() {
+void PlayerModel::faceLeft() {
     if (_faceRight == true) {
         _faceRight = false;
         scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
@@ -191,7 +191,7 @@ void DudeModel::faceLeft() {
 /**
 * Make the sprite face right
 */
-void DudeModel::faceRight() {
+void PlayerModel::faceRight() {
     if (_faceRight == false) {
         _faceRight = true;
         scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
@@ -209,7 +209,7 @@ void DudeModel::faceRight() {
  *
  * This is the primary method to override for custom physics objects
  */
-void DudeModel::createFixtures() {
+void PlayerModel::createFixtures() {
     if (_body == nullptr) {
         return;
     }
@@ -261,7 +261,7 @@ void DudeModel::createFixtures() {
  *
  * This is the primary method to override for custom physics objects.
  */
-void DudeModel::releaseFixtures() {
+void PlayerModel::releaseFixtures() {
     if (_body != nullptr) {
         return;
     }
@@ -274,12 +274,12 @@ void DudeModel::releaseFixtures() {
 }
 
 /**
- * Disposes all resources and assets of this DudeModel
+ * Disposes all resources and assets of this PlayerModel
  *
  * Any assets owned by this object will be immediately released.  Once
- * disposed, a DudeModel may not be used until it is initialized again.
+ * disposed, a PlayerModel may not be used until it is initialized again.
  */
-void DudeModel::dispose() {
+void PlayerModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
@@ -291,7 +291,7 @@ void DudeModel::dispose() {
  *
  * This method should be called after the force attribute is set.
  */
-void DudeModel::applyForce() {
+void PlayerModel::applyForce() {
     if (!isEnabled()) {
         return;
     }
@@ -349,7 +349,7 @@ void DudeModel::applyForce() {
  *
  * @param delta Number of seconds since last animation frame
  */
-void DudeModel::update(float dt) {
+void PlayerModel::update(float dt) {
     // Apply cooldowns
     
 #pragma mark Guard and Parry timing
@@ -425,7 +425,7 @@ void DudeModel::update(float dt) {
  * This is very useful when the fixtures have a very different shape than
  * the texture (e.g. a circular shape attached to a square texture).
  */
-void DudeModel::resetDebug() {
+void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
     float w = DUDE_SSHRINK*_dimension.width;
     float h = SENSOR_HEIGHT;

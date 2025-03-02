@@ -32,7 +32,7 @@
 #include <vector>
 #include "GBInput.h"
 #include "GBProjectile.h"
-#include "GBDudeModel.h"
+#include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 
 using namespace cugl;
@@ -80,7 +80,7 @@ protected:
 
     // Physics objects for the game
     /** Reference to the player avatar */
-    std::shared_ptr<DudeModel>			  _player;
+    std::shared_ptr<PlayerModel>			  _player;
     /** Reference to the player avatar */
     std::shared_ptr<EnemyModel>			  _testEnemy;
 

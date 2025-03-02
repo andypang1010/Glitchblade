@@ -1,5 +1,5 @@
 //
-//  GBDudeModel.cpp
+//  GBPlayerModel.cpp
 //  PlatformDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -265,10 +265,10 @@ void EnemyModel::releaseFixtures() {
 }
 
 /**
- * Disposes all resources and assets of this DudeModel
+ * Disposes all resources and assets of this PlayerModel
  *
  * Any assets owned by this object will be immediately released.  Once
- * disposed, a DudeModel may not be used until it is initialized again.
+ * disposed, a PlayerModel may not be used until it is initialized again.
  */
 void EnemyModel::dispose() {
     _geometry = nullptr;

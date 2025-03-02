@@ -1,5 +1,5 @@
 //
-//  GBDudeModel.h
+//  GBPlayerModel.h
 //  PlatformDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -81,10 +81,10 @@ using namespace cugl;
 * experience, using a rectangular shape for a character will regularly snag
 * on a platform.  The round shapes on the end caps lead to smoother movement.
 */
-class DudeModel : public physics2::BoxObstacle {
+class PlayerModel : public physics2::BoxObstacle {
 private:
 	/** This macro disables the copy constructor (not allowed on physics objects) */
-	CU_DISALLOW_COPY_AND_ASSIGN(DudeModel);
+	CU_DISALLOW_COPY_AND_ASSIGN(PlayerModel);
 protected:
     /** This character's remaining health */
     float _hp;
@@ -162,20 +162,20 @@ public:
      * Creates a degenerate Dude object.
      *
      * This constructor does not initialize any of the dude values beyond
-     * the defaults.  To use a DudeModel, you must call init().
+     * the defaults.  To use a PlayerModel, you must call init().
      */
-    DudeModel() : BoxObstacle(), _sensorName(SENSOR_NAME), _shieldName(SHIELD_SENSOR_NAME), _bodyName(BODY_NAME) { }
+    PlayerModel() : BoxObstacle(), _sensorName(SENSOR_NAME), _shieldName(SHIELD_SENSOR_NAME), _bodyName(BODY_NAME) { }
     
     /**
-     * Destroys this DudeModel, releasing all resources.
+     * Destroys this PlayerModel, releasing all resources.
      */
-    virtual ~DudeModel(void) { dispose(); }
+    virtual ~PlayerModel(void) { dispose(); }
     
     /**
-     * Disposes all resources and assets of this DudeModel
+     * Disposes all resources and assets of this PlayerModel
      *
      * Any assets owned by this object will be immediately released.  Once
-     * disposed, a DudeModel may not be used until it is initialized again.
+     * disposed, a PlayerModel may not be used until it is initialized again.
      */
     void dispose();
     
@@ -259,10 +259,10 @@ public:
 	 * only guarantee that the scene graph node is positioned correctly
 	 * according to the drawing scale.
 	 *
-	 * @return  A newly allocated DudeModel at the origin
+	 * @return  A newly allocated PlayerModel at the origin
 	 */
-	static std::shared_ptr<DudeModel> alloc() {
-		std::shared_ptr<DudeModel> result = std::make_shared<DudeModel>();
+	static std::shared_ptr<PlayerModel> alloc() {
+		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
 		return (result->init() ? result : nullptr);
 	}
 
@@ -278,10 +278,10 @@ public:
 	 *
      * @param pos   Initial position in world coordinates
 	 *
-	 * @return  A newly allocated DudeModel at the given position
+	 * @return  A newly allocated PlayerModel at the given position
 	 */
-	static std::shared_ptr<DudeModel> alloc(const Vec2& pos) {
-		std::shared_ptr<DudeModel> result = std::make_shared<DudeModel>();
+	static std::shared_ptr<PlayerModel> alloc(const Vec2& pos) {
+		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
 		return (result->init(pos) ? result : nullptr);
 	}
 
@@ -298,10 +298,10 @@ public:
 	 * @param pos   Initial position in world coordinates
      * @param size  The size of the dude in world units
 	 *
-	 * @return  A newly allocated DudeModel at the given position with the given scale
+	 * @return  A newly allocated PlayerModel at the given position with the given scale
 	 */
-	static std::shared_ptr<DudeModel> alloc(const Vec2& pos, const Size& size) {
-		std::shared_ptr<DudeModel> result = std::make_shared<DudeModel>();
+	static std::shared_ptr<PlayerModel> alloc(const Vec2& pos, const Size& size) {
+		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
 		return (result->init(pos, size) ? result : nullptr);
 	}
 
@@ -319,10 +319,10 @@ public:
      * @param size  The size of the dude in world units
 	 * @param scale The drawing scale (world to screen)
 	 *
-	 * @return  A newly allocated DudeModel at the given position with the given scale
+	 * @return  A newly allocated PlayerModel at the given position with the given scale
 	 */
-	static std::shared_ptr<DudeModel> alloc(const Vec2& pos, const Size& size, float scale) {
-		std::shared_ptr<DudeModel> result = std::make_shared<DudeModel>();
+	static std::shared_ptr<PlayerModel> alloc(const Vec2& pos, const Size& size, float scale) {
+		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
 		return (result->init(pos, size, scale) ? result : nullptr);
 	}
     
@@ -330,21 +330,21 @@ public:
 #pragma mark -
 #pragma mark Animation
     /**
-     * Returns the scene graph node representing this DudeModel.
+     * Returns the scene graph node representing this PlayerModel.
      *
      * By storing a reference to the scene graph node, the model can update
      * the node to be in sync with the physics info. It does this via the
      * {@link Obstacle#update(float)} method.
      *
-     * @return the scene graph node representing this DudeModel.
+     * @return the scene graph node representing this PlayerModel.
      */
 	const std::shared_ptr<scene2::SceneNode>& getSceneNode() const { return _node; }
 
     /**
-     * Sets the scene graph node representing this DudeModel.
+     * Sets the scene graph node representing this PlayerModel.
      *
      * Note that this method also handles creating the nodes for the body parts
-     * of this DudeModel. Since the obstacles are decoupled from the scene graph,
+     * of this PlayerModel. Since the obstacles are decoupled from the scene graph,
      * initialization (which creates the obstacles) occurs prior to the call to
      * this method. Therefore, to be drawn to the screen, the nodes of the attached
      * bodies must be added here.
@@ -356,7 +356,7 @@ public:
      * the node to be in sync with the physics info. It does this via the
      * {@link Obstacle#update(float)} method.
      *
-     * @param node  The scene graph node representing this DudeModel, which has been added to the world node already.
+     * @param node  The scene graph node representing this PlayerModel, which has been added to the world node already.
      */
 	void setSceneNode(const std::shared_ptr<scene2::SceneNode>& node) {
         _node = node;

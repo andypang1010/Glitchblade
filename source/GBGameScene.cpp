@@ -23,7 +23,7 @@
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
-#include "GBDudeModel.h"
+#include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBProjectile.h"
 
@@ -480,7 +480,7 @@ void GameScene::populate() {
     Vec2 dudePos = DUDE_POS;
     node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(DUDE_TEXTURE);
-    _player = DudeModel::alloc(dudePos, image->getSize() / _scale, _scale);
+    _player = PlayerModel::alloc(dudePos, image->getSize() / _scale, _scale);
     sprite = scene2::PolygonNode::allocWithTexture(image);
     _player->setSceneNode(sprite);
     _player->setDebugColor(DEBUG_COLOR);
