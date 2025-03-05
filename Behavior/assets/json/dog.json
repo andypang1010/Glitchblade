@@ -1,0 +1,47 @@
+{
+  "root": {
+    "children": {
+      "random selector": {
+        "children": {
+          "parallel": {
+            "parameters": {
+              "policy": "selector"
+            },
+            "children": {
+              "wait": {
+                "parameters": {
+                  "seconds": 3
+                }
+              },
+              "sleep": {}
+            }
+          },
+          "random selector": {
+            "children": {
+              "sequence": {
+                "children": {
+                  "bark": {},
+                  "run": {},
+                  "mark": {}
+                }
+              },
+              "parallel": {
+                "parameters": {
+                  "policy": "selector"
+                },
+                "children": {
+                  "wait": {
+                    "parameters": {
+                      "seconds": 2
+                    }
+                  },
+                  "bark": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

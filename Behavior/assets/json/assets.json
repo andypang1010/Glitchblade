@@ -1,0 +1,85 @@
+{
+  "textures": {
+    "background": {
+      "file": "textures/field.png",
+      "wrapS": "repeat",
+      "wrapT": "repeat"
+    },
+    "arenaBackground": {
+      "file": "textures/arenaBackground.png",
+      "wrapS": "repeat",
+      "wrapT": "repeat"
+    },
+    "arenaForeground": {
+      "file": "textures/arenaForeground.png",
+      "wrapS": "repeat",
+      "wrapT": "repeat"
+    },
+    "pow": {
+      "file": "textures/pow.png"
+    },
+    "redWins": {
+      "file": "textures/redWins.png"
+    },
+    "blueWins": {
+      "file": "textures/blueWins.png"
+    },
+    "redIdle": {
+      "file": "textures/redIdle.png"
+    },
+    "blueIdle": {
+      "file": "textures/blueIdle.png"
+    },
+    "redJab": {
+      "file": "textures/redJab.png"
+    },
+    "blueJab": {
+      "file": "textures/blueJab.png"
+    },
+    "redPunch": {
+      "file": "textures/redPunch.png"
+    },
+    "bluePunch": {
+      "file": "textures/bluePunch.png"
+    },
+    "redBlock": {
+      "file": "textures/redBlock.png"
+    },
+    "blueBlock": {
+      "file": "textures/blueBlock.png"
+    },
+    "pine": {
+      "file": "textures/tree.png"
+    },
+    "idle": {
+      "file": "textures/dogIdleLeft.png"
+    },
+    "bark": {
+      "file": "textures/dogBarkLeft.png"
+    },
+    "walk": {
+      "file": "textures/dogWalkLeft.png"
+    },
+    "sleep": {
+      "file": "textures/dogSleepLeft.png"
+    },
+    "mark": {
+      "file": "textures/dogMarkLeft.png"
+    }
+  },
+  "fonts": {
+    "pixel32": {
+      "file": "fonts/LightPixel7.ttf",
+      "size": 32
+    }
+  },
+  "jsons": {
+    "constants": "json/constants.json",
+    "dog": "json/dog.json",
+    "dog1": "json/dog1.json",
+    "dog2": "json/dog2.json",
+    "dog3": "json/dog3.json",
+    "dog4": "json/dog4.json",
+    "fighter": "json/fighter.json"
+  }
+}

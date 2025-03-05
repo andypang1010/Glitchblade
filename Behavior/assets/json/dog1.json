@@ -1,0 +1,27 @@
+{
+  "root": {
+    "children": {
+      "sequence": {
+        "children": {
+          "invert": {
+            "children": {
+              "failure": {}
+            }
+          },
+          "always succeed": {
+            "children": {
+              "failure": {}
+            }
+          },
+          "random sequence": {
+            "children": {
+              "bark": {},
+              "run": {},
+              "mark": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

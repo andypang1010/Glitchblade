@@ -1,0 +1,41 @@
+{
+  "root": {
+    "children": {
+      "parallel": {
+        "parameters": {
+          "policy": "sequence"
+        },
+        "children": {
+          "until failure": {
+            "children": {
+              "random selector": {
+                "children": {
+                  "bark": {},
+                  "run": {},
+                  "sleep": {}
+                }
+              }
+            }
+          },
+          "always succeed": {
+            "children": {
+              "wait": {
+                "parameters": {
+                  "seconds": 4
+                }
+              }
+            }
+          },
+          "repeat": {
+            "parameters": {
+              "count": 5
+            },
+            "children": {
+              "mark": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

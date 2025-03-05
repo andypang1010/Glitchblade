@@ -1,0 +1,13 @@
+{
+  "root": {
+    "children": {
+      "random sequence": {
+        "children": {
+          "bark": {},
+          "mark": {},
+          "run": {}
+        }
+      }
+    }
+  }
+}

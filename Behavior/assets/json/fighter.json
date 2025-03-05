@@ -1,0 +1,58 @@
+{
+  "root": {
+    "children": {
+      "random selector": {
+        "children": {
+          "punch": {},
+          "repeat": {
+            "children": {
+              "block": {}
+            },
+            "parameters": {
+              "max repeats": 1
+            }
+          },
+          "repeat": {
+            "children": {
+              "idle": {}
+            },
+            "parameters": {
+              "max repeats": 2
+            }
+          },
+          "random selector": {
+            "children": {
+              "always succeed": {
+                "children": {
+                  "selector": {
+                    "children": {
+                      "repeat": {
+                        "children": {
+                          "jab": {}
+                        },
+                        "parameters": {
+                          "max times": 2
+                        }
+                      },
+                      "punch": {}
+                    }
+                  }
+                }
+              },
+              "until success": {
+                "children": {
+                  "selector": {
+                    "children": {
+                      "jab": {},
+                      "punch": {}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
