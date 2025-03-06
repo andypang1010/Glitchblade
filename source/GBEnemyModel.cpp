@@ -62,6 +62,8 @@
 #define ENEMY_GUARD_DURATION  120
 /** Duration (in frames) for dash- affects friction*/
 #define ENEMY_DASH_DURATION  8
+/** Range to trigger enemy melee attack*/
+#define ENEMY_MELEE_RANGE  5
 /** The amount to shrink the body fixture (vertically) relative to the image */
 #define ENEMY_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -198,6 +200,75 @@ void EnemyModel::faceRight() {
             image->flipHorizontal(!image->isFlipHorizontal());
         }
     }
+}
+
+#pragma mark -
+#pragma mark AI Methods
+bool EnemyModel::isTargetClose(Vec2 targetPos) {
+    return (targetPos - getPosition()).length() <= ENEMY_MELEE_RANGE;
+}
+
+/**
+* Performs a stab attack while dashing forward
+*
+* @return whether the attack is successful
+*/
+bool stab() {
+
+}
+
+/**
+ * Performs a slam attack
+ *
+ * @return whether the attack is successful
+ */
+bool slam() {
+
+}
+
+/**
+ * Shoot projectiles for ranged attack
+ *
+ * @return whether the attack is successful
+ */
+bool shoot() {
+
+}
+
+/**
+ * Move forward slowly(for adjusting position relative to the player)
+ *
+ * @return whether the movement is successful
+ */
+bool moveForwardSlow() {
+    
+}
+
+/**
+ * Move backward slowly(for adjusting position relative to the player)
+ *
+ * @return whether the movement is successful
+ */
+bool moveBackSlow() {
+
+}
+
+/**
+ * Dash forward(quickly get close to player)
+ *
+ * @return whether the movement is successful
+ */
+bool moveForwardFast() {
+
+}
+
+/**
+ * Dash backward(evade player attack)
+ *
+ * @return whether the movement is successful
+ */
+bool moveBackFast() {
+
 }
 
 

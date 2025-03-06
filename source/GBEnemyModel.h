@@ -645,6 +645,65 @@ public:
     std::string* getBodyName() { return &_bodyName; }
 
 #pragma mark -
+#pragma mark AI Methods
+    /**
+     * Returns whether the player is in melee range
+     *
+     * @param targetPos the position of the player
+     * @return whether the target is in melee range
+     */
+    bool isTargetClose(Vec2 targetPos);
+
+    /**
+     * Performs a stab attack while dashing forward
+     *
+     * @return whether the attack is successful
+     */
+    bool stab();
+
+    /**
+     * Performs a slam attack
+     *
+     * @return whether the attack is successful
+     */
+    bool slam();
+
+    /**
+     * Shoot projectiles for ranged attack
+     *
+     * @return whether the attack is successful
+     */
+    bool shoot();
+
+    /**
+     * Move forward slowly(for adjusting position relative to the player)
+     *
+     * @return whether the movement is successful
+     */
+    bool moveForwardSlow();
+
+    /**
+     * Move backward slowly(for adjusting position relative to the player)
+     *
+     * @return whether the movement is successful
+     */
+    bool moveBackSlow();
+
+    /**
+     * Dash forward(quickly get close to player)
+     *
+     * @return whether the movement is successful
+     */
+    bool moveForwardFast();
+
+    /**
+     * Dash backward(evade player attack)
+     *
+     * @return whether the movement is successful
+     */
+    bool moveBackFast();
+
+#pragma mark -
 #pragma mark Physics Methods
     /**
      * Creates the physics Body(s) for this object, adding them to the world.
