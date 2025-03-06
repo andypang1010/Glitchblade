@@ -690,14 +690,14 @@ public:
     bool moveBackSlow();
 
     /**
-     * Dash forward(quickly get close to player)
+     * Dash forward(for quick melee attack)
      *
      * @return whether the movement is successful
      */
     bool moveForwardFast();
 
     /**
-     * Dash backward(evade player attack)
+     * Dash backward(for evading player attack)
      *
      * @return whether the movement is successful
      */
