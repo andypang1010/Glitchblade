@@ -297,7 +297,6 @@ void PlayerModel::applyForce() {
     }
     
     // Don't want to be moving.f Damp out player motion
-    // Don't want to be moving.f Damp out player motion
     if (getMovement() == 0.0f && !isDashActive()) {
         if (isGrounded()) {
             // Instant friction on the ground
@@ -312,7 +311,8 @@ void PlayerModel::applyForce() {
     }
 #pragma mark strafe force
     b2Vec2 force(getMovement(),0);
-    _body->ApplyForceToCenter(force,true);
+    _body->SetLinearVelocity(b2Vec2(getMovement(), _body->GetLinearVelocity().y));
+    // _body->ApplyForceToCenter(force,true);
 #pragma mark jump force
     // Jump!
     if (isJumpBegin() && isGrounded()) {

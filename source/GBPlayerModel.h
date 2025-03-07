@@ -124,6 +124,10 @@ protected:
 	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
 	bool _isGrounded;
+    /** Speed of the dash (set when dash begins) */
+    float _dashSpeed = 0.0f;
+    /** Remaining duration in frames of a dash */
+    int _dashTimer = 0;
     
     
     std::string _bodyName;

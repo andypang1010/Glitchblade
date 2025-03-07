@@ -162,6 +162,8 @@ protected:
     cugl::Timestamp _rtime;
 	/** The timestamp for a double tap in the middle */
 	cugl::Timestamp _mtime;
+    /** The timestamp for a double tap on the left */
+    cugl::Timestamp _ltime;
 
     /**
      * Defines the zone boundaries, so we can quickly categorize touches.

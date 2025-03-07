@@ -352,7 +352,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     populate();
     _active = true;
     _complete = false;
-    setDebug(false);
+    setDebug(true); // Debug on by default
 
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::GRAY);
@@ -500,7 +500,6 @@ void GameScene::populate() {
     _player->getSceneNode()->addChild(_playerHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyStunNode);
-    // _testEnemy->setEnabled(false); // May want to set this to false for testing
 
 	// Play the background music on a loop.
 	/*std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
