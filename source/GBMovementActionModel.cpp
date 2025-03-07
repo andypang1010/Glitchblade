@@ -1,66 +1,68 @@
-#include "GBActionModel.h"
+#include "GBMovementActionModel.h"
 
 /**
  * Default constructor.
- * Initializes the action length to 0.0f.
+ * Initializes movement-related values to defaults.
  */
-ActionModel::ActionModel() : _actionLength(0.0f), _actionName("") {}
+MovementActionModel::MovementActionModel() : _moveDirection(0, 0), _moveDistance(0.0f), _moveSpeed(0.0f), _moveToPlayer(false) {}
 
 /**
  * Virtual destructor.
  */
-ActionModel::~ActionModel() = default;
+MovementActionModel::~MovementActionModel() = default;
 
 /**
- * Returns the action animation.
- *
- * @return The shared pointer to the SpriteSheet.
+ * Returns the movement direction.
  */
-std::shared_ptr<cugl::graphics::SpriteSheet> ActionModel::getActionAnimation() const {
-    return _actionAnimation;
+cugl::Vec2 MovementActionModel::getMoveDirection() const {
+    return _moveDirection;
 }
 
 /**
- * Sets the action animation.
- *
- * @param animation The shared pointer to the new SpriteSheet.
+ * Sets the movement direction.
  */
-void ActionModel::setActionAnimation(const std::shared_ptr<cugl::graphics::SpriteSheet>& animation) {
-    _actionAnimation = animation;
+void MovementActionModel::setMoveDirection(const cugl::Vec2& direction) {
+    _moveDirection = direction;
 }
 
 /**
- * Returns the action length.
- *
- * @return The length of the action.
+ * Returns the movement distance.
  */
-float ActionModel::getActionLength() const {
-    return _actionLength;
+float MovementActionModel::getMoveDistance() const {
+    return _moveDistance;
 }
 
 /**
- * Sets the action length.
- *
- * @param length The new action length.
+ * Sets the movement distance.
  */
-void ActionModel::setActionLength(float length) {
-    _actionLength = length;
+void MovementActionModel::setMoveDistance(float distance) {
+    _moveDistance = distance;
 }
 
 /**
- * Returns the action name.
- *
- * @return The name of the action.
+ * Returns the movement speed.
  */
-std::string ActionModel::getActionName() const {
-    return _actionName;
+float MovementActionModel::getMoveSpeed() const {
+    return _moveSpeed;
 }
 
 /**
- * Sets the action name.
- *
- * @param name The new action name.
+ * Sets the movement speed.
  */
-void ActionModel::setActionName(const std::string& name) {
-    _actionName = name;
+void MovementActionModel::setMoveSpeed(float speed) {
+    _moveSpeed = speed;
+}
+
+/**
+ * Returns whether the movement is directed toward the player.
+ */
+bool MovementActionModel::getMoveToPlayer() const {
+    return _moveToPlayer;
+}
+
+/**
+ * Sets whether the movement is directed toward the player.
+ */
+void MovementActionModel::setMoveToPlayer(bool moveToPlayer) {
+    _moveToPlayer = moveToPlayer;
 }

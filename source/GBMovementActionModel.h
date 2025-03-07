@@ -1,73 +1,48 @@
-#ifndef ACTION_MODEL_H
-#define ACTION_MODEL_H
+#ifndef MOVEMENT_ACTION_MODEL_H
+#define MOVEMENT_ACTION_MODEL_H
 
 #include <string>
 #include <cugl/cugl.h>
+#include "GBActionModel.h"
 
 using namespace cugl;
 
 /**
- * An abstract class representing an action model with an animation and duration.
+ * A class representing a movement action model, inheriting from ActionModel.
  */
-class ActionModel {
+class MovementActionModel : ActionModel {
 protected:
-    /** The name of the action */
-    std::string _actionName;
+    /** The direction of movement. */
+    cugl::Vec2 _moveDirection;
 
-    /** The animation for the action. */
-    std::shared_ptr<cugl::graphics::SpriteSheet> _actionAnimation;
+    /** The distance to move. */
+    float _moveDistance;
 
-    /** The length/duration of the action. */
-    float _actionLength;
+    /** The speed to move. */
+    float _moveSpeed;
+
+    /** Whether to move toward the player. */
+    bool _moveToPlayer;
 
 public:
     /** Default constructor. */
-    ActionModel();
+    MovementActionModel();
 
     /** Virtual destructor. */
-    virtual ~ActionModel();;
+    virtual ~MovementActionModel();
 
-    /**
-     * Returns the action animation.
-     *
-     * @return The shared pointer to the SpriteSheet.
-     */
-    std::shared_ptr<cugl::graphics::SpriteSheet> getActionAnimation() const;
+    /** Getters and Setters **/
+    cugl::Vec2 getMoveDirection() const;
+    void setMoveDirection(const cugl::Vec2& direction);
 
-    /**
-     * Sets the action animation.
-     *
-     * @param animation The shared pointer to the new SpriteSheet.
-     */
-    void setActionAnimation(const std::shared_ptr<cugl::graphics::SpriteSheet>& animation);
+    float getMoveDistance() const;
+    void setMoveDistance(float distance);
 
-    /**
-     * Returns the action length.
-     *
-     * @return The length of the action.
-     */
-    float getActionLength() const;
+    float getMoveSpeed() const;
+    void setMoveSpeed(float speed);
 
-    /**
-     * Sets the action length.
-     *
-     * @param length The new action length.
-     */
-    void setActionLength(float length);
-
-    /**
-     * Returns the action name.
-     *
-     * @return The name of the action.
-     */
-    std::string getActionName() const;
-
-    /**
-     * Sets the action name.
-     *
-     * @param name The new action name.
-     */
-    void setActionName(const std::string& name);
+    bool getMoveToPlayer() const;
+    void setMoveToPlayer(bool moveToPlayer);
 };
 
-#endif // ACTION_MODEL_H
+#endif // MOVEMENT_ACTION_MODEL_H

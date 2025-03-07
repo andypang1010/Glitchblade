@@ -1,73 +1,54 @@
-#ifndef ACTION_MODEL_H
-#define ACTION_MODEL_H
+#ifndef MELEE_ACTION_MODEL_H
+#define MELEE_ACTION_MODEL_H
 
 #include <string>
 #include <cugl/cugl.h>
+#include "GBActionModel.h"
 
 using namespace cugl;
 
 /**
  * An abstract class representing an action model with an animation and duration.
  */
-class ActionModel {
+class MeleeActionModel : ActionModel {
 protected:
-    /** The name of the action */
-    std::string _actionName;
+    /** The position of the hitbox. */
+    cugl::Vec2 _hitboxPos;
 
-    /** The animation for the action. */
-    std::shared_ptr<cugl::graphics::SpriteSheet> _actionAnimation;
+    /** The size of the hitbox. */
+    cugl::Vec2 _hitboxSize;
 
-    /** The length/duration of the action. */
-    float _actionLength;
+    /** The start time of the hitbox. */
+    float _hitboxStartTime;
+
+    /** The end time of the hitbox. */
+    float _hitboxEndTime;
+
+    /** The damage dealt by the hitbox. */
+    float _hitboxDamage;
 
 public:
     /** Default constructor. */
-    ActionModel();
+    MeleeActionModel();
 
     /** Virtual destructor. */
-    virtual ~ActionModel();;
+    virtual ~MeleeActionModel();
 
-    /**
-     * Returns the action animation.
-     *
-     * @return The shared pointer to the SpriteSheet.
-     */
-    std::shared_ptr<cugl::graphics::SpriteSheet> getActionAnimation() const;
+    /** Getters and Setters **/
+    cugl::Vec2 getHitboxPos() const;
+    void setHitboxPos(const cugl::Vec2& pos);
 
-    /**
-     * Sets the action animation.
-     *
-     * @param animation The shared pointer to the new SpriteSheet.
-     */
-    void setActionAnimation(const std::shared_ptr<cugl::graphics::SpriteSheet>& animation);
+    cugl::Vec2 getHitboxSize() const;
+    void setHitboxSize(const cugl::Vec2& size);
 
-    /**
-     * Returns the action length.
-     *
-     * @return The length of the action.
-     */
-    float getActionLength() const;
+    float getHitboxStartTime() const;
+    void setHitboxStartTime(float startTime);
 
-    /**
-     * Sets the action length.
-     *
-     * @param length The new action length.
-     */
-    void setActionLength(float length);
+    float getHitboxEndTime() const;
+    void setHitboxEndTime(float endTime);
 
-    /**
-     * Returns the action name.
-     *
-     * @return The name of the action.
-     */
-    std::string getActionName() const;
-
-    /**
-     * Sets the action name.
-     *
-     * @param name The new action name.
-     */
-    void setActionName(const std::string& name);
+    float getHitboxDamage() const;
+    void setHitboxDamage(float damage);
 };
 
 #endif // ACTION_MODEL_H

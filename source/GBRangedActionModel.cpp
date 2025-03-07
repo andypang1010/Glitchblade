@@ -1,66 +1,68 @@
-#include "GBActionModel.h"
+#include "GBRangedActionModel.h"
 
 /**
  * Default constructor.
- * Initializes the action length to 0.0f.
+ * Initializes all projectile-related values to defaults.
  */
-ActionModel::ActionModel() : _actionLength(0.0f), _actionName("") {}
+RangedActionModel::RangedActionModel() : _projectileSpeed(0.0f), _projectileDirection(0, 0), _projectileDamage(0.0f) {}
 
 /**
  * Virtual destructor.
  */
-ActionModel::~ActionModel() = default;
+RangedActionModel::~RangedActionModel() = default;
 
 /**
- * Returns the action animation.
- *
- * @return The shared pointer to the SpriteSheet.
+ * Returns the projectile speed.
  */
-std::shared_ptr<cugl::graphics::SpriteSheet> ActionModel::getActionAnimation() const {
-    return _actionAnimation;
+float RangedActionModel::getProjectileSpeed() const {
+    return _projectileSpeed;
 }
 
 /**
- * Sets the action animation.
- *
- * @param animation The shared pointer to the new SpriteSheet.
+ * Sets the projectile speed.
  */
-void ActionModel::setActionAnimation(const std::shared_ptr<cugl::graphics::SpriteSheet>& animation) {
-    _actionAnimation = animation;
+void RangedActionModel::setProjectileSpeed(float speed) {
+    _projectileSpeed = speed;
 }
 
 /**
- * Returns the action length.
- *
- * @return The length of the action.
+ * Returns the projectile direction.
  */
-float ActionModel::getActionLength() const {
-    return _actionLength;
+cugl::Vec2 RangedActionModel::getProjectileDirection() const {
+    return _projectileDirection;
 }
 
 /**
- * Sets the action length.
- *
- * @param length The new action length.
+ * Sets the projectile direction.
  */
-void ActionModel::setActionLength(float length) {
-    _actionLength = length;
+void RangedActionModel::setProjectileDirection(const cugl::Vec2& direction) {
+    _projectileDirection = direction;
 }
 
 /**
- * Returns the action name.
- *
- * @return The name of the action.
+ * Returns the projectile texture.
  */
-std::string ActionModel::getActionName() const {
-    return _actionName;
+std::shared_ptr<cugl::graphics::Texture> RangedActionModel::getProjectileTexture() const {
+    return _projectileTexture;
 }
 
 /**
- * Sets the action name.
- *
- * @param name The new action name.
+ * Sets the projectile texture.
  */
-void ActionModel::setActionName(const std::string& name) {
-    _actionName = name;
+void RangedActionModel::setProjectileTexture(const std::shared_ptr<cugl::graphics::Texture>& texture) {
+    _projectileTexture = texture;
+}
+
+/**
+ * Returns the projectile damage.
+ */
+float RangedActionModel::getProjectileDamage() const {
+    return _projectileDamage;
+}
+
+/**
+ * Sets the projectile damage.
+ */
+void RangedActionModel::setProjectileDamage(float damage) {
+    _projectileDamage = damage;
 }

@@ -1,66 +1,82 @@
-#include "GBActionModel.h"
+#include "GBMeleeActionModel.h"
 
 /**
  * Default constructor.
- * Initializes the action length to 0.0f.
+ * Initializes all hitbox-related values to defaults.
  */
-ActionModel::ActionModel() : _actionLength(0.0f), _actionName("") {}
+MeleeActionModel::MeleeActionModel() : _hitboxPos(0, 0), _hitboxSize(0, 0), _hitboxStartTime(0.0f), _hitboxEndTime(0.0f), _hitboxDamage(0.0f) {}
 
 /**
  * Virtual destructor.
  */
-ActionModel::~ActionModel() = default;
+MeleeActionModel::~MeleeActionModel() = default;
 
 /**
- * Returns the action animation.
- *
- * @return The shared pointer to the SpriteSheet.
+ * Returns the hitbox position.
  */
-std::shared_ptr<cugl::graphics::SpriteSheet> ActionModel::getActionAnimation() const {
-    return _actionAnimation;
+cugl::Vec2 MeleeActionModel::getHitboxPos() const {
+    return _hitboxPos;
 }
 
 /**
- * Sets the action animation.
- *
- * @param animation The shared pointer to the new SpriteSheet.
+ * Sets the hitbox position.
  */
-void ActionModel::setActionAnimation(const std::shared_ptr<cugl::graphics::SpriteSheet>& animation) {
-    _actionAnimation = animation;
+void MeleeActionModel::setHitboxPos(const cugl::Vec2& pos) {
+    _hitboxPos = pos;
 }
 
 /**
- * Returns the action length.
- *
- * @return The length of the action.
+ * Returns the hitbox size.
  */
-float ActionModel::getActionLength() const {
-    return _actionLength;
+cugl::Vec2 MeleeActionModel::getHitboxSize() const {
+    return _hitboxSize;
 }
 
 /**
- * Sets the action length.
- *
- * @param length The new action length.
+ * Sets the hitbox size.
  */
-void ActionModel::setActionLength(float length) {
-    _actionLength = length;
+void MeleeActionModel::setHitboxSize(const cugl::Vec2& size) {
+    _hitboxSize = size;
 }
 
 /**
- * Returns the action name.
- *
- * @return The name of the action.
+ * Returns the hitbox start time.
  */
-std::string ActionModel::getActionName() const {
-    return _actionName;
+float MeleeActionModel::getHitboxStartTime() const {
+    return _hitboxStartTime;
 }
 
 /**
- * Sets the action name.
- *
- * @param name The new action name.
+ * Sets the hitbox start time.
  */
-void ActionModel::setActionName(const std::string& name) {
-    _actionName = name;
+void MeleeActionModel::setHitboxStartTime(float startTime) {
+    _hitboxStartTime = startTime;
+}
+
+/**
+ * Returns the hitbox end time.
+ */
+float MeleeActionModel::getHitboxEndTime() const {
+    return _hitboxEndTime;
+}
+
+/**
+ * Sets the hitbox end time.
+ */
+void MeleeActionModel::setHitboxEndTime(float endTime) {
+    _hitboxEndTime = endTime;
+}
+
+/**
+ * Returns the hitbox damage.
+ */
+float MeleeActionModel::getHitboxDamage() const {
+    return _hitboxDamage;
+}
+
+/**
+ * Sets the hitbox damage.
+ */
+void MeleeActionModel::setHitboxDamage(float damage) {
+    _hitboxDamage = damage;
 }
