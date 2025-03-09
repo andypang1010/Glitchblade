@@ -13,14 +13,17 @@ void EnemyController::init()
 	CULog("Inited enemycontroller");
 }
 
-void EnemyController::start()
-{
-	CULog("Started enemycontroller");
-}
-
-void EnemyController::update(float timestep)
+void EnemyController::fixedUpdate(float timestep)
 {
 	// CULog("Updated enemycontroller");
+}
+
+void EnemyController::preUpdate(float dt)
+{
+}
+
+void EnemyController::postUpdate(float dt)
+{
 }
 
 void EnemyController::removeEnemy(const std::shared_ptr<EnemyModel>& enemy)

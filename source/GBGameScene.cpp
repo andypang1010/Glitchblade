@@ -360,7 +360,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     CULog("Setting up LevelController");
     _levelController = std::make_shared<LevelController>();
     _levelController->init(); // Initialize the LevelController
-    _levelController->start(); // TODO: We will want to change this later; just start ASAP currently
 
     return true;
 }
@@ -729,6 +728,8 @@ void GameScene::preUpdate(float dt) {
       AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
     }
 
+    // Call preUpdate on the LevelController
+    _levelController->preUpdate(dt);
 }
 
 /**
@@ -762,7 +763,7 @@ void GameScene::fixedUpdate(float step) {
     _world->update(step);
 
     // Update the level controller
-    _levelController->update(step);
+    _levelController->fixedUpdate(step);
 }
 
 /**
@@ -829,6 +830,9 @@ void GameScene::postUpdate(float remain) {
     else if (_countdown == 0) {
         reset();
     }
+
+    // postUpdate the LevelController
+    _levelController->postUpdate(remain);
 }
 
 /**

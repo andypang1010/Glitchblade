@@ -13,14 +13,17 @@ void PlayerController::init()
 	CULog("Inited playercontoller");
 }
 
-void PlayerController::start()
-{
-	CULog("Started playercontoller");
-}
-
-void PlayerController::update(float timestep)
+void PlayerController::fixedUpdate(float timestep)
 {
 	// CULog("updated playercontroller");
+}
+
+void PlayerController::preUpdate(float dt)
+{
+}
+
+void PlayerController::postUpdate(float dt)
+{
 }
 
 void PlayerController::activateShield()

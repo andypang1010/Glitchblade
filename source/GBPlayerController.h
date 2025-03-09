@@ -34,15 +34,24 @@ public:
     void init();
 
     /**
-     * Starts the player controller.
-     */
-    void start();
-
-    /**
      * Updates the player's state based on inputs.
      * @param timestep The time elapsed since the last update.
      */
-    void update(float timestep);
+    void fixedUpdate(float timestep);
+
+    /**
+     * The method called to indicate the start of a deterministic loop.
+     *
+     * @param dt    The amount of time (in seconds) since the last frame
+     */
+    void preUpdate(float dt);
+
+    /**
+     * The method called to indicate the end of a deterministic loop.
+     *
+     * @param remain    The amount of time (in seconds) last fixedUpdate
+     */
+    void postUpdate(float dt);
 
     /**
      * Activates the player’s shield.

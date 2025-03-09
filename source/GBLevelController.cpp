@@ -24,21 +24,28 @@ void LevelController::init()
 	// Setup player controller
 	_playerController = std::make_shared<PlayerController>();
 
+	_enemyController->init();
+	_playerController->init();
+
 	CULog("LevelController::init");
 }
 
-void LevelController::update(float timestep)
+void LevelController::preUpdate(float dt)
 {
-	_enemyController->update(timestep);
-	_playerController->update(timestep);
-
-	CULog("LevelController::update");
+	_enemyController->preUpdate(dt);
+	_playerController->preUpdate(dt);
 }
 
-void LevelController::start()
+void LevelController::postUpdate(float dt)
 {
-	_enemyController->start();
-	_playerController->start();
+	_enemyController->postUpdate(dt);
+	_playerController->postUpdate(dt);
+}
 
-	CULog("LevelController::start");
+void LevelController::fixedUpdate(float timestep)
+{
+	_enemyController->fixedUpdate(timestep);
+	_playerController->fixedUpdate(timestep);
+
+	CULog("LevelController::update");
 }
