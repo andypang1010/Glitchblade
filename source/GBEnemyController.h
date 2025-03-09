@@ -1,23 +1,65 @@
 //
-//  GBEnemyController.h
+//  EnemyController.h
 //
 
-#ifndef __GB_ENEMY_CONTROLLER_H__
-#define __GB_ENEMY_CONTROLLER_H__
+#ifndef __ENEMY_CONTROLLER_H__
+#define __ENEMY_CONTROLLER_H__
+
 #include <cugl/cugl.h>
+#include "GBEnemyModel.h"
+#include "GBProjectile.h"
 
 using namespace cugl;
 
 /**
- * This controller handles all logical updates to EnemyModels. This includes making decisions for the enemy AI, and handling all
- * physical updates based on current enemy action. If the enemy is defeated, this controller is also responsible for removing its
- * model.
+ * This class controls all logical updates to EnemyModels.
+ *
+ * It manages AI decision-making, enemy movement, attacks, and removal of defeated enemies from the game world.
  */
-
 class EnemyController {
 private:
-protected:
+    /** List of active enemies in the game */
+    std::vector<std::shared_ptr<EnemyModel>> _enemies;
+
 public:
+    /** Constructor */
+    EnemyController();
+
+    /** Destructor */
+    ~EnemyController();
+
+    /**
+     * Initializes the enemy controller.
+     */
+    void init();
+
+    /**
+     * Starts the enemy controller.
+     */
+    void start();
+
+    /**
+     * Updates all enemy behaviors.
+     * @param timestep The time elapsed since the last update.
+     */
+    void update(float timestep);
+
+    /**
+     * Adds an enemy to the controller for management.
+     * @param enemy The enemy to add.
+     */
+    void addEnemy(const std::shared_ptr<EnemyModel>& enemy) { _enemies.push_back(enemy); }
+
+    /**
+     * Removes a defeated enemy from the game.
+     * @param enemy The enemy to remove.
+     */
+    void removeEnemy(const std::shared_ptr<EnemyModel>& enemy);
+
+    /**
+     * Clears all enemies from the controller.
+     */
+    void clearEnemies() { _enemies.clear(); }
 };
 
-#endif /* __GB_ENEMY_CONTROLLER_H__ */
+#endif /* __ENEMY_CONTROLLER_H__ */

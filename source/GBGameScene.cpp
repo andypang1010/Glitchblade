@@ -646,9 +646,6 @@ void GameScene::update(float timestep) {
     	
 	// Turn the physics engine crank.
     _world->update(timestep);
-
-    // Update the level controller
-    _levelController->update(timestep);
 }
 
 /**
@@ -763,6 +760,9 @@ void GameScene::preUpdate(float dt) {
 void GameScene::fixedUpdate(float step) {
     // Turn the physics engine crank.
     _world->update(step);
+
+    // Update the level controller
+    _levelController->update(step);
 }
 
 /**

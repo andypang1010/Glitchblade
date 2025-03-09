@@ -1,23 +1,68 @@
 //
-//  GBPlayerController.h
+//  PlayerController.h
 //
 
-#ifndef __GB_PLAYER_CONTROLLER_H__
-#define __GB_PLAYER_CONTROLLER_H__
+#ifndef __PLAYER_CONTROLLER_H__
+#define __PLAYER_CONTROLLER_H__ller
+
 #include <cugl/cugl.h>
+#include "GBPlayerModel.h"
+#include "GBProjectile.h"
 
 using namespace cugl;
 
 /**
-* This class defines the logic which manipulates the PlayerModel primarily, including translating signals into actual actions, e.g.
-* jump, guard, dash, etc. Additionally, this controller will interact with the ShieldModel and ProjectileModel to handle activating and
-* deactivating the player’s shield, and deflecting and shooting projectiles.
+ * This class defines the logic that manipulates the PlayerModel.
+ *
+ * It translates input signals into actual player actions such as movement, jumping, guarding, dashing, and projectile interactions.
  */
-
 class PlayerController {
 private:
-protected:
+    /** Reference to the player model */
+    std::shared_ptr<PlayerModel> _player;
+
 public:
+    /** Constructor */
+    PlayerController();
+
+    /** Destructor */
+    ~PlayerController();
+
+    /**
+     * Initializes the player controller.
+     */
+    void init();
+
+    /**
+     * Starts the player controller.
+     */
+    void start();
+
+    /**
+     * Updates the player's state based on inputs.
+     * @param timestep The time elapsed since the last update.
+     */
+    void update(float timestep);
+
+    /**
+     * Activates the player’s shield.
+     */
+    void activateShield();
+
+    /**
+     * Deactivates the player’s shield.
+     */
+    void deactivateShield();
+
+    /**
+     * Fires a projectile in the direction the player is facing.
+     */
+    void fireProjectile();
+
+    /**
+     * Deflects a projectile using the shield.
+     */
+    void deflectProjectile();
 };
 
-#endif /* __GB_PLAYER_CONTROLLER_H__ */
+#endif /* __PLAYER_CONTROLLER_H__ */

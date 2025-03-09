@@ -29,10 +29,16 @@ void LevelController::init()
 
 void LevelController::update(float timestep)
 {
+	_enemyController->update(timestep);
+	_playerController->update(timestep);
+
 	CULog("LevelController::update");
 }
 
 void LevelController::start()
 {
+	_enemyController->start();
+	_playerController->start();
+
 	CULog("LevelController::start");
 }
