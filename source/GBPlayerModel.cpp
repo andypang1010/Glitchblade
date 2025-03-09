@@ -63,7 +63,7 @@
 /** Duration (in frames) for parry */
 #define PARRY_DURATION  24
 /** Duration (in frames) for dash- affects friction*/
-#define DASH_DURATION  8
+#define DASH_DURATION  5
 /** The amount to shrink the body fixture (vertically) relative to the image */
 #define DUDE_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -78,7 +78,7 @@
 #define DUDE_DENSITY    1.0f
 /** The impulse for the character jump */
 #define DUDE_JUMP       42.5f
-/** The impulse for the character dash-attack */
+/** The x SPEED for the character dash-attack */
 #define DUDE_DASH       75.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
@@ -299,6 +299,7 @@ void PlayerModel::applyForce() {
     // Don't want to be moving.f Damp out player motion
     if (getMovement() == 0.0f && !isDashActive()) {
         if (isGrounded()) {
+            // CULog("Setting x vel to 0");
             // Instant friction on the ground
             b2Vec2 vel = _body->GetLinearVelocity();
             vel.x = 0; // If you set y, you will stop a jump in place
@@ -311,8 +312,11 @@ void PlayerModel::applyForce() {
     }
 #pragma mark strafe force
     b2Vec2 force(getMovement(),0);
-    _body->SetLinearVelocity(b2Vec2(getMovement(), _body->GetLinearVelocity().y));
-    // _body->ApplyForceToCenter(force,true);
+    // Ignore stafe input if in a dash (intentional)
+    if (!(_dashRem > 0)) {
+        _body->SetLinearVelocity(b2Vec2(getMovement(), _body->GetLinearVelocity().y));
+    }
+    // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
 #pragma mark jump force
     // Jump!
     if (isJumpBegin() && isGrounded()) {
@@ -321,18 +325,22 @@ void PlayerModel::applyForce() {
     }
 #pragma mark dash force
     // Dash!
-    if (isDashLeftBegin()){
-        CULog("dashing left\n");
-        b2Vec2 force(-DUDE_DASH,0);
+    if (isDashLeftBegin() && _dashReset == true){
+        CULog("dashing left begin");
         faceLeft();
-        _body->ApplyLinearImpulseToCenter(force, true);
+        // b2Vec2 force(-DUDE_DASH,0);
+        // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
+        _body->SetLinearVelocity(b2Vec2(-DUDE_DASH, _body->GetLinearVelocity().y));
+        _dashReset = false;
     }
     
-    if (isDashRightBegin()){
-        CULog("dashing right\n");
-        b2Vec2 force(DUDE_DASH,0);
+    if (isDashRightBegin() && _dashReset == true){
+        CULog("dashing right begin");
         faceRight();
-        _body->ApplyLinearImpulseToCenter(force, true);
+        // b2Vec2 force(DUDE_DASH, 0);
+        // _body->ApplyLinearImpulseToCenter(force, true);
+        _body->SetLinearVelocity(b2Vec2(DUDE_DASH, _body->GetLinearVelocity().y));
+        _dashReset = false;
     }
     // Velocity too high, clamp it
     if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
@@ -397,6 +405,12 @@ void PlayerModel::update(float dt) {
             _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
         }
     }
+
+    // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
+    if (_dashReset == false && _dashCooldownRem == 0 && !(_isDashLeftInput || _isDashRightInput)) {
+        _dashReset = true; // ready to dash again
+    }
+
     // player inputs guard and cooldown is ready
     if (isGuardBegin()) {
         CULog("Beginning guard\n");

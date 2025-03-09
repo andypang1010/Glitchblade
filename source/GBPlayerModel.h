@@ -124,12 +124,9 @@ protected:
 	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
 	bool _isGrounded;
-    /** Speed of the dash (set when dash begins) */
-    float _dashSpeed = 0.0f;
-    /** Remaining duration in frames of a dash */
-    int _dashTimer = 0;
-    
-    
+    /** Whether the dash has been released (reset) */
+    bool _dashReset = true;
+
     std::string _bodyName;
 	/** Ground sensor to represent our feet */
 	b2Fixture*  _sensorFixture;
