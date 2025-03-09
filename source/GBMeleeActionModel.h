@@ -10,7 +10,7 @@ using namespace cugl;
 /**
  * An abstract class representing an action model with an animation and duration.
  */
-class MeleeActionModel : ActionModel {
+class MeleeActionModel : public ActionModel {
 protected:
     /** The position of the hitbox. */
     cugl::Vec2 _hitboxPos;

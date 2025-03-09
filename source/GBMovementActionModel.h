@@ -10,7 +10,7 @@ using namespace cugl;
 /**
  * A class representing a movement action model, inheriting from ActionModel.
  */
-class MovementActionModel : ActionModel {
+class MovementActionModel : public ActionModel {
 protected:
     /** The direction of movement. */
     cugl::Vec2 _moveDirection;

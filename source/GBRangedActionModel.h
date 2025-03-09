@@ -10,7 +10,7 @@ using namespace cugl;
 /**
  * A class representing a ranged action model, inheriting from ActionModel.
  */
-class RangedActionModel : ActionModel {
+class RangedActionModel : public ActionModel {
 protected:
     /** The speed of the projectile. */
     float _projectileSpeed;

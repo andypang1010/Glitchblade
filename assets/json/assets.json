@@ -12,20 +12,11 @@
         "enemy": {
             "file":     "textures/enemy.png"
         },
-        "spinner": {
-            "file":     "textures/barrier.png"
-        },
-        "bridge": {
-            "file":      "textures/ropebridge.png"
-        },
         "projectile": {
             "file":      "textures/projectile.png"
         },
         "player-projectile": {
             "file":      "textures/player-projectile.png"
-        },
-        "goal": {
-            "file":      "textures/goaldoor.png"
         },
         "dpad": {
             "file":     "textures/dpad.png",
