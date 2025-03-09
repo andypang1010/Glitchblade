@@ -34,6 +34,7 @@
 #include "GBProjectile.h"
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
+#include "GBLevelController.h"
 
 using namespace cugl;
 
@@ -52,6 +53,8 @@ protected:
     // CONTROLLERS
     /** Controller for abstracting out input across multiple platforms */
     PlatformInput _input;
+    /** LevelController for managing the level progress of the current game */
+    std::shared_ptr<LevelController> _levelController;
     
     // VIEW
     /** Reference to the physics root of the scene graph */

@@ -356,6 +356,12 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
 
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::GRAY);
+
+    CULog("Setting up LevelController");
+    _levelController = std::make_shared<LevelController>();
+    _levelController->init(); // Initialize the LevelController
+    _levelController->start(); // TODO: We will want to change this later; just start ASAP currently
+
     return true;
 }
 
@@ -640,6 +646,9 @@ void GameScene::update(float timestep) {
     	
 	// Turn the physics engine crank.
     _world->update(timestep);
+
+    // Update the level controller
+    _levelController->update(timestep);
 }
 
 /**
