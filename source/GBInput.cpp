@@ -314,7 +314,7 @@ Vec2 PlatformInput::touch2Screen(const Vec2 pos) const {
  *
  */
 void PlatformInput::processJoystick() {
-    Vec2 diff = _ltouch.position - _joycenter;
+    Vec2 diff = touch2Screen(_ltouch.position) - _joycenter;
     // CULog("position is (%f,%f) and joycenter is (%f, %f)", _ltouch.position.x, _ltouch.position.y, _joycenter.x, _joycenter.y);
     // CULog("diff is (%f, %f)", diff.x, diff.y);
     if (std::fabsf(diff.x) > JSTICK_DEADZONE) {
