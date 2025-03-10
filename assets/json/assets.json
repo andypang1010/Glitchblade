@@ -3,42 +3,46 @@
 		"background": {
 			"file":     "textures/background.png"
 		},
-        "ground": {
-            "file":     "textures/ground.png"
-        },
-        "player": {
-            "file":     "textures/player.png"
-        },
-        "enemy": {
-            "file":     "textures/enemy.png"
-        },
-        "spinner": {
-            "file":     "textures/barrier.png"
-        },
-        "bridge": {
-            "file":      "textures/ropebridge.png"
-        },
-        "projectile": {
-            "file":      "textures/projectile.png"
-        },
-        "player-projectile": {
-            "file":      "textures/player-projectile.png"
-        },
-        "goal": {
-            "file":      "textures/goaldoor.png"
-        },
-        "dpad": {
-            "file":     "textures/dpad.png",
-            "wrapS":     "clamp",
-            "wrapT":     "clamp",
-            "atlas":     {
-                "up"   : [0,     0, 127, 127],
-                "down" : [128,   0, 255, 127],
-                "left" : [0,   128, 127, 255],
-                "right": [128, 128, 255, 255]
-            }
-        }
+      "ground": {
+          "file":     "textures/ground.png"
+      },
+      "player": {
+          "file":     "textures/player.png"
+      },
+      "player_attack": {
+          "file":     "textures/player_attack.png"
+      },
+      "enemy": {
+          "file":     "textures/enemy.png"
+      },
+      "spinner": {
+          "file":     "textures/barrier.png"
+      },
+      "bridge": {
+          "file":      "textures/ropebridge.png"
+      },
+      "projectile": {
+          "file":      "textures/projectile.png"
+      },
+      "player-projectile": {
+          "file":      "textures/player-projectile.png"
+      },
+      "goal": {
+          "file":      "textures/goaldoor.png"
+      },
+      "dpad": {
+          "file":     "textures/dpad.png",
+          "wrapS":     "clamp",
+          "wrapT":     "clamp",
+          "atlas":     {
+              "up"   : [0,     0, 127, 127],
+              "down" : [128,   0, 255, 127],
+              "left" : [0,   128, 127, 255],
+              "right": [128, 128, 255, 255]
+          }
+      }
 	},
+
     "sounds": {
         "game": {
             "type":     "sample",
@@ -74,15 +78,15 @@
             "volume":   0.5
         }                
     },
-	"fonts": {
-    "retro": {
-      "file": "fonts/RetroGame.ttf",
-      "size": 64
-    },
-    "debug": {
-      "file": "fonts/RetroGame.ttf",
-      "size":  14
-    }
 
-	}
+	"fonts": {
+        "retro": {
+        "file": "fonts/RetroGame.ttf",
+        "size": 64
+        },
+        "debug": {
+        "file": "fonts/RetroGame.ttf",
+        "size":  14
+        }
+    }
 }

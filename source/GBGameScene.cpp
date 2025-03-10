@@ -317,17 +317,17 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _losenode->setForeground(LOSE_COLOR);
     setFailure(false);
 
-    _playerHPNode = scene2::Label::allocWithText("HP: ", _assets->get<Font>(DEBUG_FONT));
+    _playerHPNode = scene2::Label::allocWithText("100", _assets->get<Font>(DEBUG_FONT));
     _playerHPNode->setAnchor(Vec2::ANCHOR_CENTER);
     _playerHPNode->setForeground(Color4::CYAN);
     _playerHPNode->setPosition(35, 80);
 
-    _enemyHPNode = scene2::Label::allocWithText("HP: ", _assets->get<Font>(DEBUG_FONT));
+    _enemyHPNode = scene2::Label::allocWithText("100", _assets->get<Font>(DEBUG_FONT));
     _enemyHPNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyHPNode->setForeground(Color4::RED);
     _enemyHPNode->setPosition(45, 90);
 
-    _enemyStunNode = scene2::Label::allocWithText(": ", _assets->get<Font>(DEBUG_FONT));
+    _enemyStunNode = scene2::Label::allocWithText("STUN", _assets->get<Font>(DEBUG_FONT));
     _enemyStunNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyStunNode->setForeground(Color4::RED);
     _enemyStunNode->setPosition(45, 110);
@@ -480,6 +480,9 @@ void GameScene::populate() {
     Vec2 dudePos = DUDE_POS;
     node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(DUDE_TEXTURE);
+    /*_player->_idleTexture = image;
+    _player->_attackTexture = _assets->get<Texture>(DUDE_ATTACK_TEXTURE);
+    _player->_currentTexture = image;*/
     _player = PlayerModel::alloc(dudePos, image->getSize() / _scale, _scale);
     sprite = scene2::PolygonNode::allocWithTexture(image);
     _player->setSceneNode(sprite);
@@ -715,7 +718,7 @@ void GameScene::preUpdate(float dt) {
     
     _playerHPNode->setText(std::to_string((int)_player->getHP()));
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
-    _enemyStunNode->setText(std::to_string((bool)_testEnemy->isStunned()));
+    _enemyStunNode->setText(_testEnemy->isStunned() ? "STUN" : "");
     
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
