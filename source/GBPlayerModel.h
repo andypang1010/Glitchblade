@@ -122,6 +122,8 @@ protected:
     bool _isShootInput;
     /** Whether we are knocked-back (sets input cd) */
     bool _isKnocked;
+    /** Whether we are knocked-back (sets input cd) */
+    int _knockbackRem;
     Vec2 _knockDirection;
 	/** How long until we can shoot again in animation frames*/
 	int  _shootCooldownRem;
@@ -559,12 +561,19 @@ public:
      * @return value whether the dude is in a dash animation.
      */
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
+    
     /**
      * Returns true if the dude is being knocked back.
      *
      * @return true if the dude is being knocked back.
      */
     bool isKnocked() const { return _isKnocked;}
+    /**
+     * Returns true if the dude is in a knockback animation.
+     *
+     * @return value whether the dude is in a knockback animation.
+     */
+    bool isKnockbackActive() { return _knockbackRem > 0 || isKnocked(); };
     /**
      * Sets the dash duration of the player.
      *

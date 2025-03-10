@@ -79,7 +79,7 @@
 /** The impulse for the character dash-attack */
 #define ENEMY_DASH       100.0f
 /** The implulse fot the character knockback */
-#define ENEMY_KB       42.5f
+#define ENEMY_KB       22.5f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
