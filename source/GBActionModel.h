@@ -15,7 +15,7 @@ protected:
     std::string _actionName;
 
     /** The animation for the action. */
-    std::shared_ptr<cugl::graphics::SpriteSheet> _actionAnimation;
+    std::shared_ptr<cugl::graphics::SpriteSheet> _actionSprite;
 
     /** The length/duration of the action. */
     float _actionLength;

@@ -274,6 +274,16 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         return false;
     }
 
+    std::shared_ptr<JsonReader> reader = JsonReader::allocWithAsset("json/enemies.json");
+
+    _enemiesJSON = reader->readJson();
+    if (_enemiesJSON == nullptr) {
+        CULog("Failed to load enemies.json");
+        return false;
+    }
+
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+
     // Start up the input handler
     _assets = assets;
     _input.init(getBounds());
