@@ -973,9 +973,9 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->setDashRem(0);
             CULog("Attacks canceled");
         }
+        CULog("Applying knockback");
         _player->setKnocked(true);
         ((EnemyModel*)bd2)->setKnocked(true);
-        CULog("Applying knockback");
     }
 
     // Player-Projectile Collision

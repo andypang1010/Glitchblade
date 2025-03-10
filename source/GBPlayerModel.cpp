@@ -81,7 +81,8 @@
 /** The x SPEED for the character dash-attack */
 #define DUDE_DASH       75.0f
 /** The impulse for the  vertical component of the knockback */
-#define DUDE_KB     42.5f
+#define DUDE_KB     15.0f
+#define KB_DURATION 20
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -299,7 +300,7 @@ void PlayerModel::applyForce() {
     }
     
     // Don't want to be moving.f Damp out player motion
-    if (getMovement() == 0.0f && !isDashActive()) {
+    if (getMovement() == 0.0f && !isDashActive() && !isKnockbackActive()) {
         if (isGrounded()) {
             // CULog("Setting x vel to 0");
             // Instant friction on the ground
@@ -313,9 +314,9 @@ void PlayerModel::applyForce() {
         }
     }
 #pragma mark strafe force
-    b2Vec2 force(getMovement(),0);
+//    b2Vec2 force(getMovement(),0);
     // Ignore stafe input if in a dash (intentional)
-    if (!(_dashRem > 0)) {
+    if (!(_dashRem > 0) && !isKnockbackActive()) {
         _body->SetLinearVelocity(b2Vec2(getMovement(), _body->GetLinearVelocity().y));
     }
     // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
@@ -354,7 +355,7 @@ void PlayerModel::applyForce() {
     }
     
     // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
+    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive() && !isKnockbackActive()) {
         //CULog("clamping velocity");
         setVX(SIGNUM(getVX())*getMaxSpeed());
         
@@ -412,6 +413,9 @@ void PlayerModel::update(float dt) {
         _guardCooldownRem = GUARD_COOLDOWN;
         _jumpCooldownRem = JUMP_COOLDOWN;
         _shootCooldownRem = SHOOT_COOLDOWN;
+        _knockbackRem = KB_DURATION;
+    } else {
+        _knockbackRem = (_knockbackRem > 0 ? _knockbackRem-1 : 0);
     }
     
     if (isDashBegin()) {
