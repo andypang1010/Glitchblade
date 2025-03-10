@@ -334,8 +334,8 @@ void EnemyModel::applyForce() {
 #pragma mark knockback force
     if (isKnocked() && _canKnockBack) {
         _body->SetLinearVelocity(b2Vec2(0,0));
-        Vec2 knockForce = _knockDirection.scale(ENEMY_KB);
-        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, ENEMY_KB * 0.5f), true);
+        Vec2 knockForce = _knockDirection.subtract(Vec2(0, _knockDirection.y)).scale(ENEMY_KB);
+        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, ENEMY_KB), true);
         _isKnocked = false;
     }
     

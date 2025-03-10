@@ -349,8 +349,8 @@ void PlayerModel::applyForce() {
     if (isKnocked()) {
         _body->SetLinearVelocity(b2Vec2(0,0));
 
-        Vec2 knockForce = _knockDirection.scale(DUDE_KB);
-        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, DUDE_KB * 0.5f), true);
+        Vec2 knockForce = _knockDirection.subtract(Vec2(0,_knockDirection.y)).scale(DUDE_KB);
+        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, DUDE_KB), true);
         _isKnocked = false;
     }
     
