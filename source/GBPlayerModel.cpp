@@ -347,9 +347,9 @@ void PlayerModel::applyForce() {
 #pragma mark knockback force
     if (isKnocked()) {
         _body->SetLinearVelocity(b2Vec2(0,0));
-        b2Vec2 force(-DUDE_KB, DUDE_KB);
-        _body->ApplyLinearImpulseToCenter(force, true);
-//        _body->SetLinearVelocity(b2Vec2(-DUDE_DASH, _body->GetLinearVelocity().y));
+
+        Vec2 knockForce = _knockDirection.scale(DUDE_KB);
+        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, DUDE_KB * 0.5f), true);
         _isKnocked = false;
     }
     

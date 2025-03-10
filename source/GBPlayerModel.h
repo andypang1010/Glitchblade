@@ -122,6 +122,7 @@ protected:
     bool _isShootInput;
     /** Whether we are knocked-back (sets input cd) */
     bool _isKnocked;
+    Vec2 _knockDirection;
 	/** How long until we can shoot again in animation frames*/
 	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
@@ -587,8 +588,9 @@ public:
      * Sets whether the dude is being knocked back
      *
      * @param value whether the dude is being knocked back
+     * @param knockDirection direction that the dude will move toward
      */
-    void setKnocked(bool value) { _isKnocked = value; }
+    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection;  }
     /**
      * Returns how much force to apply to get the dude moving
      *

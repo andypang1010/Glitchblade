@@ -131,6 +131,7 @@ bool EnemyModel::init(const Vec2& pos, const Size& size, float scale) {
         _shootCooldownRem = 0;
         _jumpCooldownRem  = 0;
         _dashCooldownRem = 0;
+        _canKnockBack = true;
         _guardCooldownRem = 0;
         _guardRem = 0;
         _parryRem= 0;
@@ -331,9 +332,10 @@ void EnemyModel::applyForce() {
     }
     
 #pragma mark knockback force
-    if (isKnocked()) {
+    if (isKnocked() && _canKnockBack) {
         _body->SetLinearVelocity(b2Vec2(0,0));
-        _body->ApplyLinearImpulseToCenter(b2Vec2(ENEMY_KB, ENEMY_KB), true);
+        Vec2 knockForce = _knockDirection.scale(ENEMY_KB);
+        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, ENEMY_KB * 0.5f), true);
         _isKnocked = false;
     }
     

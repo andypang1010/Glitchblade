@@ -120,8 +120,10 @@ protected:
     bool _hasProjectile;
     /** Whether we are actively inputting shoot */
     bool _isShootInput;
+    bool _canKnockBack;
     /** Whether enemy is knocked-back (sets  cd) */
     bool _isKnocked;
+    Vec2 _knockDirection;
 	/** How long until we can shoot again in animation frames*/
 	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
@@ -562,12 +564,13 @@ public:
     * @return true if the enemy is being knocked back.
     */
    bool isKnocked() const { return _isKnocked;}
-    /**
-     * Sets whether the enemy is being knocked back
-     *
-     * @param value whether the enemy is being knocked back
-     */
-    void setKnocked(bool value) { _isKnocked = value; }
+   /**
+    * Sets whether the dude is being knocked back
+    *
+    * @param value whether the dude is being knocked back
+    * @param knockDirection direction that the dude will move toward
+    */
+   void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
     /**
      * Sets the dash duration of this enemy.
      *

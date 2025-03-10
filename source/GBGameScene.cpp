@@ -954,8 +954,8 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Attacks canceled");
         }
         CULog("Applying knockback");
-        _player->setKnocked(true);
-        ((EnemyModel*)bd1)->setKnocked(true);
+        _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
+        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
     }
     else if (bd2->getName() == ENEMY_NAME && isPlayerBody(bd1, fd1)) {
         if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {
@@ -973,8 +973,8 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->setDashRem(0);
             CULog("Attacks canceled");
         }
-        _player->setKnocked(true);
-        ((EnemyModel*)bd2)->setKnocked(true);
+        _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
+        ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
         CULog("Applying knockback");
     }
 
