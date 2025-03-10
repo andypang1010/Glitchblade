@@ -78,6 +78,8 @@
 #define ENEMY_JUMP       42.5f
 /** The impulse for the character dash-attack */
 #define ENEMY_DASH       100.0f
+/** The implulse fot the character knockback */
+#define ENEMY_KB       42.5f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -327,6 +329,14 @@ void EnemyModel::applyForce() {
             _body->ApplyLinearImpulseToCenter(force, true);
         }
     }
+    
+#pragma mark knockback force
+    if (isKnocked()) {
+        _body->SetLinearVelocity(b2Vec2(0,0));
+        _body->ApplyLinearImpulseToCenter(b2Vec2(ENEMY_KB, ENEMY_KB), true);
+        _isKnocked = false;
+    }
+    
     // Velocity too high, clamp it
     if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
         setVX(SIGNUM(getVX()) * getMaxSpeed());
@@ -379,6 +389,13 @@ void EnemyModel::update(float dt) {
         _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
     } else {
         _jumpCooldownRem = (_jumpCooldownRem > 0 ? _jumpCooldownRem-1 : 0);
+    }
+    
+    if (isKnocked()) {
+        CULog("enmey knockback applied");
+        _dashCooldownRem = ENEMY_DASH_COOLDOWN;
+        _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
+        _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;
     }
     
     if (isShooting()) {

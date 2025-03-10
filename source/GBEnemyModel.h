@@ -120,6 +120,8 @@ protected:
     bool _hasProjectile;
     /** Whether we are actively inputting shoot */
     bool _isShootInput;
+    /** Whether enemy is knocked-back (sets  cd) */
+    bool _isKnocked;
 	/** How long until we can shoot again in animation frames*/
 	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
@@ -516,7 +518,7 @@ public:
      *
      * @return value whether the dude is performing a movement action.
      */
-    bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()); };
+    bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
     
     /**
      *  Returns true if the dude is currently beginning guard action.
@@ -554,6 +556,18 @@ public:
      * @return value whether the dude is in a dash animation.
      */
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
+    /**
+    * Returns true if the enemy is being knocked back.
+    *
+    * @return true if the enemy is being knocked back.
+    */
+   bool isKnocked() const { return _isKnocked;}
+    /**
+     * Sets whether the enemy is being knocked back
+     *
+     * @param value whether the enemy is being knocked back
+     */
+    void setKnocked(bool value) { _isKnocked = value; }
     /**
      * Sets the dash duration of this enemy.
      *

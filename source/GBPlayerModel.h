@@ -94,7 +94,7 @@ protected:
 	bool _faceRight;
 	/** How long until we can jump again in animation frames */
 	int  _jumpCooldownRem;
-    /** How long until we can jump again in frames*/
+    /** How long until we can dash again in frames*/
     int  _dashCooldownRem;
     /** How many frames remaining in the dash animation (affects friciton)*/
     int  _dashRem;
@@ -120,6 +120,8 @@ protected:
     bool _hasProjectile;
     /** Whether we are actively inputting shoot */
     bool _isShootInput;
+    /** Whether we are knocked-back (sets input cd) */
+    bool _isKnocked;
 	/** How long until we can shoot again in animation frames*/
 	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
@@ -518,7 +520,7 @@ public:
      *
      * @return value whether the dude is performing a movement action.
      */
-    bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()); };
+    bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
     
     /**
      *  Returns true if the dude is currently beginning guard action.
@@ -557,6 +559,12 @@ public:
      */
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
     /**
+     * Returns true if the dude is being knocked back.
+     *
+     * @return true if the dude is being knocked back.
+     */
+    bool isKnocked() const { return _isKnocked;}
+    /**
      * Sets the dash duration of the player.
      *
      * @param value new dash duration.
@@ -575,7 +583,12 @@ public:
      * @param value whether the dude is on the ground.
      */
     void setGrounded(bool value) { _isGrounded = value; }
-    
+    /**
+     * Sets whether the dude is being knocked back
+     *
+     * @param value whether the dude is being knocked back
+     */
+    void setKnocked(bool value) { _isKnocked = value; }
     /**
      * Returns how much force to apply to get the dude moving
      *

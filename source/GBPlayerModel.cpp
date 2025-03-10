@@ -80,6 +80,8 @@
 #define DUDE_JUMP       42.5f
 /** The x SPEED for the character dash-attack */
 #define DUDE_DASH       75.0f
+/** The impulse for the  vertical component of the knockback */
+#define DUDE_KB     42.5f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -342,6 +344,15 @@ void PlayerModel::applyForce() {
         _body->SetLinearVelocity(b2Vec2(DUDE_DASH, _body->GetLinearVelocity().y));
         _dashReset = false;
     }
+#pragma mark knockback force
+    if (isKnocked()) {
+        _body->SetLinearVelocity(b2Vec2(0,0));
+        b2Vec2 force(-DUDE_KB, DUDE_KB);
+        _body->ApplyLinearImpulseToCenter(force, true);
+//        _body->SetLinearVelocity(b2Vec2(-DUDE_DASH, _body->GetLinearVelocity().y));
+        _isKnocked = false;
+    }
+    
     // Velocity too high, clamp it
     if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
         //CULog("clamping velocity");
@@ -393,6 +404,14 @@ void PlayerModel::update(float dt) {
         _shootCooldownRem = SHOOT_COOLDOWN;
     } else {
         _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
+    }
+    
+    if (isKnocked()) {
+        CULog("knockback applied");
+        _dashCooldownRem = DASH_COOLDOWN;
+        _guardCooldownRem = GUARD_COOLDOWN;
+        _jumpCooldownRem = JUMP_COOLDOWN;
+        _shootCooldownRem = SHOOT_COOLDOWN;
     }
     
     if (isDashBegin()) {
