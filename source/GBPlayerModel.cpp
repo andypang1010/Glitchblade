@@ -46,7 +46,6 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 
-#define SIGNUM(x)  ((x > 0) - (x < 0))
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -65,23 +64,23 @@
 /** Duration (in frames) for dash- affects friction*/
 #define DASH_DURATION  5
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define DUDE_VSHRINK  0.95f
+#define VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define DUDE_HSHRINK  0.7f
+#define HSHRINK  0.7f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define DUDE_SSHRINK  0.6f
+#define SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
 #define SENSOR_HEIGHT   0.1f
 /** The amount to shrink the radius of the shield relative to the image width */
 #define SHIELD_RADIUS 2.0f
 /** The density of the character */
-#define DUDE_DENSITY    1.0f
+#define DENSITY    1.0f
 /** The impulse for the character jump */
-#define DUDE_JUMP       42.5f
+#define JUMP       42.5f
 /** The x SPEED for the character dash-attack */
-#define DUDE_DASH       75.0f
+#define DASH       75.0f
 /** The impulse for the  vertical component of the knockback */
-#define DUDE_KB     15.0f
+#define KB     15.0f
 #define KB_DURATION 20
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
@@ -93,9 +92,9 @@ using namespace cugl;
 #pragma mark Constructors
 
 /**
- * Initializes a new dude at the given position.
+ * Initializes a new player at the given position.
  *
- * The dude is sized according to the given drawing scale.
+ * The player is sized according to the given drawing scale.
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -103,24 +102,24 @@ using namespace cugl;
  * according to the drawing scale.
  *
  * @param pos   Initial position in world coordinates
- * @param size  The size of the dude in world units
+ * @param size  The size of the player in world units
  * @param scale The drawing scale (world to screen)
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
     Size nsize = size;
-    nsize.width  *= DUDE_HSHRINK;
-    nsize.height *= DUDE_VSHRINK;
+    nsize.width  *= HSHRINK;
+    nsize.height *= VSHRINK;
     _drawScale = scale;
     
     if (BoxObstacle::init(pos,nsize)) {
-        setDensity(DUDE_DENSITY);
+        setDensity(DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
-        _hp = DUDE_MAXHP;
+        _hp = MAXHP;
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput  = false;
@@ -159,7 +158,7 @@ void PlayerModel::damage(float value) {
 /**
  * Sets left/right movement of this character.
  *
- * This is the result of input times dude force.
+ * This is the result of input times player force.
  *
  * @param value left/right movement of this character.
  */
@@ -226,18 +225,18 @@ void PlayerModel::createFixtures() {
     }
     
     b2FixtureDef sensorDef;
-    sensorDef.density = DUDE_DENSITY;
+    sensorDef.density = DENSITY;
     sensorDef.isSensor = true;
     
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -DUDE_SSHRINK*getWidth()/2.0f;
+    corners[0].x = -SSHRINK*getWidth()/2.0f;
     corners[0].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
-    corners[1].x = -DUDE_SSHRINK*getWidth()/2.0f;
+    corners[1].x = -SSHRINK*getWidth()/2.0f;
     corners[1].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[2].x =  DUDE_SSHRINK*getWidth()/2.0f;
+    corners[2].x =  SSHRINK*getWidth()/2.0f;
     corners[2].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[3].x =  DUDE_SSHRINK*getWidth()/2.0f;
+    corners[3].x =  SSHRINK*getWidth()/2.0f;
     corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
     
     b2PolygonShape sensorShape;
@@ -289,78 +288,6 @@ void PlayerModel::dispose() {
     _shieldNode = nullptr;
 }
 
-/**
- * Applies the force to the body of this dude
- *
- * This method should be called after the force attribute is set.
- */
-void PlayerModel::applyForce() {
-    if (!isEnabled()) {
-        return;
-    }
-    
-    // Don't want to be moving.f Damp out player motion
-    if (getMovement() == 0.0f && !isDashActive() && !isKnockbackActive()) {
-        if (isGrounded()) {
-            // CULog("Setting x vel to 0");
-            // Instant friction on the ground
-            b2Vec2 vel = _body->GetLinearVelocity();
-            vel.x = 0; // If you set y, you will stop a jump in place
-            _body->SetLinearVelocity(vel);
-        } else {
-            //             Damping factor in the air
-            b2Vec2 force(-getDamping()*getVX(),0);
-            _body->ApplyForceToCenter(force,true);
-        }
-    }
-#pragma mark strafe force
-//    b2Vec2 force(getMovement(),0);
-    // Ignore stafe input if in a dash (intentional)
-    if (!(_dashRem > 0) && !isKnockbackActive()) {
-        _body->SetLinearVelocity(b2Vec2(getMovement(), _body->GetLinearVelocity().y));
-    }
-    // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
-#pragma mark jump force
-    // Jump!
-    if (isJumpBegin() && isGrounded()) {
-        b2Vec2 force(0, DUDE_JUMP);
-        _body->ApplyLinearImpulseToCenter(force,true);
-    }
-#pragma mark dash force
-    // Dash!
-    if (isDashLeftBegin() && _dashReset == true){
-        CULog("dashing left begin");
-        faceLeft();
-        // b2Vec2 force(-DUDE_DASH,0);
-        // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
-        _body->SetLinearVelocity(b2Vec2(-DUDE_DASH, _body->GetLinearVelocity().y));
-        _dashReset = false;
-    }
-    
-    if (isDashRightBegin() && _dashReset == true){
-        CULog("dashing right begin");
-        faceRight();
-        // b2Vec2 force(DUDE_DASH, 0);
-        // _body->ApplyLinearImpulseToCenter(force, true);
-        _body->SetLinearVelocity(b2Vec2(DUDE_DASH, _body->GetLinearVelocity().y));
-        _dashReset = false;
-    }
-#pragma mark knockback force
-    if (isKnocked()) {
-        _body->SetLinearVelocity(b2Vec2(0,0));
-
-        Vec2 knockForce = _knockDirection.subtract(Vec2(0,_knockDirection.y)).scale(DUDE_KB);
-        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, DUDE_KB), true);
-        _isKnocked = false;
-    }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive() && !isKnockbackActive()) {
-        //CULog("clamping velocity");
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-        
-    }
-}
 #pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
@@ -429,7 +356,7 @@ void PlayerModel::update(float dt) {
         }
     }
 
-    // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
+    // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame- this is always true on mobile)
     if (_dashReset == false && _dashCooldownRem == 0 && !(_isDashLeftInput || _isDashRightInput)) {
         _dashReset = true; // ready to dash again
     }
@@ -464,10 +391,10 @@ void PlayerModel::update(float dt) {
  */
 void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = DUDE_SSHRINK*_dimension.width;
+    float w = SSHRINK*_dimension.width;
     float h = SENSOR_HEIGHT;
-    Poly2 dudePoly(Rect(-w/0.1f,-h/2.0f,w,h));
-    _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
+    Poly2 playerPoly(Rect(-w/0.1f,-h/2.0f,w,h));
+    _sensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
     

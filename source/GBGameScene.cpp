@@ -920,7 +920,7 @@ void GameScene::beginContact(b2Contact* contact) {
         }
         CULog("Applying knockback");
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
+        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player-> getPosition()).normalize());
     }
     else if (bd2->getName() == ENEMY_NAME && isPlayerBody(bd1, fd1)) {
         if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {

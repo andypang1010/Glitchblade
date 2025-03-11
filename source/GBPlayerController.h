@@ -48,6 +48,9 @@ public:
      * Resets the status of the PlayerController so that we can play again.
      */
     void reset();
+    
+    /** Apply force to the player model*/
+    void applyForce();
 
     /**
      * Updates the player's state based on inputs.
