@@ -3,7 +3,7 @@
 //
 
 #ifndef __PLAYER_CONTROLLER_H__
-#define __PLAYER_CONTROLLER_H__ller
+#define __PLAYER_CONTROLLER_H__
 
 #include <cugl/cugl.h>
 #include "GBPlayerModel.h"
@@ -48,6 +48,9 @@ public:
      * Resets the status of the PlayerController so that we can play again.
      */
     void reset();
+    
+    /** Apply force to the player model*/
+    void applyForce();
 
     /**
      * Updates the player's state based on inputs.

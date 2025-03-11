@@ -41,8 +41,8 @@
 //  Author:  Walker White and Anthony Perello
 //  Version: 2/9/21
 //
-#ifndef __GB_MODEL_H__
-#define __GB_MODEL_H__
+#ifndef __GB_PLAYER_MODEL_H__
+#define __GB_PLAYER_MODEL_H__
 #include <cugl/cugl.h>
 
 using namespace cugl;
@@ -56,10 +56,6 @@ using namespace cugl;
 #define BODY_NAME      "body"
 #define SENSOR_NAME     "playersensor"
 #define SHIELD_SENSOR_NAME      "shield"
-
-
-
-
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -105,11 +101,12 @@ using namespace cugl;
 #define KB     15.0f
 #define KB_DURATION 20
 /** Debug color for the sensor */
-#define DEBUG_COLOR     Color4::RED
+#define SENSOR_DEBUG_COLOR     Color4::RED
+#define DEBUG_COLOR     Color4::YELLOW
 
 
 #pragma mark -
-#pragma mark Dude Model
+#pragma mark player Model
 /**
 * Player avatar for the plaform game.
 *
@@ -183,7 +180,7 @@ protected:
     std::shared_ptr<scene2::WireNode> _shieldNode;
     /** The guard shield when guard is active */
     
-	/** The scene graph node for the Dude. */
+	/** The scene graph node for the player. */
 	std::shared_ptr<scene2::SceneNode> _node;
 	/** The scale between the physics world and the screen (MUST BE UNIFORM) */
 	float _drawScale;
@@ -201,7 +198,7 @@ public:
     
 #pragma mark Hidden Constructors
     /**
-     * Creates a degenerate Dude object.
+     * Creates a degenerate player object.
      *
      * This constructor does not initialize any of the player values beyond
      * the defaults.  To use a PlayerModel, you must call init().
@@ -636,6 +633,10 @@ public:
      *
      * @return value whether the player is in a dash animation.
      */
+#pragma mark -
+#pragma mark Cooldown Get/Set
+    
+    
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
     /**
      * Returns the amount of frames remaining before the player can jump again
@@ -694,6 +695,8 @@ public:
      * @param value whether the player is on the ground.
      */
     void setGrounded(bool value) { _isGrounded = value; }
+    float getKnockF() {return KB;}
+    Vec2 getKnockDirection() {return _knockDirection;}
     /**
      * Sets whether the player is being knocked back
      *
@@ -702,6 +705,10 @@ public:
      */
     void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection;  }
     /**
+     * Resets knock status and direction
+     */
+    void resetKnocked() { _isKnocked = false; _knockDirection = Vec2(0,0);  }
+    /**
      * Returns how much force to apply to get the player moving
      *
      * Multiply this by the input to get the movement value.
@@ -709,7 +716,14 @@ public:
      * @return how much force to apply to get the player moving
      */
     float getForce() const { return FORCE; }
-    
+    /**
+     * @return how much jump force to apply
+     */
+    float getJumpF() const { return JUMP; }
+    /**
+     * @return how much dash force to apply
+     */
+    float getDashF() const { return DASH; }
     /**
      * Returns How hard the brakes are applied to get a player to stop moving
      *
@@ -717,6 +731,10 @@ public:
      */
     float getDamping() const { return DAMPING; }
     
+    /** @return Whether the dash has been released (reset). only for keyboard controls*/
+    bool getDashReset() const { return _dashReset; };
+    /** For keyboard dash controls*/
+    void setDashReset(bool r){_dashReset = r;}
     /**
      * Returns the upper limit on player left-right movement.
      *

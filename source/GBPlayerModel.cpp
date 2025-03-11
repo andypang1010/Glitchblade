@@ -46,8 +46,6 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 
-#define SIGNUM(x)  ((x > 0) - (x < 0))
-
 
 
 using namespace cugl;
@@ -252,78 +250,6 @@ void PlayerModel::dispose() {
     _shieldNode = nullptr;
 }
 
-/**
- * Applies the force to the body of this player
- *
- * This method should be called after the force attribute is set.
- */
-void PlayerModel::applyForce() {
-    if (!isEnabled()) {
-        return;
-    }
-    
-    // Don't want to be moving.f Damp out player motion
-    if (getMovement() == 0.0f && !isDashActive() && !isKnockbackActive()) {
-        if (isGrounded()) {
-            // CULog("Setting x vel to 0");
-            // Instant friction on the ground
-            b2Vec2 vel = _body->GetLinearVelocity();
-            vel.x = 0; // If you set y, you will stop a jump in place
-            _body->SetLinearVelocity(vel);
-        } else {
-            //             Damping factor in the air
-            b2Vec2 force(-getDamping()*getVX(),0);
-            _body->ApplyForceToCenter(force,true);
-        }
-    }
-#pragma mark strafe force
-//    b2Vec2 force(getMovement(),0);
-    // Ignore stafe input if in a dash (intentional)
-    if (!(_dashRem > 0) && !isKnockbackActive()) {
-        _body->SetLinearVelocity(b2Vec2(getMovement(), _body->GetLinearVelocity().y));
-    }
-    // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
-#pragma mark jump force
-    // Jump!
-    if (isJumpBegin() && isGrounded()) {
-        b2Vec2 force(0, JUMP);
-        _body->ApplyLinearImpulseToCenter(force,true);
-    }
-#pragma mark dash force
-    // Dash!
-    if (isDashLeftBegin() && _dashReset == true){
-        CULog("dashing left begin");
-        faceLeft();
-        // b2Vec2 force(-DASH,0);
-        // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
-        _body->SetLinearVelocity(b2Vec2(-DASH, _body->GetLinearVelocity().y));
-        _dashReset = false;
-    }
-    
-    if (isDashRightBegin() && _dashReset == true){
-        CULog("dashing right begin");
-        faceRight();
-        // b2Vec2 force(DASH, 0);
-        // _body->ApplyLinearImpulseToCenter(force, true);
-        _body->SetLinearVelocity(b2Vec2(DASH, _body->GetLinearVelocity().y));
-        _dashReset = false;
-    }
-#pragma mark knockback force
-    if (isKnocked()) {
-        _body->SetLinearVelocity(b2Vec2(0,0));
-
-        Vec2 knockForce = _knockDirection.subtract(Vec2(0,_knockDirection.y)).scale(KB);
-        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, KB), true);
-        _isKnocked = false;
-    }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive() && !isKnockbackActive()) {
-        //CULog("clamping velocity");
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-        
-    }
-}
 #pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
@@ -366,7 +292,7 @@ void PlayerModel::resetDebug() {
     float h = SENSOR_HEIGHT;
     Poly2 playerPoly(Rect(-w/0.1f,-h/2.0f,w,h));
     _sensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(DEBUG_COLOR);
+    _sensorNode->setColor(SENSOR_DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
     
     Poly2 shieldPoly;
