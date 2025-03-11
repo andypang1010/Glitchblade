@@ -366,6 +366,11 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
 
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::GRAY);
+
+    CULog("Setting up LevelController");
+    _levelController = std::make_shared<LevelController>();
+    _levelController->init(); // Initialize the LevelController
+
     return true;
 }
 
@@ -733,6 +738,8 @@ void GameScene::preUpdate(float dt) {
       AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
     }
 
+    // Call preUpdate on the LevelController
+    _levelController->preUpdate(dt);
 }
 
 /**
@@ -764,6 +771,9 @@ void GameScene::preUpdate(float dt) {
 void GameScene::fixedUpdate(float step) {
     // Turn the physics engine crank.
     _world->update(step);
+
+    // Update the level controller
+    _levelController->fixedUpdate(step);
 }
 
 /**
@@ -830,6 +840,9 @@ void GameScene::postUpdate(float remain) {
     else if (_countdown == 0) {
         reset();
     }
+
+    // postUpdate the LevelController
+    _levelController->postUpdate(remain);
 }
 
 /**

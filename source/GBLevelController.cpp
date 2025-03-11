@@ -13,17 +13,17 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     if (!json || json->children().empty()) {
         CULogError("Invalid or empty JSON node!");
         return actions;
-    }
+}
 
     if (json->get(enemyName) == nullptr) {
         CULogError("Enemy not found!");
         return actions;
-    }
+}
 
     if (!json->get(enemyName)->has("actions")) {
         CULogError("Invalid JSON format: Missing actions!");
         return actions;
-    }
+}
 
     std::vector<std::shared_ptr<JsonValue>> actionArray = json->get(enemyName)->get("actions")->children();
     for (std::shared_ptr<JsonValue> action : actionArray) {
@@ -53,7 +53,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
             meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
 
             actions.push_back(meleeAction);
-        }
+}
         else if (type == "ranged") {
             auto rangedAction = std::make_shared<RangedActionModel>();
             rangedAction->setActionName(name);
@@ -68,7 +68,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
             rangedAction->setProjectileDamage(action->getFloat("projectileDamage"));
 
             actions.push_back(rangedAction);
-        }
+}
         else if (type == "movement") {
             auto movementAction = std::make_shared<MovementActionModel>();
             movementAction->setActionName(name);
@@ -85,7 +85,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
         else {
             std::cerr << "Unknown action type: " << type << std::endl;
         }
-    }
+}
 
     return actions;
 }
