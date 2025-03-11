@@ -204,7 +204,7 @@ GameScene::GameScene() : Scene2(),
 _worldnode(nullptr),
 _debugnode(nullptr),
 _world(nullptr),
-_player(nullptr),
+_player_controller(nullptr),
 _complete(false),
 _debug(false)
 {
@@ -286,7 +286,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
 
     // Start up the input handler
     _assets = assets;
-    _input.init(getBounds());
 
     // Create the world and attach the listeners.
     _world = physics2::ObstacleWorld::alloc(rect, gravity);
@@ -369,7 +368,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
 
     CULog("Setting up LevelController");
     _levelController = std::make_shared<LevelController>();
-    _levelController->init(); // Initialize the LevelController
+    _levelController->init(getBounds(), std::make_shared<AssetManager>(_assets), _scale); // Initialize the LevelController
 
     return true;
 }
@@ -379,13 +378,11 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
  */
 void GameScene::dispose() {
     if (_active) {
-        _input.dispose();
         _world = nullptr;
         _worldnode = nullptr;
         _debugnode = nullptr;
         _winnode = nullptr;
         _losenode = nullptr;
-        _playerHPNode = nullptr;
         _enemyHPNode = nullptr;
         _enemyStunNode = nullptr;
         _leftnode = nullptr;
@@ -409,11 +406,14 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    _player = nullptr;
+    _player_controller -> reset();
+    _player_controller = nullptr;
 
     setFailure(false);
     setComplete(false);
     populate();
+
+    _levelController->reset();
 }
 
 /**
@@ -493,7 +493,6 @@ void GameScene::populate() {
 
 #pragma mark : Dude
     Vec2 dudePos = DUDE_POS;
-    node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(DUDE_TEXTURE);
     _player = PlayerModel::alloc(dudePos, image->getSize() / _scale, _scale);
     sprite = scene2::PolygonNode::allocWithTexture(image);
@@ -503,7 +502,6 @@ void GameScene::populate() {
 
 #pragma mark : Test Enemy
     Vec2 enemyPos = ENEMY_POS;
-    node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(ENEMY_TEXTURE);
     _testEnemy = EnemyModel::alloc(enemyPos, image->getSize() / _scale, _scale);
     sprite = scene2::PolygonNode::allocWithTexture(image);
@@ -602,145 +600,6 @@ void GameScene::setFailure(bool value) {
 
 #pragma mark -
 #pragma mark Physics Handling
-/**
- * The method called to update the game mode.
- *
- * This is the nondeterministic version of a physics simulation. It is
- * provided for comparison purposes only.
- *
- * @param timestep  The amount of time (in seconds) since the last frame
- */
-void GameScene::update(float timestep) {
-    _input.update(timestep);
-
-    // Process the toggled key commands
-    if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) { reset(); }
-    if (_input.didExit()) {
-        Application::get()->quit();
-    }
-
-    // Process the movement
-    if (_input.withJoystick()) {
-        if (_input.getHorizontal() < 0) {
-            _leftnode->setVisible(true);
-            _rightnode->setVisible(false);
-        }
-        else if (_input.getHorizontal() > 0) {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(true);
-        }
-        else {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(false);
-        }
-        _leftnode->setPosition(_input.getJoystick());
-        _rightnode->setPosition(_input.getJoystick());
-    }
-    else {
-        _leftnode->setVisible(false);
-        _rightnode->setVisible(false);
-    }
-    
-	_player->setMovement(_input.getHorizontal()*_player->getForce());
-	_player->setJumpInput( _input.didJump());
-    _player->setGuardInput(_input.didGuard());
-	_player->applyForce();
-
-	if (_player->isJumpBegin() && _player->isGrounded()) {
-		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
-		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
-	}
-
-    	
-	// Turn the physics engine crank.
-    _world->update(timestep);
-}
-
-/**
- * The method called to indicate the start of a deterministic loop.
- *
- * This method is used instead of {@link #update} if {@link #setDeterministic}
- * is set to true. It marks the beginning of the core application loop,
- * which is concluded with a call to {@link #postUpdate}.
- *
- * This method should be used to process any events that happen early in
- * the application loop, such as user input or events created by the
- * {@link schedule} method. In particular, no new user input will be
- * recorded between the time this method is called and {@link #postUpdate}
- * is invoked.
- *
- * Note that the time passed as a parameter is the time measured from the
- * start of the previous frame to the start of the current frame. It is
- * measured before any input or callbacks are processed. It agrees with
- * the value sent to {@link #postUpdate} this animation frame.
- *
- * @param dt    The amount of time (in seconds) since the last frame
- */
-void GameScene::preUpdate(float dt) {
-    _input.update(dt);
-
-    // Process the toggled key commands
-    if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) { reset(); }
-    if (_input.didExit()) {
-        CULog("Shutting down");
-        Application::get()->quit();
-    }
-
-    // Process the movement
-    if (_input.withJoystick()) {
-        if (_input.getHorizontal() < 0) {
-            _leftnode->setVisible(true);
-            _rightnode->setVisible(false);
-        }
-        else if (_input.getHorizontal() > 0) {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(true);
-        }
-        else {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(false);
-        }
-        _leftnode->setPosition(_input.getJoystick());
-        _rightnode->setPosition(_input.getJoystick());
-    }
-    else {
-        _leftnode->setVisible(false);
-        _rightnode->setVisible(false);
-    }
-    
-    _player->setMovement(_input.getHorizontal()*_player->getForce());
-    _player->setStrafeLeft(_input.didStrafeLeft());
-    _player->setStrafeRight(_input.didStrafeRight());
-	_player->setJumpInput( _input.didJump());
-    _player->setDashLeftInput(_input.didDashLeft());
-    _player->setDashRightInput(_input.didDashRight());
-    _player->setGuardInput(_input.didGuard());
-    _player->applyForce();
-
-    float dist = _testEnemy->getPosition().x - _player->getPosition().x;
-    float dir_val = dist > 0 ? -1 : 1;
-    _testEnemy->setMovement(dir_val * _testEnemy->getForce());
-    _testEnemy->setStrafeLeft(dist > 0);
-    _testEnemy->setStrafeRight(dist < 0);
-    _testEnemy->setDashLeftInput(dist > 0 && dist < ENEMY_ATTACK_RADIUS);
-    _testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
-    _testEnemy->applyForce();
-    
-    _playerHPNode->setText(std::to_string((int)_player->getHP()));
-    _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
-    _enemyStunNode->setText(std::to_string((bool)_testEnemy->isStunned()));
-    
-
-    if (_player->isJumpBegin() && _player->isGrounded()) {
-      std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
-      AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
-    }
-
-    // Call preUpdate on the LevelController
-    _levelController->preUpdate(dt);
-}
 
 /**
  * The method called to provide a deterministic application loop.

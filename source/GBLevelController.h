@@ -58,7 +58,12 @@ public:
     /**
      * Initializes the level controller.
      */
-    void init();
+    void init(cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale);
+
+    /**
+     * Resets the state of the LevelController.
+     */
+    void reset();
 
     /**
      * Updates the level controller each frame.

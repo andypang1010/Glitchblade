@@ -8,6 +8,7 @@
 #include <cugl/cugl.h>
 #include "GBPlayerModel.h"
 #include "GBProjectile.h"
+#include "GBInput.h"
 
 using namespace cugl;
 
@@ -21,17 +22,32 @@ private:
     /** Reference to the player model */
     std::shared_ptr<PlayerModel> _player;
 
+    /** Controller for abstracting out input across multiple platforms */
+    PlatformInput _input;
+
+    /** Reference to the player HP label */
+    std::shared_ptr<scene2::Label> _playerHPNode;
 public:
     /** Constructor */
     PlayerController();
 
     /** Destructor */
-    ~PlayerController();
+    ~PlayerController() { dispose(); }
 
     /**
      * Initializes the player controller.
      */
-    void init();
+    void init(cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale);
+
+    /**
+     * Disposes of all (non-static) resources allocated to this mode.
+     */
+    void dispose();
+
+    /**
+     * Resets the status of the PlayerController so that we can play again.
+     */
+    void reset();
 
     /**
      * Updates the player's state based on inputs.
@@ -59,7 +75,8 @@ public:
     void activateShield();
 
     /**
-     * Deactivates the player’s shield.
+     * @brief 
+     * 
      */
     void deactivateShield();
 

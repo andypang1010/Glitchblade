@@ -53,8 +53,6 @@ protected:
     std::shared_ptr<JsonValue> _enemiesJSON;
     
     // CONTROLLERS
-    /** Controller for abstracting out input across multiple platforms */
-    PlatformInput _input;
     /** LevelController for managing the level progress of the current game */
     std::shared_ptr<LevelController> _levelController;
     
@@ -67,8 +65,6 @@ protected:
     std::shared_ptr<scene2::Label> _winnode;
     /** Reference to the lose message label */
     std::shared_ptr<scene2::Label> _losenode;
-    /** Reference to the player HP label */
-    std::shared_ptr<scene2::Label> _playerHPNode;
     /** Reference to the enemy HP label */
     std::shared_ptr<scene2::Label> _enemyHPNode;
     /** Reference to the enemy stun label */

@@ -13,6 +13,10 @@ void EnemyController::init()
 	CULog("Inited enemycontroller");
 }
 
+void EnemyController::reset()
+{
+}
+
 void EnemyController::fixedUpdate(float timestep)
 {
 	// CULog("Updated enemycontroller");

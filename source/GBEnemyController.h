@@ -34,6 +34,11 @@ public:
     void init();
 
     /**
+     * Resets the EnemyController.
+     */
+    void reset();
+
+    /**
      * Updates all enemy behaviors.
      * @param timestep The time elapsed since the last update.
      */

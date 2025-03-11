@@ -141,7 +141,6 @@ bool EnemyModel::init(const Vec2& pos, const Size& size, float scale) {
     return false;
 }
 
-
 #pragma mark -
 #pragma mark Attribute Properties
 
@@ -460,7 +459,4 @@ void EnemyModel::resetDebug() {
     _shieldNode->setColor(DEBUG_COLOR);
     
 }
-
-
-
 
