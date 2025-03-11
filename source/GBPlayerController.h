@@ -28,6 +28,7 @@ private:
     /** Reference to the player HP label */
     std::shared_ptr<scene2::Label> _playerHPNode;
 public:
+    
     /** Constructor */
     PlayerController();
 

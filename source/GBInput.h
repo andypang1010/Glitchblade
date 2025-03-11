@@ -40,6 +40,10 @@
  */
 class PlatformInput {
 private:
+    /** Reference to the left joystick image */
+    std::shared_ptr<cugl::scene2::PolygonNode> _leftnode;
+    /** Reference to the right joystick image */
+    std::shared_ptr<cugl::scene2::PolygonNode> _rightnode;
     /** Whether or not this input is active */
     bool _active;
     // KEYBOARD EMULATION
@@ -196,7 +200,12 @@ protected:
      * @return the scene location of a touch
      */
     cugl::Vec2 touch2Screen(const cugl::Vec2 pos) const;
-
+    
+    /**
+     * Set visibility and position of joystick scene graph nodes
+     *
+     */
+    void renderJoystick();
     /**
      * Processes movement for the floating joystick.
      *

@@ -15,6 +15,7 @@
 #include "GBInput.h"
 
 using namespace cugl;
+using namespace cugl::graphics;
 
 #pragma mark Input Constants
 
@@ -65,6 +66,12 @@ using namespace cugl;
 #define LEFT_ZONE  0.5f
 /** The portion of the screen used for the right zone */
 #define RIGHT_ZONE 0.5
+
+#pragma mark Joystick Assets
+/** The image for the left dpad/joystick */
+#define LEFT_IMAGE      "dpad_left"
+/** The image for the right dpad/joystick */
+#define RIGHT_IMAGE     "dpad_right"
 
 #pragma mark -
 #pragma mark Input Controller
@@ -131,7 +138,7 @@ void PlatformInput::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool PlatformInput::init(const Rect bounds) {
+bool PlatformInput::init(const std::shared_ptr<AssetManager>& assets, const Rect bounds) {
     bool success = true;
     _sbounds = bounds;
     _tbounds = Application::get()->getDisplayBounds();
@@ -140,6 +147,17 @@ bool PlatformInput::init(const Rect bounds) {
     clearTouchInstance(_ltouch);
     clearTouchInstance(_rtouch);
     clearTouchInstance(_mtouch);
+    
+    // joystick nodes
+    _leftnode = scene2::PolygonNode::allocWithTexture(assets->get<Texture>(LEFT_IMAGE));
+    _leftnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_RIGHT);
+    _leftnode->setScale(0.35f);
+    _leftnode->setVisible(false);
+
+    _rightnode = scene2::PolygonNode::allocWithTexture(assets->get<Texture>(RIGHT_IMAGE));
+    _rightnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_LEFT);
+    _rightnode->setScale(0.35f);
+    _rightnode->setVisible(false);
     
 #ifndef CU_TOUCH_SCREEN
     success = Input::activate<Keyboard>();
@@ -305,8 +323,30 @@ Vec2 PlatformInput::touch2Screen(const Vec2 pos) const {
     return result;
 }
 
+void PlatformInput::renderJoystick() {
+    if (withJoystick()) {
+        if (getHorizontal() < 0) {
+            _leftnode->setVisible(true);
+            _rightnode->setVisible(false);
+        }
+        else if (getHorizontal() > 0) {
+            _leftnode->setVisible(false);
+            _rightnode->setVisible(true);
+        }
+        else {
+            _leftnode->setVisible(false);
+            _rightnode->setVisible(false);
+        }
+        _leftnode->setPosition(getJoystick());
+        _rightnode->setPosition(getJoystick());
+    }
+    else {
+        _leftnode->setVisible(false);
+        _rightnode->setVisible(false);
+    }
+}
 /**
- * Processes movement for the floating joystick.
+ * Processes movement for the floating joystick and move the joystick scene nodes.
  *
  * This will register movement as left or right (or neither).  It
  * will also move the joystick anchor if the touch position moves
@@ -327,6 +367,8 @@ void PlatformInput::processJoystick() {
             _keyRight = false;
         }
     }
+    renderJoystick();
+    
 }
 
 /**

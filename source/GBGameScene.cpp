@@ -179,10 +179,7 @@ Vec2 DOWN = { 0.0f, -1.0f };
 #define MUSIC_VOLUME    0.7f
 /** The volume for sound effects */
 #define EFFECT_VOLUME   0.8f
-/** The image for the left dpad/joystick */
-#define LEFT_IMAGE      "dpad_left"
-/** The image for the right dpad/joystick */
-#define RIGHT_IMAGE     "dpad_right"
+
 /** The fire rate for spawned bullets */
 #define BULLET_SPAWN_RATE     100.0f
 
@@ -340,16 +337,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _enemyStunNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyStunNode->setForeground(Color4::RED);
     _enemyStunNode->setPosition(45, 110);
-
-    _leftnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(LEFT_IMAGE));
-    _leftnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_RIGHT);
-    _leftnode->setScale(0.35f);
-    _leftnode->setVisible(false);
-
-    _rightnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(RIGHT_IMAGE));
-    _rightnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_LEFT);
-    _rightnode->setScale(0.35f);
-    _rightnode->setVisible(false);
 
     addChild(_worldnode);
     addChild(_debugnode);
@@ -621,47 +608,6 @@ void GameScene::setFailure(bool value) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GameScene::preUpdate(float dt) {
-    _input.update(dt);
-
-    // Process the toggled key commands
-    if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) { reset(); }
-    if (_input.didExit()) {
-        CULog("Shutting down");
-        Application::get()->quit();
-    }
-
-    // Process the movement
-    if (_input.withJoystick()) {
-        if (_input.getHorizontal() < 0) {
-            _leftnode->setVisible(true);
-            _rightnode->setVisible(false);
-        }
-        else if (_input.getHorizontal() > 0) {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(true);
-        }
-        else {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(false);
-        }
-        _leftnode->setPosition(_input.getJoystick());
-        _rightnode->setPosition(_input.getJoystick());
-    }
-    else {
-        _leftnode->setVisible(false);
-        _rightnode->setVisible(false);
-    }
-    
-    _player->setMovement(_input.getHorizontal()*_player->getForce());
-    _player->setStrafeLeft(_input.didStrafeLeft());
-    _player->setStrafeRight(_input.didStrafeRight());
-    _player->setJumpInput( _input.didJump());
-    _player->setDashLeftInput(_input.didDashLeft());
-    _player->setDashRightInput(_input.didDashRight());
-    _player->setGuardInput(_input.didGuard());
-    _player->applyForce();
-
     float dist = _testEnemy->getPosition().x - _player->getPosition().x;
     float dir_val = dist > 0 ? -1 : 1;
     _testEnemy->setMovement(dir_val * _testEnemy->getForce());

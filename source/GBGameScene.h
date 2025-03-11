@@ -69,10 +69,6 @@ protected:
     std::shared_ptr<scene2::Label> _enemyHPNode;
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
-    /** Reference to the left joystick image */
-    std::shared_ptr<scene2::PolygonNode> _leftnode;
-    /** Reference to the right joystick image */
-    std::shared_ptr<scene2::PolygonNode> _rightnode;
 
     /** The Box2D world */
     std::shared_ptr<physics2::ObstacleWorld> _world;

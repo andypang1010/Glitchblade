@@ -124,7 +124,28 @@ void PlayerController::fixedUpdate(float timestep)
 
 #pragma mark preUpdate
 void PlayerController::preUpdate(float dt)
-{
+{    _input.update(dt);
+    // can't reset or set debug for the whole scene from player controller- we should use buttons for reset, debug , exit instead of keyboard (or gesture) inputs
+//    // Process the toggled key commands
+//    if (_input.didDebug()) { setDebug(!isDebug()); }
+//    if (_input.didReset()) { reset(); }
+//    if (_input.didExit()) {
+//        CULog("Shutting down");
+//        Application::get()->quit();
+//    }
+
+    // Process the movement
+
+    _player->setMovement(_input.getHorizontal()*_player->getForce());
+    _player->setStrafeLeft(_input.didStrafeLeft());
+    _player->setStrafeRight(_input.didStrafeRight());
+    _player->setJumpInput( _input.didJump());
+    _player->setDashLeftInput(_input.didDashLeft());
+    _player->setDashRightInput(_input.didDashRight());
+    _player->setGuardInput(_input.didGuard());
+    _player->applyForce();
+
+    ////////****
     // guard cooldown first for most recent movement inputs
     if (_player->isGuardActive() && !_player->isGuardBegin()){
         int guardRem = _player->getGuardRem();
