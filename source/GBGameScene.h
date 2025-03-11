@@ -34,6 +34,7 @@
 #include "GBProjectile.h"
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
+#include "GBLevelController.h"
 
 using namespace cugl;
 
