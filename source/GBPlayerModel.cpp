@@ -59,7 +59,7 @@
 /** Cooldown (in frames) for dash */
 #define DASH_COOLDOWN  30
 /** Duration (in frames) for guard */
-#define GUARD_DURATION  60
+#define GUARD_DURATION  44
 /** Duration (in frames) for parry */
 #define PARRY_DURATION  24
 /** Duration (in frames) for dash- affects friction*/
@@ -386,20 +386,37 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
 void PlayerModel::update(float dt) {
     // Apply cooldowns
 
-    _jumpUpSprite->setVisible(!isGrounded() && getBody()->GetLinearVelocity().y > 0);
-    _jumpDownSprite->setVisible(!isGrounded() && getBody()->GetLinearVelocity().y < 0);
-    _walkSprite->setVisible(isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
-    _attackSprite->setVisible(isDashActive());
+    _walkSprite->setVisible(!isGuardActive() && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
+    _jumpUpSprite->setVisible(!isGuardActive() && !isGrounded() && getBody()->GetLinearVelocity().y > 0);
+    _jumpDownSprite->setVisible(!isGuardActive() && !isGrounded() && getBody()->GetLinearVelocity().y < 0);
+    _guardSprite->setVisible(isGuardActive());
+    _attackSprite->setVisible(!isGuardActive() && isDashActive());
 
-    _idleSprite->setVisible(!_jumpUpSprite->isVisible() && !_jumpDownSprite->isVisible() && !_walkSprite->isVisible());
+    _idleSprite->setVisible(
+        !_walkSprite->isVisible() &&
+        !_jumpUpSprite->isVisible() &&
+        !_jumpDownSprite->isVisible() &&
+        !_guardSprite->isVisible() &&
+        !_attackSprite->isVisible());
 
     if (isDashBegin()) {
+        currentFrame = 0;
         _attackSprite->setFrame(0);
     }
 
     if (isJumpBegin()) {
+        currentFrame = 0;
         _jumpUpSprite->setFrame(0);
         _jumpDownSprite->setFrame(0);
+    }
+
+    if (isParryActive()) {
+        currentFrame = 0;
+        _guardSprite->setFrame(0);
+    }
+
+    else {
+        playAnimation(_guardSprite);
     }
 
     playAnimation(_attackSprite);

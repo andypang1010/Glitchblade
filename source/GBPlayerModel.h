@@ -165,7 +165,9 @@ protected:
 
 public:
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
+
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
+    std::shared_ptr<scene2::SpriteNode> _guardSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;

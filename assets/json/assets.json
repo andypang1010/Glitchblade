@@ -9,8 +9,8 @@
         "player": {
             "file":     "textures/player.png"
         },
-        "player_attack": {
-            "file":     "textures/player_attack.png"
+        "player_idle": {
+            "file":     "textures/player_idle.png"
         },
         "player_walk": {
             "file":     "textures/player_walk.png"
@@ -20,6 +20,12 @@
         },
         "player_jumpDown": {
             "file":     "textures/player_jumpDown.png"
+        },
+        "player_guard": {
+            "file":     "textures/player_guard.png"
+        },
+        "player_attack": {
+            "file":     "textures/player_attack.png"
         },
         "enemy": {
             "file":     "textures/enemy.png"
