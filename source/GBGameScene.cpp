@@ -514,8 +514,8 @@ void GameScene::populate() {
     _testEnemy->getSceneNode()->addChild(_enemyHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyStunNode);
 
-	// Play the background music on a loop.
-	/*std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
+    // Play the background music on a loop.
+    /*std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
     AudioEngine::get()->getMusicQueue()->play(source, true, MUSIC_VOLUME);*/
 }
 
@@ -600,7 +600,90 @@ void GameScene::setFailure(bool value) {
 
 #pragma mark -
 #pragma mark Physics Handling
+/**
+ * The method called to indicate the start of a deterministic loop.
+ *
+ * This method is used instead of {@link #update} if {@link #setDeterministic}
+ * is set to true. It marks the beginning of the core application loop,
+ * which is concluded with a call to {@link #postUpdate}.
+ *
+ * This method should be used to process any events that happen early in
+ * the application loop, such as user input or events created by the
+ * {@link schedule} method. In particular, no new user input will be
+ * recorded between the time this method is called and {@link #postUpdate}
+ * is invoked.
+ *
+ * Note that the time passed as a parameter is the time measured from the
+ * start of the previous frame to the start of the current frame. It is
+ * measured before any input or callbacks are processed. It agrees with
+ * the value sent to {@link #postUpdate} this animation frame.
+ *
+ * @param dt    The amount of time (in seconds) since the last frame
+ */
+void GameScene::preUpdate(float dt) {
+    _input.update(dt);
 
+    // Process the toggled key commands
+    if (_input.didDebug()) { setDebug(!isDebug()); }
+    if (_input.didReset()) { reset(); }
+    if (_input.didExit()) {
+        CULog("Shutting down");
+        Application::get()->quit();
+    }
+
+    // Process the movement
+    if (_input.withJoystick()) {
+        if (_input.getHorizontal() < 0) {
+            _leftnode->setVisible(true);
+            _rightnode->setVisible(false);
+        }
+        else if (_input.getHorizontal() > 0) {
+            _leftnode->setVisible(false);
+            _rightnode->setVisible(true);
+        }
+        else {
+            _leftnode->setVisible(false);
+            _rightnode->setVisible(false);
+        }
+        _leftnode->setPosition(_input.getJoystick());
+        _rightnode->setPosition(_input.getJoystick());
+    }
+    else {
+        _leftnode->setVisible(false);
+        _rightnode->setVisible(false);
+    }
+    
+    _player->setMovement(_input.getHorizontal()*_player->getForce());
+    _player->setStrafeLeft(_input.didStrafeLeft());
+    _player->setStrafeRight(_input.didStrafeRight());
+    _player->setJumpInput( _input.didJump());
+    _player->setDashLeftInput(_input.didDashLeft());
+    _player->setDashRightInput(_input.didDashRight());
+    _player->setGuardInput(_input.didGuard());
+    _player->applyForce();
+
+    float dist = _testEnemy->getPosition().x - _player->getPosition().x;
+    float dir_val = dist > 0 ? -1 : 1;
+    _testEnemy->setMovement(dir_val * _testEnemy->getForce());
+    _testEnemy->setStrafeLeft(dist > 0);
+    _testEnemy->setStrafeRight(dist < 0);
+    _testEnemy->setDashLeftInput(dist > 0 && dist < ENEMY_ATTACK_RADIUS);
+    _testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
+    _testEnemy->applyForce();
+    
+    _playerHPNode->setText(std::to_string((int)_player->getHP()));
+    _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
+    _enemyStunNode->setText(std::to_string((bool)_testEnemy->isStunned()));
+    
+
+    if (_player->isJumpBegin() && _player->isGrounded()) {
+      std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
+      AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+    }
+
+    // Call preUpdate on the LevelController
+    _levelController->preUpdate(dt);
+}
 /**
  * The method called to provide a deterministic application loop.
  *
@@ -708,7 +791,7 @@ void GameScene::postUpdate(float remain) {
  * Add a new projectile to the world and send it in the right direction.
  */
 void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
-	float offset = PROJECTILE_OFFSET;
+    float offset = PROJECTILE_OFFSET;
     if (isPlayerFired) {
         pos.x += (_player->isFacingRight() ? offset : -offset);
         pos.y += 0.5f;
