@@ -57,7 +57,7 @@ using namespace cugl;
 #define SENSOR_NAME     "dudesensor"
 #define SHIELD_SENSOR_NAME      "shield"
 
-
+#define ANIMATION_UPDATE_FRAME 4
 
 
 #pragma mark -
@@ -148,9 +148,11 @@ protected:
     /** The guard shield when guard is active */
     
 	/** The scene graph node for the Dude. */
-	std::shared_ptr<scene2::SceneNode> _node;
+	std::shared_ptr<scene2::SceneNode> _sceneNode;
 	/** The scale between the physics world and the screen (MUST BE UNIFORM) */
 	float _drawScale;
+
+    int currentFrame;
 
 	/**
 	* Redraws the outline of the physics fixtures to the debug node
@@ -162,7 +164,12 @@ protected:
 	virtual void resetDebug() override;
 
 public:
-    
+    std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
+    std::shared_ptr<scene2::SpriteNode> _idleSprite;
+    std::shared_ptr<scene2::SpriteNode> _walkSprite;
+    std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
+    std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
+    std::shared_ptr<scene2::SpriteNode> _attackSprite;
 #pragma mark Hidden Constructors
     /**
      * Creates a degenerate Dude object.
@@ -344,7 +351,7 @@ public:
      *
      * @return the scene graph node representing this PlayerModel.
      */
-	const std::shared_ptr<scene2::SceneNode>& getSceneNode() const { return _node; }
+	const std::shared_ptr<scene2::SceneNode>& getSceneNode() const { return _sceneNode; }
 
     /**
      * Sets the scene graph node representing this PlayerModel.
@@ -365,8 +372,8 @@ public:
      * @param node  The scene graph node representing this PlayerModel, which has been added to the world node already.
      */
 	void setSceneNode(const std::shared_ptr<scene2::SceneNode>& node) {
-        _node = node;
-        _node->setPosition(getPosition() * _drawScale);
+        _sceneNode = node;
+        _sceneNode->setPosition(getPosition() * _drawScale);
     }
 
     
@@ -655,6 +662,10 @@ public:
      * @return true if this character is facing right
      */
     bool isFacingRight() const { return _faceRight; }
+
+#pragma mark -
+#pragma mark Animation Methods
+    void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
 
 #pragma mark -
 #pragma mark Physics Methods

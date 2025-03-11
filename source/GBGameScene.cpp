@@ -496,10 +496,30 @@ void GameScene::populate() {
     node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(DUDE_TEXTURE);
     _player = PlayerModel::alloc(dudePos, image->getSize() / _scale, _scale);
-    sprite = scene2::PolygonNode::allocWithTexture(image);
-    _player->setSceneNode(sprite);
+    
+    _player->_idleSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player"), 1, 1, 1);
+    _player->_idleSprite->setPosition(0, 0);
+
+    _player->_walkSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_walk"), 1, 6, 6);
+    _player->_walkSprite->setPosition(0, 40);
+
+    _player->_jumpUpSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_jumpUp"), 1, 8, 8);
+    _player->_jumpUpSprite->setPosition(0, 40);
+
+    _player->_jumpDownSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_jumpDown"), 1, 8, 8);
+    _player->_jumpDownSprite->setPosition(0, 40);
+
+    _player->_attackSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_attack"), 1, 8, 8);
+    _player->_attackSprite->setPosition(0, 40);
+
+    _player->getSceneNode()->addChild(_player->_idleSprite);
+    _player->getSceneNode()->addChild(_player->_walkSprite);
+    _player->getSceneNode()->addChild(_player->_jumpUpSprite);
+    _player->getSceneNode()->addChild(_player->_jumpDownSprite);
+    _player->getSceneNode()->addChild(_player->_attackSprite);
+
     _player->setDebugColor(DEBUG_COLOR);
-    addObstacle(_player, sprite); // Put this at the very front
+    addObstacle(_player, _player->getSceneNode()); // Put this at the very front
 
 #pragma mark : Test Enemy
     Vec2 enemyPos = ENEMY_POS;

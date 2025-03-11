@@ -63,7 +63,7 @@
 /** Duration (in frames) for parry */
 #define PARRY_DURATION  24
 /** Duration (in frames) for dash- affects friction*/
-#define DASH_DURATION  5
+#define DASH_DURATION  20
 /** The amount to shrink the body fixture (vertically) relative to the image */
 #define DUDE_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -79,7 +79,7 @@
 /** The impulse for the character jump */
 #define DUDE_JUMP       42.5f
 /** The x SPEED for the character dash-attack */
-#define DUDE_DASH       75.0f
+#define DUDE_DASH       20.0f
 /** The impulse for the  vertical component of the knockback */
 #define DUDE_KB     15.0f
 #define KB_DURATION 20
@@ -137,6 +137,9 @@ bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
         _guardCooldownRem = 0;
         _guardRem = 0;
         _parryRem= 0;
+
+        _sceneNode = scene2::SceneNode::alloc();
+        setSceneNode(_sceneNode);
         return true;
     }
     return false;
@@ -171,7 +174,7 @@ void PlayerModel::setMovement(float value) {
     }
     
     // Change facing
-    scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
+    scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_sceneNode.get());
     if (image != nullptr) {
         image->flipHorizontal(!image->isFlipHorizontal());
     }
@@ -184,7 +187,7 @@ void PlayerModel::setMovement(float value) {
 void PlayerModel::faceLeft() {
     if (_faceRight == true) {
         _faceRight = false;
-        scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
+        scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_sceneNode.get());
         if (image != nullptr) {
             image->flipHorizontal(!image->isFlipHorizontal());
         }
@@ -197,7 +200,7 @@ void PlayerModel::faceLeft() {
 void PlayerModel::faceRight() {
     if (_faceRight == false) {
         _faceRight = true;
-        scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
+        scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_sceneNode.get());
         if (image != nullptr) {
             image->flipHorizontal(!image->isFlipHorizontal());
         }
@@ -284,7 +287,7 @@ void PlayerModel::releaseFixtures() {
  */
 void PlayerModel::dispose() {
     _geometry = nullptr;
-    _node = nullptr;
+    _sceneNode = nullptr;
     _sensorNode = nullptr;
     _shieldNode = nullptr;
 }
@@ -361,6 +364,17 @@ void PlayerModel::applyForce() {
         
     }
 }
+
+void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
+    if (sprite->isVisible()) {
+        currentFrame++;
+
+        if (currentFrame % ANIMATION_UPDATE_FRAME == 0) {
+            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
+        }
+    }
+}
+
 #pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
@@ -371,7 +385,29 @@ void PlayerModel::applyForce() {
  */
 void PlayerModel::update(float dt) {
     // Apply cooldowns
-    
+
+    _jumpUpSprite->setVisible(!isGrounded() && getBody()->GetLinearVelocity().y > 0);
+    _jumpDownSprite->setVisible(!isGrounded() && getBody()->GetLinearVelocity().y < 0);
+    _walkSprite->setVisible(isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
+    _attackSprite->setVisible(isDashActive());
+
+    _idleSprite->setVisible(!_jumpUpSprite->isVisible() && !_jumpDownSprite->isVisible() && !_walkSprite->isVisible());
+
+    if (isDashBegin()) {
+        _attackSprite->setFrame(0);
+    }
+
+    if (isJumpBegin()) {
+        _jumpUpSprite->setFrame(0);
+        _jumpDownSprite->setFrame(0);
+    }
+
+    playAnimation(_attackSprite);
+    playAnimation(_walkSprite);
+    playAnimation(_idleSprite);
+
+    _sceneNode->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+
 #pragma mark Guard and Parry timing
     // guard cooldown first for most recent movement inputs
     if (isGuardActive() && !isGuardBegin()){
@@ -446,9 +482,9 @@ void PlayerModel::update(float dt) {
     }
     
     BoxObstacle::update(dt);
-    if (_node != nullptr) {
-        _node->setPosition(getPosition()*_drawScale);
-        _node->setAngle(getAngle());
+    if (_sceneNode != nullptr) {
+        _sceneNode->setPosition(getPosition()*_drawScale);
+        _sceneNode->setAngle(getAngle());
     }
 }
 
