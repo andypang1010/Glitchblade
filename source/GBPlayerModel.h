@@ -588,7 +588,7 @@ public:
      *
      * @param the value that remaining guard frames should be set to
      */
-    void setGuardRem(int value) {_guardRem = value; };
+    void setGuardRem(int value = GUARD_DURATION) {_guardRem = value; };
     /**
      * Returns the amount of frames remaining before the player can guard again
      *
@@ -599,9 +599,36 @@ public:
     /**
      * Used to set the amount of frames remaining before the player can guard again
      *
-     * @param the value that the amount of frames remaining before the player can guard again should be set to
+     * @param the amount of frames remaining before the player can guard again should be set to
      */
     void setGuardCDRem(int value = GUARD_COOLDOWN) {_guardCooldownRem = value; };
+    
+    /**
+     * Returns the amount of dash frames remaining
+     *
+     * @return the amount of dash frames remaining
+     */
+    int getDashRem() {return _dashRem; };
+    
+    /**
+     * Used to set the amount of dash frames remaining
+     *
+     * @param the value that remaining dash frames should be set to
+     */
+    void setDashRem(int value = DASH_DURATION) {_dashRem = value; };
+    /**
+     * Returns the amount of frames remaining before the player can dash again
+     *
+     * @returns the amount of frames remaining before the player can dash again
+     */
+    int getDashCDRem() {return _dashCooldownRem; };
+    
+    /**
+     * Used to set the amount of frames remaining before the player can dash again
+     *
+     * @param the amount of frames remaining before the player can dash again should be set to
+     */
+    void setDashCDRem(int value = DASH_COOLDOWN) {_dashCooldownRem = value; };
 
     /**
      * Returns true if the player is actively parrying.
@@ -621,7 +648,20 @@ public:
      *
      * @param the value that remaining parry frames should be set to
      */
-    void setParryRem(int value) {_parryRem = value; };
+    void setParryRem(int value = PARRY_DURATION) {_parryRem = value; };
+    /**
+     * Returns the amount of knockback frames remaining
+     *
+     * @return the amount of knockback frames remaining
+     */
+    int getKnockbackRem() {return _knockbackRem; };
+    
+    /**
+     * Used to set the amount of knockback frames remaining
+     *
+     * @param the value that remaining knockback frames should be set to
+     */
+    void setKnockbackRem(int value = KB_DURATION) {_knockbackRem = value; };
     /**
      * Returns true if the player has a swallowed projectile.
      *
@@ -633,10 +673,6 @@ public:
      *
      * @return value whether the player is in a dash animation.
      */
-#pragma mark -
-#pragma mark Cooldown Get/Set
-    
-    
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
     /**
      * Returns the amount of frames remaining before the player can jump again
@@ -676,12 +712,6 @@ public:
      * @return value whether the player is in a knockback animation.
      */
     bool isKnockbackActive() { return _knockbackRem > 0 || isKnocked(); };
-    /**
-     * Sets the dash duration of the player.
-     *
-     * @param value new dash duration.
-     */
-    void setDashRem(int value) { _dashRem = value; };
     /**
      * Returns true if the player is on the ground.
      *
@@ -724,6 +754,10 @@ public:
      * @return how much dash force to apply
      */
     float getDashF() const { return DASH; }
+    /** @return is dash left input */
+    bool isDashLeftInput() const { return _isDashLeftInput; }
+    /** @return is dash right input */
+    bool isDashRightInput() const { return _isDashRightInput; }
     /**
      * Returns How hard the brakes are applied to get a player to stop moving
      *

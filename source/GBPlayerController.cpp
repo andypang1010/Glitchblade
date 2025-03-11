@@ -131,12 +131,11 @@ void PlayerController::preUpdate(float dt)
         _player->setGuardRem(guardRem > 0 ? guardRem - 1 : 0);
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
-    }
-    
-    // guard not active, update cooldown
-    else {
+    } else {
+        // guard not active, update cooldown
         int guardCD = _player->getGuardCDRem();
         _player->setGuardCDRem(guardCD > 0 ? guardCD - 1 : 0);
+    }
         
     if (_player->isJumpBegin() && _player->isGrounded()) {
         _player->setJumpCDRem();
@@ -153,40 +152,39 @@ void PlayerController::preUpdate(float dt)
     }
     
     if (_player->isKnocked()) {
-        _dashCooldownRem = DASH_COOLDOWN;
+        _player->setDashCDRem();
         _player->setGuardCDRem();
         _player->setJumpCDRem();
         _player->setShootCDRem();
-        _knockbackRem = KB_DURATION;
+        _player->setKnockbackRem();
     } else {
-        _knockbackRem = (_knockbackRem > 0 ? _knockbackRem-1 : 0);
+        int kbREM = _player->getKnockbackRem();
+        _player->setKnockbackRem(kbREM > 0 ? kbREM - 1 : 0);
     }
     
     if (_player->isDashBegin()) {
-        _dashRem = DASH_DURATION;
-        _dashCooldownRem = DASH_COOLDOWN;
+        _player->setDashRem();
+        _player->setDashCDRem();
     }
     else {
-        _dashRem = (_dashRem > 0 ? _dashRem-1 : 0);
-        if (_dashRem == 0){
-            _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
-        }
+        int dashRem = _player->getDashRem();
+        _player->setDashRem(dashRem > 0 ? dashRem - 1 : 0);
+        int dashCDRem = _player->getDashCDRem();
+        _player->setDashCDRem(dashCDRem > 0 ? dashCDRem - 1 : 0);
     }
-
+    
     // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
-    if (_dashReset == false && _dashCooldownRem == 0 && !(_isDashLeftInput || _isDashRightInput)) {
-        _dashReset = true; // ready to dash again
+    if (!_player->getDashReset() && _player->getDashCDRem() == 0 && !(_player->isDashLeftInput() || !_player->isDashRightInput())) {
+        _player->setDashReset(true); // ready to dash again
     }
-
+    
     // player inputs guard and cooldown is ready
     if (_player->isGuardBegin()) {
-        CULog("Beginning guard\n");
-        _shieldNode->setColor(Color4::GREEN);
-        _guardCooldownRem = GUARD_COOLDOWN;
-        _guardRem = GUARD_DURATION;
+        _player->setGuardCDRem();
+        _player->setGuardRem();
         // begin parry
         CULog("Beginning parry\n");
-        _parryRem = PARRY_DURATION;
+        _player->setParryRem();
     }
 }
 

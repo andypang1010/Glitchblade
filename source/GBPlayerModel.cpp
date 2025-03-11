@@ -268,7 +268,10 @@ void PlayerModel::update(float dt) {
         CULog("Guard completed full duration\n");
         _shieldNode->setColor(DEBUG_COLOR);
     }
-    
+    if (isGuardBegin()) {
+        CULog("Beginning guard\n");
+        _shieldNode->setColor(Color4::GREEN);
+    }
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition()*_drawScale);
