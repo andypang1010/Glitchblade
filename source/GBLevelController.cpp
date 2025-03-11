@@ -2,6 +2,56 @@
 
 using namespace cugl::graphics;
 
+void LevelController::checkWinCondition()
+{
+}
+
+void LevelController::checkLoseCondition()
+{
+}
+
+LevelController::LevelController()
+{
+}
+
+LevelController::~LevelController()
+{
+}
+
+void LevelController::init()
+{
+	// Setup enemy controller
+	_enemyController = std::make_shared<EnemyController>();
+
+	// Setup player controller
+	_playerController = std::make_shared<PlayerController>();
+
+	_enemyController->init();
+	_playerController->init();
+
+	CULog("LevelController::init");
+}
+
+void LevelController::preUpdate(float dt)
+{
+	_enemyController->preUpdate(dt);
+	_playerController->preUpdate(dt);
+}
+
+void LevelController::postUpdate(float dt)
+{
+	_enemyController->postUpdate(dt);
+	_playerController->postUpdate(dt);
+}
+
+void LevelController::fixedUpdate(float timestep)
+{
+	_enemyController->fixedUpdate(timestep);
+	_playerController->fixedUpdate(timestep);
+
+	CULog("LevelController::update");
+}
+
 /**
  * Parses the JSON file and returns a vector of parsed actions.
  */
@@ -13,17 +63,17 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     if (!json || json->children().empty()) {
         CULogError("Invalid or empty JSON node!");
         return actions;
-}
+    }
 
     if (json->get(enemyName) == nullptr) {
         CULogError("Enemy not found!");
         return actions;
-}
+    }
 
     if (!json->get(enemyName)->has("actions")) {
         CULogError("Invalid JSON format: Missing actions!");
         return actions;
-}
+    }
 
     std::vector<std::shared_ptr<JsonValue>> actionArray = json->get(enemyName)->get("actions")->children();
     for (std::shared_ptr<JsonValue> action : actionArray) {
@@ -53,7 +103,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
             meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
 
             actions.push_back(meleeAction);
-}
+        }
         else if (type == "ranged") {
             auto rangedAction = std::make_shared<RangedActionModel>();
             rangedAction->setActionName(name);
@@ -68,7 +118,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
             rangedAction->setProjectileDamage(action->getFloat("projectileDamage"));
 
             actions.push_back(rangedAction);
-}
+        }
         else if (type == "movement") {
             auto movementAction = std::make_shared<MovementActionModel>();
             movementAction->setActionName(name);
@@ -85,7 +135,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
         else {
             std::cerr << "Unknown action type: " << type << std::endl;
         }
-}
+    }
 
     return actions;
 }

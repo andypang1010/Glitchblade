@@ -10,6 +10,9 @@
 #include "GBMeleeActionModel.h"
 #include "GBRangedActionModel.h"
 #include "GBMovementActionModel.h"
+#include "GBLevelModel.h"
+#include "GBEnemyController.h"
+#include "GBPlayerController.h"
 
 /**
  * A class that parses a JSON level file and generates corresponding action models.
@@ -41,6 +44,44 @@ protected:
     void checkLoseCondition();
 
 public:
+
+    /**
+     * Constructor.
+     */
+    LevelController();
+
+    /**
+     * Destructor.
+     */
+    ~LevelController();
+
+    /**
+     * Initializes the level controller.
+     */
+    void init();
+
+    /**
+     * Updates the level controller each frame.
+     *
+     * @param timestep The time elapsed since the last update.
+     */
+    void fixedUpdate(float timestep);
+
+    /**
+     * Starts the level.
+     * The method called to indicate the start of a deterministic loop.
+     *
+     * @param dt    The amount of time (in seconds) since the last frame
+     */
+    void preUpdate(float dt);
+
+    /**
+     * The method called to indicate the end of a deterministic loop.
+     *
+     * @param remain    The amount of time (in seconds) last fixedUpdate
+     */
+    void postUpdate(float dt);
+
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);
 };
