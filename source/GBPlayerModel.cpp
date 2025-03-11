@@ -80,6 +80,9 @@
 #define DUDE_JUMP       42.5f
 /** The x SPEED for the character dash-attack */
 #define DUDE_DASH       75.0f
+/** The impulse for the  vertical component of the knockback */
+#define DUDE_KB     15.0f
+#define KB_DURATION 20
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
@@ -297,7 +300,7 @@ void PlayerModel::applyForce() {
     }
     
     // Don't want to be moving.f Damp out player motion
-    if (getMovement() == 0.0f && !isDashActive()) {
+    if (getMovement() == 0.0f && !isDashActive() && !isKnockbackActive()) {
         if (isGrounded()) {
             // CULog("Setting x vel to 0");
             // Instant friction on the ground
@@ -311,9 +314,9 @@ void PlayerModel::applyForce() {
         }
     }
 #pragma mark strafe force
-    b2Vec2 force(getMovement(),0);
+//    b2Vec2 force(getMovement(),0);
     // Ignore stafe input if in a dash (intentional)
-    if (!(_dashRem > 0)) {
+    if (!(_dashRem > 0) && !isKnockbackActive()) {
         _body->SetLinearVelocity(b2Vec2(getMovement(), _body->GetLinearVelocity().y));
     }
     // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
@@ -342,8 +345,17 @@ void PlayerModel::applyForce() {
         _body->SetLinearVelocity(b2Vec2(DUDE_DASH, _body->GetLinearVelocity().y));
         _dashReset = false;
     }
+#pragma mark knockback force
+    if (isKnocked()) {
+        _body->SetLinearVelocity(b2Vec2(0,0));
+
+        Vec2 knockForce = _knockDirection.subtract(Vec2(0,_knockDirection.y)).scale(DUDE_KB);
+        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, DUDE_KB), true);
+        _isKnocked = false;
+    }
+    
     // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
+    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive() && !isKnockbackActive()) {
         //CULog("clamping velocity");
         setVX(SIGNUM(getVX())*getMaxSpeed());
         
@@ -393,6 +405,17 @@ void PlayerModel::update(float dt) {
         _shootCooldownRem = SHOOT_COOLDOWN;
     } else {
         _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
+    }
+    
+    if (isKnocked()) {
+        CULog("knockback applied");
+        _dashCooldownRem = DASH_COOLDOWN;
+        _guardCooldownRem = GUARD_COOLDOWN;
+        _jumpCooldownRem = JUMP_COOLDOWN;
+        _shootCooldownRem = SHOOT_COOLDOWN;
+        _knockbackRem = KB_DURATION;
+    } else {
+        _knockbackRem = (_knockbackRem > 0 ? _knockbackRem-1 : 0);
     }
     
     if (isDashBegin()) {

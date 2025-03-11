@@ -800,20 +800,20 @@ void GameScene::postUpdate(float remain) {
         _player->setHasProjectile(false);
     }
 
-    if (_bulletTimer <= 0) {
-        int r = rand() % 2;
-        if (r == 0) {
-            createProjectile(LEFT_BULLET, RIGHT, false);
-        }
-        else if(r == 1){
-            createProjectile(RIGHT_BULLET, LEFT, false);
-        }
-
-        _bulletTimer = BULLET_SPAWN_RATE;
-    }
-    else {
-        _bulletTimer -= 1;
-    }
+//    if (_bulletTimer <= 0) {
+//        int r = rand() % 2;
+//        if (r == 0) {
+//            createProjectile(LEFT_BULLET, RIGHT, false);
+//        }
+//        else if(r == 1){
+//            createProjectile(RIGHT_BULLET, LEFT, false);
+//        }
+//
+//        _bulletTimer = BULLET_SPAWN_RATE;
+//    }
+//    else {
+//        _bulletTimer -= 1;
+//    }
 
     setComplete(_testEnemy->getHP() <= 0);
     setFailure(_player->getHP() <= 0);
@@ -963,6 +963,9 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->setDashRem(0);
             CULog("Attacks canceled");
         }
+        CULog("Applying knockback");
+        _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
+        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
     }
     else if (bd2->getName() == ENEMY_NAME && isPlayerBody(bd1, fd1)) {
         if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {
@@ -980,6 +983,9 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->setDashRem(0);
             CULog("Attacks canceled");
         }
+        _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
+        ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
+        CULog("Applying knockback");
     }
 
     // Player-Projectile Collision
