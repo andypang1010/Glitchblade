@@ -142,10 +142,26 @@ void PlayerController::preUpdate(float dt)
     _player->setGuardInput(_input->didGuard());
     //
     applyForce();
-    // guard cooldown first for most recent movement inputs
+    updateCooldowns();
+}
+
+void PlayerController::updateCooldowns()
+{
+#pragma mark Guard cooldown
+    // player inputs guard and cooldown is ready
+    if (_player->isGuardBegin()) {
+        _player->setGuardCDRem();
+        _player->setGuardRem();
+        _player->setParryRem();
+        CULog("Beginning guard and parry");
+    }
     if (_player->isGuardActive() && !_player->isGuardBegin()){
-        CULog("Beginning guard");
+        CULog("Guard is active");
+        if (_player->isParryActive()){
+            CULog("Parry is active");
+        }
         int guardRem = _player->getGuardRem();
+        CULog("Updating guard cooldown");
         _player->setGuardRem(guardRem > 0 ? guardRem - 1 : 0);
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
@@ -155,21 +171,22 @@ void PlayerController::preUpdate(float dt)
         int guardCD = _player->getGuardCDRem();
         _player->setGuardCDRem(guardCD > 0 ? guardCD - 1 : 0);
     }
-        
+    
+#pragma mark Jump cooldown
     if (_player->isJumpBegin() && _player->isGrounded()) {
         _player->setJumpCDRem();
     } else {
         int jumpCD = _player->getJumpCDRem();
         _player->setJumpCDRem(jumpCD > 0 ? jumpCD - 1 :0);
     }
-    
+#pragma mark Shoot cooldown
     if (_player->isShooting()) {
         _player->setShootCDRem();
     } else {
         int shootCD = _player->getShootCDRem();
         _player->setShootCDRem(shootCD > 0 ? shootCD - 1 : 0);
     }
-    
+#pragma mark Knockback cooldown
     if (_player->isKnocked()) {
         CULog("Player is knocked");
         _player->setDashCDRem();
@@ -203,14 +220,6 @@ void PlayerController::preUpdate(float dt)
         _player->setDashReset(true); // ready to dash again
     }
     
-    // player inputs guard and cooldown is ready
-    if (_player->isGuardBegin()) {
-        _player->setGuardCDRem();
-        _player->setGuardRem();
-        // begin parry
-        CULog("Beginning parry\n");
-        _player->setParryRem();
-    }
 }
 
 #pragma mark postUpdate

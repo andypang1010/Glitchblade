@@ -62,7 +62,10 @@ public:
      * @param dt    The amount of time (in seconds) since the last frame
      */
     void preUpdate(float dt);
-
+    /**
+        Helper for preUpdate
+     */
+    void updateCooldowns();
     /**
      * The method called to indicate the end of a deterministic loop.
      *
