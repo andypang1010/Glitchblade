@@ -360,7 +360,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     populate();
     _active = true;
     _complete = false;
-    setDebug(true); // Debug on by default
+    setDebug(false); // Debug on by default
 
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::GRAY);
@@ -1040,7 +1040,7 @@ void GameScene::beginContact(b2Contact* contact) {
             ((EnemyModel*)bd1)->setDashRem(0);
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
-        else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
+        else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(10);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
@@ -1060,7 +1060,7 @@ void GameScene::beginContact(b2Contact* contact) {
             ((EnemyModel*)bd2)->setDashRem(0);
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
-        else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
+        else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(10);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());

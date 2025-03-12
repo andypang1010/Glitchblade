@@ -49,7 +49,7 @@ void LevelController::fixedUpdate(float timestep)
 	_enemyController->fixedUpdate(timestep);
 	_playerController->fixedUpdate(timestep);
 
-	CULog("LevelController::update");
+	// CULog("LevelController::update");
 }
 
 /**
@@ -78,7 +78,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     std::vector<std::shared_ptr<JsonValue>> actionArray = json->get(enemyName)->get("actions")->children();
     for (std::shared_ptr<JsonValue> action : actionArray) {
 
-        CULog(action->toString().c_str());
+        // CULog(action->toString().c_str()); // Causes android studio to have a seizure for some reason
 
         std::string type = action->getString("type");
         std::string name = action->getString("name");
