@@ -559,8 +559,8 @@ void GameScene::populate() {
     _testEnemy->getSceneNode()->addChild(_enemyHPNode);
 
 	// Play the background music on a loop.
-	/*std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
-    AudioEngine::get()->getMusicQueue()->play(source, true, MUSIC_VOLUME);*/
+	std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
+    AudioEngine::get()->getMusicQueue()->play(source, true, MUSIC_VOLUME);
 }
 
 /**
@@ -785,7 +785,7 @@ void GameScene::preUpdate(float dt) {
                 _player->damage(20);
             }
             else if (_player->iframe <= 0 && _player->isParryActive()) {
-                _testEnemy->setStun(150);
+                _testEnemy->setStun(120);
             }
             else if (_player->iframe <= 0 && _player->isGuardActive()) {
                 _player->damage(10);
@@ -1047,7 +1047,7 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
         else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd1)->damage(10);
+            ((EnemyModel*)bd1)->damage(5);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
@@ -1067,7 +1067,7 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
         else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd2)->damage(10);
+            ((EnemyModel*)bd2)->damage(5);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
@@ -1102,7 +1102,7 @@ void GameScene::beginContact(b2Contact* contact) {
     if (bd1->getName() == ENEMY_NAME && fd2 == _player->getShieldName()) {
         if (((EnemyModel*)bd1)->isDashActive() && _player->isParryActive()) {
             ((EnemyModel*)bd1)->setDashRem(0);
-            ((EnemyModel*)bd1)->setStun(180);
+            ((EnemyModel*)bd1)->setStun(120);
         }
         else if (((EnemyModel*)bd1)->isDashActive() && _player->isGuardActive()) {
             _player->damage(10);
@@ -1113,7 +1113,7 @@ void GameScene::beginContact(b2Contact* contact) {
     if (bd2->getName() == ENEMY_NAME && fd1 == _player->getShieldName()) {
         if (((EnemyModel*)bd2)->isDashActive() && _player->isParryActive()) {
             ((EnemyModel*)bd2)->setDashRem(0);
-            ((EnemyModel*)bd2)->setStun(180);
+            ((EnemyModel*)bd2)->setStun(120);
         }
         else if (((EnemyModel*)bd2)->isDashActive() && _player->isGuardActive()) {
             _player->damage(10);

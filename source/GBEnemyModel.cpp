@@ -91,7 +91,7 @@
 #define STAB_FRAMES     40
 #define STAB_DAMAGE_START_FRAME     28
 #define STAB_DAMAGE_END_FRAME    35
-#define STUN_FRAMES 150
+#define STUN_FRAMES 120
 
 using namespace cugl;
 
@@ -375,10 +375,7 @@ void EnemyModel::applyForce() {
  */
 void EnemyModel::update(float dt) {
     updateAnimation();
-    if (!isStunned())
-    {
-        nextAction();
-    }
+    nextAction();
 
     // Apply cooldowns
     
@@ -449,7 +446,7 @@ void EnemyModel::update(float dt) {
 
     if (isStunned()) {
         CULog("Enemy stunned\n");
-        _stunRem -= 1;
+        _stunRem--;
     }
     
     BoxObstacle::update(dt);

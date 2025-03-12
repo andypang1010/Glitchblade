@@ -67,7 +67,7 @@ using namespace cugl;
 /** The amount to slow the character down */
 #define DUDE_DAMPING    30.0f
 /** The maximum character speed */
-#define DUDE_MAXSPEED   10.0f
+#define DUDE_MAXSPEED   5.0f
 /** The maximum character hp */
 #define DUDE_MAXHP   100.0f
 
