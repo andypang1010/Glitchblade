@@ -261,21 +261,6 @@ void PlayerModel::dispose() {
  * @param delta Number of seconds since last animation frame
  */
 void PlayerModel::update(float dt) {
-    //The rest of this block is for logging end of guard&parry
-    if (isGuardActive() && !isGuardBegin()){
-        if (isParryActive() && (_parryRem == 0)){
-            _shieldNode->setColor(Color4::BLUE);
-            CULog("Parry completed during guard\n");
-        }
-        if (_guardRem == 0){
-            CULog("Guard completed full duration\n");
-            _shieldNode->setColor(DEBUG_COLOR);
-        }
-    }
-    if (isGuardBegin()) {
-        CULog("Beginning guard\n");
-        _shieldNode->setColor(Color4::GREEN);
-    }
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition()*_drawScale);
@@ -310,7 +295,6 @@ void PlayerModel::resetDebug() {
 
     _debug->addChild(_sensorNode);
     _debug->addChild(_shieldNode);
-    
 }
 
 

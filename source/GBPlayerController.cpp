@@ -26,7 +26,6 @@ void PlayerController::init(const cugl::Rect bounds, const std::shared_ptr<Asset
     sprite = scene2::PolygonNode::allocWithTexture(image);
     _player->setSceneNode(sprite);
     _player->setDebugColor(DEBUG_COLOR);
-
 	CULog("Inited playercontoller");
 }
 
@@ -79,6 +78,7 @@ void PlayerController::applyForce() {
 #pragma mark jump force
     // Jump!
     if (_player->isJumpBegin() && _player->isGrounded()) {
+        CULog("Applying jump impulse to player");
         b2Vec2 force(0, _player->getJumpF());
         playerBody->ApplyLinearImpulseToCenter(force,true);
     }
@@ -109,15 +109,12 @@ void PlayerController::applyForce() {
     if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashActive() && !_player->isKnockbackActive()) {
         //CULog("clamping velocity");
         _player->setVX(SIGNUM(_player->getVX())*_player->getMaxSpeed());
-        
+    }
+    else if (fabs(_player->getVX()) >= _player->getMaxSpeed()){
+        CULog("NOT CLAMPING");
     }
 }
 
-#pragma mark fixedUpdate
-void PlayerController::fixedUpdate(float timestep)
-{
-	// CULog("updated playercontroller");
-}
 
 #pragma mark preUpdate
 void PlayerController::preUpdate(float dt)
@@ -131,8 +128,7 @@ void PlayerController::preUpdate(float dt)
 //        Application::get()->quit();
 //    }
 
-    // Process the movement
-
+    // Process the movement inputs
     _player->setMovement(_input->getHorizontal()*_player->getForce());
     _player->setStrafeLeft(_input->didStrafeLeft());
     _player->setStrafeRight(_input->didStrafeRight());
@@ -140,8 +136,19 @@ void PlayerController::preUpdate(float dt)
     _player->setDashLeftInput(_input->didDashLeft());
     _player->setDashRightInput(_input->didDashRight());
     _player->setGuardInput(_input->didGuard());
+    _player->setShootInput(_input->didFire());
     //
     applyForce();
+}
+#pragma mark fixedUpdate
+void PlayerController::fixedUpdate(float timestep)
+{
+    // CULog("updated playercontroller");
+}
+
+#pragma mark postUpdate
+void PlayerController::postUpdate(float dt)
+{
     updateCooldowns();
 }
 
@@ -153,23 +160,30 @@ void PlayerController::updateCooldowns()
         _player->setGuardCDRem();
         _player->setGuardRem();
         _player->setParryRem();
+        _player->setShieldDebugColor(Color4::GREEN);
         CULog("Beginning guard and parry");
     }
     if (_player->isGuardActive() && !_player->isGuardBegin()){
         CULog("Guard is active");
-        if (_player->isParryActive()){
-            CULog("Parry is active");
-        }
         int guardRem = _player->getGuardRem();
-        CULog("Updating guard cooldown");
-        _player->setGuardRem(guardRem > 0 ? guardRem - 1 : 0);
+        CULog("Updating guard duration from %d", guardRem);
+        _player->setGuardRem(guardRem - 1);
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
-    } else if (_player->getGuardRem()>0) {
-        CULog("Updating guard cooldown");
-        // guard not active, update cooldown
+        if (parryRem == 0){
+            // Parry ending on this frame
+            _player->setShieldDebugColor(Color4::BLUE);
+            }
+        }
+    // guard not active, update cooldown
+    else if (_player->getGuardCDRem()>0) {
+        CULog("Updating guard cooldown from %d", _player->getGuardCDRem());
         int guardCD = _player->getGuardCDRem();
-        _player->setGuardCDRem(guardCD > 0 ? guardCD - 1 : 0);
+        _player->setGuardCDRem(guardCD - 1);
+        if (_player->getGuardCDRem() == 0){
+            //end guard
+            _player->setShieldDebugColor(DEBUG_COLOR);
+        }
     }
     
 #pragma mark Jump cooldown
@@ -201,13 +215,13 @@ void PlayerController::updateCooldowns()
     }
 #pragma mark dash cooldowns
     if (_player->isDashBegin()) {
-        CULog("Setting player dash cooldowns");
+//        CULog("Setting player dash cooldowns");
         _player->setDashRem();
         _player->setDashCDRem();
         _player->setDashReset(false); //only needed (and is it really needed?) for keyboard
     }
     else if (_player->getDashCDRem()>0){
-        CULog("Decrementing Dash cooldowns, frames rem from %d and cdrem from %d", _player->getDashRem(), _player->getDashCDRem());
+//        CULog("Decrementing Dash cooldowns, frames rem from %d and cdrem from %d", _player->getDashRem(), _player->getDashCDRem());
         int dashRem = _player->getDashRem();
         _player->setDashRem(dashRem > 0 ? dashRem - 1 : 0);
         int dashCDRem = _player->getDashCDRem();
@@ -216,17 +230,13 @@ void PlayerController::updateCooldowns()
     
     // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
     if (!_player->getDashReset() && _player->getDashCDRem() == 0 && !(_player->isDashInput())) {
-        CULog("Resetting dash");
+//        CULog("Resetting dash");
         _player->setDashReset(true); // ready to dash again
     }
     
 }
 
-#pragma mark postUpdate
-void PlayerController::postUpdate(float dt)
-{
-    _player->setShootInput(_input->didFire());
-}
+
 
 void PlayerController::activateShield()
 {

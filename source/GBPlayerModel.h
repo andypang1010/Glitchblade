@@ -602,6 +602,7 @@ public:
      * @param the amount of frames remaining before the player can guard again should be set to
      */
     void setGuardCDRem(int value = GUARD_COOLDOWN) {_guardCooldownRem = value; };
+    void setShieldDebugColor(Color4 c) {_shieldNode->setColor(c);}
     
     /**
      * Returns the amount of dash frames remaining
