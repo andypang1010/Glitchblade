@@ -484,10 +484,10 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
 
 void PlayerModel::updateAnimation()
 {
-    _walkSprite->setVisible(!isGuardActive() && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
-    _jumpUpSprite->setVisible(!isGuardActive() && !isGrounded() && getBody()->GetLinearVelocity().y > 0);
-    _jumpDownSprite->setVisible(!isGuardActive() && !isGrounded() && getBody()->GetLinearVelocity().y < 0);
-    _guardSprite->setVisible(isGuardActive());
+    _jumpUpSprite->setVisible(!isGuardActive() && !isGrounded() && !isDashActive() && getBody()->GetLinearVelocity().y > 0);
+    _jumpDownSprite->setVisible(!isGuardActive() && !isGrounded() && !isDashActive() && getBody()->GetLinearVelocity().y <= 0);
+    _walkSprite->setVisible(!isGuardActive() && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()) && !_jumpUpSprite->isVisible() && !_jumpDownSprite->isVisible());
+    _guardSprite->setVisible(isGuardActive() && !isDashActive());
     _attackSprite->setVisible(!isGuardActive() && isDashActive());
 
     _idleSprite->setVisible(
