@@ -358,6 +358,7 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
 * @return an Enum indicating the type of swipe
 */
  PlatformInput::SwipeType PlatformInput::processSwipe(const Vec2 start, const Vec2 stop, Timestamp current) {
+    // TODO: need to make this physical size for swipe lengths, not pixel distances
 	float xdiff = (stop.x-start.x);
     float ydiff = (stop.y - start.y);
     float thresh = SWIPE_LENGTH;
