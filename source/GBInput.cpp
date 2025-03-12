@@ -54,6 +54,8 @@ using namespace cugl;
 #define JSTICK_OFFSET    80
 /** How far we must swipe up for swipe gestures */
 #define SWIPE_LENGTH    70
+/** How far we must swipe down for guard gestures */
+#define GUARD_LENGTH    50
 /** How fast a double click must be in milliseconds */
 #define DOUBLE_CLICK    400
 
@@ -365,6 +367,8 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
     bool xpass = absxdiff > thresh;
     bool ypass = absydiff > thresh;
 
+    bool yguardpass = ydiff > GUARD_LENGTH;
+
     // Ensure at least one axis has passed the threshold
     if (xpass || ypass) {
         // X magnitude > Y magnitude (so X must have passed AND be dominant axis)
@@ -374,6 +378,9 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
         } else {
             return (ydiff > 0) ? SwipeType::GUARD : SwipeType::JUMP;
         }
+    }
+    else if (yguardpass) {
+        return SwipeType::GUARD;
     }
     
     // Return NONE if one of the other swipe types haven't been returned already
@@ -458,10 +465,7 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
     if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
         SwipeType s_type = processSwipe(_ltouch.position, event.position, event.timestamp);
         switch (s_type) {
-            case SwipeType::GUARD:
-                CULog("SWIPE TYPE IS GUARD");
-                _keyGuard = true;
-                break;
+            // can handle actions on left side here if desired
             default:
                 // CULog("Doing nothing");
                 break;
@@ -490,7 +494,8 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
                 _keyJump = true;
                 break;
             case SwipeType::GUARD:
-                // CULog("SWIPE TYPE IS GUARD");
+                CULog("SWIPE TYPE IS GUARD");
+                _keyGuard = true;
                 break;
             case SwipeType::NONE:
                 CULog("SWIPE TYPE IS NONE");
