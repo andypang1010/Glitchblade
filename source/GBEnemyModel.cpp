@@ -463,7 +463,7 @@ bool EnemyModel::isTargetClose(Vec2 targetPos) {
 void EnemyModel::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos)) {
+    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
         if (r%3 == 0) { //Slam
             _isSlamming = true;
             setMovement(0);
@@ -477,7 +477,7 @@ void EnemyModel::nextAction() {
             _moveDirection = -1;
         }
     }
-    else if (!_isSlamming && !_isStabbing && _moveDuration <= 0) {
+    else if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && !isStunned()) {
         if (r % 2 == 0) { // Stab
             _isStabbing = true;
             setMovement(0);

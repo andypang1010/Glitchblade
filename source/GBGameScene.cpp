@@ -775,10 +775,16 @@ void GameScene::preUpdate(float dt) {
 
         if (hit) {
             _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
-            if (_player->iframe <= 0) {
+            if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
                 _player->damage(20);
-                _player->iframe = 60;
             }
+            else if (_player->iframe <= 0 && _player->isParryActive()) {
+                _testEnemy->setStun(60);
+            }
+            else if (_player->iframe <= 0 && _player->isGuardActive()) {
+                _player->damage(10);
+            }
+            _player->iframe = 60;
         }
     }
     
