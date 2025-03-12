@@ -77,7 +77,7 @@
 /** The density of the character */
 #define DUDE_DENSITY    1.0f
 /** The impulse for the character jump */
-#define DUDE_JUMP       42.5f
+#define DUDE_JUMP       45.0f
 /** The x SPEED for the character dash-attack */
 #define DUDE_DASH       30.0f
 /** The impulse for the  vertical component of the knockback */
@@ -348,7 +348,8 @@ void PlayerModel::applyForce() {
         faceLeft();
         // b2Vec2 force(-DUDE_DASH,0);
         // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
-        _body->SetLinearVelocity(b2Vec2(-DUDE_DASH, _body->GetLinearVelocity().y));
+        _body->SetLinearVelocity(b2Vec2(-DUDE_DASH, 0));
+        _body->SetGravityScale(0);
         _dashReset = false;
     }
     
@@ -357,9 +358,15 @@ void PlayerModel::applyForce() {
         faceRight();
         // b2Vec2 force(DUDE_DASH, 0);
         // _body->ApplyLinearImpulseToCenter(force, true);
-        _body->SetLinearVelocity(b2Vec2(DUDE_DASH, _body->GetLinearVelocity().y));
+        _body->SetLinearVelocity(b2Vec2(DUDE_DASH, 0));
+        _body->SetGravityScale(0);
         _dashReset = false;
     }
+
+    if (!isDashActive()) {
+        _body->SetGravityScale(1);
+    }
+
 #pragma mark knockback force
     if (isKnocked()) {
         _body->SetLinearVelocity(b2Vec2(0,0));

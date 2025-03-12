@@ -571,6 +571,7 @@ void EnemyModel::updateAnimation()
     playAnimation(_stabSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+    _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
 }
 

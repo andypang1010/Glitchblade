@@ -325,20 +325,20 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _losenode->setForeground(LOSE_COLOR);
     setFailure(false);
 
-    _playerHPNode = scene2::Label::allocWithText("HP: ", _assets->get<Font>(DEBUG_FONT));
+    _playerHPNode = scene2::Label::allocWithText("100", _assets->get<Font>(DEBUG_FONT));
     _playerHPNode->setAnchor(Vec2::ANCHOR_CENTER);
     _playerHPNode->setForeground(Color4::CYAN);
-    _playerHPNode->setPosition(35, 80);
+    _playerHPNode->setPosition(0, 55);
 
-    _enemyHPNode = scene2::Label::allocWithText("HP: ", _assets->get<Font>(DEBUG_FONT));
+    _enemyHPNode = scene2::Label::allocWithText("100", _assets->get<Font>(DEBUG_FONT));
     _enemyHPNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyHPNode->setForeground(Color4::RED);
-    _enemyHPNode->setPosition(45, 90);
+    _enemyHPNode->setPosition(0, 80);
 
-    _enemyStunNode = scene2::Label::allocWithText(": ", _assets->get<Font>(DEBUG_FONT));
+    _enemyStunNode = scene2::Label::allocWithText("STUN", _assets->get<Font>(DEBUG_FONT));
     _enemyStunNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyStunNode->setForeground(Color4::RED);
-    _enemyStunNode->setPosition(45, 110);
+    _enemyStunNode->setPosition(0, 100);
 
     _leftnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(LEFT_IMAGE));
     _leftnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_RIGHT);
@@ -525,22 +525,20 @@ void GameScene::populate() {
 
 #pragma mark : Test Enemy
     Vec2 enemyPos = ENEMY_POS;
-    node = scene2::SceneNode::alloc();
-    image = _assets->get<Texture>(ENEMY_TEXTURE);
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
-    _testEnemy = EnemyModel::alloc(enemyPos, image->getSize() / _scale, _scale, actions);
+    _testEnemy = EnemyModel::alloc(enemyPos, Size(90, 130) / _scale, _scale, actions);
 
     _testEnemy->_idleSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_idle"), 1, 6, 6);
-    _testEnemy->_idleSprite->setPosition(0, 90);
+    _testEnemy->_idleSprite->setPosition(0, 40);
 
     _testEnemy->_walkSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_walking1"), 1, 8, 8);
-    _testEnemy->_walkSprite->setPosition(0, 90);
+    _testEnemy->_walkSprite->setPosition(0, 40);
 
     _testEnemy->_slamSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_slam"), 4, 10, 40);
-    _testEnemy->_slamSprite->setPosition(0, 90);
+    _testEnemy->_slamSprite->setPosition(0, 40);
 
     _testEnemy->_stabSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_stab"), 4, 10, 40);
-    _testEnemy->_stabSprite->setPosition(0, 90);
+    _testEnemy->_stabSprite->setPosition(0, 40);
 
     _testEnemy->setName(std::string(ENEMY_NAME));
     _testEnemy->setDebugColor(DEBUG_COLOR);
@@ -553,8 +551,8 @@ void GameScene::populate() {
 
     // Add UI elements
     _player->getSceneNode()->addChild(_playerHPNode);
-    _testEnemy->getSceneNode()->addChild(_enemyHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyStunNode);
+    _testEnemy->getSceneNode()->addChild(_enemyHPNode);
 
 	// Play the background music on a loop.
 	/*std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
@@ -783,7 +781,7 @@ void GameScene::preUpdate(float dt) {
                 _player->damage(20);
             }
             else if (_player->iframe <= 0 && _player->isParryActive()) {
-                _testEnemy->setStun(60);
+                _testEnemy->setStun(180);
             }
             else if (_player->iframe <= 0 && _player->isGuardActive()) {
                 _player->damage(10);
@@ -808,7 +806,7 @@ void GameScene::preUpdate(float dt) {
     
     _playerHPNode->setText(std::to_string((int)_player->getHP()));
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
-    _enemyStunNode->setText(std::to_string((bool)_testEnemy->isStunned()));
+    _enemyStunNode->setText((_testEnemy->isStunned() ? "STUN" : ""));
     
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
