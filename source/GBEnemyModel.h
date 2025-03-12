@@ -59,7 +59,7 @@ using namespace cugl;
 #define SLAM_SENSOR_NAME      "slam"
 #define STAB_SENSOR_NAME      "slam"
 
-#define E_ANIMATION_UPDATE_FRAME 2
+#define E_ANIMATION_UPDATE_FRAME 4
 
 #pragma mark -
 #pragma mark Physics Constants
@@ -232,12 +232,10 @@ public:
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
-    //std::shared_ptr<scene2::SpriteNode> _guardSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
-    //std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
-    //std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _stabSprite;
     std::shared_ptr<scene2::SpriteNode> _slamSprite;
+    std::shared_ptr<scene2::SpriteNode> _stunSprite;
 
 public:
     

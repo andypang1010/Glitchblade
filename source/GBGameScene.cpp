@@ -540,6 +540,9 @@ void GameScene::populate() {
     _testEnemy->_stabSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_stab"), 4, 10, 40);
     _testEnemy->_stabSprite->setPosition(0, 40);
 
+    _testEnemy->_stunSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_stun"), 3, 10, 22);
+    _testEnemy->_stunSprite->setPosition(0, 40);
+
     _testEnemy->setName(std::string(ENEMY_NAME));
     _testEnemy->setDebugColor(DEBUG_COLOR);
     addObstacle(_testEnemy, _testEnemy->getSceneNode()); // Put this at the very front
@@ -548,6 +551,7 @@ void GameScene::populate() {
     _testEnemy->getSceneNode()->addChild(_testEnemy->_walkSprite);
     _testEnemy->getSceneNode()->addChild(_testEnemy->_slamSprite);
     _testEnemy->getSceneNode()->addChild(_testEnemy->_stabSprite);
+    _testEnemy->getSceneNode()->addChild(_testEnemy->_stunSprite);
 
     // Add UI elements
     _player->getSceneNode()->addChild(_playerHPNode);
@@ -781,7 +785,7 @@ void GameScene::preUpdate(float dt) {
                 _player->damage(20);
             }
             else if (_player->iframe <= 0 && _player->isParryActive()) {
-                _testEnemy->setStun(180);
+                _testEnemy->setStun(150);
             }
             else if (_player->iframe <= 0 && _player->isGuardActive()) {
                 _player->damage(10);

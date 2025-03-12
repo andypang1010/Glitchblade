@@ -91,6 +91,7 @@
 #define STAB_FRAMES     40
 #define STAB_DAMAGE_START_FRAME     28
 #define STAB_DAMAGE_END_FRAME    35
+#define STUN_FRAMES 150
 
 using namespace cugl;
 
@@ -374,7 +375,11 @@ void EnemyModel::applyForce() {
  */
 void EnemyModel::update(float dt) {
     updateAnimation();
-    nextAction();
+    if (!isStunned())
+    {
+        nextAction();
+    }
+
     // Apply cooldowns
     
 #pragma mark Guard and Parry timing
@@ -552,23 +557,26 @@ void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
 
 void EnemyModel::updateAnimation()
 {
-    _walkSprite->setVisible(!_isStabbing && !_isSlamming && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
 
-    _idleSprite->setVisible(!_isStabbing && !_isSlamming && !_walkSprite->isVisible());
+    _stunSprite->setVisible(isStunned());
+    
+    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
 
-    _slamSprite->setVisible(_isSlamming);
+    _slamSprite->setVisible(!isStunned() && _isSlamming);
 
-    _stabSprite->setVisible(_isStabbing);
+    _stabSprite->setVisible(!isStunned() && _isStabbing);
 
-    //if (isDashBegin()) {
-    //    currentFrame = 0;
-    //    _attackSprite->setFrame(0);
-    //}
+    if (_stunRem == STUN_FRAMES) {
+        currentFrame = 0;
+    }
+
+    _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_stabSprite->isVisible() && !_walkSprite->isVisible());
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
     playAnimation(_slamSprite);
     playAnimation(_stabSprite);
+    playAnimation(_stunSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
