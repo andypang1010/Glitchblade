@@ -49,7 +49,7 @@ void LevelController::fixedUpdate(float timestep)
 	_enemyController->fixedUpdate(timestep);
 	_playerController->fixedUpdate(timestep);
 
-	CULog("LevelController::update");
+	// CULog("LevelController::update");
 }
 
 /**
