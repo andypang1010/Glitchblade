@@ -84,22 +84,19 @@ void PlayerController::applyForce() {
     }
 #pragma mark dash force
     // Dash!
-    if (_player->isDashLeftBegin() && _player->getDashReset()){
-        CULog("dashing left begin");
+    if (_player->isDashLeftBegin()){
+        CULog("player dashing left begin");
         _player->faceLeft();
         // b2Vec2 force(-_player->getDashF(),0);
         // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
         playerBody->SetLinearVelocity(b2Vec2(-_player->getDashF(), playerBody->GetLinearVelocity().y));
-        _player->setDashReset(false); //only needed (and is it really needed?) for keyboard
     }
-    
-    else if (_player->isDashRightBegin() && _player->getDashReset()){
-        CULog("dashing right begin");
+    if (_player->isDashRightBegin()){
+        CULog("player dashing right begin");
         _player->faceRight();
         // b2Vec2 force(DASH, 0);
         // _body->ApplyLinearImpulseToCenter(force, true);
         playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
-        _player->setDashReset(false); //only needed (and is it really needed?) for keyboard
     }
 #pragma mark knockback force
     if (_player->isKnocked()) {
@@ -107,7 +104,6 @@ void PlayerController::applyForce() {
         Vec2 knockDirection = _player->getKnockDirection();
         Vec2 knockForce = knockDirection.subtract(Vec2(0,knockDirection.y)).scale(_player->getKnockF());
         playerBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _player->getKnockF()), true);
-        _player->resetKnocked();
     }
     // Velocity too high, clamp it
     if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashActive() && !_player->isKnockbackActive()) {
@@ -144,8 +140,8 @@ void PlayerController::preUpdate(float dt)
     _player->setDashLeftInput(_input->didDashLeft());
     _player->setDashRightInput(_input->didDashRight());
     _player->setGuardInput(_input->didGuard());
+    //
     applyForce();
-
     // guard cooldown first for most recent movement inputs
     if (_player->isGuardActive() && !_player->isGuardBegin()){
         CULog("Beginning guard");
@@ -181,16 +177,20 @@ void PlayerController::preUpdate(float dt)
         _player->setJumpCDRem();
         _player->setShootCDRem();
         _player->setKnockbackRem();
+        _player->resetKnocked();
     } else {
         int kbREM = _player->getKnockbackRem();
         _player->setKnockbackRem(kbREM > 0 ? kbREM - 1 : 0);
     }
-    
+#pragma mark dash cooldowns
     if (_player->isDashBegin()) {
+        CULog("Setting player dash cooldowns");
         _player->setDashRem();
         _player->setDashCDRem();
+        _player->setDashReset(false); //only needed (and is it really needed?) for keyboard
     }
-    else {
+    else if (_player->getDashCDRem()>0){
+        CULog("Decrementing Dash cooldowns, frames rem from %d and cdrem from %d", _player->getDashRem(), _player->getDashCDRem());
         int dashRem = _player->getDashRem();
         _player->setDashRem(dashRem > 0 ? dashRem - 1 : 0);
         int dashCDRem = _player->getDashCDRem();
@@ -198,7 +198,8 @@ void PlayerController::preUpdate(float dt)
     }
     
     // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
-    if (!_player->getDashReset() && _player->getDashCDRem() == 0 && !(_player->isDashLeftInput() || !_player->isDashRightInput())) {
+    if (!_player->getDashReset() && _player->getDashCDRem() == 0 && !(_player->isDashInput())) {
+        CULog("Resetting dash");
         _player->setDashReset(true); // ready to dash again
     }
     

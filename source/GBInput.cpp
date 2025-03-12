@@ -219,8 +219,9 @@ void PlatformInput::update(float dt) {
     _rightPressed = _keyRight;
     _guardPressed = _keyGuard;
     
-
-
+    if (_ldashPressed){
+        CULog("ldash is pressed in pfinput update");
+    }
 	// Directional controls
 	_horizontal = 0.0f;
 	if (_leftPressed) {

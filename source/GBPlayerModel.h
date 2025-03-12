@@ -538,13 +538,13 @@ public:
      *
      * @param value whether the player is actively dashing left.
      */
-    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0; };
+    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset; };
     /**
      * Returns true if the player is actively dashing right.
      *
      * @param value whether the player is actively dashing right.
      */
-    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0; };
+    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset; };
     /**
      * Returns true if the player is dashing
      *
@@ -735,7 +735,7 @@ public:
      */
     void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection;  }
     /**
-     * Resets knock status and direction
+     * Resets knock status - do this after applying force.
      */
     void resetKnocked() { _isKnocked = false;  }
     /**
@@ -758,6 +758,7 @@ public:
     bool isDashLeftInput() const { return _isDashLeftInput; }
     /** @return is dash right input */
     bool isDashRightInput() const { return _isDashRightInput; }
+    bool isDashInput() const { return isDashRightInput() || isDashLeftInput(); }
     /**
      * Returns How hard the brakes are applied to get a player to stop moving
      *
@@ -767,8 +768,8 @@ public:
     
     /** @return Whether the dash has been released (reset). only for keyboard controls*/
     bool getDashReset() const { return _dashReset; };
-    /** For keyboard dash controls*/
-    void setDashReset(bool r){_dashReset = r;}
+    /** For keyboard dash controls - do this after applying force*/
+    void setDashReset(bool r){CULog("Setting DashReset to %d", r); _dashReset = r;}
     /**
      * Returns the upper limit on player left-right movement.
      *

@@ -92,9 +92,11 @@ bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
         _isGuardInput = false;
         _hasProjectile = false;
         _faceRight  = true;
+        _dashReset = true; //must init to true to be able to dash?
         _shootCooldownRem = 0;
         _jumpCooldownRem  = 0;
         _dashCooldownRem = 0;
+        _dashRem = 0;
         _guardCooldownRem = 0;
         _guardRem = 0;
         _parryRem= 0;
