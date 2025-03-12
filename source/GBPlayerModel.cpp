@@ -79,7 +79,7 @@
 /** The impulse for the character jump */
 #define DUDE_JUMP       42.5f
 /** The x SPEED for the character dash-attack */
-#define DUDE_DASH       20.0f
+#define DUDE_DASH       30.0f
 /** The impulse for the  vertical component of the knockback */
 #define DUDE_KB     15.0f
 #define KB_DURATION 20

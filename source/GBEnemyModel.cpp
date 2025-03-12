@@ -79,10 +79,18 @@
 /** The impulse for the character dash-attack */
 #define ENEMY_DASH       100.0f
 /** The implulse fot the character knockback */
-#define ENEMY_KB       22.5f
+#define ENEMY_KB       1.0f
 /** Debug color for the sensor */
 #define DEBUG_COLOR     Color4::RED
 
+#pragma mark -
+#pragma mark Action Constants // TODO: Refactor with Action parser
+#define SLAM_FRAMES     40
+#define SLAM_DAMAGE_START_FRAME     25
+#define SLAM_DAMAGE_END_FRAME    31
+#define STAB_FRAMES     40
+#define STAB_DAMAGE_START_FRAME     28
+#define STAB_DAMAGE_END_FRAME    35
 
 using namespace cugl;
 
@@ -105,7 +113,7 @@ using namespace cugl;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool EnemyModel::init(const Vec2& pos, const Size& size, float scale) {
+bool EnemyModel::init(const Vec2& pos, const Size& size, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
     Size nsize = size;
     nsize.width  *= ENEMY_HSHRINK;
     nsize.height *= ENEMY_VSHRINK;
@@ -136,6 +144,13 @@ bool EnemyModel::init(const Vec2& pos, const Size& size, float scale) {
         _guardRem = 0;
         _parryRem= 0;
         _stunRem = 0;
+
+        _isStabbing = false;
+        _isSlamming = false;
+        _moveDuration = 0;
+        currentFrame = 0;
+        _node = scene2::SceneNode::alloc();
+        setSceneNode(_node);
         return true;
     }
     return false;
@@ -164,8 +179,8 @@ void EnemyModel::damage(float value) {
  */
 void EnemyModel::setMovement(float value) {
     _movement = value;
-    bool face = _movement > 0;
-    if (_movement == 0 || _faceRight == face) {
+    bool face = _targetPos > getPosition();
+    if (_movement == 0 || _faceRight == face || _isStabbing) {
         return;
     }
     
@@ -248,6 +263,8 @@ void EnemyModel::createFixtures() {
     shieldDef.shape = &sensorShape;
     shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
     _shieldFixture = _body->CreateFixture(&shieldDef);
+
+    // create attack fixtures
 }
 
 /**
@@ -356,6 +373,8 @@ void EnemyModel::applyForce() {
  * @param delta Number of seconds since last animation frame
  */
 void EnemyModel::update(float dt) {
+    updateAnimation();
+    nextAction();
     // Apply cooldowns
     
 #pragma mark Guard and Parry timing
@@ -435,6 +454,123 @@ void EnemyModel::update(float dt) {
     }
 }
 
+#pragma mark -
+#pragma mark AI Methods
+bool EnemyModel::isTargetClose(Vec2 targetPos) {
+    return (getPosition() - targetPos).length() <= CLOSE_RADIUS;
+}
+
+void EnemyModel::nextAction() {
+    int r = rand();
+    AIMove();
+    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos)) {
+        if (r%3 == 0) { //Slam
+            _isSlamming = true;
+            setMovement(0);
+        }
+        else if(r % 3 == 1){ // Stab
+            _isStabbing = true;
+            setMovement(0);
+        }
+        else { // Move away
+            _moveDuration = 45;
+            _moveDirection = -1;
+        }
+    }
+    else if (!_isSlamming && !_isStabbing && _moveDuration <= 0) {
+        if (r % 2 == 0) { // Stab
+            _isStabbing = true;
+            setMovement(0);
+        }
+        else{ // Move closer
+            _moveDuration = 45;
+            _moveDirection = 1;
+        }
+    }
+    else {
+        if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES-1) {
+            _isSlamming = false;
+        }
+        if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES-1) {
+            _isStabbing = false;
+        }
+    }
+}
+
+void EnemyModel::AIMove() {
+    float dist = getPosition().x - _targetPos.x;
+    float dir_val = dist > 0 ? -1 : 1;
+    int face = _faceRight ? 1 : -1;
+    
+    if (_moveDuration > 0 && !_isStabbing) {
+        setMovement(_moveDirection * dir_val* getForce());
+        setStrafeLeft(dist > 0);
+        setStrafeRight(dist < 0);
+        _moveDuration--;
+    }
+    //else if (_moveDuration > 0) {
+    //    _moveDuration--;
+    //}
+    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
+        /*_faceRight ? setDashRightInput(true) : setDashLeftInput(true);*/
+        /*b2Vec2 force(face * ENEMY_DASH, 0);
+        _body->ApplyLinearImpulseToCenter(force, true);*/
+        /*_moveDuration = STAB_DAMAGE_END_FRAME - STAB_DAMAGE_START_FRAME;*/
+        setMovement(face * getForce() * ENEMY_DASH);
+    }
+    
+}
+
+bool EnemyModel::isDamaging() {
+    if (_isSlamming && _slamSprite->getFrame() >= SLAM_DAMAGE_START_FRAME-1 && _slamSprite->getFrame() <= SLAM_DAMAGE_END_FRAME - 1) {
+        return true;
+    }
+    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+#pragma mark -
+#pragma mark Animation Methods
+void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
+    if (sprite->isVisible()) {
+        currentFrame++;
+        if (currentFrame > sprite->getCount()*E_ANIMATION_UPDATE_FRAME) {
+            currentFrame = 0;
+        }
+
+        if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
+            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
+        }
+    }
+}
+
+void EnemyModel::updateAnimation()
+{
+    _walkSprite->setVisible(!_isStabbing && !_isSlamming && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
+
+    _idleSprite->setVisible(!_isStabbing && !_isSlamming && !_walkSprite->isVisible());
+
+    _slamSprite->setVisible(_isSlamming);
+
+    _stabSprite->setVisible(_isStabbing);
+
+    //if (isDashBegin()) {
+    //    currentFrame = 0;
+    //    _attackSprite->setFrame(0);
+    //}
+
+    playAnimation(_walkSprite);
+    playAnimation(_idleSprite);
+    playAnimation(_slamSprite);
+    playAnimation(_stabSprite);
+
+    _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+    _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+}
 
 #pragma mark -
 #pragma mark Scene Graph Methods
@@ -453,7 +589,7 @@ void EnemyModel::resetDebug() {
     _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
-    
+
     Poly2 shieldPoly;
     shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, ENEMY_SHIELD_RADIUS);
     _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);

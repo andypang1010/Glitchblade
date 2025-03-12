@@ -1,53 +1,65 @@
 {
-	"textures": {
-		"background": {
-			"file":     "textures/background.png"
-		},
+    "textures": {
+        "background": {
+            "file": "textures/background.png"
+        },
         "ground": {
-            "file":     "textures/ground.png"
+            "file": "textures/ground.png"
         },
         "player": {
-            "file":     "textures/player.png"
+            "file": "textures/player.png"
         },
         "player_idle": {
-            "file":     "textures/player_idle.png"
+            "file": "textures/player_idle.png"
         },
         "player_walk": {
-            "file":     "textures/player_walk.png"
+            "file": "textures/player_walk.png"
         },
         "player_jumpUp": {
-            "file":     "textures/player_jumpUp.png"
+            "file": "textures/player_jumpUp.png"
         },
         "player_jumpDown": {
-            "file":     "textures/player_jumpDown.png"
+            "file": "textures/player_jumpDown.png"
         },
         "player_guard": {
-            "file":     "textures/player_guard.png"
+            "file": "textures/player_guard.png"
         },
         "player_attack": {
-            "file":     "textures/player_attack.png"
+            "file": "textures/player_attack.png"
         },
         "enemy": {
-            "file":     "textures/enemy.png"
+            "file": "textures/enemy.png"
+        },
+        "boss1_idle": {
+            "file": "textures/boss1_idle.png"
+        },
+        "boss1_walking1": {
+            "file": "textures/boss1_walking1.png"
+        },
+        "boss1_slam": {
+            "file": "textures/boss1_slam.png"
+        },
+        "boss1_stab": {
+            "file": "textures/boss1_stab.png"
         },
         "projectile": {
-            "file":      "textures/projectile.png"
+            "file": "textures/projectile.png"
         },
         "player-projectile": {
-            "file":      "textures/player-projectile.png"
+            "file": "textures/player-projectile.png"
         },
         "dpad": {
-            "file":     "textures/dpad.png",
-            "wrapS":     "clamp",
-            "wrapT":     "clamp",
-            "atlas":     {
-                "up"   : [0,     0, 127, 127],
-                "down" : [128,   0, 255, 127],
-                "left" : [0,   128, 127, 255],
-                "right": [128, 128, 255, 255]
+            "file": "textures/dpad.png",
+            "wrapS": "clamp",
+            "wrapT": "clamp",
+            "atlas": {
+                "up": [ 0, 0, 127, 127 ],
+                "down": [ 128, 0, 255, 127 ],
+                "left": [ 0, 128, 127, 255 ],
+                "right": [ 128, 128, 255, 255 ]
             }
         }
-	},
+    },
     "sounds": {
         "game": {
             "type":     "sample",

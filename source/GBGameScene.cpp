@@ -282,8 +282,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         return false;
     }
 
-    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
-
     // Start up the input handler
     _assets = assets;
     _input.init(getBounds());
@@ -529,13 +527,31 @@ void GameScene::populate() {
     Vec2 enemyPos = ENEMY_POS;
     node = scene2::SceneNode::alloc();
     image = _assets->get<Texture>(ENEMY_TEXTURE);
-    _testEnemy = EnemyModel::alloc(enemyPos, image->getSize() / _scale, _scale);
-    sprite = scene2::PolygonNode::allocWithTexture(image);
-    _testEnemy->setSceneNode(sprite);
-    _testEnemy->setDebugColor(DEBUG_COLOR);
-    _testEnemy->setName(std::string(ENEMY_NAME));
-    addObstacle(_testEnemy, sprite); // Put this at the very front
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+    _testEnemy = EnemyModel::alloc(enemyPos, image->getSize() / _scale, _scale, actions);
 
+    _testEnemy->_idleSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_idle"), 1, 6, 6);
+    _testEnemy->_idleSprite->setPosition(0, 90);
+
+    _testEnemy->_walkSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_walking1"), 1, 8, 8);
+    _testEnemy->_walkSprite->setPosition(0, 90);
+
+    _testEnemy->_slamSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_slam"), 4, 10, 40);
+    _testEnemy->_slamSprite->setPosition(0, 90);
+
+    _testEnemy->_stabSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_stab"), 4, 10, 40);
+    _testEnemy->_stabSprite->setPosition(0, 90);
+
+    _testEnemy->setName(std::string(ENEMY_NAME));
+    _testEnemy->setDebugColor(DEBUG_COLOR);
+    addObstacle(_testEnemy, _testEnemy->getSceneNode()); // Put this at the very front
+    
+    _testEnemy->getSceneNode()->addChild(_testEnemy->_idleSprite);
+    _testEnemy->getSceneNode()->addChild(_testEnemy->_walkSprite);
+    _testEnemy->getSceneNode()->addChild(_testEnemy->_slamSprite);
+    _testEnemy->getSceneNode()->addChild(_testEnemy->_stabSprite);
+
+    // Add UI elements
     _player->getSceneNode()->addChild(_playerHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyStunNode);
@@ -733,6 +749,38 @@ void GameScene::preUpdate(float dt) {
         _leftnode->setVisible(false);
         _rightnode->setVisible(false);
     }
+
+    // TODO: refactor using Box2d
+    Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
+    bool hit = false;
+    if(_player->iframe > 0) _player->iframe--;
+    CULog("Test dist: %f", dist);
+    if (_testEnemy->isDamaging()) {
+        if (_testEnemy->_isSlamming) {
+            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
+                hit = true;
+            }
+            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
+                hit = true;
+            }
+        }
+        else if (_testEnemy->_isStabbing) {
+            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
+                hit = true;
+            }
+            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
+                hit = true;
+            }
+        }
+
+        if (hit) {
+            _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+            if (_player->iframe <= 0) {
+                _player->damage(20);
+                _player->iframe = 60;
+            }
+        }
+    }
     
     _player->setMovement(_input.getHorizontal()*_player->getForce());
     _player->setStrafeLeft(_input.didStrafeLeft());
@@ -743,13 +791,9 @@ void GameScene::preUpdate(float dt) {
     _player->setGuardInput(_input.didGuard());
     _player->applyForce();
 
-    float dist = _testEnemy->getPosition().x - _player->getPosition().x;
-    float dir_val = dist > 0 ? -1 : 1;
-    _testEnemy->setMovement(dir_val * _testEnemy->getForce());
-    _testEnemy->setStrafeLeft(dist > 0);
-    _testEnemy->setStrafeRight(dist < 0);
-    _testEnemy->setDashLeftInput(dist > 0 && dist < ENEMY_ATTACK_RADIUS);
-    _testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
+    _testEnemy->setTargetPos(_player->getPosition());
+    //_testEnemy->setDashLeftInput(_input.didDashLeft());
+    //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
     _testEnemy->applyForce();
     
     _playerHPNode->setText(std::to_string((int)_player->getHP()));
@@ -991,7 +1035,7 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
         else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
-            ((EnemyModel*)bd1)->damage(20);
+            ((EnemyModel*)bd1)->damage(10);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
@@ -1011,7 +1055,7 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
         else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
-            ((EnemyModel*)bd2)->damage(20);
+            ((EnemyModel*)bd2)->damage(10);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }

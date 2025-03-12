@@ -164,6 +164,8 @@ protected:
 	virtual void resetDebug() override;
 
 public:
+    int iframe = 0;
+
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
