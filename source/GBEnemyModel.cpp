@@ -490,9 +490,11 @@ void EnemyModel::nextAction() {
     else {
         if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES-1) {
             _isSlamming = false;
+            setMovement(0);
         }
         if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES-1) {
             _isStabbing = false;
+            setMovement(getMovement());
         }
     }
 }
