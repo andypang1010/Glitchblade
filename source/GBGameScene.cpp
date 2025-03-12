@@ -604,6 +604,8 @@ void GameScene::addObstacle(const std::shared_ptr<physics2::Obstacle>& obj,
 * @param value whether the level is completed.
 */
 void GameScene::setComplete(bool value) {
+    if (_failed)
+        return; // Do not win if lost
     bool change = _complete != value;
     _complete = value;
     if (value && change) {
@@ -626,6 +628,8 @@ void GameScene::setComplete(bool value) {
  * @param value whether the level is failed.
  */
 void GameScene::setFailure(bool value) {
+    if (_complete)
+        return; // Do not fail if won
     _failed = value;
     if (value) {
         std::shared_ptr<Sound> source = _assets->get<Sound>(LOSE_MUSIC);
