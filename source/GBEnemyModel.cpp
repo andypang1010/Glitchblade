@@ -377,7 +377,7 @@ void EnemyModel::update(float dt) {
                 CULog("Parry completed during guard\n");
             }
             if (_guardRem == 0){
-                CULog("Guard completed full duration\n");
+                CULog("Enemy Guard completed full duration\n");
             }
         }
     }

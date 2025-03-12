@@ -50,7 +50,7 @@ using namespace cugl;
 #pragma mark -
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
-#define TEXTURE    "player"
+#define PLAYER_TEXTURE    "player"
 #define ENEMY_TEXTURE   "enemy"
 /** Identifier to allow us to track the player sensor in ContactListener */
 #define BODY_NAME      "body"
@@ -94,7 +94,7 @@ using namespace cugl;
 /** The density of the character */
 #define DENSITY    1.0f
 /** The impulse for the character jump */
-#define JUMP       42.5f
+#define JUMP_F       42.5f
 /** The x SPEED for the character dash-attack */
 #define DASH       75.0f
 /** The impulse for the  vertical component of the knockback */
@@ -737,7 +737,7 @@ public:
     /**
      * Resets knock status and direction
      */
-    void resetKnocked() { _isKnocked = false; _knockDirection = Vec2(0,0);  }
+    void resetKnocked() { _isKnocked = false;  }
     /**
      * Returns how much force to apply to get the player moving
      *
@@ -749,7 +749,7 @@ public:
     /**
      * @return how much jump force to apply
      */
-    float getJumpF() const { return JUMP; }
+    float getJumpF() const { return JUMP_F; }
     /**
      * @return how much dash force to apply
      */
@@ -837,13 +837,6 @@ public:
      * @param delta Number of seconds since last animation frame
      */
     void update(float dt) override;
-    
-    /**
-     * Applies the force to the body of this player
-     *
-     * This method should be called after the force attribute is set.
-     */
-    void applyForce();
 
 
 	

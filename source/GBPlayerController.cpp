@@ -14,15 +14,15 @@ PlayerController::PlayerController()
 }
 
 
-void PlayerController::init(cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale)
+void PlayerController::init(const cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale)
 {
     std::shared_ptr<Texture> image;
     std::shared_ptr<scene2::PolygonNode> sprite;
 
-    _input.init(bounds);
-	Vec2 dudePos = POS;
-    image = assetRef->get<Texture>(TEXTURE);
-    _player = PlayerModel::alloc(dudePos, image->getSize() / scale, scale);
+    _input = PlatformInput::alloc(assetRef, bounds);
+	Vec2 pos = POS;
+    image = assetRef->get<Texture>(PLAYER_TEXTURE);
+    _player = PlayerModel::alloc(pos, image->getSize() / scale, scale);
     sprite = scene2::PolygonNode::allocWithTexture(image);
     _player->setSceneNode(sprite);
     _player->setDebugColor(DEBUG_COLOR);
@@ -30,9 +30,9 @@ void PlayerController::init(cugl::Rect bounds, const std::shared_ptr<AssetManage
 	CULog("Inited playercontoller");
 }
 
+
 void PlayerController::dispose() {
-    _input.dispose();
-    _playerHPNode = nullptr;
+    _input->dispose();
 }
 
 /**
@@ -42,6 +42,7 @@ void PlayerController::dispose() {
  */
 void PlayerController::reset() {
     _player = nullptr;
+    _input = nullptr;
 }
 
 /**
@@ -124,35 +125,36 @@ void PlayerController::fixedUpdate(float timestep)
 
 #pragma mark preUpdate
 void PlayerController::preUpdate(float dt)
-{    _input.update(dt);
+{    _input->update(dt);
     // can't reset or set debug for the whole scene from player controller- we should use buttons for reset, debug , exit instead of keyboard (or gesture) inputs
 //    // Process the toggled key commands
-//    if (_input.didDebug()) { setDebug(!isDebug()); }
-//    if (_input.didReset()) { reset(); }
-//    if (_input.didExit()) {
+//    if (_input->didDebug()) { setDebug(!isDebug()); }
+//    if (_input->didReset()) { reset(); }
+//    if (_input->didExit()) {
 //        CULog("Shutting down");
 //        Application::get()->quit();
 //    }
 
     // Process the movement
 
-    _player->setMovement(_input.getHorizontal()*_player->getForce());
-    _player->setStrafeLeft(_input.didStrafeLeft());
-    _player->setStrafeRight(_input.didStrafeRight());
-    _player->setJumpInput( _input.didJump());
-    _player->setDashLeftInput(_input.didDashLeft());
-    _player->setDashRightInput(_input.didDashRight());
-    _player->setGuardInput(_input.didGuard());
-    _player->applyForce();
+    _player->setMovement(_input->getHorizontal()*_player->getForce());
+    _player->setStrafeLeft(_input->didStrafeLeft());
+    _player->setStrafeRight(_input->didStrafeRight());
+    _player->setJumpInput( _input->didJump());
+    _player->setDashLeftInput(_input->didDashLeft());
+    _player->setDashRightInput(_input->didDashRight());
+    _player->setGuardInput(_input->didGuard());
+    applyForce();
 
-    ////////****
     // guard cooldown first for most recent movement inputs
     if (_player->isGuardActive() && !_player->isGuardBegin()){
+        CULog("Beginning guard");
         int guardRem = _player->getGuardRem();
         _player->setGuardRem(guardRem > 0 ? guardRem - 1 : 0);
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
-    } else {
+    } else if (_player->getGuardRem()>0) {
+        CULog("Updating guard cooldown");
         // guard not active, update cooldown
         int guardCD = _player->getGuardCDRem();
         _player->setGuardCDRem(guardCD > 0 ? guardCD - 1 : 0);
@@ -173,6 +175,7 @@ void PlayerController::preUpdate(float dt)
     }
     
     if (_player->isKnocked()) {
+        CULog("Player is knocked");
         _player->setDashCDRem();
         _player->setGuardCDRem();
         _player->setJumpCDRem();
@@ -212,6 +215,7 @@ void PlayerController::preUpdate(float dt)
 #pragma mark postUpdate
 void PlayerController::postUpdate(float dt)
 {
+    _player->setShootInput(_input->didFire());
 }
 
 void PlayerController::activateShield()

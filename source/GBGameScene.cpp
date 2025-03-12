@@ -201,7 +201,7 @@ GameScene::GameScene() : Scene2(),
 _worldnode(nullptr),
 _debugnode(nullptr),
 _world(nullptr),
-_player_controller(nullptr),
+_levelController(nullptr),
 _complete(false),
 _debug(false)
 {
@@ -342,9 +342,12 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     addChild(_debugnode);
     addChild(_winnode);
     addChild(_losenode);
-    addChild(_leftnode);
-    addChild(_rightnode);
 
+    CULog("Setting up LevelController");
+    _levelController = std::make_shared<LevelController>();
+    _levelController->init(getBounds(), _assets, _scale); // Initialize the LevelController
+    // DO NOT KEEP THIS IN THE CODE YOU DEGEN
+    _player = _levelController->getPlayerModel(); // DELET!
     populate();
     _active = true;
     _complete = false;
@@ -353,9 +356,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::GRAY);
 
-    CULog("Setting up LevelController");
-    _levelController = std::make_shared<LevelController>();
-    _levelController->init(getBounds(), std::make_shared<AssetManager>(_assets), _scale); // Initialize the LevelController
+
 
     return true;
 }
@@ -372,8 +373,6 @@ void GameScene::dispose() {
         _losenode = nullptr;
         _enemyHPNode = nullptr;
         _enemyStunNode = nullptr;
-        _leftnode = nullptr;
-        _rightnode = nullptr;
         _complete = false;
         _debug = false;
         Scene2::dispose();
@@ -393,13 +392,9 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    _player_controller -> reset();
-    _player_controller = nullptr;
-
     setFailure(false);
     setComplete(false);
     populate();
-
     _levelController->reset();
 }
 
@@ -478,14 +473,13 @@ void GameScene::populate() {
     sprite = scene2::PolygonNode::allocWithTexture(image, ground);
     addObstacle(groundObj, sprite, 1);
 
-#pragma mark : Dude
-    Vec2 dudePos = DUDE_POS;
-    image = _assets->get<Texture>(DUDE_TEXTURE);
-    _player = PlayerModel::alloc(dudePos, image->getSize() / _scale, _scale);
-    sprite = scene2::PolygonNode::allocWithTexture(image);
-    _player->setSceneNode(sprite);
-    _player->setDebugColor(DEBUG_COLOR);
-    addObstacle(_player, sprite); // Put this at the very front
+#pragma mark : Player Scene node
+//    Vec2 dudePos = DUDE_POS;
+//    image = _assets->get<Texture>(PLAYER_TEXTURE);
+//    _player = PlayerModel::alloc(dudePos, image->getSize() / _scale, _scale);
+    //sprite = scene2::PolygonNode::allocWithTexture(image);
+    //_levelController->setPlayerSceneNode(sprite);
+    addObstacle(_levelController->getPlayerModel(), _levelController->getPlayerNode()); // Put this at the very front
 
 #pragma mark : Test Enemy
     Vec2 enemyPos = ENEMY_POS;
@@ -620,7 +614,7 @@ void GameScene::preUpdate(float dt) {
     _playerHPNode->setText(std::to_string((int)_player->getHP()));
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
     _enemyStunNode->setText(std::to_string((bool)_testEnemy->isStunned()));
-    
+
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
       std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
@@ -689,10 +683,10 @@ void GameScene::fixedUpdate(float step) {
 void GameScene::postUpdate(float remain) {
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
-
+    _levelController->postUpdate(remain);
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
-    _player->setShootInput(_input.didFire());
+
     if (_player->isShooting() && _player->hasProjectile()) {
         createProjectile(_player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true);
         _player->setHasProjectile(false);

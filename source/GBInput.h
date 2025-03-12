@@ -252,7 +252,25 @@ public:
      * once it is reinitialized.
      */
     void dispose();
-    
+    /**
+     * Creates a new player at the given position.
+     *
+     * The player has the given size, scaled so that 1 pixel = 1 Box2d unit
+     *
+      * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param pos   Initial position in world coordinates
+     * @param size  The size of the player in world units
+     *
+     * @return  A newly allocated PlayerModel at the given position with the given scale
+     */
+    static std::shared_ptr<PlatformInput> alloc(const std::shared_ptr<cugl::AssetManager>& assetRef, const cugl::Rect bounds) {
+        std::shared_ptr<PlatformInput> result = std::make_shared<PlatformInput>();
+        return (result->init(assetRef, bounds)? result : nullptr);
+    }
     /**
      * Initializes the input control for the given bounds
      *
@@ -264,7 +282,7 @@ public:
      *
      * @return true if the controller was initialized successfully
      */
-    bool init(const cugl::Rect bounds);
+    bool init(const std::shared_ptr<cugl::AssetManager>& assetRef, const cugl::Rect bounds);
     
 #pragma mark -
 #pragma mark Input Detection

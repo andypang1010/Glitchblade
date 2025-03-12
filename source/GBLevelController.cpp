@@ -25,7 +25,6 @@ void LevelController::init(cugl::Rect bounds, const std::shared_ptr<AssetManager
 
 	// Setup player controller
 	_playerController = std::make_shared<PlayerController>();
-
 	_enemyController->init();
 	_playerController->init(bounds, assetRef, scale);
 
@@ -53,8 +52,6 @@ void LevelController::fixedUpdate(float timestep)
 {
 	_enemyController->fixedUpdate(timestep);
 	_playerController->fixedUpdate(timestep);
-
-	CULog("LevelController::update");
 }
 
 /**
@@ -144,3 +141,5 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
     return actions;
 }
+
+

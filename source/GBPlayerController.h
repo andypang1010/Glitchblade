@@ -23,10 +23,7 @@ private:
     std::shared_ptr<PlayerModel> _player;
 
     /** Controller for abstracting out input across multiple platforms */
-    PlatformInput _input;
-
-    /** Reference to the player HP label */
-    std::shared_ptr<scene2::Label> _playerHPNode;
+    std::shared_ptr<PlatformInput> _input;
 public:
     
     /** Constructor */
@@ -93,6 +90,10 @@ public:
      * Deflects a projectile using the shield.
      */
     void deflectProjectile();
+    
+    #pragma mark Getters
+    std::shared_ptr<PlayerModel> getPlayer() {return _player;};
 };
+
 
 #endif /* __PLAYER_CONTROLLER_H__ */

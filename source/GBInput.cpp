@@ -138,10 +138,11 @@ void PlatformInput::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool PlatformInput::init(const std::shared_ptr<AssetManager>& assets, const Rect bounds) {
+bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const Rect bounds) {
     bool success = true;
-    _sbounds = bounds;
     _tbounds = Application::get()->getDisplayBounds();
+    _sbounds = bounds;
+    
     
     createZones();
     clearTouchInstance(_ltouch);
@@ -149,12 +150,12 @@ bool PlatformInput::init(const std::shared_ptr<AssetManager>& assets, const Rect
     clearTouchInstance(_mtouch);
     
     // joystick nodes
-    _leftnode = scene2::PolygonNode::allocWithTexture(assets->get<Texture>(LEFT_IMAGE));
+    _leftnode = scene2::PolygonNode::allocWithTexture(assetRef->get<Texture>(LEFT_IMAGE));
     _leftnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_RIGHT);
     _leftnode->setScale(0.35f);
     _leftnode->setVisible(false);
 
-    _rightnode = scene2::PolygonNode::allocWithTexture(assets->get<Texture>(RIGHT_IMAGE));
+    _rightnode = scene2::PolygonNode::allocWithTexture(assetRef->get<Texture>(RIGHT_IMAGE));
     _rightnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_LEFT);
     _rightnode->setScale(0.35f);
     _rightnode->setVisible(false);
