@@ -490,6 +490,11 @@ void EnemyModel::nextAction() {
         }
     }
     else {
+        if (isStunned()) {
+            _isSlamming = false;
+            _isStabbing = false;
+            setMovement(0);
+        }
         if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES-1) {
             _isSlamming = false;
             setMovement(0);
@@ -549,6 +554,9 @@ void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
         if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
             sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
         }
+    }
+    else {
+        sprite->setFrame(0);
     }
 }
 

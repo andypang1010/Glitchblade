@@ -760,8 +760,7 @@ void GameScene::preUpdate(float dt) {
     Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
     bool hit = false;
     if(_player->iframe > 0) _player->iframe--;
-    CULog("Test dist: %f", dist);
-    if (_testEnemy->isDamaging()) {
+    if (_testEnemy->isDamaging() && _player->iframe <= 0) {
         if (_testEnemy->_isSlamming) {
             if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
                 hit = true;
@@ -778,20 +777,20 @@ void GameScene::preUpdate(float dt) {
                 hit = true;
             }
         }
+    }
 
-        if (hit) {
-            _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
-            if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
-                _player->damage(20);
-            }
-            else if (_player->iframe <= 0 && _player->isParryActive()) {
-                _testEnemy->setStun(120);
-            }
-            else if (_player->iframe <= 0 && _player->isGuardActive()) {
-                _player->damage(10);
-            }
-            _player->iframe = 60;
+    if (hit) {
+        _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+        if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
+            _player->damage(20);
         }
+        else if (_player->iframe <= 0 && _player->isParryActive()) {
+            _testEnemy->setStun(120);
+        }
+        else if (_player->iframe <= 0 && _player->isGuardActive()) {
+            _player->damage(10);
+        }
+        _player->iframe = 60;
     }
     
     _player->setMovement(_input.getHorizontal()*_player->getForce());
