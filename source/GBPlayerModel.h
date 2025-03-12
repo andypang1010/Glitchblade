@@ -668,6 +668,7 @@ public:
 #pragma mark -
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
+    void updateAnimation();
 
 #pragma mark -
 #pragma mark Physics Methods

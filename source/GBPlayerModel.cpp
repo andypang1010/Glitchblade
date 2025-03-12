@@ -365,16 +365,6 @@ void PlayerModel::applyForce() {
     }
 }
 
-void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite->isVisible()) {
-        currentFrame++;
-
-        if (currentFrame % ANIMATION_UPDATE_FRAME == 0) {
-            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
-        }
-    }
-}
-
 #pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
@@ -384,48 +374,11 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
  * @param delta Number of seconds since last animation frame
  */
 void PlayerModel::update(float dt) {
+
+    updateAnimation();
+
     // Apply cooldowns
-
-    _walkSprite->setVisible(!isGuardActive() && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
-    _jumpUpSprite->setVisible(!isGuardActive() && !isGrounded() && getBody()->GetLinearVelocity().y > 0);
-    _jumpDownSprite->setVisible(!isGuardActive() && !isGrounded() && getBody()->GetLinearVelocity().y < 0);
-    _guardSprite->setVisible(isGuardActive());
-    _attackSprite->setVisible(!isGuardActive() && isDashActive());
-
-    _idleSprite->setVisible(
-        !_walkSprite->isVisible() &&
-        !_jumpUpSprite->isVisible() &&
-        !_jumpDownSprite->isVisible() &&
-        !_guardSprite->isVisible() &&
-        !_attackSprite->isVisible());
-
-    if (isDashBegin()) {
-        currentFrame = 0;
-        _attackSprite->setFrame(0);
-    }
-
-    if (isJumpBegin()) {
-        currentFrame = 0;
-        _jumpUpSprite->setFrame(0);
-        _jumpDownSprite->setFrame(0);
-    }
-
-    if (isParryActive()) {
-        currentFrame = 0;
-        _guardSprite->setFrame(0);
-    }
-
-    else {
-        playAnimation(_guardSprite);
-    }
-
-    playAnimation(_attackSprite);
-    playAnimation(_walkSprite);
-    playAnimation(_idleSprite);
-
-    _sceneNode->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-
-#pragma mark Guard and Parry timing
+    #pragma mark Guard and Parry timing
     // guard cooldown first for most recent movement inputs
     if (isGuardActive() && !isGuardBegin()){
         //just for logging end of parry
@@ -503,6 +456,61 @@ void PlayerModel::update(float dt) {
         _sceneNode->setPosition(getPosition()*_drawScale);
         _sceneNode->setAngle(getAngle());
     }
+}
+
+#pragma mark -
+#pragma mark Animation
+void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
+    if (sprite->isVisible()) {
+        currentFrame++;
+
+        if (currentFrame % ANIMATION_UPDATE_FRAME == 0) {
+            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
+        }
+    }
+}
+
+void PlayerModel::updateAnimation()
+{
+    _walkSprite->setVisible(!isGuardActive() && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
+    _jumpUpSprite->setVisible(!isGuardActive() && !isGrounded() && getBody()->GetLinearVelocity().y > 0);
+    _jumpDownSprite->setVisible(!isGuardActive() && !isGrounded() && getBody()->GetLinearVelocity().y < 0);
+    _guardSprite->setVisible(isGuardActive());
+    _attackSprite->setVisible(!isGuardActive() && isDashActive());
+
+    _idleSprite->setVisible(
+        !_walkSprite->isVisible() &&
+        !_jumpUpSprite->isVisible() &&
+        !_jumpDownSprite->isVisible() &&
+        !_guardSprite->isVisible() &&
+        !_attackSprite->isVisible());
+
+    if (isDashBegin()) {
+        currentFrame = 0;
+        _attackSprite->setFrame(0);
+    }
+
+    if (isJumpBegin()) {
+        currentFrame = 0;
+        _jumpUpSprite->setFrame(0);
+        _jumpDownSprite->setFrame(0);
+    }
+
+    if (isParryActive()) {
+        currentFrame = 0;
+        _guardSprite->setFrame(0);
+    }
+
+    else {
+        playAnimation(_guardSprite);
+    }
+
+    playAnimation(_attackSprite);
+    playAnimation(_walkSprite);
+    playAnimation(_idleSprite);
+
+    _sceneNode->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+    _sceneNode->getChild(_sceneNode->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
 }
 
 
