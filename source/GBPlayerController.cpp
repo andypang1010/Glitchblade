@@ -7,7 +7,7 @@ using namespace cugl::graphics;
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 
 // CONSTANTS:
-float POS[] = { 2.5f, 5.0f };
+float INIT_POS[] = { 2.5f, 5.0f };
 
 PlayerController::PlayerController()
 {
@@ -20,7 +20,7 @@ void PlayerController::init(const cugl::Rect bounds, const std::shared_ptr<Asset
     std::shared_ptr<scene2::PolygonNode> sprite;
 
     _input = PlatformInput::alloc(assetRef, bounds);
-	Vec2 pos = POS;
+	Vec2 pos = INIT_POS;
     image = assetRef->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(pos, image->getSize() / scale, scale);
     _player->_idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_idle"), 1, 6, 6);
@@ -40,6 +40,8 @@ void PlayerController::init(const cugl::Rect bounds, const std::shared_ptr<Asset
 
     _player->_attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 1, 8, 8);
     _player->_attackSprite->setPosition(0, 40);
+    
+    
 
     _player->getSceneNode()->addChild(_player->_idleSprite);
     _player->getSceneNode()->addChild(_player->_walkSprite);
@@ -47,9 +49,16 @@ void PlayerController::init(const cugl::Rect bounds, const std::shared_ptr<Asset
     _player->getSceneNode()->addChild(_player->_jumpDownSprite);
     _player->getSceneNode()->addChild(_player->_guardSprite);
     _player->getSceneNode()->addChild(_player->_attackSprite);
-
+    
+    #pragma mark hp node
+    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(DEBUG_FONT));
+    _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _hpNode->setForeground(Color4::CYAN);
+    _hpNode->setPosition(0, 55);
+    _player->getSceneNode()->addChild(_hpNode);
     
     _player->setDebugColor(DEBUG_COLOR);
+    
 	CULog("Inited playercontoller");
 }
 
@@ -59,13 +68,11 @@ void PlayerController::dispose() {
 }
 
 /**
- * Resets the status of the game so that we can play again.
- *
- * This method disposes of the world and creates a new one.
+ * Resets the player to it's initial position
  */
 void PlayerController::reset() {
-    _player = nullptr;
-    _input = nullptr;
+    _player->resetAttributes();
+    _player->setPosition(INIT_POS);
 }
 
 /**
@@ -161,7 +168,9 @@ void PlayerController::preUpdate(float dt)
     _player->setDashRightInput(_input->didDashRight());
     _player->setGuardInput(_input->didGuard());
     _player->setShootInput(_input->didFire());
-    //
+    
+    _hpNode->setText(std::to_string((int)_player->getHP()));
+    
     applyForce();
 }
 #pragma mark fixedUpdate

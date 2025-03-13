@@ -320,11 +320,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _losenode->setForeground(LOSE_COLOR);
     setFailure(false);
 
-    _playerHPNode = scene2::Label::allocWithText("100", _assets->get<Font>(DEBUG_FONT));
-    _playerHPNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _playerHPNode->setForeground(Color4::CYAN);
-    _playerHPNode->setPosition(0, 55);
-
     _enemyHPNode = scene2::Label::allocWithText("100", _assets->get<Font>(DEBUG_FONT));
     _enemyHPNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyHPNode->setForeground(Color4::RED);
@@ -340,11 +335,21 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     addChild(_winnode);
     addChild(_losenode);
 
-    CULog("Setting up LevelController");
+    CULog("Creating empty level controller in gamescene init");
     _levelController = std::make_shared<LevelController>();
+    CULog("initializing level controller in gamescene init");
     _levelController->init(getBounds(), _assets, _scale); // Initialize the LevelController
-    // DO NOT KEEP THIS IN THE CODE YOU DEGEN
-    _player = _levelController->getPlayerModel(); // DELET!
+    #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
+        _input =  _levelController->getInputController();
+        if (!_input){
+            CULog("input is null in populate");
+        }
+    #pragma mark : Player
+        _player = _levelController->getPlayerModel();
+        if (!_player){
+            CULog("player is null in populate");
+        }
+        _player->setDebugColor(DEBUG_COLOR);
     populate();
     _active = true;
     _complete = false;
@@ -381,9 +386,7 @@ void GameScene::dispose() {
 #pragma mark Level Layout
 
 /**
- * Resets the status of the game so that we can play again.
- *
- * This method disposes of the world and creates a new one.
+ * Resets the status of the game by resetting player and enemy positions so that we can play again.
  */
 void GameScene::reset() {
     _world->clear();
@@ -391,8 +394,8 @@ void GameScene::reset() {
     _debugnode->removeAllChildren();
     setFailure(false);
     setComplete(false);
-    populate();
     _levelController->reset();
+    populate();
 }
 
 /**
@@ -407,7 +410,9 @@ void GameScene::reset() {
  * with your serialization loader, which would process a level file.
  */
 void GameScene::populate() {
-
+    // DO NOT KEEP THIS IN THE CODE YOU DEGEN
+    CULog("TODO: Get rid of this reference to player in gamescene.");
+    _player = _levelController->getPlayerModel(); // DELET!
     std::shared_ptr<Texture> image;
     std::shared_ptr<scene2::PolygonNode> sprite;
     std::shared_ptr<scene2::WireNode> draw;
@@ -469,12 +474,7 @@ void GameScene::populate() {
     ground *= _scale;
     sprite = scene2::PolygonNode::allocWithTexture(image, ground);
     addObstacle(groundObj, sprite, 1);
-#pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
-    _input =  _levelController->getInputController();
-#pragma mark : Player
-    _player = _levelController->getPlayerModel();
-    
-    _player->setDebugColor(DEBUG_COLOR);
+
     addObstacle(_levelController->getPlayerModel(), _levelController->getPlayerNode()); // Put this at the very front
 
 #pragma mark : Test Enemy
@@ -509,9 +509,9 @@ void GameScene::populate() {
     _testEnemy->getSceneNode()->addChild(_testEnemy->_stunSprite);
 
     // Add UI elements
-    _player->getSceneNode()->addChild(_playerHPNode);
     _testEnemy->getSceneNode()->addChild(_enemyStunNode);
     _testEnemy->getSceneNode()->addChild(_enemyHPNode);
+
 
 	// Play the background music on a loop.
 	std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
@@ -672,18 +672,7 @@ void GameScene::preUpdate(float dt) {
     _testEnemy->setTargetPos(_player->getPosition());
     //_testEnemy->setDashLeftInput(_input.didDashLeft());
     //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
-//=======
-//    float dist = _testEnemy->getPosition().x - _player->getPosition().x;
-//    float dir_val = dist > 0 ? -1 : 1;
-//    _testEnemy->setMovement(dir_val * _testEnemy->getForce());
-//    _testEnemy->setStrafeLeft(dist > 0);
-//    _testEnemy->setStrafeRight(dist < 0);
-//    _testEnemy->setDashLeftInput(dist > 0 && dist < ENEMY_ATTACK_RADIUS);
-//    _testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
-//>>>>>>> PlayerController
     _testEnemy->applyForce();
-    
-    _playerHPNode->setText(std::to_string((int)_player->getHP()));
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
     _enemyStunNode->setText((_testEnemy->isStunned() ? "STUN" : ""));
 

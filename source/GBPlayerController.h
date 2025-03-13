@@ -21,7 +21,7 @@ class PlayerController {
 private:
     /** Reference to the player model */
     std::shared_ptr<PlayerModel> _player;
-
+    std::shared_ptr<scene2::Label> _hpNode;
     /** Controller for abstracting out input across multiple platforms */
     std::shared_ptr<PlatformInput> _input;
 public:

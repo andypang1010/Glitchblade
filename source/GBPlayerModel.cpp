@@ -69,44 +69,22 @@ using namespace cugl;
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
+    resetAttributes();
     Size nsize = size;
     nsize.width  *= HSHRINK;
     nsize.height *= VSHRINK;
     _drawScale = scale;
-    
     if (BoxObstacle::init(pos,nsize)) {
         setDensity(DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-        
-        // Gameplay attributes
-        _hp = MAXHP;
-        _isGrounded = false;
-        _isShootInput = false;
-        _isJumpInput  = false;
-        _isStrafeLeft = false;
-        _isStrafeRight = false;
-        _isDashLeftInput = false;
-        _isDashRightInput = false;
-        _isGuardInput = false;
-        _hasProjectile = false;
-        _faceRight  = true;
-        _dashReset = true; //must init to true to be able to dash?
-        _shootCooldownRem = 0;
-        _jumpCooldownRem  = 0;
-        _dashCooldownRem = 0;
-        _dashRem = 0;
-        _guardCooldownRem = 0;
-        _guardRem = 0;
-        _parryRem= 0;
-
         _sceneNode = scene2::SceneNode::alloc();
         setSceneNode(_sceneNode);
         return true;
     }
     return false;
+    
 }
-
 
 #pragma mark -
 #pragma mark Attribute Properties

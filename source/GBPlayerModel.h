@@ -104,7 +104,7 @@ using namespace cugl;
 /** Debug color for the sensor */
 #define SENSOR_DEBUG_COLOR     Color4::RED
 #define DEBUG_COLOR     Color4::YELLOW
-
+#define DEBUG_FONT      "debug"
 #pragma mark -
 #pragma mark player Model
 /**
@@ -375,7 +375,32 @@ public:
 		return (result->init(pos, size, scale) ? result : nullptr);
 	}
     
-
+#pragma mark -
+#pragma mark Level Control and Constructor Helpers
+     /** Reset all the player attributes to their initial values*/
+     void resetAttributes(){
+         // Gameplay attributes
+         _hp = MAXHP;
+         _isGrounded = false;
+         _isShootInput = false;
+         _isJumpInput  = false;
+         _isStrafeLeft = false;
+         _isStrafeRight = false;
+         _isDashLeftInput = false;
+         _isDashRightInput = false;
+         _isGuardInput = false;
+         _hasProjectile = false;
+         _faceRight  = true;
+         _dashReset = true; //must init to true to be able to dash?
+         _shootCooldownRem = 0;
+         _jumpCooldownRem  = 0;
+         _dashCooldownRem = 0;
+         _dashRem = 0;
+         _guardCooldownRem = 0;
+         _guardRem = 0;
+         _parryRem= 0;
+     };
+    
 #pragma mark -
 #pragma mark Animation
     /**
