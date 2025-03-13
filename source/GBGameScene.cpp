@@ -92,8 +92,6 @@ float GROUND[GROUND_VERTS]{
     0.0f, GROUND_THICKNESS
 };
 
-/** The initial position of the dude */
-float DUDE_POS[] = { 2.5f, 5.0f };
 float ENEMY_POS[] = { 12.5f, 5.0f };
 
 /** Bullet Spawn Points */
@@ -179,10 +177,7 @@ Vec2 DOWN = { 0.0f, -1.0f };
 #define MUSIC_VOLUME    0.7f
 /** The volume for sound effects */
 #define EFFECT_VOLUME   0.8f
-/** The image for the left dpad/joystick */
-#define LEFT_IMAGE      "dpad_left"
-/** The image for the right dpad/joystick */
-#define RIGHT_IMAGE     "dpad_right"
+
 /** The fire rate for spawned bullets */
 #define BULLET_SPAWN_RATE     100.0f
 
@@ -204,9 +199,10 @@ GameScene::GameScene() : Scene2(),
 _worldnode(nullptr),
 _debugnode(nullptr),
 _world(nullptr),
-_player(nullptr),
+_levelController(nullptr),
 _complete(false),
-_debug(false)
+_debug(false),
+_input(nullptr)
 {
 }
 
@@ -284,7 +280,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
 
     // Start up the input handler
     _assets = assets;
-    _input.init(getBounds());
 
     // Create the world and attach the listeners.
     _world = physics2::ObstacleWorld::alloc(rect, gravity);
@@ -340,23 +335,16 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _enemyStunNode->setForeground(Color4::RED);
     _enemyStunNode->setPosition(0, 100);
 
-    _leftnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(LEFT_IMAGE));
-    _leftnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_RIGHT);
-    _leftnode->setScale(0.35f);
-    _leftnode->setVisible(false);
-
-    _rightnode = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(RIGHT_IMAGE));
-    _rightnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_LEFT);
-    _rightnode->setScale(0.35f);
-    _rightnode->setVisible(false);
-
     addChild(_worldnode);
     addChild(_debugnode);
     addChild(_winnode);
     addChild(_losenode);
-    addChild(_leftnode);
-    addChild(_rightnode);
 
+    CULog("Setting up LevelController");
+    _levelController = std::make_shared<LevelController>();
+    _levelController->init(getBounds(), _assets, _scale); // Initialize the LevelController
+    // DO NOT KEEP THIS IN THE CODE YOU DEGEN
+    _player = _levelController->getPlayerModel(); // DELET!
     populate();
     _active = true;
     _complete = false;
@@ -365,9 +353,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::GRAY);
 
-    CULog("Setting up LevelController");
-    _levelController = std::make_shared<LevelController>();
-    _levelController->init(); // Initialize the LevelController
+
 
     return true;
 }
@@ -377,17 +363,13 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
  */
 void GameScene::dispose() {
     if (_active) {
-        _input.dispose();
         _world = nullptr;
         _worldnode = nullptr;
         _debugnode = nullptr;
         _winnode = nullptr;
         _losenode = nullptr;
-        _playerHPNode = nullptr;
         _enemyHPNode = nullptr;
         _enemyStunNode = nullptr;
-        _leftnode = nullptr;
-        _rightnode = nullptr;
         _complete = false;
         _debug = false;
         Scene2::dispose();
@@ -407,11 +389,10 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    _player = nullptr;
-
     setFailure(false);
     setComplete(false);
     populate();
+    _levelController->reset();
 }
 
 /**
@@ -488,45 +469,19 @@ void GameScene::populate() {
     ground *= _scale;
     sprite = scene2::PolygonNode::allocWithTexture(image, ground);
     addObstacle(groundObj, sprite, 1);
-
-#pragma mark : Dude
-    Vec2 dudePos = DUDE_POS;
-    node = scene2::SceneNode::alloc();
-    image = _assets->get<Texture>(DUDE_TEXTURE);
-    _player = PlayerModel::alloc(dudePos, image->getSize() / _scale, _scale);
+#pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
+    _input =  _levelController->getInputController();
+#pragma mark : Player
+    _player = _levelController->getPlayerModel();
     
-    _player->_idleSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_idle"), 1, 6, 6);
-    _player->_idleSprite->setPosition(0, 40);
-
-    _player->_walkSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_walk"), 1, 6, 6);
-    _player->_walkSprite->setPosition(0, 40);
-
-    _player->_jumpUpSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_jumpUp"), 1, 8, 8);
-    _player->_jumpUpSprite->setPosition(0, 40);
-
-    _player->_jumpDownSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_jumpDown"), 1, 8, 8);
-    _player->_jumpDownSprite->setPosition(0, 40);
-
-    _player->_guardSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_guard"), 1, 6, 6);
-    _player->_guardSprite->setPosition(0, 40);
-
-    _player->_attackSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("player_attack"), 1, 8, 8);
-    _player->_attackSprite->setPosition(0, 40);
-
-    _player->getSceneNode()->addChild(_player->_idleSprite);
-    _player->getSceneNode()->addChild(_player->_walkSprite);
-    _player->getSceneNode()->addChild(_player->_jumpUpSprite);
-    _player->getSceneNode()->addChild(_player->_jumpDownSprite);
-    _player->getSceneNode()->addChild(_player->_guardSprite);
-    _player->getSceneNode()->addChild(_player->_attackSprite);
-
     _player->setDebugColor(DEBUG_COLOR);
-    addObstacle(_player, _player->getSceneNode()); // Put this at the very front
+    addObstacle(_levelController->getPlayerModel(), _levelController->getPlayerNode()); // Put this at the very front
 
 #pragma mark : Test Enemy
     Vec2 enemyPos = ENEMY_POS;
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
     _testEnemy = EnemyModel::alloc(enemyPos, Size(90, 130) / _scale, _scale, actions);
+
 
     _testEnemy->_idleSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_idle"), 1, 6, 6);
     _testEnemy->_idleSprite->setPosition(0, 40);
@@ -649,61 +604,6 @@ void GameScene::setFailure(bool value) {
 #pragma mark -
 #pragma mark Physics Handling
 /**
- * The method called to update the game mode.
- *
- * This is the nondeterministic version of a physics simulation. It is
- * provided for comparison purposes only.
- *
- * @param timestep  The amount of time (in seconds) since the last frame
- */
-void GameScene::update(float timestep) {
-    _input.update(timestep);
-
-    // Process the toggled key commands
-    if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) { reset(); }
-    if (_input.didExit()) {
-        Application::get()->quit();
-    }
-
-    // Process the movement
-    if (_input.withJoystick()) {
-        if (_input.getHorizontal() < 0) {
-            _leftnode->setVisible(true);
-            _rightnode->setVisible(false);
-        }
-        else if (_input.getHorizontal() > 0) {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(true);
-        }
-        else {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(false);
-        }
-        _leftnode->setPosition(_input.getJoystick());
-        _rightnode->setPosition(_input.getJoystick());
-    }
-    else {
-        _leftnode->setVisible(false);
-        _rightnode->setVisible(false);
-    }
-    
-	_player->setMovement(_input.getHorizontal()*_player->getForce());
-	_player->setJumpInput( _input.didJump());
-    _player->setGuardInput(_input.didGuard());
-	_player->applyForce();
-
-	if (_player->isJumpBegin() && _player->isGrounded()) {
-		std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
-		AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
-	}
-
-    	
-	// Turn the physics engine crank.
-    _world->update(timestep);
-}
-
-/**
  * The method called to indicate the start of a deterministic loop.
  *
  * This method is used instead of {@link #update} if {@link #setDeterministic}
@@ -724,36 +624,13 @@ void GameScene::update(float timestep) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GameScene::preUpdate(float dt) {
-    _input.update(dt);
 
     // Process the toggled key commands
-    if (_input.didDebug()) { setDebug(!isDebug()); }
-    if (_input.didReset()) { reset(); }
-    if (_input.didExit()) {
+    if (_input->didDebug()) { setDebug(!isDebug()); }
+    if (_input->didReset()) { reset(); }
+    if (_input->didExit()) {
         CULog("Shutting down");
         Application::get()->quit();
-    }
-
-    // Process the movement
-    if (_input.withJoystick()) {
-        if (_input.getHorizontal() < 0) {
-            _leftnode->setVisible(true);
-            _rightnode->setVisible(false);
-        }
-        else if (_input.getHorizontal() > 0) {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(true);
-        }
-        else {
-            _leftnode->setVisible(false);
-            _rightnode->setVisible(false);
-        }
-        _leftnode->setPosition(_input.getJoystick());
-        _rightnode->setPosition(_input.getJoystick());
-    }
-    else {
-        _leftnode->setVisible(false);
-        _rightnode->setVisible(false);
     }
 
     // TODO: refactor using Box2d
@@ -792,25 +669,23 @@ void GameScene::preUpdate(float dt) {
         }
         _player->iframe = 60;
     }
-    
-    _player->setMovement(_input.getHorizontal()*_player->getForce());
-    _player->setStrafeLeft(_input.didStrafeLeft());
-    _player->setStrafeRight(_input.didStrafeRight());
-	_player->setJumpInput( _input.didJump());
-    _player->setDashLeftInput(_input.didDashLeft());
-    _player->setDashRightInput(_input.didDashRight());
-    _player->setGuardInput(_input.didGuard());
-    _player->applyForce();
-
     _testEnemy->setTargetPos(_player->getPosition());
     //_testEnemy->setDashLeftInput(_input.didDashLeft());
     //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
+//=======
+//    float dist = _testEnemy->getPosition().x - _player->getPosition().x;
+//    float dir_val = dist > 0 ? -1 : 1;
+//    _testEnemy->setMovement(dir_val * _testEnemy->getForce());
+//    _testEnemy->setStrafeLeft(dist > 0);
+//    _testEnemy->setStrafeRight(dist < 0);
+//    _testEnemy->setDashLeftInput(dist > 0 && dist < ENEMY_ATTACK_RADIUS);
+//    _testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
+//>>>>>>> PlayerController
     _testEnemy->applyForce();
     
     _playerHPNode->setText(std::to_string((int)_player->getHP()));
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
     _enemyStunNode->setText((_testEnemy->isStunned() ? "STUN" : ""));
-    
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
       std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
@@ -820,7 +695,6 @@ void GameScene::preUpdate(float dt) {
     // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);
 }
-
 /**
  * The method called to provide a deterministic application loop.
  *
@@ -880,10 +754,10 @@ void GameScene::fixedUpdate(float step) {
 void GameScene::postUpdate(float remain) {
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
-
+    _levelController->postUpdate(remain);
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
-    _player->setShootInput(_input.didFire());
+
     if (_player->isShooting() && _player->hasProjectile()) {
         createProjectile(_player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true);
         _player->setHasProjectile(false);
@@ -928,7 +802,7 @@ void GameScene::postUpdate(float remain) {
  * Add a new projectile to the world and send it in the right direction.
  */
 void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
-	float offset = PROJECTILE_OFFSET;
+    float offset = PROJECTILE_OFFSET;
     if (isPlayerFired) {
         pos.x += (_player->isFacingRight() ? offset : -offset);
         pos.y += 0.5f;
@@ -1057,7 +931,7 @@ void GameScene::beginContact(b2Contact* contact) {
         }
         CULog("Applying knockback");
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
+        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player-> getPosition()).normalize());
     }
     else if (bd2->getName() == ENEMY_NAME && isPlayerBody(bd1, fd1)) {
         if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {
