@@ -40,6 +40,10 @@
  */
 class PlatformInput {
 private:
+    /** Reference to the left joystick image */
+    std::shared_ptr<cugl::scene2::PolygonNode> _leftnode;
+    /** Reference to the right joystick image */
+    std::shared_ptr<cugl::scene2::PolygonNode> _rightnode;
     /** Whether or not this input is active */
     bool _active;
     // KEYBOARD EMULATION
@@ -196,7 +200,12 @@ protected:
      * @return the scene location of a touch
      */
     cugl::Vec2 touch2Screen(const cugl::Vec2 pos) const;
-
+    
+    /**
+     * Set visibility and position of joystick scene graph nodes
+     *
+     */
+    void renderJoystick();
     /**
      * Processes movement for the floating joystick.
      *
@@ -243,7 +252,25 @@ public:
      * once it is reinitialized.
      */
     void dispose();
-    
+    /**
+     * Creates a new player at the given position.
+     *
+     * The player has the given size, scaled so that 1 pixel = 1 Box2d unit
+     *
+      * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param pos   Initial position in world coordinates
+     * @param size  The size of the player in world units
+     *
+     * @return  A newly allocated PlayerModel at the given position with the given scale
+     */
+    static std::shared_ptr<PlatformInput> alloc(const std::shared_ptr<cugl::AssetManager>& assetRef, const cugl::Rect bounds) {
+        std::shared_ptr<PlatformInput> result = std::make_shared<PlatformInput>();
+        return (result->init(assetRef, bounds)? result : nullptr);
+    }
     /**
      * Initializes the input control for the given bounds
      *
@@ -255,7 +282,7 @@ public:
      *
      * @return true if the controller was initialized successfully
      */
-    bool init(const cugl::Rect bounds);
+    bool init(const std::shared_ptr<cugl::AssetManager>& assetRef, const cugl::Rect bounds);
     
 #pragma mark -
 #pragma mark Input Detection

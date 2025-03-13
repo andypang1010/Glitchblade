@@ -46,46 +46,6 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 
-#define SIGNUM(x)  ((x > 0) - (x < 0))
-
-#pragma mark -
-#pragma mark Physics Constants
-/** Cooldown (in animation frames) for jumping */
-#define JUMP_COOLDOWN   5
-/** Cooldown (in animation frames) for shooting */
-#define SHOOT_COOLDOWN  20
-/** Cooldown (in frames) for guard */
-#define GUARD_COOLDOWN  15
-/** Cooldown (in frames) for dash */
-#define DASH_COOLDOWN  30
-/** Duration (in frames) for guard */
-#define GUARD_DURATION  44
-/** Duration (in frames) for parry */
-#define PARRY_DURATION  24
-/** Duration (in frames) for dash- affects friction*/
-#define DASH_DURATION  20
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define DUDE_VSHRINK  0.95f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define DUDE_HSHRINK  0.7f
-/** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define DUDE_SSHRINK  0.6f
-/** Height of the sensor attached to the player's feet */
-#define SENSOR_HEIGHT   0.1f
-/** The amount to shrink the radius of the shield relative to the image width */
-#define SHIELD_RADIUS 2.0f
-/** The density of the character */
-#define DUDE_DENSITY    1.0f
-/** The impulse for the character jump */
-#define DUDE_JUMP       45.0f
-/** The x SPEED for the character dash-attack */
-#define DUDE_DASH       30.0f
-/** The impulse for the  vertical component of the knockback */
-#define DUDE_KB     15.0f
-#define KB_DURATION 20
-/** Debug color for the sensor */
-#define DEBUG_COLOR     Color4::RED
-
 
 using namespace cugl;
 
@@ -93,9 +53,9 @@ using namespace cugl;
 #pragma mark Constructors
 
 /**
- * Initializes a new dude at the given position.
+ * Initializes a new player at the given position.
  *
- * The dude is sized according to the given drawing scale.
+ * The player is sized according to the given drawing scale.
  *
  * The scene graph is completely decoupled from the physics system.
  * The node does not have to be the same size as the physics body. We
@@ -103,24 +63,24 @@ using namespace cugl;
  * according to the drawing scale.
  *
  * @param pos   Initial position in world coordinates
- * @param size  The size of the dude in world units
+ * @param size  The size of the player in world units
  * @param scale The drawing scale (world to screen)
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
     Size nsize = size;
-    nsize.width  *= DUDE_HSHRINK;
-    nsize.height *= DUDE_VSHRINK;
+    nsize.width  *= HSHRINK;
+    nsize.height *= VSHRINK;
     _drawScale = scale;
     
     if (BoxObstacle::init(pos,nsize)) {
-        setDensity(DUDE_DENSITY);
+        setDensity(DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
         // Gameplay attributes
-        _hp = DUDE_MAXHP;
+        _hp = MAXHP;
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput  = false;
@@ -131,9 +91,11 @@ bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
         _isGuardInput = false;
         _hasProjectile = false;
         _faceRight  = true;
+        _dashReset = true; //must init to true to be able to dash?
         _shootCooldownRem = 0;
         _jumpCooldownRem  = 0;
         _dashCooldownRem = 0;
+        _dashRem = 0;
         _guardCooldownRem = 0;
         _guardRem = 0;
         _parryRem= 0;
@@ -162,7 +124,7 @@ void PlayerModel::damage(float value) {
 /**
  * Sets left/right movement of this character.
  *
- * This is the result of input times dude force.
+ * This is the result of input times player force.
  *
  * @param value left/right movement of this character.
  */
@@ -241,18 +203,18 @@ void PlayerModel::createFixtures() {
     }
     
     b2FixtureDef sensorDef;
-    sensorDef.density = DUDE_DENSITY;
+    sensorDef.density = DENSITY;
     sensorDef.isSensor = true;
     
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -DUDE_SSHRINK*getWidth()/2.0f;
+    corners[0].x = -SSHRINK*getWidth()/2.0f;
     corners[0].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
-    corners[1].x = -DUDE_SSHRINK*getWidth()/2.0f;
+    corners[1].x = -SSHRINK*getWidth()/2.0f;
     corners[1].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[2].x =  DUDE_SSHRINK*getWidth()/2.0f;
+    corners[2].x =  SSHRINK*getWidth()/2.0f;
     corners[2].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[3].x =  DUDE_SSHRINK*getWidth()/2.0f;
+    corners[3].x =  SSHRINK*getWidth()/2.0f;
     corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
     
     b2PolygonShape sensorShape;
@@ -304,86 +266,6 @@ void PlayerModel::dispose() {
     _shieldNode = nullptr;
 }
 
-/**
- * Applies the force to the body of this dude
- *
- * This method should be called after the force attribute is set.
- */
-void PlayerModel::applyForce() {
-    if (!isEnabled()) {
-        return;
-    }
-    
-    // Don't want to be moving.f Damp out player motion
-    if (getMovement() == 0.0f && !isDashActive() && !isKnockbackActive()) {
-        if (isGrounded()) {
-            // CULog("Setting x vel to 0");
-            // Instant friction on the ground
-            b2Vec2 vel = _body->GetLinearVelocity();
-            vel.x = 0; // If you set y, you will stop a jump in place
-            _body->SetLinearVelocity(vel);
-        } else {
-            //             Damping factor in the air
-            b2Vec2 force(-getDamping()*getVX(),0);
-            _body->ApplyForceToCenter(force,true);
-        }
-    }
-#pragma mark strafe force
-//    b2Vec2 force(getMovement(),0);
-    // Ignore stafe input if in a dash (intentional)
-    if (!(_dashRem > 0) && !isKnockbackActive()) {
-        _body->SetLinearVelocity(b2Vec2(getMovement(), _body->GetLinearVelocity().y));
-    }
-    // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
-#pragma mark jump force
-    // Jump!
-    if (isJumpBegin() && isGrounded()) {
-        b2Vec2 force(0, DUDE_JUMP);
-        _body->ApplyLinearImpulseToCenter(force,true);
-    }
-#pragma mark dash force
-    // Dash!
-    if (isDashLeftBegin() && _dashReset == true){
-        CULog("dashing left begin");
-        faceLeft();
-        // b2Vec2 force(-DUDE_DASH,0);
-        // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
-        _body->SetLinearVelocity(b2Vec2(-DUDE_DASH, 0));
-        _body->SetGravityScale(0);
-        _dashReset = false;
-    }
-    
-    if (isDashRightBegin() && _dashReset == true){
-        CULog("dashing right begin");
-        faceRight();
-        // b2Vec2 force(DUDE_DASH, 0);
-        // _body->ApplyLinearImpulseToCenter(force, true);
-        _body->SetLinearVelocity(b2Vec2(DUDE_DASH, 0));
-        _body->SetGravityScale(0);
-        _dashReset = false;
-    }
-
-    if (!isDashActive()) {
-        _body->SetGravityScale(1);
-    }
-
-#pragma mark knockback force
-    if (isKnocked()) {
-        _body->SetLinearVelocity(b2Vec2(0,0));
-
-        Vec2 knockForce = _knockDirection.subtract(Vec2(0,_knockDirection.y)).scale(DUDE_KB);
-        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, DUDE_KB), true);
-        _isKnocked = false;
-    }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive() && !isKnockbackActive()) {
-        //CULog("clamping velocity");
-        setVX(SIGNUM(getVX())*getMaxSpeed());
-        
-    }
-}
-
 #pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
@@ -393,83 +275,7 @@ void PlayerModel::applyForce() {
  * @param delta Number of seconds since last animation frame
  */
 void PlayerModel::update(float dt) {
-
     updateAnimation();
-
-    // Apply cooldowns
-    #pragma mark Guard and Parry timing
-    // guard cooldown first for most recent movement inputs
-    if (isGuardActive() && !isGuardBegin()){
-        //just for logging end of parry
-        bool parry_active = isParryActive();
-        _guardRem = (_guardRem > 0 ? _guardRem -1 : 0);
-        _parryRem= (_parryRem > 0 ? _parryRem -1 : 0);
-            
-        //The rest of this block is for logging end of guard&parry
-        if (parry_active && (_parryRem == 0)){
-            _shieldNode->setColor(Color4::BLUE);
-            CULog("Parry completed during guard\n");
-        }
-        if (_guardRem == 0){
-            CULog("Guard completed full duration\n");
-            _shieldNode->setColor(DEBUG_COLOR);
-        }
-    }
-    // guard not active, update cooldown
-    else {
-        _guardCooldownRem = (_guardCooldownRem > 0 ? _guardCooldownRem -1 : 0);
-    }
-    if (isJumpBegin() && isGrounded()) {
-        CULog("isJumping is true");
-        _jumpCooldownRem = JUMP_COOLDOWN;
-    } else {
-        _jumpCooldownRem = (_jumpCooldownRem > 0 ? _jumpCooldownRem-1 : 0);
-    }
-    
-    if (isShooting()) {
-        _shootCooldownRem = SHOOT_COOLDOWN;
-    } else {
-        _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
-    }
-    
-    if (isKnocked()) {
-        CULog("knockback applied");
-        _dashCooldownRem = DASH_COOLDOWN;
-        _guardCooldownRem = GUARD_COOLDOWN;
-        _jumpCooldownRem = JUMP_COOLDOWN;
-        _shootCooldownRem = SHOOT_COOLDOWN;
-        _knockbackRem = KB_DURATION;
-    } else {
-        _knockbackRem = (_knockbackRem > 0 ? _knockbackRem-1 : 0);
-    }
-    
-    if (isDashBegin()) {
-        _dashRem = DASH_DURATION;
-        _dashCooldownRem = DASH_COOLDOWN;
-    }
-    else {
-        _dashRem = (_dashRem > 0 ? _dashRem-1 : 0);
-        if (_dashRem == 0){
-            _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
-        }
-    }
-
-    // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
-    if (_dashReset == false && _dashCooldownRem == 0 && !(_isDashLeftInput || _isDashRightInput)) {
-        _dashReset = true; // ready to dash again
-    }
-
-    // player inputs guard and cooldown is ready
-    if (isGuardBegin()) {
-        CULog("Beginning guard\n");
-        _shieldNode->setColor(Color4::GREEN);
-        _guardCooldownRem = GUARD_COOLDOWN;
-        _guardRem = GUARD_DURATION;
-        // begin parry
-        CULog("Beginning parry\n");
-        _parryRem = PARRY_DURATION;
-    }
-    
     BoxObstacle::update(dt);
     if (_sceneNode != nullptr) {
         _sceneNode->setPosition(getPosition()*_drawScale);
@@ -544,11 +350,11 @@ void PlayerModel::updateAnimation()
  */
 void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = DUDE_SSHRINK*_dimension.width;
+    float w = SSHRINK*_dimension.width;
     float h = SENSOR_HEIGHT;
-    Poly2 dudePoly(Rect(-w/0.1f,-h/2.0f,w,h));
-    _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(DEBUG_COLOR);
+    Poly2 playerPoly(Rect(-w/0.1f,-h/2.0f,w,h));
+    _sensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
+    _sensorNode->setColor(SENSOR_DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
     
     Poly2 shieldPoly;
@@ -559,7 +365,6 @@ void PlayerModel::resetDebug() {
 
     _debug->addChild(_sensorNode);
     _debug->addChild(_shieldNode);
-    
 }
 
 

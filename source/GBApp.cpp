@@ -139,11 +139,7 @@ void GlitchbladeApp::update(float dt) {
         _gameplay.init(_assets);
         _gameplay.setSpriteBatch(_batch);
         _loaded = true;
-        
-        // Switch to deterministic mode (UNCOMMENT TO COMPARE)
         setDeterministic(true);
-    } else {
-        _gameplay.update(dt);
     }
 }
 

@@ -32,6 +32,7 @@
 #include <vector>
 #include "GBInput.h"
 #include "GBProjectile.h"
+// keep includes for models to access scene nodes when adding as children in init
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBLevelController.h"
@@ -53,10 +54,10 @@ protected:
     std::shared_ptr<JsonValue> _enemiesJSON;
     
     // CONTROLLERS
-    /** Controller for abstracting out input across multiple platforms */
-    PlatformInput _input;
     /** LevelController for managing the level progress of the current game */
     std::shared_ptr<LevelController> _levelController;
+    // delete this input controller
+    std::shared_ptr<PlatformInput> _input;
     
     // VIEW
     /** Reference to the physics root of the scene graph */
@@ -67,16 +68,13 @@ protected:
     std::shared_ptr<scene2::Label> _winnode;
     /** Reference to the lose message label */
     std::shared_ptr<scene2::Label> _losenode;
-    /** Reference to the player HP label */
-    std::shared_ptr<scene2::Label> _playerHPNode;
     /** Reference to the enemy HP label */
     std::shared_ptr<scene2::Label> _enemyHPNode;
+    /** Reference to the player HP label */
+    std::shared_ptr<scene2::Label> _playerHPNode;
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
-    /** Reference to the left joystick image */
-    std::shared_ptr<scene2::PolygonNode> _leftnode;
-    /** Reference to the right joystick image */
-    std::shared_ptr<scene2::PolygonNode> _rightnode;
+    
 
     /** The Box2D world */
     std::shared_ptr<physics2::ObstacleWorld> _world;
@@ -339,15 +337,6 @@ public:
 
 #pragma mark -
 #pragma mark Gameplay Handling
-    /**
-     * The method called to update the game mode.
-     *
-     * This is the nondeterministic version of a physics simulation. It is
-     * provided for comparison purposes only.
-     *
-     * @param timestep  The amount of time (in seconds) since the last frame
-     */
-    void update(float timestep);
      
     /**
      * The method called to indicate the start of a deterministic loop.

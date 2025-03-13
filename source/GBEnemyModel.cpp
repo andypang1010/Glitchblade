@@ -157,7 +157,6 @@ bool EnemyModel::init(const Vec2& pos, const Size& size, float scale, std::vecto
     return false;
 }
 
-
 #pragma mark -
 #pragma mark Attribute Properties
 
@@ -399,7 +398,7 @@ void EnemyModel::update(float dt) {
                 CULog("Parry completed during guard\n");
             }
             if (_guardRem == 0){
-                CULog("Guard completed full duration\n");
+                CULog("Enemy Guard completed full duration\n");
             }
         }
     }
@@ -612,7 +611,4 @@ void EnemyModel::resetDebug() {
     _shieldNode->setColor(DEBUG_COLOR);
     
 }
-
-
-
 

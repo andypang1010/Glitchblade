@@ -41,8 +41,8 @@
 //  Author:  Walker White and Anthony Perello
 //  Version: 2/9/21
 //
-#ifndef __GB_DUDE_MODEL_H__
-#define __GB_DUDE_MODEL_H__
+#ifndef __GB_PLAYER_MODEL_H__
+#define __GB_PLAYER_MODEL_H__
 #include <cugl/cugl.h>
 
 using namespace cugl;
@@ -50,30 +50,63 @@ using namespace cugl;
 #pragma mark -
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
-#define DUDE_TEXTURE    "player"
+#define PLAYER_TEXTURE    "player"
 #define ENEMY_TEXTURE   "enemy"
 /** Identifier to allow us to track the player sensor in ContactListener */
 #define BODY_NAME      "body"
-#define SENSOR_NAME     "dudesensor"
+#define SENSOR_NAME     "playersensor"
 #define SHIELD_SENSOR_NAME      "shield"
 
 #define ANIMATION_UPDATE_FRAME 4
-
-
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
-#define DUDE_FORCE      50.0f
+#define FORCE      50.0f
 /** The amount to slow the character down */
-#define DUDE_DAMPING    30.0f
+#define DAMPING    30.0f
 /** The maximum character speed */
-#define DUDE_MAXSPEED   5.0f
+#define MAXSPEED   5.0f
 /** The maximum character hp */
-#define DUDE_MAXHP   100.0f
-
+#define MAXHP   100.0f
+/** Cooldown (in animation frames) for jumping */
+#define JUMP_COOLDOWN   5
+/** Cooldown (in animation frames) for shooting */
+#define SHOOT_COOLDOWN  20
+/** Cooldown (in frames) for guard */
+#define GUARD_COOLDOWN  15
+/** Cooldown (in frames) for dash */
+#define DASH_COOLDOWN  30
+/** Duration (in frames) for guard */
+#define GUARD_DURATION  44
+/** Duration (in frames) for parry */
+#define PARRY_DURATION  24
+/** Duration (in frames) for dash- affects friction*/
+#define DASH_DURATION  20
+/** The amount to shrink the body fixture (vertically) relative to the image */
+#define VSHRINK  0.95f
+/** The amount to shrink the body fixture (horizontally) relative to the image */
+#define HSHRINK  0.7f
+/** The amount to shrink the sensor fixture (horizontally) relative to the image */
+#define SSHRINK  0.6f
+/** Height of the sensor attached to the player's feet */
+#define SENSOR_HEIGHT   0.1f
+/** The amount to shrink the radius of the shield relative to the image width */
+#define SHIELD_RADIUS 2.0f
+/** The density of the character */
+#define DENSITY    1.0f
+/** The impulse for the character jump */
+#define JUMP_F       45.0f
+/** The x SPEED for the character dash-attack */
+#define DASH       30.0f
+/** The impulse for the  vertical component of the knockback */
+#define KB     15.0f
+#define KB_DURATION 20
+/** Debug color for the sensor */
+#define SENSOR_DEBUG_COLOR     Color4::RED
+#define DEBUG_COLOR     Color4::YELLOW
 
 #pragma mark -
-#pragma mark Dude Model
+#pragma mark player Model
 /**
 * Player avatar for the plaform game.
 *
@@ -146,8 +179,7 @@ protected:
     /** The node for debugging the ground sensor */
     std::shared_ptr<scene2::WireNode> _shieldNode;
     /** The guard shield when guard is active */
-    
-	/** The scene graph node for the Dude. */
+    /** The player scene node**/
 	std::shared_ptr<scene2::SceneNode> _sceneNode;
 	/** The scale between the physics world and the screen (MUST BE UNIFORM) */
 	float _drawScale;
@@ -176,9 +208,9 @@ public:
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
 #pragma mark Hidden Constructors
     /**
-     * Creates a degenerate Dude object.
+     * Creates a degenerate player object.
      *
-     * This constructor does not initialize any of the dude values beyond
+     * This constructor does not initialize any of the player values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
     PlayerModel() : BoxObstacle(), _sensorName(SENSOR_NAME), _shieldName(SHIELD_SENSOR_NAME), _bodyName(BODY_NAME) { }
@@ -197,9 +229,9 @@ public:
     void dispose();
     
     /**
-     * Initializes a new dude at the origin.
+     * Initializes a new player at the origin.
      *
-     * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
+     * The player is a unit square scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -211,9 +243,9 @@ public:
     virtual bool init() override { return init(Vec2::ZERO, Size(1,1), 1.0f); }
     
     /**
-     * Initializes a new dude at the given position.
+     * Initializes a new player at the given position.
      *
-     * The dude is unit square scaled so that 1 pixel = 1 Box2d unit
+     * The player is unit square scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -227,9 +259,9 @@ public:
     virtual bool init(const Vec2 pos) override { return init(pos, Size(1,1), 1.0f); }
     
     /**
-     * Initializes a new dude at the given position.
+     * Initializes a new player at the given position.
      *
-     * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
+     * The player has the given size, scaled so that 1 pixel = 1 Box2d unit
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -237,7 +269,7 @@ public:
      * according to the drawing scale.
      *
      * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
+     * @param size  The size of the player in world units
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
@@ -246,9 +278,9 @@ public:
     }
     
     /**
-     * Initializes a new dude at the given position.
+     * Initializes a new player at the given position.
      *
-     * The dude is sized according to the given drawing scale.
+     * The player is sized according to the given drawing scale.
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -256,7 +288,7 @@ public:
      * according to the drawing scale.
      *
      * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
+     * @param size  The size of the player in world units
      * @param scale The drawing scale (world to screen)
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
@@ -267,9 +299,9 @@ public:
 #pragma mark -
 #pragma mark Static Constructors
 	/**
-	 * Creates a new dude at the origin.
+	 * Creates a new player at the origin.
 	 *
-	 * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
+	 * The player is a unit square scaled so that 1 pixel = 1 Box2d unit
 	 *
 	 * The scene graph is completely decoupled from the physics system.
 	 * The node does not have to be the same size as the physics body. We
@@ -284,9 +316,9 @@ public:
 	}
 
 	/**
-	 * Creates a new dude at the given position.
+	 * Creates a new player at the given position.
 	 *
-	 * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
+	 * The player is a unit square scaled so that 1 pixel = 1 Box2d unit
 	 *
 	 * The scene graph is completely decoupled from the physics system.
 	 * The node does not have to be the same size as the physics body. We
@@ -303,9 +335,9 @@ public:
 	}
 
     /**
-	 * Creates a new dude at the given position.
+	 * Creates a new player at the given position.
 	 *
-     * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
+     * The player has the given size, scaled so that 1 pixel = 1 Box2d unit
 	 *
  	 * The scene graph is completely decoupled from the physics system.
 	 * The node does not have to be the same size as the physics body. We
@@ -313,7 +345,7 @@ public:
 	 * according to the drawing scale.
 	 *
 	 * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
+     * @param size  The size of the player in world units
 	 *
 	 * @return  A newly allocated PlayerModel at the given position with the given scale
 	 */
@@ -323,9 +355,9 @@ public:
 	}
 
 	/**
-	 * Creates a new dude at the given position.
+	 * Creates a new player at the given position.
 	 *
-	 * The dude is sized according to the given drawing scale.
+	 * The player is sized according to the given drawing scale.
 	 *
 	 * The scene graph is completely decoupled from the physics system.
 	 * The node does not have to be the same size as the physics body. We
@@ -333,7 +365,7 @@ public:
 	 * according to the drawing scale.
 	 *
 	 * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
+     * @param size  The size of the player in world units
 	 * @param scale The drawing scale (world to screen)
 	 *
 	 * @return  A newly allocated PlayerModel at the given position with the given scale
@@ -407,7 +439,7 @@ public:
     /**
      * Returns left/right movement of this character.
      *
-     * This is the result of input times dude force.
+     * This is the result of input times player force.
      *
      * @return left/right movement of this character.
      */
@@ -416,7 +448,7 @@ public:
     /**
      * Sets left/right movement of this character.
      *
-     * This is the result of input times dude force.
+     * This is the result of input times player force.
      *
      * @param value left/right movement of this character.
      */
@@ -433,208 +465,330 @@ public:
     void faceRight();
     
     /**
-     * Returns true if the dude is actively firing.
+     * Returns true if the player is actively firing.
      *
-     * @return true if the dude is actively firing.
+     * @return true if the player is actively firing.
      */
     bool isShooting() const { return _isShootInput && _shootCooldownRem <= 0; }
     /**
-     * Returns true if the dude is actively strafing left.
+     * Returns true if the player is actively strafing left.
      *
-     * @return true if the dude is actively strafing left.
+     * @return true if the player is actively strafing left.
      */
     void setStrafeLeft(bool value) {_isStrafeLeft = value;};
 
     /**
-     * Sets whether the dude is actively strafing right.
+     * Sets whether the player is actively strafing right.
      *
-     * @param value whether the dude is actively strafing right.
+     * @param value whether the player is actively strafing right.
      */
     void setStrafeRight(bool value) {_isStrafeRight = value;};
 
     /**
-     * Sets whether the dude has a swallowed projectile.
+     * Sets whether the player has a swallowed projectile.
      *
-     * @param value whether the dude has a swallowed projectile.
+     * @param value whether the player has a swallowed projectile.
      */
     void setHasProjectile(bool value) { _hasProjectile = value; }
 
     /**
-     * Sets whether the dude is beginning dash left
+     * Sets whether the player is beginning dash left
      *
-     * @param value whether the dude is beginning dash left.
+     * @param value whether the player is beginning dash left.
      */
     void setDashLeftInput(bool value) { _isDashLeftInput = value; }
 
     /**
-     * Sets whether the dude is beginning dash right.
+     * Sets whether the player is beginning dash right.
      *
-     * @param value whether the dude is beginning dash right.
+     * @param value whether the player is beginning dash right.
      */
     void setDashRightInput(bool value) { _isDashRightInput = value; }
 
     /**
-     * Sets whether the dude is actively trying to jump.
+     * Sets whether the player is actively trying to jump.
      *
-     * @param value whether the dude is actively trying to jump.
+     * @param value whether the player is actively trying to jump.
      */
     void setJumpInput(bool value) { _isJumpInput = value; }
 
     /**
-     * Sets whether the dude is actively firing.
+     * Sets whether the player is actively firing.
      *
-     * @param value whether the dude is actively firing.
+     * @param value whether the player is actively firing.
      */
     void setShootInput(bool value) { _isShootInput = value; }
     /**
-     * Sets whether the dude is inputting guard
+     * Sets whether the player is inputting guard
      *
-     * @param value whether the dude is inputting guard
+     * @param value whether the player is inputting guard
      */
     void setGuardInput(bool value) { _isGuardInput = value; }
     /**
-     * Sets whether the dude is actively strafing left.
+     * Sets whether the player is actively strafing left.
      *
-     * @param value whether the dude is actively strafing left.
+     * @param value whether the player is actively strafing left.
      */
     bool isStrafeLeft() { return _isStrafeLeft; };
     /**
-     * Sets whether the dude is actively strafing right.
+     * Sets whether the player is actively strafing right.
      *
-     * @return true if whether the dude is actively strafing right.
+     * @return true if whether the player is actively strafing right.
      */
     bool isStrafeRight() { return _isStrafeRight; };
     /**
-     * Returns true if if the dude is actively trying to jump and jump cooldown is ready (regardless if on the ground).
+     * Returns true if if the player is actively trying to jump and jump cooldown is ready (regardless if on the ground).
      *
-     * @return true if the dude is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
+     * @return true if the player is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
      */
     bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
     
     /**
-     * Returns true if the dude is actively dashing left.
+     * Returns true if the player is actively dashing left.
      *
-     * @param value whether the dude is actively dashing left.
+     * @param value whether the player is actively dashing left.
      */
-    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0; };
+    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset; };
     /**
-     * Returns true if the dude is actively dashing right.
+     * Returns true if the player is actively dashing right.
      *
-     * @param value whether the dude is actively dashing right.
+     * @param value whether the player is actively dashing right.
      */
-    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0; };
+    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset; };
     /**
-     * Returns true if the dude is dashing
+     * Returns true if the player is dashing
      *
-     * @return value whether the dude is dashing either direction.
+     * @return value whether the player is dashing either direction.
      */
     bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); };
     /**
-     * Returns true if the dude is inputting a movement action/
+     * Returns true if the player is inputting a movement action/
      *
-     * @return value whether the dude is performing a movement action.
+     * @return value whether the player is performing a movement action.
      */
     bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
     
     /**
-     *  Returns true if the dude is currently beginning guard action.
+     *  Returns true if the player is currently beginning guard action.
      *
-     * @return value whether the dude is beginning guard action.
+     * @return value whether the player is beginning guard action.
      */
     bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; };
       /**
-     * Returns true if the dude has a swallowed projectile.
+     * Returns true if the player has a swallowed projectile.
      *
-     * @return value whether the dude has a swallowed projectile.
+     * @return value whether the player has a swallowed projectile.
      */
     /**
-     * Returns true ifrthe dude is actively guarding.
+     * Returns true ifrthe player is actively guarding.
      *
-     * @return value whether the dude is actively guarding.
+     * @return value whether the player is actively guarding.
      */
     bool isGuardActive() { return  _guardRem > 0 || isGuardBegin(); };
+    
+    /**
+     * Returns the amount of guard frames remaining
+     *
+     * @return the amount of guard frames remaining
+     */
+    int getGuardRem() {return _guardRem; };
+    
+    /**
+     * Used to set the amount of guard frames remaining
+     *
+     * @param the value that remaining guard frames should be set to
+     */
+    void setGuardRem(int value = GUARD_DURATION) {_guardRem = value; };
+    /**
+     * Returns the amount of frames remaining before the player can guard again
+     *
+     * @returns the amount of frames remaining before the player can guard again
+     */
+    int getGuardCDRem() {return _guardCooldownRem; };
+    
+    /**
+     * Used to set the amount of frames remaining before the player can guard again
+     *
+     * @param the amount of frames remaining before the player can guard again should be set to
+     */
+    void setGuardCDRem(int value = GUARD_COOLDOWN) {_guardCooldownRem = value; };
+    void setShieldDebugColor(Color4 c) {_shieldNode->setColor(c);}
+    
+    /**
+     * Returns the amount of dash frames remaining
+     *
+     * @return the amount of dash frames remaining
+     */
+    int getDashRem() {return _dashRem; };
+    
+    /**
+     * Used to set the amount of dash frames remaining
+     *
+     * @param the value that remaining dash frames should be set to
+     */
+    void setDashRem(int value = DASH_DURATION) {_dashRem = value; };
+    /**
+     * Returns the amount of frames remaining before the player can dash again
+     *
+     * @returns the amount of frames remaining before the player can dash again
+     */
+    int getDashCDRem() {return _dashCooldownRem; };
+    
+    /**
+     * Used to set the amount of frames remaining before the player can dash again
+     *
+     * @param the amount of frames remaining before the player can dash again should be set to
+     */
+    void setDashCDRem(int value = DASH_COOLDOWN) {_dashCooldownRem = value; };
 
     /**
-     * Returns true if the dude is actively parrying.
+     * Returns true if the player is actively parrying.
      *
-     * @return value whether the dude is actively parrying.
+     * @return value whether the player is actively parrying.
      */
     bool isParryActive() { return _parryRem > 0 || isGuardBegin(); };
     /**
-     * Returns true if the dude has a swallowed projectile.
+     * Returns the amount of parry frames remaining
      *
-     * @return value whether the dude has a swallowed projectile.
+     * @return the amount of parry frames remaining
+     */
+    int getParryRem() {return _parryRem; };
+    
+    /**
+     * Used to set the amount of parry frames remaining
+     *
+     * @param the value that remaining parry frames should be set to
+     */
+    void setParryRem(int value = PARRY_DURATION) {_parryRem = value; };
+    /**
+     * Returns the amount of knockback frames remaining
+     *
+     * @return the amount of knockback frames remaining
+     */
+    int getKnockbackRem() {return _knockbackRem; };
+    
+    /**
+     * Used to set the amount of knockback frames remaining
+     *
+     * @param the value that remaining knockback frames should be set to
+     */
+    void setKnockbackRem(int value = KB_DURATION) {_knockbackRem = value; };
+    /**
+     * Returns true if the player has a swallowed projectile.
+     *
+     * @return value whether the player has a swallowed projectile.
      */
     bool hasProjectile() { return _hasProjectile; };
     /**
-     * Returns true if the dude is in a dash animation.
+     * Returns true if the player is in a dash animation.
      *
-     * @return value whether the dude is in a dash animation.
+     * @return value whether the player is in a dash animation.
      */
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
+    /**
+     * Returns the amount of frames remaining before the player can jump again
+     *
+     * @returns the amount of frames remaining before the player can jump again
+     */
+    int getJumpCDRem() {return _jumpCooldownRem; };
     
     /**
-     * Returns true if the dude is being knocked back.
+     * Used to set the amount of frames remaining before the player can jump again
      *
-     * @return true if the dude is being knocked back.
+     * @param the value that the amount of frames remaining before the player can jump again should be set to
+     */
+    void setJumpCDRem(int value = JUMP_COOLDOWN) {_jumpCooldownRem = value; };
+    /**
+     * Returns the amount of frames remaining before the player can shoot again
+     *
+     * @returns the amount of frames remaining before the player can shoot again
+     */
+    int getShootCDRem() {return _shootCooldownRem; };
+    
+    /**
+     * Used to set the amount of frames remaining before the player can shoot again
+     *
+     * @param the value that the amount of frames remaining before the player can shoot again should be set to
+     */
+    void setShootCDRem(int value = SHOOT_COOLDOWN) {_shootCooldownRem = value; };
+    /**
+     * Returns true if the player is being knocked back.
+     *
+     * @return true if the player is being knocked back.
      */
     bool isKnocked() const { return _isKnocked;}
     /**
-     * Returns true if the dude is in a knockback animation.
+     * Returns true if the player is in a knockback animation.
      *
-     * @return value whether the dude is in a knockback animation.
+     * @return value whether the player is in a knockback animation.
      */
     bool isKnockbackActive() { return _knockbackRem > 0 || isKnocked(); };
     /**
-     * Sets the dash duration of the player.
+     * Returns true if the player is on the ground.
      *
-     * @param value new dash duration.
-     */
-    void setDashRem(int value) { _dashRem = value; };
-    /**
-     * Returns true if the dude is on the ground.
-     *
-     * @return true if the dude is on the ground.
+     * @return true if the player is on the ground.
      */
     bool isGrounded() const { return _isGrounded; }
     
     /**
-     * Sets whether the dude is on the ground.
+     * Sets whether the player is on the ground.
      *
-     * @param value whether the dude is on the ground.
+     * @param value whether the player is on the ground.
      */
     void setGrounded(bool value) { _isGrounded = value; }
+    float getKnockF() {return KB;}
+    Vec2 getKnockDirection() {return _knockDirection;}
     /**
-     * Sets whether the dude is being knocked back
+     * Sets whether the player is being knocked back
      *
-     * @param value whether the dude is being knocked back
-     * @param knockDirection direction that the dude will move toward
+     * @param value whether the player is being knocked back
+     * @param knockDirection direction that the player will move toward
      */
     void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection;  }
     /**
-     * Returns how much force to apply to get the dude moving
+     * Resets knock status - do this after applying force.
+     */
+    void resetKnocked() { _isKnocked = false;  }
+    /**
+     * Returns how much force to apply to get the player moving
      *
      * Multiply this by the input to get the movement value.
      *
-     * @return how much force to apply to get the dude moving
+     * @return how much force to apply to get the player moving
      */
-    float getForce() const { return DUDE_FORCE; }
-    
+    float getForce() const { return FORCE; }
     /**
-     * Returns How hard the brakes are applied to get a dude to stop moving
+     * @return how much jump force to apply
+     */
+    float getJumpF() const { return JUMP_F; }
+    /**
+     * @return how much dash force to apply
+     */
+    float getDashF() const { return DASH; }
+    /** @return is dash left input */
+    bool isDashLeftInput() const { return _isDashLeftInput; }
+    /** @return is dash right input */
+    bool isDashRightInput() const { return _isDashRightInput; }
+    bool isDashInput() const { return isDashRightInput() || isDashLeftInput(); }
+    /**
+     * Returns How hard the brakes are applied to get a player to stop moving
      *
-     * @return How hard the brakes are applied to get a dude to stop moving
+     * @return How hard the brakes are applied to get a player to stop moving
      */
-    float getDamping() const { return DUDE_DAMPING; }
+    float getDamping() const { return DAMPING; }
     
+    /** @return Whether the dash has been released (reset). only for keyboard controls*/
+    bool getDashReset() const { return _dashReset; };
+    /** For keyboard dash controls - do this after applying force*/
+    void setDashReset(bool r){CULog("Setting DashReset to %d", r); _dashReset = r;}
     /**
-     * Returns the upper limit on dude left-right movement.
+     * Returns the upper limit on player left-right movement.
      *
      * This does NOT apply to vertical movement.
      *
-     * @return the upper limit on dude left-right movement.
+     * @return the upper limit on player left-right movement.
      */
-    float getMaxSpeed() const { return DUDE_MAXSPEED; }
+    float getMaxSpeed() const { return MAXSPEED; }
     /**
      * Returns the name of the body fixture
      *
@@ -700,16 +854,9 @@ public:
      * @param delta Number of seconds since last animation frame
      */
     void update(float dt) override;
-    
-    /**
-     * Applies the force to the body of this dude
-     *
-     * This method should be called after the force attribute is set.
-     */
-    void applyForce();
 
 
 	
 };
 
-#endif /* __GB_DUDE_MODEL_H__ */
+#endif /* __GB_MODEL_H__ */
