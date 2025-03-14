@@ -172,6 +172,7 @@ void PlayerController::preUpdate(float dt)
     _hpNode->setText(std::to_string((int)_player->getHP()));
     
     applyForce();
+    updateCooldowns();
 }
 #pragma mark fixedUpdate
 void PlayerController::fixedUpdate(float timestep)
@@ -182,7 +183,6 @@ void PlayerController::fixedUpdate(float timestep)
 #pragma mark postUpdate
 void PlayerController::postUpdate(float dt)
 {
-    updateCooldowns();
 }
 
 void PlayerController::updateCooldowns()
