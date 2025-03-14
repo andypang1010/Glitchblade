@@ -42,14 +42,14 @@ using namespace cugl::audio;
 #pragma mark Level Geography
 
 /** This is adjusted by screen aspect ratio to get the height */
-#define SCENE_WIDTH 1024
+#define SCENE_WIDTH 1248
 #define SCENE_HEIGHT 576
 
 /** This is the aspect ratio for physics */
-#define SCENE_ASPECT 9.0/16.0
+#define SCENE_ASPECT 9.0/19.5
 
 /** Width of the game world in Box2d units */
-#define DEFAULT_WIDTH   32.0f
+#define DEFAULT_WIDTH   39.0f
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  18.0f
 
@@ -82,7 +82,7 @@ float WALL[WALL_COUNT][WALL_VERTS] = {
 
 /** The number of ground vertices */
 #define GROUND_VERTS  8
-#define GROUND_THICKNESS 4
+#define GROUND_THICKNESS 4.2
 
 /** The outlines of the ground */
 float GROUND[GROUND_VERTS]{
@@ -323,12 +323,12 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _enemyHPNode = scene2::Label::allocWithText("100", _assets->get<Font>(DEBUG_FONT));
     _enemyHPNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyHPNode->setForeground(Color4::RED);
-    _enemyHPNode->setPosition(0, 80);
+    _enemyHPNode->setPosition(0, 100);
 
     _enemyStunNode = scene2::Label::allocWithText("STUN", _assets->get<Font>(DEBUG_FONT));
     _enemyStunNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyStunNode->setForeground(Color4::RED);
-    _enemyStunNode->setPosition(0, 100);
+    _enemyStunNode->setPosition(0, 120);
 
     addChild(_worldnode);
     addChild(_debugnode);
@@ -356,9 +356,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     setDebug(false); // Debug on by default
 
     // XNA nostalgia
-    Application::get()->setClearColor(Color4f::GRAY);
-
-
+    Application::get()->setClearColor(Color4f::BLACK);
 
     return true;
 }
@@ -449,7 +447,7 @@ void GameScene::populate() {
     }
 
 #pragma mark : GROUND
-    image = _assets->get<Texture>(GROUND_TEXTURE);
+    //image = _assets->get<Texture>(GROUND_TEXTURE);
 
     std::shared_ptr<physics2::PolygonObstacle> groundObj;
     Poly2 ground(reinterpret_cast<Vec2*>(GROUND), 4);
@@ -484,19 +482,19 @@ void GameScene::populate() {
 
 
     _testEnemy->_idleSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_idle"), 1, 6, 6);
-    _testEnemy->_idleSprite->setPosition(0, 40);
+    _testEnemy->_idleSprite->setPosition(0, 60);
 
     _testEnemy->_walkSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_walking1"), 1, 8, 8);
-    _testEnemy->_walkSprite->setPosition(0, 40);
+    _testEnemy->_walkSprite->setPosition(0, 60);
 
     _testEnemy->_slamSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_slam"), 4, 10, 40);
-    _testEnemy->_slamSprite->setPosition(0, 40);
+    _testEnemy->_slamSprite->setPosition(0, 60);
 
     _testEnemy->_stabSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_stab"), 4, 10, 40);
-    _testEnemy->_stabSprite->setPosition(0, 40);
+    _testEnemy->_stabSprite->setPosition(0, 60);
 
     _testEnemy->_stunSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_stun"), 3, 10, 22);
-    _testEnemy->_stunSprite->setPosition(0, 40);
+    _testEnemy->_stunSprite->setPosition(0, 60);
 
     _testEnemy->setName(std::string(ENEMY_NAME));
     _testEnemy->setDebugColor(DEBUG_COLOR);
