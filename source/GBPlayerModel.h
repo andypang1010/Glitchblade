@@ -160,6 +160,8 @@ protected:
     Vec2 _knockDirection;
 	/** How long until we can shoot again in animation frames*/
 	int  _shootCooldownRem;
+    /** Remaining invinciblibilty frames*/
+    int _iframe;
 	/** Whether our feet are on the ground */
 	bool _isGrounded;
     /** Whether the dash has been released (reset) */
@@ -196,7 +198,6 @@ protected:
 	virtual void resetDebug() override;
 
 public:
-    int iframe = 0;
 
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 
@@ -736,6 +737,19 @@ public:
      * @param the value that the amount of frames remaining before the player can shoot again should be set to
      */
     void setShootCDRem(int value = SHOOT_COOLDOWN) {_shootCooldownRem = value; };
+    /**
+     * Returns the amount of frames remaining before the player is vulnerable
+     *
+     * @returns the remaing iframes
+     */
+    int getIframe() { return _iframe; };
+
+    /**
+     * Used to set the amount of frames remaining before the player is vulnerable
+     *
+     * @param the new number of iframes
+     */
+    void setIframe(int value) { value < 0 ? _iframe = 0 : _iframe = value; };
     /**
      * Returns true if the player is being knocked back.
      *

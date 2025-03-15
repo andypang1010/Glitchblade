@@ -311,6 +311,14 @@ public:
      */
     bool isPlayerBody(physics2::Obstacle* b,const std::string* f);
     /**
+     *
+     * This function handles the conditions for when the player is hit by the enemy
+     * Right now it does not parameters since there is only one enemy
+     * TODO: refactor to allow detection of which enemy hit the player
+     *       move to player controller
+     */
+    void playerHit();
+    /**
      * @brief Checks if a projectile is hitting the player's shield.
      *
      * This function examines two possible (body, fixture) pairs to determine if a projectile

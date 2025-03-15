@@ -144,6 +144,8 @@ Vec2 DOWN = { 0.0f, -1.0f };
 ///////////////// NAMES /////////////////////////////////////
 #define ENEMY_NAME      "enemy"
 #define PROJECTILE_NAME "projectile"
+#define SLAM_NAME "slam"
+#define STAB_NAME "stab"
 /** The name of a platform (for object identification) */
 #define GROUND_NAME   "ground"
 
@@ -634,10 +636,9 @@ void GameScene::preUpdate(float dt) {
     }
 
     // TODO: refactor using Box2d
-    Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
+    /*Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
     bool hit = false;
-    if(_player->iframe > 0) _player->iframe--;
-    if (_testEnemy->isDamaging() && _player->iframe <= 0) {
+    if (_testEnemy->isDamaging() && _player->getIframe() <= 0) {
         if (_testEnemy->_isSlamming) {
             if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
                 hit = true;
@@ -658,20 +659,18 @@ void GameScene::preUpdate(float dt) {
 
     if (hit) {
         _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
-        if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
+        if (_player->getIframe() <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
             _player->damage(20);
         }
-        else if (_player->iframe <= 0 && _player->isParryActive()) {
+        else if (_player->getIframe() <= 0 && _player->isParryActive()) {
             _testEnemy->setStun(120);
         }
-        else if (_player->iframe <= 0 && _player->isGuardActive()) {
+        else if (_player->getIframe() <= 0 && _player->isGuardActive()) {
             _player->damage(10);
         }
-        _player->iframe = 60;
-    }
+        _player->setIframe(60);
+    }*/
     _testEnemy->setTargetPos(_player->getPosition());
-    //_testEnemy->setDashLeftInput(_input.didDashLeft());
-    //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
     _testEnemy->applyForce();
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
     _enemyStunNode->setText((_testEnemy->isStunned() ? "STUN" : ""));
@@ -848,11 +847,25 @@ void GameScene::removeProjectile(Projectile* projectile) {
 
 /**Checks obstacle and fixture to see if it is an enemy body fixture.**/
 bool GameScene::isEnemyBody(physics2::Obstacle* b, const std::string* f ) {
-    return (b->getName() == ENEMY_NAME && f == _testEnemy->getBodyName());
+    return (b == _testEnemy.get() && f == _testEnemy->getBodyName());
 }
 /**Checks obstacle and fixture to see if it the player body fixture.**/
 bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
     return (b == _player.get() && f == _player->getBodyName());
+}
+
+void GameScene::playerHit() {
+    _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+    if (_player->getIframe() <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
+        _player->damage(20);
+    }
+    else if (_player->getIframe() <= 0 && _player->isParryActive()) {
+        _testEnemy->setStun(120);
+    }
+    else if (_player->getIframe() <= 0 && _player->isGuardActive()) {
+        _player->damage(10);
+    }
+    _player->setIframe(60);
 }
 
 /**
@@ -902,45 +915,44 @@ void GameScene::beginContact(b2Contact* contact) {
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
     
     // Player-Enemy Collision
-    if (bd1->getName() == ENEMY_NAME && isPlayerBody(bd2, fd2)) {
-        if (((EnemyModel*)bd1)->isDashActive() && !_player->isDashActive()) {
-            _player->damage(20);
-            ((EnemyModel*)bd1)->setDashRem(0);
-            CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
-        }
-        else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
+    if (isEnemyBody(bd1, fd1) && isPlayerBody(bd2, fd2)) {
+        // Collision between bodies
+        if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(5);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
-        }
-        else if (((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
-            ((EnemyModel*)bd1)->setDashRem(0);
-            _player->setDashRem(0);
-            CULog("Attacks canceled");
         }
         CULog("Applying knockback");
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
         ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player-> getPosition()).normalize());
     }
-    else if (bd2->getName() == ENEMY_NAME && isPlayerBody(bd1, fd1)) {
-        if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {
-            _player->damage(20);
-            ((EnemyModel*)bd2)->setDashRem(0);
-            CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
-        }
-        else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
+    else if (isEnemyBody(bd2, fd2) && isPlayerBody(bd1, fd1)) {
+        if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(5);
             _player->setDashRem(0);
             CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
-        else if (((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
-            ((EnemyModel*)bd2)->setDashRem(0);
-            _player->setDashRem(0);
-            CULog("Attacks canceled");
-        }
         _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
         ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
         CULog("Applying knockback");
+    }
+
+    // Player-Hitbox Collision
+    if (isPlayerBody(bd1, fd1) && fd2 == ((EnemyModel*)bd2)->getSlamName()) {
+        CULog("Slam called");
+        bool facingTarget = (_testEnemy->isFacingRight() && _testEnemy->getPosition().x < _player->getPosition().x)
+                          ||((!_testEnemy->isFacingRight()) && _testEnemy->getPosition().x > _player->getPosition().x);
+        if (_testEnemy->isSlamDamaging() && facingTarget) {
+            playerHit();
+        }
+    }
+    else if (isPlayerBody(bd2, fd2) && fd1 == ((EnemyModel*)bd1)->getSlamName()) {
+        CULog("Slam called");
+        bool facingTarget = (_testEnemy->isFacingRight() && _testEnemy->getPosition().x < _player->getPosition().x)
+            || ((!_testEnemy->isFacingRight()) && _testEnemy->getPosition().x > _player->getPosition().x);
+        if (_testEnemy->isSlamDamaging() && facingTarget) {
+            playerHit();
+        }
     }
 
     // Player-Projectile Collision

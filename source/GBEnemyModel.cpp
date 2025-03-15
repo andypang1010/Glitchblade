@@ -86,11 +86,7 @@
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
 #define SLAM_FRAMES     40
-#define SLAM_DAMAGE_START_FRAME     25
-#define SLAM_DAMAGE_END_FRAME    31
 #define STAB_FRAMES     40
-#define STAB_DAMAGE_START_FRAME     28
-#define STAB_DAMAGE_END_FRAME    35
 #define STUN_FRAMES 120
 
 using namespace cugl;
@@ -150,6 +146,16 @@ bool EnemyModel::init(const Vec2& pos, const Size& size, float scale, std::vecto
         _isSlamming = false;
         _moveDuration = 0;
         currentFrame = 0;
+
+        for (auto act: actions) {
+            if (act->getActionName() == "slam") {
+                _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            }
+            else if (act->getActionName() == "stab") {
+                _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            }
+        }
+
         _node = scene2::SceneNode::alloc();
         setSceneNode(_node);
         return true;
@@ -232,6 +238,12 @@ void EnemyModel::createFixtures() {
     }
     
     BoxObstacle::createFixtures();
+
+    b2Fixture* bodyFix = _body->GetFixtureList();
+    if (bodyFix) {
+        bodyFix->GetUserData().pointer = reinterpret_cast<uintptr_t>(getBodyName());
+    }
+
     b2FixtureDef sensorDef;
     sensorDef.density = ENEMY_DENSITY;
     sensorDef.isSensor = true;
@@ -255,16 +267,27 @@ void EnemyModel::createFixtures() {
     _sensorFixture = _body->CreateFixture(&sensorDef);
     
     // create shield circle fixture
-    b2FixtureDef shieldDef;
-    b2CircleShape shieldShape;
-    shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
-    shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
-    shieldDef.isSensor = true;
-    shieldDef.shape = &sensorShape;
-    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
-    _shieldFixture = _body->CreateFixture(&shieldDef);
+    //b2FixtureDef shieldDef;
+    //b2CircleShape shieldShape;
+    //shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
+    //shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
+    //shieldDef.isSensor = true;
+    //shieldDef.shape = &sensorShape;
+    //shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
+    //_shieldFixture = _body->CreateFixture(&shieldDef);
 
     // create attack fixtures
+    b2FixtureDef slamDef;
+    b2CircleShape slamShape;
+    slamShape.m_radius = _slam->getHitboxSize().x;
+    slamShape.m_p.Set(_slam->getHitboxPos().x, _slam->getHitboxPos().y);//center of body
+    slamDef.isSensor = true;
+    slamDef.shape = &slamShape;
+    slamDef.userData.pointer = reinterpret_cast<uintptr_t>(getSlamName());
+    _slamFixtureR = _body->CreateFixture(&slamDef);
+    slamShape.m_p.Set(-_slam->getHitboxPos().x, _slam->getHitboxPos().y);//center of body
+    slamDef.shape = &slamShape;
+    _slamFixtureL = _body->CreateFixture(&slamDef);
 }
 
 /**
@@ -457,21 +480,19 @@ void EnemyModel::update(float dt) {
 
 #pragma mark -
 #pragma mark AI Methods
-bool EnemyModel::isTargetClose(Vec2 targetPos) {
-    return (getPosition() - targetPos).length() <= CLOSE_RADIUS;
+bool EnemyModel::isTargetClose() {
+    return (getPosition() - _targetPos).length() <= CLOSE_RADIUS;
 }
 
 void EnemyModel::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
+    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose() && !isStunned()) {
         if (r%3 == 0) { //Slam
-            _isSlamming = true;
-            setMovement(0);
+            slam();
         }
         else if(r % 3 == 1){ // Stab
-            _isStabbing = true;
-            setMovement(0);
+            slam();
         }
         else { // Move away
             _moveDuration = 45;
@@ -480,8 +501,7 @@ void EnemyModel::nextAction() {
     }
     else if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && !isStunned()) {
         if (r % 2 == 0) { // Stab
-            _isStabbing = true;
-            setMovement(0);
+            slam();
         }
         else{ // Move closer
             _moveDuration = 45;
@@ -503,6 +523,14 @@ void EnemyModel::nextAction() {
             setMovement(getMovement());
         }
     }
+    if (!isDamaging()) {
+        _slamNodeL->setVisible(false);
+        _slamNodeR->setVisible(false);
+    }
+    else {
+        _slamNodeL->setVisible(true);
+        _slamNodeR->setVisible(true);
+    }
 }
 
 void EnemyModel::AIMove() {
@@ -516,29 +544,41 @@ void EnemyModel::AIMove() {
         setStrafeRight(dist < 0);
         _moveDuration--;
     }
-    //else if (_moveDuration > 0) {
-    //    _moveDuration--;
-    //}
-    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
-        /*_faceRight ? setDashRightInput(true) : setDashLeftInput(true);*/
-        /*b2Vec2 force(face * ENEMY_DASH, 0);
-        _body->ApplyLinearImpulseToCenter(force, true);*/
-        /*_moveDuration = STAB_DAMAGE_END_FRAME - STAB_DAMAGE_START_FRAME;*/
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
         setMovement(face * getForce() * ENEMY_DASH);
     }
     
 }
 
 bool EnemyModel::isDamaging() {
-    if (_isSlamming && _slamSprite->getFrame() >= SLAM_DAMAGE_START_FRAME-1 && _slamSprite->getFrame() <= SLAM_DAMAGE_END_FRAME - 1) {
+    if (_isSlamming && _slamSprite->getFrame() >= ((std::shared_ptr<MeleeActionModel>)(_slam))->getHitboxStartTime() - 1 && _slamSprite->getFrame() <= _slam->getHitboxEndTime() - 1) {
         return true;
     }
-    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
         return true;
     }
     else {
         return false;
     }
+}
+
+void EnemyModel::slam() {
+    _isSlamming = true;
+    setMovement(0);
+    //isFacingRight() ? 
+}
+
+bool EnemyModel::isSlamDamaging() {
+    return _isSlamming && _slamSprite->getFrame() >= ((std::shared_ptr<MeleeActionModel>)(_slam))->getHitboxStartTime() - 1 && _slamSprite->getFrame() <= _slam->getHitboxEndTime() - 1;
+}
+
+void EnemyModel::stab() {
+    _isStabbing = true;
+    setMovement(0);
+}
+
+bool EnemyModel::isStabDamaging() {
+    return _isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1;
 }
 
 #pragma mark -
@@ -605,10 +645,19 @@ void EnemyModel::resetDebug() {
     _sensorNode->setColor(DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
 
-    Poly2 shieldPoly;
-    shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, ENEMY_SHIELD_RADIUS);
-    _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldNode->setColor(DEBUG_COLOR);
-    
+    //slamShape.m_radius = _slam->getHitboxSize().x;
+    //slamShape.m_p.Set(_slam->getHitboxPos().x, _slam->getHitboxPos().y);
+
+    Poly2 slamPoly;
+    slamPoly = PolyFactory().makeNgon(10000, 0, _slam->getHitboxSize().x, 20);
+    _slamNodeR = scene2::WireNode::allocWithPoly(slamPoly);
+    _slamNodeR->setPosition(Vec2(_debug->getContentSize() / 2)+ _slam->getHitboxPos());
+    _slamNodeR->setColor(DEBUG_COLOR);
+    _slamNodeL = scene2::WireNode::allocWithPoly(slamPoly);
+    _slamNodeL->setPosition(Vec2(_debug->getContentSize() / 2).x - _slam->getHitboxPos().x, Vec2(_debug->getContentSize() / 2).y + _slam->getHitboxPos().y);
+    _slamNodeL->setColor(DEBUG_COLOR);
+
+    _debug->addChild(_slamNodeR);
+    _debug->addChild(_slamNodeL);
 }
 

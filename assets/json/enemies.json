@@ -11,8 +11,8 @@
                 "animation_col": 8,
                 "hitboxPos": [1,2],
                 "hitboxSize": [2, 4],
-                "hitboxStartTime": 7,
-                "hitboxEndTime": 15,
+                "hitboxStartTime": 28,
+                "hitboxEndTime": 35,
                 "hitboxDamage": 20
             },        
             {	
@@ -21,10 +21,10 @@
                 "animation": "textures/boss1_slam.png",
                 "animation_row": 5,
                 "animation_col": 8,
-                "hitboxPos": [1,2],
+                "hitboxPos": [3,0],
                 "hitboxSize": [2, 4],
-                "hitboxStartTime": 7,
-                "hitboxEndTime": 15,
+                "hitboxStartTime": 25,
+                "hitboxEndTime": 31,
                 "hitboxDamage": 20
             }
         ]

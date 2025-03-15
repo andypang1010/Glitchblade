@@ -168,7 +168,7 @@ void PlayerController::preUpdate(float dt)
     _player->setDashRightInput(_input->didDashRight());
     _player->setGuardInput(_input->didGuard());
     _player->setShootInput(_input->didFire());
-    
+  
     _hpNode->setText(std::to_string((int)_player->getHP()));
     
     applyForce();
@@ -267,6 +267,7 @@ void PlayerController::updateCooldowns()
         _player->setDashReset(true); // ready to dash again
     }
     
+    _player->setIframe(_player->getIframe() - 1);
 }
 
 
