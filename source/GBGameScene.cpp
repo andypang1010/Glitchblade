@@ -325,7 +325,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _enemyHPNode->setForeground(Color4::RED);
     _enemyHPNode->setPosition(0, 100);
 
-    _enemyStunNode = scene2::Label::allocWithText("STUN", _assets->get<Font>(DEBUG_FONT));
+    _enemyStunNode = scene2::Label::allocWithText("STUNNED", _assets->get<Font>(DEBUG_FONT));
     _enemyStunNode->setAnchor(Vec2::ANCHOR_CENTER);
     _enemyStunNode->setForeground(Color4::RED);
     _enemyStunNode->setPosition(0, 120);
@@ -672,7 +672,7 @@ void GameScene::preUpdate(float dt) {
     //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
     _testEnemy->applyForce();
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
-    _enemyStunNode->setText((_testEnemy->isStunned() ? "STUN" : ""));
+    _enemyStunNode->setText((_testEnemy->isStunned() ? "STUNNED" : ""));
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
       std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
