@@ -51,8 +51,6 @@ protected:
     /** The asset manager for this game mode. */
     std::shared_ptr<AssetManager> _assets;
 
-    std::shared_ptr<JsonValue> _enemiesJSON;
-    
     // CONTROLLERS
     /** LevelController for managing the level progress of the current game */
     std::shared_ptr<LevelController> _levelController;

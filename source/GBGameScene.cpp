@@ -92,7 +92,6 @@ float GROUND[GROUND_VERTS]{
     0.0f, GROUND_THICKNESS
 };
 
-float ENEMY_POS[] = { 12.5f, 5.0f };
 
 /** Bullet Spawn Points */
 Vec2 LEFT_BULLET = { WALL_THICKNESS + 1.5f, 9.0f };
@@ -269,15 +268,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     else if (!Scene2::initWithHint(Size(SCENE_WIDTH, SCENE_HEIGHT))) {
         return false;
     }
-
-    std::shared_ptr<JsonReader> reader = JsonReader::allocWithAsset("json/enemies.json");
-
-    _enemiesJSON = reader->readJson();
-    if (_enemiesJSON == nullptr) {
-        CULog("Failed to load enemies.json");
-        return false;
-    }
-
     // Start up the input handler
     _assets = assets;
 
@@ -338,7 +328,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     CULog("Creating empty level controller in gamescene init");
     _levelController = std::make_shared<LevelController>();
     CULog("initializing level controller in gamescene init");
-    _levelController->init(getBounds(), _assets, _scale); // Initialize the LevelController
+    _levelController->init(_assets,getBounds(), _scale); // Initialize the LevelController
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
         _input =  _levelController->getInputController();
         if (!_input){
@@ -478,35 +468,7 @@ void GameScene::populate() {
     addObstacle(_levelController->getPlayerModel(), _levelController->getPlayerNode()); // Put this at the very front
 
 #pragma mark : Test Enemy
-    Vec2 enemyPos = ENEMY_POS;
-    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
-    _testEnemy = EnemyModel::alloc(enemyPos, Size(90, 130) / _scale, _scale, actions);
 
-
-    _testEnemy->_idleSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_idle"), 1, 6, 6);
-    _testEnemy->_idleSprite->setPosition(0, 40);
-
-    _testEnemy->_walkSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_walking1"), 1, 8, 8);
-    _testEnemy->_walkSprite->setPosition(0, 40);
-
-    _testEnemy->_slamSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_slam"), 4, 10, 40);
-    _testEnemy->_slamSprite->setPosition(0, 40);
-
-    _testEnemy->_stabSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_stab"), 4, 10, 40);
-    _testEnemy->_stabSprite->setPosition(0, 40);
-
-    _testEnemy->_stunSprite = scene2::SpriteNode::allocWithSheet(_assets->get<Texture>("boss1_stun"), 3, 10, 22);
-    _testEnemy->_stunSprite->setPosition(0, 40);
-
-    _testEnemy->setName(std::string(ENEMY_NAME));
-    _testEnemy->setDebugColor(DEBUG_COLOR);
-    addObstacle(_testEnemy, _testEnemy->getSceneNode()); // Put this at the very front
-    
-    _testEnemy->getSceneNode()->addChild(_testEnemy->_idleSprite);
-    _testEnemy->getSceneNode()->addChild(_testEnemy->_walkSprite);
-    _testEnemy->getSceneNode()->addChild(_testEnemy->_slamSprite);
-    _testEnemy->getSceneNode()->addChild(_testEnemy->_stabSprite);
-    _testEnemy->getSceneNode()->addChild(_testEnemy->_stunSprite);
 
     // Add UI elements
     _testEnemy->getSceneNode()->addChild(_enemyStunNode);

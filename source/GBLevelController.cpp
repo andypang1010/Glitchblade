@@ -18,17 +18,29 @@ LevelController::~LevelController()
 {
 }
 
-void LevelController::init(cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale)
+bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, cugl::Rect bounds, float scale)
 {
-	// Setup enemy controller
+    // read json
+    std::shared_ptr<JsonReader> reader = JsonReader::allocWithAsset("json/enemies.json");
+
+    _enemiesJSON = reader->readJson();
+    if (_enemiesJSON == nullptr) {
+        CULog("Failed to load enemies.json");
+        return false;
+    }
+
+	// Setup enemy controller: one controller per enemy
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+    
 	_enemyController = std::make_shared<EnemyController>();
+    _enemyController->init(assetRef, bounds, scale, actions);
 
 	// Setup player controller
 	_playerController = std::make_shared<PlayerController>();
-	_enemyController->init();
-	_playerController->init(bounds, assetRef, scale);
+	_playerController->init(assetRef, bounds, scale);
 
 	CULog("LevelController::init");
+    return true;
 }
 
 void LevelController::reset() {

@@ -24,13 +24,17 @@ private:
     
     // TODO: Need to add/store HUD node somewhere
     
-    /* Controllers */
+    /* Data */
+    std::shared_ptr<JsonValue> _enemiesJSON;
     
+    /* Controllers */
+
     /** The enemy controller for this level controller */
     std::shared_ptr<EnemyController> _enemyController;
     
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
+    
     
 protected:
     /**
@@ -56,9 +60,9 @@ public:
     ~LevelController();
     
     /**
-     * Initializes the level controller.
+     * Initializes the level controller. Return false on failure
      */
-    void init(cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale);
+    bool init(const std::shared_ptr<AssetManager>& assetRef, cugl::Rect bounds,  float scale);
     
     /**
      * Resets the state of the LevelController.
@@ -86,7 +90,7 @@ public:
      * @param remain    The amount of time (in seconds) last fixedUpdate
      */
     void postUpdate(float dt);
-    
+
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);
     

@@ -18,8 +18,9 @@ using namespace cugl;
  */
 class EnemyController {
 private:
-    /** List of active enemies in the game */
-    std::vector<std::shared_ptr<EnemyModel>> _enemies;
+    /** The enemy corresponding to this controller  */
+    std::shared_ptr<EnemyModel> _enemy;
+    std::shared_ptr<scene2::Label> _hpNode;
 
 public:
     /** Constructor */
@@ -31,7 +32,7 @@ public:
     /**
      * Initializes the enemy controller.
      */
-    void init();
+    void init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale, std::vector<std::shared_ptr<ActionModel>> actions);
 
     /**
      * Resets the EnemyController.
@@ -58,22 +59,23 @@ public:
      */
     void postUpdate(float dt);
 
-    /**
-     * Adds an enemy to the controller for management.
-     * @param enemy The enemy to add.
-     */
-    void addEnemy(const std::shared_ptr<EnemyModel>& enemy) { _enemies.push_back(enemy); }
-
-    /**
-     * Removes a defeated enemy from the game.
-     * @param enemy The enemy to remove.
-     */
-    void removeEnemy(const std::shared_ptr<EnemyModel>& enemy);
-
-    /**
-     * Clears all enemies from the controller.
-     */
-    void clearEnemies() { _enemies.clear(); }
+//  Maybe for the level controller, this will be useful:
+//    /**
+//     * Adds an enemy to the controller for management.
+//     * @param enemy The enemy to add.
+//     */
+//    void addEnemy(const std::shared_ptr<EnemyModel>& enemy) { _enemies.push_back(enemy); }
+//
+//    /**
+//     * Removes a defeated enemy from the game.
+//     * @param enemy The enemy to remove.
+//     */
+//    void removeEnemy(const std::shared_ptr<EnemyModel>& enemy);
+//
+//    /**
+//     * Clears all enemies from the controller.
+//     */
+//    void clearEnemies() { _enemies.clear(); }
 };
 
 #endif /* __ENEMY_CONTROLLER_H__ */

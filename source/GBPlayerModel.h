@@ -227,56 +227,6 @@ public:
      * disposed, a PlayerModel may not be used until it is initialized again.
      */
     void dispose();
-    
-    /**
-     * Initializes a new player at the origin.
-     *
-     * The player is a unit square scaled so that 1 pixel = 1 Box2d unit
-     *
-     * The scene graph is completely decoupled from the physics system.
-     * The node does not have to be the same size as the physics body. We
-     * only guarantee that the scene graph node is positioned correctly
-     * according to the drawing scale.
-     *
-     * @return  true if the obstacle is initialized properly, false otherwise.
-     */
-    virtual bool init() override { return init(Vec2::ZERO, Size(1,1), 1.0f); }
-    
-    /**
-     * Initializes a new player at the given position.
-     *
-     * The player is unit square scaled so that 1 pixel = 1 Box2d unit
-     *
-     * The scene graph is completely decoupled from the physics system.
-     * The node does not have to be the same size as the physics body. We
-     * only guarantee that the scene graph node is positioned correctly
-     * according to the drawing scale.
-     *
-     * @param pos   Initial position in world coordinates
-     *
-     * @return  true if the obstacle is initialized properly, false otherwise.
-     */
-    virtual bool init(const Vec2 pos) override { return init(pos, Size(1,1), 1.0f); }
-    
-    /**
-     * Initializes a new player at the given position.
-     *
-     * The player has the given size, scaled so that 1 pixel = 1 Box2d unit
-     *
-     * The scene graph is completely decoupled from the physics system.
-     * The node does not have to be the same size as the physics body. We
-     * only guarantee that the scene graph node is positioned correctly
-     * according to the drawing scale.
-     *
-     * @param pos   Initial position in world coordinates
-     * @param size  The size of the player in world units
-     *
-     * @return  true if the obstacle is initialized properly, false otherwise.
-     */
-    virtual bool init(const Vec2 pos, const Size size) override {
-        return init(pos, size, 1.0f);
-    }
-    
     /**
      * Initializes a new player at the given position.
      *
@@ -293,65 +243,18 @@ public:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Vec2& pos, const Size& size, float scale);
+    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale);
 
     
 #pragma mark -
 #pragma mark Static Constructors
 	/**
-	 * Creates a new player at the origin.
-	 *
-	 * The player is a unit square scaled so that 1 pixel = 1 Box2d unit
-	 *
-	 * The scene graph is completely decoupled from the physics system.
-	 * The node does not have to be the same size as the physics body. We
-	 * only guarantee that the scene graph node is positioned correctly
-	 * according to the drawing scale.
-	 *
-	 * @return  A newly allocated PlayerModel at the origin
+	 * Creates a new player that is uninitialized.
+	 * @return  A newly allocated, unitialized PlayerModel
 	 */
 	static std::shared_ptr<PlayerModel> alloc() {
 		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
-		return (result->init() ? result : nullptr);
-	}
-
-	/**
-	 * Creates a new player at the given position.
-	 *
-	 * The player is a unit square scaled so that 1 pixel = 1 Box2d unit
-	 *
-	 * The scene graph is completely decoupled from the physics system.
-	 * The node does not have to be the same size as the physics body. We
-	 * only guarantee that the scene graph node is positioned correctly
-	 * according to the drawing scale.
-	 *
-     * @param pos   Initial position in world coordinates
-	 *
-	 * @return  A newly allocated PlayerModel at the given position
-	 */
-	static std::shared_ptr<PlayerModel> alloc(const Vec2& pos) {
-		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
-		return (result->init(pos) ? result : nullptr);
-	}
-
-    /**
-	 * Creates a new player at the given position.
-	 *
-     * The player has the given size, scaled so that 1 pixel = 1 Box2d unit
-	 *
- 	 * The scene graph is completely decoupled from the physics system.
-	 * The node does not have to be the same size as the physics body. We
-	 * only guarantee that the scene graph node is positioned correctly
-	 * according to the drawing scale.
-	 *
-	 * @param pos   Initial position in world coordinates
-     * @param size  The size of the player in world units
-	 *
-	 * @return  A newly allocated PlayerModel at the given position with the given scale
-	 */
-	static std::shared_ptr<PlayerModel> alloc(const Vec2& pos, const Size& size) {
-		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
-		return (result->init(pos, size) ? result : nullptr);
+		return (result? result : nullptr);
 	}
 
 	/**
@@ -370,16 +273,15 @@ public:
 	 *
 	 * @return  A newly allocated PlayerModel at the given position with the given scale
 	 */
-	static std::shared_ptr<PlayerModel> alloc(const Vec2& pos, const Size& size, float scale) {
+	static std::shared_ptr<PlayerModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale) {
 		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
-		return (result->init(pos, size, scale) ? result : nullptr);
+		return (result->init(assetRef, pos, scale) ? result : nullptr);
 	}
     
 #pragma mark -
 #pragma mark Level Control and Constructor Helpers
      /** Reset all the player attributes to their initial values*/
      void resetAttributes(){
-         // Gameplay attributes
          _hp = MAXHP;
          _isGrounded = false;
          _isShootInput = false;
@@ -400,6 +302,9 @@ public:
          _guardRem = 0;
          _parryRem= 0;
      };
+    
+    /**Attach the scene nodes (sprite sheets) to the player**/
+    void attachNodes(const std::shared_ptr<AssetManager>& assetRef);
     
 #pragma mark -
 #pragma mark Animation

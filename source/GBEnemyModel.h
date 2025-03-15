@@ -72,10 +72,53 @@ using namespace cugl;
 /** The maximum character hp */
 #define ENEMY_MAXHP   100.0f
 
+/** Cooldown (in animation frames) for jumping */
+#define ENEMY_JUMP_COOLDOWN   5
+/** Cooldown (in animation frames) for shooting */
+#define ENEMY_SHOOT_COOLDOWN  20
+/** Cooldown (in frames) for guard */
+#define ENEMY_GUARD_COOLDOWN  60
+/** Cooldown (in frames) for dash */
+#define ENEMY_DASH_COOLDOWN  100
+/** Duration (in frames) for guard */
+#define ENEMY_GUARD_DURATION  120
+/** Duration (in frames) for dash- affects friction*/
+#define ENEMY_DASH_DURATION  8
+/** The amount to shrink the body fixture (vertically) relative to the image */
+#define ENEMY_VSHRINK  0.95f
+/** The amount to shrink the body fixture (horizontally) relative to the image */
+#define ENEMY_HSHRINK  0.7f
+/** The amount to shrink the sensor fixture (horizontally) relative to the image */
+#define ENEMY_SSHRINK  0.6f
+/** Height of the sensor attached to the player's feet */
+#define ENEMY_SENSOR_HEIGHT   0.1f
+/** The amount to shrink the radius of the shield relative to the image width */
+#define ENEMY_SHIELD_RADIUS 2.0f
+/** The density of the character */
+#define ENEMY_DENSITY    1.0f
+/** The impulse for the character jump */
+#define ENEMY_JUMP       42.5f
+/** The impulse for the character dash-attack */
+#define ENEMY_DASH       100.0f
+/** The implulse fot the character knockback */
+#define ENEMY_KB       1.0f
+/** Debug color for the sensor */
+#define DEBUG_COLOR     Color4::RED
+
+#pragma mark -
+#pragma mark Action Constants // TODO: Refactor with Action parser
+#define SLAM_FRAMES     40
+#define SLAM_DAMAGE_START_FRAME     25
+#define SLAM_DAMAGE_END_FRAME    31
+#define STAB_FRAMES     40
+#define STAB_DAMAGE_START_FRAME     28
+#define STAB_DAMAGE_END_FRAME    35
+#define STUN_FRAMES 120
+
 #pragma mark -
 #pragma mark AI Constants
 #define CLOSE_RADIUS     6.0f
-
+#define SIGNUM(x)  ((x > 0) - (x < 0))
 
 #pragma mark -
 #pragma mark Enemy Model
@@ -262,55 +305,6 @@ public:
     void dispose();
     
     /**
-     * Initializes a new dude at the origin.
-     *
-     * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
-     *
-     * The scene graph is completely decoupled from the physics system.
-     * The node does not have to be the same size as the physics body. We
-     * only guarantee that the scene graph node is positioned correctly
-     * according to the drawing scale.
-     *
-     * @return  true if the obstacle is initialized properly, false otherwise.
-     */
-    virtual bool init() override { return init(Vec2::ZERO, Size(1, 1), 1.0f, {}); }
-    //
-    ///**
-    // * Initializes a new dude at the given position.
-    // *
-    // * The dude is unit square scaled so that 1 pixel = 1 Box2d unit
-    // *
-    // * The scene graph is completely decoupled from the physics system.
-    // * The node does not have to be the same size as the physics body. We
-    // * only guarantee that the scene graph node is positioned correctly
-    // * according to the drawing scale.
-    // *
-    // * @param pos   Initial position in world coordinates
-    // *
-    // * @return  true if the obstacle is initialized properly, false otherwise.
-    // */
-    //virtual bool init(const Vec2 pos) override { return init(pos, Size(1,1), 1.0f); }
-    //
-    ///**
-    // * Initializes a new dude at the given position.
-    // *
-    // * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
-    // *
-    // * The scene graph is completely decoupled from the physics system.
-    // * The node does not have to be the same size as the physics body. We
-    // * only guarantee that the scene graph node is positioned correctly
-    // * according to the drawing scale.
-    // *
-    // * @param pos   Initial position in world coordinates
-    // * @param size  The size of the dude in world units
-    // *
-    // * @return  true if the obstacle is initialized properly, false otherwise.
-    // */
-    //virtual bool init(const Vec2 pos, const Size size) override {
-    //    return init(pos, size, 1.0f);
-    //}
-    
-    /**
      * Initializes a new dude at the given position.
      *
      * The dude is sized according to the given drawing scale.
@@ -326,67 +320,11 @@ public:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Vec2& pos, const Size& size, float scale, std::vector<std::shared_ptr<ActionModel>> actions);
+    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale, std::vector<std::shared_ptr<ActionModel>> actions);
 
     
 #pragma mark -
 #pragma mark Static Constructors
-	///**
-	// * Creates a new dude at the origin.
-	// *
-	// * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
-	// *
-	// * The scene graph is completely decoupled from the physics system.
-	// * The node does not have to be the same size as the physics body. We
-	// * only guarantee that the scene graph node is positioned correctly
-	// * according to the drawing scale.
-	// *
-	// * @return  A newly allocated PlayerModel at the origin
-	// */
-	//static std::shared_ptr<EnemyModel> alloc() {
-	//	std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-	//	return (result->init() ? result : nullptr);
-	//}
-
-	///**
-	// * Creates a new dude at the given position.
-	// *
-	// * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
-	// *
-	// * The scene graph is completely decoupled from the physics system.
-	// * The node does not have to be the same size as the physics body. We
-	// * only guarantee that the scene graph node is positioned correctly
-	// * according to the drawing scale.
-	// *
- //    * @param pos   Initial position in world coordinates
-	// *
-	// * @return  A newly allocated PlayerModel at the given position
-	// */
-	//static std::shared_ptr<EnemyModel> alloc(const Vec2& pos) {
-	//	std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-	//	return (result->init(pos) ? result : nullptr);
-	//}
-
- //   /**
-	// * Creates a new dude at the given position.
-	// *
- //    * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
-	// *
- //	 * The scene graph is completely decoupled from the physics system.
-	// * The node does not have to be the same size as the physics body. We
-	// * only guarantee that the scene graph node is positioned correctly
-	// * according to the drawing scale.
-	// *
-	// * @param pos   Initial position in world coordinates
- //    * @param size  The size of the dude in world units
-	// *
-	// * @return  A newly allocated PlayerModel at the given position with the given scale
-	// */
-	//static std::shared_ptr<EnemyModel> alloc(const Vec2& pos, const Size& size) {
-	//	std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-	//	return (result->init(pos, size) ? result : nullptr);
-	//}
-
 	/**
 	 * Creates a new dude at the given position.
 	 *
@@ -403,12 +341,37 @@ public:
 	 *
 	 * @return  A newly allocated PlayerModel at the given position with the given scale
 	 */
-	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos, const Size& size, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
+	static std::shared_ptr<EnemyModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
 		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-		return (result->init(pos, size, scale, actions) ? result : nullptr);
+		return (result->init(assetRef, pos, scale, actions) ? result : nullptr);
 	}
-    
-
+    /** Reset all the enemy attributes to their initial values*/
+    void resetAttributes(){
+        _hp = ENEMY_MAXHP;
+        _isGrounded = false;
+        _isShootInput = false;
+        _isJumpInput  = false;
+        _isStrafeLeft = false;
+        _isStrafeRight = false;
+        _isDashLeftInput = false;
+        _isDashRightInput = false;
+        _isGuardInput = false;
+        _hasProjectile = false;
+        _faceRight  = true;
+        _shootCooldownRem = 0;
+        _jumpCooldownRem  = 0;
+        _dashCooldownRem = 0;
+        _canKnockBack = true;
+        _guardCooldownRem = 0;
+        _guardRem = 0;
+        _parryRem= 0;
+        _stunRem = 0;
+        
+        _isStabbing = false;
+        _isSlamming = false;
+        _moveDuration = 0;
+        currentFrame = 0;
+    }
 #pragma mark -
 #pragma mark Animation
     /**

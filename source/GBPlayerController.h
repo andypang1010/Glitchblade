@@ -35,7 +35,7 @@ public:
     /**
      * Initializes the player controller.
      */
-    void init(cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale);
+    void init(const std::shared_ptr<AssetManager>& assetRef, cugl::Rect bounds,  float scale);
 
     /**
      * Disposes of all (non-static) resources allocated to this mode.

@@ -68,22 +68,58 @@ using namespace cugl;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
+bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale) {
     resetAttributes();
-    Size nsize = size;
+    std::shared_ptr<graphics::Texture> image;
+    image = assetRef->get<graphics::Texture>(PLAYER_TEXTURE);
+    Size nsize = image->getSize() / scale;
     nsize.width  *= HSHRINK;
     nsize.height *= VSHRINK;
     _drawScale = scale;
+    
+    setDebugColor(DEBUG_COLOR);
+    
     if (BoxObstacle::init(pos,nsize)) {
         setDensity(DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-        _sceneNode = scene2::SceneNode::alloc();
-        setSceneNode(_sceneNode);
+        
+        // set the scene node and attach the sprite nodes to it
+        attachNodes(assetRef);
         return true;
     }
     return false;
+}
+
+
+void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef){
+    _sceneNode = scene2::SceneNode::alloc();
+    setSceneNode(_sceneNode);
     
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_idle"), 1, 6, 6);
+    _idleSprite->setPosition(0, 40);
+
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_walk"), 1, 6, 6);
+    _walkSprite->setPosition(0, 40);
+
+    _jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_jumpUp"), 1, 8, 8);
+    _jumpUpSprite->setPosition(0, 40);
+
+    _jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_jumpDown"), 1, 8, 8);
+    _jumpDownSprite->setPosition(0, 40);
+
+    _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_guard"), 1, 6, 6);
+    _guardSprite->setPosition(0, 40);
+
+    _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_attack"), 1, 8, 8);
+    _attackSprite->setPosition(0, 40);
+    
+    getSceneNode()->addChild(_idleSprite);
+    getSceneNode()->addChild(_walkSprite);
+    getSceneNode()->addChild(_jumpUpSprite);
+    getSceneNode()->addChild(_jumpDownSprite);
+    getSceneNode()->addChild(_guardSprite);
+    getSceneNode()->addChild(_attackSprite);
 }
 
 #pragma mark -
