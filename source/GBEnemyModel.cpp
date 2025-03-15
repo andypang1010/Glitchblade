@@ -75,44 +75,46 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef,const Vec2& 
     nsize.height *= ENEMY_VSHRINK;
     _drawScale = scale;
     
-    setDebugColor(DEBUG_COLOR);
+    setDebugColor(ENEMY_DEBUG_COLOR);
     
     if (BoxObstacle::init(pos,nsize)) {
         setDensity(ENEMY_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-        _node = scene2::SceneNode::alloc();
-        setSceneNode(_node);
-        //move this to new function
-        _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 6, 6);
-        _idleSprite->setPosition(0, 40);
-
-        _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walking1"), 1, 8, 8);
-        _walkSprite->setPosition(0, 40);
-
-        _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 4, 10, 40);
-        _slamSprite->setPosition(0, 40);
-
-        _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 4, 10, 40);
-        _stabSprite->setPosition(0, 40);
-
-        _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
-        _stunSprite->setPosition(0, 40);
-
-        setName(std::string(ENEMY_NAME));
-        setDebugColor(DEBUG_COLOR);
-        
-        getSceneNode()->addChild(_idleSprite);
-        getSceneNode()->addChild(_walkSprite);
-        getSceneNode()->addChild(_slamSprite);
-        getSceneNode()->addChild(_stabSprite);
-        getSceneNode()->addChild(_stunSprite);
+        attachNodes(assetRef);
         return true;
     }
     return false;
 }
 
+void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef){
+    _node = scene2::SceneNode::alloc();
+    setSceneNode(_node);
+    //move this to new function
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 6, 6);
+    _idleSprite->setPosition(0, 40);
 
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walking1"), 1, 8, 8);
+    _walkSprite->setPosition(0, 40);
+
+    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 4, 10, 40);
+    _slamSprite->setPosition(0, 40);
+
+    _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 4, 10, 40);
+    _stabSprite->setPosition(0, 40);
+
+    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
+    _stunSprite->setPosition(0, 40);
+
+    setName(std::string(ENEMY_NAME));
+    setDebugColor(ENEMY_DEBUG_COLOR);
+    
+    getSceneNode()->addChild(_idleSprite);
+    getSceneNode()->addChild(_walkSprite);
+    getSceneNode()->addChild(_slamSprite);
+    getSceneNode()->addChild(_stabSprite);
+    getSceneNode()->addChild(_stunSprite);
+}
 
 #pragma mark -
 #pragma mark Attribute Properties
@@ -252,75 +254,15 @@ void EnemyModel::dispose() {
     _node = nullptr;
     _sensorNode = nullptr;
     _shieldNode = nullptr;
+    _geometry = nullptr;
+    _sensorNode = nullptr;
+    _shieldNode = nullptr;
+    _currentSpriteNode = nullptr;
+    _idleSprite = nullptr;
+    _walkSprite = nullptr;
+
 }
 
-/**
- * Applies the force to the body of this dude
- *
- * This method should be called after the force attribute is set.
- */
-void EnemyModel::applyForce() {
-    if (!isEnabled()) {
-        return;
-    }
-    
-    // Don't want to be moving. Damp out player motion
-    if (getMovement() == 0.0f && !isDashActive()) {
-        if (isGrounded()) {
-            // Instant friction on the ground
-            b2Vec2 vel = _body->GetLinearVelocity();
-            vel.x = 0; // If you set y, you will stop a jump in place
-            _body->SetLinearVelocity(vel);
-        } else {
-            //             Damping factor in the air
-            b2Vec2 force(-getDamping()*getVX(),0);
-            _body->ApplyForceToCenter(force,true);
-        }
-    }
-
-    if (!isStunned()) {
-        #pragma mark strafe force
-        b2Vec2 force(getMovement(), 0);
-        _body->ApplyForceToCenter(force, true);
-        #pragma mark jump force
-        // Jump!
-        if (isJumpBegin() && isGrounded()) {
-            b2Vec2 force(0, ENEMY_JUMP);
-            _body->ApplyLinearImpulseToCenter(force, true);
-        }
-        #pragma mark dash force
-        // Dash!
-        if (isDashLeftBegin()) {
-            CULog("dashing left\n");
-            b2Vec2 force(-ENEMY_DASH, 0);
-            faceLeft();
-            _body->ApplyLinearImpulseToCenter(force, true);
-        }
-
-        if (isDashRightBegin()) {
-            CULog("dashing right\n");
-            b2Vec2 force(ENEMY_DASH, 0);
-            faceRight();
-            _body->ApplyLinearImpulseToCenter(force, true);
-        }
-    }
-    
-#pragma mark knockback force
-    if (isKnocked() && _canKnockBack) {
-        _body->SetLinearVelocity(b2Vec2(0,0));
-        Vec2 knockForce = _knockDirection.subtract(Vec2(0, _knockDirection.y)).scale(ENEMY_KB);
-        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, ENEMY_KB), true);
-        _isKnocked = false;
-    }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
-        setVX(SIGNUM(getVX()) * getMaxSpeed());
-    }
-    if (isStunned()) {
-        setVX(getVX()/3);
-    }
-}
 #pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
@@ -559,13 +501,13 @@ void EnemyModel::resetDebug() {
     float h = ENEMY_SENSOR_HEIGHT;
     Poly2 dudePoly(Rect(-w/0.1f,-h/2.0f,w,h));
     _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(DEBUG_COLOR);
+    _sensorNode->setColor(ENEMY_DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
 
     Poly2 shieldPoly;
     shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, ENEMY_SHIELD_RADIUS);
     _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldNode->setColor(DEBUG_COLOR);
+    _shieldNode->setColor(ENEMY_DEBUG_COLOR);
     
 }
 

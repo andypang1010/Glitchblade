@@ -9,8 +9,7 @@ using namespace cugl::graphics;
 // CONSTANTS:
 float INIT_POS[] = { 2.5f, 5.0f };
 
-PlayerController::PlayerController()
-{}
+PlayerController::PlayerController(){}
 
 
 void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale)
@@ -28,6 +27,7 @@ void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const
 
 
 void PlayerController::dispose() {
+    _player->dispose();
     _input->dispose();
 }
 

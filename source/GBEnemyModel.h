@@ -102,8 +102,12 @@ using namespace cugl;
 #define ENEMY_DASH       100.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
+#define KB_DURATION 20
 /** Debug color for the sensor */
-#define DEBUG_COLOR     Color4::RED
+#define ENEMY_DEBUG_COLOR     Color4::RED
+/** enemy obstacle name*/
+#define ENEMY_NAME      "enemy"
+#define ENEMY_DEBUG_FONT      "debug"
 
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
@@ -173,6 +177,8 @@ protected:
     bool _canKnockBack;
     /** Whether enemy is knocked-back (sets  cd) */
     bool _isKnocked;
+    /** Whether we are knocked-back (sets input cd) */
+    int _knockbackRem;
     Vec2 _knockDirection;
 	/** How long until we can shoot again in animation frames*/
 	int  _shootCooldownRem;
@@ -344,7 +350,10 @@ public:
 	static std::shared_ptr<EnemyModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
 		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
 		return (result->init(assetRef, pos, scale, actions) ? result : nullptr);
-	}
+    }
+    
+#pragma mark -
+#pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes(){
         _hp = ENEMY_MAXHP;
@@ -371,7 +380,10 @@ public:
         _isSlamming = false;
         _moveDuration = 0;
         currentFrame = 0;
-    }
+    };
+    
+    /**Attach the scene nodes (sprite sheets) to the enemy**/
+    void attachNodes(const std::shared_ptr<AssetManager>& assetRef);
 #pragma mark -
 #pragma mark Animation
     /**
@@ -599,6 +611,7 @@ public:
      *
      * @return value whether the dude is in a dash animation.
      */
+    
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
     /**
     * Returns true if the enemy is being knocked back.
@@ -612,8 +625,40 @@ public:
     * @param value whether the dude is being knocked back
     * @param knockDirection direction that the dude will move toward
     */
-   void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
     /**
+     * Returns true if the enemy is in a knockback animation.
+     *
+     * @return value whether the enemy is in a knockback animation.
+     */
+    bool isKnockbackActive() { return _knockbackRem > 0 || isKnocked(); };
+    float getKnockF() {return ENEMY_KB;}
+    Vec2 getKnockDirection() {return _knockDirection;}
+    /**
+     * Sets whether the player is being knocked back
+     *
+     * @param value whether the player is being knocked back
+     * @param knockDirection direction that the player will move toward
+     */
+    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection;  }
+    /**
+     * Resets knock status - do this after applying force.
+     */
+    void resetKnocked() { _isKnocked = false;  }
+    /**
+     * Returns the amount of knockback frames remaining
+     *
+     * @return the amount of knockback frames remaining
+     */
+    int getKnockbackRem() {return _knockbackRem; };
+    
+    /**
+     * Used to set the amount of knockback frames remaining
+     *
+     * @param the value that remaining knockback frames should be set to
+     */
+    void setKnockbackRem(int value = KB_DURATION) {_knockbackRem = value; };
+
+    /*
      * Sets the dash duration of this enemy.
      *
      * @param value new dash duration.
@@ -751,12 +796,6 @@ public:
      */
     void update(float dt) override;
     
-    /**
-     * Applies the force to the body of this dude
-     *
-     * This method should be called after the force attribute is set.
-     */
-    void applyForce();
 
 
 	

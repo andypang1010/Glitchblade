@@ -141,7 +141,6 @@ Vec2 DOWN = { 0.0f, -1.0f };
 #define PLAYER_PROJECTILE_TEXTURE "player-projectile"
 
 ///////////////// NAMES /////////////////////////////////////
-#define ENEMY_NAME      "enemy"
 #define PROJECTILE_NAME "projectile"
 /** The name of a platform (for object identification) */
 #define GROUND_NAME   "ground"
@@ -180,8 +179,6 @@ Vec2 DOWN = { 0.0f, -1.0f };
 /** The fire rate for spawned bullets */
 #define BULLET_SPAWN_RATE     100.0f
 
-/** Color to outline the physics nodes */
-#define DEBUG_COLOR     Color4::YELLOW
 /** Opacity of the physics outlines */
 #define DEBUG_OPACITY   192
 
@@ -471,8 +468,7 @@ void GameScene::populate() {
 
 
     // Add UI elements
-    _testEnemy->getSceneNode()->addChild(_enemyStunNode);
-    _testEnemy->getSceneNode()->addChild(_enemyHPNode);
+
 
 
 	// Play the background music on a loop.
@@ -632,11 +628,7 @@ void GameScene::preUpdate(float dt) {
         _player->iframe = 60;
     }
     _testEnemy->setTargetPos(_player->getPosition());
-    //_testEnemy->setDashLeftInput(_input.didDashLeft());
-    //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
-    _testEnemy->applyForce();
-    _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
-    _enemyStunNode->setText((_testEnemy->isStunned() ? "STUN" : ""));
+
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
       std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);

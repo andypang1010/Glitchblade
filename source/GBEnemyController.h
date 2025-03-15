@@ -21,23 +21,32 @@ private:
     /** The enemy corresponding to this controller  */
     std::shared_ptr<EnemyModel> _enemy;
     std::shared_ptr<scene2::Label> _hpNode;
+    std::shared_ptr<scene2::Label> _stunNode;
 
 public:
     /** Constructor */
     EnemyController();
 
     /** Destructor */
-    ~EnemyController();
+    ~EnemyController() { dispose(); }
 
     /**
      * Initializes the enemy controller.
      */
     void init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale, std::vector<std::shared_ptr<ActionModel>> actions);
+    
+    /**
+     * Disposes of all (non-static) resources allocated to this controller.
+     */
+    void dispose();
 
     /**
      * Resets the EnemyController.
      */
     void reset();
+    
+    /** Apply force to the enemy model*/
+    void applyForce();
 
     /**
      * Updates all enemy behaviors.

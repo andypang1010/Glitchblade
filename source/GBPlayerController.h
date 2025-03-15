@@ -38,7 +38,7 @@ public:
     void init(const std::shared_ptr<AssetManager>& assetRef, cugl::Rect bounds,  float scale);
 
     /**
-     * Disposes of all (non-static) resources allocated to this mode.
+     * Disposes of all (non-static) resources allocated to this controller.
      */
     void dispose();
 

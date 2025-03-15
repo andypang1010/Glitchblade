@@ -278,6 +278,13 @@ void PlayerModel::dispose() {
     _sceneNode = nullptr;
     _sensorNode = nullptr;
     _shieldNode = nullptr;
+    _currentSpriteNode = nullptr;
+    _idleSprite = nullptr;
+    _guardSprite = nullptr;
+    _walkSprite = nullptr;
+    _jumpUpSprite = nullptr;
+    _jumpDownSprite = nullptr;
+    _attackSprite = nullptr;
 }
 
 #pragma mark Cooldowns
