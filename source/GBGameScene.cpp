@@ -632,29 +632,8 @@ void GameScene::preUpdate(float dt) {
     }
 
     // TODO: refactor using Box2d
-    Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
-    bool hit = false;
     if(_player->iframe > 0) _player->iframe--;
-    if (_testEnemy->isDamaging() && _player->iframe <= 0) {
-        if (_testEnemy->_isSlamming) {
-            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
-                hit = true;
-            }
-            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
-                hit = true;
-            }
-        }
-        else if (_testEnemy->_isStabbing) {
-            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
-                hit = true;
-            }
-            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
-                hit = true;
-            }
-        }
-    }
-
-    if (hit) {
+    if (_player->iframe <= 0 && (_testEnemy->isSlamHit() || _testEnemy->isStabHit())) {
         _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
         if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
             _player->damage(20);
@@ -668,8 +647,6 @@ void GameScene::preUpdate(float dt) {
         _player->iframe = 60;
     }
     _testEnemy->setTargetPos(_player->getPosition());
-    //_testEnemy->setDashLeftInput(_input.didDashLeft());
-    //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
     _testEnemy->applyForce();
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
     _enemyStunNode->setText((_testEnemy->isStunned() ? "STUNNED" : ""));

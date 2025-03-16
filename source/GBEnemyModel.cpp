@@ -85,12 +85,6 @@
 
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
-#define SLAM_FRAMES     40
-#define SLAM_DAMAGE_START_FRAME     25
-#define SLAM_DAMAGE_END_FRAME    31
-#define STAB_FRAMES     40
-#define STAB_DAMAGE_START_FRAME     28
-#define STAB_DAMAGE_END_FRAME    35
 #define STUN_FRAMES 120
 
 using namespace cugl;
@@ -150,6 +144,16 @@ bool EnemyModel::init(const Vec2& pos, const Size& size, float scale, std::vecto
         _isSlamming = false;
         _moveDuration = 0;
         currentFrame = 0;
+
+        for (auto act : actions) {
+            if (act->getActionName() == "slam") {
+                _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            }
+            else if (act->getActionName() == "stab") {
+                _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            }
+        }
+
         _node = scene2::SceneNode::alloc();
         setSceneNode(_node);
         return true;
@@ -255,14 +259,14 @@ void EnemyModel::createFixtures() {
     _sensorFixture = _body->CreateFixture(&sensorDef);
     
     // create shield circle fixture
-    b2FixtureDef shieldDef;
-    b2CircleShape shieldShape;
-    shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
-    shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
-    shieldDef.isSensor = true;
-    shieldDef.shape = &sensorShape;
-    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
-    _shieldFixture = _body->CreateFixture(&shieldDef);
+    //b2FixtureDef shieldDef;
+    //b2CircleShape shieldShape;
+    //shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
+    //shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
+    //shieldDef.isSensor = true;
+    //shieldDef.shape = &sensorShape;
+    //shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
+    //_shieldFixture = _body->CreateFixture(&shieldDef);
 
     // create attack fixtures
 }
@@ -457,21 +461,19 @@ void EnemyModel::update(float dt) {
 
 #pragma mark -
 #pragma mark AI Methods
-bool EnemyModel::isTargetClose(Vec2 targetPos) {
-    return (getPosition() - targetPos).length() <= CLOSE_RADIUS;
+bool EnemyModel::isTargetClose() {
+    return (getPosition() - _targetPos).length() <= CLOSE_RADIUS;
 }
 
 void EnemyModel::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
+    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose() && !isStunned()) {
         if (r%3 == 0) { //Slam
-            _isSlamming = true;
-            setMovement(0);
+            slam();
         }
         else if(r % 3 == 1){ // Stab
-            _isStabbing = true;
-            setMovement(0);
+            stab();
         }
         else { // Move away
             _moveDuration = 45;
@@ -480,8 +482,7 @@ void EnemyModel::nextAction() {
     }
     else if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && !isStunned()) {
         if (r % 2 == 0) { // Stab
-            _isStabbing = true;
-            setMovement(0);
+            stab();
         }
         else{ // Move closer
             _moveDuration = 45;
@@ -494,11 +495,11 @@ void EnemyModel::nextAction() {
             _isStabbing = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES-1) {
+        if (_isSlamming && _slamSprite->getFrame() >= _slamSprite->getCount() - 1) {
             _isSlamming = false;
             setMovement(0);
         }
-        if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES-1) {
+        if (_isStabbing && _stabSprite->getFrame() >= _stabSprite->getCount() -1) {
             _isStabbing = false;
             setMovement(getMovement());
         }
@@ -516,29 +517,58 @@ void EnemyModel::AIMove() {
         setStrafeRight(dist < 0);
         _moveDuration--;
     }
-    //else if (_moveDuration > 0) {
-    //    _moveDuration--;
-    //}
-    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
-        /*_faceRight ? setDashRightInput(true) : setDashLeftInput(true);*/
-        /*b2Vec2 force(face * ENEMY_DASH, 0);
-        _body->ApplyLinearImpulseToCenter(force, true);*/
-        /*_moveDuration = STAB_DAMAGE_END_FRAME - STAB_DAMAGE_START_FRAME;*/
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
         setMovement(face * getForce() * ENEMY_DASH);
     }
     
 }
 
 bool EnemyModel::isDamaging() {
-    if (_isSlamming && _slamSprite->getFrame() >= SLAM_DAMAGE_START_FRAME-1 && _slamSprite->getFrame() <= SLAM_DAMAGE_END_FRAME - 1) {
+    if (_isSlamming && _slamSprite->getFrame() >= _slam->getHitboxStartTime() -1 && _slamSprite->getFrame() <= _slam->getHitboxEndTime() - 1) {
         return true;
     }
-    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
         return true;
     }
     else {
         return false;
     }
+}
+
+void EnemyModel::slam() {
+    _isSlamming = true;
+    setMovement(0);
+}
+
+bool EnemyModel::isSlamHit() {
+    Vec2 dist = getPosition() - _targetPos;
+    if (_isSlamming && _slamSprite->getFrame() >= _slam->getHitboxStartTime() - 1 && _slamSprite->getFrame() <= _slam->getHitboxEndTime() - 1) {
+        if (dist.x > 0 && dist.x <= 6 && !isFacingRight() && std::abs(dist.y) <= 6) {
+            return true;
+        }
+        else if (dist.x < 0 && dist.x >= -6 && isFacingRight() && std::abs(dist.y) <= 6) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void EnemyModel::stab() {
+    _isStabbing = true;
+    setMovement(0);
+}
+
+bool EnemyModel::isStabHit() {
+    Vec2 dist = getPosition() - _targetPos;
+    if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
+        if (dist.x > 0 && dist.x <= 6 && !isFacingRight() && std::abs(dist.y) <= 2) {
+            return true;
+        }
+        else if (dist.x < 0 && dist.x >= -6 && isFacingRight() && std::abs(dist.y) <= 2) {
+            return true;
+        }
+    }
+    return false;
 }
 
 #pragma mark -

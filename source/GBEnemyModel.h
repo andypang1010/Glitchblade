@@ -45,6 +45,7 @@
 #define __GB_ENEMY_MODEL_H__
 #include <cugl/cugl.h>
 #include "GBActionModel.h"
+#include "GBMeleeActionModel.h"
 
 using namespace cugl;
 
@@ -57,7 +58,7 @@ using namespace cugl;
 #define ENEMY_SENSOR_NAME     "enemysensor"
 #define ENEMY_SHIELD_SENSOR_NAME      "shield"
 #define SLAM_SENSOR_NAME      "slam"
-#define STAB_SENSOR_NAME      "slam"
+#define STAB_SENSOR_NAME      "stab"
 
 #define E_ANIMATION_UPDATE_FRAME 4
 
@@ -152,21 +153,22 @@ protected:
     /** The guard shield when guard is active */
 
     // TODO: use Action parser
-    /** Ground sensor to represent our feet */
-    b2Fixture* _slamFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
     std::string _slamName;
-    /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _slamNode;
-    /** The guard shield when guard is active */
-
-    /** Ground sensor to represent our feet */
-    b2Fixture* _stabFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
     std::string _stabName;
-    /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _stabNode;
-    /** The guard shield when guard is active */
+
+    /** The position of the target(player) */
+    Vec2 _targetPos;
+    /** Whether the enemy is stabbing */
+    bool _isStabbing;
+    /** Whether the enemy is slamming */
+    bool _isSlamming;
+
+    /** Remaining duration of current enemy movement */
+    int _moveDuration;
+    /** Direction of current enemy movement */
+    int _moveDirection;
     
 	/** The scene graph node for the Dude. */
 	std::shared_ptr<scene2::SceneNode> _node;
@@ -183,14 +185,7 @@ protected:
     virtual void resetDebug() override;
 
 public:
-    // TODO: refactor with Action parser
-    Vec2 _targetPos;
-    bool _isStabbing;
-    bool _isSlamming;
-
-    int _moveDuration;
-    int _moveDirection;
-
+    // TODO: refactor to handle actions with this class
     class ActionInstance {
     public:
         std::shared_ptr<ActionModel> action;
@@ -222,9 +217,9 @@ public:
         }
     };
 
-    std::shared_ptr<ActionModel> _slam;
-    std::shared_ptr<ActionModel> _stab;
-    std::shared_ptr<ActionInstance> currentAction = nullptr;
+    std::shared_ptr<MeleeActionModel> _slam;
+    std::shared_ptr<MeleeActionModel> _stab;
+    std::shared_ptr<ActionInstance> currentAction;
 
 public:
     int currentFrame;
@@ -274,41 +269,41 @@ public:
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
     virtual bool init() override { return init(Vec2::ZERO, Size(1, 1), 1.0f, {}); }
-    //
-    ///**
-    // * Initializes a new dude at the given position.
-    // *
-    // * The dude is unit square scaled so that 1 pixel = 1 Box2d unit
-    // *
-    // * The scene graph is completely decoupled from the physics system.
-    // * The node does not have to be the same size as the physics body. We
-    // * only guarantee that the scene graph node is positioned correctly
-    // * according to the drawing scale.
-    // *
-    // * @param pos   Initial position in world coordinates
-    // *
-    // * @return  true if the obstacle is initialized properly, false otherwise.
-    // */
-    //virtual bool init(const Vec2 pos) override { return init(pos, Size(1,1), 1.0f); }
-    //
-    ///**
-    // * Initializes a new dude at the given position.
-    // *
-    // * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
-    // *
-    // * The scene graph is completely decoupled from the physics system.
-    // * The node does not have to be the same size as the physics body. We
-    // * only guarantee that the scene graph node is positioned correctly
-    // * according to the drawing scale.
-    // *
-    // * @param pos   Initial position in world coordinates
-    // * @param size  The size of the dude in world units
-    // *
-    // * @return  true if the obstacle is initialized properly, false otherwise.
-    // */
-    //virtual bool init(const Vec2 pos, const Size size) override {
-    //    return init(pos, size, 1.0f);
-    //}
+    
+    /**
+     * Initializes a new dude at the given position.
+     *
+     * The dude is unit square scaled so that 1 pixel = 1 Box2d unit
+     *
+     * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param pos   Initial position in world coordinates
+     *
+     * @return  true if the obstacle is initialized properly, false otherwise.
+     */
+    virtual bool init(const Vec2 pos) override { return init(pos, Size(1, 1), 1.0f, {}); }
+    
+    /**
+     * Initializes a new dude at the given position.
+     *
+     * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
+     *
+     * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param pos   Initial position in world coordinates
+     * @param size  The size of the dude in world units
+     *
+     * @return  true if the obstacle is initialized properly, false otherwise.
+     */
+    virtual bool init(const Vec2 pos, const Size size) override {
+        return init(pos, size, 1.0f, {});
+    }
     
     /**
      * Initializes a new dude at the given position.
@@ -331,61 +326,61 @@ public:
     
 #pragma mark -
 #pragma mark Static Constructors
-	///**
-	// * Creates a new dude at the origin.
-	// *
-	// * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
-	// *
-	// * The scene graph is completely decoupled from the physics system.
-	// * The node does not have to be the same size as the physics body. We
-	// * only guarantee that the scene graph node is positioned correctly
-	// * according to the drawing scale.
-	// *
-	// * @return  A newly allocated PlayerModel at the origin
-	// */
-	//static std::shared_ptr<EnemyModel> alloc() {
-	//	std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-	//	return (result->init() ? result : nullptr);
-	//}
+	/**
+	 * Creates a new dude at the origin.
+	 *
+	 * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
+	 *
+	 * The scene graph is completely decoupled from the physics system.
+	 * The node does not have to be the same size as the physics body. We
+	 * only guarantee that the scene graph node is positioned correctly
+	 * according to the drawing scale.
+	 *
+	 * @return  A newly allocated PlayerModel at the origin
+	 */
+	static std::shared_ptr<EnemyModel> alloc() {
+		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
+		return (result->init() ? result : nullptr);
+	}
 
-	///**
-	// * Creates a new dude at the given position.
-	// *
-	// * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
-	// *
-	// * The scene graph is completely decoupled from the physics system.
-	// * The node does not have to be the same size as the physics body. We
-	// * only guarantee that the scene graph node is positioned correctly
-	// * according to the drawing scale.
-	// *
- //    * @param pos   Initial position in world coordinates
-	// *
-	// * @return  A newly allocated PlayerModel at the given position
-	// */
-	//static std::shared_ptr<EnemyModel> alloc(const Vec2& pos) {
-	//	std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-	//	return (result->init(pos) ? result : nullptr);
-	//}
+	/**
+	 * Creates a new dude at the given position.
+	 *
+	 * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
+	 *
+	 * The scene graph is completely decoupled from the physics system.
+	 * The node does not have to be the same size as the physics body. We
+	 * only guarantee that the scene graph node is positioned correctly
+	 * according to the drawing scale.
+	 *
+     * @param pos   Initial position in world coordinates
+	 *
+	 * @return  A newly allocated PlayerModel at the given position
+	 */
+	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos) {
+		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
+		return (result->init(pos) ? result : nullptr);
+	}
 
- //   /**
-	// * Creates a new dude at the given position.
-	// *
- //    * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
-	// *
- //	 * The scene graph is completely decoupled from the physics system.
-	// * The node does not have to be the same size as the physics body. We
-	// * only guarantee that the scene graph node is positioned correctly
-	// * according to the drawing scale.
-	// *
-	// * @param pos   Initial position in world coordinates
- //    * @param size  The size of the dude in world units
-	// *
-	// * @return  A newly allocated PlayerModel at the given position with the given scale
-	// */
-	//static std::shared_ptr<EnemyModel> alloc(const Vec2& pos, const Size& size) {
-	//	std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-	//	return (result->init(pos, size) ? result : nullptr);
-	//}
+    /**
+	 * Creates a new dude at the given position.
+	 *
+     * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
+	 *
+ 	 * The scene graph is completely decoupled from the physics system.
+	 * The node does not have to be the same size as the physics body. We
+	 * only guarantee that the scene graph node is positioned correctly
+	 * according to the drawing scale.
+	 *
+	 * @param pos   Initial position in world coordinates
+     * @param size  The size of the dude in world units
+	 *
+	 * @return  A newly allocated PlayerModel at the given position with the given scale
+	 */
+	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos, const Size& size) {
+		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
+		return (result->init(pos, size) ? result : nullptr);
+	}
 
 	/**
 	 * Creates a new dude at the given position.
@@ -747,12 +742,59 @@ public:
 
 #pragma mark -
 #pragma mark AI Methods
+    /**
+     * Sets this enemy's attack target position
+     *
+     * @param pos the position of the target(player)
+     */
     void setTargetPos(Vec2 pos) { _targetPos = pos; }
 
-    bool isTargetClose(Vec2 targetPos);
+    /**
+     * Returns whether the target is considered "close" to this enemy
+     *
+     * @return whether the target is close
+     */
+    bool isTargetClose();
+
+    /**
+     * Performs the next action of the enemy, this function contains the behavior tree for this enemy
+     *
+     */
     void nextAction();
+
+    /**
+     * Performs the next movement of the enemy, sets whether this enemy is moving and the movement duration
+     *
+     */
     void AIMove();
+
     bool isDamaging();
+
+    /**
+     * Performs the slam attack of boss1
+     *
+     */
+    void slam();
+
+    /**
+     * Checks whether the slam hits the player
+     * 
+     * @return whether the slam attack hits target
+     */
+    bool isSlamHit();
+
+    /**
+     * Performs the stab attack of boss1
+     *
+     */
+    void stab();
+
+    /**
+     * Checks whether the stab hits the player
+     * 
+     * @return whether the stab attack hits target
+     */
+    bool isStabHit();
 
 #pragma mark -
 #pragma mark Animation Methods
