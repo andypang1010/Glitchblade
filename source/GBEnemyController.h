@@ -67,6 +67,8 @@ public:
      * @param remain    The amount of time (in seconds) last fixedUpdate
      */
     void postUpdate(float dt);
+    
+    std::shared_ptr<EnemyModel> getEnemy() {return _enemy;};
 
 //  Maybe for the level controller, this will be useful:
 //    /**

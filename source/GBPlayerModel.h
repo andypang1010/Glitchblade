@@ -51,60 +51,59 @@ using namespace cugl;
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
 #define PLAYER_TEXTURE    "player"
-#define ENEMY_TEXTURE   "enemy"
 /** Identifier to allow us to track the player sensor in ContactListener */
-#define BODY_NAME      "body"
-#define SENSOR_NAME     "playersensor"
-#define SHIELD_SENSOR_NAME      "shield"
+#define PLAYER_BODY_NAME      "body"
+#define PLAYER_SENSOR_NAME     "playersensor"
+#define PLAYER_SHIELD_SENSOR_NAME      "shield"
 
 #define ANIMATION_UPDATE_FRAME 4
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
-#define FORCE      50.0f
+#define PLAYER_FORCE      50.0f
 /** The amount to slow the character down */
-#define DAMPING    30.0f
+#define PLAYER_DAMPING    30.0f
 /** The maximum character speed */
-#define MAXSPEED   5.0f
+#define PLAYER_MAXSPEED   5.0f
 /** The maximum character hp */
-#define MAXHP   100.0f
+#define PLAYER_MAXHP   100.0f
 /** Cooldown (in animation frames) for jumping */
-#define JUMP_COOLDOWN   5
+#define PLAYER_JUMP_COOLDOWN   5
 /** Cooldown (in animation frames) for shooting */
-#define SHOOT_COOLDOWN  20
+#define PLAYER_SHOOT_COOLDOWN  20
 /** Cooldown (in frames) for guard */
-#define GUARD_COOLDOWN  15
+#define PLAYER_GUARD_COOLDOWN  15
 /** Cooldown (in frames) for dash */
-#define DASH_COOLDOWN  30
+#define PLAYER_DASH_COOLDOWN  30
 /** Duration (in frames) for guard */
-#define GUARD_DURATION  44
+#define PLAYER_GUARD_DURATION  44
 /** Duration (in frames) for parry */
-#define PARRY_DURATION  24
+#define PLAYER_PARRY_DURATION  24
 /** Duration (in frames) for dash- affects friction*/
-#define DASH_DURATION  20
+#define PLAYER_DASH_DURATION  20
 /** The amount to shrink the body fixture (vertically) relative to the image */
-#define VSHRINK  0.95f
+#define PLAYER_VSHRINK  0.95f
 /** The amount to shrink the body fixture (horizontally) relative to the image */
-#define HSHRINK  0.7f
+#define PLAYER_HSHRINK  0.7f
 /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define SSHRINK  0.6f
+#define PLAYER_SSHRINK  0.6f
 /** Height of the sensor attached to the player's feet */
-#define SENSOR_HEIGHT   0.1f
+#define PLAYER_SENSOR_HEIGHT   0.1f
 /** The amount to shrink the radius of the shield relative to the image width */
-#define SHIELD_RADIUS 2.0f
+#define PLAYER_SHIELD_RADIUS 2.0f
 /** The density of the character */
-#define DENSITY    1.0f
+#define PLAYER_DENSITY    1.0f
 /** The impulse for the character jump */
-#define JUMP_F       45.0f
+#define PLAYER_JUMP_F       45.0f
 /** The x SPEED for the character dash-attack */
-#define DASH       30.0f
+#define PLAYER_DASH       30.0f
 /** The impulse for the  vertical component of the knockback */
-#define KB     15.0f
-#define KB_DURATION 20
+#define PLAYER_KB     15.0f
+#define PLAYER_KB_DURATION 20
 /** Debug color for the sensor */
-#define SENSOR_DEBUG_COLOR     Color4::RED
-#define DEBUG_COLOR     Color4::YELLOW
-#define DEBUG_FONT      "debug"
+#define PLAYER_SENSOR_DEBUG_COLOR     Color4::RED
+#define PLAYER_DEBUG_COLOR     Color4::YELLOW
+#define PLAYER_DEBUG_FONT      "debug"
 #pragma mark -
 #pragma mark player Model
 /**
@@ -213,7 +212,7 @@ public:
      * This constructor does not initialize any of the player values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    PlayerModel() : BoxObstacle(), _sensorName(SENSOR_NAME), _shieldName(SHIELD_SENSOR_NAME), _bodyName(BODY_NAME) { }
+    PlayerModel() : BoxObstacle(), _sensorName(PLAYER_SENSOR_NAME), _shieldName(PLAYER_SHIELD_SENSOR_NAME), _bodyName(PLAYER_BODY_NAME) { }
     
     /**
      * Destroys this PlayerModel, releasing all resources.
@@ -282,7 +281,7 @@ public:
 #pragma mark Level Control and Constructor Helpers
      /** Reset all the player attributes to their initial values*/
      void resetAttributes(){
-         _hp = MAXHP;
+         _hp = PLAYER_MAXHP;
          _isGrounded = false;
          _isShootInput = false;
          _isJumpInput  = false;
@@ -528,7 +527,7 @@ public:
      *
      * @param the value that remaining guard frames should be set to
      */
-    void setGuardRem(int value = GUARD_DURATION) {_guardRem = value; };
+    void setGuardRem(int value = PLAYER_GUARD_DURATION) {_guardRem = value; };
     /**
      * Returns the amount of frames remaining before the player can guard again
      *
@@ -541,7 +540,7 @@ public:
      *
      * @param the amount of frames remaining before the player can guard again should be set to
      */
-    void setGuardCDRem(int value = GUARD_COOLDOWN) {_guardCooldownRem = value; };
+    void setGuardCDRem(int value = PLAYER_GUARD_COOLDOWN) {_guardCooldownRem = value; };
     void setShieldDebugColor(Color4 c) {_shieldNode->setColor(c);}
     
     /**
@@ -556,7 +555,7 @@ public:
      *
      * @param the value that remaining dash frames should be set to
      */
-    void setDashRem(int value = DASH_DURATION) {_dashRem = value; };
+    void setDashRem(int value = PLAYER_DASH_DURATION) {_dashRem = value; };
     /**
      * Returns the amount of frames remaining before the player can dash again
      *
@@ -569,7 +568,7 @@ public:
      *
      * @param the amount of frames remaining before the player can dash again should be set to
      */
-    void setDashCDRem(int value = DASH_COOLDOWN) {_dashCooldownRem = value; };
+    void setDashCDRem(int value = PLAYER_DASH_COOLDOWN) {_dashCooldownRem = value; };
 
     /**
      * Returns true if the player is actively parrying.
@@ -589,7 +588,7 @@ public:
      *
      * @param the value that remaining parry frames should be set to
      */
-    void setParryRem(int value = PARRY_DURATION) {_parryRem = value; };
+    void setParryRem(int value = PLAYER_PARRY_DURATION) {_parryRem = value; };
     /**
      * Returns the amount of knockback frames remaining
      *
@@ -602,7 +601,7 @@ public:
      *
      * @param the value that remaining knockback frames should be set to
      */
-    void setKnockbackRem(int value = KB_DURATION) {_knockbackRem = value; };
+    void setKnockbackRem(int value = PLAYER_KB_DURATION) {_knockbackRem = value; };
     /**
      * Returns true if the player has a swallowed projectile.
      *
@@ -627,7 +626,7 @@ public:
      *
      * @param the value that the amount of frames remaining before the player can jump again should be set to
      */
-    void setJumpCDRem(int value = JUMP_COOLDOWN) {_jumpCooldownRem = value; };
+    void setJumpCDRem(int value = PLAYER_JUMP_COOLDOWN) {_jumpCooldownRem = value; };
     /**
      * Returns the amount of frames remaining before the player can shoot again
      *
@@ -640,7 +639,7 @@ public:
      *
      * @param the value that the amount of frames remaining before the player can shoot again should be set to
      */
-    void setShootCDRem(int value = SHOOT_COOLDOWN) {_shootCooldownRem = value; };
+    void setShootCDRem(int value = PLAYER_SHOOT_COOLDOWN) {_shootCooldownRem = value; };
     /**
      * Returns true if the player is being knocked back.
      *
@@ -666,7 +665,7 @@ public:
      * @param value whether the player is on the ground.
      */
     void setGrounded(bool value) { _isGrounded = value; }
-    float getKnockF() {return KB;}
+    float getKnockF() {return PLAYER_KB;}
     Vec2 getKnockDirection() {return _knockDirection;}
     /**
      * Sets whether the player is being knocked back
@@ -686,15 +685,15 @@ public:
      *
      * @return how much force to apply to get the player moving
      */
-    float getForce() const { return FORCE; }
+    float getForce() const { return PLAYER_FORCE; }
     /**
      * @return how much jump force to apply
      */
-    float getJumpF() const { return JUMP_F; }
+    float getJumpF() const { return PLAYER_JUMP_F; }
     /**
      * @return how much dash force to apply
      */
-    float getDashF() const { return DASH; }
+    float getDashF() const { return PLAYER_DASH; }
     /** @return is dash left input */
     bool isDashLeftInput() const { return _isDashLeftInput; }
     /** @return is dash right input */
@@ -705,7 +704,7 @@ public:
      *
      * @return How hard the brakes are applied to get a player to stop moving
      */
-    float getDamping() const { return DAMPING; }
+    float getDamping() const { return PLAYER_DAMPING; }
     
     /** @return Whether the dash has been released (reset). only for keyboard controls*/
     bool getDashReset() const { return _dashReset; };
@@ -718,7 +717,7 @@ public:
      *
      * @return the upper limit on player left-right movement.
      */
-    float getMaxSpeed() const { return MAXSPEED; }
+    float getMaxSpeed() const { return PLAYER_MAXSPEED; }
     /**
      * Returns the name of the body fixture
      *

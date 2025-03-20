@@ -6,20 +6,26 @@ using namespace cugl::graphics;
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 
 //CONSTANTS (INITIAL POSITIONS SHOULD BE LATER DETERMINED BY LEVEL MODEL/CONTROLLER
-float INIT_POS[] = { 12.5f, 5.0f };
+float ENEMY_INIT_POS[] = { 12.5f, 5.0f };
 
 EnemyController::EnemyController(){}
 
 void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale, std::vector<std::shared_ptr<ActionModel>> actions)
 {
-	_enemy  = EnemyModel::alloc(assetRef, INIT_POS, scale, actions);
+	_enemy  = EnemyModel::alloc(assetRef, ENEMY_INIT_POS, scale, actions);
     
     #pragma mark hp node
     _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(ENEMY_DEBUG_FONT));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _hpNode->setForeground(Color4::CYAN);
-    _hpNode->setPosition(0, 55);
+    _hpNode->setForeground(Color4::RED);
+    _hpNode->setPosition(0, 80);
     
+    #pragma mark stun node
+    _stunNode = scene2::Label::allocWithText("STUN", assetRef->get<Font>(ENEMY_DEBUG_FONT));
+    _stunNode->setAnchor(Vec2::ANCHOR_CENTER);
+    _stunNode->setForeground(Color4::RED);
+    _stunNode->setPosition(0, 100);
+
     // add indicator nodes as children to main scene node
     _enemy->getSceneNode()->addChild(_hpNode);
     _enemy->getSceneNode()->addChild(_stunNode);
@@ -29,7 +35,7 @@ void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const 
 void EnemyController::reset()
 {
     _enemy->resetAttributes();
-    _enemy->setPosition(INIT_POS);
+    _enemy->setPosition(ENEMY_INIT_POS);
 }
 
 void EnemyController::dispose() {

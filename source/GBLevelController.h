@@ -1,5 +1,5 @@
-#ifndef LEVEL_CONTROLLER_H
-#define LEVEL_CONTROLLER_H
+#ifndef __GB__LEVEL_CONTROLLER_H
+#define __GB__LEVEL_CONTROLLER_H
 
 #include <string>
 #include <vector>
@@ -13,7 +13,9 @@
 #include "GBLevelModel.h"
 #include "GBEnemyController.h"
 #include "GBPlayerController.h"
+#include "GBTypes.h"
 
+using namespace cugl;
 /**
  * A class that parses a JSON level file and generates corresponding action models.
  */
@@ -26,11 +28,12 @@ private:
     
     /* Data */
     std::shared_ptr<JsonValue> _enemiesJSON;
+    std::shared_ptr<JsonValue> _constantsJSON;
     
     /* Controllers */
-
-    /** The enemy controller for this level controller */
-    std::shared_ptr<EnemyController> _enemyController;
+    
+    /** One enemy controller for this level controller: It will likely need to be a vector for future levels*/
+    std::shared_ptr<EnemyController> _testEnemyController;
     
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
@@ -67,6 +70,13 @@ public:
     /**
      * Resets the state of the LevelController.
      */
+    
+    /**
+     Initializes static level obstacles with scene nodes to be added to the Game Scene
+     @returns a vector of all the obstacle shared pointers.
+     */
+    ObstacleNodePairs createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef, float scale);
+    
     void reset();
     
     /**
@@ -90,15 +100,25 @@ public:
      * @param remain    The amount of time (in seconds) last fixedUpdate
      */
     void postUpdate(float dt);
-
+    
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);
     
 #pragma mark Getters
+    // this is a test method because we will need to access all enemies in the level not just one
+    std::shared_ptr<EnemyModel> getTestEnemyModel(){return _testEnemyController->getEnemy();};
+    std::shared_ptr<cugl::scene2::SceneNode> getTestEnemyNode(){ return _testEnemyController->getEnemy()->getSceneNode();};
     std::shared_ptr<PlayerModel> getPlayerModel(){return _playerController->getPlayer();};
-    std::shared_ptr<PlatformInput> getInputController(){return _playerController->getInputController();};
     std::shared_ptr<cugl::scene2::SceneNode> getPlayerNode(){ return _playerController->getPlayer()->getSceneNode();};
+    std::shared_ptr<PlatformInput> getInputController(){return _playerController->getInputController();};
+    #pragma mark level obstacle data
+    void setStaticPhysics(const std::shared_ptr<physics2::Obstacle>& obj);
+    std::vector<std::vector<Vec2>>  calculateWallVertices();
+    std::vector<Vec2> calculateGroundVertices();
+    Vec2 calculateLeftBulletPosition();
+    Vec2 calculateRightBulletPosition();
     
 };
 
-#endif // LEVEL_CONTROLLER_H
+
+#endif /* LEVEL_CONTROLLER_H */

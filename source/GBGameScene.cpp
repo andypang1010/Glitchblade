@@ -37,151 +37,19 @@ using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::audio;
-
-#pragma mark -
-#pragma mark Level Geography
-
+// Constants moved to LevelController.cpp
+// NOTE: THE SCENE WIDTH/HEIGHT, ASPECT, DEFAULT WIDTH/HEIGHT ARE CURRENTLY COPIED IN LEVELCONTROLLER WITH GAME_ PREFIX
 /** This is adjusted by screen aspect ratio to get the height */
 #define SCENE_WIDTH 1024
 #define SCENE_HEIGHT 576
-
 /** This is the aspect ratio for physics */
 #define SCENE_ASPECT 9.0/16.0
-
 /** Width of the game world in Box2d units */
 #define DEFAULT_WIDTH   32.0f
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  18.0f
-
-// Since these appear only once, we do not care about the magic numbers.
-// In an actual game, this information would go in a data file.
-// IMPORTANT: Note that Box2D units do not equal drawing units
-/** The wall vertices */
-#define WALL_VERTS 12
-#define WALL_COUNT  2
-#define WALL_THICKNESS 1
-
-float WALL[WALL_COUNT][WALL_VERTS] = {
-    {
-        DEFAULT_WIDTH / 2, DEFAULT_HEIGHT,
-        0.0f, DEFAULT_HEIGHT,
-        0.0f,  0.0f,
-        WALL_THICKNESS,  0.0f,
-        WALL_THICKNESS, DEFAULT_HEIGHT - WALL_THICKNESS,
-        DEFAULT_WIDTH / 2, DEFAULT_HEIGHT - WALL_THICKNESS
-    },
-    {
-        DEFAULT_WIDTH, DEFAULT_HEIGHT,
-        DEFAULT_WIDTH / 2, DEFAULT_HEIGHT,
-        DEFAULT_WIDTH / 2, DEFAULT_HEIGHT - WALL_THICKNESS,
-        DEFAULT_WIDTH - WALL_THICKNESS, DEFAULT_HEIGHT - WALL_THICKNESS,
-        DEFAULT_WIDTH - WALL_THICKNESS,  0.0f,
-        DEFAULT_WIDTH,  0.0f
-    }
-};
-
-/** The number of ground vertices */
-#define GROUND_VERTS  8
-#define GROUND_THICKNESS 4
-
-/** The outlines of the ground */
-float GROUND[GROUND_VERTS]{
-    0.0f, 0.0f,
-    DEFAULT_WIDTH, 0.0f,
-    DEFAULT_WIDTH, GROUND_THICKNESS,
-    0.0f, GROUND_THICKNESS
-};
-
-
-/** Bullet Spawn Points */
-Vec2 LEFT_BULLET = { WALL_THICKNESS + 1.5f, 9.0f };
-Vec2 RIGHT_BULLET = { DEFAULT_WIDTH - WALL_THICKNESS - 1.5f, 13.0f };
-
-/** Directions */
-Vec2 LEFT = { -1.0f, 0.0f };
-Vec2 RIGHT = { 1.0f, 0.0f };
-Vec2 UP = { 0.0f, 1.0f };
-Vec2 DOWN = { 0.0f, -1.0f };
-
-#pragma mark -
-#pragma mark Physics Constants
 /** The new heavier gravity for this world (so it is not so floaty) */
 #define DEFAULT_GRAVITY -28.9f
-/** The density for most physics objects */
-#define BASIC_DENSITY   0.0f
-/** The density for a projectile */
-#define HEAVY_DENSITY   10.0f
-/** Friction of most platforms */
-#define BASIC_FRICTION  0.4f
-/** The restitution for all physics objects */
-#define BASIC_RESTITUTION   0.1f
-/** Offset for pojectile when firing */
-#define PROJECTILE_OFFSET   0.5f
-/** The speed of the projectile after firing */
-#define PROJECTILE_SPEED   30.0f
-/** The number of frame to wait before reinitializing the game */
-#define EXIT_COUNT      240
-
-#pragma mark -
-#pragma mark Testing Constants
-/** The radius for enemy to initial attack */
-#define ENEMY_ATTACK_RADIUS     6.0f
-
-#pragma mark -
-#pragma mark Asset Constants
-
-///////////////// TEXTURES //////////////////////////////////
-/** The key for the ground texture in the asset manager */
-#define GROUND_TEXTURE  "ground"
-/** The key for the background texture in the asset manager */
-#define BKGD_TEXTURE    "background"
-/** The key for the regular projectile texture in the asset manager */
-#define PROJECTILE_TEXTURE  "projectile"
-/** The key for the player projectile texture in the asset manager */
-#define PLAYER_PROJECTILE_TEXTURE "player-projectile"
-
-///////////////// NAMES /////////////////////////////////////
-#define PROJECTILE_NAME "projectile"
-/** The name of a platform (for object identification) */
-#define GROUND_NAME   "ground"
-
-
-
-/** The font for victory/failure messages */
-#define MESSAGE_FONT    "retro"
-/** The font for debug UI */
-#define DEBUG_FONT      "debug"
-/** The message for winning the game */
-#define WIN_MESSAGE     "VICTORY!"
-/** The color of the win message */
-#define WIN_COLOR       Color4::YELLOW
-/** The message for losing the game */
-#define LOSE_MESSAGE    "FAILURE!"
-/** The color of the lose message */
-#define LOSE_COLOR      Color4::RED
-/** The key the basic game music */
-#define GAME_MUSIC      "game"
-/** The key the victory game music */
-#define WIN_MUSIC       "win"
-/** The key the failure game music */
-#define LOSE_MUSIC      "lose"
-/** The sound effect for firing a bullet */
-#define PEW_EFFECT      "pew"
-/** The sound effect for a bullet collision */
-#define POP_EFFECT      "pop"
-/** The sound effect for jumping */
-#define JUMP_EFFECT     "jump"
-/** The volume for the music */
-#define MUSIC_VOLUME    0.7f
-/** The volume for sound effects */
-#define EFFECT_VOLUME   0.8f
-
-/** The fire rate for spawned bullets */
-#define BULLET_SPAWN_RATE     100.0f
-
-/** Opacity of the physics outlines */
-#define DEBUG_OPACITY   192
-
 
 #pragma mark -
 #pragma mark Constructors
@@ -259,14 +127,23 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, const Rect& re
  */
 bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     const Rect& rect, const Vec2& gravity) {
+    // prepare constants
+    std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
+    _constantsJSON = constants_reader->readJson();
+    if (_constantsJSON == nullptr) {
+        CULog("Failed to load constants.json");
+        return false;
+    }
+    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
+    
     if (assets == nullptr) {
         return false;
     }
-    else if (!Scene2::initWithHint(Size(SCENE_WIDTH, SCENE_HEIGHT))) {
+    else if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
         return false;
     }
-    // Start up the input handler
     _assets = assets;
+   
 
     // Create the world and attach the listeners.
     _world = physics2::ObstacleWorld::alloc(rect, gravity);
@@ -281,11 +158,11 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // IMPORTANT: SCALING MUST BE UNIFORM
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
-    _scale = _size.width == SCENE_WIDTH ? _size.width / rect.size.width : _size.height / rect.size.height;
-    Vec2 offset((_size.width - SCENE_WIDTH) / 2.0f, (_size.height - SCENE_HEIGHT) / 2.0f);
+    _scale = _size.width == sceneJ->getInt("width") ? _size.width / rect.size.width : _size.height / rect.size.height;
+    Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
 
     // Create the scene graph
-    std::shared_ptr<Texture> image = _assets->get<Texture>(BKGD_TEXTURE);
+    std::shared_ptr<Texture> image = _assets->get<Texture>(sceneJ->getString("texture"));
     _worldnode = scene2::PolygonNode::allocWithTexture(image);
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(offset);
@@ -294,28 +171,19 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(offset);
-
-    _winnode = scene2::Label::allocWithText(WIN_MESSAGE, _assets->get<Font>(MESSAGE_FONT));
+    
+    std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
+    _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
     _winnode->setAnchor(Vec2::ANCHOR_CENTER);
     _winnode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _winnode->setForeground(WIN_COLOR);
+    _winnode->setForeground(messagesJ->get("win")->getString("color"));
     setComplete(false);
 
-    _losenode = scene2::Label::allocWithText(LOSE_MESSAGE, _assets->get<Font>(MESSAGE_FONT));
+    _losenode = scene2::Label::allocWithText(messagesJ->get("lose")->getString("text", "lose msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
     _losenode->setAnchor(Vec2::ANCHOR_CENTER);
     _losenode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _losenode->setForeground(LOSE_COLOR);
+    _losenode->setForeground(messagesJ->get("lose")->getString("color"));
     setFailure(false);
-
-    _enemyHPNode = scene2::Label::allocWithText("100", _assets->get<Font>(DEBUG_FONT));
-    _enemyHPNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _enemyHPNode->setForeground(Color4::RED);
-    _enemyHPNode->setPosition(0, 80);
-
-    _enemyStunNode = scene2::Label::allocWithText("STUN", _assets->get<Font>(DEBUG_FONT));
-    _enemyStunNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _enemyStunNode->setForeground(Color4::RED);
-    _enemyStunNode->setPosition(0, 100);
 
     addChild(_worldnode);
     addChild(_debugnode);
@@ -336,7 +204,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         if (!_player){
             CULog("player is null in populate");
         }
-        _player->setDebugColor(DEBUG_COLOR);
     populate();
     _active = true;
     _complete = false;
@@ -360,8 +227,6 @@ void GameScene::dispose() {
         _debugnode = nullptr;
         _winnode = nullptr;
         _losenode = nullptr;
-        _enemyHPNode = nullptr;
-        _enemyStunNode = nullptr;
         _complete = false;
         _debug = false;
         Scene2::dispose();
@@ -400,80 +265,25 @@ void GameScene::populate() {
     // DO NOT KEEP THIS IN THE CODE YOU DEGEN
     CULog("TODO: Get rid of this reference to player in gamescene.");
     _player = _levelController->getPlayerModel(); // DELET!
-    std::shared_ptr<Texture> image;
-    std::shared_ptr<scene2::PolygonNode> sprite;
-    std::shared_ptr<scene2::WireNode> draw;
-    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
-
-#pragma mark : Walls
-    // All walls and platforms share the same texture
-    image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
-    for (int ii = 0; ii < WALL_COUNT; ii++) {
-        std::shared_ptr<physics2::PolygonObstacle> wallobj;
-
-        Poly2 wall(reinterpret_cast<Vec2*>(WALL[ii]), WALL_VERTS / 2);
-        // Call this on a polygon to get a solid shape
-        EarclipTriangulator triangulator;
-        triangulator.set(wall.vertices);
-        triangulator.calculate();
-        wall.setIndices(triangulator.getTriangulation());
-        triangulator.clear();
-
-        wallobj = physics2::PolygonObstacle::allocWithAnchor(wall, Vec2::ANCHOR_CENTER);
-        // You cannot add constant "".  Must stringify
-        wallobj->setName(std::string(GROUND_NAME));
-
-        // Set the physics attributes
-        wallobj->setBodyType(b2_staticBody);
-        wallobj->setDensity(BASIC_DENSITY);
-        wallobj->setFriction(BASIC_FRICTION);
-        wallobj->setRestitution(BASIC_RESTITUTION);
-        wallobj->setDebugColor(DEBUG_COLOR);
-
-        wall *= _scale;
-        sprite = scene2::PolygonNode::allocWithTexture(image, wall);
-        addObstacle(wallobj, sprite, 1);  // All walls share the same texture
+    _testEnemy = _levelController->getTestEnemyModel();
+    ObstacleNodePairs static_obstacles = _levelController->createStaticObstacles(_assets, _scale);
+    for (const auto& pair : static_obstacles) {
+        ObstaclePtr obstacle = pair.first;
+        NodePtr node = pair.second;
+        // add obstacle and set node position
+        addObstacle(obstacle, node, 1);
     }
-
-#pragma mark : GROUND
-    image = _assets->get<Texture>(GROUND_TEXTURE);
-
-    std::shared_ptr<physics2::PolygonObstacle> groundObj;
-    Poly2 ground(reinterpret_cast<Vec2*>(GROUND), 4);
-
-    EarclipTriangulator triangulator;
-    triangulator.set(ground.vertices);
-    triangulator.calculate();
-    ground.setIndices(triangulator.getTriangulation());
-    triangulator.clear();
-
-    groundObj = physics2::PolygonObstacle::allocWithAnchor(ground, Vec2::ANCHOR_CENTER);
-    // You cannot add constant "".  Must stringify
-    groundObj->setName(std::string(GROUND_NAME));
-
-    // Set the physics attributes
-    groundObj->setBodyType(b2_staticBody);
-    groundObj->setDensity(BASIC_DENSITY);
-    groundObj->setFriction(BASIC_FRICTION);
-    groundObj->setRestitution(BASIC_RESTITUTION);
-    groundObj->setDebugColor(DEBUG_COLOR);
-
-    ground *= _scale;
-    sprite = scene2::PolygonNode::allocWithTexture(image, ground);
-    addObstacle(groundObj, sprite, 1);
-
+    
     addObstacle(_levelController->getPlayerModel(), _levelController->getPlayerNode()); // Put this at the very front
-
-#pragma mark : Test Enemy
+    addObstacle(_levelController->getTestEnemyModel(), _levelController->getTestEnemyNode());
 
 
     // Add UI elements
 
-
-
 	// Play the background music on a loop.
-	std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
-    AudioEngine::get()->getMusicQueue()->play(source, true, MUSIC_VOLUME);
+    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
+    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
 }
 
 /**
@@ -524,10 +334,11 @@ void GameScene::setComplete(bool value) {
     bool change = _complete != value;
     _complete = value;
     if (value && change) {
-        std::shared_ptr<Sound> source = _assets->get<Sound>(WIN_MUSIC);
-        AudioEngine::get()->getMusicQueue()->play(source, false, MUSIC_VOLUME);
+        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         _winnode->setVisible(true);
-        _countdown = EXIT_COUNT;
+        _countdown = _constantsJSON->getInt("exit_count");
     }
     else if (!value) {
         _winnode->setVisible(false);
@@ -545,12 +356,14 @@ void GameScene::setComplete(bool value) {
 void GameScene::setFailure(bool value) {
     if (_complete)
         return; // Do not fail if won
+    bool change = _complete != value;
     _failed = value;
-    if (value) {
-        std::shared_ptr<Sound> source = _assets->get<Sound>(LOSE_MUSIC);
-        AudioEngine::get()->getMusicQueue()->play(source, false, MUSIC_VOLUME);
+    if (value && change) {
+        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         _losenode->setVisible(true);
-        _countdown = EXIT_COUNT;
+        _countdown = _constantsJSON->getInt("exit_count");
     }
     else {
         _losenode->setVisible(false);
@@ -631,8 +444,9 @@ void GameScene::preUpdate(float dt) {
 
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
-      std::shared_ptr<Sound> source = _assets->get<Sound>(JUMP_EFFECT);
-      AudioEngine::get()->play(JUMP_EFFECT,source,false,EFFECT_VOLUME);
+        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
+        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
+        AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
     }
 
     // Call preUpdate on the LevelController
@@ -720,7 +534,6 @@ void GameScene::postUpdate(float remain) {
 //    else {
 //        _bulletTimer -= 1;
 //    }
-
     setComplete(_testEnemy->getHP() <= 0);
     setFailure(_player->getHP() <= 0);
 
@@ -731,9 +544,11 @@ void GameScene::postUpdate(float remain) {
 
     // Reset the game if we win or lose.
     if (_countdown > 0) {
+        CULog( " countdown is %d",_countdown);
         _countdown--;
     }
     else if (_countdown == 0) {
+        CULog( "resetting countdown is 0");
         reset();
     }
 
@@ -745,22 +560,26 @@ void GameScene::postUpdate(float remain) {
  * Add a new projectile to the world and send it in the right direction.
  */
 void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
-    float offset = PROJECTILE_OFFSET;
+    float offset = _constantsJSON->get("physics")->get("projectile")->getFloat("offset");
     if (isPlayerFired) {
         pos.x += (_player->isFacingRight() ? offset : -offset);
         pos.y += 0.5f;
     }
-
-    std::shared_ptr<Texture> image = _assets->get<Texture>(isPlayerFired ? PLAYER_PROJECTILE_TEXTURE : PROJECTILE_TEXTURE);
+    std::shared_ptr<JsonValue> projJ = _constantsJSON->get("projectile");
+    std::shared_ptr<JsonValue> physicsJ = _constantsJSON->get("physics");
+    std::shared_ptr<JsonValue> player_projJ = _constantsJSON->get("player_projectile");
+    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("effects");
+    
+    std::shared_ptr<Texture> image = _assets->get<Texture>(isPlayerFired ? player_projJ->getString("texture") : projJ->getString("texture"));
     float radius = 0.5f * image->getSize().width / _scale;
 
     // Change last parameter to test player-fired or regular projectile
     std::shared_ptr<Projectile> projectile = Projectile::alloc(pos, radius, isPlayerFired);
-    projectile->setName(PROJECTILE_NAME);
-    projectile->setDensity(HEAVY_DENSITY);
+    projectile->setName(projJ->getString("name"));
+    projectile->setDensity(physicsJ->getFloat("heavy_density"));
     projectile->setBullet(true);
     projectile->setGravityScale(0);
-    projectile->setDebugColor(DEBUG_COLOR);
+    projectile->setDebugColor(physicsJ->get("debug")->getString("color"));
     projectile->setDrawScale(_scale);
     projectile->setSensor(true);
     projectile->setIsPlayerFired(isPlayerFired);
@@ -769,14 +588,15 @@ void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
     projectile->setSceneNode(sprite);
 
     sprite->flipHorizontal(direction.x < 0);
-
+    
+    float proj_speed = physicsJ->get("projectile")->getFloat("speed");
     // Compute position and velocity
-    Vec2 speed = isPlayerFired ? direction.getNormalization()*PROJECTILE_SPEED : direction.getNormalization() * PROJECTILE_SPEED / 2;
+    Vec2 speed = isPlayerFired ? direction.getNormalization()* proj_speed : direction.getNormalization() * proj_speed / 2;
     projectile->setLinearVelocity(speed);
-    addObstacle(projectile, sprite, 5);
-
-    std::shared_ptr<Sound> source = _assets->get<Sound>(PEW_EFFECT);
-    AudioEngine::get()->play(PEW_EFFECT, source, false, EFFECT_VOLUME, true);
+    addObstacle(projectile, sprite, 1);
+    
+    std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pew"));
+    AudioEngine::get()->play(fxJ->getString("pew"), source, false, fxJ->getFloat("volume"), true);
 }
 
 /**
@@ -792,9 +612,10 @@ void GameScene::removeProjectile(Projectile* projectile) {
     _worldnode->removeChild(projectile->getSceneNode());
     projectile->setDebugScene(nullptr);
     projectile->markRemoved(true);
-
-    std::shared_ptr<Sound> source = _assets->get<Sound>(POP_EFFECT);
-    AudioEngine::get()->play(POP_EFFECT, source, false, EFFECT_VOLUME, true);
+    
+    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("effects");
+    std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pop"));
+    AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
 }
 
 #pragma mark -
@@ -802,11 +623,13 @@ void GameScene::removeProjectile(Projectile* projectile) {
 
 /**Checks obstacle and fixture to see if it is an enemy body fixture.**/
 bool GameScene::isEnemyBody(physics2::Obstacle* b, const std::string* f ) {
-    return (b->getName() == ENEMY_NAME && f == _testEnemy->getBodyName());
+    std::shared_ptr<JsonValue> enemyJ = _constantsJSON->get("enemy");
+    return (b->getName() == enemyJ->getString("name") && f == _testEnemy->getBodyName());
 }
 /**Checks obstacle and fixture to see if it the player body fixture.**/
 bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
-    return (b == _player.get() && f == _player->getBodyName());
+    std::shared_ptr<JsonValue> playerJ = _constantsJSON->get("player");
+    return (b->getName() == playerJ->getString("name") && f == _player->getBodyName());
 }
 
 /**
@@ -814,11 +637,12 @@ bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
  */
 Projectile* GameScene::getProjectileHitShield(physics2::Obstacle* bd1, std::string* fd1,
                                               physics2::Obstacle* bd2, std::string* fd2) const {
-    if (bd1->getName() == PROJECTILE_NAME && fd2 == _player->getShieldName() &&
+    std::string proj_name = _constantsJSON->get("projectile")->getString("name");
+    if (bd1->getName() == proj_name && fd2 == _player->getShieldName() &&
         !((Projectile*)bd1)->getIsPlayerFired() && _player->isGuardActive()) {
         return (Projectile*)bd1;
     }
-    if (bd2->getName() == PROJECTILE_NAME && fd1 == _player->getShieldName() &&
+    if (bd2->getName() == proj_name && fd1 == _player->getShieldName() &&
         !((Projectile*)bd2)->getIsPlayerFired() && _player->isGuardActive()) {
         return (Projectile*)bd2;
     }
@@ -834,6 +658,9 @@ Projectile* GameScene::getProjectileHitShield(physics2::Obstacle* bd1, std::stri
  * @param  contact  The two bodies that collided
  */
 void GameScene::beginContact(b2Contact* contact) {
+    std::string proj_name = _constantsJSON->get("projectile")->getString("name");
+    std::string enemy_name = _constantsJSON->get("enemy")->getString("name");
+    std::string ground_name = _constantsJSON->get("ground")->getString("name");
     b2Fixture* fix1 = contact->GetFixtureA();
     b2Fixture* fix2 = contact->GetFixtureB();
     
@@ -856,7 +683,7 @@ void GameScene::beginContact(b2Contact* contact) {
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
     
     // Player-Enemy Collision
-    if (bd1->getName() == ENEMY_NAME && isPlayerBody(bd2, fd2)) {
+    if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
         if (((EnemyModel*)bd1)->isDashActive() && !_player->isDashActive()) {
             _player->damage(20);
             ((EnemyModel*)bd1)->setDashRem(0);
@@ -876,7 +703,7 @@ void GameScene::beginContact(b2Contact* contact) {
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
         ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player-> getPosition()).normalize());
     }
-    else if (bd2->getName() == ENEMY_NAME && isPlayerBody(bd1, fd1)) {
+    else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
         if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {
             _player->damage(20);
             ((EnemyModel*)bd2)->setDashRem(0);
@@ -898,14 +725,14 @@ void GameScene::beginContact(b2Contact* contact) {
     }
 
     // Player-Projectile Collision
-    if (isPlayerBody(bd1, fd1) && bd2->getName() == PROJECTILE_NAME) {
+    if (isPlayerBody(bd1, fd1) && bd2->getName() == proj_name) {
         if (!((Projectile*)bd2)->getIsPlayerFired()) {
             _player->damage(20);
             removeProjectile((Projectile*)bd2);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
         }
     }
-    else if (isPlayerBody(bd2, fd2) && bd1->getName() == PROJECTILE_NAME) {
+    else if (isPlayerBody(bd2, fd2) && bd1->getName() == proj_name) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
             _player->damage(20);
             removeProjectile((Projectile*)bd1);
@@ -915,7 +742,7 @@ void GameScene::beginContact(b2Contact* contact) {
     }
 
     // Shield-Enemy Collision
-    if (bd1->getName() == ENEMY_NAME && fd2 == _player->getShieldName()) {
+    if (bd1->getName() == enemy_name && fd2 == _player->getShieldName()) {
         if (((EnemyModel*)bd1)->isDashActive() && _player->isParryActive()) {
             ((EnemyModel*)bd1)->setDashRem(0);
             ((EnemyModel*)bd1)->setStun(120);
@@ -926,7 +753,7 @@ void GameScene::beginContact(b2Contact* contact) {
         }
     }
 
-    if (bd2->getName() == ENEMY_NAME && fd1 == _player->getShieldName()) {
+    if (bd2->getName() == enemy_name && fd1 == _player->getShieldName()) {
         if (((EnemyModel*)bd2)->isDashActive() && _player->isParryActive()) {
             ((EnemyModel*)bd2)->setDashRem(0);
             ((EnemyModel*)bd2)->setStun(120);
@@ -957,7 +784,7 @@ void GameScene::beginContact(b2Contact* contact) {
     }
 
     // Projectile-Projectile Collision
-    if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == PROJECTILE_NAME) {
+    if (bd1->getName() == proj_name && bd2->getName() == proj_name) {
 
         // Destroy if one is fired by player and the other is not
         if (
@@ -970,15 +797,15 @@ void GameScene::beginContact(b2Contact* contact) {
     }
 
     // Projectile-Environment Collision
-    if (bd1->getName() == PROJECTILE_NAME && bd2->getName() == GROUND_NAME) {
+    if (bd1->getName() == proj_name && bd2->getName() == ground_name) {
         removeProjectile((Projectile*)bd1);
     }
-    else if (bd2->getName() == PROJECTILE_NAME && bd1->getName() == GROUND_NAME) {
+    else if (bd2->getName() == proj_name && bd1->getName() == ground_name) {
         removeProjectile((Projectile*)bd2);
     }
 
     // Enemy-Projectile Collision
-    if (bd1->getName() == ENEMY_NAME && bd2->getName() == PROJECTILE_NAME) {
+    if (bd1->getName() == enemy_name && bd2->getName() == proj_name) {
 
         if (((Projectile*)bd2)->getIsPlayerFired()) {
             CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd1)->getHP());
@@ -986,7 +813,7 @@ void GameScene::beginContact(b2Contact* contact) {
             removeProjectile((Projectile*)bd2);
         }
     }
-    else if (bd2->getName() == ENEMY_NAME && bd1->getName() == PROJECTILE_NAME) {
+    else if (bd2->getName() == enemy_name && bd1->getName() == proj_name) {
         if (((Projectile*)bd1)->getIsPlayerFired()) {
             CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd2)->getHP());
             ((EnemyModel*)bd2)->damage(20);

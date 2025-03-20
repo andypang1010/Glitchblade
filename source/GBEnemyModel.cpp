@@ -68,6 +68,7 @@ using namespace graphics;
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef,const Vec2& pos, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
+    resetAttributes();
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
     Size nsize = Size(90, 130) / scale;
@@ -76,7 +77,6 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef,const Vec2& 
     _drawScale = scale;
     
     setDebugColor(ENEMY_DEBUG_COLOR);
-    
     if (BoxObstacle::init(pos,nsize)) {
         setDensity(ENEMY_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET

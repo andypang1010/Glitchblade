@@ -7,7 +7,7 @@ using namespace cugl::graphics;
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 
 // CONSTANTS:
-float INIT_POS[] = { 2.5f, 5.0f };
+float PLAYER_INIT_POS[] = { 2.5f, 5.0f };
 
 PlayerController::PlayerController(){}
 
@@ -15,10 +15,9 @@ PlayerController::PlayerController(){}
 void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale)
 {
     _input = PlatformInput::alloc(assetRef, bounds);
-    _player = PlayerModel::alloc(assetRef, INIT_POS, scale);
-    
+    _player = PlayerModel::alloc(assetRef, PLAYER_INIT_POS, scale);
     #pragma mark hp node
-    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(DEBUG_FONT));
+    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(PLAYER_DEBUG_FONT));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
     _hpNode->setForeground(Color4::CYAN);
     _hpNode->setPosition(0, 55);
@@ -36,7 +35,7 @@ void PlayerController::dispose() {
  */
 void PlayerController::reset() {
     _player->resetAttributes();
-    _player->setPosition(INIT_POS);
+    _player->setPosition(PLAYER_INIT_POS);
 }
 
 /**
@@ -175,7 +174,7 @@ void PlayerController::updateCooldowns()
         _player->setGuardCDRem(guardCD - 1);
         if (_player->getGuardCDRem() == 0){
             //end guard
-            _player->setShieldDebugColor(DEBUG_COLOR);
+            _player->setShieldDebugColor(PLAYER_DEBUG_COLOR);
         }
     }
     
@@ -195,7 +194,6 @@ void PlayerController::updateCooldowns()
     }
 #pragma mark Knockback cooldown
     if (_player->isKnocked()) {
-        CULog("Player is knocked in postupdate (apply force should have happenend this frame)");
         _player->setDashCDRem();
         _player->setGuardCDRem();
         _player->setJumpCDRem();

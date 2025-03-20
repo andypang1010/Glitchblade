@@ -73,14 +73,14 @@ bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const Vec2
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(PLAYER_TEXTURE);
     Size nsize = image->getSize() / scale;
-    nsize.width  *= HSHRINK;
-    nsize.height *= VSHRINK;
+    nsize.width  *= PLAYER_HSHRINK;
+    nsize.height *= PLAYER_VSHRINK;
     _drawScale = scale;
     
-    setDebugColor(DEBUG_COLOR);
+    setDebugColor(PLAYER_DEBUG_COLOR);
     
     if (BoxObstacle::init(pos,nsize)) {
-        setDensity(DENSITY);
+        setDensity(PLAYER_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         
@@ -217,19 +217,19 @@ void PlayerModel::createFixtures() {
     }
     
     b2FixtureDef sensorDef;
-    sensorDef.density = DENSITY;
+    sensorDef.density = PLAYER_DENSITY;
     sensorDef.isSensor = true;
     
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -SSHRINK*getWidth()/2.0f;
-    corners[0].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
-    corners[1].x = -SSHRINK*getWidth()/2.0f;
-    corners[1].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[2].x =  SSHRINK*getWidth()/2.0f;
-    corners[2].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[3].x =  SSHRINK*getWidth()/2.0f;
-    corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
+    corners[0].x = -PLAYER_SSHRINK*getWidth()/2.0f;
+    corners[0].y = (-getHeight()+PLAYER_SENSOR_HEIGHT)/2.0f;
+    corners[1].x = -PLAYER_SSHRINK*getWidth()/2.0f;
+    corners[1].y = (-getHeight()-PLAYER_SENSOR_HEIGHT)/2.0f;
+    corners[2].x =  PLAYER_SSHRINK*getWidth()/2.0f;
+    corners[2].y = (-getHeight()-PLAYER_SENSOR_HEIGHT)/2.0f;
+    corners[3].x =  PLAYER_SSHRINK*getWidth()/2.0f;
+    corners[3].y = (-getHeight()+PLAYER_SENSOR_HEIGHT)/2.0f;
     
     b2PolygonShape sensorShape;
     sensorShape.Set(corners,4);
@@ -241,7 +241,7 @@ void PlayerModel::createFixtures() {
     // create shield circle fixture
     b2FixtureDef shieldDef;
     b2CircleShape shieldShape;
-    shieldShape.m_radius = SHIELD_RADIUS;
+    shieldShape.m_radius = PLAYER_SHIELD_RADIUS;
     shieldShape.m_p.Set(0,0);//center of body
     shieldDef.isSensor = true;
     shieldDef.shape = &shieldShape;
@@ -371,18 +371,18 @@ void PlayerModel::updateAnimation()
  */
 void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = SSHRINK*_dimension.width;
-    float h = SENSOR_HEIGHT;
+    float w = PLAYER_SSHRINK*_dimension.width;
+    float h = PLAYER_SENSOR_HEIGHT;
     Poly2 playerPoly(Rect(-w/0.1f,-h/2.0f,w,h));
     _sensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(SENSOR_DEBUG_COLOR);
+    _sensorNode->setColor(PLAYER_SENSOR_DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
     
     Poly2 shieldPoly;
-    shieldPoly = PolyFactory().makeNgon(10000,0, SHIELD_RADIUS, 20);
+    shieldPoly = PolyFactory().makeNgon(10000,0, PLAYER_SHIELD_RADIUS, 20);
     _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
     _shieldNode->setPosition(Vec2(_debug->getContentSize()/2));
-    _shieldNode->setColor(DEBUG_COLOR);
+    _shieldNode->setColor(PLAYER_DEBUG_COLOR);
 
     _debug->addChild(_sensorNode);
     _debug->addChild(_shieldNode);

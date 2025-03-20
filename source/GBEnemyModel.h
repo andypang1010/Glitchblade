@@ -102,7 +102,7 @@ using namespace cugl;
 #define ENEMY_DASH       100.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
-#define KB_DURATION 20
+#define ENEMY_KB_DURATION 20
 /** Debug color for the sensor */
 #define ENEMY_DEBUG_COLOR     Color4::RED
 /** enemy obstacle name*/
@@ -122,8 +122,6 @@ using namespace cugl;
 #pragma mark -
 #pragma mark AI Constants
 #define CLOSE_RADIUS     6.0f
-#define SIGNUM(x)  ((x > 0) - (x < 0))
-
 #pragma mark -
 #pragma mark Enemy Model
 /**
@@ -656,7 +654,7 @@ public:
      *
      * @param the value that remaining knockback frames should be set to
      */
-    void setKnockbackRem(int value = KB_DURATION) {_knockbackRem = value; };
+    void setKnockbackRem(int value = ENEMY_KB_DURATION) {_knockbackRem = value; };
 
     /*
      * Sets the dash duration of this enemy.
