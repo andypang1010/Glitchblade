@@ -21,11 +21,16 @@ private:
     CU_DISALLOW_COPY_AND_ASSIGN(Projectile);
 
 protected:
+	Vec2 _direction;
+    float _speed;
+    float _damage;
+    bool _isPlayerFired;
+
     /** The scene graph node for the Projectile. */
     std::shared_ptr<scene2::SceneNode> _node;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
-    bool _isPlayerFired;
+
 
 public:
 #pragma mark Constructors
@@ -128,6 +133,20 @@ public:
      */
     void setIsPlayerFired(float isPlayerFired) {
         _isPlayerFired = isPlayerFired;
+    }
+
+    /**
+ * Returns the projectile damage.
+ */
+    bool getDamage() const { return _damage; }
+
+    /**
+     * Sets the damage of the projectile
+     *
+     * @param damage
+     */
+    void setDamage(float value) {
+        _damage = value;
     }
 
 #pragma mark -

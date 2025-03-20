@@ -21,9 +21,6 @@ protected:
     /** The texture of the projectile. */
     std::shared_ptr<cugl::graphics::Texture> _projectileTexture;
 
-    /** The damage dealt by the projectile. */
-    float _projectileDamage;
-
 public:
     /** Default constructor. */
     RangedActionModel();
@@ -40,9 +37,6 @@ public:
 
     std::shared_ptr<cugl::graphics::Texture> getProjectileTexture() const;
     void setProjectileTexture(const std::shared_ptr<cugl::graphics::Texture>& texture);
-
-    float getProjectileDamage() const;
-    void setProjectileDamage(float damage);
 };
 
 #endif // RANGED_ACTION_MODEL_H

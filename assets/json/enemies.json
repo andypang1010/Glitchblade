@@ -27,6 +27,39 @@
                 "hitboxEndFrame": 31,
                 "hitboxDamage": 20
             },
+            {
+                "type": "ranged",
+                "name": "single-projectile",
+                "animation": "textures/boss1_shoot.png",
+                "animation_row": 4,
+                "animation_col": 10,
+                "projectiles": [
+                    {
+                      "sprite": "textures/projectile.png",
+                      "spawnFrame": 10,
+                      "spawnPosition": [ 0, 0 ],
+                      "direction": [ 1, 0 ],
+                      "speed": 5,
+                      "damage": 10
+                    },
+                    {
+                      "sprite": "textures/projectile.png",
+                      "spawnFrame": 12,
+                      "spawnPosition": [ 0, 0 ],
+                      "direction": [ 0, 1 ],
+                      "speed": 5,
+                      "damage": 10
+                    },
+                    {
+                      "sprite": "textures/projectile.png",
+                      "spawnFrame": 14,
+                      "spawnPosition": [ 0, 0 ],
+                      "direction": [ -1, 0 ],
+                      "speed": 5,
+                      "damage": 10
+                    }
+                ]
+            }
             //{
             //    "type": "melee",
             //    "name": "explode",
