@@ -9,10 +9,10 @@
                 "animation": "textures/boss1_stab.png",
                 "animation_row": 5,
                 "animation_col": 8,
-                "hitboxPos": [1,2],
-                "hitboxSize": [2, 4],
-                "hitboxStartTime": 28,
-                "hitboxEndTime": 35,
+                "hitboxPos": [ 1, 2 ],
+                "hitboxSize": [ 2, 4 ],
+                "hitboxStartFrame": 10,
+                "hitboxEndFrame": 20,
                 "hitboxDamage": 20
             },        
             {	
@@ -21,12 +21,24 @@
                 "animation": "textures/boss1_slam.png",
                 "animation_row": 5,
                 "animation_col": 8,
-                "hitboxPos": [1,2],
-                "hitboxSize": [2, 4],
-                "hitboxStartTime": 25,
-                "hitboxEndTime": 31,
+                "hitboxPos": [ 1, 2 ],
+                "hitboxSize": [ 2, 4 ],
+                "hitboxStartFrame": 25,
+                "hitboxEndFrame": 31,
                 "hitboxDamage": 20
-            }
+            },
+            //{
+            //    "type": "melee",
+            //    "name": "explode",
+            //    "animation": "textures/boss1_explode.png",
+            //    "animation_row": 4,
+            //    "animation_col": 10,
+            //    "hitboxPos": [ 1, 2 ],
+            //    "hitboxSize": [ 2, 4 ],
+            //    "hitboxStartFrame": 10,
+            //    "hitboxEndFrame": 20,
+            //    "hitboxDamage": 20
+            //}
         ]
     }
 }
