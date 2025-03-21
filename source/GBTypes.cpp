@@ -5,4 +5,4 @@
 //  Created by Sasha Loayza on 3/15/25.
 //
 
-#include "GBTypes.hpp"
+#include "GBTypes.h"

@@ -10,6 +10,7 @@
 
 #include <utility> // For std::pair
 #include <memory>  // For std::shared_ptr
+#include "cugl/cugl.h"
 
 using ObstaclePtr = std::shared_ptr<cugl::physics2::Obstacle>;
 using NodePtr = std::shared_ptr<cugl::scene2::SceneNode>;
