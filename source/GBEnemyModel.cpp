@@ -523,34 +523,9 @@ void EnemyModel::AIMove() {
     
 }
 
-bool EnemyModel::isDamaging() {
-    if (_isSlamming && _slamSprite->getFrame() >= _slam->getHitboxStartTime() -1 && _slamSprite->getFrame() <= _slam->getHitboxEndTime() - 1) {
-        return true;
-    }
-    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
 void EnemyModel::slam() {
     _isSlamming = true;
     setMovement(0);
-}
-
-bool EnemyModel::isSlamHit() {
-    Vec2 dist = getPosition() - _targetPos;
-    if (_isSlamming && _slamSprite->getFrame() >= _slam->getHitboxStartTime() - 1 && _slamSprite->getFrame() <= _slam->getHitboxEndTime() - 1) {
-        if (dist.x > 0 && dist.x <= 6 && !isFacingRight() && std::abs(dist.y) <= 6) {
-            return true;
-        }
-        else if (dist.x < 0 && dist.x >= -6 && isFacingRight() && std::abs(dist.y) <= 6) {
-            return true;
-        }
-    }
-    return false;
 }
 
 void EnemyModel::stab() {
@@ -558,17 +533,14 @@ void EnemyModel::stab() {
     setMovement(0);
 }
 
-bool EnemyModel::isStabHit() {
-    Vec2 dist = getPosition() - _targetPos;
-    if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
-        if (dist.x > 0 && dist.x <= 6 && !isFacingRight() && std::abs(dist.y) <= 2) {
-            return true;
-        }
-        else if (dist.x < 0 && dist.x >= -6 && isFacingRight() && std::abs(dist.y) <= 2) {
-            return true;
-        }
+std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
+    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartTime() - 1) {
+        return _stab;
     }
-    return false;
+    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
+        return _slam;
+    }
+    return nullptr;
 }
 
 #pragma mark -

@@ -768,20 +768,11 @@ public:
      */
     void AIMove();
 
-    bool isDamaging();
-
     /**
      * Performs the slam attack of boss1
      *
      */
     void slam();
-
-    /**
-     * Checks whether the slam hits the player
-     * 
-     * @return whether the slam attack hits target
-     */
-    bool isSlamHit();
 
     /**
      * Performs the stab attack of boss1
@@ -790,11 +781,11 @@ public:
     void stab();
 
     /**
-     * Checks whether the stab hits the player
-     * 
-     * @return whether the stab attack hits target
+     * Returns the action when an attack hitbox should be active, or nothing when no attack is active
+     *
+     * @return the action that needs hitbox, or nullptr when no hitbox is active
      */
-    bool isStabHit();
+    std::shared_ptr<MeleeActionModel> getDamagingAction();
 
 #pragma mark -
 #pragma mark Animation Methods

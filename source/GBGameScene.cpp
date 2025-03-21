@@ -26,6 +26,8 @@
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBProjectile.h"
+#include "GBHitbox.h"
+#include "GBMeleeActionModel.h"
 
 #include <ctime>
 #include <string>
@@ -510,7 +512,7 @@ void GameScene::populate() {
     _testEnemy->getSceneNode()->addChild(_enemyStunNode);
     _testEnemy->getSceneNode()->addChild(_enemyHPNode);
 
-
+    
 	// Play the background music on a loop.
 	std::shared_ptr<Sound> source = _assets->get<Sound>(GAME_MUSIC);
     AudioEngine::get()->getMusicQueue()->play(source, true, MUSIC_VOLUME);
@@ -632,20 +634,6 @@ void GameScene::preUpdate(float dt) {
     }
 
     // TODO: refactor using Box2d
-    if(_player->iframe > 0) _player->iframe--;
-    if (_player->iframe <= 0 && (_testEnemy->isSlamHit() || _testEnemy->isStabHit())) {
-        _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
-        if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
-            _player->damage(20);
-        }
-        else if (_player->iframe <= 0 && _player->isParryActive()) {
-            _testEnemy->setStun(120);
-        }
-        else if (_player->iframe <= 0 && _player->isGuardActive()) {
-            _player->damage(10);
-        }
-        _player->iframe = 60;
-    }
     _testEnemy->setTargetPos(_player->getPosition());
     _testEnemy->applyForce();
     _enemyHPNode->setText(std::to_string((int)_testEnemy->getHP()));
@@ -725,6 +713,15 @@ void GameScene::postUpdate(float remain) {
     if (_player->isShooting() && _player->hasProjectile()) {
         createProjectile(_player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true);
         _player->setHasProjectile(false);
+    }
+
+    std::shared_ptr<MeleeActionModel> action = _testEnemy->getDamagingAction();
+    if (action) {
+        Vec2 spawnPos = Vec2(action->getHitboxPos());
+        if (!_testEnemy->isFacingRight()) {
+            spawnPos.x = -spawnPos.x;
+        }
+        createHitbox(spawnPos + _testEnemy->getPosition(), Size(action->getHitboxSize()), action->getHitboxDamage(), action->getHitboxEndTime() - action->getHitboxStartTime());
     }
 
 //    if (_bulletTimer <= 0) {
@@ -816,6 +813,35 @@ void GameScene::removeProjectile(Projectile* projectile) {
 
     std::shared_ptr<Sound> source = _assets->get<Sound>(POP_EFFECT);
     AudioEngine::get()->play(POP_EFFECT, source, false, EFFECT_VOLUME, true);
+}
+
+/**
+ * Add a new projectile to the world and send it in the right direction.
+ */
+void GameScene::createHitbox(Vec2 pos, Size size, int damage, int duration) {
+    std::shared_ptr<Texture> image = Texture::alloc(1, 1);
+
+    // Change last parameter to test player-fired or regular projectile
+    auto hitbox = Hitbox::alloc(pos, size, _scale, damage, duration);
+    hitbox->setDebugColor(Color4::RED);
+
+    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    sprite->setAnchor(Vec2::ANCHOR_CENTER);
+    addObstacle(hitbox, sprite);
+}
+
+/**
+ * Removes a new projectile from the world.
+ *
+ * @param  projectile   the projectile to remove
+ */
+void GameScene::removeHitbox() {
+    // do not attempt to remove a projectile that has already been removed
+    if (_testbox==nullptr || _testbox->isRemoved()) {
+        return;
+    }
+    _testbox->setDebugScene(nullptr);
+    _testbox->markRemoved(true);
 }
 
 #pragma mark -
@@ -916,6 +942,26 @@ void GameScene::beginContact(b2Contact* contact) {
         _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
         ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
         CULog("Applying knockback");
+    }
+
+    // Test: plyaer-hitbox collision
+    if (bd1->getName() == "hitbox" && isPlayerBody(bd2, fd2)) {
+        if (_player->iframe <= 0) {
+            _player->damage(((Hitbox*)bd1)->getDamage());
+            _player->iframe = 60;
+            // Refactor to get enemy position with the hitbox
+            // _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
+            _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+        }
+    }
+    else if (bd2->getName() == "hitbox" && isPlayerBody(bd1, fd1)) {
+        if (_player->iframe <= 0) {
+            _player->damage(((Hitbox*)bd2)->getDamage());
+            _player->iframe = 60;
+            // Refactor to get enemy position with the hitbox
+            // _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
+            _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+        }
     }
 
     // Player-Projectile Collision
