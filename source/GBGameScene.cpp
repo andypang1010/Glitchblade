@@ -717,11 +717,7 @@ void GameScene::postUpdate(float remain) {
 
     std::shared_ptr<MeleeActionModel> action = _testEnemy->getDamagingAction();
     if (action) {
-        Vec2 spawnPos = Vec2(action->getHitboxPos());
-        if (!_testEnemy->isFacingRight()) {
-            spawnPos.x = -spawnPos.x;
-        }
-        createHitbox(spawnPos + _testEnemy->getPosition(), Size(action->getHitboxSize()), action->getHitboxDamage(), action->getHitboxEndTime() - action->getHitboxStartTime());
+        createHitbox(_testEnemy, action->getHitboxPos(), Size(action->getHitboxSize()), action->getHitboxDamage(), action->getHitboxEndTime() - action->getHitboxStartTime() + 1);
     }
 
 //    if (_bulletTimer <= 0) {
@@ -818,11 +814,11 @@ void GameScene::removeProjectile(Projectile* projectile) {
 /**
  * Add a new projectile to the world and send it in the right direction.
  */
-void GameScene::createHitbox(Vec2 pos, Size size, int damage, int duration) {
+void GameScene::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, int duration) {
     std::shared_ptr<Texture> image = Texture::alloc(1, 1);
 
     // Change last parameter to test player-fired or regular projectile
-    auto hitbox = Hitbox::alloc(pos, size, _scale, damage, duration);
+    auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration);
     hitbox->setDebugColor(Color4::RED);
 
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
@@ -949,18 +945,14 @@ void GameScene::beginContact(b2Contact* contact) {
         if (_player->iframe <= 0) {
             _player->damage(((Hitbox*)bd1)->getDamage());
             _player->iframe = 60;
-            // Refactor to get enemy position with the hitbox
-            // _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-            _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+            _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd1)->getEnemy()->getPosition()).normalize());
         }
     }
     else if (bd2->getName() == "hitbox" && isPlayerBody(bd1, fd1)) {
         if (_player->iframe <= 0) {
             _player->damage(((Hitbox*)bd2)->getDamage());
             _player->iframe = 60;
-            // Refactor to get enemy position with the hitbox
-            // _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
-            _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+            _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd2)->getEnemy()->getPosition()).normalize());
         }
     }
 

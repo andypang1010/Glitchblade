@@ -9,10 +9,10 @@
                 "animation": "textures/boss1_stab.png",
                 "animation_row": 5,
                 "animation_col": 8,
-                "hitboxPos": [5,-1],
-                "hitboxSize": [4, 2],
-                "hitboxStartTime": 28,
-                "hitboxEndTime": 35,
+                "hitboxPos": [3,-1],
+                "hitboxSize": [4, 3],
+                "hitboxStartTime": 27,
+                "hitboxEndTime": 36,
                 "hitboxDamage": 20
             },        
             {	

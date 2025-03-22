@@ -1,6 +1,7 @@
 #ifndef __GB_HITBOX_MODEL_H__
 #define __GB_HITBOX_MODEL_H__
 #include <cugl/cugl.h>
+#include "GBEnemyModel.h"
 
 using namespace cugl;
 
@@ -12,8 +13,12 @@ private:
     CU_DISALLOW_COPY_AND_ASSIGN(Hitbox);
 
 protected:
+    /** The enemy that caused this hitbox */
+    std::shared_ptr<EnemyModel> _enemy;
     /** The scene graph node for the Projectile. */
     std::shared_ptr<scene2::SceneNode> _node;
+    /** The hitbox's relative position to the enemy */
+    Vec2 _offset;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
     /** The remaining duration of this hitbox */
@@ -44,7 +49,7 @@ public:
      */
     void dispose();
 
-    virtual bool init(const Vec2& pos, const Size& size, float scale, int damage, int duration);
+    virtual bool init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, int duration);
     
 #pragma mark -
 #pragma mark Static Constructors
@@ -63,9 +68,9 @@ public:
      *
      * @return  A newly allocated Projectile at the given position, with the given radius
      */
-    static std::shared_ptr<Hitbox> alloc(const Vec2& pos, const Size& size, float scale, int damage, int duration) {
+    static std::shared_ptr<Hitbox> alloc(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, int duration) {
         std::shared_ptr<Hitbox> result = std::make_shared<Hitbox>();
-        return (result->init(pos, size, scale, damage, duration) ? result : nullptr);
+        return (result->init(enemy, pos, size, scale, damage, duration) ? result : nullptr);
     }
 
 #pragma mark -
@@ -109,6 +114,29 @@ public:
 
 #pragma mark -
 #pragma mark Attribute Properties
+    /**
+     * Returns the enemy that created this hitbox.
+     *
+     * @return the hitbox's corresponding enemy.
+     */
+    std::shared_ptr<EnemyModel> getEnemy() const { return _enemy; }
+
+    /**
+     * Returns the position offset of this hitbox.
+     *
+     * @return the position relative to the enemy that caused this hitbox.
+     */
+    Vec2 getOffset() const { return _offset; }
+
+    /**
+     * Sets the relative position of this hitbox
+     *
+     * @param value new position
+     */
+    void setDuration(Vec2 value) {
+        _offset = value;
+    }
+
     /**
      * Returns the remaining time before this hitbox deactivates.
      *

@@ -11,16 +11,23 @@ using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::scene2;
 
-bool Hitbox::init(const Vec2& pos, const Size& size, float scale, int damage, int duration) {
+#define FPS 60
+
+bool Hitbox::init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, int duration) {
     _drawScale = scale;
     setDuration(duration);
     setDamage(damage);
-    if (BoxObstacle::init(pos, size)) {
+    if (!enemy->isFacingRight()) {
+        pos.x = -pos.x;
+    }
+    if (BoxObstacle::init(enemy->getPosition() + pos, size)) {
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         setSensor(true);
         setName("hitbox");
         setGravityScale(0);
         setDensity(0);
+        _enemy = enemy;
+        _offset = pos;
         _node = scene2::SceneNode::alloc();
         setSceneNode(_node);
         return true;
@@ -38,7 +45,9 @@ bool Hitbox::init(const Vec2& pos, const Size& size, float scale, int damage, in
  */
 void Hitbox::update(float dt) {
 	BoxObstacle::update(dt);
-    _duration--;
+    setPosition(_enemy->getPosition() + _offset);
+
+    _duration -= dt / (1.0 / FPS);
     if (_duration <= 0) {
         markRemoved(true);
     }
