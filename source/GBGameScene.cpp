@@ -153,6 +153,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _assets = assets;
     
     Rect bounds = getBounds();
+    CULog("bounds is (%f, %f), (%f, %f)",bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
     std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
     boundsJ->get("origin")->get("x")->set(bounds.origin.x);
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
@@ -165,12 +166,9 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // Shift to center if a bad fit
     _scale = _size.width == sceneJ->getInt("width") ? _size.width / rect.size.width : _size.height / rect.size.height;
     sceneJ->get("scale")->set(_scale);
+    CULog("in game scene scale is %f", _scale);
     
     
-
-
-   
-
     // Create the world and attach the listeners.
     _world = physics2::ObstacleWorld::alloc(rect, gravity);
     _world->activateCollisionCallbacks(true);
@@ -286,9 +284,9 @@ void GameScene::reset() {
 void GameScene::populate() {
     // DO NOT KEEP THIS IN THE CODE YOU DEGEN
     CULog("TODO: Get rid of this reference to player in gamescene.");
-    _player = _levelController->getPlayerModel(); // DELET!
+    ObstacleNodePairs static_obstacles = _levelController->populateLevel(""); // Will want to set the level we want to populate here
+    _player = _levelController->getPlayerModel(); // DELETE!
     _testEnemy = _levelController->getTestEnemyModel();
-    ObstacleNodePairs static_obstacles = _levelController->createStaticObstacles(_assets, _constantsJSON);
     for (const auto& pair : static_obstacles) {
         ObstaclePtr obstacle = pair.first;
         NodePtr node = pair.second;

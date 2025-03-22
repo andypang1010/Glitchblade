@@ -88,33 +88,44 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
 {
     // read json
     _assets = assetRef;
-    std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonReader> enemies_reader = JsonReader::allocWithAsset("json/enemies.json");
+    std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
+    std::shared_ptr<JsonReader> levels_reader = JsonReader::allocWithAsset("json/levels.json");
+    
     _enemiesJSON = enemies_reader->readJson();
     if (_enemiesJSON == nullptr) {
         CULog("Failed to load enemies.json");
         return false;
     }
-    
     _constantsJSON = constantsRef;
-
-
-	// Setup enemy controller: one controller per enemy
-    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
     
-	_testEnemyController = std::make_shared<EnemyController>();
-    _testEnemyController->init(assetRef, constantsRef, actions);
+    _levelsJSON = levels_reader->readJson();
+    if (_levelsJSON == nullptr) {
+        CULog("Failed to load constants.json");
+        return false;
+    }
 
-	// Setup player controller
-	_playerController = std::make_shared<PlayerController>();
-	_playerController->init(assetRef, constantsRef);
+    // Setup player controller
+    _playerController = std::make_shared<PlayerController>();
+    _playerController->init(_assets, _constantsJSON);
 
-	CULog("LevelController::init");
     return true;
 }
 
-ObstacleNodePairs LevelController::createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef){
-    float scale = constantsRef->get("scene")->getFloat("scale");
+ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
+    // Setup enemy controller: one controller per enemy
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+
+    _testEnemyController = std::make_shared<EnemyController>();
+    _testEnemyController->init(_assets, _constantsJSON, actions);
+
+    CULog("LevelController::init");
+
+    return createStaticObstacles(_assets);
+}
+
+ObstacleNodePairs LevelController::createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef){
+    float scale = _constantsJSON->get("scene")->getFloat("scale");
     CULog("in level controller scale is %f", scale);
     ObstacleNodePairs obstacle_pairs;
     std::shared_ptr<Texture> image;

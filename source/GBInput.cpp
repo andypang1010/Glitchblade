@@ -510,12 +510,12 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
     // this logic should change if we want to allow switching input sides
     if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
         SwipeType s_type = processSwipe(_ltouch.position, event.position, event.timestamp);
-        switch (s_type) {
-            // can handle actions on left side here if desired
-            default:
-                // CULog("Doing nothing");
-                break;
-        }
+        //switch (s_type) {
+        //    // can handle actions on left side here if desired
+        //    default:
+        //        // CULog("Doing nothing");
+        //        break;
+        //}
 
         /*if (s_type != SwipeType::NONE) {
             clearTouchInstance(_ltouch);

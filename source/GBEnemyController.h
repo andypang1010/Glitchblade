@@ -36,6 +36,7 @@ public:
      * Initializes the enemy controller.
      */
     void init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, std::vector<std::shared_ptr<ActionModel>> actions);
+
     
     /**
      * Disposes of all (non-static) resources allocated to this controller.
