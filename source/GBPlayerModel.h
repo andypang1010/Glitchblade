@@ -79,7 +79,7 @@ using namespace cugl;
 /** Duration (in frames) for guard */
 #define GUARD_DURATION  44
 /** Duration (in frames) for parry */
-#define PARRY_DURATION  24
+#define PARRY_DURATION  8
 /** Duration (in frames) for dash- affects friction*/
 #define DASH_DURATION  20
 /** The amount to shrink the body fixture (vertically) relative to the image */
@@ -206,6 +206,7 @@ public:
     std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
+
 #pragma mark Hidden Constructors
     /**
      * Creates a degenerate player object.

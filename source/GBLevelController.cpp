@@ -25,7 +25,7 @@ void LevelController::init(cugl::Rect bounds, const std::shared_ptr<AssetManager
 
 	// Setup player controller
 	_playerController = std::make_shared<PlayerController>();
-	_enemyController->init();
+	//_enemyController->init();
 	_playerController->init(bounds, assetRef, scale);
 
 	CULog("LevelController::init");
@@ -38,19 +38,19 @@ void LevelController::reset() {
 
 void LevelController::preUpdate(float dt)
 {
-	_enemyController->preUpdate(dt);
+	//_enemyController->preUpdate(dt);
 	_playerController->preUpdate(dt);
 }
 
 void LevelController::postUpdate(float dt)
 {
-	_enemyController->postUpdate(dt);
+	//_enemyController->postUpdate(dt);
 	_playerController->postUpdate(dt);
 }
 
 void LevelController::fixedUpdate(float timestep)
 {
-	_enemyController->fixedUpdate(timestep);
+	//_enemyController->fixedUpdate(timestep);
 	_playerController->fixedUpdate(timestep);
 }
 
@@ -85,7 +85,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
         std::string animationPath = action->getString("animation");
         std::shared_ptr<Texture> animationTexture = Texture::allocWithFile(animationPath);
-        std::shared_ptr<SpriteSheet> animationSprite = SpriteSheet::alloc(animationTexture, action->getInt("animation_row"), action->getInt("animation_col"), 40);
+        std::shared_ptr<SpriteSheet> animationSprite = SpriteSheet::alloc(animationTexture, action->getInt("animation_row"), action->getInt("animation_col"), action->getInt("animation_size"));
         animationSprite->setFrame(0);
 
         if (type == "melee") {
@@ -115,7 +115,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
             cugl::Vec2 projectileDirection(action->get("projectileDirection")->asFloatArray().front(), action->get("projectileDirection")->asFloatArray().back());
             rangedAction->setProjectileDirection(projectileDirection);
-            rangedAction->setProjectileDamage(action->getFloat("projectileDamage"));
+            //rangedAction->setProjectileDamage(action->getFloat("projectileDamage"));
 
             actions.push_back(rangedAction);
         }

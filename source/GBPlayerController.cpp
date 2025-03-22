@@ -23,26 +23,30 @@ void PlayerController::init(const cugl::Rect bounds, const std::shared_ptr<Asset
 	Vec2 pos = INIT_POS;
     image = assetRef->get<Texture>(PLAYER_TEXTURE);
     _player = PlayerModel::alloc(pos, image->getSize() / scale, scale);
-    _player->_idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_idle"), 1, 6, 6);
+    _player->_idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_idle"), 2, 5, 10);
     _player->_idleSprite->setPosition(0, 40);
+	_player->_idleSprite->setScale(0.5f);
 
-    _player->_walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_walk"), 1, 6, 6);
+    _player->_walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_walk"), 1, 5, 5);
     _player->_walkSprite->setPosition(0, 40);
+    _player->_walkSprite->setScale(0.5f);
 
-    _player->_jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpUp"), 1, 8, 8);
+    _player->_jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpUp"), 1, 5, 5);
     _player->_jumpUpSprite->setPosition(0, 40);
+    _player->_jumpUpSprite->setScale(0.5f);
 
-    _player->_jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpDown"), 1, 8, 8);
+    _player->_jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpDown"), 2, 5, 7);
     _player->_jumpDownSprite->setPosition(0, 40);
+    _player->_jumpDownSprite->setScale(0.5f);
 
-    _player->_guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 1, 6, 6);
+    _player->_guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 3, 5, 11);
     _player->_guardSprite->setPosition(0, 40);
+    _player->_guardSprite->setScale(0.5f);
 
-    _player->_attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 1, 8, 8);
+    _player->_attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 1, 5, 5);
     _player->_attackSprite->setPosition(0, 40);
-    
-    
-
+    _player->_attackSprite->setScale(0.5f);
+   
     _player->getSceneNode()->addChild(_player->_idleSprite);
     _player->getSceneNode()->addChild(_player->_walkSprite);
     _player->getSceneNode()->addChild(_player->_jumpUpSprite);
