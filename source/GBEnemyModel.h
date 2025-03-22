@@ -215,11 +215,13 @@ protected:
     std::shared_ptr<scene2::WireNode> _stabNode;
     /** The guard shield when guard is active */
     
-	/** The scene graph node for the Dude. */
+	/** The scene graph node for the enemy. */
 	std::shared_ptr<scene2::SceneNode> _node;
 	/** The scale between the physics world and the screen (MUST BE UNIFORM) */
 	float _drawScale;
-
+    
+    std::shared_ptr<JsonValue> _enemyJSON;
+    
     /**
     * Redraws the outline of the physics fixtures to the debug node
     *
@@ -288,9 +290,9 @@ public:
     
 #pragma mark Hidden Constructors
     /**
-     * Creates a degenerate Dude object.
+     * Creates a degenerate enemy object.
      *
-     * This constructor does not initialize any of the dude values beyond
+     * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
     EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _shieldName(ENEMY_SHIELD_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _slamName(SLAM_SENSOR_NAME), _stabName(STAB_SENSOR_NAME) { }
@@ -309,9 +311,9 @@ public:
     void dispose();
     
     /**
-     * Initializes a new dude at the given position.
+     * Initializes a new enemy at the given position.
      *
-     * The dude is sized according to the given drawing scale.
+     * The enemy is sized according to the given drawing scale.
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -319,35 +321,33 @@ public:
      * according to the drawing scale.
      *
      * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
+     * @param size  The size of the enemy in world units
      * @param scale The drawing scale (world to screen)
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale, std::vector<std::shared_ptr<ActionModel>> actions);
+    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions);
 
     
 #pragma mark -
 #pragma mark Static Constructors
 	/**
-	 * Creates a new dude at the given position.
+	 * Creates a new enemy at the given position.
 	 *
-	 * The dude is sized according to the given drawing scale.
+	 * The enemy is sized according to the given drawing scale.
 	 *
 	 * The scene graph is completely decoupled from the physics system.
 	 * The node does not have to be the same size as the physics body. We
 	 * only guarantee that the scene graph node is positioned correctly
 	 * according to the drawing scale.
 	 *
-	 * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
-	 * @param scale The drawing scale (world to screen)
+     * @param size  The size of the enemy in world units
 	 *
 	 * @return  A newly allocated PlayerModel at the given position with the given scale
 	 */
-	static std::shared_ptr<EnemyModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
+	static std::shared_ptr<EnemyModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
 		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-		return (result->init(assetRef, pos, scale, actions) ? result : nullptr);
+		return (result->init(assetRef, constantsRef, pos, actions) ? result : nullptr);
     }
     
 #pragma mark -
@@ -445,7 +445,7 @@ public:
     /**
      * Returns left/right movement of this character.
      *
-     * This is the result of input times dude force.
+     * This is the result of input times enemy force.
      *
      * @return left/right movement of this character.
      */
@@ -454,7 +454,7 @@ public:
     /**
      * Sets left/right movement of this character.
      *
-     * This is the result of input times dude force.
+     * This is the result of input times enemy force.
      *
      * @param value left/right movement of this character.
      */
@@ -471,143 +471,143 @@ public:
     void faceRight();
     
     /**
-     * Returns true if the dude is actively firing.
+     * Returns true if the enemy is actively firing.
      *
-     * @return true if the dude is actively firing.
+     * @return true if the enemy is actively firing.
      */
     bool isShooting() const { return _isShootInput && _shootCooldownRem <= 0; }
     /**
-     * Returns true if the dude is actively strafing left.
+     * Returns true if the enemy is actively strafing left.
      *
-     * @return true if the dude is actively strafing left.
+     * @return true if the enemy is actively strafing left.
      */
     void setStrafeLeft(bool value) {_isStrafeLeft = value;};
 
     /**
-     * Sets whether the dude is actively strafing right.
+     * Sets whether the enemy is actively strafing right.
      *
-     * @param value whether the dude is actively strafing right.
+     * @param value whether the enemy is actively strafing right.
      */
     void setStrafeRight(bool value) {_isStrafeRight = value;};
 
     /**
-     * Sets whether the dude has a swallowed projectile.
+     * Sets whether the enemy has a swallowed projectile.
      *
-     * @param value whether the dude has a swallowed projectile.
+     * @param value whether the enemy has a swallowed projectile.
      */
     void setHasProjectile(bool value) { _hasProjectile = value; }
 
     /**
-     * Sets whether the dude is beginning dash left
+     * Sets whether the enemy is beginning dash left
      *
-     * @param value whether the dude is beginning dash left.
+     * @param value whether the enemy is beginning dash left.
      */
     void setDashLeftInput(bool value) { _isDashLeftInput = value; }
 
     /**
-     * Sets whether the dude is beginning dash right.
+     * Sets whether the enemy is beginning dash right.
      *
-     * @param value whether the dude is beginning dash right.
+     * @param value whether the enemy is beginning dash right.
      */
     void setDashRightInput(bool value) { _isDashRightInput = value; }
 
     /**
-     * Sets whether the dude is actively trying to jump.
+     * Sets whether the enemy is actively trying to jump.
      *
-     * @param value whether the dude is actively trying to jump.
+     * @param value whether the enemy is actively trying to jump.
      */
     void setJumpInput(bool value) { _isJumpInput = value; }
 
     /**
-     * Sets whether the dude is actively firing.
+     * Sets whether the enemy is actively firing.
      *
-     * @param value whether the dude is actively firing.
+     * @param value whether the enemy is actively firing.
      */
     void setShootInput(bool value) { _isShootInput = value; }
     /**
-     * Sets whether the dude is inputting guard
+     * Sets whether the enemy is inputting guard
      *
-     * @param value whether the dude is inputting guard
+     * @param value whether the enemy is inputting guard
      */
     void setGuardInput(bool value) { _isGuardInput = value; }
     /**
-     * Sets whether the dude is actively strafing left.
+     * Sets whether the enemy is actively strafing left.
      *
-     * @param value whether the dude is actively strafing left.
+     * @param value whether the enemy is actively strafing left.
      */
     bool isStrafeLeft() { return _isStrafeLeft; };
     /**
-     * Sets whether the dude is actively strafing right.
+     * Sets whether the enemy is actively strafing right.
      *
-     * @return true if whether the dude is actively strafing right.
+     * @return true if whether the enemy is actively strafing right.
      */
     bool isStrafeRight() { return _isStrafeRight; };
     /**
-     * Returns true if if the dude is actively trying to jump and jump cooldown is ready (regardless if on the ground).
+     * Returns true if if the enemy is actively trying to jump and jump cooldown is ready (regardless if on the ground).
      *
-     * @return true if the dude is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
+     * @return true if the enemy is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
      */
     bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
     
     /**
-     * Returns true if the dude is actively dashing left.
+     * Returns true if the enemy is actively dashing left.
      *
-     * @param value whether the dude is actively dashing left.
+     * @param value whether the enemy is actively dashing left.
      */
     bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0; };
     /**
-     * Returns true if the dude is actively dashing right.
+     * Returns true if the enemy is actively dashing right.
      *
-     * @param value whether the dude is actively dashing right.
+     * @param value whether the enemy is actively dashing right.
      */
     bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0; };
     /**
-     * Returns true if the dude is dashing
+     * Returns true if the enemy is dashing
      *
-     * @return value whether the dude is dashing either direction.
+     * @return value whether the enemy is dashing either direction.
      */
     bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); };
     /**
-     * Returns true if the dude is inputting a movement action/
+     * Returns true if the enemy is inputting a movement action/
      *
-     * @return value whether the dude is performing a movement action.
+     * @return value whether the enemy is performing a movement action.
      */
     bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
     
     /**
-     *  Returns true if the dude is currently beginning guard action.
+     *  Returns true if the enemy is currently beginning guard action.
      *
-     * @return value whether the dude is beginning guard action.
+     * @return value whether the enemy is beginning guard action.
      */
     bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; };
       /**
-     * Returns true if the dude has a swallowed projectile.
+     * Returns true if the enemy has a swallowed projectile.
      *
-     * @return value whether the dude has a swallowed projectile.
+     * @return value whether the enemy has a swallowed projectile.
      */
     /**
-     * Returns true ifrthe dude is actively guarding.
+     * Returns true ifrthe enemy is actively guarding.
      *
-     * @return value whether the dude is actively guarding.
+     * @return value whether the enemy is actively guarding.
      */
     bool isGuardActive() { return  _guardRem > 0 || isGuardBegin(); };
 
     /**
-     * Returns true if the dude is actively parrying.
+     * Returns true if the enemy is actively parrying.
      *
-     * @return value whether the dude is actively parrying.
+     * @return value whether the enemy is actively parrying.
      */
     bool isParryActive() { return _parryRem > 0 || isGuardBegin(); };
     /**
-     * Returns true if the dude has a swallowed projectile.
+     * Returns true if the enemy has a swallowed projectile.
      *
-     * @return value whether the dude has a swallowed projectile.
+     * @return value whether the enemy has a swallowed projectile.
      */
     bool hasProjectile() { return _hasProjectile; };
     /**
-     * Returns true if the dude is in a dash animation.
+     * Returns true if the enemy is in a dash animation.
      *
-     * @return value whether the dude is in a dash animation.
+     * @return value whether the enemy is in a dash animation.
      */
     
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
@@ -618,10 +618,10 @@ public:
     */
    bool isKnocked() const { return _isKnocked;}
    /**
-    * Sets whether the dude is being knocked back
+    * Sets whether the enemy is being knocked back
     *
-    * @param value whether the dude is being knocked back
-    * @param knockDirection direction that the dude will move toward
+    * @param value whether the enemy is being knocked back
+    * @param knockDirection direction that the enemy will move toward
     */
     /**
      * Returns true if the enemy is in a knockback animation.
@@ -675,41 +675,41 @@ public:
      */
     bool isStunned() { return _stunRem>0; };
     /**
-     * Returns true if the dude is on the ground.
+     * Returns true if the enemy is on the ground.
      *
-     * @return true if the dude is on the ground.
+     * @return true if the enemy is on the ground.
      */
     bool isGrounded() const { return _isGrounded; }
     
     /**
-     * Sets whether the dude is on the ground.
+     * Sets whether the enemy is on the ground.
      *
-     * @param value whether the dude is on the ground.
+     * @param value whether the enemy is on the ground.
      */
     void setGrounded(bool value) { _isGrounded = value; }
     
     /**
-     * Returns how much force to apply to get the dude moving
+     * Returns how much force to apply to get the enemy moving
      *
      * Multiply this by the input to get the movement value.
      *
-     * @return how much force to apply to get the dude moving
+     * @return how much force to apply to get the enemy moving
      */
     float getForce() const { return ENEMY_FORCE; }
     
     /**
-     * Returns How hard the brakes are applied to get a dude to stop moving
+     * Returns How hard the brakes are applied to get a enemy to stop moving
      *
-     * @return How hard the brakes are applied to get a dude to stop moving
+     * @return How hard the brakes are applied to get a enemy to stop moving
      */
     float getDamping() const { return ENEMY_DAMPING; }
     
     /**
-     * Returns the upper limit on dude left-right movement.
+     * Returns the upper limit on enemy left-right movement.
      *
      * This does NOT apply to vertical movement.
      *
-     * @return the upper limit on dude left-right movement.
+     * @return the upper limit on enemy left-right movement.
      */
     float getMaxSpeed() const { return ENEMY_MAXSPEED; }
     

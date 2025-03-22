@@ -29,6 +29,7 @@ private:
     /* Data */
     std::shared_ptr<JsonValue> _enemiesJSON;
     std::shared_ptr<JsonValue> _constantsJSON;
+    std::shared_ptr<AssetManager> _assets;
     
     /* Controllers */
     
@@ -65,7 +66,7 @@ public:
     /**
      * Initializes the level controller. Return false on failure
      */
-    bool init(const std::shared_ptr<AssetManager>& assetRef, cugl::Rect bounds,  float scale);
+    bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef);
     
     /**
      * Resets the state of the LevelController.
@@ -75,7 +76,7 @@ public:
      Initializes static level obstacles with scene nodes to be added to the Game Scene
      @returns a vector of all the obstacle shared pointers.
      */
-    ObstacleNodePairs createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef, float scale);
+    ObstacleNodePairs createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef);
     
     void reset();
     

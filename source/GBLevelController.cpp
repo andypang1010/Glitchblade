@@ -25,13 +25,6 @@ using namespace cugl::physics2;
 
 /** Bullet Spawn Points */
 
-
-/** Directions */
-Vec2 LEFT = { -1.0f, 0.0f };
-Vec2 RIGHT = { 1.0f, 0.0f };
-Vec2 UP = { 0.0f, 1.0f };
-Vec2 DOWN = { 0.0f, -1.0f };
-
 #pragma mark -
 #pragma mark Physics Constants
 /** The density for most physics objects */
@@ -62,7 +55,7 @@ Vec2 DOWN = { 0.0f, -1.0f };
 /** The key for the regular projectile texture in the asset manager */
 #define PROJECTILE_TEXTURE  "projectile"
 /** The key for the player projectile texture in the asset manager */
-#define PLAYER_PROJECTILE_TEXTURE "player-projectile"
+#define PLAYER_PROJECTILE_TEXTURE "player_projectile"
 
 ///////////////// NAMES /////////////////////////////////////
 #define PROJECTILE_NAME "projectile"
@@ -91,38 +84,38 @@ LevelController::~LevelController()
 {
 }
 
-bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, cugl::Rect bounds, float scale)
+bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef)
 {
     // read json
+    _assets = assetRef;
+    std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonReader> enemies_reader = JsonReader::allocWithAsset("json/enemies.json");
-    std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
-    
     _enemiesJSON = enemies_reader->readJson();
     if (_enemiesJSON == nullptr) {
         CULog("Failed to load enemies.json");
         return false;
     }
-    _constantsJSON = constants_reader->readJson();
-    if (_constantsJSON == nullptr) {
-        CULog("Failed to load constants.json");
-        return false;
-    }
+    
+    _constantsJSON = constantsRef;
+
 
 	// Setup enemy controller: one controller per enemy
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
     
 	_testEnemyController = std::make_shared<EnemyController>();
-    _testEnemyController->init(assetRef, bounds, scale, actions);
+    _testEnemyController->init(assetRef, constantsRef, actions);
 
 	// Setup player controller
 	_playerController = std::make_shared<PlayerController>();
-	_playerController->init(assetRef, bounds, scale);
+	_playerController->init(assetRef, constantsRef);
 
 	CULog("LevelController::init");
     return true;
 }
 
-ObstacleNodePairs LevelController::createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef, float scale){
+ObstacleNodePairs LevelController::createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef){
+    float scale = constantsRef->get("scene")->getFloat("scale");
+    CULog("in level controller scale is %f", scale);
     ObstacleNodePairs obstacle_pairs;
     std::shared_ptr<Texture> image;
     std::shared_ptr<scene2::PolygonNode> sprite;
@@ -193,6 +186,53 @@ void LevelController::reset() {
 
 void LevelController::preUpdate(float dt)
 {
+    std::shared_ptr<EnemyModel> testEnemy = _testEnemyController->getEnemy();
+    std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
+    // TODO: refactor using Box2d
+    Vec2 dist = testEnemy->getPosition() - player->getPosition();
+    bool hit = false;
+    if(player->iframe > 0) player->iframe--;
+    if (testEnemy->isDamaging() && player->iframe <= 0) {
+        if (testEnemy->_isSlamming) {
+            if (dist.x > 0 && dist.x <= 6 && !testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
+                hit = true;
+            }
+            else if (dist.x < 0 && dist.x >= -6 && testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
+                hit = true;
+            }
+        }
+        else if (testEnemy->_isStabbing) {
+            if (dist.x > 0 && dist.x <= 6 && !testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
+                hit = true;
+            }
+            else if (dist.x < 0 && dist.x >= -6 && testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
+                hit = true;
+            }
+        }
+    }
+
+    if (hit) {
+        player->setKnocked(true, player->getPosition().subtract(testEnemy->getPosition()).normalize());
+        if (player->iframe <= 0 && !player->isParryActive() && !player->isGuardActive()) {
+            player->damage(20);
+        }
+        else if (player->iframe <= 0 && player->isParryActive()) {
+            testEnemy->setStun(120);
+        }
+        else if (player->iframe <= 0 && player->isGuardActive()) {
+            player->damage(10);
+        }
+        player->iframe = 60;
+    }
+    testEnemy->setTargetPos(player->getPosition());
+
+
+    if (player->isJumpBegin() && player->isGrounded()) {
+        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
+        std::shared_ptr<audio::Sound> source = _assets->get<audio::Sound>(fxJ->getString("jump"));
+        audio::AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
+    }
+
 	_testEnemyController->preUpdate(dt);
 	_playerController->preUpdate(dt);
 }

@@ -3,6 +3,7 @@
 #include "GBPlayerModel.h"
 using namespace cugl;
 using namespace cugl::graphics;
+using namespace cugl::audio;
 
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 
@@ -12,16 +13,26 @@ float PLAYER_INIT_POS[] = { 2.5f, 5.0f };
 PlayerController::PlayerController(){}
 
 
-void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale)
+void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef)
 {
-    _input = PlatformInput::alloc(assetRef, bounds);
-    _player = PlayerModel::alloc(assetRef, PLAYER_INIT_POS, scale);
-    #pragma mark hp node
+//    float scale = constantsRef->get("scene")->getFloat("scale");
+//    Rect bounds;
+//    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
+//    std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
+//    bounds.origin.set(boundsJ->get("origin")->getFloat("x"), boundsJ->get("origin")->getFloat("y"));
+//    bounds.size.set(boundsJ->get("size")->getFloat("width"),boundsJ->get("size")->getFloat("height"));
+    
+    _input = PlatformInput::alloc(assetRef, constantsRef);
+    _player = PlayerModel::alloc(assetRef, constantsRef, PLAYER_INIT_POS);
+#pragma mark hp node
     _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(PLAYER_DEBUG_FONT));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
     _hpNode->setForeground(Color4::CYAN);
     _hpNode->setPosition(0, 55);
     _player->getSceneNode()->addChild(_hpNode);
+#pragma mark constants
+    _assets = assetRef;
+    _constantsJSON = constantsRef;
 }
 
 
@@ -112,14 +123,14 @@ void PlayerController::applyForce() {
 void PlayerController::preUpdate(float dt)
 {    _input->update(dt);
     // can't reset or set debug for the whole scene from player controller- we should use buttons for reset, debug , exit instead of keyboard (or gesture) inputs
-//    // Process the toggled key commands
-//    if (_input->didDebug()) { setDebug(!isDebug()); }
-//    if (_input->didReset()) { reset(); }
-//    if (_input->didExit()) {
-//        CULog("Shutting down");
-//        Application::get()->quit();
-//    }
-
+    //    // Process the toggled key commands
+    //    if (_input->didDebug()) { setDebug(!isDebug()); }
+    //    if (_input->didReset()) { reset(); }
+    //    if (_input->didExit()) {
+    //        CULog("Shutting down");
+    //        Application::get()->quit();
+    //    }
+    
     // Process the movement inputs
     _player->setMovement(_input->getHorizontal()*_player->getForce());
     _player->setStrafeLeft(_input->didStrafeLeft());
@@ -132,8 +143,13 @@ void PlayerController::preUpdate(float dt)
     _hpNode->setText(std::to_string((int)_player->getHP()));
     applyForce();
     updateCooldowns();
+    
+    if (_player->isJumpBegin() && _player->isGrounded()) {
+        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
+        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
+        AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
+    }
 }
-
 #pragma mark fixedUpdate
 void PlayerController::fixedUpdate(float timestep)
 {

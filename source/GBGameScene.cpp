@@ -51,6 +51,14 @@ using namespace cugl::audio;
 /** The new heavier gravity for this world (so it is not so floaty) */
 #define DEFAULT_GRAVITY -28.9f
 
+
+
+
+#define directions
+Vec2 LEFT = { -1.0f, 0.0f };
+Vec2 RIGHT = { 1.0f, 0.0f };
+Vec2 UP = { 0.0f, 1.0f };
+Vec2 DOWN = { 0.0f, -1.0f };
 #pragma mark -
 #pragma mark Constructors
 /**
@@ -130,11 +138,11 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // prepare constants
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
     _constantsJSON = constants_reader->readJson();
+    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     if (_constantsJSON == nullptr) {
         CULog("Failed to load constants.json");
         return false;
     }
-    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     
     if (assets == nullptr) {
         return false;
@@ -143,6 +151,24 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         return false;
     }
     _assets = assets;
+    
+    Rect bounds = getBounds();
+    std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
+    boundsJ->get("origin")->get("x")->set(bounds.origin.x);
+    boundsJ->get("origin")->get("y")->set(bounds.origin.y);
+    boundsJ->get("size")->get("width")->set(bounds.size.width);
+    boundsJ->get("size")->get("height")->set(bounds.size.height);
+    
+    
+    // IMPORTANT: SCALING MUST BE UNIFORM
+    // This means that we cannot change the aspect ratio of the physics world
+    // Shift to center if a bad fit
+    _scale = _size.width == sceneJ->getInt("width") ? _size.width / rect.size.width : _size.height / rect.size.height;
+    sceneJ->get("scale")->set(_scale);
+    
+    
+
+
    
 
     // Create the world and attach the listeners.
@@ -155,13 +181,9 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         endContact(contact);
         };
 
-    // IMPORTANT: SCALING MUST BE UNIFORM
-    // This means that we cannot change the aspect ratio of the physics world
-    // Shift to center if a bad fit
-    _scale = _size.width == sceneJ->getInt("width") ? _size.width / rect.size.width : _size.height / rect.size.height;
-    Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
 
     // Create the scene graph
+    Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
     std::shared_ptr<Texture> image = _assets->get<Texture>(sceneJ->getString("texture"));
     _worldnode = scene2::PolygonNode::allocWithTexture(image);
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -193,7 +215,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     CULog("Creating empty level controller in gamescene init");
     _levelController = std::make_shared<LevelController>();
     CULog("initializing level controller in gamescene init");
-    _levelController->init(_assets,getBounds(), _scale); // Initialize the LevelController
+    _levelController->init(_assets,_constantsJSON); // Initialize the LevelController
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
         _input =  _levelController->getInputController();
         if (!_input){
@@ -266,7 +288,7 @@ void GameScene::populate() {
     CULog("TODO: Get rid of this reference to player in gamescene.");
     _player = _levelController->getPlayerModel(); // DELET!
     _testEnemy = _levelController->getTestEnemyModel();
-    ObstacleNodePairs static_obstacles = _levelController->createStaticObstacles(_assets, _scale);
+    ObstacleNodePairs static_obstacles = _levelController->createStaticObstacles(_assets, _constantsJSON);
     for (const auto& pair : static_obstacles) {
         ObstaclePtr obstacle = pair.first;
         NodePtr node = pair.second;
@@ -516,20 +538,25 @@ void GameScene::postUpdate(float remain) {
     // Otherwise, it looks like bullet appears far away
 
     if (_player->isShooting() && _player->hasProjectile()) {
-        createProjectile(_player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true);
+        ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, _player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true, _player->isFacingRight());
+        addObstacle(p.first, p.second);
         _player->setHasProjectile(false);
     }
 
 //    if (_bulletTimer <= 0) {
 //        int r = rand() % 2;
 //        if (r == 0) {
-//            createProjectile(LEFT_BULLET, RIGHT, false);
+//            Vec2 left_spawn = { _constantsJSON->get("walls")->getFloat("thickness") + 1.5f, 9.0f };
+//            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, left_spawn, RIGHT, false, false);
+//            addObstacle(p.first, p.second, 1);
 //        }
 //        else if(r == 1){
-//            createProjectile(RIGHT_BULLET, LEFT, false);
+//            Vec2 right_spawn = {_constantsJSON->get("scene")->getFloat("default_width") - _constantsJSON->get("walls")->getFloat("thickness") - 1.5f, 13.0f};
+//            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, right_spawn, LEFT, false, false);
+//            addObstacle(p.first, p.second, 1);
 //        }
 //
-//        _bulletTimer = BULLET_SPAWN_RATE;
+//        _bulletTimer = _constantsJSON->get("projectile")->getInt("spawn_rate");
 //    }
 //    else {
 //        _bulletTimer -= 1;
@@ -556,48 +583,7 @@ void GameScene::postUpdate(float remain) {
     _levelController->postUpdate(remain);
 }
 
-/**
- * Add a new projectile to the world and send it in the right direction.
- */
-void GameScene::createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired) {
-    float offset = _constantsJSON->get("physics")->get("projectile")->getFloat("offset");
-    if (isPlayerFired) {
-        pos.x += (_player->isFacingRight() ? offset : -offset);
-        pos.y += 0.5f;
-    }
-    std::shared_ptr<JsonValue> projJ = _constantsJSON->get("projectile");
-    std::shared_ptr<JsonValue> physicsJ = _constantsJSON->get("physics");
-    std::shared_ptr<JsonValue> player_projJ = _constantsJSON->get("player_projectile");
-    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("effects");
-    
-    std::shared_ptr<Texture> image = _assets->get<Texture>(isPlayerFired ? player_projJ->getString("texture") : projJ->getString("texture"));
-    float radius = 0.5f * image->getSize().width / _scale;
 
-    // Change last parameter to test player-fired or regular projectile
-    std::shared_ptr<Projectile> projectile = Projectile::alloc(pos, radius, isPlayerFired);
-    projectile->setName(projJ->getString("name"));
-    projectile->setDensity(physicsJ->getFloat("heavy_density"));
-    projectile->setBullet(true);
-    projectile->setGravityScale(0);
-    projectile->setDebugColor(physicsJ->get("debug")->getString("color"));
-    projectile->setDrawScale(_scale);
-    projectile->setSensor(true);
-    projectile->setIsPlayerFired(isPlayerFired);
-
-    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    projectile->setSceneNode(sprite);
-
-    sprite->flipHorizontal(direction.x < 0);
-    
-    float proj_speed = physicsJ->get("projectile")->getFloat("speed");
-    // Compute position and velocity
-    Vec2 speed = isPlayerFired ? direction.getNormalization()* proj_speed : direction.getNormalization() * proj_speed / 2;
-    projectile->setLinearVelocity(speed);
-    addObstacle(projectile, sprite, 1);
-    
-    std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pew"));
-    AudioEngine::get()->play(fxJ->getString("pew"), source, false, fxJ->getFloat("volume"), true);
-}
 
 /**
  * Removes a new projectile from the world.
@@ -613,7 +599,7 @@ void GameScene::removeProjectile(Projectile* projectile) {
     projectile->setDebugScene(nullptr);
     projectile->markRemoved(true);
     
-    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("effects");
+    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
     std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pop"));
     AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
 }
@@ -661,6 +647,7 @@ void GameScene::beginContact(b2Contact* contact) {
     std::string proj_name = _constantsJSON->get("projectile")->getString("name");
     std::string enemy_name = _constantsJSON->get("enemy")->getString("name");
     std::string ground_name = _constantsJSON->get("ground")->getString("name");
+    std::string wall_name = _constantsJSON->get("walls")->getString("name");
     b2Fixture* fix1 = contact->GetFixtureA();
     b2Fixture* fix2 = contact->GetFixtureB();
     
@@ -797,10 +784,10 @@ void GameScene::beginContact(b2Contact* contact) {
     }
 
     // Projectile-Environment Collision
-    if (bd1->getName() == proj_name && bd2->getName() == ground_name) {
+    if (bd1->getName() == proj_name && (bd2->getName() == ground_name||bd2->getName() == wall_name)) {
         removeProjectile((Projectile*)bd1);
     }
-    else if (bd2->getName() == proj_name && bd1->getName() == ground_name) {
+    else if (bd2->getName() == proj_name && (bd1->getName() == ground_name||bd1->getName() == wall_name)) {
         removeProjectile((Projectile*)bd2);
     }
 

@@ -10,18 +10,19 @@ float ENEMY_INIT_POS[] = { 12.5f, 5.0f };
 
 EnemyController::EnemyController(){}
 
-void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale, std::vector<std::shared_ptr<ActionModel>> actions)
+void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, std::vector<std::shared_ptr<ActionModel>> actions)
 {
-	_enemy  = EnemyModel::alloc(assetRef, ENEMY_INIT_POS, scale, actions);
-    
+	_enemy  = EnemyModel::alloc(assetRef, constantsRef, ENEMY_INIT_POS, actions);
+    _enemyJSON = constantsRef->get("enemy");
     #pragma mark hp node
-    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(ENEMY_DEBUG_FONT));
+    std::string enemy_debug_font = _enemyJSON->get("debug")->getString("font");
+    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(enemy_debug_font));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
     _hpNode->setForeground(Color4::RED);
     _hpNode->setPosition(0, 80);
     
     #pragma mark stun node
-    _stunNode = scene2::Label::allocWithText("STUN", assetRef->get<Font>(ENEMY_DEBUG_FONT));
+    _stunNode = scene2::Label::allocWithText("STUN", assetRef->get<Font>(enemy_debug_font));
     _stunNode->setAnchor(Vec2::ANCHOR_CENTER);
     _stunNode->setForeground(Color4::RED);
     _stunNode->setPosition(0, 100);
@@ -76,22 +77,23 @@ void EnemyController::applyForce() {
         #pragma mark jump force
         // Jump!
         if (_enemy->isJumpBegin() && _enemy->isGrounded()) {
-            b2Vec2 force(0, ENEMY_JUMP);
+            b2Vec2 force(0, _enemyJSON->get("jump")->getFloat("force"));
             enemyBody->ApplyLinearImpulseToCenter(force, true);
         }
 
         #pragma mark dash force
         // Dash!
+        float d_force = _enemyJSON->get("dash")->getFloat("force");
         if (_enemy->isDashLeftBegin()) {
             CULog("dashing left\n");
-            b2Vec2 force(-ENEMY_DASH, 0);
+            b2Vec2 force(-d_force, 0);
             _enemy->faceLeft();
             enemyBody->ApplyLinearImpulseToCenter(force, true);
         }
 
         if (_enemy->isDashRightBegin()) {
             CULog("dashing right\n");
-            b2Vec2 force(ENEMY_DASH, 0);
+            b2Vec2 force(d_force, 0);
             _enemy->faceRight();
             enemyBody->ApplyLinearImpulseToCenter(force, true);
         }

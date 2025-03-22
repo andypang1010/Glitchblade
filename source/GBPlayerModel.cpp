@@ -68,8 +68,9 @@ using namespace cugl;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale) {
+bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos) {
     resetAttributes();
+    float scale = constantsRef->get("scene")->getFloat("scale");
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(PLAYER_TEXTURE);
     Size nsize = image->getSize() / scale;

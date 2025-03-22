@@ -10,6 +10,7 @@
 #ifndef __GB_PROJECTILE_MODEL_H__
 #define __GB_PROJECTILE_MODEL_H__
 #include <cugl/cugl.h>
+#include "GBTypes.h"
 
 using namespace cugl;
 
@@ -129,7 +130,10 @@ public:
     void setIsPlayerFired(float isPlayerFired) {
         _isPlayerFired = isPlayerFired;
     }
-
+#pragma mark -
+#pragma mark Creating, Destroying Projectiles
+    /** Creates a projectile and returns the obstacle and scene node pair. */
+    static ObstacleNodePair createProjectile(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, Vec2 pos, Vec2 direction, bool isPlayerFired, bool face_right);
 #pragma mark -
 #pragma mark Physics Methods
     /**

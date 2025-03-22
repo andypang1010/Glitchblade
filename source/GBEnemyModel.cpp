@@ -67,16 +67,20 @@ using namespace graphics;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef,const Vec2& pos, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
+bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
     resetAttributes();
+    
+    float scale = constantsRef->get("scene")->getFloat("scale");
+    _enemyJSON = constantsRef->get("enemy");
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
+    
     Size nsize = Size(90, 130) / scale;
-    nsize.width  *= ENEMY_HSHRINK;
-    nsize.height *= ENEMY_VSHRINK;
+    nsize.width  *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
+    nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     _drawScale = scale;
     
-    setDebugColor(ENEMY_DEBUG_COLOR);
+    setDebugColor(_enemyJSON->get("debug")->getString("color"));
     if (BoxObstacle::init(pos,nsize)) {
         setDensity(ENEMY_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET

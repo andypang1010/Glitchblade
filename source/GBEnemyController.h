@@ -22,6 +22,8 @@ private:
     std::shared_ptr<EnemyModel> _enemy;
     std::shared_ptr<scene2::Label> _hpNode;
     std::shared_ptr<scene2::Label> _stunNode;
+    
+    std::shared_ptr<JsonValue> _enemyJSON;
 
 public:
     /** Constructor */
@@ -33,7 +35,7 @@ public:
     /**
      * Initializes the enemy controller.
      */
-    void init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale, std::vector<std::shared_ptr<ActionModel>> actions);
+    void init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, std::vector<std::shared_ptr<ActionModel>> actions);
     
     /**
      * Disposes of all (non-static) resources allocated to this controller.

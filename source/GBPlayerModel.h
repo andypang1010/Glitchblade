@@ -237,12 +237,11 @@ public:
      * according to the drawing scale.
      *
      * @param pos   Initial position in world coordinates
-     * @param size  The size of the player in world units
-     * @param scale The drawing scale (world to screen)
+     * @param constantsJSON reference to JsonValue with constants
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale);
+    virtual bool init(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos);
 
     
 #pragma mark -
@@ -267,14 +266,13 @@ public:
 	 * according to the drawing scale.
 	 *
 	 * @param pos   Initial position in world coordinates
-     * @param size  The size of the player in world units
-	 * @param scale The drawing scale (world to screen)
+     * @param constantsJSON reference to JsonValue with constants
 	 *
 	 * @return  A newly allocated PlayerModel at the given position with the given scale
 	 */
-	static std::shared_ptr<PlayerModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const Vec2& pos, float scale) {
+	static std::shared_ptr<PlayerModel> alloc(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos) {
 		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
-		return (result->init(assetRef, pos, scale) ? result : nullptr);
+		return (result->init(assetRef, constantsRef, pos) ? result : nullptr);
 	}
     
 #pragma mark -

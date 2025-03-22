@@ -417,11 +417,6 @@ public:
     void reset();
 
     /**
-    * Adds a new bullet to the world and sends it in the right direction.
-    */
-    void createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired);
-
-    /**
     * Removes the input Bullet from the world.
     *
     * @param  bullet   the bullet to remove
