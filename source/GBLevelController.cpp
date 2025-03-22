@@ -91,7 +91,7 @@ LevelController::~LevelController()
 {
 }
 
-void LevelController::populateLevel(std::string levelName) {
+ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
     // Setup enemy controller: one controller per enemy
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
 
@@ -103,6 +103,8 @@ void LevelController::populateLevel(std::string levelName) {
     _playerController->init(_assets, *_bounds, _scale);
 
     CULog("LevelController::init");
+
+    return createStaticObstacles(_assets, _scale);
 }
 
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, cugl::Rect bounds, float scale)
@@ -132,7 +134,7 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, cugl::
         return false;
     }
 
-    populateLevel(""); // Will need to specify the first level we want to load here (get this from loading scene)
+    // old populate location
 
     return true;
 }

@@ -73,8 +73,10 @@ public:
 
     /**
      * Populates the level based on provided levelName
+     * 
+     * @returns the ObstacleNodePairs of all the obstacle shared pointers.
      */
-    void populateLevel(std::string levelName);
+    ObstacleNodePairs populateLevel(std::string levelName);
 
     /**
      * Resets the state of the LevelController.
