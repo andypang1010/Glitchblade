@@ -943,16 +943,32 @@ void GameScene::beginContact(b2Contact* contact) {
     // Test: plyaer-hitbox collision
     if (bd1->getName() == "hitbox" && isPlayerBody(bd2, fd2)) {
         if (_player->iframe <= 0) {
-            _player->damage(((Hitbox*)bd1)->getDamage());
             _player->iframe = 60;
-            _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd1)->getEnemy()->getPosition()).normalize());
+            if (!_player->isGuardActive() && !_player->isParryActive()) {
+                _player->damage(((Hitbox*)bd1)->getDamage());
+                _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd1)->getEnemy()->getPosition()).normalize());
+            }
+            else if (_player->isParryActive()) {
+                ((Hitbox*)bd1)->getEnemy()->setStun(60);
+            }
+            else if (_player->isGuardActive()) {
+                _player->damage(((Hitbox*)bd1)->getDamage() / 2);
+            }
         }
     }
     else if (bd2->getName() == "hitbox" && isPlayerBody(bd1, fd1)) {
         if (_player->iframe <= 0) {
-            _player->damage(((Hitbox*)bd2)->getDamage());
             _player->iframe = 60;
-            _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd2)->getEnemy()->getPosition()).normalize());
+            if (!_player->isGuardActive() && !_player->isParryActive()) {
+                _player->damage(((Hitbox*)bd2)->getDamage());
+                _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd2)->getEnemy()->getPosition()).normalize());
+            }
+            else if (_player->isParryActive()) {
+                ((Hitbox*)bd2)->getEnemy()->setStun(60);
+            }
+            else if (_player->isGuardActive()) {
+                _player->damage(((Hitbox*)bd2)->getDamage() / 2);
+            }
         }
     }
 
