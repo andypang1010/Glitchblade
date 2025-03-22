@@ -132,7 +132,7 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, cugl::
         return false;
     }
 
-    populateLevel(""); // Just to prevent nullptr from now (due to _testEnemyController & _playerController being nullptr; will want to do this some other way eventually)
+    populateLevel(""); // Will need to specify the first level we want to load here (get this from loading scene)
 
     return true;
 }
