@@ -10,7 +10,7 @@ float ENEMY_INIT_POS[] = { 12.5f, 5.0f };
 
 EnemyController::EnemyController(){}
 
-void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale, std::vector<std::shared_ptr<ActionModel>> actions)
+void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, float scale, std::vector<std::shared_ptr<ActionModel>> actions)
 {
 	_enemy  = EnemyModel::alloc(assetRef, ENEMY_INIT_POS, scale, actions);
     

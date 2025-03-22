@@ -33,7 +33,7 @@ public:
     /**
      * Initializes the enemy controller.
      */
-    void init(const std::shared_ptr<AssetManager>& assetRef, const cugl::Rect bounds,  float scale, std::vector<std::shared_ptr<ActionModel>> actions);
+    void init(const std::shared_ptr<AssetManager>& assetRef, float scale, std::vector<std::shared_ptr<ActionModel>> actions);
     
     /**
      * Disposes of all (non-static) resources allocated to this controller.

@@ -91,11 +91,30 @@ LevelController::~LevelController()
 {
 }
 
+void LevelController::populateLevel(std::string levelName) {
+    // Setup enemy controller: one controller per enemy
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+
+    _testEnemyController = std::make_shared<EnemyController>();
+    _testEnemyController->init(_assets, _scale, actions);
+
+    // Setup player controller
+    _playerController = std::make_shared<PlayerController>();
+    _playerController->init(_assets, *_bounds, _scale);
+
+    CULog("LevelController::init");
+}
+
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, cugl::Rect bounds, float scale)
 {
+    _bounds = &bounds;
+    _assets = assetRef;
+    _scale = scale;
+
     // read json
     std::shared_ptr<JsonReader> enemies_reader = JsonReader::allocWithAsset("json/enemies.json");
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
+    std::shared_ptr<JsonReader> levels_reader = JsonReader::allocWithAsset("json/levels.json");
     
     _enemiesJSON = enemies_reader->readJson();
     if (_enemiesJSON == nullptr) {
@@ -107,18 +126,14 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, cugl::
         CULog("Failed to load constants.json");
         return false;
     }
+    _levelsJSON = levels_reader->readJson();
+    if (_levelsJSON == nullptr) {
+        CULog("Failed to load constants.json");
+        return false;
+    }
 
-	// Setup enemy controller: one controller per enemy
-    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
-    
-	_testEnemyController = std::make_shared<EnemyController>();
-    _testEnemyController->init(assetRef, bounds, scale, actions);
+    populateLevel(""); // Just to prevent nullptr from now (due to _testEnemyController & _playerController being nullptr; will want to do this some other way eventually)
 
-	// Setup player controller
-	_playerController = std::make_shared<PlayerController>();
-	_playerController->init(assetRef, bounds, scale);
-
-	CULog("LevelController::init");
     return true;
 }
 
@@ -207,6 +222,28 @@ void LevelController::fixedUpdate(float timestep)
 {
 	_testEnemyController->fixedUpdate(timestep);
 	_playerController->fixedUpdate(timestep);
+}
+
+/** Parses the JSON file and returns a vector of parsed levels. */
+std::vector<std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json) {
+    std::vector<std::shared_ptr<LevelModel>> levels;
+
+    if (!json || json->children().empty()) {
+        CULogError("Invalid or empty JSON node!");
+        return levels;
+    }
+
+}
+
+/** Parses the JSON file and returns a parsed level. */
+std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json) {
+    std::shared_ptr<LevelModel> level;
+
+	if (!json || json->children().empty()) {
+		CULogError("Invalid or empty JSON node!");
+		return level;
+	}
+
 }
 
 /**
