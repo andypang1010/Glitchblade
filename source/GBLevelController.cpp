@@ -301,7 +301,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
         std::string animationPath = action->getString("animation");
         std::shared_ptr<Texture> animationTexture = Texture::allocWithFile(animationPath);
-        std::shared_ptr<SpriteSheet> animationSprite = SpriteSheet::alloc(animationTexture, action->getInt("animation_row"), action->getInt("animation_col"), 40);
+        std::shared_ptr<SpriteSheet> animationSprite = SpriteSheet::alloc(animationTexture, action->getInt("animation_row"), action->getInt("animation_col"), action->getInt("animation_size"));
         animationSprite->setFrame(0);
 
         if (type == "melee") {
@@ -325,28 +325,25 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
             rangedAction->setActionName(name);
             rangedAction->setActionAnimation(animationSprite);
 
-            std::shared_ptr<Texture> projectileTexture = Texture::allocWithFile(action->getString("projectileSprite"));
-            rangedAction->setProjectileTexture(projectileTexture);
-            rangedAction->setProjectileSpeed(action->getFloat("projectileSpeed"));
+			std::vector<std::shared_ptr<Projectile>> projectiles;
+			std::vector<Vec2> spawnPositions;
+			std::vector<int> spawnFrames;
 
-            cugl::Vec2 projectileDirection(action->get("projectileDirection")->asFloatArray().front(), action->get("projectileDirection")->asFloatArray().back());
-            rangedAction->setProjectileDirection(projectileDirection);
-            rangedAction->setProjectileDamage(action->getFloat("projectileDamage"));
+			for (std::shared_ptr<JsonValue> projectileJSON : action->get("projectiles")->children()) {
+				std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
+
+                spawnPositions.push_back(Vec2(json->get("projectileSpawnPosition")->get("x")->asFloat(), json->get("projectileSpawnPosition")->get("y")->asFloat()));
+                spawnFrames.push_back(json->get("projectileSpawnFrame")->asInt());
+				projectile->setLinearVelocity(Vec2(json->get("projectileVelocity")->get("x")->asFloat(), json->get("projectileVelocity")->get("y")->asFloat()));
+                // projectile->setTexture(Texture::allocWithFile(action->getString("projectileSprite")));
+                // projectile->setDamage(json->get("projectileDamage")->asInt());
+
+				projectiles.push_back(projectile);
+			}
+
+			rangedAction->setProjectiles(projectiles);
 
             actions.push_back(rangedAction);
-        }
-        else if (type == "movement") {
-            auto movementAction = std::make_shared<MovementActionModel>();
-            movementAction->setActionName(name);
-            movementAction->setActionAnimation(animationSprite);
-
-            movementAction->setMoveToPlayer(action->getBool("moveToPlayer"));
-
-            cugl::Vec2 moveDirection(action->get("moveDirection")->asFloatArray().front(), action->get("moveDirection")->asFloatArray().back());
-            movementAction->setMoveDirection(moveDirection);
-            movementAction->setMoveDistance(action->getFloat("moveDistance"));
-
-            actions.push_back(movementAction);
         }
         else {
             std::cerr << "Unknown action type: " << type << std::endl;

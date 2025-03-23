@@ -4,6 +4,7 @@
 #include <string>
 #include <cugl/cugl.h>
 #include "GBActionModel.h"
+#include "GBProjectile.h"
 
 using namespace cugl;
 
@@ -12,17 +13,9 @@ using namespace cugl;
  */
 class RangedActionModel : public ActionModel {
 protected:
-    /** The speed of the projectile. */
-    float _projectileSpeed;
-
-    /** The direction of the projectile. */
-    cugl::Vec2 _projectileDirection;
-
-    /** The texture of the projectile. */
-    std::shared_ptr<cugl::graphics::Texture> _projectileTexture;
-
-    /** The damage dealt by the projectile. */
-    float _projectileDamage;
+	std::vector<std::shared_ptr<Projectile>> _projectiles;
+    std::vector<Vec2> _projectileSpawnPositions;
+    std::vector<int> _projectileSpawnFrames;
 
 public:
     /** Default constructor. */
@@ -32,17 +25,13 @@ public:
     virtual ~RangedActionModel();
 
     /** Getters and Setters **/
-    float getProjectileSpeed() const;
-    void setProjectileSpeed(float speed);
+    const std::vector<std::shared_ptr<Projectile>>& getProjectiles() const;
+    void setProjectiles(const std::vector<std::shared_ptr<Projectile>>& projectiles);
+    const std::vector<Vec2>& getProjectileSpawnPositions() const;
+    void setProjectileSpawnPositions(const std::vector<Vec2>& positions);
+    const std::vector<int>& getProjectileSpawnFrames() const;
+    void setProjectileSpawnFrames(const std::vector<int>& frames);
 
-    cugl::Vec2 getProjectileDirection() const;
-    void setProjectileDirection(const cugl::Vec2& direction);
-
-    std::shared_ptr<cugl::graphics::Texture> getProjectileTexture() const;
-    void setProjectileTexture(const std::shared_ptr<cugl::graphics::Texture>& texture);
-
-    float getProjectileDamage() const;
-    void setProjectileDamage(float damage);
 };
 
 #endif // RANGED_ACTION_MODEL_H

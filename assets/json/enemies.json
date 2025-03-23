@@ -1,5 +1,47 @@
 {
-    "boss1":
+    "minion_1A":
+    {   "health": 50,
+        "actions":
+        [
+            {	
+                "type": "melee", 
+                "name": "explode",
+                "animation": "textures/minion1A_explode.png",
+                "animation_row": 6,
+                "animation_col": 8,
+                "animation_size": 45,
+                "hitboxPos": [1,2],
+                "hitboxSize": [2, 4],
+                "hitboxStartTime": 7,
+                "hitboxEndTime": 15,
+                "hitboxDamage": 20
+            },        
+            {	
+                "type": "ranged", 
+                "name": "shoot",
+                "animation": "textures/minion1A_shoot.png",
+                "animation_row": 1,
+                "animation_col": 5,
+                "animation_size": 5,
+                "projectiles":[
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 10,
+                            "y": 5
+                        },
+                        "projectileSpawnFrame": 3,
+                        "projectileAnimation": "textures/projectile.png",
+                        "projectileVelocity" : {
+                            "x": 3,
+                            "y": 0
+                        },
+                        "projectileDamage": 10
+                    }
+                ]
+            }
+        ]
+    },
+    "boss_1":
     {   "health": 200,
         "actions":
         [
@@ -9,6 +51,7 @@
                 "animation": "textures/boss1_stab.png",
                 "animation_row": 5,
                 "animation_col": 8,
+                "animation_size": 40,
                 "hitboxPos": [1,2],
                 "hitboxSize": [2, 4],
                 "hitboxStartTime": 7,
@@ -21,6 +64,7 @@
                 "animation": "textures/boss1_slam.png",
                 "animation_row": 5,
                 "animation_col": 8,
+                "animation_size": 40,
                 "hitboxPos": [1,2],
                 "hitboxSize": [2, 4],
                 "hitboxStartTime": 7,
