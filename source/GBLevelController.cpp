@@ -105,7 +105,13 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         return false;
     }
 
-	parseLevels(_levelsJSON);
+	_levels = parseLevels(_levelsJSON);
+
+    int _currentLevelIndex = 0;
+    int _currentWaveIndex = 0;
+    int _currentEnemyIndex = 0;
+    int _numEnemiesActive = 0;
+    float _lastSpawnedInterval = 0;
 
     // Setup player controller
     _playerController = std::make_shared<PlayerController>();

@@ -15,6 +15,8 @@
 #include "GBPlayerController.h"
 #include "GBTypes.h"
 
+#define MAX_NUM_ENEMIES 2
+
 using namespace cugl;
 /**
  * A class that parses a JSON level file and generates corresponding action models.
@@ -24,12 +26,19 @@ private:
     /** A reference to the level model */
     std::shared_ptr<LevelModel> _levelModel;
 
+	std::vector<std::shared_ptr<LevelModel>> _levels;
+	int _currentLevelIndex;
+	int _currentWaveIndex;
+    int _currentEnemyIndex;
+    int _numEnemiesActive;
+    float _lastSpawnedInterval;
+
     // TODO: Need to add/store HUD node somewhere
 
     /* Data */
+    std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonValue> _enemiesJSON;
     std::shared_ptr<JsonValue> _constantsJSON;
-    std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonValue> _levelsJSON;
     cugl::Rect* _bounds;
     float _scale;
