@@ -329,7 +329,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
             cugl::Vec2 projectileDirection(action->get("projectileDirection")->asFloatArray().front(), action->get("projectileDirection")->asFloatArray().back());
             rangedAction->setProjectileDirection(projectileDirection);
-            rangedAction->setProjectileDamage(action->getFloat("projectileDamage"));
+            //rangedAction->setProjectileDamage(action->getFloat("projectileDamage"));
 
             actions.push_back(rangedAction);
         }
