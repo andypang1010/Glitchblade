@@ -645,12 +645,14 @@ void GameScene::preUpdate(float dt) {
         _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
         if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
             _player->damage(20);
+            _ui->setHP(_player->getHP());
         }
         else if (_player->iframe <= 0 && _player->isParryActive()) {
             _testEnemy->setStun(120);
         }
         else if (_player->iframe <= 0 && _player->isGuardActive()) {
             _player->damage(10);
+            _ui->setHP(_player->getHP());
         }
         _player->iframe = 60;
     }
@@ -890,6 +892,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->damage(20);
             ((EnemyModel*)bd1)->setDashRem(0);
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
+            _ui->setHP(_player->getHP());
         }
         else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(5);
@@ -910,6 +913,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->damage(20);
             ((EnemyModel*)bd2)->setDashRem(0);
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
+            _ui->setHP(_player->getHP());
         }
         else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(5);
@@ -932,6 +936,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->damage(20);
             removeProjectile((Projectile*)bd2);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
+            _ui->setHP(_player->getHP());
         }
     }
     else if (isPlayerBody(bd2, fd2) && bd1->getName() == PROJECTILE_NAME) {
@@ -939,6 +944,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->damage(20);
             removeProjectile((Projectile*)bd1);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
+            _ui->setHP(_player->getHP());
         }
         // TODO: REFACTOR TO NOT REPEAT CODE!!!
     }
@@ -951,6 +957,7 @@ void GameScene::beginContact(b2Contact* contact) {
         }
         else if (((EnemyModel*)bd1)->isDashActive() && _player->isGuardActive()) {
             _player->damage(10);
+            _ui->setHP(_player->getHP());
             ((EnemyModel*)bd1)->setDashRem(0);
         }
     }
@@ -962,6 +969,7 @@ void GameScene::beginContact(b2Contact* contact) {
         }
         else if (((EnemyModel*)bd2)->isDashActive() && _player->isGuardActive()) {
             _player->damage(10);
+            _ui->setHP(_player->getHP());
             ((EnemyModel*)bd2)->setDashRem(0);
         }
     }
@@ -981,6 +989,7 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Guarded projectile");
 
             _player->damage(10);
+            _ui->setHP(_player->getHP());
         }
         removeProjectile(shieldHit);
     }

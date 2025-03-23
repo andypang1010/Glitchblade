@@ -31,8 +31,8 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _hpbar;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     
-    int _maxHP = 5;
-    int _currentHP = 5;
+    int _maxHP = 100;
+    int _currentHP = 100;
 
     bool _active;
     
@@ -71,6 +71,13 @@ public:
         return (result->init(assets) ? result : nullptr);
     }
     
+    /**
+     * Updates the visible HP bar segments to match current HP.
+     *
+     * @param hp  The current HP value (must be <= _maxHP)
+     */
+    void setHP(int hp);
+
     /**
      * Sets whether the scene is currently active
      *

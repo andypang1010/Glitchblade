@@ -69,19 +69,15 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     }
     
     if (_hpbar) {
-        float segmentWidth = 35.0f;   // 每个血段宽度
-        float segmentHeight = 55.0f;  // 每个血段高度
-        float segmentSpacing = 7.0f;  // 每个段之间的间隔
-        float startX = 15.0f;         // 左边内缩一点点
+        float segmentWidth = 35.0f;
+        float segmentHeight = 55.0f;
+        float segmentSpacing = 7.0f;
+        float startX = 15.0f;
         float startY = 37.0f;
 
         std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
-        if (texture == nullptr) {
-            CULog("❌ Texture 'hp_segment' not found!");
-            return false;
-        }
         
-        for (int i = 0; i < _maxHP; ++i) {
+        for (int i = 0; i < 5; ++i) {
             std::shared_ptr<scene2::PolygonNode> segment = scene2::PolygonNode::allocWithTexture(texture);
             segment->setAnchor(Vec2::ANCHOR_TOP_LEFT);
             segment->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + startY);
@@ -125,5 +121,15 @@ void GBIngameUI::setActive(bool value) {
     }
     
     setVisible(value);
+}
+
+void GBIngameUI::setHP(int hp) {
+    hp = std::max(0, std::min(hp, 100));
+
+    int filled = (int)std::round((5 * hp) / 100.0f);
+
+    for (int i = 0; i < 5; ++i) {
+        _hpSegments[i]->setVisible(i < filled);
+    }
 }
 
