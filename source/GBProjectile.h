@@ -20,13 +20,17 @@ class Projectile : public physics2::WheelObstacle {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CU_DISALLOW_COPY_AND_ASSIGN(Projectile);
-
+    
 protected:
     /** The scene graph node for the Projectile. */
     std::shared_ptr<scene2::SceneNode> _node;
+    std::shared_ptr<scene2::SpriteNode> _sprite_node;
+    std::shared_ptr<graphics::Texture> _texture;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
+    float _damage;
     bool _isPlayerFired;
+    
 
 public:
 #pragma mark Constructors
@@ -97,6 +101,13 @@ public:
         _node = node;
     }
     
+    /**Get the projectile's sprite node. Use after it is attached with attachSpriteNode(sprite_node).  */
+    const std::shared_ptr<scene2::SpriteNode>& getSpriteNode() const { return _sprite_node; }
+    
+    /** Attach a sprite node to the projectile's (empty) scene node, for sprite animations. */
+    void attachSpriteNode(const std::shared_ptr<scene2::SpriteNode> sprite_node);
+
+    
     /**
      * Sets the ratio of the Projectile sprite to the physics body
      *
@@ -112,7 +123,9 @@ public:
     void setDrawScale(float scale) {
         _drawScale = scale;
     }
-
+    float getDamage() { return _damage;}
+    void setDamage(float dmg) {_damage = dmg;}
+    
 #pragma mark -
 #pragma mark Attribute Properties
     /**

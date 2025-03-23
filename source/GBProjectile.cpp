@@ -35,6 +35,8 @@ void Projectile::update(float dt) {
         _node->setAngle(getAngle());
     }
 }
+
+
 /**
  * Add a new projectile to the world and send it in the right direction.
  */
@@ -79,6 +81,10 @@ ObstacleNodePair Projectile::createProjectile(const std::shared_ptr<AssetManager
     audio::AudioEngine::get()->play(fxJ->getString("pew"), source, false, fxJ->getFloat("volume"), true);
     
     return proj_pair;
+}
+
+void Projectile::attachSpriteNode(const std::shared_ptr<scene2::SpriteNode> sprite_node){
+    _node->addChild(sprite_node);
 }
 
 /**
