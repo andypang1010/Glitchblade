@@ -16,7 +16,7 @@ ActionModel::~ActionModel() = default;
  *
  * @return The shared pointer to the SpriteSheet.
  */
-std::shared_ptr<cugl::graphics::SpriteSheet> ActionModel::getActionAnimation() const {
+std::shared_ptr<cugl::scene2::SpriteNode> ActionModel::getActionAnimation() const {
     return _actionSprite;
 }
 
@@ -25,7 +25,7 @@ std::shared_ptr<cugl::graphics::SpriteSheet> ActionModel::getActionAnimation() c
  *
  * @param animation The shared pointer to the new SpriteSheet.
  */
-void ActionModel::setActionAnimation(const std::shared_ptr<cugl::graphics::SpriteSheet>& animation) {
+void ActionModel::setActionAnimation(const std::shared_ptr<cugl::scene2::SpriteNode>& animation) {
     _actionSprite = animation;
 }
 

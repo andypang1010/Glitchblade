@@ -4,6 +4,7 @@ using namespace cugl::graphics;
 using namespace cugl::physics2;
 
 #include "GBTypes.h"
+using namespace cugl::scene2;
 
 #pragma mark -
 #pragma mark Constants moved from gamescene to here - these maybe should be parsed from JSON or in separate file
@@ -301,7 +302,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
         std::string animationPath = action->getString("animation");
         std::shared_ptr<Texture> animationTexture = Texture::allocWithFile(animationPath);
-        std::shared_ptr<SpriteSheet> animationSprite = SpriteSheet::alloc(animationTexture, action->getInt("animation_row"), action->getInt("animation_col"), action->getInt("animation_size"));
+        std::shared_ptr<SpriteNode> animationSprite = SpriteNode::allocWithSheet(animationTexture, action->getInt("animation_row"), action->getInt("animation_col"), action->getInt("animation_size"));
         animationSprite->setFrame(0);
 
         if (type == "melee") {
@@ -335,7 +336,15 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
                 spawnPositions.push_back(Vec2(json->get("projectileSpawnPosition")->get("x")->asFloat(), json->get("projectileSpawnPosition")->get("y")->asFloat()));
                 spawnFrames.push_back(json->get("projectileSpawnFrame")->asInt());
 				projectile->setLinearVelocity(Vec2(json->get("projectileVelocity")->get("x")->asFloat(), json->get("projectileVelocity")->get("y")->asFloat()));
-                // projectile->setTexture(Texture::allocWithFile(action->getString("projectileSprite")));
+                
+                //projectile->setSpriteNode(
+                //    SpriteNode::allocWithSheet(
+                //        Texture::allocWithFile(action->getString("projectileSprite")), 
+                //        action->getInt("animation_row"), 
+                //        action->getInt("animation_col"), 
+                //        action->getInt("animation_size")
+                //    )
+                //);
                 // projectile->setDamage(json->get("projectileDamage")->asInt());
 
 				projectiles.push_back(projectile);

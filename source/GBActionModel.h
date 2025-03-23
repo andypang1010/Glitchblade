@@ -15,7 +15,7 @@ protected:
     std::string _actionName;
 
     /** The animation for the action. */
-    std::shared_ptr<cugl::graphics::SpriteSheet> _actionSprite;
+    std::shared_ptr<cugl::scene2::SpriteNode> _actionSprite;
 
     /** The length/duration of the action. */
     float _actionLength;
@@ -32,14 +32,14 @@ public:
      *
      * @return The shared pointer to the SpriteSheet.
      */
-    std::shared_ptr<cugl::graphics::SpriteSheet> getActionAnimation() const;
+    std::shared_ptr<cugl::scene2::SpriteNode> getActionAnimation() const;
 
     /**
      * Sets the action animation.
      *
      * @param animation The shared pointer to the new SpriteSheet.
      */
-    void setActionAnimation(const std::shared_ptr<cugl::graphics::SpriteSheet>& animation);
+    void setActionAnimation(const std::shared_ptr<cugl::scene2::SpriteNode>& animation);
 
     /**
      * Returns the action length.

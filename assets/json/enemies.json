@@ -30,7 +30,10 @@
                             "y": 5
                         },
                         "projectileSpawnFrame": 3,
-                        "projectileAnimation": "textures/projectile.png",
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
                         "projectileVelocity" : {
                             "x": 3,
                             "y": 0
