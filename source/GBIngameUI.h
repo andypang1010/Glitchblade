@@ -29,7 +29,11 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _pauseButton;
     /** The HP bar in top-left corner. */
     std::shared_ptr<cugl::scene2::SceneNode> _hpbar;
+    std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     
+    int _maxHP = 5;
+    int _currentHP = 5;
+
     bool _active;
     
 public:

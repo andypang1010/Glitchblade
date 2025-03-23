@@ -33,10 +33,8 @@ using namespace cugl;
  */
 bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     if (assets == nullptr) {
-        CULog("❌ false1");
         return false;
     } else if (!SceneNode::init()) {
-        CULog("❌ false2");
         return false;
     }
     
@@ -48,20 +46,13 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     auto layer = assets->get<scene2::SceneNode>("ingamescene");
     
     if (layer == nullptr) {
-        CULog("❌ ingamescene not loaded");
         return false;
     }
     
     layer->setContentSize(screenSize);
     layer->doLayout(); // This rearranges the children to fit the screen
     addChild(layer);
-    
-    if (layer == nullptr) {
-        CULog("❌ ingamescene not loaded");
-    } else {
-        CULog("✅ ingamescene loaded, children = %d", layer->getChildren().size());
-    }
-    
+    setActive(true);
     _pauseButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("pause"));
     _hpbar = layer->getChildByName("hpbar");
     
@@ -76,6 +67,31 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
             _pauseButton->activate();
         }
     }
+    
+    if (_hpbar) {
+        float segmentWidth = 35.0f;   // 每个血段宽度
+        float segmentHeight = 55.0f;  // 每个血段高度
+        float segmentSpacing = 7.0f;  // 每个段之间的间隔
+        float startX = 15.0f;         // 左边内缩一点点
+        float startY = 37.0f;
+
+        std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
+        if (texture == nullptr) {
+            CULog("❌ Texture 'hp_segment' not found!");
+            return false;
+        }
+        
+        for (int i = 0; i < _maxHP; ++i) {
+            std::shared_ptr<scene2::PolygonNode> segment = scene2::PolygonNode::allocWithTexture(texture);
+            segment->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+            segment->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + startY);
+            segment->setContentSize(Size(segmentWidth, segmentHeight));
+            segment->setVisible(true);
+            _hpbar->addChild(segment);
+            _hpSegments.push_back(segment);
+        }
+    }
+
     
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::CORNFLOWER);
