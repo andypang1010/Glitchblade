@@ -48,8 +48,8 @@
         "projectile": {
             "file": "textures/projectile.png"
         },
-        "player-projectile": {
-            "file": "textures/player-projectile.png"
+        "player_projectile": {
+            "file": "textures/player_projectile.png"
         },
         "dpad": {
             "file": "textures/dpad.png",

@@ -50,9 +50,7 @@ class GameScene : public scene2::Scene2 {
 protected:
     /** The asset manager for this game mode. */
     std::shared_ptr<AssetManager> _assets;
-
-    std::shared_ptr<JsonValue> _enemiesJSON;
-    
+    std::shared_ptr<JsonValue> _constantsJSON;
     // CONTROLLERS
     /** LevelController for managing the level progress of the current game */
     std::shared_ptr<LevelController> _levelController;
@@ -417,11 +415,6 @@ public:
      * Resets the status of the game so that we can play again.
      */
     void reset();
-
-    /**
-    * Adds a new bullet to the world and sends it in the right direction.
-    */
-    void createProjectile(Vec2 pos, Vec2 direction, bool isPlayerFired);
 
     /**
     * Removes the input Bullet from the world.

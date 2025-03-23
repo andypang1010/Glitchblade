@@ -46,49 +46,8 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 
-#define SIGNUM(x)  ((x > 0) - (x < 0))
-
-#pragma mark -
-#pragma mark Physics Constants
-/** Cooldown (in animation frames) for jumping */
-#define ENEMY_JUMP_COOLDOWN   5
-/** Cooldown (in animation frames) for shooting */
-#define ENEMY_SHOOT_COOLDOWN  20
-/** Cooldown (in frames) for guard */
-#define ENEMY_GUARD_COOLDOWN  60
-/** Cooldown (in frames) for dash */
-#define ENEMY_DASH_COOLDOWN  100
-/** Duration (in frames) for guard */
-#define ENEMY_GUARD_DURATION  120
-/** Duration (in frames) for dash- affects friction*/
-#define ENEMY_DASH_DURATION  8
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define ENEMY_VSHRINK  0.95f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define ENEMY_HSHRINK  0.7f
-/** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define ENEMY_SSHRINK  0.6f
-/** Height of the sensor attached to the player's feet */
-#define ENEMY_SENSOR_HEIGHT   0.1f
-/** The amount to shrink the radius of the shield relative to the image width */
-#define ENEMY_SHIELD_RADIUS 2.0f
-/** The density of the character */
-#define ENEMY_DENSITY    1.0f
-/** The impulse for the character jump */
-#define ENEMY_JUMP       42.5f
-/** The impulse for the character dash-attack */
-#define ENEMY_DASH       100.0f
-/** The implulse fot the character knockback */
-#define ENEMY_KB       1.0f
-/** Debug color for the sensor */
-#define DEBUG_COLOR     Color4::RED
-
-#pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-#define STUN_FRAMES 120
-
 using namespace cugl;
-
+using namespace graphics;
 #pragma mark -
 #pragma mark Constructors
 
@@ -108,57 +67,57 @@ using namespace cugl;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool EnemyModel::init(const Vec2& pos, const Size& size, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
-    Size nsize = size;
-    nsize.width  *= ENEMY_HSHRINK;
-    nsize.height *= ENEMY_VSHRINK;
+bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    resetAttributes();
+    
+    float scale = constantsRef->get("scene")->getFloat("scale");
+    _enemyJSON = constantsRef->get("enemy");
+    std::shared_ptr<graphics::Texture> image;
+    image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
+    
+    Size nsize = Size(90, 130) / scale;
+    nsize.width  *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
+    nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     _drawScale = scale;
     
+    setDebugColor(_enemyJSON->get("debug")->getString("color"));
     if (BoxObstacle::init(pos,nsize)) {
         setDensity(ENEMY_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-        
-        // Gameplay attributes
-        _hp = ENEMY_MAXHP;
-        _isGrounded = false;
-        _isShootInput = false;
-        _isJumpInput  = false;
-        _isStrafeLeft = false;
-        _isStrafeRight = false;
-        _isDashLeftInput = false;
-        _isDashRightInput = false;
-        _isGuardInput = false;
-        _hasProjectile = false;
-        _faceRight  = true;
-        _shootCooldownRem = 0;
-        _jumpCooldownRem  = 0;
-        _dashCooldownRem = 0;
-        _canKnockBack = true;
-        _guardCooldownRem = 0;
-        _guardRem = 0;
-        _parryRem= 0;
-        _stunRem = 0;
-
-        _isStabbing = false;
-        _isSlamming = false;
-        _moveDuration = 0;
-        currentFrame = 0;
-
-        for (auto act : actions) {
-            if (act->getActionName() == "slam") {
-                _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
-            }
-            else if (act->getActionName() == "stab") {
-                _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
-            }
-        }
-
-        _node = scene2::SceneNode::alloc();
-        setSceneNode(_node);
+        attachNodes(assetRef);
         return true;
     }
     return false;
+}
+
+void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef){
+    _node = scene2::SceneNode::alloc();
+    setSceneNode(_node);
+    //move this to new function
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 6, 6);
+    _idleSprite->setPosition(0, 40);
+
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walking1"), 1, 8, 8);
+    _walkSprite->setPosition(0, 40);
+
+    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 4, 10, 40);
+    _slamSprite->setPosition(0, 40);
+
+    _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 4, 10, 40);
+    _stabSprite->setPosition(0, 40);
+
+    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
+    _stunSprite->setPosition(0, 40);
+
+    setName(std::string(ENEMY_NAME));
+    setDebugColor(ENEMY_DEBUG_COLOR);
+    
+    getSceneNode()->addChild(_idleSprite);
+    getSceneNode()->addChild(_walkSprite);
+    getSceneNode()->addChild(_slamSprite);
+    getSceneNode()->addChild(_stabSprite);
+    getSceneNode()->addChild(_stunSprite);
 }
 
 #pragma mark -
@@ -259,14 +218,14 @@ void EnemyModel::createFixtures() {
     _sensorFixture = _body->CreateFixture(&sensorDef);
     
     // create shield circle fixture
-    //b2FixtureDef shieldDef;
-    //b2CircleShape shieldShape;
-    //shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
-    //shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
-    //shieldDef.isSensor = true;
-    //shieldDef.shape = &sensorShape;
-    //shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
-    //_shieldFixture = _body->CreateFixture(&shieldDef);
+    b2FixtureDef shieldDef;
+    b2CircleShape shieldShape;
+    shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
+    shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
+    shieldDef.isSensor = true;
+    shieldDef.shape = &sensorShape;
+    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
+    _shieldFixture = _body->CreateFixture(&shieldDef);
 
     // create attack fixtures
 }
@@ -299,75 +258,15 @@ void EnemyModel::dispose() {
     _node = nullptr;
     _sensorNode = nullptr;
     _shieldNode = nullptr;
+    _geometry = nullptr;
+    _sensorNode = nullptr;
+    _shieldNode = nullptr;
+    _currentSpriteNode = nullptr;
+    _idleSprite = nullptr;
+    _walkSprite = nullptr;
+
 }
 
-/**
- * Applies the force to the body of this dude
- *
- * This method should be called after the force attribute is set.
- */
-void EnemyModel::applyForce() {
-    if (!isEnabled()) {
-        return;
-    }
-    
-    // Don't want to be moving. Damp out player motion
-    if (getMovement() == 0.0f && !isDashActive()) {
-        if (isGrounded()) {
-            // Instant friction on the ground
-            b2Vec2 vel = _body->GetLinearVelocity();
-            vel.x = 0; // If you set y, you will stop a jump in place
-            _body->SetLinearVelocity(vel);
-        } else {
-            //             Damping factor in the air
-            b2Vec2 force(-getDamping()*getVX(),0);
-            _body->ApplyForceToCenter(force,true);
-        }
-    }
-
-    if (!isStunned()) {
-        #pragma mark strafe force
-        b2Vec2 force(getMovement(), 0);
-        _body->ApplyForceToCenter(force, true);
-        #pragma mark jump force
-        // Jump!
-        if (isJumpBegin() && isGrounded()) {
-            b2Vec2 force(0, ENEMY_JUMP);
-            _body->ApplyLinearImpulseToCenter(force, true);
-        }
-        #pragma mark dash force
-        // Dash!
-        if (isDashLeftBegin()) {
-            CULog("dashing left\n");
-            b2Vec2 force(-ENEMY_DASH, 0);
-            faceLeft();
-            _body->ApplyLinearImpulseToCenter(force, true);
-        }
-
-        if (isDashRightBegin()) {
-            CULog("dashing right\n");
-            b2Vec2 force(ENEMY_DASH, 0);
-            faceRight();
-            _body->ApplyLinearImpulseToCenter(force, true);
-        }
-    }
-    
-#pragma mark knockback force
-    if (isKnocked() && _canKnockBack) {
-        _body->SetLinearVelocity(b2Vec2(0,0));
-        Vec2 knockForce = _knockDirection.subtract(Vec2(0, _knockDirection.y)).scale(ENEMY_KB);
-        _body->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, ENEMY_KB), true);
-        _isKnocked = false;
-    }
-    
-    // Velocity too high, clamp it
-    if (fabs(getVX()) >= getMaxSpeed() && !isDashActive()) {
-        setVX(SIGNUM(getVX()) * getMaxSpeed());
-    }
-    if (isStunned()) {
-        setVX(getVX()/3);
-    }
-}
 #pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
@@ -461,19 +360,21 @@ void EnemyModel::update(float dt) {
 
 #pragma mark -
 #pragma mark AI Methods
-bool EnemyModel::isTargetClose() {
-    return (getPosition() - _targetPos).length() <= CLOSE_RADIUS;
+bool EnemyModel::isTargetClose(Vec2 targetPos) {
+    return (getPosition() - targetPos).length() <= CLOSE_RADIUS;
 }
 
 void EnemyModel::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose() && !isStunned()) {
+    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
         if (r%3 == 0) { //Slam
-            slam();
+            _isSlamming = true;
+            setMovement(0);
         }
         else if(r % 3 == 1){ // Stab
-            stab();
+            _isStabbing = true;
+            setMovement(0);
         }
         else { // Move away
             _moveDuration = 45;
@@ -482,7 +383,8 @@ void EnemyModel::nextAction() {
     }
     else if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && !isStunned()) {
         if (r % 2 == 0) { // Stab
-            stab();
+            _isStabbing = true;
+            setMovement(0);
         }
         else{ // Move closer
             _moveDuration = 45;
@@ -495,11 +397,11 @@ void EnemyModel::nextAction() {
             _isStabbing = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= _slamSprite->getCount() - 1) {
+        if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES-1) {
             _isSlamming = false;
             setMovement(0);
         }
-        if (_isStabbing && _stabSprite->getFrame() >= _stabSprite->getCount() -1) {
+        if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES-1) {
             _isStabbing = false;
             setMovement(getMovement());
         }
@@ -517,58 +419,29 @@ void EnemyModel::AIMove() {
         setStrafeRight(dist < 0);
         _moveDuration--;
     }
-    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
+    //else if (_moveDuration > 0) {
+    //    _moveDuration--;
+    //}
+    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
+        /*_faceRight ? setDashRightInput(true) : setDashLeftInput(true);*/
+        /*b2Vec2 force(face * ENEMY_DASH, 0);
+        _body->ApplyLinearImpulseToCenter(force, true);*/
+        /*_moveDuration = STAB_DAMAGE_END_FRAME - STAB_DAMAGE_START_FRAME;*/
         setMovement(face * getForce() * ENEMY_DASH);
     }
     
 }
 
 bool EnemyModel::isDamaging() {
-    if (_isSlamming && _slamSprite->getFrame() >= _slam->getHitboxStartTime() -1 && _slamSprite->getFrame() <= _slam->getHitboxEndTime() - 1) {
+    if (_isSlamming && _slamSprite->getFrame() >= SLAM_DAMAGE_START_FRAME-1 && _slamSprite->getFrame() <= SLAM_DAMAGE_END_FRAME - 1) {
         return true;
     }
-    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
+    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
         return true;
     }
     else {
         return false;
     }
-}
-
-void EnemyModel::slam() {
-    _isSlamming = true;
-    setMovement(0);
-}
-
-bool EnemyModel::isSlamHit() {
-    Vec2 dist = getPosition() - _targetPos;
-    if (_isSlamming && _slamSprite->getFrame() >= _slam->getHitboxStartTime() - 1 && _slamSprite->getFrame() <= _slam->getHitboxEndTime() - 1) {
-        if (dist.x > 0 && dist.x <= 6 && !isFacingRight() && std::abs(dist.y) <= 6) {
-            return true;
-        }
-        else if (dist.x < 0 && dist.x >= -6 && isFacingRight() && std::abs(dist.y) <= 6) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void EnemyModel::stab() {
-    _isStabbing = true;
-    setMovement(0);
-}
-
-bool EnemyModel::isStabHit() {
-    Vec2 dist = getPosition() - _targetPos;
-    if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
-        if (dist.x > 0 && dist.x <= 6 && !isFacingRight() && std::abs(dist.y) <= 2) {
-            return true;
-        }
-        else if (dist.x < 0 && dist.x >= -6 && isFacingRight() && std::abs(dist.y) <= 2) {
-            return true;
-        }
-    }
-    return false;
 }
 
 #pragma mark -
@@ -632,13 +505,13 @@ void EnemyModel::resetDebug() {
     float h = ENEMY_SENSOR_HEIGHT;
     Poly2 dudePoly(Rect(-w/0.1f,-h/2.0f,w,h));
     _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(DEBUG_COLOR);
+    _sensorNode->setColor(ENEMY_DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
 
     Poly2 shieldPoly;
     shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, ENEMY_SHIELD_RADIUS);
     _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldNode->setColor(DEBUG_COLOR);
+    _shieldNode->setColor(ENEMY_DEBUG_COLOR);
     
 }
 

@@ -24,6 +24,10 @@ private:
     std::shared_ptr<scene2::Label> _hpNode;
     /** Controller for abstracting out input across multiple platforms */
     std::shared_ptr<PlatformInput> _input;
+    /** Data */
+    std::shared_ptr<AssetManager> _assets;
+    std::shared_ptr<JsonValue> _constantsJSON;
+    
 public:
     
     /** Constructor */
@@ -35,10 +39,10 @@ public:
     /**
      * Initializes the player controller.
      */
-    void init(cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale);
+    void init(const std::shared_ptr<AssetManager>& assetRef,  const std::shared_ptr<JsonValue>& constantsRef);
 
     /**
-     * Disposes of all (non-static) resources allocated to this mode.
+     * Disposes of all (non-static) resources allocated to this controller.
      */
     void dispose();
 

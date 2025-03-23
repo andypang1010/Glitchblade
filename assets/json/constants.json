@@ -1,0 +1,206 @@
+{
+    "scene": {
+        "width": 1024,
+        "height": 576,
+        "aspect": 0.5625,
+        "default_width": 32,
+        "default_height": 18,
+        "gravity": -28.9,
+        "texture": "background",
+        "scale": null,
+        "bounds": {
+            "origin": {
+                "x": null,
+                "y": null
+            },
+            "size": {
+                "width": null,
+                "height": null
+            }
+        }
+    },
+    "walls": {
+        "vertex_count": 12,
+        "wall_count": 2,
+        "thickness": 1,
+        "name": "wall"
+    },
+    "ground": {
+        "vertex_count": 8,
+        "thickness": 4,
+        "texture": "ground",
+        "name": "ground"
+    },
+    "physics": {
+        "basic_density": 0,
+        "heavy_density": 10,
+        "basic_friction": 0.4,
+        "basic_restitution": 0.1,
+        "debug": {
+            "opacity": 192,
+            "color": "white"
+        }
+    },
+    "player": {
+        "texture": "player",
+        "names": {
+            "body": "player_body_sensor",
+            "ground": "player_ground_sensor",
+            "shield": "player_shield_sensor"
+        },
+        "animation": {
+            "update_frame": 4
+        },
+        "movement": {
+            "force": 50,
+            "damping": 30,
+            "max_speed": 5
+        },
+        "jump": {
+            "cooldown": 5,
+            "force": 45
+        },
+        "dash": {
+            "cooldown": 30,
+            "duration": 20,
+            "speed": 30
+        },
+        "knockback": {
+            "force": 15,
+            "duration": 20
+        },
+        "combat": {
+            "shoot_cooldown": 20,
+            "guard": {
+                "cooldown": 15,
+                "duration": 44
+            },
+            "parry": {
+                "duration": 24
+            }
+        },
+        "health": {
+            "max_hp": 100
+        },
+        "fixtures": {
+            "body": {
+                "v_shrink": 0.95,
+                "h_shrink": 0.7
+            },
+            "sensor": {
+                "h_shrink": 0.6,
+                "height": 0.1,
+                "debug_color": "red"
+            },
+            "shield": {
+                "radius": 2
+            }
+        },
+        "density": 1,
+        "debug": {
+            "color": "yellow",
+            "font": "debug"
+        }
+    },
+    "enemy": {
+        "texture": "enemy",
+        "names": {
+            "body": "enemy_body",
+            "sensor": "enemy_sensor",
+            "shield_sensor": "enemy_shield",
+            "slam_sensor": "slam",
+            "stab_sensor": "stab"
+        },
+        "animation": {
+            "update_frame": 4
+        },
+        "physics": {
+            "movement": {
+                "force": 20,
+                "damping": 30,
+                "max_speed": 10
+            },
+            "jump": {
+                "cooldown": 5,
+                "force": 42.5
+            },
+            "dash": {
+                "cooldown": 100,
+                "duration": 8,
+                "force": 100
+            },
+            "knockback": {
+                "force": 1,
+                "duration": 20
+            }
+        },
+        "combat": {
+            "shoot_cooldown": 20,
+            "guard": {
+                "cooldown": 60,
+                "duration": 120
+            }
+        },
+        "health": {
+            "max_hp": 100
+        },
+        "fixtures": {
+            "body": {
+                "v_shrink": 0.95,
+                "h_shrink": 0.7
+            },
+            "sensor": {
+                "h_shrink": 0.6,
+                "height": 0.1
+            },
+            "shield": {
+                "radius": 2
+            }
+        },
+        "density": 1,
+        "debug": {
+            "color": "red",
+            "font": "debug"
+        },
+        "name": "enemy"
+    },
+    "messages": {
+        "font": "retro",
+        "win": {
+            "text": "VICTORY!",
+            "color": "yellow"
+        },
+        "lose": {
+            "text": "FAILURE!",
+            "color": "red"
+        }
+    },
+    "audio": {
+        "music": {
+            "game": "game",
+            "win": "win",
+            "lose": "lose",
+            "volume": 0.7
+        },
+        "effects": {
+            "pew": "pew",
+            "pop": "pop",
+            "jump": "jump",
+            "volume": 0.8
+        }
+    },
+    "projectile": {
+        "spawn_rate": 100,
+        "name": "projectile",
+        "texture": "projectile",
+        "offset": 0.5,
+        "speed": 30
+    },
+    "player_projectile": {
+        "name": "player_projectile",
+        "texture": "player_projectile",
+        "offset": 0.5,
+        "speed": 30
+    },
+    "exit_count": 240
+}

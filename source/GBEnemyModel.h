@@ -45,7 +45,6 @@
 #define __GB_ENEMY_MODEL_H__
 #include <cugl/cugl.h>
 #include "GBActionModel.h"
-#include "GBMeleeActionModel.h"
 
 using namespace cugl;
 
@@ -58,7 +57,7 @@ using namespace cugl;
 #define ENEMY_SENSOR_NAME     "enemysensor"
 #define ENEMY_SHIELD_SENSOR_NAME      "shield"
 #define SLAM_SENSOR_NAME      "slam"
-#define STAB_SENSOR_NAME      "stab"
+#define STAB_SENSOR_NAME      "slam"
 
 #define E_ANIMATION_UPDATE_FRAME 4
 
@@ -73,11 +72,56 @@ using namespace cugl;
 /** The maximum character hp */
 #define ENEMY_MAXHP   100.0f
 
+/** Cooldown (in animation frames) for jumping */
+#define ENEMY_JUMP_COOLDOWN   5
+/** Cooldown (in animation frames) for shooting */
+#define ENEMY_SHOOT_COOLDOWN  20
+/** Cooldown (in frames) for guard */
+#define ENEMY_GUARD_COOLDOWN  60
+/** Cooldown (in frames) for dash */
+#define ENEMY_DASH_COOLDOWN  100
+/** Duration (in frames) for guard */
+#define ENEMY_GUARD_DURATION  120
+/** Duration (in frames) for dash- affects friction*/
+#define ENEMY_DASH_DURATION  8
+/** The amount to shrink the body fixture (vertically) relative to the image */
+#define ENEMY_VSHRINK  0.95f
+/** The amount to shrink the body fixture (horizontally) relative to the image */
+#define ENEMY_HSHRINK  0.7f
+/** The amount to shrink the sensor fixture (horizontally) relative to the image */
+#define ENEMY_SSHRINK  0.6f
+/** Height of the sensor attached to the player's feet */
+#define ENEMY_SENSOR_HEIGHT   0.1f
+/** The amount to shrink the radius of the shield relative to the image width */
+#define ENEMY_SHIELD_RADIUS 2.0f
+/** The density of the character */
+#define ENEMY_DENSITY    1.0f
+/** The impulse for the character jump */
+#define ENEMY_JUMP       42.5f
+/** The impulse for the character dash-attack */
+#define ENEMY_DASH       100.0f
+/** The implulse fot the character knockback */
+#define ENEMY_KB       1.0f
+#define ENEMY_KB_DURATION 20
+/** Debug color for the sensor */
+#define ENEMY_DEBUG_COLOR     Color4::RED
+/** enemy obstacle name*/
+#define ENEMY_NAME      "enemy"
+#define ENEMY_DEBUG_FONT      "debug"
+
+#pragma mark -
+#pragma mark Action Constants // TODO: Refactor with Action parser
+#define SLAM_FRAMES     40
+#define SLAM_DAMAGE_START_FRAME     25
+#define SLAM_DAMAGE_END_FRAME    31
+#define STAB_FRAMES     40
+#define STAB_DAMAGE_START_FRAME     28
+#define STAB_DAMAGE_END_FRAME    35
+#define STUN_FRAMES 120
+
 #pragma mark -
 #pragma mark AI Constants
 #define CLOSE_RADIUS     6.0f
-
-
 #pragma mark -
 #pragma mark Enemy Model
 /**
@@ -131,6 +175,8 @@ protected:
     bool _canKnockBack;
     /** Whether enemy is knocked-back (sets  cd) */
     bool _isKnocked;
+    /** Whether we are knocked-back (sets input cd) */
+    int _knockbackRem;
     Vec2 _knockDirection;
 	/** How long until we can shoot again in animation frames*/
 	int  _shootCooldownRem;
@@ -153,28 +199,29 @@ protected:
     /** The guard shield when guard is active */
 
     // TODO: use Action parser
+    /** Ground sensor to represent our feet */
+    b2Fixture* _slamFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
     std::string _slamName;
+    /** The node for debugging the ground sensor */
+    std::shared_ptr<scene2::WireNode> _slamNode;
+    /** The guard shield when guard is active */
+
+    /** Ground sensor to represent our feet */
+    b2Fixture* _stabFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
     std::string _stabName;
-
-    /** The position of the target(player) */
-    Vec2 _targetPos;
-    /** Whether the enemy is stabbing */
-    bool _isStabbing;
-    /** Whether the enemy is slamming */
-    bool _isSlamming;
-
-    /** Remaining duration of current enemy movement */
-    int _moveDuration;
-    /** Direction of current enemy movement */
-    int _moveDirection;
+    /** The node for debugging the ground sensor */
+    std::shared_ptr<scene2::WireNode> _stabNode;
+    /** The guard shield when guard is active */
     
-	/** The scene graph node for the Dude. */
+	/** The scene graph node for the enemy. */
 	std::shared_ptr<scene2::SceneNode> _node;
 	/** The scale between the physics world and the screen (MUST BE UNIFORM) */
 	float _drawScale;
-
+    
+    std::shared_ptr<JsonValue> _enemyJSON;
+    
     /**
     * Redraws the outline of the physics fixtures to the debug node
     *
@@ -185,7 +232,14 @@ protected:
     virtual void resetDebug() override;
 
 public:
-    // TODO: refactor to handle actions with this class
+    // TODO: refactor with Action parser
+    Vec2 _targetPos;
+    bool _isStabbing;
+    bool _isSlamming;
+
+    int _moveDuration;
+    int _moveDirection;
+
     class ActionInstance {
     public:
         std::shared_ptr<ActionModel> action;
@@ -217,9 +271,9 @@ public:
         }
     };
 
-    std::shared_ptr<MeleeActionModel> _slam;
-    std::shared_ptr<MeleeActionModel> _stab;
-    std::shared_ptr<ActionInstance> currentAction;
+    std::shared_ptr<ActionModel> _slam;
+    std::shared_ptr<ActionModel> _stab;
+    std::shared_ptr<ActionInstance> currentAction = nullptr;
 
 public:
     int currentFrame;
@@ -236,9 +290,9 @@ public:
     
 #pragma mark Hidden Constructors
     /**
-     * Creates a degenerate Dude object.
+     * Creates a degenerate enemy object.
      *
-     * This constructor does not initialize any of the dude values beyond
+     * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
     EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _shieldName(ENEMY_SHIELD_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _slamName(SLAM_SENSOR_NAME), _stabName(STAB_SENSOR_NAME) { }
@@ -257,23 +311,9 @@ public:
     void dispose();
     
     /**
-     * Initializes a new dude at the origin.
+     * Initializes a new enemy at the given position.
      *
-     * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
-     *
-     * The scene graph is completely decoupled from the physics system.
-     * The node does not have to be the same size as the physics body. We
-     * only guarantee that the scene graph node is positioned correctly
-     * according to the drawing scale.
-     *
-     * @return  true if the obstacle is initialized properly, false otherwise.
-     */
-    virtual bool init() override { return init(Vec2::ZERO, Size(1, 1), 1.0f, {}); }
-    
-    /**
-     * Initializes a new dude at the given position.
-     *
-     * The dude is unit square scaled so that 1 pixel = 1 Box2d unit
+     * The enemy is sized according to the given drawing scale.
      *
      * The scene graph is completely decoupled from the physics system.
      * The node does not have to be the same size as the physics body. We
@@ -281,129 +321,67 @@ public:
      * according to the drawing scale.
      *
      * @param pos   Initial position in world coordinates
-     *
-     * @return  true if the obstacle is initialized properly, false otherwise.
-     */
-    virtual bool init(const Vec2 pos) override { return init(pos, Size(1, 1), 1.0f, {}); }
-    
-    /**
-     * Initializes a new dude at the given position.
-     *
-     * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
-     *
-     * The scene graph is completely decoupled from the physics system.
-     * The node does not have to be the same size as the physics body. We
-     * only guarantee that the scene graph node is positioned correctly
-     * according to the drawing scale.
-     *
-     * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
-     *
-     * @return  true if the obstacle is initialized properly, false otherwise.
-     */
-    virtual bool init(const Vec2 pos, const Size size) override {
-        return init(pos, size, 1.0f, {});
-    }
-    
-    /**
-     * Initializes a new dude at the given position.
-     *
-     * The dude is sized according to the given drawing scale.
-     *
-     * The scene graph is completely decoupled from the physics system.
-     * The node does not have to be the same size as the physics body. We
-     * only guarantee that the scene graph node is positioned correctly
-     * according to the drawing scale.
-     *
-     * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
+     * @param size  The size of the enemy in world units
      * @param scale The drawing scale (world to screen)
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const Vec2& pos, const Size& size, float scale, std::vector<std::shared_ptr<ActionModel>> actions);
+    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions);
 
     
 #pragma mark -
 #pragma mark Static Constructors
 	/**
-	 * Creates a new dude at the origin.
+	 * Creates a new enemy at the given position.
 	 *
-	 * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
-	 *
-	 * The scene graph is completely decoupled from the physics system.
-	 * The node does not have to be the same size as the physics body. We
-	 * only guarantee that the scene graph node is positioned correctly
-	 * according to the drawing scale.
-	 *
-	 * @return  A newly allocated PlayerModel at the origin
-	 */
-	static std::shared_ptr<EnemyModel> alloc() {
-		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-		return (result->init() ? result : nullptr);
-	}
-
-	/**
-	 * Creates a new dude at the given position.
-	 *
-	 * The dude is a unit square scaled so that 1 pixel = 1 Box2d unit
+	 * The enemy is sized according to the given drawing scale.
 	 *
 	 * The scene graph is completely decoupled from the physics system.
 	 * The node does not have to be the same size as the physics body. We
 	 * only guarantee that the scene graph node is positioned correctly
 	 * according to the drawing scale.
 	 *
-     * @param pos   Initial position in world coordinates
-	 *
-	 * @return  A newly allocated PlayerModel at the given position
-	 */
-	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos) {
-		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-		return (result->init(pos) ? result : nullptr);
-	}
-
-    /**
-	 * Creates a new dude at the given position.
-	 *
-     * The dude has the given size, scaled so that 1 pixel = 1 Box2d unit
-	 *
- 	 * The scene graph is completely decoupled from the physics system.
-	 * The node does not have to be the same size as the physics body. We
-	 * only guarantee that the scene graph node is positioned correctly
-	 * according to the drawing scale.
-	 *
-	 * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
+     * @param size  The size of the enemy in world units
 	 *
 	 * @return  A newly allocated PlayerModel at the given position with the given scale
 	 */
-	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos, const Size& size) {
+	static std::shared_ptr<EnemyModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
 		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-		return (result->init(pos, size) ? result : nullptr);
-	}
-
-	/**
-	 * Creates a new dude at the given position.
-	 *
-	 * The dude is sized according to the given drawing scale.
-	 *
-	 * The scene graph is completely decoupled from the physics system.
-	 * The node does not have to be the same size as the physics body. We
-	 * only guarantee that the scene graph node is positioned correctly
-	 * according to the drawing scale.
-	 *
-	 * @param pos   Initial position in world coordinates
-     * @param size  The size of the dude in world units
-	 * @param scale The drawing scale (world to screen)
-	 *
-	 * @return  A newly allocated PlayerModel at the given position with the given scale
-	 */
-	static std::shared_ptr<EnemyModel> alloc(const Vec2& pos, const Size& size, float scale, std::vector<std::shared_ptr<ActionModel>> actions) {
-		std::shared_ptr<EnemyModel> result = std::make_shared<EnemyModel>();
-		return (result->init(pos, size, scale, actions) ? result : nullptr);
-	}
+		return (result->init(assetRef, constantsRef, pos, actions) ? result : nullptr);
+    }
     
-
+#pragma mark -
+#pragma mark Level Control and Constructor Helpers
+    /** Reset all the enemy attributes to their initial values*/
+    void resetAttributes(){
+        _hp = ENEMY_MAXHP;
+        _isGrounded = false;
+        _isShootInput = false;
+        _isJumpInput  = false;
+        _isStrafeLeft = false;
+        _isStrafeRight = false;
+        _isDashLeftInput = false;
+        _isDashRightInput = false;
+        _isGuardInput = false;
+        _hasProjectile = false;
+        _faceRight  = true;
+        _shootCooldownRem = 0;
+        _jumpCooldownRem  = 0;
+        _dashCooldownRem = 0;
+        _canKnockBack = true;
+        _guardCooldownRem = 0;
+        _guardRem = 0;
+        _parryRem= 0;
+        _stunRem = 0;
+        
+        _isStabbing = false;
+        _isSlamming = false;
+        _moveDuration = 0;
+        currentFrame = 0;
+    };
+    
+    /**Attach the scene nodes (sprite sheets) to the enemy**/
+    void attachNodes(const std::shared_ptr<AssetManager>& assetRef);
 #pragma mark -
 #pragma mark Animation
     /**
@@ -467,7 +445,7 @@ public:
     /**
      * Returns left/right movement of this character.
      *
-     * This is the result of input times dude force.
+     * This is the result of input times enemy force.
      *
      * @return left/right movement of this character.
      */
@@ -476,7 +454,7 @@ public:
     /**
      * Sets left/right movement of this character.
      *
-     * This is the result of input times dude force.
+     * This is the result of input times enemy force.
      *
      * @param value left/right movement of this character.
      */
@@ -493,144 +471,145 @@ public:
     void faceRight();
     
     /**
-     * Returns true if the dude is actively firing.
+     * Returns true if the enemy is actively firing.
      *
-     * @return true if the dude is actively firing.
+     * @return true if the enemy is actively firing.
      */
     bool isShooting() const { return _isShootInput && _shootCooldownRem <= 0; }
     /**
-     * Returns true if the dude is actively strafing left.
+     * Returns true if the enemy is actively strafing left.
      *
-     * @return true if the dude is actively strafing left.
+     * @return true if the enemy is actively strafing left.
      */
     void setStrafeLeft(bool value) {_isStrafeLeft = value;};
 
     /**
-     * Sets whether the dude is actively strafing right.
+     * Sets whether the enemy is actively strafing right.
      *
-     * @param value whether the dude is actively strafing right.
+     * @param value whether the enemy is actively strafing right.
      */
     void setStrafeRight(bool value) {_isStrafeRight = value;};
 
     /**
-     * Sets whether the dude has a swallowed projectile.
+     * Sets whether the enemy has a swallowed projectile.
      *
-     * @param value whether the dude has a swallowed projectile.
+     * @param value whether the enemy has a swallowed projectile.
      */
     void setHasProjectile(bool value) { _hasProjectile = value; }
 
     /**
-     * Sets whether the dude is beginning dash left
+     * Sets whether the enemy is beginning dash left
      *
-     * @param value whether the dude is beginning dash left.
+     * @param value whether the enemy is beginning dash left.
      */
     void setDashLeftInput(bool value) { _isDashLeftInput = value; }
 
     /**
-     * Sets whether the dude is beginning dash right.
+     * Sets whether the enemy is beginning dash right.
      *
-     * @param value whether the dude is beginning dash right.
+     * @param value whether the enemy is beginning dash right.
      */
     void setDashRightInput(bool value) { _isDashRightInput = value; }
 
     /**
-     * Sets whether the dude is actively trying to jump.
+     * Sets whether the enemy is actively trying to jump.
      *
-     * @param value whether the dude is actively trying to jump.
+     * @param value whether the enemy is actively trying to jump.
      */
     void setJumpInput(bool value) { _isJumpInput = value; }
 
     /**
-     * Sets whether the dude is actively firing.
+     * Sets whether the enemy is actively firing.
      *
-     * @param value whether the dude is actively firing.
+     * @param value whether the enemy is actively firing.
      */
     void setShootInput(bool value) { _isShootInput = value; }
     /**
-     * Sets whether the dude is inputting guard
+     * Sets whether the enemy is inputting guard
      *
-     * @param value whether the dude is inputting guard
+     * @param value whether the enemy is inputting guard
      */
     void setGuardInput(bool value) { _isGuardInput = value; }
     /**
-     * Sets whether the dude is actively strafing left.
+     * Sets whether the enemy is actively strafing left.
      *
-     * @param value whether the dude is actively strafing left.
+     * @param value whether the enemy is actively strafing left.
      */
     bool isStrafeLeft() { return _isStrafeLeft; };
     /**
-     * Sets whether the dude is actively strafing right.
+     * Sets whether the enemy is actively strafing right.
      *
-     * @return true if whether the dude is actively strafing right.
+     * @return true if whether the enemy is actively strafing right.
      */
     bool isStrafeRight() { return _isStrafeRight; };
     /**
-     * Returns true if if the dude is actively trying to jump and jump cooldown is ready (regardless if on the ground).
+     * Returns true if if the enemy is actively trying to jump and jump cooldown is ready (regardless if on the ground).
      *
-     * @return true if the dude is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
+     * @return true if the enemy is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
      */
     bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
     
     /**
-     * Returns true if the dude is actively dashing left.
+     * Returns true if the enemy is actively dashing left.
      *
-     * @param value whether the dude is actively dashing left.
+     * @param value whether the enemy is actively dashing left.
      */
     bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0; };
     /**
-     * Returns true if the dude is actively dashing right.
+     * Returns true if the enemy is actively dashing right.
      *
-     * @param value whether the dude is actively dashing right.
+     * @param value whether the enemy is actively dashing right.
      */
     bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0; };
     /**
-     * Returns true if the dude is dashing
+     * Returns true if the enemy is dashing
      *
-     * @return value whether the dude is dashing either direction.
+     * @return value whether the enemy is dashing either direction.
      */
     bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); };
     /**
-     * Returns true if the dude is inputting a movement action/
+     * Returns true if the enemy is inputting a movement action/
      *
-     * @return value whether the dude is performing a movement action.
+     * @return value whether the enemy is performing a movement action.
      */
     bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
     
     /**
-     *  Returns true if the dude is currently beginning guard action.
+     *  Returns true if the enemy is currently beginning guard action.
      *
-     * @return value whether the dude is beginning guard action.
+     * @return value whether the enemy is beginning guard action.
      */
     bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; };
       /**
-     * Returns true if the dude has a swallowed projectile.
+     * Returns true if the enemy has a swallowed projectile.
      *
-     * @return value whether the dude has a swallowed projectile.
+     * @return value whether the enemy has a swallowed projectile.
      */
     /**
-     * Returns true ifrthe dude is actively guarding.
+     * Returns true ifrthe enemy is actively guarding.
      *
-     * @return value whether the dude is actively guarding.
+     * @return value whether the enemy is actively guarding.
      */
     bool isGuardActive() { return  _guardRem > 0 || isGuardBegin(); };
 
     /**
-     * Returns true if the dude is actively parrying.
+     * Returns true if the enemy is actively parrying.
      *
-     * @return value whether the dude is actively parrying.
+     * @return value whether the enemy is actively parrying.
      */
     bool isParryActive() { return _parryRem > 0 || isGuardBegin(); };
     /**
-     * Returns true if the dude has a swallowed projectile.
+     * Returns true if the enemy has a swallowed projectile.
      *
-     * @return value whether the dude has a swallowed projectile.
+     * @return value whether the enemy has a swallowed projectile.
      */
     bool hasProjectile() { return _hasProjectile; };
     /**
-     * Returns true if the dude is in a dash animation.
+     * Returns true if the enemy is in a dash animation.
      *
-     * @return value whether the dude is in a dash animation.
+     * @return value whether the enemy is in a dash animation.
      */
+    
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
     /**
     * Returns true if the enemy is being knocked back.
@@ -639,13 +618,45 @@ public:
     */
    bool isKnocked() const { return _isKnocked;}
    /**
-    * Sets whether the dude is being knocked back
+    * Sets whether the enemy is being knocked back
     *
-    * @param value whether the dude is being knocked back
-    * @param knockDirection direction that the dude will move toward
+    * @param value whether the enemy is being knocked back
+    * @param knockDirection direction that the enemy will move toward
     */
-   void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
     /**
+     * Returns true if the enemy is in a knockback animation.
+     *
+     * @return value whether the enemy is in a knockback animation.
+     */
+    bool isKnockbackActive() { return _knockbackRem > 0 || isKnocked(); };
+    float getKnockF() {return ENEMY_KB;}
+    Vec2 getKnockDirection() {return _knockDirection;}
+    /**
+     * Sets whether the player is being knocked back
+     *
+     * @param value whether the player is being knocked back
+     * @param knockDirection direction that the player will move toward
+     */
+    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection;  }
+    /**
+     * Resets knock status - do this after applying force.
+     */
+    void resetKnocked() { _isKnocked = false;  }
+    /**
+     * Returns the amount of knockback frames remaining
+     *
+     * @return the amount of knockback frames remaining
+     */
+    int getKnockbackRem() {return _knockbackRem; };
+    
+    /**
+     * Used to set the amount of knockback frames remaining
+     *
+     * @param the value that remaining knockback frames should be set to
+     */
+    void setKnockbackRem(int value = ENEMY_KB_DURATION) {_knockbackRem = value; };
+
+    /*
      * Sets the dash duration of this enemy.
      *
      * @param value new dash duration.
@@ -664,41 +675,41 @@ public:
      */
     bool isStunned() { return _stunRem>0; };
     /**
-     * Returns true if the dude is on the ground.
+     * Returns true if the enemy is on the ground.
      *
-     * @return true if the dude is on the ground.
+     * @return true if the enemy is on the ground.
      */
     bool isGrounded() const { return _isGrounded; }
     
     /**
-     * Sets whether the dude is on the ground.
+     * Sets whether the enemy is on the ground.
      *
-     * @param value whether the dude is on the ground.
+     * @param value whether the enemy is on the ground.
      */
     void setGrounded(bool value) { _isGrounded = value; }
     
     /**
-     * Returns how much force to apply to get the dude moving
+     * Returns how much force to apply to get the enemy moving
      *
      * Multiply this by the input to get the movement value.
      *
-     * @return how much force to apply to get the dude moving
+     * @return how much force to apply to get the enemy moving
      */
     float getForce() const { return ENEMY_FORCE; }
     
     /**
-     * Returns How hard the brakes are applied to get a dude to stop moving
+     * Returns How hard the brakes are applied to get a enemy to stop moving
      *
-     * @return How hard the brakes are applied to get a dude to stop moving
+     * @return How hard the brakes are applied to get a enemy to stop moving
      */
     float getDamping() const { return ENEMY_DAMPING; }
     
     /**
-     * Returns the upper limit on dude left-right movement.
+     * Returns the upper limit on enemy left-right movement.
      *
      * This does NOT apply to vertical movement.
      *
-     * @return the upper limit on dude left-right movement.
+     * @return the upper limit on enemy left-right movement.
      */
     float getMaxSpeed() const { return ENEMY_MAXSPEED; }
     
@@ -742,59 +753,12 @@ public:
 
 #pragma mark -
 #pragma mark AI Methods
-    /**
-     * Sets this enemy's attack target position
-     *
-     * @param pos the position of the target(player)
-     */
     void setTargetPos(Vec2 pos) { _targetPos = pos; }
 
-    /**
-     * Returns whether the target is considered "close" to this enemy
-     *
-     * @return whether the target is close
-     */
-    bool isTargetClose();
-
-    /**
-     * Performs the next action of the enemy, this function contains the behavior tree for this enemy
-     *
-     */
+    bool isTargetClose(Vec2 targetPos);
     void nextAction();
-
-    /**
-     * Performs the next movement of the enemy, sets whether this enemy is moving and the movement duration
-     *
-     */
     void AIMove();
-
     bool isDamaging();
-
-    /**
-     * Performs the slam attack of boss1
-     *
-     */
-    void slam();
-
-    /**
-     * Checks whether the slam hits the player
-     * 
-     * @return whether the slam attack hits target
-     */
-    bool isSlamHit();
-
-    /**
-     * Performs the stab attack of boss1
-     *
-     */
-    void stab();
-
-    /**
-     * Checks whether the stab hits the player
-     * 
-     * @return whether the stab attack hits target
-     */
-    bool isStabHit();
 
 #pragma mark -
 #pragma mark Animation Methods
@@ -830,12 +794,6 @@ public:
      */
     void update(float dt) override;
     
-    /**
-     * Applies the force to the body of this dude
-     *
-     * This method should be called after the force attribute is set.
-     */
-    void applyForce();
 
 
 	

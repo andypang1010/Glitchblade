@@ -10,6 +10,7 @@
 #ifndef __GB_PROJECTILE_MODEL_H__
 #define __GB_PROJECTILE_MODEL_H__
 #include <cugl/cugl.h>
+#include "GBTypes.h"
 
 using namespace cugl;
 
@@ -21,16 +22,11 @@ private:
     CU_DISALLOW_COPY_AND_ASSIGN(Projectile);
 
 protected:
-	Vec2 _direction;
-    float _speed;
-    float _damage;
-    bool _isPlayerFired;
-
     /** The scene graph node for the Projectile. */
     std::shared_ptr<scene2::SceneNode> _node;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
-
+    bool _isPlayerFired;
 
 public:
 #pragma mark Constructors
@@ -134,21 +130,10 @@ public:
     void setIsPlayerFired(float isPlayerFired) {
         _isPlayerFired = isPlayerFired;
     }
-
-    /**
- * Returns the projectile damage.
- */
-    bool getDamage() const { return _damage; }
-
-    /**
-     * Sets the damage of the projectile
-     *
-     * @param damage
-     */
-    void setDamage(float value) {
-        _damage = value;
-    }
-
+#pragma mark -
+#pragma mark Creating, Destroying Projectiles
+    /** Creates a projectile and returns the obstacle and scene node pair. */
+    static ObstacleNodePair createProjectile(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, Vec2 pos, Vec2 direction, bool isPlayerFired, bool face_right);
 #pragma mark -
 #pragma mark Physics Methods
     /**

@@ -68,22 +68,59 @@ using namespace cugl;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool PlayerModel::init(const Vec2& pos, const Size& size, float scale) {
+bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos) {
     resetAttributes();
-    Size nsize = size;
-    nsize.width  *= HSHRINK;
-    nsize.height *= VSHRINK;
+    float scale = constantsRef->get("scene")->getFloat("scale");
+    std::shared_ptr<graphics::Texture> image;
+    image = assetRef->get<graphics::Texture>(PLAYER_TEXTURE);
+    Size nsize = image->getSize() / scale;
+    nsize.width  *= PLAYER_HSHRINK;
+    nsize.height *= PLAYER_VSHRINK;
     _drawScale = scale;
+    
+    setDebugColor(PLAYER_DEBUG_COLOR);
+    
     if (BoxObstacle::init(pos,nsize)) {
-        setDensity(DENSITY);
+        setDensity(PLAYER_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-        _sceneNode = scene2::SceneNode::alloc();
-        setSceneNode(_sceneNode);
+        
+        // set the scene node and attach the sprite nodes to it
+        attachNodes(assetRef);
         return true;
     }
     return false;
+}
+
+
+void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef){
+    _sceneNode = scene2::SceneNode::alloc();
+    setSceneNode(_sceneNode);
     
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_idle"), 1, 6, 6);
+    _idleSprite->setPosition(0, 40);
+
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_walk"), 1, 6, 6);
+    _walkSprite->setPosition(0, 40);
+
+    _jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_jumpUp"), 1, 8, 8);
+    _jumpUpSprite->setPosition(0, 40);
+
+    _jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_jumpDown"), 1, 8, 8);
+    _jumpDownSprite->setPosition(0, 40);
+
+    _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_guard"), 1, 6, 6);
+    _guardSprite->setPosition(0, 40);
+
+    _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_attack"), 1, 8, 8);
+    _attackSprite->setPosition(0, 40);
+    
+    getSceneNode()->addChild(_idleSprite);
+    getSceneNode()->addChild(_walkSprite);
+    getSceneNode()->addChild(_jumpUpSprite);
+    getSceneNode()->addChild(_jumpDownSprite);
+    getSceneNode()->addChild(_guardSprite);
+    getSceneNode()->addChild(_attackSprite);
 }
 
 #pragma mark -
@@ -181,19 +218,19 @@ void PlayerModel::createFixtures() {
     }
     
     b2FixtureDef sensorDef;
-    sensorDef.density = DENSITY;
+    sensorDef.density = PLAYER_DENSITY;
     sensorDef.isSensor = true;
     
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -SSHRINK*getWidth()/2.0f;
-    corners[0].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
-    corners[1].x = -SSHRINK*getWidth()/2.0f;
-    corners[1].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[2].x =  SSHRINK*getWidth()/2.0f;
-    corners[2].y = (-getHeight()-SENSOR_HEIGHT)/2.0f;
-    corners[3].x =  SSHRINK*getWidth()/2.0f;
-    corners[3].y = (-getHeight()+SENSOR_HEIGHT)/2.0f;
+    corners[0].x = -PLAYER_SSHRINK*getWidth()/2.0f;
+    corners[0].y = (-getHeight()+PLAYER_SENSOR_HEIGHT)/2.0f;
+    corners[1].x = -PLAYER_SSHRINK*getWidth()/2.0f;
+    corners[1].y = (-getHeight()-PLAYER_SENSOR_HEIGHT)/2.0f;
+    corners[2].x =  PLAYER_SSHRINK*getWidth()/2.0f;
+    corners[2].y = (-getHeight()-PLAYER_SENSOR_HEIGHT)/2.0f;
+    corners[3].x =  PLAYER_SSHRINK*getWidth()/2.0f;
+    corners[3].y = (-getHeight()+PLAYER_SENSOR_HEIGHT)/2.0f;
     
     b2PolygonShape sensorShape;
     sensorShape.Set(corners,4);
@@ -205,7 +242,7 @@ void PlayerModel::createFixtures() {
     // create shield circle fixture
     b2FixtureDef shieldDef;
     b2CircleShape shieldShape;
-    shieldShape.m_radius = SHIELD_RADIUS;
+    shieldShape.m_radius = PLAYER_SHIELD_RADIUS;
     shieldShape.m_p.Set(0,0);//center of body
     shieldDef.isSensor = true;
     shieldDef.shape = &shieldShape;
@@ -242,6 +279,13 @@ void PlayerModel::dispose() {
     _sceneNode = nullptr;
     _sensorNode = nullptr;
     _shieldNode = nullptr;
+    _currentSpriteNode = nullptr;
+    _idleSprite = nullptr;
+    _guardSprite = nullptr;
+    _walkSprite = nullptr;
+    _jumpUpSprite = nullptr;
+    _jumpDownSprite = nullptr;
+    _attackSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -328,18 +372,18 @@ void PlayerModel::updateAnimation()
  */
 void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = SSHRINK*_dimension.width;
-    float h = SENSOR_HEIGHT;
+    float w = PLAYER_SSHRINK*_dimension.width;
+    float h = PLAYER_SENSOR_HEIGHT;
     Poly2 playerPoly(Rect(-w/0.1f,-h/2.0f,w,h));
     _sensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(SENSOR_DEBUG_COLOR);
+    _sensorNode->setColor(PLAYER_SENSOR_DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
     
     Poly2 shieldPoly;
-    shieldPoly = PolyFactory().makeNgon(10000,0, SHIELD_RADIUS, 20);
+    shieldPoly = PolyFactory().makeNgon(10000,0, PLAYER_SHIELD_RADIUS, 20);
     _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
     _shieldNode->setPosition(Vec2(_debug->getContentSize()/2));
-    _shieldNode->setColor(DEBUG_COLOR);
+    _shieldNode->setColor(PLAYER_DEBUG_COLOR);
 
     _debug->addChild(_sensorNode);
     _debug->addChild(_shieldNode);

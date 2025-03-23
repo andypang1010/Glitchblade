@@ -3,67 +3,41 @@
 #include "GBPlayerModel.h"
 using namespace cugl;
 using namespace cugl::graphics;
+using namespace cugl::audio;
 
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 
 // CONSTANTS:
-float INIT_POS[] = { 2.5f, 5.0f };
+float PLAYER_INIT_POS[] = { 2.5f, 5.0f };
 
-PlayerController::PlayerController()
+PlayerController::PlayerController(){}
+
+
+void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef)
 {
-}
-
-
-void PlayerController::init(const cugl::Rect bounds, const std::shared_ptr<AssetManager>& assetRef, float scale)
-{
-    std::shared_ptr<Texture> image;
-    std::shared_ptr<scene2::PolygonNode> sprite;
-
-    _input = PlatformInput::alloc(assetRef, bounds);
-	Vec2 pos = INIT_POS;
-    image = assetRef->get<Texture>(PLAYER_TEXTURE);
-    _player = PlayerModel::alloc(pos, image->getSize() / scale, scale);
-    _player->_idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_idle"), 1, 6, 6);
-    _player->_idleSprite->setPosition(0, 40);
-
-    _player->_walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_walk"), 1, 6, 6);
-    _player->_walkSprite->setPosition(0, 40);
-
-    _player->_jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpUp"), 1, 8, 8);
-    _player->_jumpUpSprite->setPosition(0, 40);
-
-    _player->_jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpDown"), 1, 8, 8);
-    _player->_jumpDownSprite->setPosition(0, 40);
-
-    _player->_guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 1, 6, 6);
-    _player->_guardSprite->setPosition(0, 40);
-
-    _player->_attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 1, 8, 8);
-    _player->_attackSprite->setPosition(0, 40);
+//    float scale = constantsRef->get("scene")->getFloat("scale");
+//    Rect bounds;
+//    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
+//    std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
+//    bounds.origin.set(boundsJ->get("origin")->getFloat("x"), boundsJ->get("origin")->getFloat("y"));
+//    bounds.size.set(boundsJ->get("size")->getFloat("width"),boundsJ->get("size")->getFloat("height"));
     
-    
-
-    _player->getSceneNode()->addChild(_player->_idleSprite);
-    _player->getSceneNode()->addChild(_player->_walkSprite);
-    _player->getSceneNode()->addChild(_player->_jumpUpSprite);
-    _player->getSceneNode()->addChild(_player->_jumpDownSprite);
-    _player->getSceneNode()->addChild(_player->_guardSprite);
-    _player->getSceneNode()->addChild(_player->_attackSprite);
-    
-    #pragma mark hp node
-    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(DEBUG_FONT));
+    _input = PlatformInput::alloc(assetRef, constantsRef);
+    _player = PlayerModel::alloc(assetRef, constantsRef, PLAYER_INIT_POS);
+#pragma mark hp node
+    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(PLAYER_DEBUG_FONT));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
     _hpNode->setForeground(Color4::CYAN);
     _hpNode->setPosition(0, 55);
     _player->getSceneNode()->addChild(_hpNode);
-    
-    _player->setDebugColor(DEBUG_COLOR);
-    
-	CULog("Inited playercontoller");
+#pragma mark constants
+    _assets = assetRef;
+    _constantsJSON = constantsRef;
 }
 
 
 void PlayerController::dispose() {
+    _player->dispose();
     _input->dispose();
 }
 
@@ -72,7 +46,7 @@ void PlayerController::dispose() {
  */
 void PlayerController::reset() {
     _player->resetAttributes();
-    _player->setPosition(INIT_POS);
+    _player->setPosition(PLAYER_INIT_POS);
 }
 
 /**
@@ -131,6 +105,7 @@ void PlayerController::applyForce() {
     }
 #pragma mark knockback force
     if (_player->isKnocked()) {
+        //CULog("Applying player knockback force");
         playerBody->SetLinearVelocity(b2Vec2(0,0));
         Vec2 knockDirection = _player->getKnockDirection();
         Vec2 knockForce = knockDirection.subtract(Vec2(0,knockDirection.y)).scale(_player->getKnockF());
@@ -141,9 +116,6 @@ void PlayerController::applyForce() {
         //CULog("clamping velocity");
         _player->setVX(SIGNUM(_player->getVX())*_player->getMaxSpeed());
     }
-    else if (fabs(_player->getVX()) >= _player->getMaxSpeed()){
-        CULog("NOT CLAMPING");
-    }
 }
 
 
@@ -151,14 +123,14 @@ void PlayerController::applyForce() {
 void PlayerController::preUpdate(float dt)
 {    _input->update(dt);
     // can't reset or set debug for the whole scene from player controller- we should use buttons for reset, debug , exit instead of keyboard (or gesture) inputs
-//    // Process the toggled key commands
-//    if (_input->didDebug()) { setDebug(!isDebug()); }
-//    if (_input->didReset()) { reset(); }
-//    if (_input->didExit()) {
-//        CULog("Shutting down");
-//        Application::get()->quit();
-//    }
-
+    //    // Process the toggled key commands
+    //    if (_input->didDebug()) { setDebug(!isDebug()); }
+    //    if (_input->didReset()) { reset(); }
+    //    if (_input->didExit()) {
+    //        CULog("Shutting down");
+    //        Application::get()->quit();
+    //    }
+    
     // Process the movement inputs
     _player->setMovement(_input->getHorizontal()*_player->getForce());
     _player->setStrafeLeft(_input->didStrafeLeft());
@@ -168,16 +140,19 @@ void PlayerController::preUpdate(float dt)
     _player->setDashRightInput(_input->didDashRight());
     _player->setGuardInput(_input->didGuard());
     _player->setShootInput(_input->didFire());
-    
     _hpNode->setText(std::to_string((int)_player->getHP()));
-    
     applyForce();
     updateCooldowns();
+    
+    if (_player->isJumpBegin() && _player->isGrounded()) {
+        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
+        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
+        AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
+    }
 }
 #pragma mark fixedUpdate
 void PlayerController::fixedUpdate(float timestep)
 {
-    // CULog("updated playercontroller");
 }
 
 #pragma mark postUpdate
@@ -199,7 +174,7 @@ void PlayerController::updateCooldowns()
     if (_player->isGuardActive() && !_player->isGuardBegin()){
         CULog("Guard is active");
         int guardRem = _player->getGuardRem();
-        CULog("Updating guard duration from %d", guardRem);
+        //CULog("Updating guard duration from %d", guardRem);
         _player->setGuardRem(guardRem - 1);
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
@@ -210,12 +185,12 @@ void PlayerController::updateCooldowns()
         }
     // guard not active, update cooldown
     else if (_player->getGuardCDRem()>0) {
-        CULog("Updating guard cooldown from %d", _player->getGuardCDRem());
+        //CULog("Updating guard cooldown from %d", _player->getGuardCDRem());
         int guardCD = _player->getGuardCDRem();
         _player->setGuardCDRem(guardCD - 1);
         if (_player->getGuardCDRem() == 0){
             //end guard
-            _player->setShieldDebugColor(DEBUG_COLOR);
+            _player->setShieldDebugColor(PLAYER_DEBUG_COLOR);
         }
     }
     
@@ -235,7 +210,6 @@ void PlayerController::updateCooldowns()
     }
 #pragma mark Knockback cooldown
     if (_player->isKnocked()) {
-        CULog("Player is knocked");
         _player->setDashCDRem();
         _player->setGuardCDRem();
         _player->setJumpCDRem();

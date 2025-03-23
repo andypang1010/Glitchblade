@@ -140,8 +140,12 @@ void PlatformInput::dispose() {
  *
  * @return true if the controller was initialized successfully
  */
-bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const Rect bounds) {
+bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef) {
     bool success = true;
+    Rect bounds;
+    std::shared_ptr<JsonValue> boundsJ = constantsRef->get("scene")->get("bounds");
+    bounds.origin.set(boundsJ->get("origin")->getFloat("x"), boundsJ->get("origin")->getFloat("y"));
+    bounds.size.set(boundsJ->get("size")->getFloat("width"),boundsJ->get("size")->getFloat("height"));
     _tbounds = Application::get()->getDisplayBounds();
     _sbounds = bounds;
     
@@ -506,12 +510,12 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
     // this logic should change if we want to allow switching input sides
     if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
         SwipeType s_type = processSwipe(_ltouch.position, event.position, event.timestamp);
-        switch (s_type) {
-            // can handle actions on left side here if desired
-            default:
-                // CULog("Doing nothing");
-                break;
-        }
+        //switch (s_type) {
+        //    // can handle actions on left side here if desired
+        //    default:
+        //        // CULog("Doing nothing");
+        //        break;
+        //}
 
         /*if (s_type != SwipeType::NONE) {
             clearTouchInstance(_ltouch);
