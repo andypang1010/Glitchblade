@@ -51,6 +51,17 @@
         "player-projectile": {
             "file": "textures/player-projectile.png"
         },
+        
+        "pause_button": {
+        "file": "textures/pause_button.png"
+        },
+        "hp_empty": {
+        "file": "textures/hp_bar.png"
+        },
+        "hp_segment": {
+        "file": "textures/hp_segment.png"
+        },
+        
         "dpad": {
             "file": "textures/dpad.png",
             "wrapS": "clamp",
@@ -99,14 +110,30 @@
         }                
     },
 	"fonts": {
-    "retro": {
-      "file": "fonts/RetroGame.ttf",
-      "size": 64
+        "retro": {
+          "file": "fonts/RetroGame.ttf",
+          "size": 64
+        },
+        "debug": {
+          "file": "fonts/RetroGame.ttf",
+          "size":  14
+        }
+	},
+    "widgets": {
+        "ingamescene" : "widgets/ingamescene.json",
+        "pausebutton" : "widgets/pausebutton.json",
+        "hpbar" : "widgets/hpbar.json"
     },
-    "debug": {
-      "file": "fonts/RetroGame.ttf",
-      "size":  14
+    "scene2s" : {
+        "ingamescene" : {
+                    "type"      : "Widget",
+                    "comment"   : "This is the root node of the scene for the lab",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "key" : "ingamescene"
+                    }
+        }
     }
-
-	}
 }

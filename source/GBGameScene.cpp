@@ -26,6 +26,7 @@
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBProjectile.h"
+#include "GBIngameUI.h"
 
 #include <ctime>
 #include <string>
@@ -350,6 +351,13 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
             CULog("player is null in populate");
         }
         _player->setDebugColor(DEBUG_COLOR);
+    
+    // === Initialize in-game UI ===
+    _ui = GBIngameUI::alloc(_assets);
+    if (_ui != nullptr) {
+        addChild(_ui);
+    }
+    
     populate();
     _active = true;
     _complete = false;

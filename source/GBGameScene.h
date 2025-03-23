@@ -36,6 +36,7 @@
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBLevelController.h"
+#include "GBIngameUI.h"
 
 using namespace cugl;
 
@@ -75,7 +76,10 @@ protected:
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
     
-
+    // UI
+    /** Ingame UI */
+    std::shared_ptr<GBIngameUI> _ui;
+    
     /** The Box2D world */
     std::shared_ptr<physics2::ObstacleWorld> _world;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */

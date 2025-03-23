@@ -46,6 +46,7 @@ void GlitchbladeApp::onStartup() {
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Sound>(SoundLoader::alloc()->getHook());
     _assets->attach<SceneNode>(Scene2Loader::alloc()->getHook());
+    _assets->attach<WidgetValue>(WidgetLoader::alloc()->getHook());
     _assets->loadDirectory("json/loading.json");
 
     // Create a "loading" screen
