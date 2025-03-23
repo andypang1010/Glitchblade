@@ -31,7 +31,6 @@ public:
     void setProjectileSpawnPositions(const std::vector<Vec2>& positions);
     const std::vector<int>& getProjectileSpawnFrames() const;
     void setProjectileSpawnFrames(const std::vector<int>& frames);
-
 };
 
 #endif // RANGED_ACTION_MODEL_H

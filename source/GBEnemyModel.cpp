@@ -281,34 +281,7 @@ void EnemyModel::update(float dt) {
 
     // Apply cooldowns
     
-#pragma mark Guard and Parry timing
-    // guard cooldown first for most recent movement inputs
-    if (isGuardActive() && !isGuardBegin()){
-        //just for logging end of parry
-        bool parry_active = isParryActive();
-        // If robot moves, guard is cancelled
-        if (isMoveBegin()){
-            _guardRem = 0;
-            _parryRem = 0;
-            CULog("Parry and Guard ended due to movement\n");
-        }
-        else{
-            _guardRem = (_guardRem > 0 ? _guardRem -1 : 0);
-            _parryRem= (_parryRem > 0 ? _parryRem -1 : 0);
-            
-            //The rest of this block is for logging end of guard&parry
-            if (parry_active && (_parryRem == 0)){
-                CULog("Parry completed during guard\n");
-            }
-            if (_guardRem == 0){
-                CULog("Enemy Guard completed full duration\n");
-            }
-        }
-    }
-    // guard not active, update cooldown
-    else {
-        _guardCooldownRem = (_guardCooldownRem > 0 ? _guardCooldownRem -1 : 0);
-    }
+
     if (isJumpBegin() && isGrounded()) {
         CULog("isJumping is true");
         _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;

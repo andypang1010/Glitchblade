@@ -275,8 +275,6 @@ void LevelController::fixedUpdate(float timestep)
 std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName) {
     std::vector<std::shared_ptr<ActionModel>> actions;
 
-    //CULog((json->toString()).c_str());
-
     if (!json || json->children().empty()) {
         CULogError("Invalid or empty JSON node!");
         return actions;
@@ -315,8 +313,8 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
             meleeAction->setHitboxPos(hitboxPos);
             meleeAction->setHitboxSize(hitboxSize);
-            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartTime"));
-            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndTime"));
+            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartFrame"));
+            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndFrame"));
             meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
 
             actions.push_back(meleeAction);
@@ -351,6 +349,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 			}
 
 			rangedAction->setProjectiles(projectiles);
+
 
             actions.push_back(rangedAction);
         }

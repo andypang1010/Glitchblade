@@ -294,9 +294,8 @@ void GameScene::populate() {
         addObstacle(obstacle, node, 1);
     }
     
-    addObstacle(_levelController->getPlayerModel(), _levelController->getPlayerNode()); // Put this at the very front
-    addObstacle(_levelController->getTestEnemyModel(), _levelController->getTestEnemyNode());
-
+    addObstacle(_levelController->getPlayerModel(),_levelController->getPlayerNode());
+    addObstacle(_levelController->getTestEnemyModel(),_levelController->getTestEnemyNode());
 
     // Add UI elements
 
@@ -331,14 +330,14 @@ void GameScene::addObstacle(const std::shared_ptr<physics2::Obstacle>& obj,
     }
     _worldnode->addChild(node);
 
-    // Dynamic objects need constant updating
-    if (obj->getBodyType() == b2_dynamicBody) {
-        scene2::SceneNode* weak = node.get(); // No need for smart pointer in callback
-        obj->setListener([=, this](physics2::Obstacle* obs) {
-            weak->setPosition(obs->getPosition() * _scale);
-            weak->setAngle(obs->getAngle());
-            });
-    }
+//    // Dynamic objects need constant updating
+//    if (obj->getBodyType() == b2_dynamicBody) {
+//        scene2::SceneNode* weak = node.get(); // No need for smart pointer in callback
+//        obj->setListener([=, this](physics2::Obstacle* obs) {
+//            weak->setPosition(obs->getPosition() * _scale);
+//            weak->setAngle(obs->getAngle());
+//            });
+//    }
 }
 
 /**
@@ -541,24 +540,24 @@ void GameScene::postUpdate(float remain) {
         _player->setHasProjectile(false);
     }
 
-//    if (_bulletTimer <= 0) {
-//        int r = rand() % 2;
-//        if (r == 0) {
-//            Vec2 left_spawn = { _constantsJSON->get("walls")->getFloat("thickness") + 1.5f, 9.0f };
-//            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, left_spawn, RIGHT, false, false);
-//            addObstacle(p.first, p.second, 1);
-//        }
-//        else if(r == 1){
-//            Vec2 right_spawn = {_constantsJSON->get("scene")->getFloat("default_width") - _constantsJSON->get("walls")->getFloat("thickness") - 1.5f, 13.0f};
-//            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, right_spawn, LEFT, false, false);
-//            addObstacle(p.first, p.second, 1);
-//        }
-//
-//        _bulletTimer = _constantsJSON->get("projectile")->getInt("spawn_rate");
-//    }
-//    else {
-//        _bulletTimer -= 1;
-//    }
+    if (_bulletTimer <= 0) {
+        int r = rand() % 2;
+        if (r == 0) {
+            Vec2 left_spawn = { _constantsJSON->get("walls")->getFloat("thickness") + 1.5f, 9.0f };
+            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, left_spawn, RIGHT, false, false);
+            addObstacle(p.first, p.second, 1);
+        }
+        else if(r == 1){
+            Vec2 right_spawn = {_constantsJSON->get("scene")->getFloat("default_width") - _constantsJSON->get("walls")->getFloat("thickness") - 1.5f, 13.0f};
+            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, right_spawn, LEFT, false, false);
+            addObstacle(p.first, p.second, 1);
+        }
+
+        _bulletTimer = _constantsJSON->get("projectile")->getInt("spawn_rate");
+    }
+    else {
+        _bulletTimer -= 1;
+    }
     setComplete(_testEnemy->getHP() <= 0);
     setFailure(_player->getHP() <= 0);
 
