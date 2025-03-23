@@ -684,7 +684,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->setDashRem(0);
             CULog("Attacks canceled");
         }
-        CULog("Applying knockback");
+        //CULog("Applying knockback");
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
         ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player-> getPosition()).normalize());
     }
@@ -706,7 +706,7 @@ void GameScene::beginContact(b2Contact* contact) {
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
         ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
-        CULog("Applying knockback");
+        //CULog("Applying knockback");
     }
 
     // Player-Projectile Collision

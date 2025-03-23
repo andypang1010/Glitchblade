@@ -105,7 +105,7 @@ void PlayerController::applyForce() {
     }
 #pragma mark knockback force
     if (_player->isKnocked()) {
-        CULog("Applying player knockback force");
+        //CULog("Applying player knockback force");
         playerBody->SetLinearVelocity(b2Vec2(0,0));
         Vec2 knockDirection = _player->getKnockDirection();
         Vec2 knockForce = knockDirection.subtract(Vec2(0,knockDirection.y)).scale(_player->getKnockF());

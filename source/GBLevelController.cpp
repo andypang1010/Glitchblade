@@ -105,6 +105,8 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         return false;
     }
 
+	parseLevels(_levelsJSON);
+
     // Setup player controller
     _playerController = std::make_shared<PlayerController>();
     _playerController->init(_assets, _constantsJSON);
@@ -346,6 +348,70 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     }
 
     return actions;
+}
+
+std::vector<std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json)
+{
+    std::vector<std::shared_ptr<LevelModel>> levels;
+
+    if (!json || json->children().empty()) {
+        CULogError("Invalid or empty JSON node!");
+        return levels;
+    }
+
+    for (std::shared_ptr<JsonValue> level : json->get("levels")->children()) {
+		levels.push_back(parseLevel(level));
+    }
+
+	return levels;
+}
+
+std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<JsonValue>& json)
+{
+    std::shared_ptr<LevelModel> level = std::make_shared<LevelModel>();
+
+    if (!json || json->children().empty()) {
+        CULogError("Invalid or empty JSON node!");
+        return level;
+    }
+
+	CULog(json->toString().c_str());
+
+	level->setLevelName(json-> getString("name"));
+
+	CULog(level->getLevelName().c_str());
+    level->setBackground(Texture::allocWithFile(json->getString("background")));
+    
+	// Parse platforms
+    std::vector<std::shared_ptr<Rect>> platforms;
+
+	for (std::shared_ptr<JsonValue> platform : json->get("platforms")->children()) {
+		std::shared_ptr<Rect> rect = std::make_shared<Rect>();
+
+		rect->origin.x = platform->get("origin")->get("x")->asFloat();
+		rect->origin.y = platform->get("origin")->get("y")->asFloat();
+		rect->size.width = platform->get("size")->get("width")->asFloat();
+		rect->size.height = platform->get("size")->get("height")->asFloat();
+
+		platforms.push_back(rect);
+	}
+
+	level->setPlatforms(platforms);
+
+
+    // Parse Waves
+    std::vector<std::shared_ptr<WaveModel>> waves;
+
+    for (std::shared_ptr<JsonValue> wave : json->get("waves")->children()) {
+        std::shared_ptr<WaveModel> waveModel = std::make_shared<WaveModel>();
+		waveModel->setSpawnIntervals(wave->get("spawn_intervals")->asFloatArray());
+		waveModel->setEnemies(wave->get("enemies")->asStringArray());
+
+		waves.push_back(waveModel);
+    }
+
+	level->setWaves(waves);
+	return level;
 }
 
 

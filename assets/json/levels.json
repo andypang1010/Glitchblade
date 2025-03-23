@@ -5,9 +5,11 @@
       "name": "Tutorial",
       "background": "textures/background_1.png",
       "platforms": [],
-      "spawn_interval": 5,
       "waves": [
-        [ "boss_1" ]
+        {
+          "spawn_intervals": [ 5 ],
+          "enemies": [ "boss_1" ]
+        }
       ]
     },
 
@@ -15,11 +17,19 @@
       "name": "Level 1",
       "background": "textures/background_1.png",
       "platforms": [],
-      "spawn_interval": 5,
       "waves": [
-        [ "minion_melee_1", "minion_ranged_1" ],
-        [ "minion_melee_1", "minion_ranged_1", "minion_melee_1", "minion_melee_1", "minion_ranged_1" ],
-        [ "boss_1" ]
+        {
+          "spawn_intervals": [ 2, 5 ],
+          "enemies": [ "minion_melee_1", "minion_ranged_1" ]
+        },
+        {
+          "spawn_intervals": [ 3, 5, 5, 5, 5 ],
+          "enemies": [ "minion_melee_1", "minion_ranged_1", "minion_melee_1", "minion_melee_1", "minion_ranged_1" ]
+        },
+        {
+          "spawn_intervals": [ 5 ],
+          "enemies": [ "boss_1" ]
+        }
       ]
     },
 
@@ -28,15 +38,29 @@
       "background": "textures/background_2.png",
       "platforms": [
         {
-          "position": [ 10, 5 ],
-          "size": [ 6, 2 ]
+          "origin": {
+            "x": 10,
+            "y": 5
+          },
+          "size": {
+            "width": 6,
+            "height": 2
+          }
         }
       ],
-      "spawn_interval": 10,
       "waves": [
-        [ "minion_melee_2" ],
-        [ "minion_melee_2", "minion_melee_2", "minion_ranged_2" ],
-        [ "boss_2" ]
+        {
+          "spawn_intervals": [ 2 ],
+          "enemies": [ "minion_melee_2" ]
+        },
+        {
+          "spawn_intervals": [ 2, 7, 3 ],
+          "enemies": [ "minion_melee_2", "minion_melee_2", "minion_ranged_2" ]
+        },
+        {
+          "spawn_intervals": [ 5 ],
+          "enemies": [ "boss_2" ]
+        }
       ]
     },
 
@@ -45,19 +69,39 @@
       "background": "textures/background_3.png",
       "platforms": [
         {
-          "position": [ 10, 7 ],
-          "size": [ 6, 2 ]
+          "origin": {
+            "x": 10,
+            "y": 7
+          },
+          "size": {
+            "width": 6,
+            "height": 2
+          }
         },
         {
-          "position": [ 7, 3 ],
-          "size": [ 6, 2 ]
+          "origin": {
+            "x": 7,
+            "y": 3
+          },
+          "size": {
+            "width": 6,
+            "height": 2
+          }
         }
       ],
-      "spawn_interval": 7,
       "waves": [
-        [ "minion_melee_3" ],
-        [ "minion_melee_3", "minion_melee_3", "minion_ranged_3" ],
-        [ "boss_3" ]
+        {
+          "spawn_intervals": [ 2 ],
+          "enemies": [ "minion_melee_3" ]
+        },
+        {
+          "spawn_intervals": [ 2, 7, 3 ],
+          "enemies": [ "minion_melee_3", "minion_melee_3", "minion_ranged_3" ]
+        },
+        {
+          "spawn_intervals": [ 5 ],
+          "enemies": [ "boss_3" ]
+        }
       ]
     },
 
@@ -66,13 +110,21 @@
       "background": "textures/background_4.png",
       "platforms": [
         {
-          "position": [ 10, 5 ],
-          "size": [ 2, 4 ]
+          "origin": {
+            "x": 10,
+            "y": 5
+          },
+          "size": {
+            "width": 8,
+            "height": 2
+          }
         }
       ],
-      "spawn_interval": 0,
       "waves": [
-        [ "boss_final" ]
+        {
+          "spawn_intervals": [ 5 ],
+          "enemies": [ "boss_final" ]
+        }
       ]
     }
 
