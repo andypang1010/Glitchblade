@@ -3,7 +3,7 @@
     {
       "name": "Level 1",
       "background": "textures/background2.png",
-      "ground": "textures/invisiground.png",
+      "ground": "textures/ground2.png",
       "platforms": [],
       "waves": [
         {
