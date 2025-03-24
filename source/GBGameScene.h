@@ -37,6 +37,7 @@
 #include "GBEnemyModel.h"
 #include "GBLevelController.h"
 #include "GBIngameUI.h"
+#include "GBPauseMenu.h"
 
 using namespace cugl;
 
@@ -79,6 +80,8 @@ protected:
     // UI
     /** Ingame UI */
     std::shared_ptr<GBIngameUI> _ui;
+    std::shared_ptr<GBPauseMenu> _pauseMenu;
+    bool _isPaused = false;
     
     /** The Box2D world */
     std::shared_ptr<physics2::ObstacleWorld> _world;
@@ -433,6 +436,11 @@ public:
     * @param  bullet   the bullet to remove
     */
     void removeProjectile(Projectile* bullet);
+    
+    void setPaused(bool paused) {
+        _isPaused = paused;
+    }
+
 
   };
 

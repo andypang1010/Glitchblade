@@ -1,7 +1,8 @@
 //
-//  GBIngameUI.cpp
+//  GBPauseMenu.cpp
 //
-//  This module handles the in-game UI, including pause button and HP bar.
+//  This module handles the pause menu UI, including menu background,
+//  HP bar, player image, and four buttons: resume, restart, exit, and setting.
 //  Based on:
 //
 //  UIButtonScene.cpp
@@ -13,7 +14,7 @@
 //  Author: Walker White
 //  Version: 1/20/18
 //
-#include "GBIngameUI.h"
+#include "GBPauseMenu.h"
 
 using namespace cugl;
 
@@ -23,58 +24,74 @@ using namespace cugl;
 /**
  * Initializes the controller contents, and starts the game
  *
- * The constructor does not allocate any objects or memory.  This allows
- * us to have a non-pointer reference to this controller, reducing our
- * memory allocation.  Instead, allocation happens in this method.
- *
  * @param assets    The (loaded) assets for this game mode
  *
  * @return true if the controller is initialized properly, false otherwise.
  */
-bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
+bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
     if (assets == nullptr) {
         return false;
     } else if (!SceneNode::init()) {
         return false;
     }
-    
+
     _assets = assets;
-    
+
     Size screenSize = Application::get()->getDisplaySize();
     setContentSize(screenSize);
-    
-    auto layer = assets->get<scene2::SceneNode>("ingamescene");
-    
+
+    auto layer = assets->get<scene2::SceneNode>("pausemenu");
+
     if (layer == nullptr) {
         return false;
     }
-    
+
     layer->setContentSize(screenSize);
-    layer->doLayout(); // This rearranges the children to fit the screen
+    layer->doLayout();
     addChild(layer);
     setActive(true);
-    _pauseButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("pause"));
-    _hpbar = layer->getChildByName("hpbar");
-    
-    if (_pauseButton) {
-        _pauseButton->addListener([this](const std::string& name, bool pressed) {
-            if (pressed) {
-                CULog("Pause!");
-            }
-        });
 
-        if (_active) {
-            _pauseButton->activate();
-        }
+    _resumeButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("play"));
+    _restartButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("restart"));
+    _exitButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("exit"));
+    _settingButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("setting"));
+    _hpbar = layer->getChildByName("hpbar");
+
+    if (_resumeButton) {
+        _resumeButton->addListener([](const std::string& name, bool down) {
+            if (down) CULog("Resume pressed");
+        });
+        _resumeButton->activate();
     }
-    
+
+    if (_restartButton) {
+        _restartButton->addListener([](const std::string& name, bool down) {
+            if (down) CULog("Restart pressed");
+        });
+        _restartButton->activate();
+    }
+
+    if (_exitButton) {
+        _exitButton->addListener([](const std::string& name, bool down) {
+            if (down) CULog("Exit pressed");
+        });
+        _exitButton->activate();
+    }
+
+    if (_settingButton) {
+        _settingButton->addListener([](const std::string& name, bool down) {
+            if (down) CULog("Settings pressed");
+        });
+        _settingButton->activate();
+    }
+
     if (_hpbar) {
-        float segmentWidth = 35.0f;
-        float segmentHeight = 55.0f;
-        float halfSegmentHeight = 46.9f;
-        float segmentSpacing = 7.0f;
+        float segmentWidth = 42.0f;
+        float segmentHeight = 61.8f;
+        float halfSegmentHeight = 52.7f;
+        float segmentSpacing = 8.4f;
         float startX = 15.0f;
-        float startY = 38.0f;
+        float startY = 34.0f;
 
         std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
         std::shared_ptr<cugl::graphics::Texture> halfTexture = _assets->get<cugl::graphics::Texture>("half_hp_segment");
@@ -89,7 +106,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
             
             std::shared_ptr<scene2::PolygonNode> half = scene2::PolygonNode::allocWithTexture(halfTexture);
             half->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-            half->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + 35.0f);
+            half->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + 31.5f);
             half->setContentSize(Size(segmentWidth, halfSegmentHeight));
             half->setVisible(false);
             _hpbar->addChild(half);
@@ -97,8 +114,6 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
         }
     }
 
-    
-    // XNA nostalgia
     Application::get()->setClearColor(Color4f::CORNFLOWER);
     return true;
 }
@@ -106,11 +121,13 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
-void GBIngameUI::dispose() {
-    _pauseButton = nullptr;
-    _hpbar = nullptr;
+void GBPauseMenu::dispose() {
+    _resumeButton = nullptr;
+    _restartButton = nullptr;
+    _exitButton = nullptr;
+    _settingButton = nullptr;
     _assets = nullptr;
-    
+
     removeAllChildren();
 }
 
@@ -119,20 +136,26 @@ void GBIngameUI::dispose() {
  *
  * @param value whether the scene is currently active
  */
-void GBIngameUI::setActive(bool value) {
+void GBPauseMenu::setActive(bool value) {
     _active = value;
-    if (_pauseButton) {
-        if (value && !_pauseButton->isActive()) {
-            _pauseButton->activate();
-        } else if (!value && _pauseButton->isActive()) {
-            _pauseButton->deactivate();
-        }
+
+    if (_resumeButton) {
+        value ? _resumeButton->activate() : _resumeButton->deactivate();
     }
-    
+    if (_restartButton) {
+        value ? _restartButton->activate() : _restartButton->deactivate();
+    }
+    if (_exitButton) {
+        value ? _exitButton->activate() : _exitButton->deactivate();
+    }
+    if (_settingButton) {
+        value ? _settingButton->activate() : _settingButton->deactivate();
+    }
+
     setVisible(value);
 }
 
-void GBIngameUI::setHP(int hp) {
+void GBPauseMenu::setHP(int hp) {
     hp = std::max(0, std::min(hp, 100));
 
     int filled = hp / 20;
@@ -144,4 +167,3 @@ void GBIngameUI::setHP(int hp) {
     }
     
 }
-

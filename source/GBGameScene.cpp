@@ -27,6 +27,7 @@
 #include "GBEnemyModel.h"
 #include "GBProjectile.h"
 #include "GBIngameUI.h"
+#include "GBPauseMenu.h"
 
 #include <ctime>
 #include <string>
@@ -357,6 +358,48 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     if (_ui != nullptr) {
         addChild(_ui);
     }
+    _pauseMenu = GBPauseMenu::alloc(assets);
+    if (_pauseMenu != nullptr) {
+        _pauseMenu->setVisible(false);
+        addChild(_pauseMenu);
+    }
+    
+    auto pauseButton = _ui->getPauseButton();
+    if (pauseButton) {
+        pauseButton->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                _ui->setVisible(false);
+                _pauseMenu->setVisible(true);
+                setPaused(true);
+                CULog("Pause pressed, showing menu.");
+            }
+        });
+    }
+    
+    auto resumeButton = _pauseMenu->getResumeButton();
+    if (resumeButton) {
+        resumeButton->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                _pauseMenu->setVisible(false);
+                _ui->setVisible(true);
+                setPaused(false);
+                CULog("Resume pressed, returning to game.");
+            }
+        });
+    }
+    
+    auto restartButton = _pauseMenu->getRestartButton();
+    if (restartButton) {
+        restartButton->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                _pauseMenu->setVisible(false);
+                _ui->setVisible(true);
+                this->reset();
+                CULog("Restart pressed.");
+            }
+        });
+    }
+    
     
     populate();
     _active = true;
@@ -401,6 +444,8 @@ void GameScene::reset() {
     setFailure(false);
     setComplete(false);
     _levelController->reset();
+    _ui->setHP(100);
+    _pauseMenu->setHP(100);
     populate();
 }
 
@@ -630,7 +675,8 @@ void GameScene::setFailure(bool value) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GameScene::preUpdate(float dt) {
-
+    if (_isPaused) return;
+    
     // Process the toggled key commands
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) { reset(); }
@@ -646,6 +692,7 @@ void GameScene::preUpdate(float dt) {
         if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
             _player->damage(20);
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
         else if (_player->iframe <= 0 && _player->isParryActive()) {
             _testEnemy->setStun(120);
@@ -653,6 +700,7 @@ void GameScene::preUpdate(float dt) {
         else if (_player->iframe <= 0 && _player->isGuardActive()) {
             _player->damage(10);
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
         _player->iframe = 60;
     }
@@ -696,6 +744,9 @@ void GameScene::preUpdate(float dt) {
  * @param step  The number of fixed seconds for this step
  */
 void GameScene::fixedUpdate(float step) {
+    
+    if (_isPaused) return;
+    
     // Turn the physics engine crank.
     _world->update(step);
 
@@ -726,6 +777,9 @@ void GameScene::fixedUpdate(float step) {
  * @param remain    The amount of time (in seconds) last fixedUpdate
  */
 void GameScene::postUpdate(float remain) {
+    
+    if (_isPaused) return;
+    
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
     _levelController->postUpdate(remain);
@@ -893,6 +947,7 @@ void GameScene::beginContact(b2Contact* contact) {
             ((EnemyModel*)bd1)->setDashRem(0);
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
         else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(5);
@@ -914,6 +969,7 @@ void GameScene::beginContact(b2Contact* contact) {
             ((EnemyModel*)bd2)->setDashRem(0);
             CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
         else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(5);
@@ -937,6 +993,7 @@ void GameScene::beginContact(b2Contact* contact) {
             removeProjectile((Projectile*)bd2);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
     }
     else if (isPlayerBody(bd2, fd2) && bd1->getName() == PROJECTILE_NAME) {
@@ -945,6 +1002,7 @@ void GameScene::beginContact(b2Contact* contact) {
             removeProjectile((Projectile*)bd1);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
         // TODO: REFACTOR TO NOT REPEAT CODE!!!
     }
@@ -958,6 +1016,7 @@ void GameScene::beginContact(b2Contact* contact) {
         else if (((EnemyModel*)bd1)->isDashActive() && _player->isGuardActive()) {
             _player->damage(10);
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
             ((EnemyModel*)bd1)->setDashRem(0);
         }
     }
@@ -970,6 +1029,7 @@ void GameScene::beginContact(b2Contact* contact) {
         else if (((EnemyModel*)bd2)->isDashActive() && _player->isGuardActive()) {
             _player->damage(10);
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
             ((EnemyModel*)bd2)->setDashRem(0);
         }
     }
@@ -990,6 +1050,7 @@ void GameScene::beginContact(b2Contact* contact) {
 
             _player->damage(10);
             _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
         removeProjectile(shieldHit);
     }

@@ -1,7 +1,8 @@
 //
-//  GBIngameUI.h
+//  GBPauseMenu.h
 //
-//  This module handles the in-game UI, including pause button and HP bar.
+//  This module handles the pause menu UI, including menu background,
+//  HP bar, player image, and four buttons: resume, restart, exit, and setting.
 //  Based on:
 //
 //  UIButtonScene.h
@@ -13,47 +14,50 @@
 //  Author: Walker White
 //  Version: 1/20/18
 //
-#ifndef __GB_INGAME_UI_H__
-#define __GB_INGAME_UI_H__
+#ifndef __GB_PAUSE_MENU_H__
+#define __GB_PAUSE_MENU_H__
 #include <cugl/cugl.h>
 
 /**
- * A scene for demoing a simple button
+ * A scene for the pause menu interface
  */
-class GBIngameUI : public cugl::scene2::SceneNode {
+class GBPauseMenu : public cugl::scene2::SceneNode {
 protected:
     /** The asset manager for this game mode. */
     std::shared_ptr<cugl::AssetManager> _assets;
 
-    /** The pause button in top-right corner. */
-    std::shared_ptr<cugl::scene2::Button> _pauseButton;
-    /** The HP bar in top-left corner. */
-    std::shared_ptr<cugl::scene2::SceneNode> _hpbar;
-    std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
-    std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
+    /** The pause menu buttons */
+    std::shared_ptr<cugl::scene2::Button> _resumeButton;
+    std::shared_ptr<cugl::scene2::Button> _restartButton;
+    std::shared_ptr<cugl::scene2::Button> _exitButton;
+    std::shared_ptr<cugl::scene2::Button> _settingButton;
     
-    int _maxHP = 100;
-    int _currentHP = 100;
+    /** The HP bar container node. */
+    std::shared_ptr<cugl::scene2::SceneNode> _hpbar;
+    /** Full segment nodes */
+    std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
+    /** Half segment nodes */
+    std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
 
     bool _active;
-    
+
 public:
 #pragma mark -
 #pragma mark Constructors
-    
+
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      *
      * This method is different from dispose() in that it ALSO shuts off any
      * static resources, like the input controller.
      */
-    ~GBIngameUI() { dispose(); }
-    
+    ~GBPauseMenu() { dispose(); }
+
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      */
     virtual void dispose() override;
-    
+
     /**
      * Initializes the controller contents, and starts the game
      *
@@ -66,18 +70,11 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const std::shared_ptr<cugl::AssetManager>& assets);
-    
-    static std::shared_ptr<GBIngameUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets) {
-        std::shared_ptr<GBIngameUI> result = std::make_shared<GBIngameUI>();
+
+    static std::shared_ptr<GBPauseMenu> alloc(const std::shared_ptr<cugl::AssetManager>& assets) {
+        std::shared_ptr<GBPauseMenu> result = std::make_shared<GBPauseMenu>();
         return (result->init(assets) ? result : nullptr);
     }
-    
-    /**
-     * Updates the visible HP bar segments to match current HP.
-     *
-     * @param hp  The current HP value (must be <= _maxHP)
-     */
-    void setHP(int hp);
 
     /**
      * Sets whether the scene is currently active
@@ -86,12 +83,17 @@ public:
      */
     void setActive(bool value);
     
-    bool isActive() const { return _active;}
+    void setHP(int hp);
+
+    bool isActive() const { return _active; }
     
-    std::shared_ptr<cugl::scene2::Button> getPauseButton() const {
-        return _pauseButton;
+    std::shared_ptr<cugl::scene2::Button> getResumeButton() const {
+        return _resumeButton;
     }
 
+    std::shared_ptr<cugl::scene2::Button> getRestartButton() const {
+        return _restartButton;
+    }
 };
 
-#endif /* __GB_INGAME_UI_H__ */
+#endif /* __GB_PAUSE_MENU_H__ */
