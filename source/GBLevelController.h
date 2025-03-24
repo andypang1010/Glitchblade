@@ -45,7 +45,7 @@ private:
     /* Controllers */
 
     /** One enemy controller for this level controller: It will likely need to be a vector for future levels*/
-    std::shared_ptr<EnemyController> _testEnemyController;
+    std::vector<std::shared_ptr<EnemyController>> _enemyControllers;
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
@@ -73,6 +73,14 @@ public:
      * Destructor.
      */
     ~LevelController();
+
+    void addEnemy(const std::shared_ptr<EnemyController>& cont);
+
+    void spawnWave(const std::shared_ptr<LevelModel>&, int waveNum);
+
+    std::vector<std::shared_ptr<EnemyController>> getEnemyControllers() {
+        return _enemyControllers;
+    }
 
     std::shared_ptr<LevelModel> getLevelByName(std::string name) {
         auto it = _levels.find(name);
@@ -102,7 +110,7 @@ public:
      Initializes static level obstacles with scene nodes to be added to the Game Scene
      @returns a vector of all the obstacle shared pointers.
      */
-    ObstacleNodePairs createStaticObstacles(std::string levelName, std::shared_ptr<LevelModel> levelRef);
+    ObstacleNodePairs createStaticObstacles(std::string levelName, const std::shared_ptr<LevelModel>& levelRef);
     
     /**
     * Populates the level.

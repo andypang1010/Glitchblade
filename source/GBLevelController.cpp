@@ -85,6 +85,10 @@ LevelController::~LevelController()
 {
 }
 
+void LevelController::addEnemy(const std::shared_ptr<EnemyController>& cont) {
+    _enemyControllers.push_back(cont);
+}
+
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef)
 {
     // read json
@@ -128,24 +132,25 @@ std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::s
     return worldNode;
 }
 
+void LevelController::spawnWave(const std::shared_ptr<LevelModel>& levelRef, int waveNum) {
+    // Now loop through the enemies in levelRef, store their actions, make controllers, & init them.
+    std::vector<std::shared_ptr<WaveModel>> waves = levelRef->getWaves();
+
+
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+    std::shared_ptr<EnemyController> cont = std::make_shared<EnemyController>();
+    cont->init(_assets, _constantsJSON, actions);
+    addEnemy(cont); // Add the controller to the list of enemy controllers stored in the LevelController
+}
+
 ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
     std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
-
-    // Now loop through the enemies in levelRef, store their actions, make controllers, & init them.
-    for (int i = 0; i < 1; i++) { // obviously a placeholder; TODO TODO TODO change this later
-        // Setup enemy controller: one controller per enemy
-        /*std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
-
-        _testEnemyController = std::make_shared<EnemyController>();
-        _testEnemyController->init(_assets, _constantsJSON, actions);*/
-    }
-
     // Finally, create and return the static obstacles for this level (need to pass & use the levelName instead of assets in the future if we want level-specific backgrounds, grounds, etc.)
     return createStaticObstacles(levelName, levelRef);
 }
 
 // TODO: we should not use assetRef, load background & ground based on the level in the future
-ObstacleNodePairs LevelController::createStaticObstacles(std::string levelName, std::shared_ptr<LevelModel> levelRef) {
+ObstacleNodePairs LevelController::createStaticObstacles(std::string levelName, const std::shared_ptr<LevelModel>& levelRef) {
     float scale = _constantsJSON->get("scene")->getFloat("scale");
     CULog("in level controller scale is %f", scale);
     ObstacleNodePairs obstacle_pairs;

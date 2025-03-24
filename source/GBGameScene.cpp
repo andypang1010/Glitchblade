@@ -289,13 +289,14 @@ void GameScene::populate() {
     // TODO: may want to move level selection into GameScene init. Not really sure at the moment where the level changing will originate from...
     ObstacleNodePairs obs = _levelController->populateLevel("Level 1"); // Will want to set the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
-    // testEnemy = _levelController->getTestEnemyModel();
     for (const auto& pair : obs) {
         ObstaclePtr obstacle = pair.first;
         NodePtr node = pair.second;
         // add obstacle and set node position
         addObstacle(obstacle, node, 1);
     }
+
+    std::vector<std::shared_ptr<EnemyController>> enemyControllers = _levelController->getEnemyControllers();
     
     addObstacle(_levelController->getPlayerModel(),_levelController->getPlayerNode());
     // addObstacle(_levelController->getTestEnemyModel(),_levelController->getTestEnemyNode());
