@@ -122,6 +122,9 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
 }
 
 ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
+    std::shared_ptr<LevelModel> levelRef = LevelController::getLevelByName(levelName);
+
+
     // Setup enemy controller: one controller per enemy
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
 
@@ -133,6 +136,7 @@ ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
     return createStaticObstacles(_assets);
 }
 
+// TODO: we should not use assetRef, load background & ground based on the level in the future
 ObstacleNodePairs LevelController::createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef){
     float scale = _constantsJSON->get("scene")->getFloat("scale");
     CULog("in level controller scale is %f", scale);
@@ -361,9 +365,9 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     return actions;
 }
 
-std::vector<std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json)
+std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json)
 {
-    std::vector<std::shared_ptr<LevelModel>> levels;
+    std::unordered_map<std::string, std::shared_ptr<LevelModel>> levels;
 
     if (!json || json->children().empty()) {
         CULogError("Invalid or empty JSON node!");
@@ -371,7 +375,9 @@ std::vector<std::shared_ptr<LevelModel>> LevelController::parseLevels(const std:
     }
 
     for (std::shared_ptr<JsonValue> level : json->get("levels")->children()) {
-		levels.push_back(parseLevel(level));
+        std::shared_ptr<LevelModel> parsedLevel = parseLevel(level);
+        std::string lName = parsedLevel->getLevelName();
+        levels[lName] = parsedLevel;
     }
 
 	return levels;

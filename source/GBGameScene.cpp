@@ -284,7 +284,7 @@ void GameScene::reset() {
 void GameScene::populate() {
     // DO NOT KEEP THIS IN THE CODE YOU DEGEN
     CULog("TODO: Get rid of this reference to player in gamescene.");
-    ObstacleNodePairs static_obstacles = _levelController->populateLevel(""); // Will want to set the level we want to populate here
+    ObstacleNodePairs static_obstacles = _levelController->populateLevel("Level 1"); // Will want to set the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
     _testEnemy = _levelController->getTestEnemyModel();
     for (const auto& pair : static_obstacles) {
