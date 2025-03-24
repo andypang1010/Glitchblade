@@ -394,6 +394,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
             if (down) {
                 _pauseMenu->setVisible(false);
                 _ui->setVisible(true);
+                setPaused(false);
                 this->reset();
                 CULog("Restart pressed.");
             }
