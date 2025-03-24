@@ -26,7 +26,7 @@ private:
     /** A reference to the level model */
     std::shared_ptr<LevelModel> _levelModel;
 
-	std::vector<std::shared_ptr<LevelModel>> _levels;
+    std::unordered_map<std::string, std::shared_ptr<LevelModel >> _levels;
 	int _currentLevelIndex;
 	int _currentWaveIndex;
     int _currentEnemyIndex;
@@ -73,6 +73,16 @@ public:
      * Destructor.
      */
     ~LevelController();
+
+    std::shared_ptr<LevelModel> getLevelByName(std::string name) {
+        auto it = _levels.find(name);
+        if (it != _levels.end()) {
+            return it->second;
+        }
+        else {
+            throw std::runtime_error("The level specified: " + name + " does not exist!");
+        }
+    }
 
     /**
      * Initializes the level controller. Return false on failure
@@ -129,7 +139,7 @@ public:
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);
     /** Parses the JSON file and returns a vector of parsed actions. */
-    static std::vector<std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json);
+    static std::unordered_map<std::string, std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json);
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json);
 
