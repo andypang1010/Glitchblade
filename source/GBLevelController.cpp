@@ -171,7 +171,7 @@ ObstacleNodePairs LevelController::createStaticObstacles(const std::shared_ptr<A
 
 #pragma mark : GROUND
     std::shared_ptr<JsonValue> groundJ = _constantsJSON->get("ground");
-    image = assetRef->get<Texture>(groundJ->getString("texture"));
+	image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
 
     std::shared_ptr<physics2::PolygonObstacle> groundObj;
     Poly2 ground(calculateGroundVertices());

@@ -40,12 +40,12 @@ using namespace cugl::audio;
 // Constants moved to LevelController.cpp
 // NOTE: THE SCENE WIDTH/HEIGHT, ASPECT, DEFAULT WIDTH/HEIGHT ARE CURRENTLY COPIED IN LEVELCONTROLLER WITH GAME_ PREFIX
 /** This is adjusted by screen aspect ratio to get the height */
-#define SCENE_WIDTH 1024
+#define SCENE_WIDTH 1248
 #define SCENE_HEIGHT 576
 /** This is the aspect ratio for physics */
-#define SCENE_ASPECT 9.0/16.0
+#define SCENE_ASPECT 9.0/19.5
 /** Width of the game world in Box2d units */
-#define DEFAULT_WIDTH   32.0f
+#define DEFAULT_WIDTH   39.0f
 /** Height of the game world in Box2d units */
 #define DEFAULT_HEIGHT  18.0f
 /** The new heavier gravity for this world (so it is not so floaty) */
@@ -230,7 +230,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     setDebug(false); // Debug on by default
 
     // XNA nostalgia
-    Application::get()->setClearColor(Color4f::GRAY);
+    Application::get()->setClearColor(Color4f::BLACK);
 
 
 
