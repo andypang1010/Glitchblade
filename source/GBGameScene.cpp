@@ -290,7 +290,7 @@ void GameScene::populate() {
     ObstacleNodePairs obs = _levelController->populateLevel("Level 1"); // Will want to set the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
     _testEnemy = _levelController->getTestEnemyModel();
-    for (const auto& pair : static_obstacles) {
+    for (const auto& pair : obs) {
         ObstaclePtr obstacle = pair.first;
         NodePtr node = pair.second;
         // add obstacle and set node position

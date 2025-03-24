@@ -129,7 +129,7 @@ std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::s
 }
 
 ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
-    std::shared_ptr<LevelModel> levelRef = LevelController::getLevelByName(levelName);
+    std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
 
     // Now loop through the enemies in levelRef, store their actions, make controllers, & init them.
     for (int i = 0; i < 1; i++) { // obviously a placeholder; TODO TODO TODO change this later
