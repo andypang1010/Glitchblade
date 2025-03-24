@@ -132,15 +132,20 @@ std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::s
     return worldNode;
 }
 
-void LevelController::spawnWave(const std::shared_ptr<LevelModel>& levelRef, int waveNum) {
+void LevelController::spawnWave(int waveNum) {
     // Now loop through the enemies in levelRef, store their actions, make controllers, & init them.
-    std::vector<std::shared_ptr<WaveModel>> waves = levelRef->getWaves();
+    std::vector<std::shared_ptr<WaveModel>> waves = _levelModel->getWaves();
+    std::shared_ptr<WaveModel> wave = waves[waveNum];
+    std::vector<std::string> enemiesString = wave->getEnemies();
+    CULog("SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    for (auto s : enemiesString) {
+        CULog(s.c_str());
+    }
 
-
-    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
-    std::shared_ptr<EnemyController> cont = std::make_shared<EnemyController>();
-    cont->init(_assets, _constantsJSON, actions);
-    addEnemy(cont); // Add the controller to the list of enemy controllers stored in the LevelController
+    //std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+    //std::shared_ptr<EnemyController> cont = std::make_shared<EnemyController>();
+    //cont->init(_assets, _constantsJSON, actions);
+    //addEnemy(cont); // Add the controller to the list of enemy controllers stored in the LevelController
 }
 
 ObstacleNodePairs LevelController::populateLevel(std::string levelName) {

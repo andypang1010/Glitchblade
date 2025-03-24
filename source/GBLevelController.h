@@ -76,7 +76,7 @@ public:
 
     void addEnemy(const std::shared_ptr<EnemyController>& cont);
 
-    void spawnWave(const std::shared_ptr<LevelModel>&, int waveNum);
+    void spawnWave(int waveNum);
 
     std::vector<std::shared_ptr<EnemyController>> getEnemyControllers() {
         return _enemyControllers;
