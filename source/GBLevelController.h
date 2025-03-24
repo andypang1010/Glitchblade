@@ -78,6 +78,11 @@ public:
      * Initializes the level controller. Return false on failure
      */
     bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef);
+
+    /**
+    * Creates and returns a worldNode for GameScene to use
+    */
+    std::shared_ptr<cugl::scene2::PolygonNode> makeWorldNode(std::string levelName);
     
     /**
      * Resets the state of the LevelController.
@@ -87,8 +92,11 @@ public:
      Initializes static level obstacles with scene nodes to be added to the Game Scene
      @returns a vector of all the obstacle shared pointers.
      */
-    ObstacleNodePairs createStaticObstacles(const std::shared_ptr<AssetManager>& assetRef);
+    ObstacleNodePairs createStaticObstacles(std::string levelName, std::shared_ptr<LevelModel> levelRef);
     
+    /**
+    * Populates the level.
+    */
     ObstacleNodePairs populateLevel(std::string levelName);
 
     /**

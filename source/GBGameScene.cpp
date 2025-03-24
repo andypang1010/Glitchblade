@@ -183,7 +183,12 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // Create the scene graph
     Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
     std::shared_ptr<Texture> image = _assets->get<Texture>(sceneJ->getString("texture"));
-    _worldnode = scene2::PolygonNode::allocWithTexture(image);
+
+    _levelController = std::make_shared<LevelController>();
+    _levelController->init(_assets, _constantsJSON); // Initialize the LevelController
+    // LevelController needs to be initialized before populate() or else we will get nullptr related issues
+
+    _worldnode = _levelController->makeWorldNode("Level 1");
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(offset);
 
@@ -210,10 +215,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     addChild(_winnode);
     addChild(_losenode);
 
-    CULog("Creating empty level controller in gamescene init");
-    _levelController = std::make_shared<LevelController>();
-    CULog("initializing level controller in gamescene init");
-    _levelController->init(_assets,_constantsJSON); // Initialize the LevelController
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
         _input =  _levelController->getInputController();
         if (!_input){
@@ -224,6 +225,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         if (!_player){
             CULog("player is null in populate");
         }
+
     populate();
     _active = true;
     _complete = false;
@@ -284,7 +286,8 @@ void GameScene::reset() {
 void GameScene::populate() {
     // DO NOT KEEP THIS IN THE CODE YOU DEGEN
     CULog("TODO: Get rid of this reference to player in gamescene.");
-    ObstacleNodePairs static_obstacles = _levelController->populateLevel(""); // Will want to set the level we want to populate here
+    // TODO: may want to move level selection into GameScene init. Not really sure at the moment where the level changing will originate from...
+    ObstacleNodePairs obs = _levelController->populateLevel("Level 1"); // Will want to set the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
     _testEnemy = _levelController->getTestEnemyModel();
     for (const auto& pair : static_obstacles) {

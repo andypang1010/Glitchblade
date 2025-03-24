@@ -20,6 +20,7 @@ class LevelModel {
 private:
 	std::string _levelName;
 	std::shared_ptr<Texture> _background;
+    std::shared_ptr<Texture> _ground;
 	std::vector<std::shared_ptr<Rect>> _platforms;
     std::vector<std::shared_ptr<WaveModel>> _waves;
 
@@ -48,6 +49,10 @@ public:
     // Getter and Setter for _background
     std::shared_ptr<Texture> getBackground() const { return _background; }
     void setBackground(const std::shared_ptr<Texture>& background) { _background = background; }
+
+    // Getter and Setter for _ground
+    std::shared_ptr<Texture> getGround() const { return _ground; }
+    void setGround(const std::shared_ptr<Texture>& ground) { _ground = ground; }
 
     // Getter and Setter for _platforms
     std::vector<std::shared_ptr<Rect>> getPlatforms() const { return _platforms; }
