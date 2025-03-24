@@ -2,7 +2,7 @@
   "levels": [
     {
       "name": "Level 1",
-      "background": "textures/background.png",
+      "background": "textures/background2.png",
       "ground": "textures/ground.png",
       "platforms": [],
       "waves": [

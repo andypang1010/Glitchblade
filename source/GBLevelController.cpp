@@ -372,9 +372,9 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     return actions;
 }
 
-std::vector<std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json)
+std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json)
 {
-    std::vector<std::shared_ptr<LevelModel>> levels;
+    std::unordered_map<std::string, std::shared_ptr<LevelModel>> levels;
 
     if (!json || json->children().empty()) {
         CULogError("Invalid or empty JSON node!");
@@ -382,7 +382,8 @@ std::vector<std::shared_ptr<LevelModel>> LevelController::parseLevels(const std:
     }
 
     for (std::shared_ptr<JsonValue> level : json->get("levels")->children()) {
-		levels.push_back(parseLevel(level));
+        std::shared_ptr<LevelModel> lModel = parseLevel(level);
+        levels[lModel->getLevelName()] = lModel;
     }
 
 	return levels;
