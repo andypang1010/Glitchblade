@@ -134,10 +134,10 @@ ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
     // Now loop through the enemies in levelRef, store their actions, make controllers, & init them.
     for (int i = 0; i < 1; i++) { // obviously a placeholder; TODO TODO TODO change this later
         // Setup enemy controller: one controller per enemy
-        std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+        /*std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
 
         _testEnemyController = std::make_shared<EnemyController>();
-        _testEnemyController->init(_assets, _constantsJSON, actions);
+        _testEnemyController->init(_assets, _constantsJSON, actions);*/
     }
 
     // Finally, create and return the static obstacles for this level (need to pass & use the levelName instead of assets in the future if we want level-specific backgrounds, grounds, etc.)
@@ -211,17 +211,17 @@ ObstacleNodePairs LevelController::createStaticObstacles(std::string levelName, 
 
 void LevelController::reset() {
     CULog("LC RESET CALLED!!!!!!");
-    _testEnemyController->reset();
+    //_testEnemyController->reset();
     _playerController->reset();
 }
 
 void LevelController::preUpdate(float dt)
 {
-    std::shared_ptr<EnemyModel> testEnemy = _testEnemyController->getEnemy();
+    //std::shared_ptr<EnemyModel> testEnemy = _testEnemyController->getEnemy();
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
     // TODO: refactor using Box2d
-    Vec2 dist = testEnemy->getPosition() - player->getPosition();
-    bool hit = false;
+    // Vec2 dist = testEnemy->getPosition() - player->getPosition();
+    /*bool hit = false;
     if(player->iframe > 0) player->iframe--;
     if (testEnemy->isDamaging() && player->iframe <= 0) {
         if (testEnemy->_isSlamming) {
@@ -255,7 +255,7 @@ void LevelController::preUpdate(float dt)
         }
         player->iframe = 60;
     }
-    testEnemy->setTargetPos(player->getPosition());
+    testEnemy->setTargetPos(player->getPosition());*/
 
 
     if (player->isJumpBegin() && player->isGrounded()) {
@@ -264,19 +264,19 @@ void LevelController::preUpdate(float dt)
         audio::AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
     }
 
-	_testEnemyController->preUpdate(dt);
+	//_testEnemyController->preUpdate(dt);
 	_playerController->preUpdate(dt);
 }
 
 void LevelController::postUpdate(float dt)
 {
-	_testEnemyController->postUpdate(dt);
+	// _testEnemyController->postUpdate(dt);
 	_playerController->postUpdate(dt);
 }
 
 void LevelController::fixedUpdate(float timestep)
 {
-	_testEnemyController->fixedUpdate(timestep);
+	// _testEnemyController->fixedUpdate(timestep);
 	_playerController->fixedUpdate(timestep);
 }
 

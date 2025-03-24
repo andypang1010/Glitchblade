@@ -289,7 +289,7 @@ void GameScene::populate() {
     // TODO: may want to move level selection into GameScene init. Not really sure at the moment where the level changing will originate from...
     ObstacleNodePairs obs = _levelController->populateLevel("Level 1"); // Will want to set the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
-    _testEnemy = _levelController->getTestEnemyModel();
+    // testEnemy = _levelController->getTestEnemyModel();
     for (const auto& pair : obs) {
         ObstaclePtr obstacle = pair.first;
         NodePtr node = pair.second;
@@ -298,7 +298,7 @@ void GameScene::populate() {
     }
     
     addObstacle(_levelController->getPlayerModel(),_levelController->getPlayerNode());
-    addObstacle(_levelController->getTestEnemyModel(),_levelController->getTestEnemyNode());
+    // addObstacle(_levelController->getTestEnemyModel(),_levelController->getTestEnemyNode());
 
     // Add UI elements
 
@@ -427,7 +427,7 @@ void GameScene::preUpdate(float dt) {
     }
 
     // TODO: refactor using Box2d
-    Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
+    /*Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
     bool hit = false;
     if(_player->iframe > 0) _player->iframe--;
     if (_testEnemy->isDamaging() && _player->iframe <= 0) {
@@ -462,7 +462,7 @@ void GameScene::preUpdate(float dt) {
         }
         _player->iframe = 60;
     }
-    _testEnemy->setTargetPos(_player->getPosition());
+    _testEnemy->setTargetPos(_player->getPosition());*/
 
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
@@ -561,7 +561,7 @@ void GameScene::postUpdate(float remain) {
     else {
         _bulletTimer -= 1;
     }
-    setComplete(_testEnemy->getHP() <= 0);
+    // setComplete(_testEnemy->getHP() <= 0);
     setFailure(_player->getHP() <= 0);
 
     // Record failure if necessary.
@@ -610,7 +610,8 @@ void GameScene::removeProjectile(Projectile* projectile) {
 /**Checks obstacle and fixture to see if it is an enemy body fixture.**/
 bool GameScene::isEnemyBody(physics2::Obstacle* b, const std::string* f ) {
     std::shared_ptr<JsonValue> enemyJ = _constantsJSON->get("enemy");
-    return (b->getName() == enemyJ->getString("name") && f == _testEnemy->getBodyName());
+    // return (b->getName() == enemyJ->getString("name") && f == _testEnemy->getBodyName());
+    return false; // Need to check ALL enemies TODO TODO TODO
 }
 /**Checks obstacle and fixture to see if it the player body fixture.**/
 bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
@@ -679,7 +680,7 @@ void GameScene::beginContact(b2Contact* contact) {
         else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(5);
             _player->setDashRem(0);
-            CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
+            // CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
         else if (((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
             ((EnemyModel*)bd1)->setDashRem(0);
@@ -699,7 +700,7 @@ void GameScene::beginContact(b2Contact* contact) {
         else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(5);
             _player->setDashRem(0);
-            CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
+            // CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
         else if (((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
             ((EnemyModel*)bd2)->setDashRem(0);

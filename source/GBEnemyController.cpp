@@ -6,7 +6,7 @@ using namespace cugl::graphics;
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 
 //CONSTANTS (INITIAL POSITIONS SHOULD BE LATER DETERMINED BY LEVEL MODEL/CONTROLLER
-float ENEMY_INIT_POS[] = { 12.5f, 5.0f };
+float ENEMY_INIT_POS[] = { 12.5f, 8.0f };
 
 EnemyController::EnemyController(){}
 
