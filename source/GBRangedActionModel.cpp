@@ -4,7 +4,7 @@
  * Default constructor.
  * Initializes all projectile-related values to defaults.
  */
-RangedActionModel::RangedActionModel() : _projectileSpeed(0.0f), _projectileDirection(0, 0), _projectileDamage(0.0f) {}
+RangedActionModel::RangedActionModel() : _projectileSpeed(0.0f), _projectileDirection(0, 0) {}
 
 /**
  * Virtual destructor.
@@ -53,16 +53,16 @@ void RangedActionModel::setProjectileTexture(const std::shared_ptr<cugl::graphic
     _projectileTexture = texture;
 }
 
-/**
- * Returns the projectile damage.
- */
-float RangedActionModel::getProjectileDamage() const {
-    return _projectileDamage;
-}
-
-/**
- * Sets the projectile damage.
- */
-void RangedActionModel::setProjectileDamage(float damage) {
-    _projectileDamage = damage;
-}
+///**
+// * Returns the projectile damage.
+// */
+//float RangedActionModel::getProjectileDamage() const {
+//    return _projectileDamage;
+//}
+//
+///**
+// * Sets the projectile damage.
+// */
+//void RangedActionModel::setProjectileDamage(float damage) {
+//    _projectileDamage = damage;
+//}
