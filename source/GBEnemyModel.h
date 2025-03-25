@@ -100,7 +100,7 @@ using namespace cugl;
 /** The impulse for the character jump */
 #define ENEMY_JUMP       42.5f
 /** The impulse for the character dash-attack */
-#define ENEMY_DASH       100.0f
+#define STAB_FORCE       300.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
 #define ENEMY_KB_DURATION 20
@@ -160,9 +160,9 @@ protected:
 	/** Whether we are actively inputting jumping */
 	bool _isJumpInput;
     /** Whether we are actively inputting strafe left*/
-    bool _isStrafeLeft;
+    bool _isMoveLeft;
     /** Whether we are actively inputting strafe right*/
-    bool _isStrafeRight;
+    bool _isMoveRight;
     /** Whether we are actively inputting dash left*/
     bool _isDashLeftInput;
     /** Whether we are actively inputting dash right*/
@@ -359,8 +359,8 @@ public:
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput  = false;
-        _isStrafeLeft = false;
-        _isStrafeRight = false;
+        _isMoveLeft = false;
+        _isMoveRight = false;
         _isDashLeftInput = false;
         _isDashRightInput = false;
         _isGuardInput = false;
@@ -482,14 +482,14 @@ public:
      *
      * @return true if the enemy is actively strafing left.
      */
-    void setStrafeLeft(bool value) {_isStrafeLeft = value;};
+    void setMoveLeft(bool value) {_isMoveLeft = value;};
 
     /**
      * Sets whether the enemy is actively strafing right.
      *
      * @param value whether the enemy is actively strafing right.
      */
-    void setStrafeRight(bool value) {_isStrafeRight = value;};
+    void setMoveRight(bool value) {_isMoveRight = value;};
 
     /**
      * Sets whether the enemy has a swallowed projectile.
@@ -536,13 +536,13 @@ public:
      *
      * @param value whether the enemy is actively strafing left.
      */
-    bool isStrafeLeft() { return _isStrafeLeft; };
+    bool isMoveLeft() { return _isMoveLeft; };
     /**
      * Sets whether the enemy is actively strafing right.
      *
      * @return true if whether the enemy is actively strafing right.
      */
-    bool isStrafeRight() { return _isStrafeRight; };
+    bool isMoveRight() { return _isMoveRight; };
     /**
      * Returns true if if the enemy is actively trying to jump and jump cooldown is ready (regardless if on the ground).
      *
@@ -573,7 +573,7 @@ public:
      *
      * @return value whether the enemy is performing a movement action.
      */
-    bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
+    bool isMoveBegin() {return isDashBegin() || isMoveLeft() || isMoveRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
     
     /**
      *  Returns true if the enemy is currently beginning guard action.

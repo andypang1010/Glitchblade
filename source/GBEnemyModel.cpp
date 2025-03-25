@@ -291,7 +291,7 @@ void EnemyModel::update(float dt) {
     nextAction();
 
     // Apply cooldowns
-    
+
 
     if (isJumpBegin() && isGrounded()) {
         CULog("isJumping is true");
@@ -353,12 +353,10 @@ void EnemyModel::nextAction() {
     AIMove();
     if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
         if (r%3 == 0) { //Slam
-            _isSlamming = true;
-            setMovement(0);
+            slam();
         }
         else if(r % 3 == 1){ // Stab
-            _isStabbing = true;
-            setMovement(0);
+            stab();
         }
         else { // Move away
             _moveDuration = 45;
@@ -367,8 +365,7 @@ void EnemyModel::nextAction() {
     }
     else if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && !isStunned()) {
         if (r % 2 == 0) { // Stab
-            _isStabbing = true;
-            setMovement(0);
+            stab();
         }
         else{ // Move closer
             _moveDuration = 45;
@@ -399,19 +396,13 @@ void EnemyModel::AIMove() {
     
     if (_moveDuration > 0 && !_isStabbing) {
         setMovement(_moveDirection * dir_val* getForce());
-        setStrafeLeft(dist > 0);
-        setStrafeRight(dist < 0);
+        setMoveLeft(dist > 0);
+        setMoveRight(dist < 0);
         _moveDuration--;
     }
-    //else if (_moveDuration > 0) {
-    //    _moveDuration--;
-    //}
+
     else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
-        /*_faceRight ? setDashRightInput(true) : setDashLeftInput(true);*/
-        /*b2Vec2 force(face * ENEMY_DASH, 0);
-        _body->ApplyLinearImpulseToCenter(force, true);*/
-        /*_moveDuration = STAB_DAMAGE_END_FRAME - STAB_DAMAGE_START_FRAME;*/
-        setMovement(face * getForce() * ENEMY_DASH);
+        setMovement(face * getForce() * STAB_FORCE);
     }
     
 }
@@ -459,7 +450,7 @@ void EnemyModel::updateAnimation()
 
     _stunSprite->setVisible(isStunned());
     
-    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
+    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && isGrounded() && (isMoveLeft() || isMoveRight()));
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
