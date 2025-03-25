@@ -111,7 +111,11 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     }
 
 	_levels = parseLevels(_levelsJSON);
-
+    if (_levels.empty()) {
+        CULog("empty levels in levelcontroller init");
+        return false;
+    }
+    
     int _currentLevelIndex = 0;
     int _currentWaveIndex = 0;
     int _currentEnemyIndex = 0;
@@ -134,7 +138,7 @@ std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::s
 
 void LevelController::spawnWave(int waveNum) {
     // Now loop through the enemies in levelRef, store their actions, make controllers, & init them.
-    std::vector<std::shared_ptr<WaveModel>> waves = _levelModel->getWaves();
+    std::vector<std::shared_ptr<WaveModel>> waves = _currentLevel->getWaves();
     std::shared_ptr<WaveModel> wave = waves[waveNum];
     std::vector<std::string> enemiesString = wave->getEnemies();
     CULog("SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -150,6 +154,7 @@ void LevelController::spawnWave(int waveNum) {
 
 ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
     std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
+    _currentLevel = levelRef;
     // Finally, create and return the static obstacles for this level (need to pass & use the levelName instead of assets in the future if we want level-specific backgrounds, grounds, etc.)
     return createStaticObstacles(levelName, levelRef);
 }

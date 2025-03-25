@@ -24,7 +24,7 @@ using namespace cugl;
 class LevelController {
 private:
     /** A reference to the level model */
-    std::shared_ptr<LevelModel> _levelModel;
+    std::shared_ptr<LevelModel> _currentLevel;
 
     std::unordered_map<std::string, std::shared_ptr<LevelModel >> _levels;
 	int _currentLevelIndex;
