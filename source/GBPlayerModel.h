@@ -76,9 +76,9 @@ using namespace cugl;
 /** Cooldown (in frames) for dash */
 #define PLAYER_DASH_COOLDOWN  30
 /** Duration (in frames) for guard */
-#define GUARD_DURATION  48
+#define PLAYER_GUARD_DURATION  48
 /** Duration (in frames) for parry */
-#define PARRY_DURATION  12
+#define PLAYER_PARRY_DURATION  12
 /** Duration (in frames) for dash- affects friction*/
 #define PLAYER_DASH_DURATION  20
 /** The amount to shrink the body fixture (vertically) relative to the image */

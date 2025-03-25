@@ -45,6 +45,7 @@
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
+using namespace cugl::graphics;
 
 
 using namespace cugl;
@@ -97,23 +98,29 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef){
     _sceneNode = scene2::SceneNode::alloc();
     setSceneNode(_sceneNode);
     
-    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_idle"), 1, 6, 6);
-    _idleSprite->setPosition(0, 40);
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_idle"), 3, 4, 11);
+    _idleSprite->setPosition(0, -25);
+    _idleSprite->setScale(0.5f);
 
-    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_walk"), 1, 6, 6);
-    _walkSprite->setPosition(0, 40);
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_walk"), 2, 4, 5);
+    _walkSprite->setPosition(0, -25);
+    _walkSprite->setScale(0.5f);
 
-    _jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_jumpUp"), 1, 8, 8);
-    _jumpUpSprite->setPosition(0, 40);
+    _jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpUp"), 2, 4, 5);
+    _jumpUpSprite->setPosition(0, -25);
+    _jumpUpSprite->setScale(0.5f);
 
-    _jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_jumpDown"), 1, 8, 8);
-    _jumpDownSprite->setPosition(0, 40);
+    _jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpDown"), 2, 4, 7);
+    _jumpDownSprite->setPosition(0, -25);
+    _jumpDownSprite->setScale(0.5f);
 
-    _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_guard"), 1, 6, 6);
-    _guardSprite->setPosition(0, 40);
+    _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 3, 4, 12);
+    _guardSprite->setPosition(0, -25);
+    _guardSprite->setScale(0.5f);
 
-    _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<graphics::Texture>("player_attack"), 1, 8, 8);
-    _attackSprite->setPosition(0, 40);
+    _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 2, 4, 5);
+    _attackSprite->setPosition(0, -25);
+    _attackSprite->setScale(0.5f);
     
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
