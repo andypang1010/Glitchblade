@@ -729,48 +729,20 @@ void GameScene::beginContact(b2Contact* contact) {
     
     // Player-Enemy Collision
     if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
-        if (((EnemyModel*)bd1)->isDashActive() && !_player->isDashActive()) {
-            _player->damage(20);
-            ((EnemyModel*)bd1)->setDashRem(0);
-            CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-        }
-        else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
+        if (_player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(5);
             _player->setDashRem(0);
-            CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
-        else if (((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
-            ((EnemyModel*)bd1)->setDashRem(0);
-            _player->setDashRem(0);
-            CULog("Attacks canceled");
-        }
-        //CULog("Applying knockback");
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
         ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player-> getPosition()).normalize());
     }
     else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
-        if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {
-            _player->damage(20);
-            ((EnemyModel*)bd2)->setDashRem(0);
-            CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-        }
-        else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
+        if (_player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(5);
             _player->setDashRem(0);
-            CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
-        else if (((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
-            ((EnemyModel*)bd2)->setDashRem(0);
-            _player->setDashRem(0);
-            CULog("Attacks canceled");
-        }
-        _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
+        _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
         ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
-        //CULog("Applying knockback");
     }
 
     // Test: plyaer-hitbox collision
@@ -782,7 +754,7 @@ void GameScene::beginContact(b2Contact* contact) {
                 _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd1)->getEnemy()->getPosition()).normalize());
             }
             else if (_player->isParryActive()) {
-                ((Hitbox*)bd1)->getEnemy()->setStun(60);
+                ((Hitbox*)bd1)->getEnemy()->setStun(88);
             }
             else if (_player->isGuardActive()) {
                 _player->damage(((Hitbox*)bd1)->getDamage() / 2);
@@ -797,7 +769,7 @@ void GameScene::beginContact(b2Contact* contact) {
                 _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd2)->getEnemy()->getPosition()).normalize());
             }
             else if (_player->isParryActive()) {
-                ((Hitbox*)bd2)->getEnemy()->setStun(60);
+                ((Hitbox*)bd2)->getEnemy()->setStun(88);
             }
             else if (_player->isGuardActive()) {
                 _player->damage(((Hitbox*)bd2)->getDamage() / 2);
@@ -827,31 +799,31 @@ void GameScene::beginContact(b2Contact* contact) {
     }
 
     // Shield-Enemy Collision
-    if (bd1->getName() == enemy_name && fd2 == _player->getShieldName()) {
-        if (((EnemyModel*)bd1)->isDashActive() && _player->isParryActive()) {
-            ((EnemyModel*)bd1)->setDashRem(0);
-            ((EnemyModel*)bd1)->setStun(120);
-        }
-        else if (((EnemyModel*)bd1)->isDashActive() && _player->isGuardActive()) {
-            _player->damage(10);
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-            ((EnemyModel*)bd1)->setDashRem(0);
-        }
-    }
+    //if (bd1->getName() == enemy_name && fd2 == _player->getShieldName()) {
+    //    if (((EnemyModel*)bd1)->isDashActive() && _player->isParryActive()) {
+    //        ((EnemyModel*)bd1)->setDashRem(0);
+    //        ((EnemyModel*)bd1)->setStun(120);
+    //    }
+    //    else if (((EnemyModel*)bd1)->isDashActive() && _player->isGuardActive()) {
+    //        _player->damage(10);
+    //        _ui->setHP(_player->getHP());
+    //        _pauseMenu->setHP(_player->getHP());
+    //        ((EnemyModel*)bd1)->setDashRem(0);
+    //    }
+    //}
 
-    if (bd2->getName() == enemy_name && fd1 == _player->getShieldName()) {
-        if (((EnemyModel*)bd2)->isDashActive() && _player->isParryActive()) {
-            ((EnemyModel*)bd2)->setDashRem(0);
-            ((EnemyModel*)bd2)->setStun(120);
-        }
-        else if (((EnemyModel*)bd2)->isDashActive() && _player->isGuardActive()) {
-            _player->damage(10);
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-            ((EnemyModel*)bd2)->setDashRem(0);
-        }
-    }
+    //if (bd2->getName() == enemy_name && fd1 == _player->getShieldName()) {
+    //    if (((EnemyModel*)bd2)->isDashActive() && _player->isParryActive()) {
+    //        ((EnemyModel*)bd2)->setDashRem(0);
+    //        ((EnemyModel*)bd2)->setStun(88);
+    //    }
+    //    else if (((EnemyModel*)bd2)->isDashActive() && _player->isGuardActive()) {
+    //        _player->damage(10);
+    //        _ui->setHP(_player->getHP());
+    //        _pauseMenu->setHP(_player->getHP());
+    //        ((EnemyModel*)bd2)->setDashRem(0);
+    //    }
+    //}
 
     // Shield-Projectile Collision
     Projectile* shieldHit = getProjectileHitShield(bd1, fd1, bd2, fd2);
