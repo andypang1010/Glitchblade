@@ -226,7 +226,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         if (!_player){
             CULog("player is null in populate");
         }
-        _player->setDebugColor(DEBUG_COLOR);
+        _player->setDebugColor(Color4::YELLOW);
     
     // === Initialize in-game UI ===
     _ui = GBIngameUI::alloc(_assets);
