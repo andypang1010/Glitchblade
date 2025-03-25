@@ -278,7 +278,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         });
     }
     
-    
     populate();
     _active = true;
     _complete = false;
@@ -483,6 +482,8 @@ void GameScene::preUpdate(float dt) {
 
     // TODO: refactor using Box2d
     _testEnemy->setTargetPos(_player->getPosition());
+
+	_ui->setHP(_player->getHP());
 
 
     if (_player->isJumpBegin() && _player->isGrounded()) {

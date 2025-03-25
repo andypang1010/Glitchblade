@@ -55,8 +55,8 @@
               "animation_row": 5,
               "animation_col": 8,
               "animation_size": 40,
-              "hitboxPos": [ 3, -1 ],
-              "hitboxSize": [ 4, 3 ],
+              "hitboxPos": [ 3, 0 ],
+              "hitboxSize": [ 4, 1.5 ],
               "hitboxStartTime": 27,
               "hitboxEndTime": 36,
               "hitboxDamage": 20
@@ -68,8 +68,8 @@
                 "animation_row": 5,
                 "animation_col": 8,
                 "animation_size": 40,
-                "hitboxPos": [4,1],
-                "hitboxSize": [4, 4],
+                "hitboxPos": [4, -0.5],
+                "hitboxSize": [4, 3],
                 "hitboxStartTime": 25,
                 "hitboxEndTime": 31,
                 "hitboxDamage": 20

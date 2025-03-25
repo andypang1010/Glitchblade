@@ -18,7 +18,7 @@
 using namespace cugl;
 
 /** This is adjusted by screen aspect ratio to get the height */
-#define SCENE_WIDTH 1024
+#define SCENE_WIDTH 1248
 
 /**
  * Initializes the controller contents, and starts the game

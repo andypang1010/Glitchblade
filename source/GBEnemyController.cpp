@@ -19,13 +19,13 @@ void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(enemy_debug_font));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
     _hpNode->setForeground(Color4::RED);
-    _hpNode->setPosition(0, 80);
+    _hpNode->setPosition(0, 115);
     
     #pragma mark stun node
     _stunNode = scene2::Label::allocWithText("STUN", assetRef->get<Font>(enemy_debug_font));
     _stunNode->setAnchor(Vec2::ANCHOR_CENTER);
     _stunNode->setForeground(Color4::RED);
-    _stunNode->setPosition(0, 100);
+    _stunNode->setPosition(0, 135);
 
     // add indicator nodes as children to main scene node
     _enemy->getSceneNode()->addChild(_hpNode);
