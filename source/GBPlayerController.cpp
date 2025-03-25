@@ -163,6 +163,7 @@ void PlayerController::postUpdate(float dt)
 void PlayerController::updateCooldowns()
 {
 #pragma mark Guard cooldown
+    if (_player->iframe > 0) _player->iframe--;
     // player inputs guard and cooldown is ready
     if (_player->isGuardBegin()) {
         _player->setGuardCDRem();

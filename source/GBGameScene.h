@@ -103,6 +103,12 @@ protected:
     /** Countdown active for winning or losing */
     int _bulletTimer;
 
+    /** Countdown active for test hitbox */
+    int _testTimer;
+    std::shared_ptr<physics2::BoxObstacle> _testbox;
+    std::shared_ptr<scene2::SceneNode> _testNode;
+    bool _testSwitch = false;
+
     /** Mark set to handle more sophisticated collision callbacks */
     std::unordered_set<b2Fixture*> _sensorFixtures;
 
@@ -434,6 +440,18 @@ public:
         _isPaused = paused;
     }
 
+
+    /**
+    * Adds a new hitbox to the world.
+    */
+    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, int duration);
+
+    /**
+    * Removes the input hitbox from the world.
+    *
+    * @param  bullet   the bullet to remove
+    */
+    void removeHitbox();
 
   };
 

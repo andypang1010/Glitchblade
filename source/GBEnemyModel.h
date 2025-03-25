@@ -758,7 +758,25 @@ public:
     bool isTargetClose(Vec2 targetPos);
     void nextAction();
     void AIMove();
-    bool isDamaging();
+
+    /**
+     * Performs the slam attack of boss1
+     *
+     */
+    void slam();
+
+    /**
+     * Performs the stab attack of boss1
+     *
+     */
+    void stab();
+
+    /**
+     * Returns the action when an attack hitbox should be active, or nothing when no attack is active
+     *
+     * @return the action that needs hitbox, or nullptr when no hitbox is active
+     */
+    std::shared_ptr<MeleeActionModel> getDamagingAction();
 
 #pragma mark -
 #pragma mark Animation Methods

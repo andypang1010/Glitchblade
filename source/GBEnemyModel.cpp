@@ -405,16 +405,24 @@ void EnemyModel::AIMove() {
     
 }
 
-bool EnemyModel::isDamaging() {
-    if (_isSlamming && _slamSprite->getFrame() >= SLAM_DAMAGE_START_FRAME-1 && _slamSprite->getFrame() <= SLAM_DAMAGE_END_FRAME - 1) {
-        return true;
+void EnemyModel::slam() {
+    _isSlamming = true;
+    setMovement(0);
+}
+
+void EnemyModel::stab() {
+    _isStabbing = true;
+    setMovement(0);
+}
+
+std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
+    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartTime() - 1) {
+        return _stab;
     }
-    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
-        return true;
+    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
+        return _slam;
     }
-    else {
-        return false;
-    }
+    return nullptr;
 }
 
 #pragma mark -

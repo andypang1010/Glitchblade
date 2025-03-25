@@ -26,6 +26,8 @@
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBProjectile.h"
+#include "GBHitbox.h"
+#include "GBMeleeActionModel.h"
 #include "GBIngameUI.h"
 #include "GBPauseMenu.h"
 
@@ -480,45 +482,6 @@ void GameScene::preUpdate(float dt) {
     }
 
     // TODO: refactor using Box2d
-    Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
-    bool hit = false;
-    if(_player->iframe > 0) _player->iframe--;
-    if (_testEnemy->isDamaging() && _player->iframe <= 0) {
-        if (_testEnemy->_isSlamming) {
-            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
-                hit = true;
-            }
-            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
-                hit = true;
-            }
-        }
-        else if (_testEnemy->_isStabbing) {
-            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
-                hit = true;
-            }
-            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
-                hit = true;
-            }
-        }
-    }
-
-    if (hit) {
-        _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
-        if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
-            _player->damage(20);
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-        }
-        else if (_player->iframe <= 0 && _player->isParryActive()) {
-            _testEnemy->setStun(120);
-        }
-        else if (_player->iframe <= 0 && _player->isGuardActive()) {
-            _player->damage(10);
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-        }
-        _player->iframe = 60;
-    }
     _testEnemy->setTargetPos(_player->getPosition());
 
 
@@ -606,24 +569,26 @@ void GameScene::postUpdate(float remain) {
         _player->setHasProjectile(false);
     }
 
-    if (_bulletTimer <= 0) {
-        int r = rand() % 2;
-        if (r == 0) {
-            Vec2 left_spawn = { _constantsJSON->get("walls")->getFloat("thickness") + 1.5f, 9.0f };
-            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, left_spawn, RIGHT, false, false);
-            addObstacle(p.first, p.second, 1);
-        }
-        else if(r == 1){
-            Vec2 right_spawn = {_constantsJSON->get("scene")->getFloat("default_width") - _constantsJSON->get("walls")->getFloat("thickness") - 1.5f, 13.0f};
-            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, right_spawn, LEFT, false, false);
-            addObstacle(p.first, p.second, 1);
-        }
+    std::shared_ptr<MeleeActionModel> action = _testEnemy->getDamagingAction();
+    if (action) {
+        createHitbox(_testEnemy, action->getHitboxPos(), Size(action->getHitboxSize()), action->getHitboxDamage(), action->getHitboxEndTime() - action->getHitboxStartTime() + 1);
+    }
 
-        _bulletTimer = _constantsJSON->get("projectile")->getInt("spawn_rate");
-    }
-    else {
-        _bulletTimer -= 1;
-    }
+//    if (_bulletTimer <= 0) {
+//        int r = rand() % 2;
+//        if (r == 0) {
+//            createProjectile(LEFT_BULLET, RIGHT, false);
+//        }
+//        else if(r == 1){
+//            createProjectile(RIGHT_BULLET, LEFT, false);
+//        }
+//
+//        _bulletTimer = BULLET_SPAWN_RATE;
+//    }
+//    else {
+//        _bulletTimer -= 1;
+//    }
+
     setComplete(_testEnemy->getHP() <= 0);
     setFailure(_player->getHP() <= 0);
 
@@ -665,6 +630,35 @@ void GameScene::removeProjectile(Projectile* projectile) {
     std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
     std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pop"));
     AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
+}
+
+/**
+ * Add a new projectile to the world and send it in the right direction.
+ */
+void GameScene::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, int duration) {
+    std::shared_ptr<Texture> image = Texture::alloc(1, 1);
+
+    // Change last parameter to test player-fired or regular projectile
+    auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration);
+    hitbox->setDebugColor(Color4::RED);
+
+    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    sprite->setAnchor(Vec2::ANCHOR_CENTER);
+    addObstacle(hitbox, sprite);
+}
+
+/**
+ * Removes a new projectile from the world.
+ *
+ * @param  projectile   the projectile to remove
+ */
+void GameScene::removeHitbox() {
+    // do not attempt to remove a projectile that has already been removed
+    if (_testbox==nullptr || _testbox->isRemoved()) {
+        return;
+    }
+    _testbox->setDebugScene(nullptr);
+    _testbox->markRemoved(true);
 }
 
 #pragma mark -
@@ -776,6 +770,38 @@ void GameScene::beginContact(b2Contact* contact) {
         _player->setKnocked(true, _player->getPosition().subtract(bd2->getPosition()).normalize());
         ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
         //CULog("Applying knockback");
+    }
+
+    // Test: plyaer-hitbox collision
+    if (bd1->getName() == "hitbox" && isPlayerBody(bd2, fd2)) {
+        if (_player->iframe <= 0) {
+            _player->iframe = 60;
+            if (!_player->isGuardActive() && !_player->isParryActive()) {
+                _player->damage(((Hitbox*)bd1)->getDamage());
+                _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd1)->getEnemy()->getPosition()).normalize());
+            }
+            else if (_player->isParryActive()) {
+                ((Hitbox*)bd1)->getEnemy()->setStun(60);
+            }
+            else if (_player->isGuardActive()) {
+                _player->damage(((Hitbox*)bd1)->getDamage() / 2);
+            }
+        }
+    }
+    else if (bd2->getName() == "hitbox" && isPlayerBody(bd1, fd1)) {
+        if (_player->iframe <= 0) {
+            _player->iframe = 60;
+            if (!_player->isGuardActive() && !_player->isParryActive()) {
+                _player->damage(((Hitbox*)bd2)->getDamage());
+                _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd2)->getEnemy()->getPosition()).normalize());
+            }
+            else if (_player->isParryActive()) {
+                ((Hitbox*)bd2)->getEnemy()->setStun(60);
+            }
+            else if (_player->isGuardActive()) {
+                _player->damage(((Hitbox*)bd2)->getDamage() / 2);
+            }
+        }
     }
 
     // Player-Projectile Collision
