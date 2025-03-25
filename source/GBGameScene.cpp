@@ -135,23 +135,24 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, const Rect& re
  */
 bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     const Rect& rect, const Vec2& gravity) {
+    if (assets == nullptr) {
+        return false;
+    }
+    _assets = assets;
     // prepare constants
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
     _constantsJSON = constants_reader->readJson();
-    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     if (_constantsJSON == nullptr) {
         CULog("Failed to load constants.json");
         return false;
     }
-    
-    if (assets == nullptr) {
+    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
+    if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
         return false;
     }
-    else if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
-        return false;
-    }
-    _assets = assets;
     
+    _offset = Vec2((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
+
     Rect bounds = getBounds();
     CULog("bounds is (%f, %f), (%f, %f)",bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
     std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
@@ -178,9 +179,29 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _world->onEndContact = [this](b2Contact* contact) {
         endContact(contact);
         };
+    _debugnode = scene2::SceneNode::alloc();
+    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
+    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _debugnode->setPosition(_offset);
+    std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
+    _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
+    _winnode->setAnchor(Vec2::ANCHOR_CENTER);
+    _winnode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
+    _winnode->setForeground(messagesJ->get("win")->getString("color"));
+    setComplete(false);
 
+    _losenode = scene2::Label::allocWithText(messagesJ->get("lose")->getString("text", "lose msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
+    _losenode->setAnchor(Vec2::ANCHOR_CENTER);
+    _losenode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
+    _losenode->setForeground(messagesJ->get("lose")->getString("color"));
+    setFailure(false);
+    
+    addChild(_debugnode);
+    addChild(_winnode);
+    addChild(_losenode);
+    
     _levelController = std::make_shared<LevelController>();
-    _levelController->init(_assets, _constantsJSON); // Initialize the LevelController
+    _levelController->init(_assets, _constantsJSON, _world, _debugnode); // Initialize the LevelController
     // LevelController needs to be initialized before populate() or else we will get nullptr related issues
 
 
@@ -196,7 +217,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         }
 
     populate(_levelController->getLevelByName("Level 1"));
-    setDebug(false); // Debug on by default
+    setDebug(true); // Debug on by default
 
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::BLACK);
@@ -251,53 +272,18 @@ void GameScene::reset() {
  * with your serialization loader, which would process a level file.
  */
 void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
-    // Create the scene graph
-    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
-    Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
-    
     _worldnode = _levelController->makeWorldNode("Level 1");
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _worldnode->setPosition(offset);
-
-    _debugnode = scene2::SceneNode::alloc();
-    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
-    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _debugnode->setPosition(offset);
-    
-    std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
-    _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
-    _winnode->setAnchor(Vec2::ANCHOR_CENTER);
-    _winnode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _winnode->setForeground(messagesJ->get("win")->getString("color"));
-    setComplete(false);
-
-    _losenode = scene2::Label::allocWithText(messagesJ->get("lose")->getString("text", "lose msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
-    _losenode->setAnchor(Vec2::ANCHOR_CENTER);
-    _losenode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _losenode->setForeground(messagesJ->get("lose")->getString("color"));
-    setFailure(false);
-
+    _worldnode->setPosition(_offset);
     addChild(_worldnode);
-    addChild(_debugnode);
-    addChild(_winnode);
-    addChild(_losenode);
     // DO NOT KEEP THIS IN THE CODE YOU DEGEN
     CULog("TODO: Get rid of this reference to player in gamescene.");
     // TODO: may want to move level selection into GameScene init. Not really sure at the moment where the level changing will originate from...
-    ObstacleNodePairs obs = _levelController->populateLevel("Level 1"); // Will want to set the level we want to populate here
+    _levelController->populateLevel("Level 1"); // Will want to set the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
-    for (const auto& pair : obs) {
-        ObstaclePtr obstacle = pair.first;
-        NodePtr node = pair.second;
-        // add obstacle and set node position
-        addObstacle(obstacle, node, 1);
-        
-    }
+
 
     std::vector<std::shared_ptr<EnemyController>> enemyControllers = _levelController->getEnemyControllers();
-    
-    addObstacle(_levelController->getPlayerModel(),_levelController->getPlayerNode());
-    // addObstacle(_levelController->getTestEnemyModel(),_levelController->getTestEnemyNode());
 
     // Add UI elements
 
@@ -308,45 +294,10 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
 
     // Now let's try spawning the first wave
     CULog("PRE SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    _levelController->spawnWave(1);
+    _levelController->spawnWave(0);
     
     _active = true;
     _complete = false;
-}
-
-/**
- * Adds the physics object to the physics world and loosely couples it to the scene graph
- *
- * There are two ways to link a physics object to a scene graph node on the
- * screen.  One way is to make a subclass of a physics object, like we did
- * with dude.  The other is to use callback functions to loosely couple
- * the two.  This function is an example of the latter.
- *
- * @param obj             The physics object to add
- * @param node            The scene graph node to attach it to
- * @param zOrder          The drawing order
- * @param useObjPosition  Whether to update the node's position to be at the object's position
- */
-void GameScene::addObstacle(const std::shared_ptr<physics2::Obstacle>& obj,
-    const std::shared_ptr<scene2::SceneNode>& node,
-    bool useObjPosition) {
-    _world->addObstacle(obj);
-    obj->setDebugScene(_debugnode);
-
-    // Position the scene graph node (enough for static objects)
-    if (useObjPosition) {
-        node->setPosition(obj->getPosition() * _scale);
-    }
-    _worldnode->addChild(node);
-
-//    // Dynamic objects need constant updating
-//    if (obj->getBodyType() == b2_dynamicBody) {
-//        scene2::SceneNode* weak = node.get(); // No need for smart pointer in callback
-//        obj->setListener([=, this](physics2::Obstacle* obs) {
-//            weak->setPosition(obs->getPosition() * _scale);
-//            weak->setAngle(obs->getAngle());
-//            });
-//    }
 }
 
 /**
@@ -423,7 +374,6 @@ void GameScene::setFailure(bool value) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GameScene::preUpdate(float dt) {
-
     // Process the toggled key commands
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) { reset(); }
@@ -504,30 +454,6 @@ void GameScene::postUpdate(float remain) {
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
 
-    if (_player->isShooting() && _player->hasProjectile()) {
-        ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, _player->getPosition(), _player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true, _player->isFacingRight());
-        addObstacle(p.first, p.second);
-        _player->setHasProjectile(false);
-    }
-
-    if (_bulletTimer <= 0) {
-        int r = rand() % 2;
-        if (r == 0) {
-            Vec2 left_spawn = { _constantsJSON->get("walls")->getFloat("thickness") + 1.5f, 9.0f };
-            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, left_spawn, RIGHT, false, false);
-            addObstacle(p.first, p.second, 1);
-        }
-        else if(r == 1){
-            Vec2 right_spawn = {_constantsJSON->get("scene")->getFloat("default_width") - _constantsJSON->get("walls")->getFloat("thickness") - 1.5f, 13.0f};
-            ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, right_spawn, LEFT, false, false);
-            addObstacle(p.first, p.second, 1);
-        }
-
-        _bulletTimer = _constantsJSON->get("projectile")->getInt("spawn_rate");
-    }
-    else {
-        _bulletTimer -= 1;
-    }
 
     setComplete(_levelController->isCurrentLevelComplete());
     setFailure(_player->getHP() <= 0);

@@ -54,6 +54,8 @@ private:
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
+    
+
 
 
 protected:
@@ -120,12 +122,20 @@ public:
      Initializes static level obstacles with scene nodes to be added to the Game Scene
      @returns a vector of all the obstacle shared pointers.
      */
-    ObstacleNodePairs createStaticObstacles(std::string levelName, const std::shared_ptr<LevelModel>& levelRef);
+    void createStaticObstacles(std::string levelName, const std::shared_ptr<LevelModel>& levelRef);
+    
+    /**
+     * Adds the physics object to the physics world and loosely couples it to the scene graph
+     *
+     * @param obstacle_pair the obstacle and it's node
+     */
+    void addObstacle(ObstacleNodePair obstacle_pair);
+    
     
     /**
     * Populates the level.
     */
-    ObstacleNodePairs populateLevel(std::string levelName);
+    void populateLevel(std::string levelName);
 
     /**
      * Resets the state of the LevelController.

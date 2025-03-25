@@ -141,13 +141,25 @@ std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::s
 
 void LevelController::spawnWave(int waveNum) {
     // Now loop through the enemies in levelRef, store their actions, make controllers, & init them.
+    Application* app = Application::get();
     std::vector<std::shared_ptr<WaveModel>> waves = _currentLevel->getWaves();
     std::shared_ptr<WaveModel> wave = waves[waveNum];
     std::vector<std::string> enemiesString = wave->getEnemies();
+    std::vector<float> spawnIntervals = wave->getSpawnIntervals();
     CULog("SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    for (auto s : enemiesString) {
-        CULog(s.c_str());
+    
+    for (int i = 0; i< enemiesString.size(); i++){
+        std::function< bool()> callback = [spawnIntervals, i](){
+            CULog("timer callback");
+            CULog("spawn interval # %d is %f", i, spawnIntervals[i]);
+            return false; //only run once
+        };
+        Uint32 timer = static_cast<Uint32>(spawnIntervals[i] * 1000); //seconds to ms
+        app->schedule(callback, timer);
     }
+        
+        
+
 
     //std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
     //std::shared_ptr<EnemyController> cont = std::make_shared<EnemyController>();
@@ -155,15 +167,15 @@ void LevelController::spawnWave(int waveNum) {
     //addEnemy(cont); // Add the controller to the list of enemy controllers stored in the LevelController
 }
 
-ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
+void LevelController::populateLevel(std::string levelName) {
     std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
     _currentLevel = levelRef;
-    // Finally, create and return the static obstacles for this level (need to pass & use the levelName instead of assets in the future if we want level-specific backgrounds, grounds, etc.)
-    return createStaticObstacles(levelName, levelRef);
+    createStaticObstacles(levelName, levelRef);
+    addObstacle(std::make_pair(getPlayerModel(), getPlayerNode()));
 }
 
 // TODO: we should not use assetRef, load background & ground based on the level in the future
-ObstacleNodePairs LevelController::createStaticObstacles(std::string levelName, const std::shared_ptr<LevelModel>& levelRef) {
+void LevelController::createStaticObstacles(std::string levelName, const std::shared_ptr<LevelModel>& levelRef) {
     float scale = _constantsJSON->get("scene")->getFloat("scale");
     CULog("in level controller scale is %f", scale);
     ObstacleNodePairs obstacle_pairs;
@@ -223,8 +235,12 @@ ObstacleNodePairs LevelController::createStaticObstacles(std::string levelName, 
     sprite = scene2::PolygonNode::allocWithTexture(image, ground);
     ObstacleNodePair ground_pair = std::make_pair(groundObj, sprite);
     obstacle_pairs.push_back(ground_pair);
-
-    return obstacle_pairs;
+    
+    for (const auto& pair : obstacle_pairs) {
+        // add obstacle and set node position
+        addObstacle(pair);
+        
+    }
 }
 
 void LevelController::reset() {
@@ -239,10 +255,10 @@ void LevelController::preUpdate(float dt)
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
 
     // TODO: Uncomment this & make it loop through all the current enemies (instead of just using _testEnemy)
-    /*Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
+    /*Vec2 dist = _testEnemy->getPosition() - player->getPosition();
     bool hit = false;
-    if(_player->iframe > 0) _player->iframe--;
-    if (_testEnemy->isDamaging() && _player->iframe <= 0) {
+    if(player->iframe > 0) player->iframe--;
+    if (_testEnemy->isDamaging() && player->iframe <= 0) {
         if (_testEnemy->_isSlamming) {
             if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
                 hit = true;
@@ -262,19 +278,19 @@ void LevelController::preUpdate(float dt)
     }
 
     if (hit) {
-        _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
-        if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
-            _player->damage(20);
+        player->setKnocked(true, player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+        if (player->iframe <= 0 && !player->isParryActive() && !player->isGuardActive()) {
+            player->damage(20);
         }
-        else if (_player->iframe <= 0 && _player->isParryActive()) {
+        else if (player->iframe <= 0 && player->isParryActive()) {
             _testEnemy->setStun(120);
         }
-        else if (_player->iframe <= 0 && _player->isGuardActive()) {
-            _player->damage(10);
+        else if (player->iframe <= 0 && player->isGuardActive()) {
+            player->damage(10);
         }
-        _player->iframe = 60;
+        player->iframe = 60;
     }
-    _testEnemy->setTargetPos(_player->getPosition());*/
+    _testEnemy->setTargetPos(player->getPosition());*/
 
 
     if (player->isJumpBegin() && player->isGrounded()) {
@@ -289,6 +305,12 @@ void LevelController::preUpdate(float dt)
 
 void LevelController::postUpdate(float dt)
 {
+    std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
+    if (player->isShooting() && player->hasProjectile()) {
+        ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, player->getPosition(), player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true, player->isFacingRight());
+        addObstacle(p);
+        player->setHasProjectile(false);
+    }
 	// _testEnemyController->postUpdate(dt);
 	_playerController->postUpdate(dt);
 }
@@ -520,3 +542,13 @@ void LevelController::setStaticPhysics(const std::shared_ptr<physics2::Obstacle>
     obj->setRestitution(physicsJ->getFloat("basic_restitution"));
     obj->setDebugColor(physicsJ->get("debug")->getString("color"));
 }
+
+void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
+    std::shared_ptr<Obstacle> obj = obstacle_pair.first;
+    std::shared_ptr<scene2::SceneNode> node = obstacle_pair.second;
+    _worldRef->addObstacle(obj);
+    obj->setDebugScene(_debugNodeRef);
+    node->setPosition(obj->getPosition() * _scale);
+    _worldNode->addChild(node);
+}
+
