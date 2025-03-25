@@ -126,7 +126,7 @@ ObstacleNodePairs LevelController::populateLevel(std::string levelName) {
 
 
     // Setup enemy controller: one controller per enemy
-    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss_1");
 
     _testEnemyController = std::make_shared<EnemyController>();
     _testEnemyController->init(_assets, _constantsJSON, actions);
@@ -213,7 +213,7 @@ void LevelController::preUpdate(float dt)
     std::shared_ptr<EnemyModel> testEnemy = _testEnemyController->getEnemy();
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
     // TODO: refactor using Box2d
-    Vec2 dist = testEnemy->getPosition() - player->getPosition();
+    /*Vec2 dist = testEnemy->getPosition() - player->getPosition();
     bool hit = false;
     if(player->iframe > 0) player->iframe--;
     if (testEnemy->isDamaging() && player->iframe <= 0) {
@@ -247,7 +247,7 @@ void LevelController::preUpdate(float dt)
             player->damage(10);
         }
         player->iframe = 60;
-    }
+    }*/
     testEnemy->setTargetPos(player->getPosition());
 
 
@@ -317,8 +317,8 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
             meleeAction->setHitboxPos(hitboxPos);
             meleeAction->setHitboxSize(hitboxSize);
-            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartFrame"));
-            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndFrame"));
+            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartTime"));
+            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndTime"));
             meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
 
             actions.push_back(meleeAction);

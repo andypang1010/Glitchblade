@@ -86,8 +86,19 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         attachNodes(assetRef);
+
+        for (auto act : actions) {
+            if (act->getActionName() == "slam") {
+			    _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
+		    }
+            else if (act->getActionName() == "stab") {
+                _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            }
+        }
+
         return true;
     }
+
     return false;
 }
 

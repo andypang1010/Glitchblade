@@ -45,6 +45,7 @@
 #define __GB_ENEMY_MODEL_H__
 #include <cugl/cugl.h>
 #include "GBActionModel.h"
+#include "GBMeleeActionModel.h"
 
 using namespace cugl;
 
@@ -271,9 +272,9 @@ public:
         }
     };
 
-    std::shared_ptr<ActionModel> _slam;
-    std::shared_ptr<ActionModel> _stab;
-    std::shared_ptr<ActionInstance> currentAction = nullptr;
+    std::shared_ptr<MeleeActionModel> _slam;
+    std::shared_ptr<MeleeActionModel> _stab;
+    //std::shared_ptr<ActionInstance> currentAction = nullptr;
 
 public:
     int currentFrame;
