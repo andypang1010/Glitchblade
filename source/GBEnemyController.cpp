@@ -74,16 +74,18 @@ void EnemyController::applyForce() {
         b2Vec2 force(_enemy->getMovement(), 0);
         enemyBody->ApplyForceToCenter(force, true);
 
+		//CULog(_enemyJSON->toString().c_str());
+
         #pragma mark jump force
         // Jump!
         if (_enemy->isJumpBegin() && _enemy->isGrounded()) {
-            b2Vec2 force(0, _enemyJSON->get("jump")->getFloat("force"));
+            b2Vec2 force(0, _enemyJSON->get("physics")->get("jump")->getFloat("force"));
             enemyBody->ApplyLinearImpulseToCenter(force, true);
         }
 
         #pragma mark dash force
         // Dash!
-        float d_force = _enemyJSON->get("dash")->getFloat("force");
+        float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
         if (_enemy->isDashLeftBegin()) {
             CULog("dashing left\n");
             b2Vec2 force(-d_force, 0);
@@ -119,7 +121,8 @@ void EnemyController::applyForce() {
 
 void EnemyController::fixedUpdate(float timestep)
 {
-	// CULog("Updated enemycontroller");
+
+    applyForce();
 }
 
 void EnemyController::preUpdate(float dt)
@@ -128,6 +131,7 @@ void EnemyController::preUpdate(float dt)
     //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
     _hpNode->setText(std::to_string((int)_enemy->getHP()));
     _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
+
 }
 
 void EnemyController::postUpdate(float dt)
