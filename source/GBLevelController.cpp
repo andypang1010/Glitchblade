@@ -89,8 +89,12 @@ void LevelController::addEnemy(const std::shared_ptr<EnemyController>& cont) {
     _enemyControllers.push_back(cont);
 }
 
-bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef)
+bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef)
 {
+    // Store references to world and debugNode
+    _worldRef = worldRef;
+    _debugNodeRef = debugNodeRef;
+
     // read json
     _assets = assetRef;
     std::shared_ptr<JsonReader> enemies_reader = JsonReader::allocWithAsset("json/enemies.json");
