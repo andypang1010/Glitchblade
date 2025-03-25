@@ -322,6 +322,7 @@ void PlayerModel::updateAnimation()
     _jumpUpSprite->setVisible(!isGuardActive() && !isGrounded() && !isDashActive() && getBody()->GetLinearVelocity().y > 0);
     _jumpDownSprite->setVisible(!isGuardActive() && !isGrounded() && !isDashActive() && getBody()->GetLinearVelocity().y <= 0);
     _walkSprite->setVisible(!isGuardActive() && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()) && !_jumpUpSprite->isVisible() && !_jumpDownSprite->isVisible());
+    
     _guardSprite->setVisible(isGuardActive() && !isDashActive());
     _attackSprite->setVisible(!isGuardActive() && isDashActive());
 
@@ -344,8 +345,8 @@ void PlayerModel::updateAnimation()
     }
 
     if (isParryActive()) {
-        currentFrame = 0;
-        _guardSprite->setFrame(0);
+        currentFrame = 7;
+		_guardSprite->setFrame(1);
     }
 
     else {

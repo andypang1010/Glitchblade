@@ -132,7 +132,7 @@ void PlayerController::preUpdate(float dt)
     //    }
     
     // Process the movement inputs
-    _player->setMovement(_input->getHorizontal()*_player->getForce());
+    _player->setMovement(_player->isGuardActive() ? 0 : _input->getHorizontal()*_player->getForce());
     _player->setStrafeLeft(_input->didStrafeLeft());
     _player->setStrafeRight(_input->didStrafeRight());
     _player->setJumpInput( _input->didJump());
