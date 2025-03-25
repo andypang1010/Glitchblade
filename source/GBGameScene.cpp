@@ -179,41 +179,10 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         endContact(contact);
         };
 
-
-    // Create the scene graph
-    Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
-    std::shared_ptr<Texture> image = _assets->get<Texture>(sceneJ->getString("texture"));
-
     _levelController = std::make_shared<LevelController>();
     _levelController->init(_assets, _constantsJSON); // Initialize the LevelController
     // LevelController needs to be initialized before populate() or else we will get nullptr related issues
 
-    _worldnode = _levelController->makeWorldNode("Level 1");
-    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _worldnode->setPosition(offset);
-
-    _debugnode = scene2::SceneNode::alloc();
-    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
-    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _debugnode->setPosition(offset);
-    
-    std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
-    _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
-    _winnode->setAnchor(Vec2::ANCHOR_CENTER);
-    _winnode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _winnode->setForeground(messagesJ->get("win")->getString("color"));
-    setComplete(false);
-
-    _losenode = scene2::Label::allocWithText(messagesJ->get("lose")->getString("text", "lose msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
-    _losenode->setAnchor(Vec2::ANCHOR_CENTER);
-    _losenode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _losenode->setForeground(messagesJ->get("lose")->getString("color"));
-    setFailure(false);
-
-    addChild(_worldnode);
-    addChild(_debugnode);
-    addChild(_winnode);
-    addChild(_losenode);
 
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
         _input =  _levelController->getInputController();
@@ -226,9 +195,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
             CULog("player is null in populate");
         }
 
-    populate();
-    _active = true;
-    _complete = false;
+    populate(_levelController->getLevelByName("Level 1"));
     setDebug(false); // Debug on by default
 
     // XNA nostalgia
@@ -269,7 +236,7 @@ void GameScene::reset() {
     setFailure(false);
     setComplete(false);
     _levelController->reset();
-    populate();
+    populate(_levelController->getCurrentLevel());
 }
 
 /**
@@ -283,7 +250,37 @@ void GameScene::reset() {
  * This method is really, really long.  In practice, you would replace this
  * with your serialization loader, which would process a level file.
  */
-void GameScene::populate() {
+void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
+    // Create the scene graph
+    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
+    Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
+    
+    _worldnode = _levelController->makeWorldNode("Level 1");
+    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _worldnode->setPosition(offset);
+
+    _debugnode = scene2::SceneNode::alloc();
+    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
+    _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _debugnode->setPosition(offset);
+    
+    std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
+    _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
+    _winnode->setAnchor(Vec2::ANCHOR_CENTER);
+    _winnode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
+    _winnode->setForeground(messagesJ->get("win")->getString("color"));
+    setComplete(false);
+
+    _losenode = scene2::Label::allocWithText(messagesJ->get("lose")->getString("text", "lose msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
+    _losenode->setAnchor(Vec2::ANCHOR_CENTER);
+    _losenode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
+    _losenode->setForeground(messagesJ->get("lose")->getString("color"));
+    setFailure(false);
+
+    addChild(_worldnode);
+    addChild(_debugnode);
+    addChild(_winnode);
+    addChild(_losenode);
     // DO NOT KEEP THIS IN THE CODE YOU DEGEN
     CULog("TODO: Get rid of this reference to player in gamescene.");
     // TODO: may want to move level selection into GameScene init. Not really sure at the moment where the level changing will originate from...
@@ -294,6 +291,7 @@ void GameScene::populate() {
         NodePtr node = pair.second;
         // add obstacle and set node position
         addObstacle(obstacle, node, 1);
+        
     }
 
     std::vector<std::shared_ptr<EnemyController>> enemyControllers = _levelController->getEnemyControllers();
@@ -311,6 +309,9 @@ void GameScene::populate() {
     // Now let's try spawning the first wave
     CULog("PRE SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     _levelController->spawnWave(1);
+    
+    _active = true;
+    _complete = false;
 }
 
 /**

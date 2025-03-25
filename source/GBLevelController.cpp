@@ -103,7 +103,6 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         return false;
     }
     _constantsJSON = constantsRef;
-    
     _levelsJSON = levels_reader->readJson();
     if (_levelsJSON == nullptr) {
         CULog("Failed to load constants.json");

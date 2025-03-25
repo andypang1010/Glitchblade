@@ -111,7 +111,7 @@ protected:
      * This method is really, really long.  In practice, you would replace this
      * with your serialization loader, which would process a level file.
      */
-    void populate();
+    void populate(const std::shared_ptr<LevelModel>& level);
     
     /**
      * Adds the physics object to the physics world and loosely couples it to the scene graph
