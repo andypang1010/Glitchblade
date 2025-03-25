@@ -82,8 +82,6 @@ protected:
     // Physics objects for the game
     /** Reference to the player avatar */
     std::shared_ptr<PlayerModel>			  _player;
-    /** Reference to the player avatar */
-    std::shared_ptr<EnemyModel>			  _testEnemy;
 
     /** Whether we have completed this "game" */
     bool _complete;
@@ -297,7 +295,7 @@ public:
      * @param f Pointer to the fixture's user data (string).
      * @return True if the fixture and body correspond to an enemy body, false otherwise.
      */
-    bool isEnemyBody(physics2::Obstacle* b,const std::string* f);
+    bool isEnemyBody(physics2::Obstacle* b, std::string f);
     /**
      *
      * This function returns true if the provided Obstacle b is the player body

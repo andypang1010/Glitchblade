@@ -26,14 +26,19 @@ private:
     /** A reference to the level model */
     std::shared_ptr<LevelModel> _currentLevel;
 
+    // Set the current level to be incomplete by default
+    bool _isCurrentLevelComplete = false;
+
     std::unordered_map<std::string, std::shared_ptr<LevelModel >> _levels;
+    std::shared_ptr<cugl::scene2::PolygonNode> _worldNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _debugNodeRef;
+    std::shared_ptr<cugl::physics2::ObstacleWorld> _worldRef;
+
 	int _currentLevelIndex;
 	int _currentWaveIndex;
     int _currentEnemyIndex;
     int _numEnemiesActive;
     float _lastSpawnedInterval;
-
-    // TODO: Need to add/store HUD node somewhere
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
@@ -74,6 +79,11 @@ public:
      */
     ~LevelController();
 
+    bool isCurrentLevelComplete() {
+        // TODO: every time an enemy is defeated(or more optimally??) check if _isCurrentLevelComplete needs to be set to true
+        return _isCurrentLevelComplete;
+    }
+
     void addEnemy(const std::shared_ptr<EnemyController>& cont);
 
     void spawnWave(int waveNum);
@@ -95,7 +105,7 @@ public:
     /**
      * Initializes the level controller. Return false on failure
      */
-    bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef);
+    bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef);
 
     /**
     * Creates and returns a worldNode for GameScene to use

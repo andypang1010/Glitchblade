@@ -73,23 +73,6 @@ public:
     
     std::shared_ptr<EnemyModel> getEnemy() {return _enemy;};
 
-//  Maybe for the level controller, this will be useful:
-//    /**
-//     * Adds an enemy to the controller for management.
-//     * @param enemy The enemy to add.
-//     */
-//    void addEnemy(const std::shared_ptr<EnemyModel>& enemy) { _enemies.push_back(enemy); }
-//
-//    /**
-//     * Removes a defeated enemy from the game.
-//     * @param enemy The enemy to remove.
-//     */
-//    void removeEnemy(const std::shared_ptr<EnemyModel>& enemy);
-//
-//    /**
-//     * Clears all enemies from the controller.
-//     */
-//    void clearEnemies() { _enemies.clear(); }
 };
 
 #endif /* __ENEMY_CONTROLLER_H__ */

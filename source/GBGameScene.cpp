@@ -432,45 +432,6 @@ void GameScene::preUpdate(float dt) {
         Application::get()->quit();
     }
 
-    // TODO: refactor using Box2d
-    /*Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
-    bool hit = false;
-    if(_player->iframe > 0) _player->iframe--;
-    if (_testEnemy->isDamaging() && _player->iframe <= 0) {
-        if (_testEnemy->_isSlamming) {
-            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
-                hit = true;
-            }
-            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
-                hit = true;
-            }
-        }
-        else if (_testEnemy->_isStabbing) {
-            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
-                hit = true;
-            }
-            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
-                hit = true;
-            }
-        }
-    }
-
-    if (hit) {
-        _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
-        if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
-            _player->damage(20);
-        }
-        else if (_player->iframe <= 0 && _player->isParryActive()) {
-            _testEnemy->setStun(120);
-        }
-        else if (_player->iframe <= 0 && _player->isGuardActive()) {
-            _player->damage(10);
-        }
-        _player->iframe = 60;
-    }
-    _testEnemy->setTargetPos(_player->getPosition());*/
-
-
     if (_player->isJumpBegin() && _player->isGrounded()) {
         std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
         std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
@@ -567,7 +528,8 @@ void GameScene::postUpdate(float remain) {
     else {
         _bulletTimer -= 1;
     }
-    // setComplete(_testEnemy->getHP() <= 0);
+
+    setComplete(_levelController->isCurrentLevelComplete());
     setFailure(_player->getHP() <= 0);
 
     // Record failure if necessary.
@@ -614,10 +576,10 @@ void GameScene::removeProjectile(Projectile* projectile) {
 #pragma mark Collision Handling
 
 /**Checks obstacle and fixture to see if it is an enemy body fixture.**/
-bool GameScene::isEnemyBody(physics2::Obstacle* b, const std::string* f ) {
+bool GameScene::isEnemyBody(physics2::Obstacle* b, std::string f ) {
     std::shared_ptr<JsonValue> enemyJ = _constantsJSON->get("enemy");
-    // return (b->getName() == enemyJ->getString("name") && f == _testEnemy->getBodyName());
-    return false; // Need to check ALL enemies TODO TODO TODO
+    // This depends on enemies having their name set to enemy. This is probably dumb
+    return (b->getName() == enemyJ->getString("name") && f == "enemy");
 }
 /**Checks obstacle and fixture to see if it the player body fixture.**/
 bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
@@ -686,7 +648,6 @@ void GameScene::beginContact(b2Contact* contact) {
         else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(5);
             _player->setDashRem(0);
-            // CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
         else if (((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
             ((EnemyModel*)bd1)->setDashRem(0);
@@ -706,7 +667,6 @@ void GameScene::beginContact(b2Contact* contact) {
         else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(5);
             _player->setDashRem(0);
-            // CULog("Enemy damaged by player, remaining HP %f", _testEnemy->getHP());
         }
         else if (((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
             ((EnemyModel*)bd2)->setDashRem(0);

@@ -131,8 +131,8 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
 std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::string levelName) {
     std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
     std::shared_ptr<Texture> bgimage = levelRef->getBackground();
-    std::shared_ptr<cugl::scene2::PolygonNode> worldNode = scene2::PolygonNode::allocWithTexture(bgimage);
-    return worldNode;
+    _worldNode = scene2::PolygonNode::allocWithTexture(bgimage);
+    return _worldNode;
 }
 
 void LevelController::spawnWave(int waveNum) {
@@ -233,43 +233,44 @@ void LevelController::preUpdate(float dt)
 {
     //std::shared_ptr<EnemyModel> testEnemy = _testEnemyController->getEnemy();
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
-    // TODO: refactor using Box2d
-    // Vec2 dist = testEnemy->getPosition() - player->getPosition();
-    /*bool hit = false;
-    if(player->iframe > 0) player->iframe--;
-    if (testEnemy->isDamaging() && player->iframe <= 0) {
-        if (testEnemy->_isSlamming) {
-            if (dist.x > 0 && dist.x <= 6 && !testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
+
+    // TODO: Uncomment this & make it loop through all the current enemies (instead of just using _testEnemy)
+    /*Vec2 dist = _testEnemy->getPosition() - _player->getPosition();
+    bool hit = false;
+    if(_player->iframe > 0) _player->iframe--;
+    if (_testEnemy->isDamaging() && _player->iframe <= 0) {
+        if (_testEnemy->_isSlamming) {
+            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
                 hit = true;
             }
-            else if (dist.x < 0 && dist.x >= -6 && testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
+            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
                 hit = true;
             }
         }
-        else if (testEnemy->_isStabbing) {
-            if (dist.x > 0 && dist.x <= 6 && !testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
+        else if (_testEnemy->_isStabbing) {
+            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
                 hit = true;
             }
-            else if (dist.x < 0 && dist.x >= -6 && testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
+            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
                 hit = true;
             }
         }
     }
 
     if (hit) {
-        player->setKnocked(true, player->getPosition().subtract(testEnemy->getPosition()).normalize());
-        if (player->iframe <= 0 && !player->isParryActive() && !player->isGuardActive()) {
-            player->damage(20);
+        _player->setKnocked(true, _player->getPosition().subtract(_testEnemy->getPosition()).normalize());
+        if (_player->iframe <= 0 && !_player->isParryActive() && !_player->isGuardActive()) {
+            _player->damage(20);
         }
-        else if (player->iframe <= 0 && player->isParryActive()) {
-            testEnemy->setStun(120);
+        else if (_player->iframe <= 0 && _player->isParryActive()) {
+            _testEnemy->setStun(120);
         }
-        else if (player->iframe <= 0 && player->isGuardActive()) {
-            player->damage(10);
+        else if (_player->iframe <= 0 && _player->isGuardActive()) {
+            _player->damage(10);
         }
-        player->iframe = 60;
+        _player->iframe = 60;
     }
-    testEnemy->setTargetPos(player->getPosition());*/
+    _testEnemy->setTargetPos(_player->getPosition());*/
 
 
     if (player->isJumpBegin() && player->isGrounded()) {
