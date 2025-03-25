@@ -85,7 +85,9 @@ public:
         // TODO: every time an enemy is defeated(or more optimally??) check if _isCurrentLevelComplete needs to be set to true
         return _isCurrentLevelComplete;
     }
-
+    
+    /**Return a new enemy controller from the enemy name*/
+    std::shared_ptr<EnemyController> createEnemy(std::string enemy_name);
     void addEnemy(const std::shared_ptr<EnemyController>& cont);
 
     void spawnWave(int waveNum);

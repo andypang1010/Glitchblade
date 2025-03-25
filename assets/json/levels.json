@@ -8,7 +8,7 @@
       "waves": [
         {
           "spawn_intervals": [ 2, 5 ],
-          "enemies": [ "minion_melee_1", "minion_ranged_1" ]
+          "enemies": [ "boss1", "boss1" ]
         },
         {
           "spawn_intervals": [ 3, 5, 5, 5, 5 ],

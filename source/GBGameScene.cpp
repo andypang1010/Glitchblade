@@ -291,7 +291,7 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
 	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
     AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
-
+    
     // Now let's try spawning the first wave
     CULog("PRE SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     _levelController->spawnWave(0);

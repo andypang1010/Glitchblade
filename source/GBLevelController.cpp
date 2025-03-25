@@ -85,8 +85,19 @@ LevelController::~LevelController()
 {
 }
 
-void LevelController::addEnemy(const std::shared_ptr<EnemyController>& cont) {
-    _enemyControllers.push_back(cont);
+/**
+ 
+ */
+
+std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemy_name) {
+    std::shared_ptr<EnemyController> enemy = std::make_shared<EnemyController>();
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, enemy_name);
+    enemy->init(_assets, _constantsJSON, actions);
+    return enemy;
+}
+void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
+    _enemyControllers.push_back(enemy_controller);
+    addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
 }
 
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef)
@@ -149,7 +160,11 @@ void LevelController::spawnWave(int waveNum) {
     CULog("SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     
     for (int i = 0; i< enemiesString.size(); i++){
-        std::function< bool()> callback = [spawnIntervals, i](){
+        std::function< bool()> callback = [this, enemiesString, spawnIntervals, i](){
+            // create enemy controller
+            // get obstacle, node
+            std::shared_ptr<EnemyController> enemy_controller = createEnemy(enemiesString[i]);
+            addEnemy(enemy_controller);
             CULog("timer callback");
             CULog("spawn interval # %d is %f", i, spawnIntervals[i]);
             return false; //only run once
