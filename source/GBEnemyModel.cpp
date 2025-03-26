@@ -283,14 +283,12 @@ void EnemyModel::update(float dt) {
     
 
     if (isJumpBegin() && isGrounded()) {
-        CULog("isJumping is true");
         _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
     } else {
         _jumpCooldownRem = (_jumpCooldownRem > 0 ? _jumpCooldownRem-1 : 0);
     }
     
     if (isKnocked()) {
-        CULog("enmey knockback applied");
         _dashCooldownRem = ENEMY_DASH_COOLDOWN;
         _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
         _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;
@@ -314,13 +312,11 @@ void EnemyModel::update(float dt) {
     }
     // player inputs guard and cooldown is ready
     if (isGuardBegin()) {
-        CULog("Beginning guard\n");
         _guardCooldownRem = ENEMY_GUARD_COOLDOWN;
         _guardRem = ENEMY_GUARD_DURATION;
     }
 
     if (isStunned()) {
-        CULog("Enemy stunned\n");
         _stunRem--;
     }
     
