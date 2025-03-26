@@ -401,7 +401,7 @@ void EnemyModel::AIMove() {
         _moveDuration--;
     }
 
-    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
         setMovement(face * getForce() * STAB_FORCE);
     }
     

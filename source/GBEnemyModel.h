@@ -198,23 +198,6 @@ protected:
     /** The node for debugging the ground sensor */
     std::shared_ptr<scene2::WireNode> _shieldNode;
     /** The guard shield when guard is active */
-
-    // TODO: use Action parser
-    /** Ground sensor to represent our feet */
-    b2Fixture* _slamFixture;
-    /** Reference to the sensor name (since a constant cannot have a pointer) */
-    std::string _slamName;
-    /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _slamNode;
-    /** The guard shield when guard is active */
-
-    /** Ground sensor to represent our feet */
-    b2Fixture* _stabFixture;
-    /** Reference to the sensor name (since a constant cannot have a pointer) */
-    std::string _stabName;
-    /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _stabNode;
-    /** The guard shield when guard is active */
     
 	/** The scene graph node for the enemy. */
 	std::shared_ptr<scene2::SceneNode> _node;
@@ -296,7 +279,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _shieldName(ENEMY_SHIELD_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _slamName(SLAM_SENSOR_NAME), _stabName(STAB_SENSOR_NAME) { }
+    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _shieldName(ENEMY_SHIELD_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME){ }
     
     /**
      * Destroys this PlayerModel, releasing all resources.
@@ -730,11 +713,6 @@ public:
      * @return the name of the shield sensor
      */
     std::string* getShieldName() { return &_shieldName; }
-
-    // TODO: refactor
-    std::string* getSlamName() { return &_slamName; }
-
-    std::string* getStabName() { return &_stabName; }
     
     /**
      * Returns true if this character is facing right
