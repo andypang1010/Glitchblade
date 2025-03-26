@@ -71,11 +71,9 @@ using namespace cugl::scene2;
 // EnemyController needs to become a base class that all other types of enemies derive from
 std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()>> enemyFactoryMap = {
     { "boss_1", []() {
-        CULog("CALLED FACTORYMAP FOR boss_1");
         return std::make_shared<EnemyController>();
     } }, // Should return a Boss1Controller
     { "minion_1A", []() {
-        CULog("CALLED FACTORYMAP FOR minion_1A");
         return std::make_shared<EnemyController>();
     } }, // Should return a Minion1AController
     // Add more as desired here
