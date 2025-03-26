@@ -219,7 +219,23 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         }
         _player->setDebugColor(Color4::YELLOW);
     
+    populate(_levelController->getLevelByName("Level 1"));
+
     // === Initialize in-game UI ===
+    populateUI(assets);
+    
+    _active = true;
+    _complete = false;
+    setDebug(false); // Debug on by default
+
+    // XNA nostalgia
+    Application::get()->setClearColor(Color4f::BLACK);
+
+    return true;
+}
+
+void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
+{
     _ui = GBIngameUI::alloc(_assets);
     if (_ui != nullptr) {
         addChild(_ui);
@@ -229,7 +245,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         _pauseMenu->setVisible(false);
         addChild(_pauseMenu);
     }
-    
+
     auto pauseButton = _ui->getPauseButton();
     if (pauseButton) {
         pauseButton->addListener([this](const std::string& name, bool down) {
@@ -239,9 +255,9 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
                 setPaused(true);
                 CULog("Pause pressed, showing menu.");
             }
-        });
+            });
     }
-    
+
     auto resumeButton = _pauseMenu->getResumeButton();
     if (resumeButton) {
         resumeButton->addListener([this](const std::string& name, bool down) {
@@ -251,9 +267,9 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
                 setPaused(false);
                 CULog("Resume pressed, returning to game.");
             }
-        });
+            });
     }
-    
+
     auto restartButton = _pauseMenu->getRestartButton();
     if (restartButton) {
         restartButton->addListener([this](const std::string& name, bool down) {
@@ -264,18 +280,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
                 this->reset();
                 CULog("Restart pressed.");
             }
-        });
+            });
     }
-    
-    _active = true;
-    _complete = false;
-    setDebug(false); // Debug on by default
-
-    populate(_levelController->getLevelByName("Level 1"));
-    // XNA nostalgia
-    Application::get()->setClearColor(Color4f::BLACK);
-
-    return true;
 }
 
 /**
@@ -290,6 +296,8 @@ void GameScene::dispose() {
         _losenode = nullptr;
         _complete = false;
         _debug = false;
+		_ui = nullptr;
+		_pauseMenu = nullptr;
         Scene2::dispose();
     }
 }
@@ -302,15 +310,17 @@ void GameScene::dispose() {
  * Resets the status of the game by resetting player and enemy positions so that we can play again.
  */
 void GameScene::reset() {
+	removeAllChildren();
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
     setFailure(false);
     setComplete(false);
     _levelController->reset();
+    populate(_levelController->getCurrentLevel());
+	populateUI(_assets);
     _ui->setHP(100);
     _pauseMenu->setHP(100);
-    populate(_levelController->getCurrentLevel());
 }
 
 /**
