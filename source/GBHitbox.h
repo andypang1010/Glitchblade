@@ -21,8 +21,8 @@ protected:
     Vec2 _offset;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
-    /** The remaining duration of this hitbox */
-    int _duration;
+    /** The remaining duration in frames of this hitbox */
+    float _duration;
     /** The damage of this hitbox */
     int _damage;
 
@@ -49,7 +49,7 @@ public:
      */
     void dispose();
 
-    virtual bool init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, int duration);
+    virtual bool init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration);
     
 #pragma mark -
 #pragma mark Static Constructors
@@ -68,7 +68,7 @@ public:
      *
      * @return  A newly allocated Projectile at the given position, with the given radius
      */
-    static std::shared_ptr<Hitbox> alloc(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, int duration) {
+    static std::shared_ptr<Hitbox> alloc(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration) {
         std::shared_ptr<Hitbox> result = std::make_shared<Hitbox>();
         return (result->init(enemy, pos, size, scale, damage, duration) ? result : nullptr);
     }
@@ -133,7 +133,7 @@ public:
      *
      * @param value new position
      */
-    void setDuration(Vec2 value) {
+    void setOffset(Vec2 value) {
         _offset = value;
     }
 
@@ -142,14 +142,14 @@ public:
      *
      * @return the remaining duration(in frames) of this hitbox.
      */
-    bool getDuration() const { return _duration; }
+    float getDuration() const { return _duration; }
 
     /**
      * Sets the duration of the hitbox
      *
      * @param value new duration
      */
-    void setDuration(int value) {
+    void setDuration(float value) {
         _duration = value;
     }
 

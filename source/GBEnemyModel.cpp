@@ -302,6 +302,7 @@ void EnemyModel::update(float dt) {
     
     if (isKnocked()) {
         CULog("enmey knockback applied");
+        resetKnocked();
         _dashCooldownRem = ENEMY_DASH_COOLDOWN;
         _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
         _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;

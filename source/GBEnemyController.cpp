@@ -76,13 +76,6 @@ void EnemyController::applyForce() {
 
 		//CULog(_enemyJSON->toString().c_str());
 
-        #pragma mark jump force
-        // Jump!
-        if (_enemy->isJumpBegin() && _enemy->isGrounded()) {
-            b2Vec2 force(0, _enemyJSON->get("physics")->get("jump")->getFloat("force"));
-            enemyBody->ApplyLinearImpulseToCenter(force, true);
-        }
-
         #pragma mark dash force
         // Dash!
         float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");

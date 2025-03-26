@@ -636,7 +636,7 @@ void GameScene::removeProjectile(Projectile* projectile) {
 /**
  * Add a new projectile to the world and send it in the right direction.
  */
-void GameScene::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, int duration) {
+void GameScene::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration) {
     std::shared_ptr<Texture> image = Texture::alloc(1, 1);
 
     // Change last parameter to test player-fired or regular projectile

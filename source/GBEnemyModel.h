@@ -100,7 +100,7 @@ using namespace cugl;
 /** The impulse for the character jump */
 #define ENEMY_JUMP       42.5f
 /** The impulse for the character dash-attack */
-#define STAB_FORCE       300.0f
+#define STAB_FORCE       200.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
 #define ENEMY_KB_DURATION 20

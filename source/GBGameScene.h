@@ -444,7 +444,7 @@ public:
     /**
     * Adds a new hitbox to the world.
     */
-    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, int duration);
+    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration);
 
     /**
     * Removes the input hitbox from the world.
