@@ -120,40 +120,19 @@ protected:
 	float _movement;
 	/** Which direction is the character facing */
 	bool _faceRight;
-    /** How many frames remaining in the dash animation (affects friciton)*/
-    int  _dashRem;
-    /** How long until we can guard again in frames */
-    int  _guardCooldownRem;
-    /** How many frames remaining in the guard (0 when guard is not active) */
-    int  _guardRem;
-    /** How many frames remaining in the parry (0 when parry is not active) */
-    int  _parryRem;
     /** How many frames remaining in enemy stun */
     int _stunRem;
-	/** Whether we are actively inputting jumping */
-	bool _isJumpInput;
     /** Whether we are actively inputting strafe left*/
     bool _isMoveLeft;
     /** Whether we are actively inputting strafe right*/
     bool _isMoveRight;
-    /** Whether we are actively inputting dash left*/
-    bool _isDashLeftInput;
-    /** Whether we are actively inputting dash right*/
-    bool _isDashRightInput;
-    /** Whether we are actively inputting the guard*/
-    bool _isGuardInput;
-    /** Whether we have a (swallowed) projectile*/
-    bool _hasProjectile;
-    /** Whether we are actively inputting shoot */
-    bool _isShootInput;
+    /** Whether enemy can be knocked-back */
     bool _canKnockBack;
     /** Whether enemy is knocked-back (sets  cd) */
     bool _isKnocked;
     /** Whether we are knocked-back (sets input cd) */
     int _knockbackRem;
     Vec2 _knockDirection;
-	/** How long until we can shoot again in animation frames*/
-	int  _shootCooldownRem;
 	/** Whether our feet are on the ground */
 	bool _isGrounded;
 
@@ -164,13 +143,6 @@ protected:
 	std::string _sensorName;
 	/** The node for debugging the ground sensor */
 	std::shared_ptr<scene2::WireNode> _sensorNode;
-    /** Ground sensor to represent our feet */
-    b2Fixture*  _shieldFixture;
-    /** Reference to the sensor name (since a constant cannot have a pointer) */
-    std::string _shieldName;
-    /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _shieldNode;
-    /** The guard shield when guard is active */
     
 	/** The scene graph node for the enemy. */
 	std::shared_ptr<scene2::SceneNode> _node;
@@ -313,20 +285,10 @@ public:
     void resetAttributes(){
         _hp = ENEMY_MAXHP;
         _isGrounded = false;
-        _isShootInput = false;
-        _isJumpInput  = false;
         _isMoveLeft = false;
         _isMoveRight = false;
-        _isDashLeftInput = false;
-        _isDashRightInput = false;
-        _isGuardInput = false;
-        _hasProjectile = false;
         _faceRight  = true;
-        _shootCooldownRem = 0;
         _canKnockBack = true;
-        _guardCooldownRem = 0;
-        _guardRem = 0;
-        _parryRem= 0;
         _stunRem = 0;
         
         _isStabbing = false;

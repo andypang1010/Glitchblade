@@ -256,10 +256,8 @@ void EnemyModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
-    _shieldNode = nullptr;
     _geometry = nullptr;
     _sensorNode = nullptr;
-    _shieldNode = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
