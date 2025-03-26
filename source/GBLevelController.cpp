@@ -172,14 +172,6 @@ void LevelController::spawnWave(int waveNum) {
         Uint32 timer = static_cast<Uint32>(spawnIntervals[i] * 1000); //seconds to ms
         app->schedule(callback, timer);
     }
-        
-        
-
-
-    //std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, "boss1");
-    //std::shared_ptr<EnemyController> cont = std::make_shared<EnemyController>();
-    //cont->init(_assets, _constantsJSON, actions);
-    //addEnemy(cont); // Add the controller to the list of enemy controllers stored in the LevelController
 }
 
 void LevelController::populateLevel(std::string levelName) {
@@ -270,42 +262,45 @@ void LevelController::preUpdate(float dt)
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
 
     // TODO: Uncomment this & make it loop through all the current enemies (instead of just using _testEnemy)
-    /*Vec2 dist = _testEnemy->getPosition() - player->getPosition();
-    bool hit = false;
-    if(player->iframe > 0) player->iframe--;
-    if (_testEnemy->isDamaging() && player->iframe <= 0) {
-        if (_testEnemy->_isSlamming) {
-            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
-                hit = true;
+    for (auto enemyCtrlr : _enemyControllers) {
+        std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
+        Vec2 dist = enemodel->getPosition() - player->getPosition();
+        bool hit = false;
+        if (player->iframe > 0) player->iframe--;
+        if (enemodel->isDamaging() && player->iframe <= 0) {
+            if (enemodel->_isSlamming) {
+                if (dist.x > 0 && dist.x <= 6 && !enemodel->isFacingRight() && std::abs(dist.y) <= 6) {
+                    hit = true;
+                }
+                else if (dist.x < 0 && dist.x >= -6 && enemodel->isFacingRight() && std::abs(dist.y) <= 6) {
+                    hit = true;
+                }
             }
-            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 6) {
-                hit = true;
+            else if (enemodel->_isStabbing) {
+                if (dist.x > 0 && dist.x <= 6 && !enemodel->isFacingRight() && std::abs(dist.y) <= 2) {
+                    hit = true;
+                }
+                else if (dist.x < 0 && dist.x >= -6 && enemodel->isFacingRight() && std::abs(dist.y) <= 2) {
+                    hit = true;
+                }
             }
         }
-        else if (_testEnemy->_isStabbing) {
-            if (dist.x > 0 && dist.x <= 6 && !_testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
-                hit = true;
-            }
-            else if (dist.x < 0 && dist.x >= -6 && _testEnemy->isFacingRight() && std::abs(dist.y) <= 2) {
-                hit = true;
-            }
-        }
-    }
 
-    if (hit) {
-        player->setKnocked(true, player->getPosition().subtract(_testEnemy->getPosition()).normalize());
-        if (player->iframe <= 0 && !player->isParryActive() && !player->isGuardActive()) {
-            player->damage(20);
+        if (hit) {
+            player->setKnocked(true, player->getPosition().subtract(enemodel->getPosition()).normalize());
+            if (player->iframe <= 0 && !player->isParryActive() && !player->isGuardActive()) {
+                player->damage(20);
+            }
+            else if (player->iframe <= 0 && player->isParryActive()) {
+                enemodel->setStun(120);
+            }
+            else if (player->iframe <= 0 && player->isGuardActive()) {
+                player->damage(10);
+            }
+            player->iframe = 60;
         }
-        else if (player->iframe <= 0 && player->isParryActive()) {
-            _testEnemy->setStun(120);
-        }
-        else if (player->iframe <= 0 && player->isGuardActive()) {
-            player->damage(10);
-        }
-        player->iframe = 60;
+        enemodel->setTargetPos(player->getPosition());
     }
-    _testEnemy->setTargetPos(player->getPosition());*/
 
 
     if (player->isJumpBegin() && player->isGrounded()) {
