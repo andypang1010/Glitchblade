@@ -85,14 +85,12 @@ void EnemyController::applyForce() {
         // Dash!
         float d_force = _enemyJSON->get("dash")->getFloat("force");
         if (_enemy->isDashLeftBegin()) {
-            CULog("dashing left\n");
             b2Vec2 force(-d_force, 0);
             _enemy->faceLeft();
             enemyBody->ApplyLinearImpulseToCenter(force, true);
         }
 
         if (_enemy->isDashRightBegin()) {
-            CULog("dashing right\n");
             b2Vec2 force(d_force, 0);
             _enemy->faceRight();
             enemyBody->ApplyLinearImpulseToCenter(force, true);
@@ -101,7 +99,6 @@ void EnemyController::applyForce() {
 #pragma mark knockback force
 #pragma mark knockback force
     if (_enemy->isKnocked()) {
-        CULog("Applying player knockback force");
         enemyBody->SetLinearVelocity(b2Vec2(0,0));
         Vec2 knockDirection = _enemy->getKnockDirection();
         Vec2 knockForce = knockDirection.subtract(Vec2(0,knockDirection.y)).scale(_enemy->getKnockF());
@@ -109,7 +106,6 @@ void EnemyController::applyForce() {
     }
     // Velocity too high, clamp it
     if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed() && !_enemy->isDashActive() && !_enemy->isKnockbackActive()) {
-        //CULog("clamping velocity");
         _enemy->setVX(SIGNUM(_enemy->getVX())*_enemy->getMaxSpeed());
     }
     if (_enemy->isStunned()) {
@@ -119,7 +115,6 @@ void EnemyController::applyForce() {
 
 void EnemyController::fixedUpdate(float timestep)
 {
-	// CULog("Updated enemycontroller");
 }
 
 void EnemyController::preUpdate(float dt)

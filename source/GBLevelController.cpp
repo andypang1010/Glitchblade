@@ -160,12 +160,18 @@ void LevelController::spawnWave(int waveNum) {
     
     float prevTotals = 0; // Intervals should "stack" since all timers are created immediately
     for (int i = 0; i< enemiesString.size(); i++){
-        std::function< bool()> callback = [this, enemiesString, i](){
+        int resetCountAtTime = _resetCount;
+        std::function< bool()> callback = [this, resetCountAtTime, enemiesString, i](){
+            if (resetCountAtTime != _resetCount) {
+                return false;
+            }
             // Create and add the enemy
             std::shared_ptr<EnemyController> enemy_controller = createEnemy(enemiesString[i]);
             addEnemy(enemy_controller);
             return false; //only run once
         };
+        CULog("MAKING TIMER FOR: ");
+        CULog(enemiesString[i].c_str());
         Uint32 timer = static_cast<Uint32>((spawnIntervals[i] + prevTotals) * 1000); // seconds to ms
         float waveDelay = spawnIntervals[i];
         prevTotals += waveDelay;
@@ -173,15 +179,14 @@ void LevelController::spawnWave(int waveNum) {
     }
 }
 
-void LevelController::populateLevel(std::string levelName) {
-    std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
-    _currentLevel = levelRef;
-    createStaticObstacles(levelName, levelRef);
+void LevelController::populateLevel(const std::shared_ptr<LevelModel>& level) {
+    _currentLevel = level;
+    createStaticObstacles(level);
     addObstacle(std::make_pair(getPlayerModel(), getPlayerNode()));
 }
 
 // TODO: we should not use assetRef, load background & ground based on the level in the future
-void LevelController::createStaticObstacles(std::string levelName, const std::shared_ptr<LevelModel>& levelRef) {
+void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& levelRef) {
     float scale = _constantsJSON->get("scene")->getFloat("scale");
     CULog("in level controller scale is %f", scale);
     ObstacleNodePairs obstacle_pairs;
@@ -245,14 +250,26 @@ void LevelController::createStaticObstacles(std::string levelName, const std::sh
     for (const auto& pair : obstacle_pairs) {
         // add obstacle and set node position
         addObstacle(pair);
-        
     }
 }
 
 void LevelController::reset() {
-    CULog("LC RESET CALLED!!!!!!");
-    //_testEnemyController->reset();
-    _playerController->reset();
+    // Reset player controller
+    if (_playerController != nullptr) {
+        _playerController->reset();
+    }
+
+    // Clear or reset non-init fields
+    _enemyControllers.clear();
+    _worldNode = nullptr;
+
+    // Reset wave/enemy indexes and counters
+    _currentWaveIndex = 0;
+    _currentEnemyIndex = 0;
+    _numEnemiesActive = 0;
+    _lastSpawnedInterval = 0.0f;
+
+    _resetCount += 1;
 }
 
 void LevelController::preUpdate(float dt)

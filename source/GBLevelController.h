@@ -38,6 +38,7 @@ private:
 	int _currentWaveIndex;
     int _currentEnemyIndex;
     int _numEnemiesActive;
+    int _resetCount = 0;
     float _lastSpawnedInterval;
 
     /* Data */
@@ -124,7 +125,7 @@ public:
      Initializes static level obstacles with scene nodes to be added to the Game Scene
      @returns a vector of all the obstacle shared pointers.
      */
-    void createStaticObstacles(std::string levelName, const std::shared_ptr<LevelModel>& levelRef);
+    void createStaticObstacles(const std::shared_ptr<LevelModel>& levelRef);
     
     /**
      * Adds the physics object to the physics world and loosely couples it to the scene graph
@@ -137,7 +138,7 @@ public:
     /**
     * Populates the level.
     */
-    void populateLevel(std::string levelName);
+    void populateLevel(const std::shared_ptr<LevelModel>& level);
 
     /**
      * Resets the state of the LevelController.

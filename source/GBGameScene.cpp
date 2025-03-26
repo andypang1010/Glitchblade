@@ -154,7 +154,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _offset = Vec2((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
 
     Rect bounds = getBounds();
-    CULog("bounds is (%f, %f), (%f, %f)",bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
     std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
     boundsJ->get("origin")->get("x")->set(bounds.origin.x);
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
@@ -167,7 +166,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // Shift to center if a bad fit
     _scale = _size.width == sceneJ->getInt("width") ? _size.width / rect.size.width : _size.height / rect.size.height;
     sceneJ->get("scale")->set(_scale);
-    CULog("in game scene scale is %f", _scale);
     
     
     // Create the world and attach the listeners.
@@ -276,10 +274,7 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
     addChild(_worldnode);
-    // DO NOT KEEP THIS IN THE CODE YOU DEGEN
-    CULog("TODO: Get rid of this reference to player in gamescene.");
-    // TODO: may want to move level selection into GameScene init. Not really sure at the moment where the level changing will originate from...
-    _levelController->populateLevel("Level 1"); // Will want to set the level we want to populate here
+    _levelController->populateLevel(level); // Sets the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
 
 
