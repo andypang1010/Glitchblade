@@ -563,15 +563,15 @@ void GameScene::removeProjectile(Projectile* projectile) {
  * Add a new projectile to the world and send it in the right direction.
  */
 void GameScene::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration) {
-    std::shared_ptr<Texture> image = Texture::alloc(1, 1);
+    //std::shared_ptr<Texture> image = Texture::alloc(1, 1);
 
-    // Change last parameter to test player-fired or regular projectile
-    auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration);
-    hitbox->setDebugColor(Color4::RED);
+    //// Change last parameter to test player-fired or regular projectile
+    //auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration);
+    //hitbox->setDebugColor(Color4::RED);
 
-    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    sprite->setAnchor(Vec2::ANCHOR_CENTER);
-    addObstacle(hitbox, sprite);
+    //std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    //sprite->setAnchor(Vec2::ANCHOR_CENTER);
+    //addObstacle(hitbox, sprite);
 }
 
 /**
