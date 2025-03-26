@@ -26,6 +26,10 @@
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBProjectile.h"
+#include "GBHitbox.h"
+#include "GBMeleeActionModel.h"
+#include "GBIngameUI.h"
+#include "GBPauseMenu.h"
 
 #include <ctime>
 #include <string>
@@ -213,10 +217,61 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         if (!_player){
             CULog("player is null in populate");
         }
+        _player->setDebugColor(Color4::YELLOW);
+    
+    // === Initialize in-game UI ===
+    _ui = GBIngameUI::alloc(_assets);
+    if (_ui != nullptr) {
+        addChild(_ui);
+    }
+    _pauseMenu = GBPauseMenu::alloc(assets);
+    if (_pauseMenu != nullptr) {
+        _pauseMenu->setVisible(false);
+        addChild(_pauseMenu);
+    }
+    
+    auto pauseButton = _ui->getPauseButton();
+    if (pauseButton) {
+        pauseButton->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                _ui->setVisible(false);
+                _pauseMenu->setVisible(true);
+                setPaused(true);
+                CULog("Pause pressed, showing menu.");
+            }
+        });
+    }
+    
+    auto resumeButton = _pauseMenu->getResumeButton();
+    if (resumeButton) {
+        resumeButton->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                _pauseMenu->setVisible(false);
+                _ui->setVisible(true);
+                setPaused(false);
+                CULog("Resume pressed, returning to game.");
+            }
+        });
+    }
+    
+    auto restartButton = _pauseMenu->getRestartButton();
+    if (restartButton) {
+        restartButton->addListener([this](const std::string& name, bool down) {
+            if (down) {
+                _pauseMenu->setVisible(false);
+                _ui->setVisible(true);
+                setPaused(false);
+                this->reset();
+                CULog("Restart pressed.");
+            }
+        });
+    }
+    
+    _active = true;
+    _complete = false;
+    setDebug(false); // Debug on by default
 
     populate(_levelController->getLevelByName("Level 1"));
-    setDebug(true); // Debug on by default
-
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::BLACK);
 
@@ -253,6 +308,8 @@ void GameScene::reset() {
     setFailure(false);
     setComplete(false);
     _levelController->reset();
+    _ui->setHP(100);
+    _pauseMenu->setHP(100);
     populate(_levelController->getCurrentLevel());
 }
 
@@ -366,6 +423,8 @@ void GameScene::setFailure(bool value) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GameScene::preUpdate(float dt) {
+    if (_isPaused) return;
+    
     // Process the toggled key commands
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) { reset(); }
@@ -373,6 +432,10 @@ void GameScene::preUpdate(float dt) {
         CULog("Shutting down");
         Application::get()->quit();
     }
+
+
+	_ui->setHP(_player->getHP());
+
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
         std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
@@ -410,6 +473,9 @@ void GameScene::preUpdate(float dt) {
  * @param step  The number of fixed seconds for this step
  */
 void GameScene::fixedUpdate(float step) {
+    
+    if (_isPaused) return;
+    
     // Turn the physics engine crank.
     _world->update(step);
 
@@ -440,6 +506,9 @@ void GameScene::fixedUpdate(float step) {
  * @param remain    The amount of time (in seconds) last fixedUpdate
  */
 void GameScene::postUpdate(float remain) {
+    
+    if (_isPaused) return;
+    
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
     _levelController->postUpdate(remain);
@@ -488,6 +557,35 @@ void GameScene::removeProjectile(Projectile* projectile) {
     std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
     std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pop"));
     AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
+}
+
+/**
+ * Add a new projectile to the world and send it in the right direction.
+ */
+void GameScene::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration) {
+    std::shared_ptr<Texture> image = Texture::alloc(1, 1);
+
+    // Change last parameter to test player-fired or regular projectile
+    auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration);
+    hitbox->setDebugColor(Color4::RED);
+
+    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    sprite->setAnchor(Vec2::ANCHOR_CENTER);
+    addObstacle(hitbox, sprite);
+}
+
+/**
+ * Removes a new projectile from the world.
+ *
+ * @param  projectile   the projectile to remove
+ */
+void GameScene::removeHitbox() {
+    // do not attempt to remove a projectile that has already been removed
+    if (_testbox==nullptr || _testbox->isRemoved()) {
+        return;
+    }
+    _testbox->setDebugScene(nullptr);
+    _testbox->markRemoved(true);
 }
 
 #pragma mark -
@@ -563,7 +661,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->setDashRem(0);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
+        ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
     }
     else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
@@ -575,7 +673,7 @@ void GameScene::beginContact(b2Contact* contact) {
     }
 
     // Test: plyaer-hitbox collision
-    /*if (bd1->getName() == "hitbox" && isPlayerBody(bd2, fd2)) {
+    if (bd1->getName() == "hitbox" && isPlayerBody(bd2, fd2)) {
         if (_player->iframe <= 0) {
             _player->iframe = 60;
             if (!_player->isGuardActive() && !_player->isParryActive()) {
@@ -604,7 +702,7 @@ void GameScene::beginContact(b2Contact* contact) {
                 _player->damage(((Hitbox*)bd2)->getDamage() / 2);
             }
         }
-    }*/
+    }
 
     // Player-Projectile Collision
     if (isPlayerBody(bd1, fd1) && bd2->getName() == proj_name) {
@@ -612,8 +710,8 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->damage(20);
             removeProjectile((Projectile*)bd2);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
-            //_ui->setHP(_player->getHP());
-            //_pauseMenu->setHP(_player->getHP());
+            _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
     }
     else if (isPlayerBody(bd2, fd2) && bd1->getName() == proj_name) {
@@ -621,8 +719,8 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->damage(20);
             removeProjectile((Projectile*)bd1);
             CULog("Player Damaged, remaining HP %f", _player->getHP());
-            //_ui->setHP(_player->getHP());
-            //_pauseMenu->setHP(_player->getHP());
+            _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
         // TODO: REFACTOR TO NOT REPEAT CODE!!!
     }
@@ -669,8 +767,8 @@ void GameScene::beginContact(b2Contact* contact) {
             CULog("Guarded projectile");
 
             _player->damage(10);
-            //_ui->setHP(_player->getHP());
-            //_pauseMenu->setHP(_player->getHP());
+            _ui->setHP(_player->getHP());
+            _pauseMenu->setHP(_player->getHP());
         }
         removeProjectile(shieldHit);
     }

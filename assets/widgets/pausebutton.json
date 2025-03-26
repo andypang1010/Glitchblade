@@ -1,0 +1,56 @@
+{
+    "variables": {},
+    "contents": {
+        "type": "Button",
+        "format": {
+            "type": "Anchored"
+        },
+        "data": {
+            "anchor": [
+                1,
+                1
+            ],
+            "size": [
+                80,
+                80
+            ],
+            "angle": 0,
+            "position": [
+                0,
+                0
+            ],
+            "visible": true,
+            "upnode": "pause_button"
+        },
+        "children": {
+            "pause_button": {
+                "type": "Image",
+                "data": {
+                    "texture": "pause_button",
+                    "anchor": [
+                        1,
+                        1
+                    ],
+                    "size": [
+                        80,
+                        80
+                    ],
+                    "angle": 0,
+                    "position": [
+                        0,
+                        0
+                    ],
+                    "visible": true
+                },
+                "layout": {
+                    "x_anchor": "right",
+                    "y_anchor": "top",
+                    "absolute": false,
+                    "x_offset": 0,
+                    "y_offset": 0
+                }
+
+            }
+        }
+    }
+}

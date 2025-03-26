@@ -48,18 +48,18 @@
     {   "health": 200,
         "actions":
         [
-            {	
-                "type": "melee", 
-                "name": "stab",
-                "animation": "textures/boss1_stab.png",
-                "animation_row": 5,
-                "animation_col": 8,
-                "animation_size": 40,
-                "hitboxPos": [1,2],
-                "hitboxSize": [2, 4],
-                "hitboxStartTime": 7,
-                "hitboxEndTime": 15,
-                "hitboxDamage": 20
+            {
+              "type": "melee",
+              "name": "stab",
+              "animation": "textures/boss1_stab.png",
+              "animation_row": 5,
+              "animation_col": 8,
+              "animation_size": 40,
+              "hitboxPos": [ 3, 0 ],
+              "hitboxSize": [ 4, 1.5 ],
+              "hitboxStartTime": 27,
+              "hitboxEndTime": 36,
+              "hitboxDamage": 20
             },        
             {	
                 "type": "melee", 
@@ -68,10 +68,10 @@
                 "animation_row": 5,
                 "animation_col": 8,
                 "animation_size": 40,
-                "hitboxPos": [1,2],
-                "hitboxSize": [2, 4],
-                "hitboxStartTime": 7,
-                "hitboxEndTime": 15,
+                "hitboxPos": [4, -0.5],
+                "hitboxSize": [4, 3],
+                "hitboxStartTime": 25,
+                "hitboxEndTime": 31,
                 "hitboxDamage": 20
             }
         ]

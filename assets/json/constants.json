@@ -27,7 +27,7 @@
     },
     "ground": {
         "vertex_count": 8,
-        "thickness": 4,
+        "thickness": 4.4,
         "texture": "ground",
         "name": "ground"
     },
@@ -61,7 +61,7 @@
             "force": 45
         },
         "dash": {
-            "cooldown": 30,
+            "cooldown": 45,
             "duration": 20,
             "speed": 30
         },
