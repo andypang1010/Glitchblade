@@ -291,7 +291,7 @@ void LevelController::preUpdate(float dt)
         Vec2 dist = enemodel->getPosition() - player->getPosition();
         bool hit = false;
         if (player->iframe > 0) player->iframe--;
-        if (enemodel->isDamaging() && player->iframe <= 0) {
+        /*if (enemodel->isDamaging() && player->iframe <= 0) {
             if (enemodel->_isSlamming) {
                 if (dist.x > 0 && dist.x <= 6 && !enemodel->isFacingRight() && std::abs(dist.y) <= 6) {
                     hit = true;
@@ -322,7 +322,7 @@ void LevelController::preUpdate(float dt)
                 player->damage(10);
             }
             player->iframe = 60;
-        }
+        }*/
         enemodel->setTargetPos(player->getPosition());
     }
 
@@ -347,12 +347,20 @@ void LevelController::postUpdate(float dt)
     }
 	// _testEnemyController->postUpdate(dt);
 	_playerController->postUpdate(dt);
+
+	for (auto enemyCtrlr : _enemyControllers) {
+		enemyCtrlr->postUpdate(dt);
+	}
 }
 
 void LevelController::fixedUpdate(float timestep)
 {
 	// _testEnemyController->fixedUpdate(timestep);
 	_playerController->fixedUpdate(timestep);
+
+	for (auto enemyCtrlr : _enemyControllers) {
+		enemyCtrlr->fixedUpdate(timestep);
+	}
 }
 
 /**
@@ -397,8 +405,8 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
             meleeAction->setHitboxPos(hitboxPos);
             meleeAction->setHitboxSize(hitboxSize);
-            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartFrame"));
-            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndFrame"));
+            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartTime"));
+            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndTime"));
             meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
 
             actions.push_back(meleeAction);

@@ -10,18 +10,18 @@ using namespace cugl::audio;
 // CONSTANTS:
 float PLAYER_INIT_POS[] = { 2.5f, 5.0f };
 
-PlayerController::PlayerController(){}
+PlayerController::PlayerController() {}
 
 
 void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef)
 {
-//    float scale = constantsRef->get("scene")->getFloat("scale");
-//    Rect bounds;
-//    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
-//    std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
-//    bounds.origin.set(boundsJ->get("origin")->getFloat("x"), boundsJ->get("origin")->getFloat("y"));
-//    bounds.size.set(boundsJ->get("size")->getFloat("width"),boundsJ->get("size")->getFloat("height"));
-    
+    //    float scale = constantsRef->get("scene")->getFloat("scale");
+    //    Rect bounds;
+    //    std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
+    //    std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
+    //    bounds.origin.set(boundsJ->get("origin")->getFloat("x"), boundsJ->get("origin")->getFloat("y"));
+    //    bounds.size.set(boundsJ->get("size")->getFloat("width"),boundsJ->get("size")->getFloat("height"));
+
     _input = PlatformInput::alloc(assetRef, constantsRef);
     _player = PlayerModel::alloc(assetRef, constantsRef, PLAYER_INIT_POS);
 #pragma mark hp node
@@ -62,60 +62,79 @@ void PlayerController::applyForce() {
     // Don't want to be moving.f Damp out player motion
     if (_player->getMovement() == 0.0f && !_player->isDashActive() && !_player->isKnockbackActive()) {
         if (_player->isGrounded()) {
+            // CULog("Setting x vel to 0");
             // Instant friction on the grounds
             b2Vec2 vel = playerBody->GetLinearVelocity();
             vel.x = 0; // If you set y, you will stop a jump in place
             playerBody->SetLinearVelocity(vel);
-        } else {
+        }
+        else {
             //             Damping factor in the air
-            b2Vec2 force(_player->getDamping()*_player->getVX(),0);
-            playerBody->ApplyForceToCenter(force,true);
+            b2Vec2 force(_player->getDamping() * _player->getVX(), 0);
+            playerBody->ApplyForceToCenter(force, true);
         }
     }
+
+    if (!_player->isGuardActive()) {
+        // Dash!
+        if (_player->isDashLeftBegin()) {
+            CULog("player dashing left begin");
+            _player->faceLeft();
+            // b2Vec2 force(-_player->getDashF(),0);
+            // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
+            playerBody->SetLinearVelocity(b2Vec2(-_player->getDashF(), playerBody->GetLinearVelocity().y));
+        }
+        if (_player->isDashRightBegin()) {
+            CULog("player dashing right begin");
+            _player->faceRight();
+            // b2Vec2 force(DASH, 0);
+            // _body->ApplyLinearImpulseToCenter(force, true);
+            playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
+        }
+
+        if (_player->isDashActive())
+        {
+            playerBody->SetLinearVelocity(b2Vec2(_player->getVX(), 0));
+        }
+
+        if (!_player->isDashActive()) {
 #pragma mark strafe force
-//    b2Vec2 force(getMovement(),0);
-    // Ignore stafe input if in a dash (intentional)
-    if (!_player->isDashActive() && !_player->isKnockbackActive()) {
-        playerBody->SetLinearVelocity(b2Vec2(_player->getMovement(), playerBody->GetLinearVelocity().y));
-    }
-    // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
+            //    b2Vec2 force(getMovement(),0);
+                // Ignore stafe input if in a dash (intentional)
+            if (!_player->isDashActive() && !_player->isKnockbackActive()) {
+                playerBody->SetLinearVelocity(b2Vec2(_player->getMovement(), playerBody->GetLinearVelocity().y));
+            }
+            // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
 #pragma mark jump force
     // Jump!
-    if (_player->isJumpBegin() && _player->isGrounded()) {
-        b2Vec2 force(0, _player->getJumpF());
-        playerBody->ApplyLinearImpulseToCenter(force,true);
-    }
+            if (_player->isJumpBegin() && _player->isGrounded()) {
+                CULog("Applying jump impulse to player");
+                b2Vec2 force(0, _player->getJumpF());
+                playerBody->ApplyLinearImpulseToCenter(force, true);
+            }
+        }
 #pragma mark dash force
-    // Dash!
-    if (_player->isDashLeftBegin()){
-        _player->faceLeft();
-        // b2Vec2 force(-_player->getDashF(),0);
-        // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
-        playerBody->SetLinearVelocity(b2Vec2(-_player->getDashF(), playerBody->GetLinearVelocity().y));
-    }
-    if (_player->isDashRightBegin()){
-        _player->faceRight();
-        // b2Vec2 force(DASH, 0);
-        // _body->ApplyLinearImpulseToCenter(force, true);
-        playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
-    }
 #pragma mark knockback force
-    if (_player->isKnocked()) {
-        playerBody->SetLinearVelocity(b2Vec2(0,0));
-        Vec2 knockDirection = _player->getKnockDirection();
-        Vec2 knockForce = knockDirection.subtract(Vec2(0,knockDirection.y)).scale(_player->getKnockF());
-        playerBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _player->getKnockF()), true);
+        if (_player->isKnocked()) {
+            //CULog("Applying player knockback force");
+            playerBody->SetLinearVelocity(b2Vec2(0, 0));
+            Vec2 knockDirection = _player->getKnockDirection();
+            Vec2 knockForce = knockDirection.subtract(Vec2(0, knockDirection.y)).scale(_player->getKnockF());
+            playerBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _player->getKnockF()), true);
+        }
     }
     // Velocity too high, clamp it
     if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashActive() && !_player->isKnockbackActive()) {
-        _player->setVX(SIGNUM(_player->getVX())*_player->getMaxSpeed());
+        //CULog("clamping velocity");
+        _player->setVX(SIGNUM(_player->getVX()) * _player->getMaxSpeed());
     }
 }
 
 
 #pragma mark preUpdate
 void PlayerController::preUpdate(float dt)
-{    _input->update(dt);
+{
+    _input->update(dt);
     // can't reset or set debug for the whole scene from player controller- we should use buttons for reset, debug , exit instead of keyboard (or gesture) inputs
     //    // Process the toggled key commands
     //    if (_input->didDebug()) { setDebug(!isDebug()); }
@@ -124,12 +143,12 @@ void PlayerController::preUpdate(float dt)
     //        CULog("Shutting down");
     //        Application::get()->quit();
     //    }
-    
+
     // Process the movement inputs
-    _player->setMovement(_input->getHorizontal()*_player->getForce());
+    _player->setMovement(_player->isGuardActive() ? 0 : _input->getHorizontal() * _player->getForce());
     _player->setStrafeLeft(_input->didStrafeLeft());
     _player->setStrafeRight(_input->didStrafeRight());
-    _player->setJumpInput( _input->didJump());
+    _player->setJumpInput(_input->didJump());
     _player->setDashLeftInput(_input->didDashLeft());
     _player->setDashRightInput(_input->didDashRight());
     _player->setGuardInput(_input->didGuard());
@@ -137,11 +156,11 @@ void PlayerController::preUpdate(float dt)
     _hpNode->setText(std::to_string((int)_player->getHP()));
     applyForce();
     updateCooldowns();
-    
+
     if (_player->isJumpBegin() && _player->isGrounded()) {
         std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
         std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
-        AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
+        AudioEngine::get()->play(fxJ->getString("jump"), source, false, fxJ->getFloat("volume"));
     }
 }
 #pragma mark fixedUpdate
@@ -157,46 +176,51 @@ void PlayerController::postUpdate(float dt)
 void PlayerController::updateCooldowns()
 {
 #pragma mark Guard cooldown
+    if (_player->iframe > 0) _player->iframe--;
     // player inputs guard and cooldown is ready
     if (_player->isGuardBegin()) {
         _player->setGuardCDRem();
         _player->setGuardRem();
         _player->setParryRem();
         _player->setShieldDebugColor(Color4::GREEN);
+        CULog("Beginning guard and parry");
     }
-    if (_player->isGuardActive() && !_player->isGuardBegin()){
+    if (_player->isGuardActive() && !_player->isGuardBegin()) {
+        CULog("Guard is active");
         int guardRem = _player->getGuardRem();
         //CULog("Updating guard duration from %d", guardRem);
         _player->setGuardRem(guardRem - 1);
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
-        if (parryRem == 0){
+        if (parryRem == 0) {
             // Parry ending on this frame
             _player->setShieldDebugColor(Color4::BLUE);
-            }
         }
+    }
     // guard not active, update cooldown
-    else if (_player->getGuardCDRem()>0) {
+    else if (_player->getGuardCDRem() > 0) {
         //CULog("Updating guard cooldown from %d", _player->getGuardCDRem());
         int guardCD = _player->getGuardCDRem();
         _player->setGuardCDRem(guardCD - 1);
-        if (_player->getGuardCDRem() == 0){
+        if (_player->getGuardCDRem() == 0) {
             //end guard
             _player->setShieldDebugColor(PLAYER_DEBUG_COLOR);
         }
     }
-    
+
 #pragma mark Jump cooldown
     if (_player->isJumpBegin() && _player->isGrounded()) {
         _player->setJumpCDRem();
-    } else {
+    }
+    else {
         int jumpCD = _player->getJumpCDRem();
-        _player->setJumpCDRem(jumpCD > 0 ? jumpCD - 1 :0);
+        _player->setJumpCDRem(jumpCD > 0 ? jumpCD - 1 : 0);
     }
 #pragma mark Shoot cooldown
     if (_player->isShooting()) {
         _player->setShootCDRem();
-    } else {
+    }
+    else {
         int shootCD = _player->getShootCDRem();
         _player->setShootCDRem(shootCD > 0 ? shootCD - 1 : 0);
     }
@@ -208,31 +232,32 @@ void PlayerController::updateCooldowns()
         _player->setShootCDRem();
         _player->setKnockbackRem();
         _player->resetKnocked();
-    } else {
+    }
+    else {
         int kbREM = _player->getKnockbackRem();
         _player->setKnockbackRem(kbREM > 0 ? kbREM - 1 : 0);
     }
 #pragma mark dash cooldowns
     if (_player->isDashBegin()) {
-//        CULog("Setting player dash cooldowns");
+        //        CULog("Setting player dash cooldowns");
         _player->setDashRem();
         _player->setDashCDRem();
         _player->setDashReset(false); //only needed (and is it really needed?) for keyboard
     }
-    else if (_player->getDashCDRem()>0){
-//        CULog("Decrementing Dash cooldowns, frames rem from %d and cdrem from %d", _player->getDashRem(), _player->getDashCDRem());
+    else if (_player->getDashCDRem() > 0) {
+        //        CULog("Decrementing Dash cooldowns, frames rem from %d and cdrem from %d", _player->getDashRem(), _player->getDashCDRem());
         int dashRem = _player->getDashRem();
         _player->setDashRem(dashRem > 0 ? dashRem - 1 : 0);
         int dashCDRem = _player->getDashCDRem();
         _player->setDashCDRem(dashCDRem > 0 ? dashCDRem - 1 : 0);
     }
-    
+
     // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
-    if (!_player->getDashReset() && _player->getDashCDRem() == 0 && !(_player->isDashInput())) {
-//        CULog("Resetting dash");
+    if (!_player->getDashReset() && _player->getDashCDRem() <= 0 && !(_player->isDashInput())) {
+        //        CULog("Resetting dash");
         _player->setDashReset(true); // ready to dash again
     }
-    
+
 }
 
 
@@ -252,4 +277,3 @@ void PlayerController::fireProjectile()
 void PlayerController::deflectProjectile()
 {
 }
-

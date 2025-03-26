@@ -1,4 +1,4 @@
-//
+ï»¿//
 //  PlayerController.h
 //
 
@@ -27,9 +27,9 @@ private:
     /** Data */
     std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonValue> _constantsJSON;
-    
+
 public:
-    
+
     /** Constructor */
     PlayerController();
 
@@ -39,7 +39,7 @@ public:
     /**
      * Initializes the player controller.
      */
-    void init(const std::shared_ptr<AssetManager>& assetRef,  const std::shared_ptr<JsonValue>& constantsRef);
+    void init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef);
 
     /**
      * Disposes of all (non-static) resources allocated to this controller.
@@ -50,7 +50,7 @@ public:
      * Resets the status of the PlayerController so that we can play again.
      */
     void reset();
-    
+
     /** Apply force to the player model*/
     void applyForce();
 
@@ -78,13 +78,13 @@ public:
     void postUpdate(float dt);
 
     /**
-     * Activates the player’s shield.
+     * Activates the playerï¿½s shield.
      */
     void activateShield();
 
     /**
-     * @brief 
-     * 
+     * @brief
+     *
      */
     void deactivateShield();
 
@@ -97,11 +97,11 @@ public:
      * Deflects a projectile using the shield.
      */
     void deflectProjectile();
-    
-    #pragma mark Getters
-    std::shared_ptr<PlayerModel> getPlayer() {return _player;};
+
+#pragma mark Getters
+    std::shared_ptr<PlayerModel> getPlayer() { return _player; };
     //can remove this once no longer need input for debugging.
-    std::shared_ptr<PlatformInput> getInputController() {return _input;};
+    std::shared_ptr<PlatformInput> getInputController() { return _input; };
 };
 
 

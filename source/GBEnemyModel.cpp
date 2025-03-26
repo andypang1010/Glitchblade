@@ -69,50 +69,61 @@ using namespace graphics;
  */
 bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
     resetAttributes();
-    
+
     float scale = constantsRef->get("scene")->getFloat("scale");
     _enemyJSON = constantsRef->get("enemy");
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
-    
-    Size nsize = Size(90, 130) / scale;
-    nsize.width  *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
+
+    Size nsize = Size(90, 180) / scale;
+    nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     _drawScale = scale;
-    
+
     setDebugColor(_enemyJSON->get("debug")->getString("color"));
-    if (BoxObstacle::init(pos,nsize)) {
+    if (BoxObstacle::init(pos, nsize)) {
         setDensity(ENEMY_DENSITY);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
         attachNodes(assetRef);
+
+        for (auto act : actions) {
+            if (act->getActionName() == "slam") {
+                _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            }
+            else if (act->getActionName() == "stab") {
+                _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            }
+        }
+
         return true;
     }
+
     return false;
 }
 
-void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef){
+void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 6, 6);
-    _idleSprite->setPosition(0, 40);
+    _idleSprite->setPosition(0, 50);
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walking1"), 1, 8, 8);
-    _walkSprite->setPosition(0, 40);
+    _walkSprite->setPosition(0, 50);
 
     _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 4, 10, 40);
-    _slamSprite->setPosition(0, 40);
+    _slamSprite->setPosition(0, 50);
 
     _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 4, 10, 40);
-    _stabSprite->setPosition(0, 40);
+    _stabSprite->setPosition(0, 50);
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
-    _stunSprite->setPosition(0, 40);
+    _stunSprite->setPosition(0, 50);
 
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
-    
+
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_slamSprite);
@@ -146,7 +157,7 @@ void EnemyModel::setMovement(float value) {
     if (_movement == 0 || _faceRight == face || _isStabbing) {
         return;
     }
-    
+
     // Change facing
     scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
     if (image != nullptr) {
@@ -193,41 +204,29 @@ void EnemyModel::createFixtures() {
     if (_body == nullptr) {
         return;
     }
-    
+
     BoxObstacle::createFixtures();
     b2FixtureDef sensorDef;
     sensorDef.density = ENEMY_DENSITY;
     sensorDef.isSensor = true;
-    
+
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -ENEMY_SSHRINK*getWidth()/2.0f;
-    corners[0].y = (-getHeight()+ENEMY_SENSOR_HEIGHT)/2.0f;
-    corners[1].x = -ENEMY_SSHRINK*getWidth()/2.0f;
-    corners[1].y = (-getHeight()-ENEMY_SENSOR_HEIGHT)/2.0f;
-    corners[2].x = ENEMY_SSHRINK*getWidth()/2.0f;
-    corners[2].y = (-getHeight()-ENEMY_SENSOR_HEIGHT)/2.0f;
-    corners[3].x = ENEMY_SSHRINK*getWidth()/2.0f;
-    corners[3].y = (-getHeight()+ENEMY_SENSOR_HEIGHT)/2.0f;
-    
+    corners[0].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
+    corners[0].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
+    corners[1].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
+    corners[1].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
+    corners[2].x = ENEMY_SSHRINK * getWidth() / 2.0f;
+    corners[2].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
+    corners[3].x = ENEMY_SSHRINK * getWidth() / 2.0f;
+    corners[3].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
+
     b2PolygonShape sensorShape;
-    sensorShape.Set(corners,4);
-    
+    sensorShape.Set(corners, 4);
+
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
-    
-    // create shield circle fixture
-    b2FixtureDef shieldDef;
-    b2CircleShape shieldShape;
-    shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
-    shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
-    shieldDef.isSensor = true;
-    shieldDef.shape = &sensorShape;
-    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
-    _shieldFixture = _body->CreateFixture(&shieldDef);
-
-    // create attack fixtures
 }
 
 /**
@@ -239,7 +238,7 @@ void EnemyModel::releaseFixtures() {
     if (_body != nullptr) {
         return;
     }
-    
+
     BoxObstacle::releaseFixtures();
     if (_sensorFixture != nullptr) {
         _body->DestroyFixture(_sensorFixture);
@@ -257,10 +256,8 @@ void EnemyModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
     _sensorNode = nullptr;
-    _shieldNode = nullptr;
     _geometry = nullptr;
     _sensorNode = nullptr;
-    _shieldNode = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
@@ -280,49 +277,20 @@ void EnemyModel::update(float dt) {
     nextAction();
 
     // Apply cooldowns
-    
 
-    if (isJumpBegin() && isGrounded()) {
-        _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
-    } else {
-        _jumpCooldownRem = (_jumpCooldownRem > 0 ? _jumpCooldownRem-1 : 0);
-    }
-    
     if (isKnocked()) {
-        _dashCooldownRem = ENEMY_DASH_COOLDOWN;
-        _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
-        _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;
-    }
-    
-    if (isShooting()) {
-        _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;
-    } else {
-        _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
-    }
-    
-    if (isDashBegin()) {
-        _dashRem = ENEMY_DASH_DURATION;
-        _dashCooldownRem = ENEMY_DASH_COOLDOWN;
-    }
-    else {
-        _dashRem = (_dashRem > 0 ? _dashRem-1 : 0);
-        if (_dashRem == 0){
-            _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
-        }
-    }
-    // player inputs guard and cooldown is ready
-    if (isGuardBegin()) {
-        _guardCooldownRem = ENEMY_GUARD_COOLDOWN;
-        _guardRem = ENEMY_GUARD_DURATION;
+        CULog("enmey knockback applied");
+        resetKnocked();
     }
 
     if (isStunned()) {
+        CULog("Enemy stunned\n");
         _stunRem--;
     }
-    
+
     BoxObstacle::update(dt);
     if (_node != nullptr) {
-        _node->setPosition(getPosition()*_drawScale);
+        _node->setPosition(getPosition() * _drawScale);
         _node->setAngle(getAngle());
     }
 }
@@ -337,13 +305,11 @@ void EnemyModel::nextAction() {
     int r = rand();
     AIMove();
     if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
-        if (r%3 == 0) { //Slam
-            _isSlamming = true;
-            setMovement(0);
+        if (r % 3 == 0) { //Slam
+            slam();
         }
-        else if(r % 3 == 1){ // Stab
-            _isStabbing = true;
-            setMovement(0);
+        else if (r % 3 == 1) { // Stab
+            stab();
         }
         else { // Move away
             _moveDuration = 45;
@@ -352,10 +318,9 @@ void EnemyModel::nextAction() {
     }
     else if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && !isStunned()) {
         if (r % 2 == 0) { // Stab
-            _isStabbing = true;
-            setMovement(0);
+            stab();
         }
-        else{ // Move closer
+        else { // Move closer
             _moveDuration = 45;
             _moveDirection = 1;
         }
@@ -366,11 +331,11 @@ void EnemyModel::nextAction() {
             _isStabbing = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES-1) {
+        if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES - 1) {
             _isSlamming = false;
             setMovement(0);
         }
-        if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES-1) {
+        if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES - 1) {
             _isStabbing = false;
             setMovement(getMovement());
         }
@@ -381,36 +346,50 @@ void EnemyModel::AIMove() {
     float dist = getPosition().x - _targetPos.x;
     float dir_val = dist > 0 ? -1 : 1;
     int face = _faceRight ? 1 : -1;
-    
+
     if (_moveDuration > 0 && !_isStabbing) {
-        setMovement(_moveDirection * dir_val* getForce());
-        setStrafeLeft(dist > 0);
-        setStrafeRight(dist < 0);
+        setMovement(_moveDirection * dir_val * getForce());
+        setMoveLeft(dist > 0);
+        setMoveRight(dist < 0);
         _moveDuration--;
     }
-    //else if (_moveDuration > 0) {
-    //    _moveDuration--;
-    //}
-    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
-        /*_faceRight ? setDashRightInput(true) : setDashLeftInput(true);*/
-        /*b2Vec2 force(face * ENEMY_DASH, 0);
-        _body->ApplyLinearImpulseToCenter(force, true);*/
-        /*_moveDuration = STAB_DAMAGE_END_FRAME - STAB_DAMAGE_START_FRAME;*/
-        setMovement(face * getForce() * ENEMY_DASH);
+
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
+        setMovement(face * getForce() * STAB_FORCE);
     }
-    
+
 }
 
-bool EnemyModel::isDamaging() {
-    if (_isSlamming && _slamSprite->getFrame() >= SLAM_DAMAGE_START_FRAME-1 && _slamSprite->getFrame() <= SLAM_DAMAGE_END_FRAME - 1) {
-        return true;
-    }
-    else if (_isStabbing && _stabSprite->getFrame() >= STAB_DAMAGE_START_FRAME - 1 && _stabSprite->getFrame() <= STAB_DAMAGE_END_FRAME - 1) {
-        return true;
+void EnemyModel::slam() {
+    if (getPosition().x - _targetPos.x < 0) {
+        faceRight();
     }
     else {
-        return false;
+        faceLeft();
     }
+    _isSlamming = true;
+    setMovement(0);
+}
+
+void EnemyModel::stab() {
+    if (getPosition().x - _targetPos.x < 0) {
+        faceRight();
+    }
+    else {
+        faceLeft();
+    }
+    _isStabbing = true;
+    setMovement(0);
+}
+
+std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
+    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartTime() - 1) {
+        return _stab;
+    }
+    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
+        return _slam;
+    }
+    return nullptr;
 }
 
 #pragma mark -
@@ -418,7 +397,7 @@ bool EnemyModel::isDamaging() {
 void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
     if (sprite->isVisible()) {
         currentFrame++;
-        if (currentFrame > sprite->getCount()*E_ANIMATION_UPDATE_FRAME) {
+        if (currentFrame > sprite->getCount() * E_ANIMATION_UPDATE_FRAME) {
             currentFrame = 0;
         }
 
@@ -435,8 +414,8 @@ void EnemyModel::updateAnimation()
 {
 
     _stunSprite->setVisible(isStunned());
-    
-    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()));
+
+    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && isGrounded() && (isMoveLeft() || isMoveRight()));
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
@@ -470,17 +449,10 @@ void EnemyModel::updateAnimation()
  */
 void EnemyModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = ENEMY_SSHRINK*_dimension.width;
+    float w = ENEMY_SSHRINK * _dimension.width;
     float h = ENEMY_SENSOR_HEIGHT;
-    Poly2 dudePoly(Rect(-w/0.1f,-h/2.0f,w,h));
+    Poly2 dudePoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
     _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(ENEMY_DEBUG_COLOR);
-    _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
-
-    Poly2 shieldPoly;
-    shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, ENEMY_SHIELD_RADIUS);
-    _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldNode->setColor(ENEMY_DEBUG_COLOR);
-    
+    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
 }
-

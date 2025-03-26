@@ -74,11 +74,11 @@ using namespace cugl;
 /** Cooldown (in frames) for guard */
 #define PLAYER_GUARD_COOLDOWN  15
 /** Cooldown (in frames) for dash */
-#define PLAYER_DASH_COOLDOWN  30
+#define PLAYER_DASH_COOLDOWN  45
 /** Duration (in frames) for guard */
-#define PLAYER_GUARD_DURATION  44
+#define PLAYER_GUARD_DURATION  48
 /** Duration (in frames) for parry */
-#define PLAYER_PARRY_DURATION  24
+#define PLAYER_PARRY_DURATION  12
 /** Duration (in frames) for dash- affects friction*/
 #define PLAYER_DASH_DURATION  20
 /** The amount to shrink the body fixture (vertically) relative to the image */
@@ -115,17 +115,17 @@ using namespace cugl;
 */
 class PlayerModel : public physics2::BoxObstacle {
 private:
-	/** This macro disables the copy constructor (not allowed on physics objects) */
-	CU_DISALLOW_COPY_AND_ASSIGN(PlayerModel);
+    /** This macro disables the copy constructor (not allowed on physics objects) */
+    CU_DISALLOW_COPY_AND_ASSIGN(PlayerModel);
 protected:
     /** This character's remaining health */
     float _hp;
-	/** The current horizontal movement of the character */
-	float _movement;
-	/** Which direction is the character facing */
-	bool _faceRight;
-	/** How long until we can jump again in animation frames */
-	int  _jumpCooldownRem;
+    /** The current horizontal movement of the character */
+    float _movement;
+    /** Which direction is the character facing */
+    bool _faceRight;
+    /** How long until we can jump again in animation frames */
+    int  _jumpCooldownRem;
     /** How long until we can dash again in frames*/
     int  _dashCooldownRem;
     /** How many frames remaining in the dash animation (affects friciton)*/
@@ -136,8 +136,8 @@ protected:
     int  _guardRem;
     /** How many frames remaining in the parry (0 when parry is not active) */
     int  _parryRem;
-	/** Whether we are actively inputting jumping */
-	bool _isJumpInput;
+    /** Whether we are actively inputting jumping */
+    bool _isJumpInput;
     /** Whether we are actively inputting strafe left*/
     bool _isStrafeLeft;
     /** Whether we are actively inputting strafe right*/
@@ -157,42 +157,42 @@ protected:
     /** Whether we are knocked-back (sets input cd) */
     int _knockbackRem;
     Vec2 _knockDirection;
-	/** How long until we can shoot again in animation frames*/
-	int  _shootCooldownRem;
-	/** Whether our feet are on the ground */
-	bool _isGrounded;
+    /** How long until we can shoot again in animation frames*/
+    int  _shootCooldownRem;
+    /** Whether our feet are on the ground */
+    bool _isGrounded;
     /** Whether the dash has been released (reset) */
     bool _dashReset = true;
 
     std::string _bodyName;
-	/** Ground sensor to represent our feet */
-	b2Fixture*  _sensorFixture;
-	/** Reference to the sensor name (since a constant cannot have a pointer) */
-	std::string _sensorName;
-	/** The node for debugging the ground sensor */
-	std::shared_ptr<scene2::WireNode> _sensorNode;
     /** Ground sensor to represent our feet */
-    b2Fixture*  _shieldFixture;
+    b2Fixture* _sensorFixture;
+    /** Reference to the sensor name (since a constant cannot have a pointer) */
+    std::string _sensorName;
+    /** The node for debugging the ground sensor */
+    std::shared_ptr<scene2::WireNode> _sensorNode;
+    /** Ground sensor to represent our feet */
+    b2Fixture* _shieldFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
     std::string _shieldName;
     /** The node for debugging the ground sensor */
     std::shared_ptr<scene2::WireNode> _shieldNode;
     /** The guard shield when guard is active */
     /** The player scene node**/
-	std::shared_ptr<scene2::SceneNode> _sceneNode;
-	/** The scale between the physics world and the screen (MUST BE UNIFORM) */
-	float _drawScale;
+    std::shared_ptr<scene2::SceneNode> _sceneNode;
+    /** The scale between the physics world and the screen (MUST BE UNIFORM) */
+    float _drawScale;
 
-    int currentFrame;
+    int currentFrame = 0;
 
-	/**
-	* Redraws the outline of the physics fixtures to the debug node
-	*
-	* The debug node is use to outline the fixtures attached to this object.
-	* This is very useful when the fixtures have a very different shape than
-	* the texture (e.g. a circular shape attached to a square texture).
-	*/
-	virtual void resetDebug() override;
+    /**
+    * Redraws the outline of the physics fixtures to the debug node
+    *
+    * The debug node is use to outline the fixtures attached to this object.
+    * This is very useful when the fixtures have a very different shape than
+    * the texture (e.g. a circular shape attached to a square texture).
+    */
+    virtual void resetDebug() override;
 
 public:
     int iframe = 0;
@@ -205,6 +205,7 @@ public:
     std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
+
 #pragma mark Hidden Constructors
     /**
      * Creates a degenerate player object.
@@ -212,13 +213,13 @@ public:
      * This constructor does not initialize any of the player values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    PlayerModel() : BoxObstacle(), _sensorName(PLAYER_SENSOR_NAME), _shieldName(PLAYER_SHIELD_SENSOR_NAME), _bodyName(PLAYER_BODY_NAME) { }
-    
+    PlayerModel() : BoxObstacle(), _sensorName(PLAYER_SENSOR_NAME), _shieldName(PLAYER_SHIELD_SENSOR_NAME), _bodyName(PLAYER_BODY_NAME) {}
+
     /**
      * Destroys this PlayerModel, releasing all resources.
      */
     virtual ~PlayerModel(void) { dispose(); }
-    
+
     /**
      * Disposes all resources and assets of this PlayerModel
      *
@@ -241,68 +242,68 @@ public:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos);
+    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos);
 
-    
+
 #pragma mark -
 #pragma mark Static Constructors
-	/**
-	 * Creates a new player that is uninitialized.
-	 * @return  A newly allocated, unitialized PlayerModel
-	 */
-	static std::shared_ptr<PlayerModel> alloc() {
-		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
-		return (result? result : nullptr);
-	}
+    /**
+     * Creates a new player that is uninitialized.
+     * @return  A newly allocated, unitialized PlayerModel
+     */
+    static std::shared_ptr<PlayerModel> alloc() {
+        std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
+        return (result ? result : nullptr);
+    }
 
-	/**
-	 * Creates a new player at the given position.
-	 *
-	 * The player is sized according to the given drawing scale.
-	 *
-	 * The scene graph is completely decoupled from the physics system.
-	 * The node does not have to be the same size as the physics body. We
-	 * only guarantee that the scene graph node is positioned correctly
-	 * according to the drawing scale.
-	 *
-	 * @param pos   Initial position in world coordinates
+    /**
+     * Creates a new player at the given position.
+     *
+     * The player is sized according to the given drawing scale.
+     *
+     * The scene graph is completely decoupled from the physics system.
+     * The node does not have to be the same size as the physics body. We
+     * only guarantee that the scene graph node is positioned correctly
+     * according to the drawing scale.
+     *
+     * @param pos   Initial position in world coordinates
      * @param constantsJSON reference to JsonValue with constants
-	 *
-	 * @return  A newly allocated PlayerModel at the given position with the given scale
-	 */
-	static std::shared_ptr<PlayerModel> alloc(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos) {
-		std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
-		return (result->init(assetRef, constantsRef, pos) ? result : nullptr);
-	}
-    
+     *
+     * @return  A newly allocated PlayerModel at the given position with the given scale
+     */
+    static std::shared_ptr<PlayerModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos) {
+        std::shared_ptr<PlayerModel> result = std::make_shared<PlayerModel>();
+        return (result->init(assetRef, constantsRef, pos) ? result : nullptr);
+    }
+
 #pragma mark -
 #pragma mark Level Control and Constructor Helpers
-     /** Reset all the player attributes to their initial values*/
-     void resetAttributes(){
-         _hp = PLAYER_MAXHP;
-         _isGrounded = false;
-         _isShootInput = false;
-         _isJumpInput  = false;
-         _isStrafeLeft = false;
-         _isStrafeRight = false;
-         _isDashLeftInput = false;
-         _isDashRightInput = false;
-         _isGuardInput = false;
-         _hasProjectile = false;
-         _faceRight  = true;
-         _dashReset = true; //must init to true to be able to dash?
-         _shootCooldownRem = 0;
-         _jumpCooldownRem  = 0;
-         _dashCooldownRem = 0;
-         _dashRem = 0;
-         _guardCooldownRem = 0;
-         _guardRem = 0;
-         _parryRem= 0;
-     };
-    
+    /** Reset all the player attributes to their initial values*/
+    void resetAttributes() {
+        _hp = PLAYER_MAXHP;
+        _isGrounded = false;
+        _isShootInput = false;
+        _isJumpInput = false;
+        _isStrafeLeft = false;
+        _isStrafeRight = false;
+        _isDashLeftInput = false;
+        _isDashRightInput = false;
+        _isGuardInput = false;
+        _hasProjectile = false;
+        _faceRight = true;
+        _dashReset = true; //must init to true to be able to dash?
+        _shootCooldownRem = 0;
+        _jumpCooldownRem = 0;
+        _dashCooldownRem = 0;
+        _dashRem = 0;
+        _guardCooldownRem = 0;
+        _guardRem = 0;
+        _parryRem = 0;
+    };
+
     /**Attach the scene nodes (sprite sheets) to the player**/
     void attachNodes(const std::shared_ptr<AssetManager>& assetRef);
-    
+
 #pragma mark -
 #pragma mark Animation
     /**
@@ -314,7 +315,7 @@ public:
      *
      * @return the scene graph node representing this PlayerModel.
      */
-	const std::shared_ptr<scene2::SceneNode>& getSceneNode() const { return _sceneNode; }
+    const std::shared_ptr<scene2::SceneNode>& getSceneNode() const { return _sceneNode; }
 
     /**
      * Sets the scene graph node representing this PlayerModel.
@@ -334,12 +335,12 @@ public:
      *
      * @param node  The scene graph node representing this PlayerModel, which has been added to the world node already.
      */
-	void setSceneNode(const std::shared_ptr<scene2::SceneNode>& node) {
+    void setSceneNode(const std::shared_ptr<scene2::SceneNode>& node) {
         _sceneNode = node;
         _sceneNode->setPosition(getPosition() * _drawScale);
     }
 
-    
+
 #pragma mark -
 #pragma mark Attribute Properties
     /**
@@ -351,14 +352,14 @@ public:
 
     /**
      * Sets the remaining health of this character.
-     * 
+     *
      * @param value the new hp.
      */
     void setHP(float value) { _hp = value; }
 
     /**
      * Reduces the health of this character.
-     * 
+     *
      * @param value the amount of hp reduction.
      */
     void damage(float value);
@@ -371,7 +372,7 @@ public:
      * @return left/right movement of this character.
      */
     float getMovement() const { return _movement; }
-    
+
     /**
      * Sets left/right movement of this character.
      *
@@ -390,7 +391,7 @@ public:
     * Sets the character to face right
     */
     void faceRight();
-    
+
     /**
      * Returns true if the player is actively firing.
      *
@@ -402,14 +403,14 @@ public:
      *
      * @return true if the player is actively strafing left.
      */
-    void setStrafeLeft(bool value) {_isStrafeLeft = value;};
+    void setStrafeLeft(bool value) { _isStrafeLeft = value; };
 
     /**
      * Sets whether the player is actively strafing right.
      *
      * @param value whether the player is actively strafing right.
      */
-    void setStrafeRight(bool value) {_isStrafeRight = value;};
+    void setStrafeRight(bool value) { _isStrafeRight = value; };
 
     /**
      * Sets whether the player has a swallowed projectile.
@@ -469,7 +470,7 @@ public:
      * @return true if the player is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
      */
     bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
-    
+
     /**
      * Returns true if the player is actively dashing left.
      *
@@ -493,80 +494,80 @@ public:
      *
      * @return value whether the player is performing a movement action.
      */
-    bool isMoveBegin() {return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
-    
+    bool isMoveBegin() { return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
+
     /**
      *  Returns true if the player is currently beginning guard action.
      *
      * @return value whether the player is beginning guard action.
      */
     bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; };
-      /**
-     * Returns true if the player has a swallowed projectile.
-     *
-     * @return value whether the player has a swallowed projectile.
-     */
     /**
-     * Returns true ifrthe player is actively guarding.
-     *
-     * @return value whether the player is actively guarding.
-     */
+   * Returns true if the player has a swallowed projectile.
+   *
+   * @return value whether the player has a swallowed projectile.
+   */
+   /**
+    * Returns true ifrthe player is actively guarding.
+    *
+    * @return value whether the player is actively guarding.
+    */
     bool isGuardActive() { return  _guardRem > 0 || isGuardBegin(); };
-    
+
     /**
      * Returns the amount of guard frames remaining
      *
      * @return the amount of guard frames remaining
      */
-    int getGuardRem() {return _guardRem; };
-    
+    int getGuardRem() { return _guardRem; };
+
     /**
      * Used to set the amount of guard frames remaining
      *
      * @param the value that remaining guard frames should be set to
      */
-    void setGuardRem(int value = PLAYER_GUARD_DURATION) {_guardRem = value; };
+    void setGuardRem(int value = PLAYER_GUARD_DURATION) { _guardRem = value; };
     /**
      * Returns the amount of frames remaining before the player can guard again
      *
      * @returns the amount of frames remaining before the player can guard again
      */
-    int getGuardCDRem() {return _guardCooldownRem; };
-    
+    int getGuardCDRem() { return _guardCooldownRem; };
+
     /**
      * Used to set the amount of frames remaining before the player can guard again
      *
      * @param the amount of frames remaining before the player can guard again should be set to
      */
-    void setGuardCDRem(int value = PLAYER_GUARD_COOLDOWN) {_guardCooldownRem = value; };
-    void setShieldDebugColor(Color4 c) {_shieldNode->setColor(c);}
-    
+    void setGuardCDRem(int value = PLAYER_GUARD_COOLDOWN) { _guardCooldownRem = value; };
+    void setShieldDebugColor(Color4 c) { _shieldNode->setColor(c); }
+
     /**
      * Returns the amount of dash frames remaining
      *
      * @return the amount of dash frames remaining
      */
-    int getDashRem() {return _dashRem; };
-    
+    int getDashRem() { return _dashRem; };
+
     /**
      * Used to set the amount of dash frames remaining
      *
      * @param the value that remaining dash frames should be set to
      */
-    void setDashRem(int value = PLAYER_DASH_DURATION) {_dashRem = value; };
+    void setDashRem(int value = PLAYER_DASH_DURATION) { _dashRem = value; };
     /**
      * Returns the amount of frames remaining before the player can dash again
      *
      * @returns the amount of frames remaining before the player can dash again
      */
-    int getDashCDRem() {return _dashCooldownRem; };
-    
+    int getDashCDRem() { return _dashCooldownRem; };
+
     /**
      * Used to set the amount of frames remaining before the player can dash again
      *
      * @param the amount of frames remaining before the player can dash again should be set to
      */
-    void setDashCDRem(int value = PLAYER_DASH_COOLDOWN) {_dashCooldownRem = value; };
+    void setDashCDRem(int value = PLAYER_DASH_COOLDOWN) { _dashCooldownRem = value; };
 
     /**
      * Returns true if the player is actively parrying.
@@ -579,27 +580,27 @@ public:
      *
      * @return the amount of parry frames remaining
      */
-    int getParryRem() {return _parryRem; };
-    
+    int getParryRem() { return _parryRem; };
+
     /**
      * Used to set the amount of parry frames remaining
      *
      * @param the value that remaining parry frames should be set to
      */
-    void setParryRem(int value = PLAYER_PARRY_DURATION) {_parryRem = value; };
+    void setParryRem(int value = PLAYER_PARRY_DURATION) { _parryRem = value; };
     /**
      * Returns the amount of knockback frames remaining
      *
      * @return the amount of knockback frames remaining
      */
-    int getKnockbackRem() {return _knockbackRem; };
-    
+    int getKnockbackRem() { return _knockbackRem; };
+
     /**
      * Used to set the amount of knockback frames remaining
      *
      * @param the value that remaining knockback frames should be set to
      */
-    void setKnockbackRem(int value = PLAYER_KB_DURATION) {_knockbackRem = value; };
+    void setKnockbackRem(int value = PLAYER_KB_DURATION) { _knockbackRem = value; };
     /**
      * Returns true if the player has a swallowed projectile.
      *
@@ -617,33 +618,33 @@ public:
      *
      * @returns the amount of frames remaining before the player can jump again
      */
-    int getJumpCDRem() {return _jumpCooldownRem; };
-    
+    int getJumpCDRem() { return _jumpCooldownRem; };
+
     /**
      * Used to set the amount of frames remaining before the player can jump again
      *
      * @param the value that the amount of frames remaining before the player can jump again should be set to
      */
-    void setJumpCDRem(int value = PLAYER_JUMP_COOLDOWN) {_jumpCooldownRem = value; };
+    void setJumpCDRem(int value = PLAYER_JUMP_COOLDOWN) { _jumpCooldownRem = value; };
     /**
      * Returns the amount of frames remaining before the player can shoot again
      *
      * @returns the amount of frames remaining before the player can shoot again
      */
-    int getShootCDRem() {return _shootCooldownRem; };
-    
+    int getShootCDRem() { return _shootCooldownRem; };
+
     /**
      * Used to set the amount of frames remaining before the player can shoot again
      *
      * @param the value that the amount of frames remaining before the player can shoot again should be set to
      */
-    void setShootCDRem(int value = PLAYER_SHOOT_COOLDOWN) {_shootCooldownRem = value; };
+    void setShootCDRem(int value = PLAYER_SHOOT_COOLDOWN) { _shootCooldownRem = value; };
     /**
      * Returns true if the player is being knocked back.
      *
      * @return true if the player is being knocked back.
      */
-    bool isKnocked() const { return _isKnocked;}
+    bool isKnocked() const { return _isKnocked; }
     /**
      * Returns true if the player is in a knockback animation.
      *
@@ -656,26 +657,26 @@ public:
      * @return true if the player is on the ground.
      */
     bool isGrounded() const { return _isGrounded; }
-    
+
     /**
      * Sets whether the player is on the ground.
      *
      * @param value whether the player is on the ground.
      */
     void setGrounded(bool value) { _isGrounded = value; }
-    float getKnockF() {return PLAYER_KB;}
-    Vec2 getKnockDirection() {return _knockDirection;}
+    float getKnockF() { return PLAYER_KB; }
+    Vec2 getKnockDirection() { return _knockDirection; }
     /**
      * Sets whether the player is being knocked back
      *
      * @param value whether the player is being knocked back
      * @param knockDirection direction that the player will move toward
      */
-    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection;  }
+    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
     /**
      * Resets knock status - do this after applying force.
      */
-    void resetKnocked() { _isKnocked = false;  }
+    void resetKnocked() { _isKnocked = false; }
     /**
      * Returns how much force to apply to get the player moving
      *
@@ -703,11 +704,11 @@ public:
      * @return How hard the brakes are applied to get a player to stop moving
      */
     float getDamping() const { return PLAYER_DAMPING; }
-    
+
     /** @return Whether the dash has been released (reset). only for keyboard controls*/
     bool getDashReset() const { return _dashReset; };
     /** For keyboard dash controls - do this after applying force*/
-    void setDashReset(bool r){_dashReset = r;}
+    void setDashReset(bool r) { CULog("Setting DashReset to %d", r); _dashReset = r; }
     /**
      * Returns the upper limit on player left-right movement.
      *
@@ -740,7 +741,7 @@ public:
      * @return the name of the shield sensor
      */
     std::string* getShieldName() { return &_shieldName; }
-    
+
     /**
      * Returns true if this character is facing right
      *
@@ -751,6 +752,7 @@ public:
 #pragma mark -
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
+    void playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
     void updateAnimation();
 
 #pragma mark -
@@ -765,14 +767,14 @@ public:
      * @return true if object allocation succeeded
      */
     void createFixtures() override;
-    
+
     /**
      * Release the fixtures for this body, reseting the shape
      *
      * This is the primary method to override for custom physics objects.
      */
     void releaseFixtures() override;
-    
+
     /**
      * Updates the object's physics state (NOT GAME LOGIC).
      *
@@ -783,7 +785,7 @@ public:
     void update(float dt) override;
 
 
-	
+
 };
 
 #endif /* __GB_MODEL_H__ */
