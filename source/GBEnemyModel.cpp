@@ -361,11 +361,23 @@ void EnemyModel::AIMove() {
 }
 
 void EnemyModel::slam() {
+    if (getPosition().x - _targetPos.x < 0) {
+        faceRight();
+    }
+    else {
+        faceLeft();
+    }
     _isSlamming = true;
     setMovement(0);
 }
 
 void EnemyModel::stab() {
+    if (getPosition().x - _targetPos.x < 0) {
+        faceRight();
+    }
+    else {
+        faceLeft();
+    }
     _isStabbing = true;
     setMovement(0);
 }
