@@ -358,7 +358,7 @@ void PlayerModel::updateAnimation()
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
 
-        if (isDashBegin()) {
+        if (isDashInput()) {
 			currentFrame = 0;
 			_attackSprite->setFrame(0);
         }

@@ -237,7 +237,7 @@ void PlayerController::updateCooldowns()
     }
     
     // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
-    if (!_player->getDashReset() && _player->getDashCDRem() == 0 && !(_player->isDashInput())) {
+    if (!_player->getDashReset() && _player->getDashCDRem() <= 0 && !(_player->isDashInput())) {
 //        CULog("Resetting dash");
         _player->setDashReset(true); // ready to dash again
     }
