@@ -75,21 +75,6 @@ void PlayerController::applyForce() {
     }
 
     if (!_player->isGuardActive()) {
-#pragma mark strafe force
-        //    b2Vec2 force(getMovement(),0);
-            // Ignore stafe input if in a dash (intentional)
-        if (!_player->isDashActive() && !_player->isKnockbackActive()) {
-            playerBody->SetLinearVelocity(b2Vec2(_player->getMovement(), playerBody->GetLinearVelocity().y));
-        }
-        // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
-#pragma mark jump force
-    // Jump!
-        if (_player->isJumpBegin() && _player->isGrounded()) {
-            CULog("Applying jump impulse to player");
-            b2Vec2 force(0, _player->getJumpF());
-            playerBody->ApplyLinearImpulseToCenter(force, true);
-        }
-#pragma mark dash force
         // Dash!
         if (_player->isDashLeftBegin()) {
             CULog("player dashing left begin");
@@ -105,6 +90,29 @@ void PlayerController::applyForce() {
             // _body->ApplyLinearImpulseToCenter(force, true);
             playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
         }
+
+        if (_player->isDashActive())
+        {
+            playerBody->SetLinearVelocity(b2Vec2(_player->getVX(), 0));
+        }
+
+        if (!_player->isDashActive()) {
+#pragma mark strafe force
+            //    b2Vec2 force(getMovement(),0);
+                // Ignore stafe input if in a dash (intentional)
+            if (!_player->isDashActive() && !_player->isKnockbackActive()) {
+                playerBody->SetLinearVelocity(b2Vec2(_player->getMovement(), playerBody->GetLinearVelocity().y));
+            }
+            // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
+#pragma mark jump force
+    // Jump!
+            if (_player->isJumpBegin() && _player->isGrounded()) {
+                CULog("Applying jump impulse to player");
+                b2Vec2 force(0, _player->getJumpF());
+                playerBody->ApplyLinearImpulseToCenter(force, true);
+            }
+        }
+#pragma mark dash force
 #pragma mark knockback force
         if (_player->isKnocked()) {
             //CULog("Applying player knockback force");

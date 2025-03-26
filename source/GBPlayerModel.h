@@ -74,7 +74,7 @@ using namespace cugl;
 /** Cooldown (in frames) for guard */
 #define PLAYER_GUARD_COOLDOWN  15
 /** Cooldown (in frames) for dash */
-#define PLAYER_DASH_COOLDOWN  30
+#define PLAYER_DASH_COOLDOWN  45
 /** Duration (in frames) for guard */
 #define PLAYER_GUARD_DURATION  48
 /** Duration (in frames) for parry */

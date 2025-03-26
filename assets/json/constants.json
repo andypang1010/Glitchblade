@@ -61,7 +61,7 @@
             "force": 45
         },
         "dash": {
-            "cooldown": 30,
+            "cooldown": 45,
             "duration": 20,
             "speed": 30
         },
