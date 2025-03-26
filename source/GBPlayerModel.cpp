@@ -315,54 +315,121 @@ void PlayerModel::update(float dt) {
 #pragma mark -
 #pragma mark Animation
 void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite->isVisible()) {
-        currentFrame++;
+    currentFrame += 1;
 
-        if (currentFrame % ANIMATION_UPDATE_FRAME == 0) {
-            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
-        }
+    if (currentFrame % ANIMATION_UPDATE_FRAME == 0) {
+        sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
     }
 }
 
+void PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
+    currentFrame += 1;
+
+    if (currentFrame % ANIMATION_UPDATE_FRAME == 0
+        && sprite->getFrame() < sprite->getCount() - 1) {
+        sprite->setFrame(sprite->getFrame() + 1);
+    }
+}
+
+
 void PlayerModel::updateAnimation()
 {
-    _jumpUpSprite->setVisible(!isGuardActive() && !isGrounded() && !isDashActive() && getBody()->GetLinearVelocity().y > 0);
-    _jumpDownSprite->setVisible(!isGuardActive() && !isGrounded() && !isDashActive() && getBody()->GetLinearVelocity().y <= 0);
-    _walkSprite->setVisible(!isGuardActive() && isGrounded() && !isDashActive() && (isStrafeLeft() || isStrafeRight()) && !_jumpUpSprite->isVisible() && !_jumpDownSprite->isVisible());
-    
-    _guardSprite->setVisible(isGuardActive() && !isDashActive());
-    _attackSprite->setVisible(!isGuardActive() && isDashActive());
+    if (isGuardActive()) {
+		_guardSprite->setVisible(true);
+		_attackSprite->setVisible(false);
+		_jumpUpSprite->setVisible(false);
+		_jumpDownSprite->setVisible(false);
+		_walkSprite->setVisible(false);
+		_idleSprite->setVisible(false);
 
-    _idleSprite->setVisible(
-        !_walkSprite->isVisible() &&
-        !_jumpUpSprite->isVisible() &&
-        !_jumpDownSprite->isVisible() &&
-        !_guardSprite->isVisible() &&
-        !_attackSprite->isVisible());
+        if (_isGuardInput) {
+            currentFrame = 0;
+            _guardSprite->setFrame(0);
+        }
 
-    if (isDashBegin()) {
-        currentFrame = 0;
-        _attackSprite->setFrame(0);
+		playAnimation(_guardSprite);
     }
 
-    if (isJumpBegin()) {
+    else if (isDashActive()) {
+        _guardSprite->setVisible(false);
+        _attackSprite->setVisible(true);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+
+        if (isDashBegin()) {
+			currentFrame = 0;
+			_attackSprite->setFrame(0);
+        }
+
+		playAnimation(_attackSprite);
+    }
+
+    else if (isJumpBegin()) {
+        _guardSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(true);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+
         currentFrame = 0;
-        _jumpUpSprite->setFrame(0);
+		_jumpUpSprite->setFrame(0);
+    }
+    else if (getVY() > 0 && !isGrounded()) {
+        _guardSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(true);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+
+		playAnimationOnce(_jumpUpSprite);
+	}
+	else if (getVY() == 0 && !isGrounded()) {
+        _guardSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(true);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+
+		currentFrame = 0;
         _jumpDownSprite->setFrame(0);
+	}
+	else if (getVY() < 0 && !isGrounded()) {
+        _guardSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(true);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+        
+		playAnimationOnce(_jumpDownSprite);
     }
 
-    if (isParryActive()) {
-        currentFrame = 7;
-		_guardSprite->setFrame(1);
+    else if (isStrafeLeft() || isStrafeRight()) {
+        _guardSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(true);
+        _idleSprite->setVisible(false);
+
+        playAnimation(_walkSprite);
     }
 
-    else {
-        playAnimation(_guardSprite);
-    }
+	else {
+        _guardSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(true);
 
-    playAnimation(_attackSprite);
-    playAnimation(_walkSprite);
-    playAnimation(_idleSprite);
+		playAnimation(_idleSprite);
+	}
 
     _sceneNode->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _sceneNode->getChild(_sceneNode->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
