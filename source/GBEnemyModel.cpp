@@ -283,9 +283,6 @@ void EnemyModel::update(float dt) {
     if (isKnocked()) {
         CULog("enmey knockback applied");
         resetKnocked();
-        _dashCooldownRem = ENEMY_DASH_COOLDOWN;
-        _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
-        _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;
     }
 
     if (isStunned()) {
@@ -448,11 +445,5 @@ void EnemyModel::resetDebug() {
     _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
     _sensorNode->setColor(ENEMY_DEBUG_COLOR);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width/2.0f, 0.0f));
-
-    Poly2 shieldPoly;
-    shieldPoly = PolyFactory().makeCircle(_debug->getContentWidth()/2,_debug->getContentHeight()/2, ENEMY_SHIELD_RADIUS);
-    _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldNode->setColor(ENEMY_DEBUG_COLOR);
-    
 }
 
