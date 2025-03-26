@@ -359,8 +359,6 @@ void PlatformInput::renderJoystick() {
  */
 void PlatformInput::processJoystick() {
     Vec2 diff = touch2Screen(_ltouch.position) - _joycenter;
-    // CULog("position is (%f,%f) and joycenter is (%f, %f)", _ltouch.position.x, _ltouch.position.y, _joycenter.x, _joycenter.y);
-    // CULog("diff is (%f, %f)", diff.x, diff.y);
     if (std::fabsf(diff.x) > JSTICK_DEADZONE) {
         if (diff.x > 0) {
             _keyLeft = false;
@@ -441,7 +439,6 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
  * @param focus	Whether the listener currently has focus
  */
 void PlatformInput::touchBeganCB(const TouchEvent& event, bool focus) {
-    //CULog("Touch began %lld", event.touch);
     Vec2 pos = event.position;
     Zone zone = getZone(pos);
     switch (zone) {

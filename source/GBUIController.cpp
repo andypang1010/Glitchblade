@@ -10,7 +10,7 @@
 //
 //    _ingameUI = GBIngameUI::alloc(assets);
 //    if (_ingameUI == nullptr) {
-//        CULog("❌ Failed to initialize InGame UI");
+//        CULog("Failed to initialize InGame UI");
 //        return false;
 //    }
 //    _ingameUI->setActive(true);

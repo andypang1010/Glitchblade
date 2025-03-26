@@ -154,7 +154,6 @@ void PlayerModel::setMovement(float value) {
     _movement = value;
     bool face = _movement > 0;
     if (_movement == 0 || _faceRight == face) {
-        // CULog("RETURNING!");
         return;
     }
 
@@ -164,10 +163,6 @@ void PlayerModel::setMovement(float value) {
         // Don't flip if it means overriding a dash direction
         if (!isDashActive()) {
             image->flipHorizontal(!image->isFlipHorizontal());
-            CULog("DID FLIP!");
-        }
-        else {
-            CULog("IGNORING FLIP!");
         }
     }
 
@@ -180,7 +175,6 @@ void PlayerModel::setMovement(float value) {
 * Make the sprite face left
 */
 void PlayerModel::faceLeft() {
-    CULog("Doing faceLeft");
     if (_faceRight == true) {
         _faceRight = false;
         scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_sceneNode.get());
@@ -194,7 +188,6 @@ void PlayerModel::faceLeft() {
 * Make the sprite face right
 */
 void PlayerModel::faceRight() {
-    CULog("Doing faceRight");
     if (_faceRight == false) {
         _faceRight = true;
         scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_sceneNode.get());
