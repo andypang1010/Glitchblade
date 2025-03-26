@@ -311,6 +311,8 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
+    _pauseMenu->removeAllChildren();
+    _ui->removeAllChildren();
     setFailure(false);
     setComplete(false);
     _levelController->reset();
