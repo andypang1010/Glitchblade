@@ -79,7 +79,6 @@ std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()
     // Add more as desired here
 };
 
-
 void LevelController::checkWinCondition()
 {
 }
@@ -102,9 +101,10 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
     std::shared_ptr<EnemyController> enemy = enemyFactoryMap[enemyType]();
 
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, enemyType);
-    enemy->init(_assets, _constantsJSON, actions); // Needs to actually specify the type of enemy
+    enemy->init(_assets, _constantsJSON, actions);
     return enemy;
 }
+
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
     _enemyControllers.push_back(enemy_controller);
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
