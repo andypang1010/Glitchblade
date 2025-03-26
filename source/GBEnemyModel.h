@@ -355,6 +355,7 @@ public:
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes(){
         _hp = ENEMY_MAXHP;
+        CULog("IN RESET ATTRIBUTES HP IS: %f", _hp);
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput  = false;

@@ -220,8 +220,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::BLACK);
 
-
-
     return true;
 }
 
@@ -558,6 +556,12 @@ void GameScene::beginContact(b2Contact* contact) {
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
+
+    /*CULog("BD2 NAME IS: ");
+    CULog(bd2->getName().c_str());
+
+    CULog("enemy_name IS: ");
+    CULog(enemy_name.c_str());*/
     
     // Player-Enemy Collision
     if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
@@ -568,6 +572,7 @@ void GameScene::beginContact(b2Contact* contact) {
         }
         else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(5);
+            CULog("TRIED TO DAMAGE THE ENEMY");
             _player->setDashRem(0);
         }
         else if (((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
@@ -587,6 +592,7 @@ void GameScene::beginContact(b2Contact* contact) {
         }
         else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(5);
+            CULog("TRIED TO DAMAGE THE ENEMY");
             _player->setDashRem(0);
         }
         else if (((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {

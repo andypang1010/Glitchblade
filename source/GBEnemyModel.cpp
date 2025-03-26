@@ -129,7 +129,8 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef){
 * @param value the amount of hp reduction.
 */
 void EnemyModel::damage(float value) {
-    _hp -= value; 
+    _hp -= value;
+    CULog("ENEMY HP IS NOW %f", _hp);
     _hp = _hp < 0 ? 0 : _hp;
 }
 

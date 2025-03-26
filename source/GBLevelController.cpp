@@ -90,9 +90,10 @@ LevelController::~LevelController()
  */
 
 std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemy_name) {
+    // TODO: add switch case here to create specific controller based on the enemy_name
     std::shared_ptr<EnemyController> enemy = std::make_shared<EnemyController>();
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, enemy_name);
-    enemy->init(_assets, _constantsJSON, actions);
+    enemy->init(_assets, _constantsJSON, actions); // Needs to actually specify the type of enemy
     return enemy;
 }
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
@@ -162,6 +163,7 @@ void LevelController::spawnWave(int waveNum) {
     for (int i = 0; i< enemiesString.size(); i++){
         int resetCountAtTime = _resetCount;
         std::function< bool()> callback = [this, resetCountAtTime, enemiesString, i](){
+            // Invalidate the callback if the level has been reset before execution
             if (resetCountAtTime != _resetCount) {
                 return false;
             }
