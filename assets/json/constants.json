@@ -27,7 +27,7 @@
     },
     "ground": {
         "vertex_count": 8,
-        "thickness": 4,
+        "thickness": 4.4,
         "texture": "ground",
         "name": "ground"
     },
