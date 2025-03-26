@@ -17,7 +17,7 @@ protected:
     std::shared_ptr<JsonValue> _enemyJSON;
     std::shared_ptr<scene2::Label> _hpNode;
     std::shared_ptr<scene2::Label> _stunNode;
-    const float ENEMY_INIT_POS[2] = { 12.5f, 5.0f };
+    const float ENEMY_INIT_POS[2] = { 36.0f, 5.0f };
 
 public:
     EnemyController() {}
