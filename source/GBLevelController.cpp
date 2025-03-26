@@ -1,4 +1,5 @@
 #include "GBLevelController.h"
+#include "GBBoss1Controller.h"
 
 using namespace cugl::graphics;
 using namespace cugl::physics2;
@@ -71,11 +72,15 @@ using namespace cugl::scene2;
 // EnemyController needs to become a base class that all other types of enemies derive from
 std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()>> enemyFactoryMap = {
     { "boss_1", []() {
-        return std::make_shared<EnemyController>();
+        CULog("USING BOSS 1 CONTROLLER");
+        return std::make_shared<Boss1Controller>();
     } }, // Should return a Boss1Controller
     { "minion_1A", []() {
-        return std::make_shared<EnemyController>();
+        return std::make_shared<Boss1Controller>();
     } }, // Should return a Minion1AController
+    { "minion_1B", []() {
+        return std::make_shared<Boss1Controller>();
+    } } // Should return a Minion1BController
     // Add more as desired here
 };
 
