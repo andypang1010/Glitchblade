@@ -227,18 +227,6 @@ void EnemyModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
-    
-    // create shield circle fixture
-    b2FixtureDef shieldDef;
-    b2CircleShape shieldShape;
-    shieldShape.m_radius = ENEMY_SHIELD_RADIUS;
-    shieldShape.m_p.Set(getWidth()/2, getHeight()/2);//center of body
-    shieldDef.isSensor = true;
-    shieldDef.shape = &sensorShape;
-    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
-    _shieldFixture = _body->CreateFixture(&shieldDef);
-
-    // create attack fixtures
 }
 
 /**
@@ -291,14 +279,6 @@ void EnemyModel::update(float dt) {
     nextAction();
 
     // Apply cooldowns
-
-
-    if (isJumpBegin() && isGrounded()) {
-        CULog("isJumping is true");
-        _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
-    } else {
-        _jumpCooldownRem = (_jumpCooldownRem > 0 ? _jumpCooldownRem-1 : 0);
-    }
     
     if (isKnocked()) {
         CULog("enmey knockback applied");
@@ -306,29 +286,6 @@ void EnemyModel::update(float dt) {
         _dashCooldownRem = ENEMY_DASH_COOLDOWN;
         _jumpCooldownRem = ENEMY_JUMP_COOLDOWN;
         _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;
-    }
-    
-    if (isShooting()) {
-        _shootCooldownRem = ENEMY_SHOOT_COOLDOWN;
-    } else {
-        _shootCooldownRem = (_shootCooldownRem > 0 ? _shootCooldownRem-1 : 0);
-    }
-    
-    if (isDashBegin()) {
-        _dashRem = ENEMY_DASH_DURATION;
-        _dashCooldownRem = ENEMY_DASH_COOLDOWN;
-    }
-    else {
-        _dashRem = (_dashRem > 0 ? _dashRem-1 : 0);
-        if (_dashRem == 0){
-            _dashCooldownRem = (_dashCooldownRem > 0 ? _dashCooldownRem-1 : 0);
-        }
-    }
-    // player inputs guard and cooldown is ready
-    if (isGuardBegin()) {
-        CULog("Beginning guard\n");
-        _guardCooldownRem = ENEMY_GUARD_COOLDOWN;
-        _guardRem = ENEMY_GUARD_DURATION;
     }
 
     if (isStunned()) {

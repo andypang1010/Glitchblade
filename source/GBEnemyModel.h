@@ -455,12 +455,6 @@ public:
     void faceRight();
     
     /**
-     * Returns true if the enemy is actively firing.
-     *
-     * @return true if the enemy is actively firing.
-     */
-    bool isShooting() const { return _isShootInput && _shootCooldownRem <= 0; }
-    /**
      * Returns true if the enemy is actively strafing left.
      *
      * @return true if the enemy is actively strafing left.
@@ -475,46 +469,6 @@ public:
     void setMoveRight(bool value) {_isMoveRight = value;};
 
     /**
-     * Sets whether the enemy has a swallowed projectile.
-     *
-     * @param value whether the enemy has a swallowed projectile.
-     */
-    void setHasProjectile(bool value) { _hasProjectile = value; }
-
-    /**
-     * Sets whether the enemy is beginning dash left
-     *
-     * @param value whether the enemy is beginning dash left.
-     */
-    void setDashLeftInput(bool value) { _isDashLeftInput = value; }
-
-    /**
-     * Sets whether the enemy is beginning dash right.
-     *
-     * @param value whether the enemy is beginning dash right.
-     */
-    void setDashRightInput(bool value) { _isDashRightInput = value; }
-
-    /**
-     * Sets whether the enemy is actively trying to jump.
-     *
-     * @param value whether the enemy is actively trying to jump.
-     */
-    void setJumpInput(bool value) { _isJumpInput = value; }
-
-    /**
-     * Sets whether the enemy is actively firing.
-     *
-     * @param value whether the enemy is actively firing.
-     */
-    void setShootInput(bool value) { _isShootInput = value; }
-    /**
-     * Sets whether the enemy is inputting guard
-     *
-     * @param value whether the enemy is inputting guard
-     */
-    void setGuardInput(bool value) { _isGuardInput = value; }
-    /**
      * Sets whether the enemy is actively strafing left.
      *
      * @param value whether the enemy is actively strafing left.
@@ -526,75 +480,14 @@ public:
      * @return true if whether the enemy is actively strafing right.
      */
     bool isMoveRight() { return _isMoveRight; };
-    /**
-     * Returns true if if the enemy is actively trying to jump and jump cooldown is ready (regardless if on the ground).
-     *
-     * @return true if the enemy is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
-     */
-    bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
     
-    /**
-     * Returns true if the enemy is actively dashing left.
-     *
-     * @param value whether the enemy is actively dashing left.
-     */
-    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0; };
-    /**
-     * Returns true if the enemy is actively dashing right.
-     *
-     * @param value whether the enemy is actively dashing right.
-     */
-    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0; };
-    /**
-     * Returns true if the enemy is dashing
-     *
-     * @return value whether the enemy is dashing either direction.
-     */
-    bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); };
     /**
      * Returns true if the enemy is inputting a movement action/
      *
      * @return value whether the enemy is performing a movement action.
      */
-    bool isMoveBegin() {return isDashBegin() || isMoveLeft() || isMoveRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
-    
-    /**
-     *  Returns true if the enemy is currently beginning guard action.
-     *
-     * @return value whether the enemy is beginning guard action.
-     */
-    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; };
-      /**
-     * Returns true if the enemy has a swallowed projectile.
-     *
-     * @return value whether the enemy has a swallowed projectile.
-     */
-    /**
-     * Returns true ifrthe enemy is actively guarding.
-     *
-     * @return value whether the enemy is actively guarding.
-     */
-    bool isGuardActive() { return  _guardRem > 0 || isGuardBegin(); };
+    bool isMoveBegin() {return isMoveLeft() || isMoveRight() || isKnocked(); };
 
-    /**
-     * Returns true if the enemy is actively parrying.
-     *
-     * @return value whether the enemy is actively parrying.
-     */
-    bool isParryActive() { return _parryRem > 0 || isGuardBegin(); };
-    /**
-     * Returns true if the enemy has a swallowed projectile.
-     *
-     * @return value whether the enemy has a swallowed projectile.
-     */
-    bool hasProjectile() { return _hasProjectile; };
-    /**
-     * Returns true if the enemy is in a dash animation.
-     *
-     * @return value whether the enemy is in a dash animation.
-     */
-    
-    bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
     /**
     * Returns true if the enemy is being knocked back.
     *
@@ -640,12 +533,6 @@ public:
      */
     void setKnockbackRem(int value = ENEMY_KB_DURATION) {_knockbackRem = value; };
 
-    /*
-     * Sets the dash duration of this enemy.
-     *
-     * @param value new dash duration.
-     */
-    void setDashRem(int value) { _dashRem = value; };
     /**
      * Sets the stun duration of this enemy.
      *
@@ -705,14 +592,6 @@ public:
      * @return the name of the ground sensor
      */
     std::string* getSensorName() { return &_sensorName; }
-    /**
-     * Returns the name of the shield sensor
-     *
-     * This is used by ContactListener
-     *
-     * @return the name of the shield sensor
-     */
-    std::string* getShieldName() { return &_shieldName; }
     
     /**
      * Returns true if this character is facing right

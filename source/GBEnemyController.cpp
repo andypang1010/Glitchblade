@@ -56,7 +56,7 @@ void EnemyController::applyForce() {
     b2Body* enemyBody = _enemy->getBody();
     
     // Don't want to be moving. Damp out player motion
-    if (_enemy->getMovement() == 0.0f && !_enemy->isDashActive()) {
+    if (_enemy->getMovement() == 0.0f) {
         if (_enemy->isGrounded()) {
             // Instant friction on the ground
             b2Vec2 vel =  enemyBody->GetLinearVelocity();
@@ -79,21 +79,7 @@ void EnemyController::applyForce() {
         #pragma mark dash force
         // Dash!
         float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
-        if (_enemy->isDashLeftBegin()) {
-            CULog("dashing left\n");
-            b2Vec2 force(-d_force, 0);
-            _enemy->faceLeft();
-            enemyBody->ApplyLinearImpulseToCenter(force, true);
-        }
-
-        if (_enemy->isDashRightBegin()) {
-            CULog("dashing right\n");
-            b2Vec2 force(d_force, 0);
-            _enemy->faceRight();
-            enemyBody->ApplyLinearImpulseToCenter(force, true);
-        }
     }
-#pragma mark knockback force
 #pragma mark knockback force
     if (_enemy->isKnocked()) {
         CULog("Applying player knockback force");
@@ -103,7 +89,7 @@ void EnemyController::applyForce() {
         enemyBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _enemy->getKnockF()), true);
     }
     // Velocity too high, clamp it
-    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed() && !_enemy->isDashActive() && !_enemy->isKnockbackActive()) {
+    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed() && !_enemy->isKnockbackActive()) {
         //CULog("clamping velocity");
         _enemy->setVX(SIGNUM(_enemy->getVX())*_enemy->getMaxSpeed());
     }
@@ -114,7 +100,6 @@ void EnemyController::applyForce() {
 
 void EnemyController::fixedUpdate(float timestep)
 {
-
     applyForce();
 }
 
