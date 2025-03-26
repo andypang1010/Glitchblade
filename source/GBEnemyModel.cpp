@@ -279,12 +279,10 @@ void EnemyModel::update(float dt) {
     // Apply cooldowns
 
     if (isKnocked()) {
-        CULog("enmey knockback applied");
         resetKnocked();
     }
 
     if (isStunned()) {
-        CULog("Enemy stunned\n");
         _stunRem--;
     }
 

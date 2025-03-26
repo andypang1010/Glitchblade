@@ -253,7 +253,6 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
                 _ui->setVisible(false);
                 _pauseMenu->setVisible(true);
                 setPaused(true);
-                CULog("Pause pressed, showing menu.");
             }
             });
     }
@@ -265,7 +264,6 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
                 _pauseMenu->setVisible(false);
                 _ui->setVisible(true);
                 setPaused(false);
-                CULog("Resume pressed, returning to game.");
             }
             });
     }
@@ -278,7 +276,6 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
                 _ui->setVisible(true);
                 setPaused(false);
                 this->reset();
-                CULog("Restart pressed.");
             }
             });
     }
@@ -439,7 +436,6 @@ void GameScene::preUpdate(float dt) {
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) { reset(); }
     if (_input->didExit()) {
-        CULog("Shutting down");
         Application::get()->quit();
     }
 
@@ -536,11 +532,9 @@ void GameScene::postUpdate(float remain) {
 
     // Reset the game if we win or lose.
     if (_countdown > 0) {
-        // CULog( " countdown is %d",_countdown);
         _countdown--;
     }
     else if (_countdown == 0) {
-        // CULog( "resetting countdown is 0");
         reset();
     }
 
@@ -654,11 +648,10 @@ void GameScene::beginContact(b2Contact* contact) {
     std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
     std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
 
+    // No idea what this if block is doing; previously was only used for CULogs
     if (!fix1->GetUserData().pointer || !fix2->GetUserData().pointer) {
-        //CULog("Error: fix1 or fix2 has null user data.");//projectiles don't have names so they will error
     }
     else {
-        CULog("fix1 is %s and fix2 is %s", fd1->c_str(), fd2->c_str());
     }
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
@@ -719,7 +712,6 @@ void GameScene::beginContact(b2Contact* contact) {
         if (!((Projectile*)bd2)->getIsPlayerFired()) {
             _player->damage(20);
             removeProjectile((Projectile*)bd2);
-            CULog("Player Damaged, remaining HP %f", _player->getHP());
             _ui->setHP(_player->getHP());
             _pauseMenu->setHP(_player->getHP());
         }
@@ -728,7 +720,6 @@ void GameScene::beginContact(b2Contact* contact) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
             _player->damage(20);
             removeProjectile((Projectile*)bd1);
-            CULog("Player Damaged, remaining HP %f", _player->getHP());
             _ui->setHP(_player->getHP());
             _pauseMenu->setHP(_player->getHP());
         }
@@ -767,15 +758,11 @@ void GameScene::beginContact(b2Contact* contact) {
     if (shieldHit) {
 
         if (_player->isParryActive()) {
-            CULog("Parried projectile");
-
             if (!_player->hasProjectile()) {
                 _player->setHasProjectile(true);
             }
         }
         else {
-            CULog("Guarded projectile");
-
             _player->damage(10);
             _ui->setHP(_player->getHP());
             _pauseMenu->setHP(_player->getHP());
@@ -808,14 +795,12 @@ void GameScene::beginContact(b2Contact* contact) {
     if (bd1->getName() == enemy_name && bd2->getName() == proj_name) {
 
         if (((Projectile*)bd2)->getIsPlayerFired()) {
-            CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd1)->getHP());
             ((EnemyModel*)bd1)->damage(20);
             removeProjectile((Projectile*)bd2);
         }
     }
     else if (bd2->getName() == enemy_name && bd1->getName() == proj_name) {
         if (((Projectile*)bd1)->getIsPlayerFired()) {
-            CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd2)->getHP());
             ((EnemyModel*)bd2)->damage(20);
             removeProjectile((Projectile*)bd1);
         }

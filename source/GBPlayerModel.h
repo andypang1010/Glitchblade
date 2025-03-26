@@ -708,7 +708,7 @@ public:
     /** @return Whether the dash has been released (reset). only for keyboard controls*/
     bool getDashReset() const { return _dashReset; };
     /** For keyboard dash controls - do this after applying force*/
-    void setDashReset(bool r) { CULog("Setting DashReset to %d", r); _dashReset = r; }
+    void setDashReset(bool r) { _dashReset = r; }
     /**
      * Returns the upper limit on player left-right movement.
      *
