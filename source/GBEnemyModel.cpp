@@ -130,7 +130,6 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef){
 */
 void EnemyModel::damage(float value) {
     _hp -= value;
-    CULog("ENEMY HP IS NOW %f", _hp);
     _hp = _hp < 0 ? 0 : _hp;
 }
 

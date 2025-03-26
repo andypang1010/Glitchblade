@@ -285,8 +285,7 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
 	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
     AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
     
-    // Now let's try spawning the first wave
-    CULog("PRE SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // Spawn the first wave
     _levelController->spawnWave(0);
     
     _active = true;
@@ -458,11 +457,11 @@ void GameScene::postUpdate(float remain) {
 
     // Reset the game if we win or lose.
     if (_countdown > 0) {
-        CULog( " countdown is %d",_countdown);
+        // CULog( " countdown is %d",_countdown);
         _countdown--;
     }
     else if (_countdown == 0) {
-        CULog( "resetting countdown is 0");
+        // CULog( "resetting countdown is 0");
         reset();
     }
 
@@ -547,11 +546,12 @@ void GameScene::beginContact(b2Contact* contact) {
     std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
     std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
     
+    // TODO: why is this if else here??
     if (!fix1->GetUserData().pointer || !fix2->GetUserData().pointer) {
         //CULog("Error: fix1 or fix2 has null user data.");//projectiles don't have names so they will error
     }
         else{
-            CULog("fix1 is %s and fix2 is %s", fd1->c_str(), fd2->c_str());
+            // CULog("fix1 is %s and fix2 is %s", fd1->c_str(), fd2->c_str());
         }
 
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
@@ -568,11 +568,10 @@ void GameScene::beginContact(b2Contact* contact) {
         if (((EnemyModel*)bd1)->isDashActive() && !_player->isDashActive()) {
             _player->damage(20);
             ((EnemyModel*)bd1)->setDashRem(0);
-            CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
+            // CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
         else if (!((EnemyModel*)bd1)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(5);
-            CULog("TRIED TO DAMAGE THE ENEMY");
             _player->setDashRem(0);
         }
         else if (((EnemyModel*)bd1)->isDashActive() && _player->isDashActive()) {
@@ -588,11 +587,10 @@ void GameScene::beginContact(b2Contact* contact) {
         if (((EnemyModel*)bd2)->isDashActive() && !_player->isDashActive()) {
             _player->damage(20);
             ((EnemyModel*)bd2)->setDashRem(0);
-            CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
+            // CULog("Player damaged by enemy, remaining HP %f", _player->getHP());
         }
         else if (!((EnemyModel*)bd2)->isDashActive() && _player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(5);
-            CULog("TRIED TO DAMAGE THE ENEMY");
             _player->setDashRem(0);
         }
         else if (((EnemyModel*)bd2)->isDashActive() && _player->isDashActive()) {
@@ -610,14 +608,12 @@ void GameScene::beginContact(b2Contact* contact) {
         if (!((Projectile*)bd2)->getIsPlayerFired()) {
             _player->damage(20);
             removeProjectile((Projectile*)bd2);
-            CULog("Player Damaged, remaining HP %f", _player->getHP());
         }
     }
     else if (isPlayerBody(bd2, fd2) && bd1->getName() == proj_name) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
             _player->damage(20);
             removeProjectile((Projectile*)bd1);
-            CULog("Player Damaged, remaining HP %f", _player->getHP());
         }
         // TODO: REFACTOR TO NOT REPEAT CODE!!!
     }
@@ -689,14 +685,12 @@ void GameScene::beginContact(b2Contact* contact) {
     if (bd1->getName() == enemy_name && bd2->getName() == proj_name) {
 
         if (((Projectile*)bd2)->getIsPlayerFired()) {
-            CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd1)->getHP());
             ((EnemyModel*)bd1)->damage(20);
             removeProjectile((Projectile*)bd2);
         }
     }
     else if (bd2->getName() == enemy_name && bd1->getName() == proj_name) {
         if (((Projectile*)bd1)->getIsPlayerFired()) {
-            CULog("Enemy Damaged, remaining HP %f", ((EnemyModel*)bd2)->getHP());
             ((EnemyModel*)bd2)->damage(20);
             removeProjectile((Projectile*)bd1);
         }

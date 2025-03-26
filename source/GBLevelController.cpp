@@ -68,6 +68,19 @@ using namespace cugl::scene2;
 
 #define WORLD_DEBUG_COLOR    Color4::WHITE
 
+// EnemyController needs to become a base class that all other types of enemies derive from
+std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()>> enemyFactoryMap = {
+    { "boss_1", []() {
+        CULog("CALLED FACTORYMAP FOR boss_1");
+        return std::make_shared<EnemyController>();
+    } }, // Should return a Boss1Controller
+    { "minion_1A", []() {
+        CULog("CALLED FACTORYMAP FOR minion_1A");
+        return std::make_shared<EnemyController>();
+    } }, // Should return a Minion1AController
+    // Add more as desired here
+};
+
 
 void LevelController::checkWinCondition()
 {
@@ -85,14 +98,12 @@ LevelController::~LevelController()
 {
 }
 
-/**
- 
- */
+std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyType) {
+    // This will call the correct constructor using make_shared from the enemyFactoryMap
+    // Here, all enemy controller types will be treated as their parent class, EnemyController
+    std::shared_ptr<EnemyController> enemy = enemyFactoryMap[enemyType]();
 
-std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemy_name) {
-    // TODO: add switch case here to create specific controller based on the enemy_name
-    std::shared_ptr<EnemyController> enemy = std::make_shared<EnemyController>();
-    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, enemy_name);
+    std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, enemyType);
     enemy->init(_assets, _constantsJSON, actions); // Needs to actually specify the type of enemy
     return enemy;
 }
@@ -127,7 +138,6 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
 
 	_levels = parseLevels(_levelsJSON);
     if (_levels.empty()) {
-        CULog("empty levels in levelcontroller init");
         return false;
     }
     
@@ -167,13 +177,12 @@ void LevelController::spawnWave(int waveNum) {
             if (resetCountAtTime != _resetCount) {
                 return false;
             }
+            std::string enemyType = enemiesString[i];
             // Create and add the enemy
-            std::shared_ptr<EnemyController> enemy_controller = createEnemy(enemiesString[i]);
+            std::shared_ptr<EnemyController> enemy_controller = createEnemy(enemyType);
             addEnemy(enemy_controller);
             return false; //only run once
         };
-        CULog("MAKING TIMER FOR: ");
-        CULog(enemiesString[i].c_str());
         Uint32 timer = static_cast<Uint32>((spawnIntervals[i] + prevTotals) * 1000); // seconds to ms
         float waveDelay = spawnIntervals[i];
         prevTotals += waveDelay;
@@ -190,7 +199,6 @@ void LevelController::populateLevel(const std::shared_ptr<LevelModel>& level) {
 // TODO: we should not use assetRef, load background & ground based on the level in the future
 void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& levelRef) {
     float scale = _constantsJSON->get("scene")->getFloat("scale");
-    CULog("in level controller scale is %f", scale);
     ObstacleNodePairs obstacle_pairs;
     std::shared_ptr<Texture> image;
     std::shared_ptr<scene2::PolygonNode> sprite;
@@ -373,8 +381,6 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     std::vector<std::shared_ptr<JsonValue>> actionArray = json->get(enemyName)->get("actions")->children();
     for (std::shared_ptr<JsonValue> action : actionArray) {
 
-        // CULog(action->toString().c_str()); // Causes android studio to have a seizure for some reason
-
         std::string type = action->getString("type");
         std::string name = action->getString("name");
 
@@ -467,11 +473,7 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
         return level;
     }
 
-	CULog(json->toString().c_str());
-
 	level->setLevelName(json-> getString("name"));
-
-	CULog(level->getLevelName().c_str());
     level->setBackground(Texture::allocWithFile(json->getString("background")));
     level->setGround(Texture::allocWithFile(json->getString("ground")));
     

@@ -247,7 +247,6 @@ void PlatformInput::update(float dt) {
     _keyLdash = false;
     _keyRdash = false;
         if (_joystick){
-        CULog("Calling process joystick\n");
         processJoystick();
     }
 #endif
@@ -528,26 +527,20 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
 
         switch (s_type) {
             case SwipeType::LEFTDASH:
-                CULog("SWIPE TYPE IS LEFTDASH");
                 _keyLdash = true;
                 break;
             case SwipeType::RIGHTDASH:
-                CULog("SWIPE TYPE IS RIGHTDASH");
                 _keyRdash = true;
                 break;
             case SwipeType::JUMP:
-                CULog("SWIPE TYPE IS JUMP");
                 _keyJump = true;
                 break;
             case SwipeType::GUARD:
-                CULog("SWIPE TYPE IS GUARD");
                 _keyGuard = true;
                 break;
             case SwipeType::NONE:
-                CULog("SWIPE TYPE IS NONE");
                 break;
             default:
-                CULog("Why is this printing :|");
                 break;
         }
 

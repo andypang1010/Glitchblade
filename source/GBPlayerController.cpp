@@ -62,7 +62,6 @@ void PlayerController::applyForce() {
     // Don't want to be moving.f Damp out player motion
     if (_player->getMovement() == 0.0f && !_player->isDashActive() && !_player->isKnockbackActive()) {
         if (_player->isGrounded()) {
-            // CULog("Setting x vel to 0");
             // Instant friction on the grounds
             b2Vec2 vel = playerBody->GetLinearVelocity();
             vel.x = 0; // If you set y, you will stop a jump in place
@@ -83,21 +82,18 @@ void PlayerController::applyForce() {
 #pragma mark jump force
     // Jump!
     if (_player->isJumpBegin() && _player->isGrounded()) {
-        CULog("Applying jump impulse to player");
         b2Vec2 force(0, _player->getJumpF());
         playerBody->ApplyLinearImpulseToCenter(force,true);
     }
 #pragma mark dash force
     // Dash!
     if (_player->isDashLeftBegin()){
-        CULog("player dashing left begin");
         _player->faceLeft();
         // b2Vec2 force(-_player->getDashF(),0);
         // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
         playerBody->SetLinearVelocity(b2Vec2(-_player->getDashF(), playerBody->GetLinearVelocity().y));
     }
     if (_player->isDashRightBegin()){
-        CULog("player dashing right begin");
         _player->faceRight();
         // b2Vec2 force(DASH, 0);
         // _body->ApplyLinearImpulseToCenter(force, true);
@@ -105,7 +101,6 @@ void PlayerController::applyForce() {
     }
 #pragma mark knockback force
     if (_player->isKnocked()) {
-        //CULog("Applying player knockback force");
         playerBody->SetLinearVelocity(b2Vec2(0,0));
         Vec2 knockDirection = _player->getKnockDirection();
         Vec2 knockForce = knockDirection.subtract(Vec2(0,knockDirection.y)).scale(_player->getKnockF());
@@ -113,7 +108,6 @@ void PlayerController::applyForce() {
     }
     // Velocity too high, clamp it
     if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashActive() && !_player->isKnockbackActive()) {
-        //CULog("clamping velocity");
         _player->setVX(SIGNUM(_player->getVX())*_player->getMaxSpeed());
     }
 }
@@ -169,10 +163,8 @@ void PlayerController::updateCooldowns()
         _player->setGuardRem();
         _player->setParryRem();
         _player->setShieldDebugColor(Color4::GREEN);
-        CULog("Beginning guard and parry");
     }
     if (_player->isGuardActive() && !_player->isGuardBegin()){
-        CULog("Guard is active");
         int guardRem = _player->getGuardRem();
         //CULog("Updating guard duration from %d", guardRem);
         _player->setGuardRem(guardRem - 1);
