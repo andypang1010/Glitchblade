@@ -157,19 +157,18 @@ void LevelController::spawnWave(int waveNum) {
     std::shared_ptr<WaveModel> wave = waves[waveNum];
     std::vector<std::string> enemiesString = wave->getEnemies();
     std::vector<float> spawnIntervals = wave->getSpawnIntervals();
-    CULog("SPAWN WAVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     
+    float prevTotals = 0; // Intervals should "stack" since all timers are created immediately
     for (int i = 0; i< enemiesString.size(); i++){
-        std::function< bool()> callback = [this, enemiesString, spawnIntervals, i](){
-            // create enemy controller
-            // get obstacle, node
+        std::function< bool()> callback = [this, enemiesString, i](){
+            // Create and add the enemy
             std::shared_ptr<EnemyController> enemy_controller = createEnemy(enemiesString[i]);
             addEnemy(enemy_controller);
-            CULog("timer callback");
-            CULog("spawn interval # %d is %f", i, spawnIntervals[i]);
             return false; //only run once
         };
-        Uint32 timer = static_cast<Uint32>(spawnIntervals[i] * 1000); //seconds to ms
+        Uint32 timer = static_cast<Uint32>((spawnIntervals[i] + prevTotals) * 1000); // seconds to ms
+        float waveDelay = spawnIntervals[i];
+        prevTotals += waveDelay;
         app->schedule(callback, timer);
     }
 }
