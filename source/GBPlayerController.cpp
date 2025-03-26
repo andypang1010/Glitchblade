@@ -76,6 +76,7 @@ void PlayerController::applyForce() {
 
     if (!_player->isGuardActive()) {
         // Dash!
+        #pragma mark dash force
         if (_player->isDashLeftBegin()) {
             _player->faceLeft();
             // b2Vec2 force(-_player->getDashF(),0);
@@ -109,15 +110,16 @@ void PlayerController::applyForce() {
                 playerBody->ApplyLinearImpulseToCenter(force, true);
             }
         }
-#pragma mark dash force
-#pragma mark knockback force
-        if (_player->isKnocked()) {
-            playerBody->SetLinearVelocity(b2Vec2(0, 0));
-            Vec2 knockDirection = _player->getKnockDirection();
-            Vec2 knockForce = knockDirection.subtract(Vec2(0, knockDirection.y)).scale(_player->getKnockF());
-            playerBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _player->getKnockF()), true);
-        }
     }
+
+#pragma mark knockback force
+    if (_player->isKnocked()) {
+        playerBody->SetLinearVelocity(b2Vec2(0, 0));
+        Vec2 knockDirection = _player->getKnockDirection();
+        Vec2 knockForce = knockDirection.subtract(Vec2(0, knockDirection.y)).scale(_player->getKnockF());
+        playerBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _player->getKnockF()), true);
+    }
+ 
     // Velocity too high, clamp it
     if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashActive() && !_player->isKnockbackActive()) {
         _player->setVX(SIGNUM(_player->getVX()) * _player->getMaxSpeed());

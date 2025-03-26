@@ -210,6 +210,11 @@ void EnemyModel::createFixtures() {
     sensorDef.density = ENEMY_DENSITY;
     sensorDef.isSensor = true;
 
+    b2Filter filter = b2Filter();
+    filter.maskBits = 0x0001;
+    filter.categoryBits = 0x0002;
+    setFilterData(filter);
+
     // Sensor dimensions
     b2Vec2 corners[4];
     corners[0].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
