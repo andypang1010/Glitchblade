@@ -511,19 +511,24 @@ void EnemyModel::updateAnimation()
 	playAnimation(_shootSprite);
 	playAnimation(_explodeSprite);
 
-	if (_explodeSprite->isVisible()) {
-		if (currentFrame == 96) {
-			_explodeVFXSprite->setFrame(0);
-		}
-
-        if (currentFrame > 96 && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            _explodeVFXSprite->setFrame((_explodeVFXSprite->getFrame() + 1) % _explodeVFXSprite->getCount());
-        }
-	}
+    playVFXAnimation(_explodeSprite, _explodeVFXSprite, 24);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+}
+
+void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
+{
+    if (actionSprite->isVisible()) {
+        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
+            vfxSprite->setFrame(0);
+        }
+
+        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
+            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
+        }
+    }
 }
 
 #pragma mark -
