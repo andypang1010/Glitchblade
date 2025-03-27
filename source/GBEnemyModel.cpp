@@ -262,11 +262,12 @@ void EnemyModel::dispose() {
     _node = nullptr;
     _sensorNode = nullptr;
     _geometry = nullptr;
-    _sensorNode = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
-
+    _stabSprite = nullptr;
+    _slamSprite = nullptr;
+    _stunSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -278,6 +279,8 @@ void EnemyModel::dispose() {
  * @param delta Number of seconds since last animation frame
  */
 void EnemyModel::update(float dt) {
+    if (isRemoved()) return;
+
     updateAnimation();
     nextAction();
 

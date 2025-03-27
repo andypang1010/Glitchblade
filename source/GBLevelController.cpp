@@ -288,9 +288,6 @@ void LevelController::preUpdate(float dt)
     // TODO: Uncomment this & make it loop through all the current enemies (instead of just using _testEnemy)
     for (auto enemyCtrlr : _enemyControllers) {
         std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
-        Vec2 dist = enemodel->getPosition() - player->getPosition();
-        bool hit = false;
-        if (player->iframe > 0) player->iframe--;
         enemodel->setTargetPos(player->getPosition());
     }
 
@@ -339,11 +336,12 @@ void LevelController::postUpdate(float dt)
 
         if (enemyCtrlr->getEnemy()->getHP() <= 95) {
             if (enemyCtrlr->getEnemy()->isRemoved()) {
-                return;
+                continue;
             }
 
             _worldNode->removeChild(enemyCtrlr->getEnemy()->getSceneNode());
             enemyCtrlr->getEnemy()->markRemoved(true);
+            _enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
         }
 	}
 }
