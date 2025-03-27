@@ -595,6 +595,13 @@ public:
      */
     std::shared_ptr<MeleeActionModel> getDamagingAction();
 
+    /**
+     * Returns the action when a projectile is going to be shot, or nothing when no attack is active
+     *
+     * @return the action that needs projectile, or nullptr when no ranged attack is active
+     */
+    std::shared_ptr<RangedActionModel> getProjectileAction();
+
 #pragma mark -
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
