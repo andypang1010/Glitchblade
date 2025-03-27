@@ -292,13 +292,6 @@ void LevelController::preUpdate(float dt)
         enemodel->setTargetPos(player->getPosition());
     }
 
-
-    if (player->isJumpBegin() && player->isGrounded()) {
-        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-        std::shared_ptr<audio::Sound> source = _assets->get<audio::Sound>(fxJ->getString("jump"));
-        audio::AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
-    }
-
 	_playerController->preUpdate(dt);
     for (auto enemyCtrlr : _enemyControllers) {
         enemyCtrlr->preUpdate(dt);
