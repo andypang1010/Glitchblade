@@ -103,8 +103,8 @@
                         "projectileSpawnFrame": 6,
                         "projectileAnimation": "textures/projectile.png",
                         "projectile_animation_row": 1,
-                        "projectile_animation_col": 1,
-                        "projectile_animation_size": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
                         "projectileVelocity" : {
                             "x": 3,
                             "y": 0
