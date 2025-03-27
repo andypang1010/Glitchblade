@@ -335,7 +335,7 @@ void LevelController::postUpdate(float dt)
 
 		enemyCtrlr->postUpdate(dt);
 
-        if (enemyCtrlr->getEnemy()->getHP() <= 95) {
+        if (enemyCtrlr->getEnemy()->getHP() <= 0) {
             if (enemyCtrlr->getEnemy()->isRemoved()) {
                 continue;
             }
