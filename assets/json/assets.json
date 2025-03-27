@@ -45,6 +45,12 @@
         "boss1_stun": {
           "file": "textures/boss1_stun.png"
         },
+        "boss1_shoot": {
+            "file": "textures/boss1_shoot.png"
+        },
+        "boss1_explode": {
+            "file": "textures/boss1_explode.png"
+        },
         "projectile": {
             "file": "textures/projectile.png"
         },
