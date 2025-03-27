@@ -22,7 +22,7 @@
     "walls": {
         "vertex_count": 12,
         "wall_count": 2,
-        "thickness": 1,
+        "thickness": 3,
         "name": "wall"
     },
     "ground": {

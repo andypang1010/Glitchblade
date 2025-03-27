@@ -102,8 +102,6 @@ void EnemyController::fixedUpdate(float timestep)
 
 void EnemyController::preUpdate(float dt)
 {
-    //_testEnemy->setDashLeftInput(_input.didDashLeft());
-    //_testEnemy->setDashRightInput(dist < 0 && dist > -ENEMY_ATTACK_RADIUS);
     _hpNode->setText(std::to_string((int)_enemy->getHP()));
     _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
 

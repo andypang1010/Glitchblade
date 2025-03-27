@@ -26,7 +26,6 @@
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBProjectile.h"
-#include "GBHitbox.h"
 #include "GBMeleeActionModel.h"
 #include "GBIngameUI.h"
 #include "GBPauseMenu.h"
@@ -565,35 +564,6 @@ void GameScene::removeProjectile(Projectile* projectile) {
     AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
 }
 
-/**
- * Add a new projectile to the world and send it in the right direction.
- */
-void GameScene::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration) {
-    //std::shared_ptr<Texture> image = Texture::alloc(1, 1);
-
-    //// Change last parameter to test player-fired or regular projectile
-    //auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration);
-    //hitbox->setDebugColor(Color4::RED);
-
-    //std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    //sprite->setAnchor(Vec2::ANCHOR_CENTER);
-    //addObstacle(hitbox, sprite);
-}
-
-/**
- * Removes a new projectile from the world.
- *
- * @param  projectile   the projectile to remove
- */
-void GameScene::removeHitbox() {
-    // do not attempt to remove a projectile that has already been removed
-    if (_testbox==nullptr || _testbox->isRemoved()) {
-        return;
-    }
-    _testbox->setDebugScene(nullptr);
-    _testbox->markRemoved(true);
-}
-
 #pragma mark -
 #pragma mark Collision Handling
 
@@ -666,7 +636,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->setDashRem(0);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
+        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
     }
     else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
@@ -725,35 +695,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _ui->setHP(_player->getHP());
             _pauseMenu->setHP(_player->getHP());
         }
-        // TODO: REFACTOR TO NOT REPEAT CODE!!!
     }
-
-    // Shield-Enemy Collision
-    //if (bd1->getName() == enemy_name && fd2 == _player->getShieldName()) {
-    //    if (((EnemyModel*)bd1)->isDashActive() && _player->isParryActive()) {
-    //        ((EnemyModel*)bd1)->setDashRem(0);
-    //        ((EnemyModel*)bd1)->setStun(120);
-    //    }
-    //    else if (((EnemyModel*)bd1)->isDashActive() && _player->isGuardActive()) {
-    //        _player->damage(10);
-    //        _ui->setHP(_player->getHP());
-    //        _pauseMenu->setHP(_player->getHP());
-    //        ((EnemyModel*)bd1)->setDashRem(0);
-    //    }
-    //}
-
-    //if (bd2->getName() == enemy_name && fd1 == _player->getShieldName()) {
-    //    if (((EnemyModel*)bd2)->isDashActive() && _player->isParryActive()) {
-    //        ((EnemyModel*)bd2)->setDashRem(0);
-    //        ((EnemyModel*)bd2)->setStun(88);
-    //    }
-    //    else if (((EnemyModel*)bd2)->isDashActive() && _player->isGuardActive()) {
-    //        _player->damage(10);
-    //        _ui->setHP(_player->getHP());
-    //        _pauseMenu->setHP(_player->getHP());
-    //        ((EnemyModel*)bd2)->setDashRem(0);
-    //    }
-    //}
 
     // Shield-Projectile Collision
     Projectile* shieldHit = getProjectileHitShield(bd1, fd1, bd2, fd2);

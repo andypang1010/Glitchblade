@@ -14,6 +14,7 @@
 #include "GBEnemyController.h"
 #include "GBPlayerController.h"
 #include "GBTypes.h"
+#include "GBHitbox.h"
 
 #define MAX_NUM_ENEMIES 2
 
@@ -166,6 +167,12 @@ public:
      * @param remain    The amount of time (in seconds) last fixedUpdate
      */
     void postUpdate(float dt);
+
+
+    /**
+    * Adds a new hitbox to the world.
+    */
+    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration);
 
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);
