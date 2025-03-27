@@ -197,10 +197,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _losenode->setForeground(messagesJ->get("lose")->getString("color"));
     setFailure(false);
     
-    addChild(_debugnode);
-    addChild(_winnode);
-    addChild(_losenode);
-    
     _levelController = std::make_shared<LevelController>();
     _levelController->init(_assets, _constantsJSON, _world, _debugnode); // Initialize the LevelController
     // LevelController needs to be initialized before populate() or else we will get nullptr related issues
@@ -337,6 +333,10 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
     addChild(_worldnode);
+    addChild(_debugnode);
+    addChild(_winnode);
+    addChild(_losenode);
+
     _levelController->populateLevel(level); // Sets the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
 

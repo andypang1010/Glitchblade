@@ -259,6 +259,7 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
         // add obstacle and set node position
         addObstacle(pair);
     }
+
 }
 
 void LevelController::reset() {
