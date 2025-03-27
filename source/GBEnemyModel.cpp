@@ -134,6 +134,9 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 4, 10, 40);
     _explodeSprite->setPosition(0, 50);
 
+	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 32);
+	_explodeVFXSprite->setPosition(0, 0);
+
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
 
@@ -143,7 +146,10 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_stabSprite);
     getSceneNode()->addChild(_stunSprite);
 	getSceneNode()->addChild(_shootSprite);
+
 	getSceneNode()->addChild(_explodeSprite);
+    getSceneNode()->addChild(_explodeVFXSprite);
+
 }
 
 #pragma mark -
@@ -489,6 +495,8 @@ void EnemyModel::updateAnimation()
 
 	_explodeSprite->setVisible(!isStunned() && _isExploding);
 
+    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && currentFrame >= 96);
+
     if (_stunRem == STUN_FRAMES) {
         currentFrame = 0;
     }
@@ -502,6 +510,16 @@ void EnemyModel::updateAnimation()
     playAnimation(_stunSprite);
 	playAnimation(_shootSprite);
 	playAnimation(_explodeSprite);
+
+	if (_explodeSprite->isVisible()) {
+		if (currentFrame == 96) {
+			_explodeVFXSprite->setFrame(0);
+		}
+
+        if (currentFrame > 96 && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
+            _explodeVFXSprite->setFrame((_explodeVFXSprite->getFrame() + 1) % _explodeVFXSprite->getCount());
+        }
+	}
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

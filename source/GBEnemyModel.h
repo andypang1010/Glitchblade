@@ -223,6 +223,7 @@ public:
     std::shared_ptr<scene2::SpriteNode> _slamSprite;
     std::shared_ptr<scene2::SpriteNode> _shootSprite;
     std::shared_ptr<scene2::SpriteNode> _explodeSprite;
+    std::shared_ptr<scene2::SpriteNode> _explodeVFXSprite;
     std::shared_ptr<scene2::SpriteNode> _stunSprite;
 
 public:

@@ -57,6 +57,9 @@
         "player_projectile": {
             "file": "textures/player_projectile.png"
         },
+        "explode_enemy_1": {
+            "file":  "textures/explode_enemy_1.png"
+        },
         
         "pause_button": {
         "file": "textures/pause_button.png"
