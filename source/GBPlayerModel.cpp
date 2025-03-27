@@ -141,6 +141,8 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void PlayerModel::damage(float value) {
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
+	_sceneNode->setColor(Color4::RED);
+    _lastDamagedFrame = 0;
 }
 
 /**
@@ -302,6 +304,14 @@ void PlayerModel::update(float dt) {
     if (_sceneNode != nullptr) {
         _sceneNode->setPosition(getPosition() * _drawScale);
         _sceneNode->setAngle(getAngle());
+    }
+
+    if (_lastDamagedFrame < PLAYER_HIT_COLOR_DURATION) {
+        _lastDamagedFrame++;
+    }
+
+    if (_lastDamagedFrame == PLAYER_HIT_COLOR_DURATION) {
+        _sceneNode->setColor(Color4::WHITE);
     }
 }
 
