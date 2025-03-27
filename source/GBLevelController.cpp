@@ -312,9 +312,9 @@ void LevelController::postUpdate(float dt)
 {
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
     if (player->isShooting() && player->hasProjectile()) {
-        ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, player->getPosition(), player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true, player->isFacingRight());
-        addObstacle(p);
-        player->setHasProjectile(false);
+        //ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, player->getPosition(), player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true, player->isFacingRight());
+        //addObstacle(p);
+        //player->setHasProjectile(false);
     }
 	// _testEnemyController->postUpdate(dt);
 	_playerController->postUpdate(dt);
@@ -327,8 +327,8 @@ void LevelController::postUpdate(float dt)
             createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndTime() - damagingAction->getHitboxStartTime() + 1);
         }
 
-        if (rand() % 60 == 0) {
-            auto projectilePair = Projectile::createProjectile(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition(), enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), false, enemyCtrlr->getEnemy()->isFacingRight());
+        if (projectileAction) {
+            auto projectilePair = Projectile::createProjectile(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition().add(enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(2, 0) : Vec2(-2, 0)), enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), false, enemyCtrlr->getEnemy()->isFacingRight());
             addObstacle(projectilePair);
         }
 
@@ -423,10 +423,23 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 			for (std::shared_ptr<JsonValue> projectileJSON : action->get("projectiles")->children()) {
 				std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
 
-                spawnPositions.push_back(Vec2(projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(), projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()));
-                spawnFrames.push_back(projectileJSON->get("projectileSpawnFrame")->asInt());
-				projectile->setLinearVelocity(Vec2(projectileJSON->get("projectileVelocity")->get("x")->asFloat(), projectileJSON->get("projectileVelocity")->get("y")->asFloat()));
+                spawnPositions.push_back(
+                    Vec2(
+                        projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(), 
+                        projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
+                    )
+                );
                 
+                spawnFrames.push_back(projectileJSON->get("projectileSpawnFrame")->asInt());
+
+				projectile->setIsPlayerFired(false);
+                projectile->setDamage(projectileJSON->get("projectileDamage")->asInt());
+                projectile->setLinearVelocity(
+                    Vec2(
+                        projectileJSON->get("projectileVelocity")->get("x")->asFloat(), 
+                        projectileJSON->get("projectileVelocity")->get("y")->asFloat()
+                    )
+                );
                 //projectile->setSpriteNode(
                 //    SpriteNode::allocWithSheet(
                 //        Texture::allocWithFile(projectileJSON->getString("projectileAnimation")), 
@@ -435,13 +448,13 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
                 //        action->getInt("animation_size")
                 //    )
                 //);
-                // projectile->setDamage(projectileJSON->get("projectileDamage")->asInt());
 
 				projectiles.push_back(projectile);
 			}
 
+			rangedAction->setProjectileSpawnPositions(spawnPositions);
+			rangedAction->setProjectileSpawnFrames(spawnFrames);
 			rangedAction->setProjectiles(projectiles);
-
 
             actions.push_back(rangedAction);
         }

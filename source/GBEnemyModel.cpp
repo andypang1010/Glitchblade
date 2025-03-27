@@ -464,9 +464,12 @@ std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
 
 std::shared_ptr<RangedActionModel> EnemyModel::getProjectileAction() {
 	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
-    if (_isShooting && std::find(frames.begin(), frames.end(), _shootSprite->getFrame()+1) != frames.end()) {
-        return _shoot;
+    for (int frame : frames) {
+		if (_isShooting && currentFrame == frame * E_ANIMATION_UPDATE_FRAME) {
+			return _shoot;
+		}
     }
+    
     return nullptr;
 }
 
