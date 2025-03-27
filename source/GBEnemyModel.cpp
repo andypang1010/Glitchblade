@@ -163,6 +163,8 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void EnemyModel::damage(float value) {
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
+	_lastDamagedFrame = 0;
+    _node->setColor(Color4::RED);
 }
 
 /**
@@ -321,6 +323,14 @@ void EnemyModel::update(float dt) {
     if (_node != nullptr) {
         _node->setPosition(getPosition() * _drawScale);
         _node->setAngle(getAngle());
+    }
+
+    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
+		_lastDamagedFrame++;
+    }
+
+    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
+        _node->setColor(Color4::WHITE);
     }
 }
 

@@ -60,6 +60,8 @@ using namespace cugl;
 
 #define E_ANIMATION_UPDATE_FRAME 4
 
+#define ENEMY_HIT_COLOR_DURATION 8
+
 #pragma mark -
 #pragma mark Physics Constants
 /** The factor to multiply by the input */
@@ -139,6 +141,7 @@ protected:
     Vec2 _knockDirection;
     /** Whether our feet are on the ground */
     bool _isGrounded;
+    int _lastDamagedFrame;
 
     std::string _bodyName;
     /** Ground sensor to represent our feet */
