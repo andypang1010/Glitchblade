@@ -321,9 +321,15 @@ void LevelController::postUpdate(float dt)
 
 	for (auto enemyCtrlr : _enemyControllers) {
         auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
+		auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
 
         if (damagingAction) {
             createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndTime() - damagingAction->getHitboxStartTime() + 1);
+        }
+
+        if (rand() % 60 == 0) {
+            auto projectilePair = Projectile::createProjectile(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition(), enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), false, enemyCtrlr->getEnemy()->isFacingRight());
+            addObstacle(projectilePair);
         }
 
 		enemyCtrlr->postUpdate(dt);

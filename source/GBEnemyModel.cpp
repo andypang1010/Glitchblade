@@ -462,6 +462,14 @@ std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
     return nullptr;
 }
 
+std::shared_ptr<RangedActionModel> EnemyModel::getProjectileAction() {
+	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
+    if (_isShooting && std::find(frames.begin(), frames.end(), _shootSprite->getFrame()+1) != frames.end()) {
+        return _shoot;
+    }
+    return nullptr;
+}
+
 #pragma mark -
 #pragma mark Animation Methods
 void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {

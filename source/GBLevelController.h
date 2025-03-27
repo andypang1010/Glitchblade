@@ -15,6 +15,7 @@
 #include "GBPlayerController.h"
 #include "GBTypes.h"
 #include "GBHitbox.h"
+#include "GBProjectile.h"
 
 #define MAX_NUM_ENEMIES 2
 
