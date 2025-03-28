@@ -264,6 +264,7 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
         // add obstacle and set node position
         addObstacle(pair);
     }
+
 }
 
 void LevelController::reset() {
@@ -293,41 +294,6 @@ void LevelController::preUpdate(float dt)
     // TODO: Uncomment this & make it loop through all the current enemies (instead of just using _testEnemy)
     for (auto enemyCtrlr : _enemyControllers) {
         std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
-        Vec2 dist = enemodel->getPosition() - player->getPosition();
-        bool hit = false;
-        if (player->iframe > 0) player->iframe--;
-        /*if (enemodel->isDamaging() && player->iframe <= 0) {
-            if (enemodel->_isSlamming) {
-                if (dist.x > 0 && dist.x <= 6 && !enemodel->isFacingRight() && std::abs(dist.y) <= 6) {
-                    hit = true;
-                }
-                else if (dist.x < 0 && dist.x >= -6 && enemodel->isFacingRight() && std::abs(dist.y) <= 6) {
-                    hit = true;
-                }
-            }
-            else if (enemodel->_isStabbing) {
-                if (dist.x > 0 && dist.x <= 6 && !enemodel->isFacingRight() && std::abs(dist.y) <= 2) {
-                    hit = true;
-                }
-                else if (dist.x < 0 && dist.x >= -6 && enemodel->isFacingRight() && std::abs(dist.y) <= 2) {
-                    hit = true;
-                }
-            }
-        }
-
-        if (hit) {
-            player->setKnocked(true, player->getPosition().subtract(enemodel->getPosition()).normalize());
-            if (player->iframe <= 0 && !player->isParryActive() && !player->isGuardActive()) {
-                player->damage(20);
-            }
-            else if (player->iframe <= 0 && player->isParryActive()) {
-                enemodel->setStun(120);
-            }
-            else if (player->iframe <= 0 && player->isGuardActive()) {
-                player->damage(10);
-            }
-            player->iframe = 60;
-        }*/
         enemodel->setTargetPos(player->getPosition());
     }
 
@@ -338,8 +304,20 @@ void LevelController::preUpdate(float dt)
         audio::AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
     }
 
-	//_testEnemyController->preUpdate(dt);
 	_playerController->preUpdate(dt);
+    for (auto enemyCtrlr : _enemyControllers) {
+        enemyCtrlr->preUpdate(dt);
+    }
+}
+
+void LevelController::fixedUpdate(float timestep)
+{
+	// _testEnemyController->fixedUpdate(timestep);
+	_playerController->fixedUpdate(timestep);
+
+	for (auto enemyCtrlr : _enemyControllers) {
+		enemyCtrlr->fixedUpdate(timestep);
+	}
 }
 
 void LevelController::postUpdate(float dt)
@@ -354,18 +332,39 @@ void LevelController::postUpdate(float dt)
 	_playerController->postUpdate(dt);
 
 	for (auto enemyCtrlr : _enemyControllers) {
+        auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
+
+        if (damagingAction) {
+            createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndTime() - damagingAction->getHitboxStartTime() + 1);
+        }
+
 		enemyCtrlr->postUpdate(dt);
+
+        if (enemyCtrlr->getEnemy()->getHP() <= 0) {
+            if (enemyCtrlr->getEnemy()->isRemoved()) {
+                continue;
+            }
+
+            _worldNode->removeChild(enemyCtrlr->getEnemy()->getSceneNode());
+            enemyCtrlr->getEnemy()->markRemoved(true);
+            _enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
+        }
 	}
 }
 
-void LevelController::fixedUpdate(float timestep)
-{
-	// _testEnemyController->fixedUpdate(timestep);
-	_playerController->fixedUpdate(timestep);
+/**
+ * Add a new projectile to the world and send it in the right direction.
+ */
+void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration) {
+    std::shared_ptr<Texture> image = Texture::alloc(1, 1);
 
-	for (auto enemyCtrlr : _enemyControllers) {
-		enemyCtrlr->fixedUpdate(timestep);
-	}
+    // Change last parameter to test player-fired or regular projectile
+    auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration);
+    hitbox->setDebugColor(Color4::RED);
+
+    std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
+    sprite->setAnchor(Vec2::ANCHOR_CENTER);
+    addObstacle(ObstacleNodePair(hitbox, sprite));
 }
 
 /**
@@ -413,6 +412,8 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
             meleeAction->setHitboxStartTime(action->getFloat("hitboxStartTime"));
             meleeAction->setHitboxEndTime(action->getFloat("hitboxEndTime"));
             meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
+
+            
 
             actions.push_back(meleeAction);
         }

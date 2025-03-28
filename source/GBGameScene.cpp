@@ -26,7 +26,6 @@
 #include "GBPlayerModel.h"
 #include "GBEnemyModel.h"
 #include "GBProjectile.h"
-#include "GBHitbox.h"
 #include "GBMeleeActionModel.h"
 #include "GBIngameUI.h"
 #include "GBPauseMenu.h"
@@ -198,10 +197,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _losenode->setForeground(messagesJ->get("lose")->getString("color"));
     setFailure(false);
     
-    addChild(_debugnode);
-    addChild(_winnode);
-    addChild(_losenode);
-    
     _levelController = std::make_shared<LevelController>();
     _levelController->init(_assets, _constantsJSON, _world, _debugnode); // Initialize the LevelController
     // LevelController needs to be initialized before populate() or else we will get nullptr related issues
@@ -219,7 +214,23 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         }
         _player->setDebugColor(Color4::YELLOW);
     
+    populate(_levelController->getLevelByName("Level 1"));
+
     // === Initialize in-game UI ===
+    populateUI(assets);
+    
+    _active = true;
+    _complete = false;
+    setDebug(false); // Debug on by default
+
+    // XNA nostalgia
+    Application::get()->setClearColor(Color4f::BLACK);
+
+    return true;
+}
+
+void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
+{
     _ui = GBIngameUI::alloc(_assets);
     if (_ui != nullptr) {
         addChild(_ui);
@@ -229,7 +240,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         _pauseMenu->setVisible(false);
         addChild(_pauseMenu);
     }
-    
+
     auto pauseButton = _ui->getPauseButton();
     if (pauseButton) {
         pauseButton->addListener([this](const std::string& name, bool down) {
@@ -238,9 +249,9 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
                 _pauseMenu->setVisible(true);
                 setPaused(true);
             }
-        });
+            });
     }
-    
+
     auto resumeButton = _pauseMenu->getResumeButton();
     if (resumeButton) {
         resumeButton->addListener([this](const std::string& name, bool down) {
@@ -249,9 +260,9 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
                 _ui->setVisible(true);
                 setPaused(false);
             }
-        });
+            });
     }
-    
+
     auto restartButton = _pauseMenu->getRestartButton();
     if (restartButton) {
         restartButton->addListener([this](const std::string& name, bool down) {
@@ -261,18 +272,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
                 setPaused(false);
                 this->reset();
             }
-        });
+            });
     }
-    
-    _active = true;
-    _complete = false;
-    setDebug(false); // Debug on by default
-
-    populate(_levelController->getLevelByName("Level 1"));
-    // XNA nostalgia
-    Application::get()->setClearColor(Color4f::BLACK);
-
-    return true;
 }
 
 /**
@@ -287,6 +288,8 @@ void GameScene::dispose() {
         _losenode = nullptr;
         _complete = false;
         _debug = false;
+		_ui = nullptr;
+		_pauseMenu = nullptr;
         Scene2::dispose();
     }
 }
@@ -299,15 +302,19 @@ void GameScene::dispose() {
  * Resets the status of the game by resetting player and enemy positions so that we can play again.
  */
 void GameScene::reset() {
+	removeAllChildren();
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
+    _pauseMenu->removeAllChildren();
+    _ui->removeAllChildren();
     setFailure(false);
     setComplete(false);
     _levelController->reset();
+    populate(_levelController->getCurrentLevel());
+	populateUI(_assets);
     _ui->setHP(100);
     _pauseMenu->setHP(100);
-    populate(_levelController->getCurrentLevel());
 }
 
 /**
@@ -326,6 +333,10 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
     addChild(_worldnode);
+    addChild(_debugnode);
+    addChild(_winnode);
+    addChild(_losenode);
+
     _levelController->populateLevel(level); // Sets the level we want to populate here
     _player = _levelController->getPlayerModel(); // DELETE!
 
@@ -553,35 +564,6 @@ void GameScene::removeProjectile(Projectile* projectile) {
     AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
 }
 
-/**
- * Add a new projectile to the world and send it in the right direction.
- */
-void GameScene::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration) {
-    //std::shared_ptr<Texture> image = Texture::alloc(1, 1);
-
-    //// Change last parameter to test player-fired or regular projectile
-    //auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration);
-    //hitbox->setDebugColor(Color4::RED);
-
-    //std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
-    //sprite->setAnchor(Vec2::ANCHOR_CENTER);
-    //addObstacle(hitbox, sprite);
-}
-
-/**
- * Removes a new projectile from the world.
- *
- * @param  projectile   the projectile to remove
- */
-void GameScene::removeHitbox() {
-    // do not attempt to remove a projectile that has already been removed
-    if (_testbox==nullptr || _testbox->isRemoved()) {
-        return;
-    }
-    _testbox->setDebugScene(nullptr);
-    _testbox->markRemoved(true);
-}
-
 #pragma mark -
 #pragma mark Collision Handling
 
@@ -654,7 +636,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _player->setDashRem(0);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
+        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
     }
     else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
@@ -713,35 +695,7 @@ void GameScene::beginContact(b2Contact* contact) {
             _ui->setHP(_player->getHP());
             _pauseMenu->setHP(_player->getHP());
         }
-        // TODO: REFACTOR TO NOT REPEAT CODE!!!
     }
-
-    // Shield-Enemy Collision
-    //if (bd1->getName() == enemy_name && fd2 == _player->getShieldName()) {
-    //    if (((EnemyModel*)bd1)->isDashActive() && _player->isParryActive()) {
-    //        ((EnemyModel*)bd1)->setDashRem(0);
-    //        ((EnemyModel*)bd1)->setStun(120);
-    //    }
-    //    else if (((EnemyModel*)bd1)->isDashActive() && _player->isGuardActive()) {
-    //        _player->damage(10);
-    //        _ui->setHP(_player->getHP());
-    //        _pauseMenu->setHP(_player->getHP());
-    //        ((EnemyModel*)bd1)->setDashRem(0);
-    //    }
-    //}
-
-    //if (bd2->getName() == enemy_name && fd1 == _player->getShieldName()) {
-    //    if (((EnemyModel*)bd2)->isDashActive() && _player->isParryActive()) {
-    //        ((EnemyModel*)bd2)->setDashRem(0);
-    //        ((EnemyModel*)bd2)->setStun(88);
-    //    }
-    //    else if (((EnemyModel*)bd2)->isDashActive() && _player->isGuardActive()) {
-    //        _player->damage(10);
-    //        _ui->setHP(_player->getHP());
-    //        _pauseMenu->setHP(_player->getHP());
-    //        ((EnemyModel*)bd2)->setDashRem(0);
-    //    }
-    //}
 
     // Shield-Projectile Collision
     Projectile* shieldHit = getProjectileHitShield(bd1, fd1, bd2, fd2);

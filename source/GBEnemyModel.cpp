@@ -210,6 +210,11 @@ void EnemyModel::createFixtures() {
     sensorDef.density = ENEMY_DENSITY;
     sensorDef.isSensor = true;
 
+    b2Filter filter = b2Filter();
+    filter.maskBits = 0x0001;
+    filter.categoryBits = 0x0002;
+    setFilterData(filter);
+
     // Sensor dimensions
     b2Vec2 corners[4];
     corners[0].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
@@ -257,11 +262,12 @@ void EnemyModel::dispose() {
     _node = nullptr;
     _sensorNode = nullptr;
     _geometry = nullptr;
-    _sensorNode = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
-
+    _stabSprite = nullptr;
+    _slamSprite = nullptr;
+    _stunSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -273,6 +279,8 @@ void EnemyModel::dispose() {
  * @param delta Number of seconds since last animation frame
  */
 void EnemyModel::update(float dt) {
+    if (isRemoved()) return;
+
     updateAnimation();
     nextAction();
 
