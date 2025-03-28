@@ -60,6 +60,7 @@ void Minion1BController::fixedUpdate(float timestep) {
 
 void Minion1BController::preUpdate(float dt) {
     if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
+    //if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getAggression()));
     if (_stunNode) _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
 }
 

@@ -87,6 +87,8 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void EnemyModel::damage(float value) {
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
+    _aggression += value;
+    _aggression = _aggression > 100 ? 100 : _aggression;
 	_lastDamagedFrame = 0;
     _node->setColor(Color4::RED);
 }
@@ -100,17 +102,6 @@ void EnemyModel::damage(float value) {
  */
 void EnemyModel::setMovement(float value) {
     _movement = value;
-    bool face = _targetPos > getPosition();
-    if (_movement == 0 || _faceRight == face) {
-        return;
-    }
-
-    // Change facing
-    scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
-    if (image != nullptr) {
-        image->flipHorizontal(!image->isFlipHorizontal());
-    }
-    _faceRight = face;
 }
 
 /**
@@ -256,8 +247,26 @@ void EnemyModel::update(float dt) {
 
 #pragma mark -
 #pragma mark AI Methods
-bool EnemyModel::isTargetClose(Vec2 targetPos) {
-    return (getPosition() - targetPos).length() <= CLOSE_RADIUS;
+bool EnemyModel::isTargetClose() {
+    return (getPosition() - _targetPos).length() <= CLOSE_RADIUS;
+}
+
+bool EnemyModel::isTargetFar() {
+	return (getPosition() - _targetPos).length() >= FAR_RADIUS;
+}
+
+void EnemyModel::faceTarget() {
+    bool face = _targetPos > getPosition();
+    if (_faceRight == face) {
+        return;
+    }
+
+    // Change facing
+    scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
+    if (image != nullptr) {
+        image->flipHorizontal(!image->isFlipHorizontal());
+    }
+    _faceRight = face;
 }
 
 void EnemyModel::nextAction() {

@@ -42,7 +42,7 @@ using namespace cugl;
 /** The density of the character */
 #define ENEMY_DENSITY    1.0f
 /** The impulse for the character dash-attack */
-#define STAB_FORCE       50.0f
+#define MINION1B_PUNCH_FORCE       35.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
 #define ENEMY_KB_DURATION 20

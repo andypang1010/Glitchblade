@@ -100,6 +100,7 @@ using namespace cugl;
 #pragma mark -
 #pragma mark AI Constants
 #define CLOSE_RADIUS 6.0f
+#define FAR_RADIUS 12.0f
 
 #pragma mark -
 #pragma mark Enemy Model
@@ -139,6 +140,7 @@ protected:
     int _lastDamagedFrame;
 
     Vec2 _targetPos;
+    float _aggression = 0.0f;
 
     int _moveDuration;
     int _moveDirection;
@@ -229,6 +231,7 @@ public:
         _faceRight = true;
         _canKnockBack = true;
         _stunRem = 0;
+        _aggression = 0;
 
         _moveDuration = 0;
         currentFrame = 0;
@@ -481,11 +484,39 @@ public:
 
 #pragma mark -
 #pragma mark AI Methods
+    /**
+     * Sets the target position of this enemy
+     *
+     * @param pos the position of target(player)
+     */
     virtual void setTargetPos(Vec2 pos) { _targetPos = pos; }
 
-    virtual bool isTargetClose(Vec2 targetPos);
+    /**
+     * Make the enemy face the target
+     *
+     */
+    virtual void faceTarget();
+
+    /**
+     * Make the enemy move toward the target
+     *
+	 * @param duration the duration of the movement
+     */
+    virtual void approachTarget(int duration) { faceTarget(); _moveDirection = 1; _moveDuration = duration; };
+    /**
+   * Make the enemy move away from the target
+   *
+   * @param duration the duration of the movement
+   */
+    virtual void avoidTarget(int duration) { faceTarget(); _moveDirection = -1; _moveDuration = duration; };
+
+    virtual bool isTargetClose();
+    virtual bool isTargetFar();
     virtual void nextAction();
     virtual void AIMove();
+
+    virtual void setAggression(float value) { _aggression = value; }
+	virtual float getAggression() { return _aggression; }
 
     /**
      * Returns the action when an attack hitbox should be active, or nothing when no attack is active
