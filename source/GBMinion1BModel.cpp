@@ -229,8 +229,7 @@ void Minion1BModel::nextAction() {
             punch();
         }
         else { // Move closer
-            _moveDuration = 45;
-            _moveDirection = 1;
+            approachTarget(45);
         }
     }
     else {
@@ -262,29 +261,22 @@ void Minion1BModel::AIMove() {
         _moveDuration--;
     }
     else if (_isPunching && _punchSprite->getFrame() >= _punch->getHitboxStartTime() - 1 && _punchSprite->getFrame() <= _punch->getHitboxEndTime() - 1) {
-        setMovement(face * getForce() * STAB_FORCE);
+        setMovement(face * getForce() * MINION1B_PUNCH_FORCE);
+    }
+    else {
+        setMovement(getMovement() / 2);
     }
 
 }
 
 void Minion1BModel::slam() {
-    if (getPosition().x - _targetPos.x < 0) {
-        faceRight();
-    }
-    else {
-        faceLeft();
-    }
+    faceTarget();
     _isSlamming = true;
     setMovement(0);
 }
 
 void Minion1BModel::punch() {
-    if (getPosition().x - _targetPos.x < 0) {
-        faceRight();
-    }
-    else {
-        faceLeft();
-    }
+	faceTarget();
     _isPunching = true;
     setMovement(0);
 }

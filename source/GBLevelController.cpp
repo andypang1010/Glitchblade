@@ -326,6 +326,7 @@ void LevelController::postUpdate(float dt)
 	_playerController->postUpdate(dt);
 
 	for (auto enemyCtrlr : _enemyControllers) {
+        if (enemyCtrlr == nullptr) continue;
         auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
 		auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
 

@@ -100,17 +100,6 @@ void EnemyModel::damage(float value) {
  */
 void EnemyModel::setMovement(float value) {
     _movement = value;
-    bool face = _targetPos > getPosition();
-    if (_movement == 0 || _faceRight == face) {
-        return;
-    }
-
-    // Change facing
-    scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
-    if (image != nullptr) {
-        image->flipHorizontal(!image->isFlipHorizontal());
-    }
-    _faceRight = face;
 }
 
 /**
@@ -258,6 +247,20 @@ void EnemyModel::update(float dt) {
 #pragma mark AI Methods
 bool EnemyModel::isTargetClose(Vec2 targetPos) {
     return (getPosition() - targetPos).length() <= CLOSE_RADIUS;
+}
+
+void EnemyModel::faceTarget() {
+    bool face = _targetPos > getPosition();
+    if (_faceRight == face) {
+        return;
+    }
+
+    // Change facing
+    scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_node.get());
+    if (image != nullptr) {
+        image->flipHorizontal(!image->isFlipHorizontal());
+    }
+    _faceRight = face;
 }
 
 void EnemyModel::nextAction() {

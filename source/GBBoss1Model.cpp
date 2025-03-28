@@ -286,8 +286,7 @@ void Boss1Model::nextAction() {
 			explode();
 		}
         else { // Move away
-            _moveDuration = 45;
-            _moveDirection = -1;
+            avoidTarget(45);
         }
     }
     else if (!_isSlamming && !_isStabbing && !_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
@@ -298,8 +297,7 @@ void Boss1Model::nextAction() {
 			shoot();
 		}
         else { // Move closer
-            _moveDuration = 45;
-            _moveDirection = 1;
+            approachTarget(45);
         }
     }
     else {
@@ -344,49 +342,32 @@ void Boss1Model::AIMove() {
     else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
         setMovement(face * getForce() * STAB_FORCE);
     }
+    else {
+        setMovement(getMovement() / 2);
+    }
 
 }
 
 void Boss1Model::slam() {
-    if (getPosition().x - _targetPos.x < 0) {
-        faceRight();
-    }
-    else {
-        faceLeft();
-    }
+	faceTarget();
     _isSlamming = true;
     setMovement(0);
 }
 
 void Boss1Model::stab() {
-    if (getPosition().x - _targetPos.x < 0) {
-        faceRight();
-    }
-    else {
-        faceLeft();
-    }
+	faceTarget();
     _isStabbing = true;
     setMovement(0);
 }
 
 void Boss1Model::shoot() {
-    if (getPosition().x - _targetPos.x < 0) {
-        faceRight();
-    }
-    else {
-        faceLeft();
-    }
+	faceTarget();
     _isShooting = true;
     setMovement(0);
 }
 
 void Boss1Model::explode() {
-    if (getPosition().x - _targetPos.x < 0) {
-        faceRight();
-    }
-    else {
-        faceLeft();
-    }
+	faceTarget();
     _isExploding = true;
     setMovement(0);
 }
