@@ -87,6 +87,8 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void EnemyModel::damage(float value) {
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
+    _aggression += value;
+    _aggression = _aggression > 100 ? 100 : _aggression;
 	_lastDamagedFrame = 0;
     _node->setColor(Color4::RED);
 }
@@ -245,8 +247,12 @@ void EnemyModel::update(float dt) {
 
 #pragma mark -
 #pragma mark AI Methods
-bool EnemyModel::isTargetClose(Vec2 targetPos) {
-    return (getPosition() - targetPos).length() <= CLOSE_RADIUS;
+bool EnemyModel::isTargetClose() {
+    return (getPosition() - _targetPos).length() <= CLOSE_RADIUS;
+}
+
+bool EnemyModel::isTargetFar() {
+	return (getPosition() - _targetPos).length() >= FAR_RADIUS;
 }
 
 void EnemyModel::faceTarget() {

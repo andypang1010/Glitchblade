@@ -100,6 +100,7 @@ using namespace cugl;
 #pragma mark -
 #pragma mark AI Constants
 #define CLOSE_RADIUS 6.0f
+#define FAR_RADIUS 12.0f
 
 #pragma mark -
 #pragma mark Enemy Model
@@ -139,7 +140,7 @@ protected:
     int _lastDamagedFrame;
 
     Vec2 _targetPos;
-    float _aggression;
+    float _aggression = 0.0f;
 
     int _moveDuration;
     int _moveDirection;
@@ -509,7 +510,8 @@ public:
    */
     virtual void avoidTarget(int duration) { faceTarget(); _moveDirection = -1; _moveDuration = duration; };
 
-    virtual bool isTargetClose(Vec2 targetPos);
+    virtual bool isTargetClose();
+    virtual bool isTargetFar();
     virtual void nextAction();
     virtual void AIMove();
 

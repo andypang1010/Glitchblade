@@ -246,6 +246,7 @@ void Boss1Model::update(float dt) {
     nextAction();
 
     // Apply cooldowns
+    _aggression = std::min(100.0f, _aggression + dt*10);
 
     if (isKnocked()) {
         resetKnocked();
@@ -275,29 +276,36 @@ void Boss1Model::update(float dt) {
 void Boss1Model::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isStabbing && !_isShooting && !_isExploding && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
-        if (r % 4 == 0) { //Slam
-            slam();
+    if (!_isSlamming && !_isStabbing && !_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
+        if (isTargetClose()) {
+            if (r % 4 == 0) { //Slam
+                slam();
+            }
+            else if (r % 4 == 1) { // Stab
+                stab();
+            }
+            else if (r % 4 == 2) { // Explode
+                explode();
+            }
+            else { // Move away
+                avoidTarget(45);
+            }
         }
-        else if (r % 4 == 1) { // Stab
-            stab();
+        else if (isTargetFar()) {
+            if (r % 2 == 0) { // Shoot
+                shoot();
+            }
+            else { // Move closer
+                approachTarget(45);
+            }
         }
-		else if (r % 4 == 2) { // Explode
-			explode();
-		}
-        else { // Move away
-            avoidTarget(45);
-        }
-    }
-    else if (!_isSlamming && !_isStabbing && !_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
-        if (r % 3 == 0) { // Stab
-            stab();
-        }
-		else if (r % 3 == 1) { // Shoot
-			shoot();
-		}
-        else { // Move closer
-            approachTarget(45);
+        else {
+            if (r % 2 == 0) { // Stab
+                stab();
+            }
+            else { // Move closer
+                approachTarget(45);
+            }
         }
     }
     else {
@@ -349,27 +357,39 @@ void Boss1Model::AIMove() {
 }
 
 void Boss1Model::slam() {
-	faceTarget();
-    _isSlamming = true;
-    setMovement(0);
+    faceTarget();
+    if (rand() % 100 <= _aggression) {
+        _aggression -= std::max(0.0f, _aggression - 25);
+        _isSlamming = true;
+        setMovement(0);
+    }
 }
 
 void Boss1Model::stab() {
 	faceTarget();
-    _isStabbing = true;
-    setMovement(0);
+    if (rand() % 100 <= _aggression) {
+        _aggression -= std::max(0.0f, _aggression - 25);
+        _isStabbing = true;
+        setMovement(0);
+    }
 }
 
 void Boss1Model::shoot() {
 	faceTarget();
-    _isShooting = true;
-    setMovement(0);
+    if (rand() % 100 <= _aggression) {
+        _aggression -= std::max(0.0f, _aggression - 10);
+        _isShooting = true;
+        setMovement(0);
+    }
 }
 
 void Boss1Model::explode() {
 	faceTarget();
-    _isExploding = true;
-    setMovement(0);
+    if (rand() % 200 <= _aggression) {
+        _aggression -= std::max(0.0f, _aggression - 50);
+        _isExploding = true;
+        setMovement(0);
+    }
 }
 
 std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {

@@ -187,6 +187,7 @@ void Minion1BModel::update(float dt) {
     nextAction();
 
     // Apply cooldowns
+	_aggression = std::min(100.0f, _aggression + dt*5);
 
     if (isKnocked()) {
         resetKnocked();
@@ -216,20 +217,22 @@ void Minion1BModel::update(float dt) {
 void Minion1BModel::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isPunching && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
-        if (r % 2 == 0) { //Slam
-            slam();
+    if (!_isSlamming && !_isPunching && _moveDuration <= 0 && !isStunned()) {
+        if (isTargetClose()) {
+            if (r % 2 == 0) { //Slam
+                slam();
+            }
+            else { // Punch
+                punch();
+            }
         }
-        else { // Punch
-            punch();
-        }
-    }
-    else if (!_isSlamming && !_isPunching && _moveDuration <= 0 && !isStunned()) {
-        if (r % 2 == 0) { // Punch
-            punch();
-        }
-        else { // Move closer
-            approachTarget(45);
+        else {
+            if (r % 2 == 0) { // Punch
+                punch();
+            }
+            else { // Move closer
+                approachTarget(45);
+            }
         }
     }
     else {
@@ -271,14 +274,20 @@ void Minion1BModel::AIMove() {
 
 void Minion1BModel::slam() {
     faceTarget();
-    _isSlamming = true;
-    setMovement(0);
+    if (rand() % 200 <= _aggression) {
+        _aggression -= std::max(0.0f, _aggression - 25);
+        _isSlamming = true;
+        setMovement(0);
+    }
 }
 
 void Minion1BModel::punch() {
 	faceTarget();
-    _isPunching = true;
-    setMovement(0);
+    if (rand() % 100 <= _aggression) {
+        _aggression -= std::max(0.0f, _aggression - 50);
+        _isPunching = true;
+        setMovement(0);
+    }
 }
 
 std::shared_ptr<MeleeActionModel> Minion1BModel::getDamagingAction() {
