@@ -28,7 +28,7 @@
 //  Version: 7/1/16
 
 // Include your application class
-#include "GBApp.h"
+#include "app/GBApp.h"
 
 #if __has_include("discordsdk/discord.h")
     #include "GBDiscordPresence.h"

@@ -13,17 +13,38 @@ orientation: landscape # The orientation for mobile devices
 sources: # The list of the source code files
   - source/*.cpp
   - source/*.h
-  - source/discordsdk/*.cpp
-  - source/discordsdk/*.h
+  - source/app/*.cpp
+  - source/app/*.h
+  - source/core/*.cpp
+  - source/core/*.h
+
+  - source/enemies/*.cpp
+  - source/enemies/*.h
+  - source/enemies/actionmodel_variants/*.cpp
+  - source/enemies/actionmodel_variants/*.h
+  - source/enemies/enemy_variants/*.cpp
+  - source/enemies/enemy_variants/*.h
+
+  - source/game/*.cpp
+  - source/game/*.h
+  - source/game/ui/*.cpp
+  - source/game/ui/*.h
+  - source/game/objects/*.cpp
+  - source/game/objects/*.h
+
+  - source/levels/*.cpp
+  - source/levels/*.h
+
+  - source/player/*.cpp
+  - source/player/*.h
 
 modules:
   - audio # We need sound
   - physics2 # We need the physics libraries
   - scene2 # We want the 2d UI
 
-# This must be one of portrait, landscape, portrait-flipped, landscape-flipped,
 targets: # The target platforms to build for
-  - android # Android Studio
-  - apple # XCode (note macOS and iOS use one project)
-  - windows # Windows Sisual Studio
-  - cmake # This supports all Desktop platform GBA5AF6 GBA5AF6 GA5CAA5 GC9EE55 G607B7B5
+  - android     # Android Studio
+  - apple       # XCode (note macOS and iOS use one project)
+  - windows     # Windows Visual Studio
+  - cmake       # Generic desktop builds
