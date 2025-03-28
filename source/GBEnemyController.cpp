@@ -5,9 +5,6 @@ using namespace cugl;
 void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef,
     const std::shared_ptr<JsonValue>& constantsRef,
     std::vector<std::shared_ptr<ActionModel>> actions) {
-    _enemy = EnemyModel::alloc(assetRef, constantsRef, ENEMY_INIT_POS, actions);
-    _enemyJSON = constantsRef->get("enemy");
-
     std::string enemy_debug_font = _enemyJSON->get("debug")->getString("font");
 
     _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(enemy_debug_font));

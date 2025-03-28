@@ -4,6 +4,15 @@
 
 Boss1Controller::Boss1Controller() : EnemyController() {}
 
+void Boss1Controller::init(const std::shared_ptr<AssetManager>& assetRef,
+    const std::shared_ptr<JsonValue>& constantsRef,
+    std::vector<std::shared_ptr<ActionModel>> actions) {
+
+    _enemy = Boss1Model::alloc(assetRef, constantsRef, ENEMY_INIT_POS, actions);
+    _enemyJSON = constantsRef->get("enemy");
+    EnemyController::init(assetRef, constantsRef, actions);
+}
+
 void Boss1Controller::applyForce() {
     if (!_enemy || !_enemy->isEnabled()) return;
 
@@ -26,7 +35,7 @@ void Boss1Controller::applyForce() {
         enemyBody->ApplyForceToCenter(force, true);
 
         float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
-        // Dash force fetched but unused — this is where you'd apply it if needed
+        // Dash force fetched but unused ?this is where you'd apply it if needed
     }
 
     if (_enemy->isKnocked()) {

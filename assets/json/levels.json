@@ -7,8 +7,8 @@
       "platforms": [],
       "waves": [
         {
-          "spawn_intervals": [ 2 ],
-          "enemies": [ "boss_1" ]
+          "spawn_intervals": [ 2, 5 ],
+          "enemies": [ "boss_1", "boss_1" ]
         },
         {
           "spawn_intervals": [ 2, 10 ],
