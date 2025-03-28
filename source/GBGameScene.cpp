@@ -632,7 +632,7 @@ void GameScene::beginContact(b2Contact* contact) {
     // Player-Enemy Collision
     if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd1)->damage(5);
+            ((EnemyModel*)bd1)->damage(20);
             _player->setDashRem(0);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
@@ -640,7 +640,7 @@ void GameScene::beginContact(b2Contact* contact) {
     }
     else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd2)->damage(5);
+            ((EnemyModel*)bd2)->damage(20);
             _player->setDashRem(0);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());

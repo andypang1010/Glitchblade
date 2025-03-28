@@ -1,5 +1,6 @@
 #include "GBLevelController.h"
 #include "GBBoss1Controller.h"
+#include "GBMinion1BController.h"
 
 using namespace cugl::graphics;
 using namespace cugl::physics2;
@@ -79,7 +80,7 @@ std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()
         return std::make_shared<Boss1Controller>();
     } }, // Should return a Minion1AController
     { "minion_1B", []() {
-        return std::make_shared<Boss1Controller>();
+        return std::make_shared<Minion1BController>();
     } } // Should return a Minion1BController
     // Add more as desired here
 };

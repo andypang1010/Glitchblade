@@ -43,7 +43,7 @@
             "file": "textures/boss1_stab.png"
         },
         "boss1_stun": {
-          "file": "textures/boss1_stun.png"
+            "file": "textures/boss1_stun.png"
         },
         "boss1_shoot": {
             "file": "textures/boss1_shoot.png"
@@ -58,44 +58,59 @@
             "file": "textures/player_projectile.png"
         },
         "explode_enemy_1": {
-            "file":  "textures/explode_enemy_1.png"
+            "file": "textures/explode_enemy_1.png"
         },
-        
+        "minion1B_idle": {
+            "file": "textures/minion1B_idle.png"
+        },
+        "minion1B_punch": {
+            "file": "textures/minion1B_punch.png"
+        },
+        "minion1B_slam": {
+            "file": "textures/minion1B_slam.png"
+        },
+        "minion1B_walk": {
+            "file": "textures/minion1B_walk.png"
+        },
+        "minion1B_stun": {
+            "file": "textures/minion1B_stun.png"
+        },
+
         "pause_button": {
-        "file": "textures/pause_button.png"
+            "file": "textures/pause_button.png"
         },
         "hp_empty": {
-        "file": "textures/hp_bar.png"
+            "file": "textures/hp_bar.png"
         },
         "hp_segment": {
-        "file": "textures/hp_segment.png"
+            "file": "textures/hp_segment.png"
         },
         "half_hp_segment": {
-        "file": "textures/half_hp_segment.png"
+            "file": "textures/half_hp_segment.png"
         },
-        
+
         "menu_background": {
-        "file": "textures/menu_background.png"
+            "file": "textures/menu_background.png"
         },
         "menu_hpbar": {
-        "file": "textures/menu_hpbar.png"
+            "file": "textures/menu_hpbar.png"
         },
         "button_play": {
-        "file": "textures/button_play.png"
+            "file": "textures/button_play.png"
         },
         "button_setting": {
-        "file": "textures/button_setting.png"
+            "file": "textures/button_setting.png"
         },
         "button_restart": {
-        "file": "textures/button_restart.png"
+            "file": "textures/button_restart.png"
         },
         "button_exit": {
-        "file": "textures/button_exit.png"
+            "file": "textures/button_exit.png"
         },
         "menu_player": {
-        "file": "textures/menu_player.png"
+            "file": "textures/menu_player.png"
         },
-        
+
         "dpad": {
             "file": "textures/dpad.png",
             "wrapS": "clamp",
