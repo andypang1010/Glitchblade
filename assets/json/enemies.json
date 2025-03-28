@@ -73,7 +73,46 @@
                 "hitboxStartTime": 25,
                 "hitboxEndTime": 31,
                 "hitboxDamage": 20
-            }
+            },
+            {
+                "type": "melee",
+                "name": "explode",
+                "animation": "textures/boss1_explode.png",
+                "animation_row": 4,
+                "animation_col": 10,
+                "animation_size": 40,
+                "hitboxPos": [ 0, 0 ],
+                "hitboxSize": [ 7, 7 ],
+                "hitboxStartTime": 26,
+                "hitboxEndTime": 33,
+                "hitboxDamage": 40
+              },
+              {
+                "type": "ranged",
+                "name": "shoot",
+                "animation": "textures/boss1_shoot.png",
+                "animation_row": 2,
+                "animation_col": 10,
+                "animation_size": 15,
+                "projectiles":[
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 1,
+                            "y": 5
+                        },
+                        "projectileSpawnFrame": 6,
+                        "projectileAnimation": "textures/projectile.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectileVelocity" : {
+                            "x": 3,
+                            "y": 0
+                        },
+                        "projectileDamage": 10
+                    }
+                ]
+              }
         ]
     }
 }

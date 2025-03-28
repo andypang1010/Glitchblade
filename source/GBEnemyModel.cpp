@@ -45,6 +45,7 @@
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
+#include "GBRangedActionModel.h"
 
 using namespace cugl;
 using namespace graphics;
@@ -94,6 +95,12 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::
             else if (act->getActionName() == "stab") {
                 _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
             }
+            else if (act->getActionName() == "explode") {
+                _explode = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            }
+            else if (act->getActionName() == "shoot") {
+                _shoot = std::dynamic_pointer_cast<RangedActionModel>(act);
+            }
         }
 
         return true;
@@ -121,6 +128,15 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
     _stunSprite->setPosition(0, 50);
 
+    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 2, 10, 15);
+    _shootSprite->setPosition(0, 50);
+
+    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 4, 10, 40);
+    _explodeSprite->setPosition(0, 50);
+
+	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 32);
+	_explodeVFXSprite->setPosition(0, 0);
+
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
 
@@ -129,6 +145,11 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_slamSprite);
     getSceneNode()->addChild(_stabSprite);
     getSceneNode()->addChild(_stunSprite);
+	getSceneNode()->addChild(_shootSprite);
+
+	getSceneNode()->addChild(_explodeSprite);
+    getSceneNode()->addChild(_explodeVFXSprite);
+
 }
 
 #pragma mark -
@@ -142,6 +163,8 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void EnemyModel::damage(float value) {
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
+	_lastDamagedFrame = 0;
+    _node->setColor(Color4::RED);
 }
 
 /**
@@ -268,6 +291,8 @@ void EnemyModel::dispose() {
     _stabSprite = nullptr;
     _slamSprite = nullptr;
     _stunSprite = nullptr;
+	_shootSprite = nullptr;
+	_explodeSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -299,6 +324,14 @@ void EnemyModel::update(float dt) {
         _node->setPosition(getPosition() * _drawScale);
         _node->setAngle(getAngle());
     }
+
+    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
+		_lastDamagedFrame++;
+    }
+
+    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
+        _node->setColor(Color4::WHITE);
+    }
 }
 
 #pragma mark -
@@ -310,22 +343,28 @@ bool EnemyModel::isTargetClose(Vec2 targetPos) {
 void EnemyModel::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
-        if (r % 3 == 0) { //Slam
+    if (!_isSlamming && !_isStabbing && !_isShooting && !_isExploding && _moveDuration <= 0 && isTargetClose(_targetPos) && !isStunned()) {
+        if (r % 4 == 0) { //Slam
             slam();
         }
-        else if (r % 3 == 1) { // Stab
+        else if (r % 4 == 1) { // Stab
             stab();
         }
+		else if (r % 4 == 2) { // Explode
+			explode();
+		}
         else { // Move away
             _moveDuration = 45;
             _moveDirection = -1;
         }
     }
-    else if (!_isSlamming && !_isStabbing && _moveDuration <= 0 && !isStunned()) {
-        if (r % 2 == 0) { // Stab
+    else if (!_isSlamming && !_isStabbing && !_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
+        if (r % 3 == 0) { // Stab
             stab();
         }
+		else if (r % 3 == 1) { // Shoot
+			shoot();
+		}
         else { // Move closer
             _moveDuration = 45;
             _moveDirection = 1;
@@ -335,6 +374,8 @@ void EnemyModel::nextAction() {
         if (isStunned()) {
             _isSlamming = false;
             _isStabbing = false;
+			_isShooting = false;
+			_isExploding = false;
             setMovement(0);
         }
         if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES - 1) {
@@ -344,6 +385,14 @@ void EnemyModel::nextAction() {
         if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES - 1) {
             _isStabbing = false;
             setMovement(getMovement());
+        }
+        if (_isShooting && _shootSprite->getFrame() >= SHOOT_FRAMES - 1) {
+            _isShooting = false;
+            setMovement(0);
+        }
+        if (_isExploding && _explodeSprite->getFrame() >= EXPLODE_FRAMES - 1) {
+            _isExploding = false;
+            setMovement(0);
         }
     }
 }
@@ -388,13 +437,49 @@ void EnemyModel::stab() {
     setMovement(0);
 }
 
+void EnemyModel::shoot() {
+    if (getPosition().x - _targetPos.x < 0) {
+        faceRight();
+    }
+    else {
+        faceLeft();
+    }
+    _isShooting = true;
+    setMovement(0);
+}
+
+void EnemyModel::explode() {
+    if (getPosition().x - _targetPos.x < 0) {
+        faceRight();
+    }
+    else {
+        faceLeft();
+    }
+    _isExploding = true;
+    setMovement(0);
+}
+
 std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
     if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartTime() - 1) {
         return _stab;
     }
     else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
         return _slam;
+	}
+	else if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
+		return _explode;
+	}
+    return nullptr;
+}
+
+std::shared_ptr<RangedActionModel> EnemyModel::getProjectileAction() {
+	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
+    for (int frame : frames) {
+		if (_isShooting && currentFrame == frame * E_ANIMATION_UPDATE_FRAME) {
+			return _shoot;
+		}
     }
+    
     return nullptr;
 }
 
@@ -427,21 +512,44 @@ void EnemyModel::updateAnimation()
 
     _stabSprite->setVisible(!isStunned() && _isStabbing);
 
+	_shootSprite->setVisible(!isStunned() && _isShooting);
+
+	_explodeSprite->setVisible(!isStunned() && _isExploding);
+
+    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && currentFrame >= 96);
+
     if (_stunRem == STUN_FRAMES) {
         currentFrame = 0;
     }
 
-    _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_stabSprite->isVisible() && !_walkSprite->isVisible());
+    _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_stabSprite->isVisible() && !_shootSprite->isVisible() && !_explodeSprite->isVisible() && !_walkSprite->isVisible());
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
     playAnimation(_slamSprite);
     playAnimation(_stabSprite);
     playAnimation(_stunSprite);
+	playAnimation(_shootSprite);
+	playAnimation(_explodeSprite);
+
+    playVFXAnimation(_explodeSprite, _explodeVFXSprite, 24);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+}
+
+void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
+{
+    if (actionSprite->isVisible()) {
+        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
+            vfxSprite->setFrame(0);
+        }
+
+        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
+            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
+        }
+    }
 }
 
 #pragma mark -

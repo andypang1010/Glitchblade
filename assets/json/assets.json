@@ -45,11 +45,20 @@
         "boss1_stun": {
           "file": "textures/boss1_stun.png"
         },
+        "boss1_shoot": {
+            "file": "textures/boss1_shoot.png"
+        },
+        "boss1_explode": {
+            "file": "textures/boss1_explode.png"
+        },
         "projectile": {
             "file": "textures/projectile.png"
         },
         "player_projectile": {
             "file": "textures/player_projectile.png"
+        },
+        "explode_enemy_1": {
+            "file":  "textures/explode_enemy_1.png"
         },
         
         "pause_button": {

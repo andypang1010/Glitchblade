@@ -149,14 +149,16 @@ void PlayerController::preUpdate(float dt)
     _player->setGuardInput(_input->didGuard());
     _player->setShootInput(_input->didFire());
     _hpNode->setText(std::to_string((int)_player->getHP()));
-    applyForce();
-    updateCooldowns();
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
         std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
         std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
         AudioEngine::get()->play(fxJ->getString("jump"), source, false, fxJ->getFloat("volume"));
     }
+
+    applyForce();
+    updateCooldowns();
+
 }
 #pragma mark fixedUpdate
 void PlayerController::fixedUpdate(float timestep)

@@ -104,6 +104,7 @@ using namespace cugl;
 #define PLAYER_SENSOR_DEBUG_COLOR     Color4::RED
 #define PLAYER_DEBUG_COLOR     Color4::YELLOW
 #define PLAYER_DEBUG_FONT      "debug"
+#define PLAYER_HIT_COLOR_DURATION 8
 #pragma mark -
 #pragma mark player Model
 /**
@@ -163,6 +164,7 @@ protected:
     bool _isGrounded;
     /** Whether the dash has been released (reset) */
     bool _dashReset = true;
+    int _lastDamagedFrame;
 
     std::string _bodyName;
     /** Ground sensor to represent our feet */
