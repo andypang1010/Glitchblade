@@ -42,7 +42,7 @@ using namespace cugl;
 /** The density of the character */
 #define ENEMY_DENSITY    1.0f
 /** The impulse for the character dash-attack */
-#define STAB_FORCE       200.0f
+#define STAB_FORCE       50.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
 #define ENEMY_KB_DURATION 20
@@ -57,7 +57,7 @@ using namespace cugl;
 #define MINION1B_SLAM_FRAMES     15
 #define MINION1B_PUNCH_FRAMES     30
 
-#define STUN_FRAMES 88
+#define STUN_FRAMES 16
 
 #pragma mark -
 #pragma mark AI Constants

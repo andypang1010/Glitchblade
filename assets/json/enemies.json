@@ -53,10 +53,10 @@
                 "animation_row": 8,
                 "animation_col": 4,
                 "animation_size": 30,
-                "hitboxPos": [ 2, 0 ],
-                "hitboxSize": [ 3, 2 ],
-                "hitboxStartTime": 20,
-                "hitboxEndTime": 28,
+                "hitboxPos": [ 4, 0 ],
+                "hitboxSize": [ 4, 2 ],
+                "hitboxStartTime": 21,
+                "hitboxEndTime": 30,
                 "hitboxDamage": 10
             },
             {
@@ -66,10 +66,10 @@
                 "animation_row": 4,
                 "animation_col": 4,
                 "animation_size": 15,
-                "hitboxPos": [ 2, 0 ],
-                "hitboxSize": [ 3, 2 ],
+                "hitboxPos": [ 2, -0.5 ],
+                "hitboxSize": [ 3, 1 ],
                 "hitboxStartTime": 8,
-                "hitboxEndTime": 13,
+                "hitboxEndTime": 15,
                 "hitboxDamage": 10
             }
         ]
@@ -114,7 +114,7 @@
                 "hitboxSize": [ 7, 7 ],
                 "hitboxStartTime": 26,
                 "hitboxEndTime": 33,
-                "hitboxDamage": 40
+                "hitboxDamage": 20
             },
             {
                 "type": "ranged",

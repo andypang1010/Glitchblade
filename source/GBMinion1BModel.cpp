@@ -33,7 +33,7 @@ bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
 
-    Size nsize = Size(90, 180) / scale;
+    Size nsize = Size(90, 90) / scale;
     nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     _drawScale = scale;
@@ -65,19 +65,24 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     setSceneNode(_node);
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_idle"), 3, 4, 10);
-    _idleSprite->setPosition(0, 0);
+	_idleSprite->setScale(0.5f);
+    _idleSprite->setPosition(0, 10);
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_walk"), 3, 4, 10);
-    _walkSprite->setPosition(0, 0);
+    _walkSprite->setScale(0.5f);
+    _walkSprite->setPosition(0, 10);
 
     _punchSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_punch"), 8, 4, 30);
-    _punchSprite->setPosition(0, 0);
+    _punchSprite->setScale(0.5f);
+    _punchSprite->setPosition(0, 10);
 
     _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_slam"), 4, 4, 15);
-    _slamSprite->setPosition(0, 0);
+    _slamSprite->setScale(0.5f);
+    _slamSprite->setPosition(0, 10);
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_stun"), 1, 4, 4);
-    _stunSprite->setPosition(0, 0);
+    _stunSprite->setScale(0.5f);
+    _stunSprite->setPosition(0, 10);
 
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
