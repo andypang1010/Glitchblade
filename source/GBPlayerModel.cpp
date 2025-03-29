@@ -90,7 +90,6 @@ bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const std:
 
         // set the scene node and attach the sprite nodes to it
         attachNodes(assetRef);
-        setName("player");
         return true;
     }
     return false;
@@ -131,6 +130,8 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_jumpDownSprite);
     getSceneNode()->addChild(_guardSprite);
     getSceneNode()->addChild(_attackSprite);
+    
+    setName(_name);
 }
 
 #pragma mark -
@@ -446,7 +447,6 @@ void PlayerModel::updateAnimation()
  * the texture (e.g. a circular shape attached to a square texture).
  */
 void PlayerModel::resetDebug() {
-    CULog("In player mdoel reset debug, debug scene is %s", getDebugScene()->getName().c_str());
     BoxObstacle::resetDebug();
     _debug->setName("player_debug");
     if (_groundSensorNode == nullptr || _shieldSensorNode == nullptr){
@@ -512,6 +512,12 @@ void PlayerModel::setConstants(){
     _guard_cooldown = _playerJSON->get("guard")->getInt("cooldown");
     _guard_duration = _playerJSON->get("guard")->getInt("duration");
     _parry_duration = _playerJSON->get("parry")->getInt("duration");
+    
+    _name = _playerJSON->getString("name");
+    _bodyName = _playerJSON->get("fixture_names")->getString("body");
+    _shieldSensorName = _playerJSON->get("fixture_names")->getString("shield");
+    _groundSensorName = _playerJSON->get("fixture_names")->getString("ground");
+
 }
 
 void PlayerModel::reset(){

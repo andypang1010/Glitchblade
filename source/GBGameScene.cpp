@@ -149,6 +149,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         CULog("Failed to load constants.json");
         return false;
     }
+
+    
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
         return false;
@@ -574,14 +576,12 @@ void GameScene::removeProjectile(Projectile* projectile) {
 
 /**Checks obstacle and fixture to see if it is an enemy body fixture.**/
 bool GameScene::isEnemyBody(physics2::Obstacle* b, std::string f ) {
-    std::shared_ptr<JsonValue> enemyJ = _constantsJSON->get("enemy");
     // This depends on enemies having their name set to enemy. This is probably dumb
-    return (b->getName() == enemyJ->getString("name") && f == "enemy");
+    return (f == "enemy");
 }
 /**Checks obstacle and fixture to see if it the player body fixture.**/
 bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
-    std::shared_ptr<JsonValue> playerJ = _constantsJSON->get("player");
-    return (b->getName() == playerJ->getString("name") && f == _player->getBodyName());
+    return (f == _player->getBodyName());
 }
 
 /**
@@ -793,3 +793,4 @@ void GameScene::endContact(b2Contact* contact) {
         }
     }
 }
+

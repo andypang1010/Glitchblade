@@ -588,6 +588,5 @@ void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
     obj->setDebugScene(_debugNodeRef);
     node->setPosition(obj->getPosition() * _scale);
     _worldNode->addChild(node);
-    CULog("At end of addobstacle on %s debug node has %lu children",obj->getName().c_str(), _debugNodeRef->getChildCount());
 }
 

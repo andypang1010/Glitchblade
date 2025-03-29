@@ -109,6 +109,7 @@ protected:
     /** Whether the dash has been released (reset) */
     bool _dashReset = true;
 
+    std::string _name;
     std::string _bodyName;
     /** Ground sensor to represent our feet */
     b2Fixture* _groundSensorFixture;

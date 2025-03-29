@@ -44,7 +44,8 @@
     "player": {
         "texture": "player",
         "max_hp": 100,
-        "names": {
+        "name": "player",
+        "fixture_names": {
             "body": "player_body_sensor",
             "ground": "player_ground_sensor",
             "shield": "player_shield_sensor"
