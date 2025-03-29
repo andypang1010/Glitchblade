@@ -65,7 +65,6 @@ bool GBUIController::init(const std::shared_ptr<AssetManager>& assets) {
 
     _ingameUI = GBIngameUI::alloc(assets);
         if (_ingameUI != nullptr) {
-            // 这才是可以 setContentSize 的对象
             Size screen = Application::get()->getDisplaySize();
             _ingameUI->setContentSize(screen);
             _ingameUI->doLayout();
@@ -96,7 +95,6 @@ void GBUIController::dispose() {
 
 void GBUIController::update(float dt) {
     if (_ingameUI && _ingameUI->isActive()) {
-        // 暂时 IngameUI 不需要每帧更新，你可以加你自己的逻辑
     }
 }
 
