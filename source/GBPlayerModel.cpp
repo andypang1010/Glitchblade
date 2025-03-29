@@ -70,24 +70,27 @@ using namespace cugl;
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos) {
+    _playerJSON = constantsRef->get("player");
+    setConstants();
     resetAttributes();
     float scale = constantsRef->get("scene")->getFloat("scale");
     std::shared_ptr<graphics::Texture> image;
-    image = assetRef->get<graphics::Texture>(PLAYER_TEXTURE);
+    image = assetRef->get<graphics::Texture>(_playerJSON->getString("texture"));
     Size nsize = image->getSize() / scale;
-    nsize.width *= PLAYER_HSHRINK;
-    nsize.height *= PLAYER_VSHRINK;
+    nsize.width *= _playerJSON->get("fixtures")->get("body")->getFloat("h_shrink");
+    nsize.height *= _playerJSON->get("fixtures")->get("body")->getFloat("v_shrink");
     _drawScale = scale;
 
-    setDebugColor(PLAYER_DEBUG_COLOR);
+    setDebugColor(_playerJSON->get("debug")->getString("color"));
 
     if (BoxObstacle::init(pos, nsize)) {
-        setDensity(PLAYER_DENSITY);
+        setDensity(_playerJSON->getFloat("density"));
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
 
         // set the scene node and attach the sprite nodes to it
         attachNodes(assetRef);
+        setName("player");
         return true;
     }
     return false;
@@ -218,36 +221,40 @@ void PlayerModel::createFixtures() {
     }
 
     b2FixtureDef sensorDef;
-    sensorDef.density = PLAYER_DENSITY;
+    sensorDef.density = _playerJSON->getFloat("density");
     sensorDef.isSensor = true;
 
     // Sensor dimensions
+    float sensorHShrink = _playerJSON->get("fixtures")->get("sensor")->getFloat("h_shrink");
+    float sensorHeight = _playerJSON->get("fixtures")->get("sensor")->getFloat("height");
+
     b2Vec2 corners[4];
-    corners[0].x = -PLAYER_SSHRINK * getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + PLAYER_SENSOR_HEIGHT) / 2.0f;
-    corners[1].x = -PLAYER_SSHRINK * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - PLAYER_SENSOR_HEIGHT) / 2.0f;
-    corners[2].x = PLAYER_SSHRINK * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - PLAYER_SENSOR_HEIGHT) / 2.0f;
-    corners[3].x = PLAYER_SSHRINK * getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + PLAYER_SENSOR_HEIGHT) / 2.0f;
+    corners[0].x = -sensorHShrink * getWidth() / 2.0f;
+    corners[0].y = (-getHeight() + sensorHeight) / 2.0f;
+    corners[1].x = -sensorHShrink * getWidth() / 2.0f;
+    corners[1].y = (-getHeight() - sensorHeight) / 2.0f;
+    corners[2].x = sensorHShrink * getWidth() / 2.0f;
+    corners[2].y = (-getHeight() - sensorHeight) / 2.0f;
+    corners[3].x = sensorHShrink * getWidth() / 2.0f;
+    corners[3].y = (-getHeight() + sensorHeight) / 2.0f;
 
     b2PolygonShape sensorShape;
     sensorShape.Set(corners, 4);
 
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getGroundSensorName());
-    _sensorFixture = _body->CreateFixture(&sensorDef);
+    _groundSensorFixture = _body->CreateFixture(&sensorDef);
 
-    // create shield circle fixture
+    // Create shield circle fixture
     b2FixtureDef shieldDef;
     b2CircleShape shieldShape;
-    shieldShape.m_radius = PLAYER_SHIELD_RADIUS;
-    shieldShape.m_p.Set(0, 0);//center of body
+    shieldShape.m_radius = _playerJSON->get("fixtures")->get("shield")->getFloat("radius");
+    shieldShape.m_p.Set(0, 0); // Center of body
     shieldDef.isSensor = true;
     shieldDef.shape = &shieldShape;
     shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
-    _shieldFixture = _body->CreateFixture(&shieldDef);
+    _shieldSensorFixture = _body->CreateFixture(&shieldDef);
+
 
 }
 
@@ -262,9 +269,9 @@ void PlayerModel::releaseFixtures() {
     }
 
     BoxObstacle::releaseFixtures();
-    if (_sensorFixture != nullptr) {
-        _body->DestroyFixture(_sensorFixture);
-        _sensorFixture = nullptr;
+    if (_groundSensorFixture != nullptr) {
+        _body->DestroyFixture(_groundSensorFixture);
+        _groundSensorFixture = nullptr;
     }
 }
 
@@ -277,8 +284,8 @@ void PlayerModel::releaseFixtures() {
 void PlayerModel::dispose() {
     _geometry = nullptr;
     _sceneNode = nullptr;
-    _sensorNode = nullptr;
-    _shieldNode = nullptr;
+    _groundSensorNode = nullptr;
+    _shieldSensorNode = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _guardSprite = nullptr;
@@ -310,7 +317,7 @@ void PlayerModel::update(float dt) {
 void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
     currentFrame += 1;
 
-    if (currentFrame % ANIMATION_UPDATE_FRAME == 0) {
+    if (currentFrame % _animation_update_frame == 0) {
         sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
     }
 }
@@ -318,7 +325,7 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
 void PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
     currentFrame += 1;
 
-    if (currentFrame % ANIMATION_UPDATE_FRAME == 0
+    if (currentFrame % _animation_update_frame == 0
         && sprite->getFrame() < sprite->getCount() - 1) {
         sprite->setFrame(sprite->getFrame() + 1);
     }
@@ -439,23 +446,102 @@ void PlayerModel::updateAnimation()
  * the texture (e.g. a circular shape attached to a square texture).
  */
 void PlayerModel::resetDebug() {
+    CULog("In player mdoel reset debug, debug scene is %s", getDebugScene()->getName().c_str());
     BoxObstacle::resetDebug();
-    float w = PLAYER_SSHRINK * _dimension.width;
-    float h = PLAYER_SENSOR_HEIGHT;
-    Poly2 playerPoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
-    _sensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(PLAYER_SENSOR_DEBUG_COLOR);
-    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
-
-    Poly2 shieldPoly;
-    shieldPoly = PolyFactory().makeNgon(10000, 0, PLAYER_SHIELD_RADIUS, 20);
-    _shieldNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldNode->setPosition(Vec2(_debug->getContentSize() / 2));
-    _shieldNode->setColor(PLAYER_DEBUG_COLOR);
-
-    _debug->addChild(_sensorNode);
-    _debug->addChild(_shieldNode);
+    _debug->setName("player_debug");
+    if (_groundSensorNode == nullptr || _shieldSensorNode == nullptr){
+        setDebug();
+    }
+    if (_debug->getChildCount() == 0){
+        _debug->addChild(_shieldSensorNode);
+        _debug->addChild(_groundSensorNode);
+    }
+    
+    // necessary during reset, set debug scene node, since BoxObstacle::resetDebug() doesn't handle it correctly.
+    if (_debug->getScene() == nullptr){
+        _scene->addChild(_debug);
+    }
 }
 
+void PlayerModel::setDebug(){
+    // Sensor dimensions
+    float sensor_shrink = _playerJSON->get("fixtures")->get("sensor")->getFloat("s_shrink");
+    float sensor_height = _playerJSON->get("fixtures")->get("sensor")->getFloat("height");
+    float w = sensor_shrink * _dimension.width;
+    float h = sensor_height;
+    Poly2 playerPoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
+    _groundSensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
+    _groundSensorNode->setColor(Color4(_playerJSON->get("debug")->getString("ground_sensor_color")));
+    _groundSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+
+    Poly2 shieldPoly;
+    float radius = _playerJSON->get("fixtures")->get("shield")->getFloat("radius");
+    shieldPoly = PolyFactory().makeNgon(10000, 0, radius, 20);
+    _shieldSensorNode = scene2::WireNode::allocWithPoly(shieldPoly);
+    _shieldSensorNode->setPosition(Vec2(_debug->getContentSize() / 2));
+    _shieldSensorNode->setColor(Color4(_playerJSON->get("debug")->getString("color")));
+}
+
+void PlayerModel::setConstants(){
+
+    // Health
+    _maxhp = _playerJSON->getInt("max_hp");
+    // Animation
+    _animation_update_frame = _playerJSON->get("animation")->getInt("update_frame");
+
+    // Movement
+    _strafe_force = _playerJSON->get("strafe")->getFloat("force");
+    _damp_force = _playerJSON->get("movement")->getFloat("damping");
+    _maxspeed = _playerJSON->get("movement")->getFloat("max_speed");
+
+    // Jump
+    _jump_cooldown = _playerJSON->get("jump")->getInt("cooldown");
+    _jump_force = _playerJSON->get("jump")->getFloat("force");
+
+    // Dash
+    _dash_cooldown = _playerJSON->get("dash")->getInt("cooldown");
+    _dash_duration = _playerJSON->get("dash")->getInt("duration");
+    _dash_force = _playerJSON->get("dash")->getFloat("speed");
+
+    // Knockback
+    _knock_force = _playerJSON->get("knockback")->getFloat("force");
+    _knock_duration = _playerJSON->get("knockback")->getInt("duration");
+
+    // Combat
+    _shoot_cooldown = _playerJSON->getInt("shoot_cooldown");
+    _guard_cooldown = _playerJSON->get("guard")->getInt("cooldown");
+    _guard_duration = _playerJSON->get("guard")->getInt("duration");
+    _parry_duration = _playerJSON->get("parry")->getInt("duration");
+}
+
+void PlayerModel::reset(){
+    CULog("resetting player model");
+    if (getDebugScene()){
+        CULog("In reset player model, debug scene name is %s", getDebugScene()->getName().c_str());
+    }
+    //setDebugScene(nullptr);
+    _scene = nullptr; // set debug scene to nullptr
+    resetAttributes();
+}
+
+#pragma mark static constants
+int PlayerModel::_animation_update_frame = 4;
+float PlayerModel::_maxspeed = 5.0f;
+float PlayerModel::_maxhp = 100.0f;
+int PlayerModel::_jump_cooldown = 5;
+int PlayerModel::_shoot_cooldown = 20;
+int PlayerModel::_guard_cooldown = 15;
+int PlayerModel::_dash_cooldown = 45;
+
+int PlayerModel::_guard_duration = 44;
+int PlayerModel::_parry_duration = 24;
+int PlayerModel::_dash_duration = 20;
+int PlayerModel::_knock_duration = 20;
+
+float PlayerModel::_strafe_force = 50.0f;
+float PlayerModel::_jump_force = 45.0f;
+float PlayerModel::_damp_force = 30.0f;
+float PlayerModel::_dash_force = 30.0f;
+float PlayerModel::_knock_force = 15.0f;
 
 

@@ -265,9 +265,9 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
 void LevelController::reset() {
     // Reset player controller
     if (_playerController != nullptr) {
+        CULog("Resetting player controller");
         _playerController->reset();
     }
-
     // Clear or reset non-init fields
     _enemyControllers.clear();
     _worldNode = nullptr;
@@ -584,8 +584,10 @@ void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
     std::shared_ptr<Obstacle> obj = obstacle_pair.first;
     std::shared_ptr<scene2::SceneNode> node = obstacle_pair.second;
     _worldRef->addObstacle(obj);
+    obj->setDebugScene(nullptr);
     obj->setDebugScene(_debugNodeRef);
     node->setPosition(obj->getPosition() * _scale);
     _worldNode->addChild(node);
+    CULog("At end of addobstacle on %s debug node has %lu children",obj->getName().c_str(), _debugNodeRef->getChildCount());
 }
 
