@@ -218,7 +218,7 @@ public:
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes() override {
-        _hp = ENEMY_MAXHP;
+        _hp = 200;
         _isGrounded = false;
         _isMoveLeft = false;
         _isMoveRight = false;

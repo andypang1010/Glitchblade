@@ -637,7 +637,7 @@ void GameScene::beginContact(b2Contact* contact) {
     // Player-Enemy Collision
     if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd1)->damage(20);
+            ((EnemyModel*)bd1)->damage(10);
             _player->setDashRem(0);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
@@ -645,7 +645,7 @@ void GameScene::beginContact(b2Contact* contact) {
     }
     else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd2)->damage(20);
+            ((EnemyModel*)bd2)->damage(10);
             _player->setDashRem(0);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
@@ -687,7 +687,10 @@ void GameScene::beginContact(b2Contact* contact) {
     // Player-Projectile Collision
     if (isPlayerBody(bd1, fd1) && bd2->getName() == proj_name) {
         if (!((Projectile*)bd2)->getIsPlayerFired()) {
-            _player->damage(20);
+            if (_player->iframe <= 0) {
+                _player->iframe = 60;
+                _player->damage(10);
+            }
             removeProjectile((Projectile*)bd2);
             _ui->setHP(_player->getHP());
             _pauseMenu->setHP(_player->getHP());
@@ -695,7 +698,10 @@ void GameScene::beginContact(b2Contact* contact) {
     }
     else if (isPlayerBody(bd2, fd2) && bd1->getName() == proj_name) {
         if (!((Projectile*)bd1)->getIsPlayerFired()) {
-            _player->damage(20);
+            if (_player->iframe <= 0) {
+                _player->iframe = 60;
+                _player->damage(10);
+            }
             removeProjectile((Projectile*)bd1);
             _ui->setHP(_player->getHP());
             _pauseMenu->setHP(_player->getHP());

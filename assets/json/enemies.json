@@ -111,7 +111,7 @@
                 "animation_col": 10,
                 "animation_size": 40,
                 "hitboxPos": [ 0, 0 ],
-                "hitboxSize": [ 7, 7 ],
+                "hitboxSize": [ 10, 10 ],
                 "hitboxStartTime": 26,
                 "hitboxEndTime": 33,
                 "hitboxDamage": 20

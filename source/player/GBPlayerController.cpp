@@ -75,8 +75,26 @@ void PlayerController::applyForce() {
     }
 
     if (!_player->isGuardActive()) {
+        if (!_player->isDashActive()) {
+#pragma mark strafe force
+            //    b2Vec2 force(getMovement(),0);
+                // Ignore stafe input if in a dash (intentional)
+            if (!_player->isDashActive() && !_player->isKnockbackActive()) {
+                playerBody->SetLinearVelocity(b2Vec2(_player->getMovement(), playerBody->GetLinearVelocity().y));
+            }
+            // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
+#pragma mark jump force
+    // Jump!
+            if (_player->isJumpBegin() && _player->isGrounded()) {
+                b2Vec2 force(0, _player->getJumpF());
+                playerBody->ApplyLinearImpulseToCenter(force, true);
+            }
+        }
+    }
+
+    if (!_player->isParryActive()) {
         // Dash!
-        #pragma mark dash force
+#pragma mark dash force
         if (_player->isDashLeftBegin()) {
             _player->faceLeft();
             // b2Vec2 force(-_player->getDashF(),0);
@@ -93,22 +111,6 @@ void PlayerController::applyForce() {
         if (_player->isDashActive())
         {
             playerBody->SetLinearVelocity(b2Vec2(_player->getVX(), 0));
-        }
-
-        if (!_player->isDashActive()) {
-#pragma mark strafe force
-            //    b2Vec2 force(getMovement(),0);
-                // Ignore stafe input if in a dash (intentional)
-            if (!_player->isDashActive() && !_player->isKnockbackActive()) {
-                playerBody->SetLinearVelocity(b2Vec2(_player->getMovement(), playerBody->GetLinearVelocity().y));
-            }
-            // _body->ApplyForceToCenter(force,true); // Old method of movement (slipper)
-#pragma mark jump force
-    // Jump!
-            if (_player->isJumpBegin() && _player->isGrounded()) {
-                b2Vec2 force(0, _player->getJumpF());
-                playerBody->ApplyLinearImpulseToCenter(force, true);
-            }
         }
     }
 
@@ -219,7 +221,7 @@ void PlayerController::updateCooldowns()
     }
 #pragma mark Knockback cooldown
     if (_player->isKnocked()) {
-        _player->setDashCDRem();
+        //_player->setDashCDRem();
         _player->setGuardCDRem();
         _player->setJumpCDRem();
         _player->setShootCDRem();

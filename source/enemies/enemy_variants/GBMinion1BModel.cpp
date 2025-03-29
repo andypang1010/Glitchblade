@@ -267,7 +267,7 @@ void Minion1BModel::AIMove() {
         setMovement(face * getForce() * MINION1B_PUNCH_FORCE);
     }
     else {
-        setMovement(getMovement() / 2);
+        setMovement(0);
     }
 
 }

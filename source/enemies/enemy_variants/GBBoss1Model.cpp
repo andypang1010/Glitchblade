@@ -351,7 +351,7 @@ void Boss1Model::AIMove() {
         setMovement(face * getForce() * STAB_FORCE);
     }
     else {
-        setMovement(getMovement() / 2);
+        setMovement(getMovement() / 3);
     }
 
 }
