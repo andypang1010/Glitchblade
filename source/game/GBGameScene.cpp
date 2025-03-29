@@ -149,6 +149,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         CULog("Failed to load constants.json");
         return false;
     }
+
+    
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
         return false;
@@ -184,6 +186,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(_offset);
+    _debugnode->setName("game_debug_node");
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
     _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
     _winnode->setAnchor(Vec2::ANCHOR_CENTER);
@@ -212,7 +215,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         if (!_player){
             CULog("player is null in populate");
         }
-        _player->setDebugColor(Color4::YELLOW);
     
     populate(_levelController->getLevelByName("Level 1"));
 
@@ -306,6 +308,9 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
+
+    CULog("After debugnode remove all children in gamescene reset:");
+    CULog("_debugnode has %lu children", _debugnode->getChildCount());
     _pauseMenu->removeAllChildren();
     _ui->removeAllChildren();
     setFailure(false);
@@ -334,11 +339,13 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     _worldnode->setPosition(_offset);
     addChild(_worldnode);
     addChild(_debugnode);
+ 
     addChild(_winnode);
     addChild(_losenode);
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
-    _player = _levelController->getPlayerModel(); // DELETE!
+    CULog("In populate, after populate level, debug node has %lu children",_debugnode->getChildCount());
+    _player = _levelController->getPlayerModel();
 
 
     std::vector<std::shared_ptr<EnemyController>> enemyControllers = _levelController->getEnemyControllers();
@@ -569,14 +576,12 @@ void GameScene::removeProjectile(Projectile* projectile) {
 
 /**Checks obstacle and fixture to see if it is an enemy body fixture.**/
 bool GameScene::isEnemyBody(physics2::Obstacle* b, std::string f ) {
-    std::shared_ptr<JsonValue> enemyJ = _constantsJSON->get("enemy");
     // This depends on enemies having their name set to enemy. This is probably dumb
-    return (b->getName() == enemyJ->getString("name") && f == "enemy");
+    return (f == "enemy");
 }
 /**Checks obstacle and fixture to see if it the player body fixture.**/
 bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
-    std::shared_ptr<JsonValue> playerJ = _constantsJSON->get("player");
-    return (b->getName() == playerJ->getString("name") && f == _player->getBodyName());
+    return (f == _player->getBodyName());
 }
 
 /**
@@ -788,3 +793,4 @@ void GameScene::endContact(b2Contact* contact) {
         }
     }
 }
+

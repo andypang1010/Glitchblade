@@ -48,64 +48,6 @@
 using namespace cugl;
 
 #pragma mark -
-#pragma mark Drawing Constants
-/** The texture for the character avatar */
-#define PLAYER_TEXTURE    "player"
-/** Identifier to allow us to track the player sensor in ContactListener */
-#define PLAYER_BODY_NAME      "body"
-#define PLAYER_SENSOR_NAME     "playersensor"
-#define PLAYER_SHIELD_SENSOR_NAME      "shield"
-
-#define ANIMATION_UPDATE_FRAME 4
-#pragma mark -
-#pragma mark Physics Constants
-/** The factor to multiply by the input */
-#define PLAYER_FORCE      50.0f
-/** The amount to slow the character down */
-#define PLAYER_DAMPING    30.0f
-/** The maximum character speed */
-#define PLAYER_MAXSPEED   5.0f
-/** The maximum character hp */
-#define PLAYER_MAXHP   100.0f
-/** Cooldown (in animation frames) for jumping */
-#define PLAYER_JUMP_COOLDOWN   5
-/** Cooldown (in animation frames) for shooting */
-#define PLAYER_SHOOT_COOLDOWN  20
-/** Cooldown (in frames) for guard */
-#define PLAYER_GUARD_COOLDOWN  15
-/** Cooldown (in frames) for dash */
-#define PLAYER_DASH_COOLDOWN  45
-/** Duration (in frames) for guard */
-#define PLAYER_GUARD_DURATION  48
-/** Duration (in frames) for parry */
-#define PLAYER_PARRY_DURATION  12
-/** Duration (in frames) for dash- affects friction*/
-#define PLAYER_DASH_DURATION  20
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define PLAYER_VSHRINK  0.95f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define PLAYER_HSHRINK  0.7f
-/** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define PLAYER_SSHRINK  0.6f
-/** Height of the sensor attached to the player's feet */
-#define PLAYER_SENSOR_HEIGHT   0.1f
-/** The amount to shrink the radius of the shield relative to the image width */
-#define PLAYER_SHIELD_RADIUS 2.0f
-/** The density of the character */
-#define PLAYER_DENSITY    1.0f
-/** The impulse for the character jump */
-#define PLAYER_JUMP_F       45.0f
-/** The x SPEED for the character dash-attack */
-#define PLAYER_DASH       30.0f
-/** The impulse for the  vertical component of the knockback */
-#define PLAYER_KB     15.0f
-#define PLAYER_KB_DURATION 20
-/** Debug color for the sensor */
-#define PLAYER_SENSOR_DEBUG_COLOR     Color4::RED
-#define PLAYER_DEBUG_COLOR     Color4::YELLOW
-#define PLAYER_DEBUG_FONT      "debug"
-#define PLAYER_HIT_COLOR_DURATION 8
-#pragma mark -
 #pragma mark player Model
 /**
 * Player avatar for the plaform game.
@@ -119,6 +61,8 @@ private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CU_DISALLOW_COPY_AND_ASSIGN(PlayerModel);
 protected:
+    /**JsonValue storing all necessary player constants for fixtures and physics*/
+    std::shared_ptr<JsonValue> _playerJSON;
     /** This character's remaining health */
     float _hp;
     /** The current horizontal movement of the character */
@@ -156,7 +100,7 @@ protected:
     /** Whether we are knocked-back (sets input cd) */
     bool _isKnocked;
     /** Whether we are knocked-back (sets input cd) */
-    int _knockbackRem;
+    int _knockRem;
     Vec2 _knockDirection;
     /** How long until we can shoot again in animation frames*/
     int  _shootCooldownRem;
@@ -166,25 +110,25 @@ protected:
     bool _dashReset = true;
     int _lastDamagedFrame;
 
+    std::string _name;
     std::string _bodyName;
     /** Ground sensor to represent our feet */
-    b2Fixture* _sensorFixture;
+    b2Fixture* _groundSensorFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
-    std::string _sensorName;
+    std::string _groundSensorName;
     /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _sensorNode;
+    std::shared_ptr<scene2::WireNode> _groundSensorNode;
     /** Ground sensor to represent our feet */
-    b2Fixture* _shieldFixture;
+    b2Fixture* _shieldSensorFixture;
     /** Reference to the sensor name (since a constant cannot have a pointer) */
-    std::string _shieldName;
-    /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _shieldNode;
+    std::string _shieldSensorName;
     /** The guard shield when guard is active */
+    std::shared_ptr<scene2::WireNode> _shieldSensorNode;
     /** The player scene node**/
     std::shared_ptr<scene2::SceneNode> _sceneNode;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
+    
     float _drawScale;
-
     int currentFrame = 0;
 
     /**
@@ -215,7 +159,7 @@ public:
      * This constructor does not initialize any of the player values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    PlayerModel() : BoxObstacle(), _sensorName(PLAYER_SENSOR_NAME), _shieldName(PLAYER_SHIELD_SENSOR_NAME), _bodyName(PLAYER_BODY_NAME) {}
+    PlayerModel() : BoxObstacle() {}
 
     /**
      * Destroys this PlayerModel, releasing all resources.
@@ -282,7 +226,7 @@ public:
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the player attributes to their initial values*/
     void resetAttributes() {
-        _hp = PLAYER_MAXHP;
+        _hp = _maxhp;
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput = false;
@@ -302,6 +246,11 @@ public:
         _guardRem = 0;
         _parryRem = 0;
     };
+    
+    void setConstants();
+    void setDebug();
+    void debugHelper();
+    void reset();
 
     /**Attach the scene nodes (sprite sheets) to the player**/
     void attachNodes(const std::shared_ptr<AssetManager>& assetRef);
@@ -343,389 +292,9 @@ public:
     }
 
 
-#pragma mark -
-#pragma mark Attribute Properties
-    /**
-     * Returns the remaining health of this character.
-     *
-     * @return HP of this character.
-     */
-    float getHP() const { return _hp; }
 
-    /**
-     * Sets the remaining health of this character.
-     *
-     * @param value the new hp.
-     */
-    void setHP(float value) { _hp = value; }
-
-    /**
-     * Reduces the health of this character.
-     *
-     * @param value the amount of hp reduction.
-     */
-    void damage(float value);
-
-    /**
-     * Returns left/right movement of this character.
-     *
-     * This is the result of input times player force.
-     *
-     * @return left/right movement of this character.
-     */
-    float getMovement() const { return _movement; }
-
-    /**
-     * Sets left/right movement of this character.
-     *
-     * This is the result of input times player force.
-     *
-     * @param value left/right movement of this character.
-     */
-    void setMovement(float value);
-
-    /**
-    * Sets the character to face left
-    */
-    void faceLeft();
-
-    /**
-    * Sets the character to face right
-    */
-    void faceRight();
-
-    /**
-     * Returns true if the player is actively firing.
-     *
-     * @return true if the player is actively firing.
-     */
-    bool isShooting() const { return _isShootInput && _shootCooldownRem <= 0; }
-    /**
-     * Returns true if the player is actively strafing left.
-     *
-     * @return true if the player is actively strafing left.
-     */
-    void setStrafeLeft(bool value) { _isStrafeLeft = value; };
-
-    /**
-     * Sets whether the player is actively strafing right.
-     *
-     * @param value whether the player is actively strafing right.
-     */
-    void setStrafeRight(bool value) { _isStrafeRight = value; };
-
-    /**
-     * Sets whether the player has a swallowed projectile.
-     *
-     * @param value whether the player has a swallowed projectile.
-     */
-    void setHasProjectile(bool value) { _hasProjectile = value; }
-
-    /**
-     * Sets whether the player is beginning dash left
-     *
-     * @param value whether the player is beginning dash left.
-     */
-    void setDashLeftInput(bool value) { _isDashLeftInput = value; }
-
-    /**
-     * Sets whether the player is beginning dash right.
-     *
-     * @param value whether the player is beginning dash right.
-     */
-    void setDashRightInput(bool value) { _isDashRightInput = value; }
-
-    /**
-     * Sets whether the player is actively trying to jump.
-     *
-     * @param value whether the player is actively trying to jump.
-     */
-    void setJumpInput(bool value) { _isJumpInput = value; }
-
-    /**
-     * Sets whether the player is actively firing.
-     *
-     * @param value whether the player is actively firing.
-     */
-    void setShootInput(bool value) { _isShootInput = value; }
-    /**
-     * Sets whether the player is inputting guard
-     *
-     * @param value whether the player is inputting guard
-     */
-    void setGuardInput(bool value) { _isGuardInput = value; }
-    /**
-     * Sets whether the player is actively strafing left.
-     *
-     * @param value whether the player is actively strafing left.
-     */
-    bool isStrafeLeft() { return _isStrafeLeft; };
-    /**
-     * Sets whether the player is actively strafing right.
-     *
-     * @return true if whether the player is actively strafing right.
-     */
-    bool isStrafeRight() { return _isStrafeRight; };
-    /**
-     * Returns true if if the player is actively trying to jump and jump cooldown is ready (regardless if on the ground).
-     *
-     * @return true if the player is actively trying to jump and jump cooldown is ready (regardless if on the ground or not).
-     */
-    bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
-
-    /**
-     * Returns true if the player is actively dashing left.
-     *
-     * @param value whether the player is actively dashing left.
-     */
-    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset; };
-    /**
-     * Returns true if the player is actively dashing right.
-     *
-     * @param value whether the player is actively dashing right.
-     */
-    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset; };
-    /**
-     * Returns true if the player is dashing
-     *
-     * @return value whether the player is dashing either direction.
-     */
-    bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); };
-    /**
-     * Returns true if the player is inputting a movement action/
-     *
-     * @return value whether the player is performing a movement action.
-     */
-    bool isMoveBegin() { return isDashBegin() || isStrafeLeft() || isStrafeRight() || (isJumpBegin() && isGrounded()) || isKnocked(); };
-
-    /**
-     *  Returns true if the player is currently beginning guard action.
-     *
-     * @return value whether the player is beginning guard action.
-     */
-    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; };
-    /**
-   * Returns true if the player has a swallowed projectile.
-   *
-   * @return value whether the player has a swallowed projectile.
-   */
-   /**
-    * Returns true ifrthe player is actively guarding.
-    *
-    * @return value whether the player is actively guarding.
-    */
-    bool isGuardActive() { return  _guardRem > 0 || isGuardBegin(); };
-
-    /**
-     * Returns the amount of guard frames remaining
-     *
-     * @return the amount of guard frames remaining
-     */
-    int getGuardRem() { return _guardRem; };
-
-    /**
-     * Used to set the amount of guard frames remaining
-     *
-     * @param the value that remaining guard frames should be set to
-     */
-    void setGuardRem(int value = PLAYER_GUARD_DURATION) { _guardRem = value; };
-    /**
-     * Returns the amount of frames remaining before the player can guard again
-     *
-     * @returns the amount of frames remaining before the player can guard again
-     */
-    int getGuardCDRem() { return _guardCooldownRem; };
-
-    /**
-     * Used to set the amount of frames remaining before the player can guard again
-     *
-     * @param the amount of frames remaining before the player can guard again should be set to
-     */
-    void setGuardCDRem(int value = PLAYER_GUARD_COOLDOWN) { _guardCooldownRem = value; };
-    void setShieldDebugColor(Color4 c) { _shieldNode->setColor(c); }
-
-    /**
-     * Returns the amount of dash frames remaining
-     *
-     * @return the amount of dash frames remaining
-     */
-    int getDashRem() { return _dashRem; };
-
-    /**
-     * Used to set the amount of dash frames remaining
-     *
-     * @param the value that remaining dash frames should be set to
-     */
-    void setDashRem(int value = PLAYER_DASH_DURATION) { _dashRem = value; };
-    /**
-     * Returns the amount of frames remaining before the player can dash again
-     *
-     * @returns the amount of frames remaining before the player can dash again
-     */
-    int getDashCDRem() { return _dashCooldownRem; };
-
-    /**
-     * Used to set the amount of frames remaining before the player can dash again
-     *
-     * @param the amount of frames remaining before the player can dash again should be set to
-     */
-    void setDashCDRem(int value = PLAYER_DASH_COOLDOWN) { _dashCooldownRem = value; };
-
-    /**
-     * Returns true if the player is actively parrying.
-     *
-     * @return value whether the player is actively parrying.
-     */
-    bool isParryActive() { return _parryRem > 0 || isGuardBegin(); };
-    /**
-     * Returns the amount of parry frames remaining
-     *
-     * @return the amount of parry frames remaining
-     */
-    int getParryRem() { return _parryRem; };
-
-    /**
-     * Used to set the amount of parry frames remaining
-     *
-     * @param the value that remaining parry frames should be set to
-     */
-    void setParryRem(int value = PLAYER_PARRY_DURATION) { _parryRem = value; };
-    /**
-     * Returns the amount of knockback frames remaining
-     *
-     * @return the amount of knockback frames remaining
-     */
-    int getKnockbackRem() { return _knockbackRem; };
-
-    /**
-     * Used to set the amount of knockback frames remaining
-     *
-     * @param the value that remaining knockback frames should be set to
-     */
-    void setKnockbackRem(int value = PLAYER_KB_DURATION) { _knockbackRem = value; };
-    /**
-     * Returns true if the player has a swallowed projectile.
-     *
-     * @return value whether the player has a swallowed projectile.
-     */
-    bool hasProjectile() { return _hasProjectile; };
-    /**
-     * Returns true if the player is in a dash animation.
-     *
-     * @return value whether the player is in a dash animation.
-     */
-    bool isDashActive() { return _dashRem > 0 || isDashBegin(); };
-    /**
-     * Returns the amount of frames remaining before the player can jump again
-     *
-     * @returns the amount of frames remaining before the player can jump again
-     */
-    int getJumpCDRem() { return _jumpCooldownRem; };
-
-    /**
-     * Used to set the amount of frames remaining before the player can jump again
-     *
-     * @param the value that the amount of frames remaining before the player can jump again should be set to
-     */
-    void setJumpCDRem(int value = PLAYER_JUMP_COOLDOWN) { _jumpCooldownRem = value; };
-    /**
-     * Returns the amount of frames remaining before the player can shoot again
-     *
-     * @returns the amount of frames remaining before the player can shoot again
-     */
-    int getShootCDRem() { return _shootCooldownRem; };
-
-    /**
-     * Used to set the amount of frames remaining before the player can shoot again
-     *
-     * @param the value that the amount of frames remaining before the player can shoot again should be set to
-     */
-    void setShootCDRem(int value = PLAYER_SHOOT_COOLDOWN) { _shootCooldownRem = value; };
-    /**
-     * Returns true if the player is being knocked back.
-     *
-     * @return true if the player is being knocked back.
-     */
-    bool isKnocked() const { return _isKnocked; }
-    /**
-     * Returns true if the player is in a knockback animation.
-     *
-     * @return value whether the player is in a knockback animation.
-     */
-    bool isKnockbackActive() { return _knockbackRem > 0 || isKnocked(); };
-    /**
-     * Returns true if the player is on the ground.
-     *
-     * @return true if the player is on the ground.
-     */
-    bool isGrounded() const { return _isGrounded; }
-
-    /**
-     * Sets whether the player is on the ground.
-     *
-     * @param value whether the player is on the ground.
-     */
-    void setGrounded(bool value) { _isGrounded = value; }
-    float getKnockF() { return PLAYER_KB; }
-    Vec2 getKnockDirection() { return _knockDirection; }
-    /**
-     * Sets whether the player is being knocked back
-     *
-     * @param value whether the player is being knocked back
-     * @param knockDirection direction that the player will move toward
-     */
-    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
-    /**
-     * Resets knock status - do this after applying force.
-     */
-    void resetKnocked() { _isKnocked = false; }
-    /**
-     * Returns how much force to apply to get the player moving
-     *
-     * Multiply this by the input to get the movement value.
-     *
-     * @return how much force to apply to get the player moving
-     */
-    float getForce() const { return PLAYER_FORCE; }
-    /**
-     * @return how much jump force to apply
-     */
-    float getJumpF() const { return PLAYER_JUMP_F; }
-    /**
-     * @return how much dash force to apply
-     */
-    float getDashF() const { return PLAYER_DASH; }
-    /** @return is dash left input */
-    bool isDashLeftInput() const { return _isDashLeftInput; }
-    /** @return is dash right input */
-    bool isDashRightInput() const { return _isDashRightInput; }
-    bool isDashInput() const { return isDashRightInput() || isDashLeftInput(); }
-    /**
-     * Returns How hard the brakes are applied to get a player to stop moving
-     *
-     * @return How hard the brakes are applied to get a player to stop moving
-     */
-    float getDamping() const { return PLAYER_DAMPING; }
-
-    /** @return Whether the dash has been released (reset). only for keyboard controls*/
-    bool getDashReset() const { return _dashReset; };
-    /** For keyboard dash controls - do this after applying force*/
-    void setDashReset(bool r) { _dashReset = r; }
-    /**
-     * Returns the upper limit on player left-right movement.
-     *
-     * This does NOT apply to vertical movement.
-     *
-     * @return the upper limit on player left-right movement.
-     */
-    float getMaxSpeed() const { return PLAYER_MAXSPEED; }
-    /**
-     * Returns the name of the body fixture
-     *
-     * This is used by ContactListener
-     *
-     * @return the name of the body fixture
-     */
+// Miscellaneous
+Vec2 getKnockDirection() { return _knockDirection; }
     std::string* getBodyName() { return &_bodyName; }
     /**
      * Returns the name of the ground sensor
@@ -734,7 +303,7 @@ public:
      *
      * @return the name of the ground sensor
      */
-    std::string* getGroundSensorName() { return &_sensorName; }
+    std::string* getGroundSensorName() { return &_groundSensorName; }
     /**
      * Returns the name of the shield sensor
      *
@@ -742,7 +311,7 @@ public:
      *
      * @return the name of the shield sensor
      */
-    std::string* getShieldName() { return &_shieldName; }
+    std::string* getShieldName() { return &_shieldSensorName; }
 
     /**
      * Returns true if this character is facing right
@@ -787,7 +356,129 @@ public:
     void update(float dt) override;
 
 
+#pragma mark constants
+private:
+    static int _animation_update_frame;
+    static float _maxspeed;
+    static float _maxhp;
+    static int _jump_cooldown;
+    static int _shoot_cooldown;
+    static int _guard_cooldown;
+    static int _dash_cooldown;
+    
+    static int _guard_duration;
+    static int _parry_duration;
+    static int _dash_duration;
+    static int _knock_duration;
+    
+    static float _strafe_force;
+    static float _jump_force;
+    static float _damp_force;
+    static float _dash_force;
+    static float _knock_force;
 
+public:
+    #pragma mark -
+    #pragma mark - Attribute Properties
+
+    // Health
+    int getMaxHP() const { return _maxhp;}
+    float getHP() const { return _hp; }
+    void setHP(float value) { _hp = value; }
+    void damage(float value);
+
+    // Movement
+    float getMovement() const { return _movement; }
+    void setMovement(float value);
+
+    // Direction
+    void faceLeft();
+    void faceRight();
+
+    // Shooting
+    bool isShooting() const { return _isShootInput && _shootCooldownRem <= 0; }
+    void setShootInput(bool value) { _isShootInput = value; }
+    int getShootCDRem() { return _shootCooldownRem; }
+    void setShootCDRem(int value = _shoot_cooldown) { _shootCooldownRem = _shoot_cooldown; }
+
+    // Strafing
+    void setStrafeLeft(bool value) { _isStrafeLeft = value; }
+    void setStrafeRight(bool value) { _isStrafeRight = value; }
+    bool isStrafeLeft() { return _isStrafeLeft; }
+    bool isStrafeRight() { return _isStrafeRight; }
+
+    // Jumping
+    bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
+    int getJumpCDRem() { return _jumpCooldownRem; }
+    void setJumpCDRem(int value = _jump_cooldown) { _jumpCooldownRem = value; }
+    void setJumpInput(bool value) { _isJumpInput = value; }
+
+    // Dashing
+    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset; }
+    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset; }
+    bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); }
+    bool isDashActive() { return _dashRem > 0 || isDashBegin(); }
+    int getDashRem() { return _dashRem; }
+    void setDashRem(int value = _dash_duration) { _dashRem = value; }
+    int getDashCDRem() { return _dashCooldownRem; }
+    void setDashCDRem(int value = _dash_cooldown) { _dashCooldownRem = value; }
+    bool isDashLeftInput() const { return _isDashLeftInput; }
+    bool isDashRightInput() const { return _isDashRightInput; }
+    bool isDashInput() const { return isDashRightInput() || isDashLeftInput(); }
+    void setDashInput(bool value) { _isDashLeftInput = value; }
+        
+    // Dash
+    bool getDashReset() const { return _dashReset; }
+    void setDashReset(bool r) { _dashReset = r; }
+    void setDashRightInput(bool value) { _isDashRightInput = value; }
+    void setDashLeftInput(bool value) { _isDashLeftInput = value; }
+
+    // Guarding
+    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; }
+    bool isGuardActive() { return _guardRem > 0 || isGuardBegin(); }
+    int getGuardRem() { return _guardRem; }
+    void setGuardRem(int value = _guard_duration) { _guardRem = value; }
+    int getGuardCDRem() { return _guardCooldownRem; }
+    void setGuardCDRem(int value = _guard_cooldown) { _guardCooldownRem = value; }
+    void setGuardInput(bool value) { _isGuardInput = value; }
+
+    // Parrying
+    bool isParryActive() { return _parryRem > 0 || isGuardBegin(); }
+    int getParryRem() { return _parryRem; }
+    void setParryRem(int value = _parry_duration) { _parryRem = value; }
+
+    // Knockback
+    int getKnockbackRem() { return _knockRem; }
+    void setKnockbackRem(int value = _knock_duration) { _knockRem = value; }
+    bool isKnocked() const { return _isKnocked; }
+    bool isKnockbackActive() { return _knockRem > 0 || isKnocked(); }
+    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
+    void resetKnocked() { _isKnocked = false; }
+
+    // Projectile
+    bool hasProjectile() { return _hasProjectile; }
+    void setHasProjectile(bool value) { _hasProjectile = value; }
+
+    // Grounded
+    bool isGrounded() const { return _isGrounded; }
+    void setGrounded(bool value) { _isGrounded = value; }
+
+    // Forces
+    float getStrafeF() const { return _strafe_force; }
+    float getJumpF() const { return _jump_force; }
+    float getDashF() const { return _dash_force; }
+    float getKnockF() { return _knock_force; }
+    float getDampF() const { return _damp_force; }
+
+    // Speed
+    float getMaxSpeed() const { return _maxspeed; }
+
+    // Debug
+    void setShieldDebugColor(Color4 c) { _shieldSensorNode->setColor(c); }
+
+
+
+    
 };
 
 #endif /* __GB_MODEL_H__ */

@@ -415,7 +415,7 @@ public:
     void setPaused(bool paused) {
         _isPaused = paused;
     }
-
+    
   };
 
 #endif /* __GB_GAME_SCENE_H__ */

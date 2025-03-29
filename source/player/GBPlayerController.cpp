@@ -25,7 +25,7 @@ void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const
     _input = PlatformInput::alloc(assetRef, constantsRef);
     _player = PlayerModel::alloc(assetRef, constantsRef, PLAYER_INIT_POS);
 #pragma mark hp node
-    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(PLAYER_DEBUG_FONT));
+    _hpNode = scene2::Label::allocWithText(std::to_string(_player->getMaxHP()), assetRef->get<Font>(constantsRef->get("player")->get("debug")->getString("font")));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
     _hpNode->setForeground(Color4::CYAN);
     _hpNode->setPosition(0, 55);
@@ -45,7 +45,7 @@ void PlayerController::dispose() {
  * Resets the player to it's initial position
  */
 void PlayerController::reset() {
-    _player->resetAttributes();
+    _player->reset();
     _player->setPosition(PLAYER_INIT_POS);
 }
 
@@ -69,7 +69,7 @@ void PlayerController::applyForce() {
         }
         else {
             //             Damping factor in the air
-            b2Vec2 force(_player->getDamping() * _player->getVX(), 0);
+            b2Vec2 force(_player->getDampF() * _player->getVX(), 0);
             playerBody->ApplyForceToCenter(force, true);
         }
     }
@@ -140,7 +140,7 @@ void PlayerController::preUpdate(float dt)
     //    }
 
     // Process the movement inputs
-    _player->setMovement(_player->isGuardActive() ? 0 : _input->getHorizontal() * _player->getForce());
+    _player->setMovement(_player->isGuardActive() ? 0 : _input->getHorizontal() * _player->getStrafeF());
     _player->setStrafeLeft(_input->didStrafeLeft());
     _player->setStrafeRight(_input->didStrafeRight());
     _player->setJumpInput(_input->didJump());
@@ -197,7 +197,7 @@ void PlayerController::updateCooldowns()
         _player->setGuardCDRem(guardCD - 1);
         if (_player->getGuardCDRem() == 0) {
             //end guard
-            _player->setShieldDebugColor(PLAYER_DEBUG_COLOR);
+            _player->setShieldDebugColor(Color4(_constantsJSON->get("player")->get("debug")->getString("color")));
         }
     }
 
@@ -267,3 +267,4 @@ void PlayerController::fireProjectile()
 void PlayerController::deflectProjectile()
 {
 }
+

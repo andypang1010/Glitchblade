@@ -19,7 +19,7 @@
 using namespace cugl;
 
 /** This is adjusted by screen aspect ratio to get the height */
-#define SCENE_WIDTH 1024
+#define SCENE_WIDTH 1248
 
 /**
  * Initializes the controller contents, and starts the game
@@ -37,8 +37,7 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
 
     _assets = assets;
 
-    Size screenSize = Application::get()->getDisplaySize();
-    setContentSize(screenSize);
+    setContentSize(Size(1248, 576));
 
     auto layer = assets->get<scene2::SceneNode>("pausemenu");
 
@@ -46,7 +45,7 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
         return false;
     }
 
-    layer->setContentSize(screenSize);
+    layer->setContentSize(Size(1248, 576));
     layer->doLayout();
     addChild(layer);
     setActive(true);

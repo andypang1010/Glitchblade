@@ -40,8 +40,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     
     _assets = assets;
     
-    Size screenSize = Application::get()->getDisplaySize();
-    setContentSize(screenSize);
+    setContentSize(Size(1248, 576));
     
     auto layer = assets->get<scene2::SceneNode>("ingamescene");
     
@@ -49,7 +48,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
         return false;
     }
     
-    layer->setContentSize(screenSize);
+    layer->setContentSize(Size(1248, 576));
     layer->doLayout(); // This rearranges the children to fit the screen
     addChild(layer);
     setActive(true);
