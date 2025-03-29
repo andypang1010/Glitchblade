@@ -634,23 +634,15 @@ void GameScene::beginContact(b2Contact* contact) {
     physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
     physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
 
+    
     // Player-Enemy Collision
-    if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
-        if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd1)->damage(5);
-            _player->setDashRem(0);
-        }
-        _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
+    if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)){
+        enemyCollision((EnemyModel*)bd1);
     }
-    else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
-        if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd2)->damage(5);
-            _player->setDashRem(0);
-        }
-        _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
+    else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)){
+        enemyCollision((EnemyModel*)bd2);
     }
+
 
     // Test: plyaer-hitbox collision
     if (bd1->getName() == "hitbox" && isPlayerBody(bd2, fd2)) {
@@ -759,9 +751,9 @@ void GameScene::beginContact(b2Contact* contact) {
     if ((_player->getGroundSensorName() == fd2 && _player.get() != bd1) ||
         (_player->getGroundSensorName() == fd1 && _player.get() != bd2)) {
         _player->setGrounded(true);
-
         // Could have more than one ground
         _sensorFixtures.emplace(_player.get() == bd1 ? fix2 : fix1);
+        
     }
 }
 
@@ -792,5 +784,14 @@ void GameScene::endContact(b2Contact* contact) {
             _player->setGrounded(false);
         }
     }
+}
+
+void GameScene::enemyCollision(EnemyModel* enemy){
+        if (_player->isDashActive() && !_player->isGuardActive()) {
+            enemy->damage(5);
+            _player->setDashRem(0);
+        }
+        _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
+        enemy->setKnocked(true, enemy->getPosition().subtract(_player->getPosition()).normalize());
 }
 

@@ -276,26 +276,8 @@ public:
     * @param  contact  The two bodies that collided
     */
     void endContact(b2Contact* contact);
-    
-    /**
-     *
-     * This function returns true if the provided Obstacle b is an enemy body
-     * and if the fixture name `f` matches the enemy's body name.
-     *
-     * @param b Pointer to the Obstacle  being checked.
-     * @param f Pointer to the fixture's user data (string).
-     * @return True if the fixture and body correspond to an enemy body, false otherwise.
-     */
+protected:
     bool isEnemyBody(physics2::Obstacle* b, std::string f);
-    /**
-     *
-     * This function returns true if the provided Obstacle b is the player body
-     * and if the fixture name `f` matches the player's body name.
-     *
-     * @param b Pointer to the Obstacle  being checked.
-     * @param f Pointer to the fixture's user data (string).
-     * @return True if the fixture and body correspond to the player body, false otherwise.
-     */
     bool isPlayerBody(physics2::Obstacle* b,const std::string* f);
     /**
      * @brief Checks if a projectile is hitting the player's shield.
@@ -315,6 +297,8 @@ public:
      */
     Projectile* getProjectileHitShield(physics2::Obstacle* bd1, std::string* fd1,
                                                 physics2::Obstacle* bd2, std::string* fd2) const;
+#pragma mark collision cases
+    void enemyCollision(EnemyModel* enemy);
 
     /**
  Checks if contact is projectile hitting player shield and returns the Projectile if so, else NULL.
@@ -324,7 +308,7 @@ public:
 
 #pragma mark -
 #pragma mark Gameplay Handling
-     
+public:
     /**
      * The method called to indicate the start of a deterministic loop.
      *
