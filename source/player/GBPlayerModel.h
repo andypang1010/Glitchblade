@@ -45,6 +45,8 @@
 #define __GB_PLAYER_MODEL_H__
 #include <cugl/cugl.h>
 
+#define PLAYER_HIT_COLOR_DURATION 8
+
 using namespace cugl;
 
 #pragma mark -
