@@ -211,6 +211,7 @@ public:
      */
     static std::shared_ptr<Boss1Model> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
         std::shared_ptr<Boss1Model> result = std::make_shared<Boss1Model>();
+        //result->_scale = Application::get()->getDisplayWidth() / 1248;
         return (result->init(assetRef, constantsRef, pos, actions) ? result : nullptr);
     }
 
