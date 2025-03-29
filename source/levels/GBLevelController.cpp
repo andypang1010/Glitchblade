@@ -111,7 +111,6 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
 }
 
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
-    _enemyControllers.push_back(enemy_controller);
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
 }
 
@@ -171,6 +170,12 @@ void LevelController::spawnWave(int waveNum) {
     std::shared_ptr<WaveModel> wave = waves[waveNum];
     std::vector<std::string> enemiesString = wave->getEnemies();
     std::vector<float> spawnIntervals = wave->getSpawnIntervals();
+
+    for (int i = 0; i < enemiesString.size(); i++) {
+        std::string enemyType = enemiesString[i];
+        std::shared_ptr<EnemyController> enemy_controller = createEnemy(enemyType);
+        _enemyControllers.push_back(enemy_controller);
+    }
     
     float prevTotals = 0; // Intervals should "stack" since all timers are created immediately
     for (int i = 0; i< enemiesString.size(); i++){
@@ -180,10 +185,8 @@ void LevelController::spawnWave(int waveNum) {
             if (resetCountAtTime != _resetCount) {
                 return false;
             }
-            std::string enemyType = enemiesString[i];
-            // Create and add the enemy
-            std::shared_ptr<EnemyController> enemy_controller = createEnemy(enemyType);
-            addEnemy(enemy_controller);
+
+            addEnemy(_enemyControllers[i]);
             return false; //only run once
         };
         Uint32 timer = static_cast<Uint32>((spawnIntervals[i] + prevTotals) * 1000); // seconds to ms
@@ -299,6 +302,11 @@ void LevelController::preUpdate(float dt)
 
 	_playerController->preUpdate(dt);
     for (auto enemyCtrlr : _enemyControllers) {
+        if (enemyCtrlr == nullptr) continue;
+        if (enemyCtrlr->getEnemy()->getBody() == nullptr) {
+            continue;
+        }
+
         enemyCtrlr->preUpdate(dt);
     }
 }
@@ -309,6 +317,11 @@ void LevelController::fixedUpdate(float timestep)
 	_playerController->fixedUpdate(timestep);
 
 	for (auto enemyCtrlr : _enemyControllers) {
+        if (enemyCtrlr == nullptr) continue;
+		if (enemyCtrlr->getEnemy()->getBody() == nullptr) {
+			continue;
+		}
+
 		enemyCtrlr->fixedUpdate(timestep);
 	}
 }
@@ -326,6 +339,9 @@ void LevelController::postUpdate(float dt)
 
 	for (auto enemyCtrlr : _enemyControllers) {
         if (enemyCtrlr == nullptr) continue;
+        if (enemyCtrlr->getEnemy()->getBody() == nullptr) {
+            continue;
+        }
         auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
 		auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
 
@@ -347,7 +363,7 @@ void LevelController::postUpdate(float dt)
 
             _worldNode->removeChild(enemyCtrlr->getEnemy()->getSceneNode());
             enemyCtrlr->getEnemy()->markRemoved(true);
-            _enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
+            //_enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
         }
 	}
 }

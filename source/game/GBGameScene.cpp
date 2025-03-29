@@ -225,7 +225,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _complete = false;
     setDebug(false); // Debug on by default
 
-    // XNA nostalgia
     Application::get()->setClearColor(Color4f::BLACK);
 
     return true;
@@ -320,6 +319,8 @@ void GameScene::reset() {
 	populateUI(_assets);
     _ui->setHP(100);
     _pauseMenu->setHP(100);
+
+    Application::get()->setClearColor(Color4f::BLACK);
 }
 
 /**
