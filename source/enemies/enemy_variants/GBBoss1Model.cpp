@@ -348,7 +348,7 @@ void Boss1Model::AIMove() {
     }
 
     else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
-        setMovement(face * getForce() * STAB_FORCE);
+        setMovement(face * getForce() * STAB_FORCE * _scale);
     }
     else {
         setMovement(getMovement() / 3);
