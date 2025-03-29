@@ -95,8 +95,6 @@ using namespace cugl;
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
 
-#define STUN_FRAMES 88
-
 #pragma mark -
 #pragma mark AI Constants
 #define CLOSE_RADIUS 6.0f
