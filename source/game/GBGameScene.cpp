@@ -460,6 +460,7 @@ void GameScene::preUpdate(float dt) {
 
     // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);
+    processScreenShake();
 }
 /**
  * The method called to provide a deterministic application loop.
@@ -572,6 +573,28 @@ void GameScene::removeProjectile(Projectile* projectile) {
     AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
 }
 
+void GameScene::setScreenShake(float intensity, int duration) {
+    if (_shakeIntensity > intensity) {
+        return;
+    }
+    _shakeIntensity = intensity;
+    _shakeDuration = duration;
+}
+
+void GameScene::processScreenShake() {
+    Vec2 target = Vec2::ZERO;
+    if (_shakeDuration > 0) {
+        _shakeDuration--;
+        int shakeX = rand() % 2 ? _shakeIntensity : -_shakeIntensity;
+        int shakeY = rand() % 2 ? _shakeIntensity : -_shakeIntensity;
+        target = Vec2(shakeX, shakeY);
+    }
+    else {
+        _shakeIntensity = 0;
+    }
+    _worldnode->setPosition(_worldnode->getPosition() + (target - _worldnode->getPosition()) / 2);
+}
+
 #pragma mark -
 #pragma mark Collision Handling
 
@@ -640,6 +663,7 @@ void GameScene::beginContact(b2Contact* contact) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd1)->damage(10);
             _player->setDashRem(0);
+            setScreenShake(3, 5);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
         ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
@@ -648,6 +672,7 @@ void GameScene::beginContact(b2Contact* contact) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
             ((EnemyModel*)bd2)->damage(10);
             _player->setDashRem(0);
+            setScreenShake(3, 5);
         }
         _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
         ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
@@ -660,12 +685,14 @@ void GameScene::beginContact(b2Contact* contact) {
             if (!_player->isGuardActive() && !_player->isParryActive()) {
                 _player->damage(((Hitbox*)bd1)->getDamage());
                 _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd1)->getEnemy()->getPosition()).normalize());
+                setScreenShake(((Hitbox*)bd1)->getDamage(), 3);
             }
             else if (_player->isParryActive()) {
                 ((Hitbox*)bd1)->getEnemy()->setStun(88);
             }
             else if (_player->isGuardActive()) {
                 _player->damage(((Hitbox*)bd1)->getDamage() / 2);
+                setScreenShake(((Hitbox*)bd1)->getDamage() / 2, 3);
             }
         }
     }
@@ -675,12 +702,14 @@ void GameScene::beginContact(b2Contact* contact) {
             if (!_player->isGuardActive() && !_player->isParryActive()) {
                 _player->damage(((Hitbox*)bd2)->getDamage());
                 _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd2)->getEnemy()->getPosition()).normalize());
+                setScreenShake(((Hitbox*)bd2)->getDamage(), 3);
             }
             else if (_player->isParryActive()) {
                 ((Hitbox*)bd2)->getEnemy()->setStun(88);
             }
             else if (_player->isGuardActive()) {
                 _player->damage(((Hitbox*)bd2)->getDamage() / 2);
+                setScreenShake(((Hitbox*)bd2)->getDamage() / 2, 3);
             }
         }
     }

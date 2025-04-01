@@ -99,6 +99,9 @@ protected:
     /** Countdown active for winning or losing */
     int _countdown;
 
+    float _shakeIntensity;
+    int _shakeDuration;
+
     /** Mark set to handle more sophisticated collision callbacks */
     std::unordered_set<b2Fixture*> _sensorFixtures;
 
@@ -415,6 +418,20 @@ public:
     void setPaused(bool paused) {
         _isPaused = paused;
     }
+
+    /**
+ * Sets a screen shake effect on current game scene.
+ *
+ * @param intensity the intensity of the shake
+ * @param duration the duration of the shake
+ */
+    void setScreenShake(float intensity, int duration);
+
+    /**
+     * Moves the world node to process the current screen shake.
+     *
+     */
+    void processScreenShake();
     
   };
 
