@@ -264,7 +264,7 @@ void Minion1BModel::AIMove() {
         _moveDuration--;
     }
     else if (_isPunching && _punchSprite->getFrame() >= _punch->getHitboxStartTime() - 1 && _punchSprite->getFrame() <= _punch->getHitboxEndTime() - 1) {
-        setMovement(face * getForce() * MINION1B_PUNCH_FORCE);
+        setMovement(face * getForce() * MINION1B_PUNCH_FORCE * _scale);
     }
     else {
         setMovement(0);
