@@ -142,12 +142,8 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     if (_levels.empty()) {
         return false;
     }
-    
-    int _currentLevelIndex = 0;
-    int _currentWaveIndex = 0;
-    int _currentEnemyIndex = 0;
+
     int _numEnemiesActive = 0;
-    float _lastSpawnedInterval = 0;
 
     // Setup player controller
     _playerController = std::make_shared<PlayerController>();
@@ -187,6 +183,7 @@ void LevelController::spawnWave(int waveNum) {
             }
 
             addEnemy(_enemyControllers[i]);
+			_numEnemiesActive++;
             return false; //only run once
         };
         Uint32 timer = static_cast<Uint32>((spawnIntervals[i] + prevTotals) * 1000); // seconds to ms
@@ -280,11 +277,8 @@ void LevelController::reset() {
     _enemyControllers.clear();
     _worldNode = nullptr;
 
-    // Reset wave/enemy indexes and counters
-    _currentWaveIndex = 0;
-    _currentEnemyIndex = 0;
+    // Reset number of enemies active
     _numEnemiesActive = 0;
-    _lastSpawnedInterval = 0.0f;
 
     _resetCount += 1;
 }
@@ -302,8 +296,7 @@ void LevelController::preUpdate(float dt)
 
 	_playerController->preUpdate(dt);
     for (auto enemyCtrlr : _enemyControllers) {
-        if (enemyCtrlr == nullptr) continue;
-        if (enemyCtrlr->getEnemy()->getBody() == nullptr) {
+        if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
             continue;
         }
 
@@ -317,10 +310,9 @@ void LevelController::fixedUpdate(float timestep)
 	_playerController->fixedUpdate(timestep);
 
 	for (auto enemyCtrlr : _enemyControllers) {
-        if (enemyCtrlr == nullptr) continue;
-		if (enemyCtrlr->getEnemy()->getBody() == nullptr) {
-			continue;
-		}
+        if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
+            continue;
+        }
 
 		enemyCtrlr->fixedUpdate(timestep);
 	}
@@ -338,10 +330,10 @@ void LevelController::postUpdate(float dt)
 	_playerController->postUpdate(dt);
 
 	for (auto enemyCtrlr : _enemyControllers) {
-        if (enemyCtrlr == nullptr) continue;
-        if (enemyCtrlr->getEnemy()->getBody() == nullptr) {
+        if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
             continue;
         }
+
         auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
 		auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
 
@@ -363,6 +355,7 @@ void LevelController::postUpdate(float dt)
 
             _worldNode->removeChild(enemyCtrlr->getEnemy()->getSceneNode());
             enemyCtrlr->getEnemy()->markRemoved(true);
+			_numEnemiesActive--;
             //_enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
         }
 	}

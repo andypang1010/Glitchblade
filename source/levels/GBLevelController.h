@@ -36,12 +36,8 @@ private:
     std::shared_ptr<cugl::scene2::SceneNode> _debugNodeRef;
     std::shared_ptr<cugl::physics2::ObstacleWorld> _worldRef;
 
-	int _currentLevelIndex;
-	int _currentWaveIndex;
-    int _currentEnemyIndex;
-    int _numEnemiesActive;
+    int _numEnemiesActive = 0;
     int _resetCount = 0;
-    float _lastSpawnedInterval;
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
