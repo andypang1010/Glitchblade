@@ -158,12 +158,11 @@ void PlayerController::preUpdate(float dt)
         AudioEngine::get()->play(fxJ->getString("jump"), source, false, fxJ->getFloat("volume"));
     }
 
-    applyForce();
-
 }
 #pragma mark fixedUpdate
 void PlayerController::fixedUpdate(float timestep)
 {
+    applyForce();
     updateCooldowns();
 }
 
