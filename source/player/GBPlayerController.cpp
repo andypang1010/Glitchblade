@@ -162,6 +162,7 @@ void PlayerController::preUpdate(float dt)
 #pragma mark fixedUpdate
 void PlayerController::fixedUpdate(float timestep)
 {
+    _player->updateAnimation();
     applyForce();
     updateCooldowns();
 }

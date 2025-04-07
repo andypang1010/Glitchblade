@@ -315,7 +315,6 @@ void PlayerModel::update(float dt) {
         CULog("");
     }
 
-    updateAnimation();
     BoxObstacle::update(dt);
     if (_sceneNode != nullptr) {
         _sceneNode->setPosition(getPosition() * _drawScale);
