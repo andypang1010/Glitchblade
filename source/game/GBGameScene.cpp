@@ -271,9 +271,9 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
                 _pauseMenu->setVisible(false);
                 _ui->setVisible(true);
                 setPaused(false);
-                this->reset();
+                reset();
             }
-            });
+        });
     }
 }
 
