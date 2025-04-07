@@ -373,7 +373,10 @@ void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, 
 
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     sprite->setAnchor(Vec2::ANCHOR_CENTER);
-    addObstacle(ObstacleNodePair(hitbox, sprite));
+
+    if (_worldRef->inBounds(hitbox.get())) {
+        addObstacle(ObstacleNodePair(hitbox, sprite));
+    }
 }
 
 /**
