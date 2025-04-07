@@ -78,7 +78,7 @@ protected:
     /** How many frames remaining in the dash animation (affects friciton)*/
     int  _dashRem;
     /** How long until we can guard again in frames */
-    int  _guardCooldownRem;
+    int  _guardCooldownRem = 0;
     /** How many frames remaining in the guard (0 when guard is not active) */
     int  _guardRem;
     /** How many frames remaining in the parry (0 when parry is not active) */
@@ -436,7 +436,7 @@ public:
     void setDashLeftInput(bool value) { _isDashLeftInput = value; }
 
     // Guarding
-    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem <= 0; }
+    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0; }
     bool isGuardActive() { return _guardRem > 0 || isGuardBegin(); }
     int getGuardRem() { return _guardRem; }
     void setGuardRem(int value = _guard_duration) { _guardRem = value; }
