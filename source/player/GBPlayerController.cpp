@@ -158,13 +158,12 @@ void PlayerController::preUpdate(float dt)
         AudioEngine::get()->play(fxJ->getString("jump"), source, false, fxJ->getFloat("volume"));
     }
 
-    applyForce();
-    updateCooldowns();
-
 }
 #pragma mark fixedUpdate
 void PlayerController::fixedUpdate(float timestep)
 {
+    applyForce();
+    updateCooldowns();
 }
 
 #pragma mark postUpdate
@@ -194,9 +193,9 @@ void PlayerController::updateCooldowns()
         }
     }
     // guard not active, update cooldown
-    else if (_player->getGuardCDRem() > 0) {
-        int guardCD = _player->getGuardCDRem();
-        _player->setGuardCDRem(guardCD - 1);
+    else if (_player->getGuardCDRem() >= 0) {
+        int newCD = _player->getGuardCDRem() - 1;
+        _player->setGuardCDRem((newCD < 0) ? 0 : newCD);
         if (_player->getGuardCDRem() == 0) {
             //end guard
             _player->setShieldDebugColor(Color4(_constantsJSON->get("player")->get("debug")->getString("color")));

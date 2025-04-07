@@ -209,9 +209,9 @@ void PlatformInput::update(float dt) {
     _keyJump   = keys->keyPressed(JUMP_KEY);
     _keyLeft = keys->keyDown(LEFT_KEY);
     _keyRight = keys->keyDown(RIGHT_KEY);
-    _keyLdash = keys->keyDown(LDASH_KEY);
-    _keyRdash = keys->keyDown(RDASH_KEY);
-    _keyGuard = keys->keyDown(GUARD_KEY);
+    _keyLdash = keys->keyPressed(LDASH_KEY);
+    _keyRdash = keys->keyPressed(RDASH_KEY);
+    _keyGuard = keys->keyPressed(GUARD_KEY);
 #endif
 
     _resetPressed = _keyReset;

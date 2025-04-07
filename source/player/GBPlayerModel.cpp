@@ -307,6 +307,14 @@ void PlayerModel::dispose() {
  * @param delta Number of seconds since last animation frame
  */
 void PlayerModel::update(float dt) {
+
+    if (_isGuardInput)
+    {
+        CULog("PLAYER GUARD INPUT: %s", _isGuardInput ? "TRUE" : "FALSE");
+        CULog("PLAYER GUARD CD REMAINING: %i", _guardCooldownRem);
+        CULog("");
+    }
+
     updateAnimation();
     BoxObstacle::update(dt);
     if (_sceneNode != nullptr) {
@@ -353,7 +361,7 @@ void PlayerModel::updateAnimation()
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
 
-        if (_isGuardInput) {
+        if (isGuardBegin()) {
             currentFrame = 0;
             _guardSprite->setFrame(0);
         }
