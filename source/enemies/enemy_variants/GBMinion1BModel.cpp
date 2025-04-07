@@ -47,7 +47,7 @@ bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
 
         for (auto act : actions) {
             if (act->getActionName() == "slam") {
-                _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
+                _slam = std::dynamic_pointer_cast<RangedActionModel>(act);
             }
             else if (act->getActionName() == "punch") {
                 _punch = std::dynamic_pointer_cast<MeleeActionModel>(act);
@@ -219,16 +219,13 @@ void Minion1BModel::nextAction() {
     AIMove();
     if (!_isSlamming && !_isPunching && _moveDuration <= 0 && !isStunned()) {
         if (isTargetClose()) {
-            if (r % 2 == 0) { //Slam
-                slam();
-            }
-            else { // Punch
+            if (r % 2 == 0) { // Punch
                 punch();
             }
         }
         else {
-            if (r % 2 == 0) { // Punch
-                punch();
+            if (r % 2 == 0) { // Slam
+                slam();
             }
             else { // Move closer
                 approachTarget(45);
@@ -294,13 +291,17 @@ std::shared_ptr<MeleeActionModel> Minion1BModel::getDamagingAction() {
     if (_isPunching && _punchSprite->getFrame() == _punch->getHitboxStartTime() - 1) {
         return _punch;
     }
-    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
-        return _slam;
-	}
     return nullptr;
 }
 
 std::shared_ptr<RangedActionModel> Minion1BModel::getProjectileAction() {
+    std::vector<int> frames = _slam->getProjectileSpawnFrames();
+    for (int frame : frames) {
+        if (_isSlamming && currentFrame == frame * E_ANIMATION_UPDATE_FRAME) {
+            return _slam;
+        }
+    }
+
     return nullptr;
 }
 

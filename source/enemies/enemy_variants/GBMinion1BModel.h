@@ -83,7 +83,7 @@ protected:
     bool _isSlamming;
 
     std::shared_ptr<MeleeActionModel> _punch;
-    std::shared_ptr<MeleeActionModel> _slam;
+    std::shared_ptr<RangedActionModel> _slam;
 
     /**
     * Redraws the outline of the physics fixtures to the debug node

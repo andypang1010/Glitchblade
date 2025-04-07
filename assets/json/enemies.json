@@ -37,7 +37,7 @@
                             "x": 3,
                             "y": 0
                         },
-                        "projectileDamage": 10
+                        "projectileDamage": 20
                     }
                 ]
             }
@@ -57,21 +57,34 @@
                 "hitboxSize": [ 4, 2 ],
                 "hitboxStartTime": 21,
                 "hitboxEndTime": 30,
-                "hitboxDamage": 10
+                "hitboxDamage": 20
             },
-            {
-                "type": "melee",
-                "name": "slam",
-                "animation": "textures/minion1B_slam.png",
-                "animation_row": 4,
-                "animation_col": 4,
-                "animation_size": 15,
-                "hitboxPos": [ 2, -0.5 ],
-                "hitboxSize": [ 3, 1 ],
-                "hitboxStartTime": 8,
-                "hitboxEndTime": 15,
-                "hitboxDamage": 10
-            }
+          {
+            "type": "ranged",
+            "name": "slam",
+            "animation": "textures/minion1B_slam.png",
+            "animation_row": 4,
+            "animation_col": 4,
+            "animation_size": 15,
+            "projectiles": [
+              {
+                "projectileSpawnPosition": {
+                  "x": 1,
+                  "y": 2
+                },
+                "projectileSpawnFrame": 12,
+                "projectileAnimation": "textures/projectile.png",
+                "projectile_animation_row": 1,
+                "projectile_animation_col": 6,
+                "projectile_animation_size": 6,
+                "projectileVelocity": {
+                  "x": 2,
+                  "y": 0
+                },
+                "projectileDamage": 20
+              }
+            ]
+          }
         ]
     },
     "boss_1": {
@@ -114,7 +127,7 @@
                 "hitboxSize": [ 10, 10 ],
                 "hitboxStartTime": 26,
                 "hitboxEndTime": 33,
-                "hitboxDamage": 20
+                "hitboxDamage": 40
             },
             {
                 "type": "ranged",
@@ -138,7 +151,7 @@
                             "x": 3,
                             "y": 0
                         },
-                        "projectileDamage": 10
+                        "projectileDamage": 20
                     }
                 ]
             }
