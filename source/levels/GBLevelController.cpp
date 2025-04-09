@@ -159,15 +159,6 @@ std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::s
     return _worldNode;
 }
 
-bool LevelController::waveComplete() {
-    bool isComplete = true;
-	for (auto enemy : _enemyWaves[_currentWaveIndex]) {
-        isComplete &= enemy->getEnemy()->isRemoved();
-	}
-
-	return isComplete;
-}
-
 void LevelController::updateLevel() {
 	if (_enemyWaves.empty()) {
 		spawnLevel();
@@ -220,6 +211,15 @@ void LevelController::spawnLevel() {
 
         _enemyWaves.push_back(enemyControllers);
     }
+}
+
+bool LevelController::waveComplete() {
+    bool isComplete = true;
+    for (auto enemy : _enemyWaves[_currentWaveIndex]) {
+        isComplete &= enemy->getEnemy()->isRemoved();
+    }
+
+    return isComplete;
 }
 
 void LevelController::populateLevel(const std::shared_ptr<LevelModel>& level) {
@@ -308,8 +308,6 @@ void LevelController::reset() {
 
     // Reset number of enemies active
     _numEnemiesActive = 0;
-
-    _resetCount += 1;
 }
 
 void LevelController::preUpdate(float dt)

@@ -37,7 +37,6 @@ private:
     std::shared_ptr<cugl::physics2::ObstacleWorld> _worldRef;
 
     int _numEnemiesActive = 0;
-    int _resetCount = 0;
 
 	int _currentLevelIndex = 0;
 	int _currentWaveIndex = 0;
@@ -99,9 +98,6 @@ public:
     void updateLevel();
     void updateWave();
     void spawnLevel();
-    void spawnWave();
-    void spawnWave(int waveNum);
-
     bool waveComplete();
 
     std::vector<std::shared_ptr<EnemyController>> getEnemyControllers() {
