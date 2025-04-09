@@ -661,7 +661,7 @@ void GameScene::beginContact(b2Contact* contact) {
     // Player-Enemy Collision
     if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd1)->damage(10);
+            ((EnemyModel*)bd1)->damage(100);
             _player->setDashRem(0);
             setScreenShake(3, 5);
         }
@@ -670,7 +670,7 @@ void GameScene::beginContact(b2Contact* contact) {
     }
     else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd2)->damage(10);
+            ((EnemyModel*)bd2)->damage(100);
             _player->setDashRem(0);
             setScreenShake(3, 5);
         }

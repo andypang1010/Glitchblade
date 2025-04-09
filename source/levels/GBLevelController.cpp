@@ -303,7 +303,9 @@ void LevelController::reset() {
         _playerController->reset();
     }
     // Clear or reset non-init fields
-    _enemyWaves[_currentWaveIndex].clear();
+    _enemyWaves.clear();
+	_currentWaveIndex = 0;
+    _currentEnemyIndex = 0;
     _worldNode = nullptr;
 
     // Reset number of enemies active
