@@ -443,15 +443,9 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
         std::string type = action->getString("type");
         std::string name = action->getString("name");
 
-        std::string animationPath = action->getString("animation");
-        std::shared_ptr<Texture> animationTexture = Texture::allocWithFile(animationPath);
-        std::shared_ptr<SpriteNode> animationSprite = SpriteNode::allocWithSheet(animationTexture, action->getInt("animation_row"), action->getInt("animation_col"), action->getInt("animation_size"));
-        animationSprite->setFrame(0);
-
         if (type == "melee") {
             auto meleeAction = std::make_shared<MeleeActionModel>();
             meleeAction->setActionName(name);
-            meleeAction->setActionAnimation(animationSprite);
 
             cugl::Vec2 hitboxPos(action->get("hitboxPos")->asFloatArray().front(), action->get("hitboxPos")->asFloatArray().back());
             cugl::Vec2 hitboxSize(action->get("hitboxSize")->asFloatArray().front(), action->get("hitboxSize")->asFloatArray().back());
@@ -469,7 +463,6 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
         else if (type == "ranged") {
             auto rangedAction = std::make_shared<RangedActionModel>();
             rangedAction->setActionName(name);
-            rangedAction->setActionAnimation(animationSprite);
 
 			std::vector<std::shared_ptr<Projectile>> projectiles;
 			std::vector<Vec2> spawnPositions;
