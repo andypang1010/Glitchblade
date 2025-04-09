@@ -56,6 +56,8 @@ private:
     /** One enemy controller for this level controller: It will likely need to be a vector for future levels*/
     std::vector<std::shared_ptr<EnemyController>> _enemyControllers;
 
+	std::vector<std::vector<std::shared_ptr<EnemyController>>> _enemyWaves;
+
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
     
@@ -94,9 +96,13 @@ public:
     std::shared_ptr<EnemyController> createEnemy(std::string enemy_name);
     void addEnemy(const std::shared_ptr<EnemyController>& cont);
 
+    void updateLevel();
     void updateWave();
+    void spawnLevel();
     void spawnWave();
     void spawnWave(int waveNum);
+
+    bool waveComplete();
 
     std::vector<std::shared_ptr<EnemyController>> getEnemyControllers() {
         return _enemyControllers;

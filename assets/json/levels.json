@@ -7,12 +7,12 @@
       "platforms": [],
       "waves": [
         {
-          "spawn_intervals": [ 2, 7, 7, 15 ],
-            "enemies": [ "minion_1B", "minion_1B", "minion_1B", "boss_1" ]
+          "spawn_intervals": [ 2, 7 ],
+            "enemies": [ "minion_1B", "minion_1B" ]
         },
         {
-          "spawn_intervals": [ 2, 7, 7 ],
-          "enemies": [ "minion_1B", "minion_1B", "minion_1B" ]
+          "spawn_intervals": [ 3 ],
+          "enemies": [ "boss_1" ]
         },
         {
           "spawn_intervals": [ 3 ],
