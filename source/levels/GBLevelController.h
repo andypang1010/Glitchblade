@@ -39,6 +39,11 @@ private:
     int _numEnemiesActive = 0;
     int _resetCount = 0;
 
+	int _currentLevelIndex = 0;
+	int _currentWaveIndex = 0;
+	int _currentEnemyIndex = 0;
+    float _lastSpawnedTime = 0;
+
     /* Data */
     std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonValue> _enemiesJSON;
@@ -89,6 +94,8 @@ public:
     std::shared_ptr<EnemyController> createEnemy(std::string enemy_name);
     void addEnemy(const std::shared_ptr<EnemyController>& cont);
 
+    void updateWave();
+    void spawnWave();
     void spawnWave(int waveNum);
 
     std::vector<std::shared_ptr<EnemyController>> getEnemyControllers() {

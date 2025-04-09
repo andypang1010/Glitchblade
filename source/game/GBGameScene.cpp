@@ -359,7 +359,7 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
     
     // Spawn the first wave
-    _levelController->spawnWave(0);
+    //_levelController->spawnWave(0);
     
     _active = true;
     _complete = false;

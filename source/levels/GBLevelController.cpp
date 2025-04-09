@@ -159,6 +159,42 @@ std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::s
     return _worldNode;
 }
 
+void LevelController::updateWave() {
+	if (_enemyControllers.empty()) {
+        spawnWave();
+        return;
+	}
+
+	if (_currentEnemyIndex >= _enemyControllers.size()) {
+        return;
+	}
+
+    float spawnInterval = _currentLevel->getWaves()[_currentWaveIndex]->getSpawnIntervals()[_currentEnemyIndex];
+
+    if (_lastSpawnedTime >= spawnInterval && _numEnemiesActive < MAX_NUM_ENEMIES) {
+		addEnemy(_enemyControllers[_currentEnemyIndex]);
+		_numEnemiesActive++;
+		_currentEnemyIndex++;
+		_lastSpawnedTime = 0;
+	}
+	else {
+		_lastSpawnedTime += 1.0f / 60.0f; // Assuming 60 FPS
+    }
+}
+
+void LevelController::spawnWave() {
+    std::vector<std::shared_ptr<WaveModel>> waves = _currentLevel->getWaves();
+    std::shared_ptr<WaveModel> wave = waves[_currentWaveIndex];
+    std::vector<std::string> enemiesString = wave->getEnemies();
+    std::vector<float> spawnIntervals = wave->getSpawnIntervals();
+
+    for (int i = 0; i < enemiesString.size(); i++) {
+        std::string enemyType = enemiesString[i];
+        std::shared_ptr<EnemyController> enemy_controller = createEnemy(enemyType);
+        _enemyControllers.push_back(enemy_controller);
+    }
+}
+
 void LevelController::spawnWave(int waveNum) {
     // Now loop through the enemies in levelRef, store their actions, make controllers, & init them.
     Application* app = Application::get();
@@ -308,6 +344,7 @@ void LevelController::fixedUpdate(float timestep)
 {
 	// _testEnemyController->fixedUpdate(timestep);
 	_playerController->fixedUpdate(timestep);
+	updateWave();
 
 	for (auto enemyCtrlr : _enemyControllers) {
         if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
