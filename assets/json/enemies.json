@@ -72,7 +72,7 @@
                   "x": 1,
                   "y": 2
                 },
-                "projectileSpawnFrame": 12,
+                "projectileSpawnFrame": 13,
                 "projectileAnimation": "textures/projectile.png",
                 "projectile_animation_row": 1,
                 "projectile_animation_col": 6,

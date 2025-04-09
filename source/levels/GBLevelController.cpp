@@ -170,17 +170,17 @@ void LevelController::updateLevel() {
 	}
 
     if (waveComplete()) {
-        _currentWaveIndex++;
         _lastSpawnedTime = 0;
         _numEnemiesActive = 0;
 		_currentEnemyIndex = 0;
+        _currentWaveIndex++;
     }
 
     updateWave();
 }
 
 void LevelController::updateWave() {
-	if (_currentEnemyIndex >= _enemyWaves[_currentWaveIndex].size()) {
+	if (_currentWaveIndex >= _enemyWaves.size() || _currentEnemyIndex >= _enemyWaves[_currentWaveIndex].size()) {
         return;
 	}
 
@@ -215,6 +215,10 @@ void LevelController::spawnLevel() {
 
 bool LevelController::waveComplete() {
     bool isComplete = true;
+	if (_currentWaveIndex >= _enemyWaves.size()) {
+		return true;
+	}
+
     for (auto enemy : _enemyWaves[_currentWaveIndex]) {
         isComplete &= enemy->getEnemy()->isRemoved();
     }
@@ -303,23 +307,23 @@ void LevelController::reset() {
         _playerController->reset();
     }
     // Clear or reset non-init fields
+    _worldNode = nullptr;
+
+    // Reset wave attributes
     _enemyWaves.clear();
 	_currentWaveIndex = 0;
     _currentEnemyIndex = 0;
-    _worldNode = nullptr;
-
-    // Reset number of enemies active
+	_lastSpawnedTime = 0;
     _numEnemiesActive = 0;
 }
 
 void LevelController::preUpdate(float dt)
 {
-    //std::shared_ptr<EnemyModel> testEnemy = _testEnemyController->getEnemy();
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
 
-    // TODO: Uncomment this & make it loop through all the current enemies (instead of just using _testEnemy)
-    if (_enemyWaves.size() > 0 && _enemyWaves[_currentWaveIndex].size() > 0) {
-
+    if (_enemyWaves.size() > 0
+        && _currentWaveIndex < _enemyWaves.size()
+        && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
             std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
             enemodel->setTargetPos(player->getPosition());
@@ -335,7 +339,9 @@ void LevelController::fixedUpdate(float timestep)
 	_playerController->fixedUpdate(timestep);
     updateLevel();
 
-    if (_enemyWaves.size() > 0 && _enemyWaves[_currentWaveIndex].size() > 0) {
+    if (_enemyWaves.size() > 0 
+        && _currentWaveIndex < _enemyWaves.size() 
+        && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
             if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
                 continue;
@@ -356,7 +362,9 @@ void LevelController::postUpdate(float dt)
     }
 	_playerController->postUpdate(dt);
 
-    if (_enemyWaves.size() > 0 && _enemyWaves[_currentWaveIndex].size() > 0) {
+    if (_enemyWaves.size() > 0
+        && _currentWaveIndex < _enemyWaves.size()
+        && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
             if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
                 continue;
