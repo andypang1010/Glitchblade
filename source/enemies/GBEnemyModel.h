@@ -169,7 +169,8 @@ protected:
     virtual void resetDebug() override;
 
 public:
-    int currentFrame;
+    int currentFrame = 0;
+    int frameCounter = 0;
 
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 
@@ -533,10 +534,9 @@ public:
 
 #pragma mark -
 #pragma mark Animation Methods
-    virtual void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
+    void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
+    void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame);
     virtual void updateAnimation();
-
-    virtual void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame);
 
 #pragma mark -
 #pragma mark Physics Methods

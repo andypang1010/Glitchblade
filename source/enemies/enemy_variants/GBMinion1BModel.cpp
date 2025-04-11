@@ -297,7 +297,7 @@ std::shared_ptr<MeleeActionModel> Minion1BModel::getDamagingAction() {
 std::shared_ptr<RangedActionModel> Minion1BModel::getProjectileAction() {
     std::vector<int> frames = _slam->getProjectileSpawnFrames();
     for (int frame : frames) {
-        if (_isSlamming && currentFrame == frame * E_ANIMATION_UPDATE_FRAME) {
+        if (_isSlamming && _slamSprite->getFrame() == frame && frameCounter == 0) {
             return _slam;
         }
     }
@@ -307,21 +307,18 @@ std::shared_ptr<RangedActionModel> Minion1BModel::getProjectileAction() {
 
 #pragma mark -
 #pragma mark Animation Methods
-void Minion1BModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite->isVisible()) {
-        currentFrame++;
-        if (currentFrame > sprite->getCount() * E_ANIMATION_UPDATE_FRAME) {
-            currentFrame = 0;
-        }
 
-        if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
-        }
-    }
-    else {
-        sprite->setFrame(0);
-    }
-}
+//void Minion1BModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
+//    if (sprite->isVisible()) {
+//		frameCounter = (frameCounter + 1) % E_ANIMATION_UPDATE_FRAME;
+//		if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0) {
+//            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
+//        }
+//    }
+//    else {
+//        sprite->setFrame(0);
+//    }
+//}
 
 void Minion1BModel::updateAnimation()
 {
@@ -334,11 +331,11 @@ void Minion1BModel::updateAnimation()
 
     _punchSprite->setVisible(!isStunned() && _isPunching);
 
+    _idleSprite->setVisible(!_stunSprite->isVisible() && !_slamSprite->isVisible() && !_punchSprite->isVisible() && !_walkSprite->isVisible());
+
     if (_stunRem == STUN_FRAMES) {
         currentFrame = 0;
     }
-
-    _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_punchSprite->isVisible() && !_walkSprite->isVisible());
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
@@ -351,18 +348,18 @@ void Minion1BModel::updateAnimation()
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
 }
 
-void Minion1BModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
-{
-    if (actionSprite->isVisible()) {
-        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
-            vfxSprite->setFrame(0);
-        }
-
-        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
-        }
-    }
-}
+//void Minion1BModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
+//{
+//    if (actionSprite->isVisible()) {
+//        if (actionSprite->getFrame() == startFrame) {
+//            vfxSprite->setFrame(0);
+//        }
+//
+//        if (actionSprite->getFrame() > startFrame && actionSprite->getFrame() % E_ANIMATION_UPDATE_FRAME == 0) {
+//            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
+//        }
+//    }
+//}
 
 #pragma mark -
 #pragma mark Scene Graph Methods

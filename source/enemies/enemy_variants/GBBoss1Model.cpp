@@ -408,7 +408,7 @@ std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {
 std::shared_ptr<RangedActionModel> Boss1Model::getProjectileAction() {
 	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
     for (int frame : frames) {
-		if (_isShooting && currentFrame == frame * E_ANIMATION_UPDATE_FRAME) {
+		if (_isShooting && _shootSprite->getFrame() == frame && frameCounter == 0) {
 			return _shoot;
 		}
     }
@@ -418,21 +418,6 @@ std::shared_ptr<RangedActionModel> Boss1Model::getProjectileAction() {
 
 #pragma mark -
 #pragma mark Animation Methods
-void Boss1Model::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite->isVisible()) {
-        currentFrame++;
-        if (currentFrame > sprite->getCount() * E_ANIMATION_UPDATE_FRAME) {
-            currentFrame = 0;
-        }
-
-        if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
-        }
-    }
-    else {
-        sprite->setFrame(0);
-    }
-}
 
 void Boss1Model::updateAnimation()
 {
@@ -449,7 +434,7 @@ void Boss1Model::updateAnimation()
 
 	_explodeSprite->setVisible(!isStunned() && _isExploding);
 
-    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && currentFrame >= 96);
+    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= 24);
 
     if (_stunRem == STUN_FRAMES) {
         currentFrame = 0;
@@ -470,19 +455,6 @@ void Boss1Model::updateAnimation()
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-}
-
-void Boss1Model::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
-{
-    if (actionSprite->isVisible()) {
-        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
-            vfxSprite->setFrame(0);
-        }
-
-        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
-        }
-    }
 }
 
 #pragma mark -

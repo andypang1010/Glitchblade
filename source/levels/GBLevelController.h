@@ -17,7 +17,7 @@
 #include "../core/GBHitbox.h"
 #include "../game/objects/GBProjectile.h"
 
-#define MAX_NUM_ENEMIES 2
+#define MAX_NUM_ENEMIES 1
 
 using namespace cugl;
 /**
