@@ -36,6 +36,7 @@
 #include "../player/GBPlayerModel.h"
 #include "../enemies/GBEnemyModel.h"
 #include "../levels/GBLevelController.h"
+#include "GBCollisionController.h"
 #include "ui/GBIngameUI.h"
 #include "ui/GBPauseMenu.h"
 
@@ -55,7 +56,9 @@ protected:
     std::shared_ptr<JsonValue> _constantsJSON;
     // CONTROLLERS
     /** LevelController for managing the level progress of the current game */
-    std::shared_ptr<LevelController> _levelController;
+    std::unique_ptr<LevelController> _levelController;
+    /** CollisionController for handling collisions in the physics world */
+    std::unique_ptr<CollisionController> _collisionController;
     // delete this input controller
     std::shared_ptr<PlatformInput> _input;
     
@@ -101,9 +104,6 @@ protected:
 
     float _shakeIntensity;
     int _shakeDuration;
-
-    /** Mark set to handle more sophisticated collision callbacks */
-    std::unordered_set<b2Fixture*> _sensorFixtures;
 
 #pragma mark Internal Object Management
     /**
