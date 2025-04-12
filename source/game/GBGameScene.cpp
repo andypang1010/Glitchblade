@@ -216,6 +216,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
             CULog("player is null in populate");
         }
     
+    // TODO TODO TODO: change this based on level select
     populate(_levelController->getLevelByName("Level 1"));
 
     // === Initialize in-game UI ===
@@ -497,6 +498,14 @@ void GameScene::fixedUpdate(float step) {
 
     // Update the level controller
     _levelController->fixedUpdate(step);
+
+    if (_levelController->isCurrentLevelComplete()) {
+        CULog("WAITING TO SWAP LEVELS");
+        _current_level_swap_countdown--;
+        if (_current_level_swap_countdown <= 0) {
+            CULog("Do swap logic here"); // need to also reset the swap countdown
+        }
+    }
 }
 
 /**

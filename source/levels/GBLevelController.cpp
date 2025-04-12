@@ -84,22 +84,6 @@ std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()
     // Add more as desired here
 };
 
-void LevelController::checkWinCondition()
-{
-}
-
-void LevelController::checkLoseCondition()
-{
-}
-
-LevelController::LevelController()
-{
-}
-
-LevelController::~LevelController()
-{
-}
-
 std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyType) {
     // This will call the correct constructor using make_shared from the enemyFactoryMap
     // Here, all enemy controller types will be treated as their parent class, EnemyController

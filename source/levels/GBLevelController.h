@@ -64,31 +64,10 @@ private:
 
 
 protected:
-    /**
-     * Check if the game win conditions have been met.
-     */
-    void checkWinCondition();
-
-    /**
-     * Check if the game lose conditions have been met.
-     */
-    void checkLoseCondition();
-
 public:
 
-    /**
-     * Constructor.
-     */
-    LevelController();
-
-    /**
-     * Destructor.
-     */
-    ~LevelController();
-
     bool isCurrentLevelComplete() {
-        // TODO: every time an enemy is defeated(or more optimally??) check if _isCurrentLevelComplete needs to be set to true
-        return _isCurrentLevelComplete;
+        return _enemyWaves.size() > 0 && waveComplete() && _currentWaveIndex == _enemyWaves.size();
     }
     
     /**Return a new enemy controller from the enemy name*/

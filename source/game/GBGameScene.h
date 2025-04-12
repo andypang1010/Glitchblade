@@ -39,6 +39,8 @@
 #include "ui/GBIngameUI.h"
 #include "ui/GBPauseMenu.h"
 
+#define LEVEL_SWAP_COUNTDOWN_FRAMES 300
+
 using namespace cugl;
 
 /**
@@ -74,6 +76,8 @@ protected:
     std::shared_ptr<scene2::Label> _playerHPNode;
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
+
+    int _current_level_swap_countdown = LEVEL_SWAP_COUNTDOWN_FRAMES;
     
     // UI
     /** Ingame UI */
