@@ -217,31 +217,10 @@ void EnemyModel::dispose() {
 void EnemyModel::update(float dt) {
     if (isRemoved()) return;
 
-    updateAnimation();
-    nextAction();
-
-    // Apply cooldowns
-
-    if (isKnocked()) {
-        resetKnocked();
-    }
-
-    if (isStunned()) {
-        _stunRem--;
-    }
-
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition() * _drawScale);
         _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
     }
 }
 

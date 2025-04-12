@@ -183,20 +183,6 @@ void Minion1BModel::dispose() {
 void Minion1BModel::update(float dt) {
     if (isRemoved()) return;
 
-    updateAnimation();
-    nextAction();
-
-    // Apply cooldowns
-	_aggression = std::min(100.0f, _aggression + dt*5);
-
-    if (isKnocked()) {
-        resetKnocked();
-    }
-
-    if (isStunned()) {
-        _stunRem--;
-    }
-
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition() * _drawScale);

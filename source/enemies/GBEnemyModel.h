@@ -413,6 +413,12 @@ public:
      */
     virtual void setStun(int value) { _stunRem = value; };
     /**
+     * Returns the stun duration remaining.
+     *
+     * @return the remaining stun duration
+     */
+    virtual int getStunRem() { return _stunRem; };
+    /**
      * Checks if enemy is stunned.
      *
      * @return whether the enemy is stunned.

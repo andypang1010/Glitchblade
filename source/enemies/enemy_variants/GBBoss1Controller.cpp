@@ -56,6 +56,19 @@ void Boss1Controller::applyForce() {
 
 void Boss1Controller::fixedUpdate(float timestep) {
     applyForce();
+    _enemy->updateAnimation();
+    _enemy->nextAction();
+
+    // Apply cooldowns
+    _enemy->setAggression(std::min(100.0f, _enemy->getAggression() + timestep * 10));
+
+    if (_enemy->isKnocked()) {
+        _enemy->resetKnocked();
+    }
+
+    if (_enemy->isStunned()) {
+        _enemy->setStun(_enemy->getStunRem() - 1);
+    }
 }
 
 void Boss1Controller::preUpdate(float dt) {
