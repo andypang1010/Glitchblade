@@ -20,6 +20,10 @@
                             "x": 10,
                             "y": 5
                         },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                            },
                         "projectileSpawnFrame": 3,
                         "projectileAnimation": "textures/projectile_enemy_1.png",
                         "projectile_animation_row": 1,
@@ -56,8 +60,12 @@
                   "x": 1,
                   "y": 2
                 },
+                "projectileSize": {
+                "width": 3,
+                "height": 2
+                },
                 "projectileSpawnFrame": 11,
-                "projectileAnimation": "textures/projectile.png",
+                "projectileAnimation": "textures/wave-enemy-1.png",
                 "projectile_animation_row": 1,
                 "projectile_animation_col": 6,
                 "projectile_animation_size": 6,
@@ -110,8 +118,12 @@
                             "x": 1,
                             "y": 5
                         },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
                         "projectileSpawnFrame": 6,
-                        "projectileAnimation": "textures/projectile.png",
+                        "projectileAnimation": "textures/projectile-enemy-1.png",
                         "projectile_animation_row": 1,
                         "projectile_animation_col": 6,
                         "projectile_animation_size": 6,

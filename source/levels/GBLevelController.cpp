@@ -477,6 +477,19 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
                         projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
                     )
                 );
+
+                //projectile = Projectile::alloc(
+                //    Vec2(
+                //        projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(),
+                //        projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
+                //    ),
+                //    Size(
+                //        projectileJSON->get("projectileSize")->get("width")->asFloat(),
+                //        projectileJSON->get("projectileSize")->get("height")->asFloat()
+                //    ),
+                //    false
+                //);
+
                 
                 spawnFrames.push_back(projectileJSON->get("projectileSpawnFrame")->asInt());
 
