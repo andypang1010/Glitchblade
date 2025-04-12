@@ -171,6 +171,7 @@ protected:
 public:
     int currentFrame = 0;
     int frameCounter = 0;
+    int stunFrame;
 
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 

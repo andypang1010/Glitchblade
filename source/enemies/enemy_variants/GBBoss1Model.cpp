@@ -76,6 +76,8 @@ bool Boss1Model::init(const std::shared_ptr<AssetManager>& assetRef, const std::
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
 
+    stunFrame = 88;
+
     Size nsize = Size(90, 180) / scale;
     nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
@@ -410,7 +412,7 @@ void Boss1Model::updateAnimation()
 
     _stunSprite->setVisible(isStunned());
 
-    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && isGrounded() && (isMoveLeft() || isMoveRight()));
+    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && (isMoveLeft() || isMoveRight()));
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
@@ -421,10 +423,6 @@ void Boss1Model::updateAnimation()
 	_explodeSprite->setVisible(!isStunned() && _isExploding);
 
     _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= 24);
-
-    if (_stunRem == STUN_FRAMES) {
-        currentFrame = 0;
-    }
 
     _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_stabSprite->isVisible() && !_shootSprite->isVisible() && !_explodeSprite->isVisible() && !_walkSprite->isVisible());
 

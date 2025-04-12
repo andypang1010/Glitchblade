@@ -688,7 +688,8 @@ void GameScene::beginContact(b2Contact* contact) {
                 setScreenShake(((Hitbox*)bd1)->getDamage(), 3);
             }
             else if (_player->isParryActive()) {
-                ((Hitbox*)bd1)->getEnemy()->setStun(88);
+
+                ((Hitbox*)bd1)->getEnemy()->setStun(((Hitbox*)bd1)->getEnemy()->stunFrame);
             }
             else if (_player->isGuardActive()) {
                 _player->damage(((Hitbox*)bd1)->getDamage() / 2);
@@ -705,7 +706,7 @@ void GameScene::beginContact(b2Contact* contact) {
                 setScreenShake(((Hitbox*)bd2)->getDamage(), 3);
             }
             else if (_player->isParryActive()) {
-                ((Hitbox*)bd2)->getEnemy()->setStun(88);
+                ((Hitbox*)bd2)->getEnemy()->setStun(((Hitbox*)bd2)->getEnemy()->stunFrame);
             }
             else if (_player->isGuardActive()) {
                 _player->damage(((Hitbox*)bd2)->getDamage() / 2);

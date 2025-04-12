@@ -33,6 +33,8 @@ bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
 
+    stunFrame = 16;
+
     Size nsize = Size(90, 90) / scale;
     nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
@@ -294,34 +296,18 @@ std::shared_ptr<RangedActionModel> Minion1BModel::getProjectileAction() {
 #pragma mark -
 #pragma mark Animation Methods
 
-//void Minion1BModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-//    if (sprite->isVisible()) {
-//		frameCounter = (frameCounter + 1) % E_ANIMATION_UPDATE_FRAME;
-//		if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0) {
-//            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
-//        }
-//    }
-//    else {
-//        sprite->setFrame(0);
-//    }
-//}
-
 void Minion1BModel::updateAnimation()
 {
 
     _stunSprite->setVisible(isStunned());
 
-    _walkSprite->setVisible(!isStunned() && !_isPunching && !_isSlamming && isGrounded() && (isMoveLeft() || isMoveRight()));
+    _walkSprite->setVisible(!isStunned() && !_isPunching && !_isSlamming && (isMoveLeft() || isMoveRight()));
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
     _punchSprite->setVisible(!isStunned() && _isPunching);
 
     _idleSprite->setVisible(!_stunSprite->isVisible() && !_slamSprite->isVisible() && !_punchSprite->isVisible() && !_walkSprite->isVisible());
-
-    if (_stunRem == STUN_FRAMES) {
-        currentFrame = 0;
-    }
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
@@ -333,19 +319,6 @@ void Minion1BModel::updateAnimation()
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
 }
-
-//void Minion1BModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
-//{
-//    if (actionSprite->isVisible()) {
-//        if (actionSprite->getFrame() == startFrame) {
-//            vfxSprite->setFrame(0);
-//        }
-//
-//        if (actionSprite->getFrame() > startFrame && actionSprite->getFrame() % E_ANIMATION_UPDATE_FRAME == 0) {
-//            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
-//        }
-//    }
-//}
 
 #pragma mark -
 #pragma mark Scene Graph Methods
