@@ -562,7 +562,7 @@ void GameScene::postUpdate(float remain) {
 }
 
 
-
+#pragma mark collision helpers
 /**
  * Removes a new projectile from the world.
  *
@@ -604,32 +604,3 @@ void GameScene::processScreenShake() {
     _worldnode->setPosition(_worldnode->getPosition() + (target - _worldnode->getPosition()) / 2);
 }
 
-#pragma mark -
-#pragma mark Collision Handling
-
-/**Checks obstacle and fixture to see if it is an enemy body fixture.**/
-bool GameScene::isEnemyBody(physics2::Obstacle* b, std::string f ) {
-    // This depends on enemies having their name set to enemy. This is probably dumb
-    return (f == "enemy");
-}
-/**Checks obstacle and fixture to see if it the player body fixture.**/
-bool GameScene::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
-    return (f == _player->getBodyName());
-}
-
-/**
- Checks if contact is projectile hitting player shield and returns the Projectile if so, else NULL.
- */
-Projectile* GameScene::getProjectileHitShield(physics2::Obstacle* bd1, std::string* fd1,
-                                              physics2::Obstacle* bd2, std::string* fd2) const {
-    std::string proj_name = _constantsJSON->get("projectile")->getString("name");
-    if (bd1->getName() == proj_name && fd2 == _player->getShieldName() &&
-        !((Projectile*)bd1)->getIsPlayerFired() && _player->isGuardActive()) {
-        return (Projectile*)bd1;
-    }
-    if (bd2->getName() == proj_name && fd1 == _player->getShieldName() &&
-        !((Projectile*)bd2)->getIsPlayerFired() && _player->isGuardActive()) {
-        return (Projectile*)bd2;
-    }
-    return nullptr;
-}
