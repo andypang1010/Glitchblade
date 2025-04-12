@@ -283,10 +283,7 @@ public:
 
 #pragma mark -
 #pragma mark Animation Methods
-    void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) override;
     void updateAnimation() override;
-
-    void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame) override;
 
 #pragma mark -
 #pragma mark Physics Methods

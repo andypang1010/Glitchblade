@@ -4,48 +4,12 @@
  * Default constructor.
  * Initializes the action length to 0.0f.
  */
-ActionModel::ActionModel() : _actionLength(0.0f), _actionName("") {}
+ActionModel::ActionModel() : _actionName("") {}
 
 /**
  * Virtual destructor.
  */
 ActionModel::~ActionModel() = default;
-
-/**
- * Returns the action animation.
- *
- * @return The shared pointer to the SpriteSheet.
- */
-std::shared_ptr<cugl::scene2::SpriteNode> ActionModel::getActionAnimation() const {
-    return _actionSprite;
-}
-
-/**
- * Sets the action animation.
- *
- * @param animation The shared pointer to the new SpriteSheet.
- */
-void ActionModel::setActionAnimation(const std::shared_ptr<cugl::scene2::SpriteNode>& animation) {
-    _actionSprite = animation;
-}
-
-/**
- * Returns the action length.
- *
- * @return The length of the action.
- */
-float ActionModel::getActionLength() const {
-    return _actionLength;
-}
-
-/**
- * Sets the action length.
- *
- * @param length The new action length.
- */
-void ActionModel::setActionLength(float length) {
-    _actionLength = length;
-}
 
 /**
  * Returns the action name.

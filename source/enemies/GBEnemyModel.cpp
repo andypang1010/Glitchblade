@@ -217,31 +217,10 @@ void EnemyModel::dispose() {
 void EnemyModel::update(float dt) {
     if (isRemoved()) return;
 
-    updateAnimation();
-    nextAction();
-
-    // Apply cooldowns
-
-    if (isKnocked()) {
-        resetKnocked();
-    }
-
-    if (isStunned()) {
-        _stunRem--;
-    }
-
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition() * _drawScale);
         _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
     }
 }
 
@@ -289,12 +268,8 @@ std::shared_ptr<RangedActionModel> EnemyModel::getProjectileAction() {
 #pragma mark Animation Methods
 void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
     if (sprite->isVisible()) {
-        currentFrame++;
-        if (currentFrame > sprite->getCount() * E_ANIMATION_UPDATE_FRAME) {
-            currentFrame = 0;
-        }
-
-        if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
+        frameCounter = (frameCounter + 1) % E_ANIMATION_UPDATE_FRAME;
+        if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0) {
             sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
         }
     }
@@ -303,21 +278,21 @@ void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
     }
 }
 
-void EnemyModel::updateAnimation()
-{
-}
-
 void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
 {
     if (actionSprite->isVisible()) {
-        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
+        if (actionSprite->getFrame() == startFrame) {
             vfxSprite->setFrame(0);
         }
 
-        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
+        if (actionSprite->getFrame() > startFrame && frameCounter % E_ANIMATION_UPDATE_FRAME == 0) {
             vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
         }
     }
+}
+
+void EnemyModel::updateAnimation()
+{
 }
 
 #pragma mark -

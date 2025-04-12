@@ -5,10 +5,6 @@
             {
                 "type": "melee",
                 "name": "explode",
-                "animation": "textures/minion1A_explode.png",
-                "animation_row": 6,
-                "animation_col": 8,
-                "animation_size": 45,
                 "hitboxPos": [ 1, 2 ],
                 "hitboxSize": [ 2, 4 ],
                 "hitboxStartTime": 7,
@@ -18,10 +14,6 @@
             {
                 "type": "ranged",
                 "name": "shoot",
-                "animation": "textures/minion1A_shoot.png",
-                "animation_row": 1,
-                "animation_col": 5,
-                "animation_size": 5,
                 "projectiles": [
                     {
                         "projectileSpawnPosition": {
@@ -49,10 +41,6 @@
             {
                 "type": "melee",
                 "name": "punch",
-                "animation": "textures/minion1B_punch.png",
-                "animation_row": 8,
-                "animation_col": 4,
-                "animation_size": 30,
                 "hitboxPos": [ 4, 0 ],
                 "hitboxSize": [ 4, 2 ],
                 "hitboxStartTime": 21,
@@ -62,17 +50,13 @@
           {
             "type": "ranged",
             "name": "slam",
-            "animation": "textures/minion1B_slam.png",
-            "animation_row": 4,
-            "animation_col": 4,
-            "animation_size": 15,
             "projectiles": [
               {
                 "projectileSpawnPosition": {
                   "x": 1,
                   "y": 2
                 },
-                "projectileSpawnFrame": 13,
+                "projectileSpawnFrame": 11,
                 "projectileAnimation": "textures/projectile.png",
                 "projectile_animation_row": 1,
                 "projectile_animation_col": 6,
@@ -93,10 +77,6 @@
             {
                 "type": "melee",
                 "name": "stab",
-                "animation": "textures/boss1_stab.png",
-                "animation_row": 5,
-                "animation_col": 8,
-                "animation_size": 40,
                 "hitboxPos": [ 3, 0 ],
                 "hitboxSize": [ 4, 1.5 ],
                 "hitboxStartTime": 27,
@@ -106,10 +86,6 @@
             {
                 "type": "melee",
                 "name": "slam",
-                "animation": "textures/boss1_slam.png",
-                "animation_row": 5,
-                "animation_col": 8,
-                "animation_size": 40,
                 "hitboxPos": [ 4, 0 ],
                 "hitboxSize": [ 4, 6 ],
                 "hitboxStartTime": 25,
@@ -119,10 +95,6 @@
             {
                 "type": "melee",
                 "name": "explode",
-                "animation": "textures/boss1_explode.png",
-                "animation_row": 4,
-                "animation_col": 10,
-                "animation_size": 40,
                 "hitboxPos": [ 0, 0 ],
                 "hitboxSize": [ 10, 10 ],
                 "hitboxStartTime": 26,
@@ -132,10 +104,6 @@
             {
                 "type": "ranged",
                 "name": "shoot",
-                "animation": "textures/boss1_shoot.png",
-                "animation_row": 2,
-                "animation_col": 10,
-                "animation_size": 15,
                 "projectiles": [
                     {
                         "projectileSpawnPosition": {

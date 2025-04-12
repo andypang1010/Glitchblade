@@ -76,6 +76,8 @@ bool Boss1Model::init(const std::shared_ptr<AssetManager>& assetRef, const std::
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
 
+    stunFrame = 88;
+
     Size nsize = Size(90, 180) / scale;
     nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
@@ -242,20 +244,6 @@ void Boss1Model::dispose() {
 void Boss1Model::update(float dt) {
     if (isRemoved()) return;
 
-    updateAnimation();
-    nextAction();
-
-    // Apply cooldowns
-    _aggression = std::min(100.0f, _aggression + dt*10);
-
-    if (isKnocked()) {
-        resetKnocked();
-    }
-
-    if (isStunned()) {
-        _stunRem--;
-    }
-
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition() * _drawScale);
@@ -408,7 +396,7 @@ std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {
 std::shared_ptr<RangedActionModel> Boss1Model::getProjectileAction() {
 	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
     for (int frame : frames) {
-		if (_isShooting && currentFrame == frame * E_ANIMATION_UPDATE_FRAME) {
+		if (_isShooting && _shootSprite->getFrame() == frame && frameCounter == 0) {
 			return _shoot;
 		}
     }
@@ -418,28 +406,13 @@ std::shared_ptr<RangedActionModel> Boss1Model::getProjectileAction() {
 
 #pragma mark -
 #pragma mark Animation Methods
-void Boss1Model::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite->isVisible()) {
-        currentFrame++;
-        if (currentFrame > sprite->getCount() * E_ANIMATION_UPDATE_FRAME) {
-            currentFrame = 0;
-        }
-
-        if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
-        }
-    }
-    else {
-        sprite->setFrame(0);
-    }
-}
 
 void Boss1Model::updateAnimation()
 {
 
     _stunSprite->setVisible(isStunned());
 
-    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && isGrounded() && (isMoveLeft() || isMoveRight()));
+    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && (isMoveLeft() || isMoveRight()));
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
@@ -449,11 +422,7 @@ void Boss1Model::updateAnimation()
 
 	_explodeSprite->setVisible(!isStunned() && _isExploding);
 
-    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && currentFrame >= 96);
-
-    if (_stunRem == STUN_FRAMES) {
-        currentFrame = 0;
-    }
+    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= 24);
 
     _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_stabSprite->isVisible() && !_shootSprite->isVisible() && !_explodeSprite->isVisible() && !_walkSprite->isVisible());
 
@@ -470,19 +439,6 @@ void Boss1Model::updateAnimation()
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-}
-
-void Boss1Model::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
-{
-    if (actionSprite->isVisible()) {
-        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
-            vfxSprite->setFrame(0);
-        }
-
-        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
-        }
-    }
 }
 
 #pragma mark -

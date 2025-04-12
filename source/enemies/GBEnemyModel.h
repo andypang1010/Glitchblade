@@ -169,7 +169,9 @@ protected:
     virtual void resetDebug() override;
 
 public:
-    int currentFrame;
+    int currentFrame = 0;
+    int frameCounter = 0;
+    int stunFrame;
 
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 
@@ -412,6 +414,12 @@ public:
      */
     virtual void setStun(int value) { _stunRem = value; };
     /**
+     * Returns the stun duration remaining.
+     *
+     * @return the remaining stun duration
+     */
+    virtual int getStunRem() { return _stunRem; };
+    /**
      * Checks if enemy is stunned.
      *
      * @return whether the enemy is stunned.
@@ -533,10 +541,9 @@ public:
 
 #pragma mark -
 #pragma mark Animation Methods
-    virtual void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
+    void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
+    void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame);
     virtual void updateAnimation();
-
-    virtual void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame);
 
 #pragma mark -
 #pragma mark Physics Methods
