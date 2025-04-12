@@ -9,7 +9,7 @@
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
 #include "../core/GBHitbox.h"
-
+using namespace cugl::physics2;
 // Constructor
 CollisionController::CollisionController(
      std::shared_ptr<PlayerModel> player,
@@ -58,91 +58,37 @@ void CollisionController::beginContact(b2Contact* contact) {
     else {
     }
 
-    physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
-    physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
+    Obstacle* o1 = reinterpret_cast<Obstacle*>(body1->GetUserData().pointer);
+    Obstacle* o2 = reinterpret_cast<Obstacle*>(body2->GetUserData().pointer);
+
 
     // Player-Enemy Collision
-    if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
-        if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd1)->damage(100);
-            _player->setDashRem(0);
-            _screenShake(3, 5);
-        }
-        _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd1)->setKnocked(true, bd1->getPosition().subtract(_player->getPosition()).normalize());
-    }
-    else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
-        if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd2)->damage(100);
-            _player->setDashRem(0);
-            _screenShake(3, 5);
-        }
-        _player->setKnocked(true, _player->getPosition().subtract(bd1->getPosition()).normalize());
-        ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
+    if (o1->getName() == enemy_name && isPlayerBody(o2, fd2)) {
+        playerEnemyCollision(o1);
+    } else if (o2->getName() == enemy_name && isPlayerBody(o1, fd1)) {
+        playerEnemyCollision(o2);
     }
 
-    // Test: plyaer-hitbox collision
-    if (bd1->getName() == "hitbox" && isPlayerBody(bd2, fd2)) {
-        if (_player->iframe <= 0) {
-            _player->iframe = 60;
-            if (!_player->isGuardActive() && !_player->isParryActive()) {
-                _player->damage(((Hitbox*)bd1)->getDamage());
-                _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd1)->getEnemy()->getPosition()).normalize());
-                _screenShake(((Hitbox*)bd1)->getDamage(), 3);
-            }
-            else if (_player->isParryActive()) {
-                ((Hitbox*)bd1)->getEnemy()->setStun(88);
-            }
-            else if (_player->isGuardActive()) {
-                _player->damage(((Hitbox*)bd1)->getDamage() / 2);
-                _screenShake(((Hitbox*)bd1)->getDamage() / 2, 3);
-            }
-        }
+    // Test: player-hitbox collision
+    if (o1->getName() == "hitbox" && isPlayerBody(o2, fd2)) {
+        playerHitboxCollision(o1);
     }
-    else if (bd2->getName() == "hitbox" && isPlayerBody(bd1, fd1)) {
-        if (_player->iframe <= 0) {
-            _player->iframe = 60;
-            if (!_player->isGuardActive() && !_player->isParryActive()) {
-                _player->damage(((Hitbox*)bd2)->getDamage());
-                _player->setKnocked(true, _player->getPosition().subtract(((Hitbox*)bd2)->getEnemy()->getPosition()).normalize());
-                _screenShake(((Hitbox*)bd2)->getDamage(), 3);
-            }
-            else if (_player->isParryActive()) {
-                ((Hitbox*)bd2)->getEnemy()->setStun(88);
-            }
-            else if (_player->isGuardActive()) {
-                _player->damage(((Hitbox*)bd2)->getDamage() / 2);
-                _screenShake(((Hitbox*)bd2)->getDamage() / 2, 3);
-            }
-        }
+    else if (o2->getName() == "hitbox" && isPlayerBody(o1, fd1)) {
+        playerHitboxCollision(o2);
     }
+
 
     // Player-Projectile Collision
-    if (isPlayerBody(bd1, fd1) && bd2->getName() == proj_name) {
-        if (!((Projectile*)bd2)->getIsPlayerFired()) {
-            if (_player->iframe <= 0) {
-                _player->iframe = 60;
-                _player->damage(10);
-            }
-            _removeProjectile((Projectile*)bd2);
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-        }
+    if (isPlayerBody(o1, fd1) && o2->getName() == proj_name) {
+        playerProjectileCollision(o2);
     }
-    else if (isPlayerBody(bd2, fd2) && bd1->getName() == proj_name) {
-        if (!((Projectile*)bd1)->getIsPlayerFired()) {
-            if (_player->iframe <= 0) {
-                _player->iframe = 60;
-                _player->damage(10);
-            }
-            _removeProjectile((Projectile*)bd1);
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-        }
+    else if (isPlayerBody(o2, fd2) && o1->getName() == proj_name) {
+        playerProjectileCollision(o1);
     }
 
+
     // Shield-Projectile Collision
-    Projectile* shieldHit = getProjectileHitShield(bd1, fd1, bd2, fd2);
+    Projectile* shieldHit = getProjectileHitShield(o1, fd1, o2, fd2);
     if (shieldHit) {
 
         if (_player->isParryActive()) {
@@ -159,48 +105,42 @@ void CollisionController::beginContact(b2Contact* contact) {
     }
 
     // Projectile-Projectile Collision
-    if (bd1->getName() == proj_name && bd2->getName() == proj_name) {
+    if (o1->getName() == proj_name && o2->getName() == proj_name) {
 
         // Destroy if one is fired by player and the other is not
         if (
-            (((Projectile*)bd1)->getIsPlayerFired() && !((Projectile*)bd2)->getIsPlayerFired()) ||
-            (((Projectile*)bd2)->getIsPlayerFired() && !((Projectile*)bd1)->getIsPlayerFired())
+            (((Projectile*)o1)->getIsPlayerFired() && !((Projectile*)o2)->getIsPlayerFired()) ||
+            (((Projectile*)o2)->getIsPlayerFired() && !((Projectile*)o1)->getIsPlayerFired())
             ) {
-            _removeProjectile((Projectile*)bd1);
-            _removeProjectile((Projectile*)bd2);
+            _removeProjectile((Projectile*)o1);
+            _removeProjectile((Projectile*)o2);
         }
     }
 
     // Projectile-Environment Collision
-    if (bd1->getName() == proj_name && (bd2->getName() == ground_name || bd2->getName() == wall_name)) {
-        _removeProjectile((Projectile*)bd1);
+    if (o1->getName() == proj_name && (o2->getName() == ground_name || o2->getName() == wall_name)) {
+        _removeProjectile((Projectile*)o1);
     }
-    else if (bd2->getName() == proj_name && (bd1->getName() == ground_name || bd1->getName() == wall_name)) {
-        _removeProjectile((Projectile*)bd2);
+    else if (o2->getName() == proj_name && (o1->getName() == ground_name || o1->getName() == wall_name)) {
+        _removeProjectile((Projectile*)o2);
     }
 
     // Enemy-Projectile Collision
-    if (bd1->getName() == enemy_name && bd2->getName() == proj_name) {
+    if (o1->getName() == enemy_name && o2->getName() == proj_name) {
+        enemyProjectileCollision(o1, o2);
+    }
+    else if (o2->getName() == enemy_name && o1->getName() == proj_name) {
+        enemyProjectileCollision(o2, o1);
+    }
 
-        if (((Projectile*)bd2)->getIsPlayerFired()) {
-            ((EnemyModel*)bd1)->damage(20);
-            _removeProjectile((Projectile*)bd2);
-        }
-    }
-    else if (bd2->getName() == enemy_name && bd1->getName() == proj_name) {
-        if (((Projectile*)bd1)->getIsPlayerFired()) {
-            ((EnemyModel*)bd2)->damage(20);
-            _removeProjectile((Projectile*)bd1);
-        }
-    }
 
     // Player-Ground Collision
-    if ((_player->getGroundSensorName() == fd2 && _player.get() != bd1) ||
-        (_player->getGroundSensorName() == fd1 && _player.get() != bd2)) {
+    if ((_player->getGroundSensorName() == fd2 && _player.get() != o1) ||
+        (_player->getGroundSensorName() == fd1 && _player.get() != o2)) {
         _player->setGrounded(true);
 
         // Could have more than one ground
-        _sensorFixtures.emplace(_player.get() == bd1 ? fix2 : fix1);
+        _sensorFixtures.emplace(_player.get() == o1 ? fix2 : fix1);
     }
 }
 
@@ -221,19 +161,89 @@ void CollisionController::endContact(b2Contact* contact) {
     std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
     std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
 
-    physics2::Obstacle* bd1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
-    physics2::Obstacle* bd2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
+    physics2::Obstacle* o1 = reinterpret_cast<physics2::Obstacle*>(body1->GetUserData().pointer);
+    physics2::Obstacle* o2 = reinterpret_cast<physics2::Obstacle*>(body2->GetUserData().pointer);
 
-    if ((_player->getGroundSensorName() == fd2 && _player.get() != bd1) ||
-        (_player->getGroundSensorName() == fd1 && _player.get() != bd2)) {
-        _sensorFixtures.erase(_player.get() == bd1 ? fix2 : fix1);
+    if ((_player->getGroundSensorName() == fd2 && _player.get() != o1) ||
+        (_player->getGroundSensorName() == fd1 && _player.get() != o2)) {
+        _sensorFixtures.erase(_player.get() == o1 ? fix2 : fix1);
         if (_sensorFixtures.empty()) {
             _player->setGrounded(false);
         }
     }
 }
 
+#pragma mark collision case helpers
+void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
+    EnemyModel* enemy = (EnemyModel*) enemyObstacle;
+    if (_player->isDashActive() && !_player->isGuardActive()) {
+        enemy->damage(100);
+        _player->setDashRem(0);
+        _screenShake(3, 5);
+    }
+    _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
+    enemy->setKnocked(true, enemy->getPosition().subtract(_player->getPosition()).normalize());
+}
 
+/** doc comments generated by Microsoft Copilot for these collision case helpers*/
+void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
+    Hitbox* hitbox = (Hitbox*)hitboxObstacle; // Cast to the proper type
+
+    // Process collision only if the player's invulnerability frames have expired.
+    if (_player->iframe <= 0) {
+        _player->iframe = 60;  // Reset the iframe counter
+
+        // If neither guard nor parry is active, apply full damage and knockback.
+        if (!_player->isGuardActive() && !_player->isParryActive()) {
+            int damage = hitbox->getDamage();
+            _player->damage(damage);
+            _player->setKnocked(true, _player->getPosition().subtract(hitbox->getEnemy()->getPosition()).normalize());
+            _screenShake(damage, 3);
+        }
+        // If parry is active, stun the enemy.
+        else if (_player->isParryActive()) {
+            hitbox->getEnemy()->setStun(88);
+        }
+        // If guard is active, deal half damage with corresponding screen shake.
+        else if (_player->isGuardActive()) {
+            int halfDamage = hitbox->getDamage() / 2;
+            _player->damage(halfDamage);
+            _screenShake(halfDamage, 3);
+        }
+    }
+}
+
+void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle) {
+    Projectile* projectile = (Projectile*)projectileObstacle; // Cast to the proper type
+
+    // Process collision only if the projectile was not fired by the player.
+    if (!projectile->getIsPlayerFired()) {
+        // If the player's invulnerability frames have expired, reset and deal damage.
+        if (_player->iframe <= 0) {
+            _player->iframe = 60;
+            _player->damage(10);
+        }
+        // Remove the projectile and update the UI and pause menu with the current HP.
+        _removeProjectile(projectile);
+        _ui->setHP(_player->getHP());
+        _pauseMenu->setHP(_player->getHP());
+    }
+}
+
+void CollisionController::enemyProjectileCollision(Obstacle* enemyObstacle, Obstacle* projectileObstacle) {
+    // Cast obstacles to their proper types.
+    EnemyModel* enemy = static_cast<EnemyModel*>(enemyObstacle);
+    Projectile* projectile = static_cast<Projectile*>(projectileObstacle);
+    
+    // Process collision only if the projectile was fired by the player.
+    if (projectile->getIsPlayerFired()) {
+        enemy->damage(20);
+        _removeProjectile(projectile);
+    }
+}
+
+
+#pragma mark collision helpers
 
 /**Checks obstacle and fixture to see if it is an enemy body fixture.**/
 bool CollisionController::isEnemyBody(physics2::Obstacle* b, std::string f ) {
@@ -248,19 +258,20 @@ bool CollisionController::isPlayerBody(physics2::Obstacle* b, const std::string*
 /**
  Checks if contact is projectile hitting player shield and returns the Projectile if so, else NULL.
  */
-Projectile* CollisionController::getProjectileHitShield(physics2::Obstacle* bd1, std::string* fd1,
-                                              physics2::Obstacle* bd2, std::string* fd2) const {
+Projectile* CollisionController::getProjectileHitShield(physics2::Obstacle* o1, std::string* fd1,
+                                              physics2::Obstacle* o2, std::string* fd2) const {
     std::string proj_name = _constantsJSON->get("projectile")->getString("name");
-    if (bd1->getName() == proj_name && fd2 == _player->getShieldName() &&
-        !((Projectile*)bd1)->getIsPlayerFired() && _player->isGuardActive()) {
-        return (Projectile*)bd1;
+    if (o1->getName() == proj_name && fd2 == _player->getShieldName() &&
+        !((Projectile*)o1)->getIsPlayerFired() && _player->isGuardActive()) {
+        return (Projectile*)o1;
     }
-    if (bd2->getName() == proj_name && fd1 == _player->getShieldName() &&
-        !((Projectile*)bd2)->getIsPlayerFired() && _player->isGuardActive()) {
-        return (Projectile*)bd2;
+    if (o2->getName() == proj_name && fd1 == _player->getShieldName() &&
+        !((Projectile*)o2)->getIsPlayerFired() && _player->isGuardActive()) {
+        return (Projectile*)o2;
     }
     return nullptr;
 }
+
 
 void CollisionController::reset() {
     _sensorFixtures.clear();

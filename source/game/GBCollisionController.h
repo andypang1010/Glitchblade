@@ -17,6 +17,7 @@
 #include <box2d/b2_collision.h>
 
 using namespace cugl;
+using namespace cugl::physics2;
 
 class CollisionController {
 public:
@@ -33,38 +34,13 @@ private:
     ScreenShakeCallback _screenShake;
     /** Mark set to handle more sophisticated collision callbacks */
     std::unordered_set<b2Fixture*> _sensorFixtures;
-public:
-    // Constructor
-    CollisionController(
-        std::shared_ptr<PlayerModel> player,
-        std::shared_ptr<GBIngameUI> ui,
-        std::shared_ptr<GBPauseMenu> pauseMenu,
-        std::shared_ptr<JsonValue> constantsJSON,
-        RemoveProjectileCallback removeProjectile,
-        ScreenShakeCallback screenShake
-    );
     
-    /**
-    * Processes the start of a collision
-    *
-    * This method is called when we first get a collision between two objects.  We use
-    * this method to test if it is the "right" kind of collision.  In particular, we
-    * use it to test if we make it to the win door.  We also us it to eliminate bullets.
-    *
-    * @param  contact  The two bodies that collided
-    */
-    void beginContact(b2Contact* contact);
-    
-    /**
-    * Processes the end of a collision
-    *
-    * This method is called when we no longer have a collision between two objects.
-    * We use this method allow the character to jump again.
-    *
-    * @param  contact  The two bodies that collided
-    */
-    void endContact(b2Contact* contact);
-    
+#pragma mark collision case helpers
+    void playerEnemyCollision(Obstacle* enemyObstacle);
+    void playerHitboxCollision(Obstacle* hitboxObstacle);
+    void playerProjectileCollision(Obstacle* projectileObstacle);
+    void enemyProjectileCollision(Obstacle* enemyObstacle, Obstacle* projectileObstacle);
+#pragma mark collision helpers
     /**
      *
      * This function returns true if the provided Obstacle b is an enemy body
@@ -109,6 +85,39 @@ public:
  */
     Projectile* getEnemyHitShield(physics2::Obstacle* bd1, std::string* fd1,
         physics2::Obstacle* bd2, std::string* fd2) const;
+
+
+public:
+    // Constructor
+    CollisionController(
+        std::shared_ptr<PlayerModel> player,
+        std::shared_ptr<GBIngameUI> ui,
+        std::shared_ptr<GBPauseMenu> pauseMenu,
+        std::shared_ptr<JsonValue> constantsJSON,
+        RemoveProjectileCallback removeProjectile,
+        ScreenShakeCallback screenShake
+    );
+    
+    /**
+    * Processes the start of a collision
+    *
+    * This method is called when we first get a collision between two objects.  We use
+    * this method to test if it is the "right" kind of collision.  In particular, we
+    * use it to test if we make it to the win door.  We also us it to eliminate bullets.
+    *
+    * @param  contact  The two bodies that collided
+    */
+    void beginContact(b2Contact* contact);
+    
+    /**
+    * Processes the end of a collision
+    *
+    * This method is called when we no longer have a collision between two objects.
+    * We use this method allow the character to jump again.
+    *
+    * @param  contact  The two bodies that collided
+    */
+    void endContact(b2Contact* contact);
     
     /** Reset the collision controller (eg for a new level) */
     void reset();
