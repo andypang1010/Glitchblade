@@ -7,8 +7,8 @@
                 "name": "explode",
                 "hitboxPos": [ 1, 2 ],
                 "hitboxSize": [ 2, 4 ],
-                "hitboxStartTime": 7,
-                "hitboxEndTime": 15,
+                "hitboxStartFrame": 7,
+                "hitboxEndFrame": 15,
                 "hitboxDamage": 20
             },
             {
@@ -43,8 +43,8 @@
                 "name": "punch",
                 "hitboxPos": [ 4, 0 ],
                 "hitboxSize": [ 4, 2 ],
-                "hitboxStartTime": 21,
-                "hitboxEndTime": 30,
+                "hitboxStartFrame": 21,
+                "hitboxEndFrame": 30,
                 "hitboxDamage": 20
             },
           {
@@ -79,8 +79,8 @@
                 "name": "stab",
                 "hitboxPos": [ 3, 0 ],
                 "hitboxSize": [ 4, 1.5 ],
-                "hitboxStartTime": 27,
-                "hitboxEndTime": 36,
+                "hitboxStartFrame": 27,
+                "hitboxEndFrame": 36,
                 "hitboxDamage": 20
             },
             {
@@ -88,8 +88,8 @@
                 "name": "slam",
                 "hitboxPos": [ 4, 0 ],
                 "hitboxSize": [ 4, 6 ],
-                "hitboxStartTime": 25,
-                "hitboxEndTime": 31,
+                "hitboxStartFrame": 25,
+                "hitboxEndFrame": 31,
                 "hitboxDamage": 20
             },
             {
@@ -97,8 +97,8 @@
                 "name": "explode",
                 "hitboxPos": [ 0, 0 ],
                 "hitboxSize": [ 10, 10 ],
-                "hitboxStartTime": 26,
-                "hitboxEndTime": 33,
+                "hitboxStartFrame": 26,
+                "hitboxEndFrame": 33,
                 "hitboxDamage": 40
             },
             {

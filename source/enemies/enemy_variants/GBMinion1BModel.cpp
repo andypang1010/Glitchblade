@@ -248,7 +248,7 @@ void Minion1BModel::AIMove() {
         setMoveRight(dist < 0);
         _moveDuration--;
     }
-    else if (_isPunching && _punchSprite->getFrame() >= _punch->getHitboxStartTime() - 1 && _punchSprite->getFrame() <= _punch->getHitboxEndTime() - 1) {
+    else if (_isPunching && _punchSprite->getFrame() >= _punch->getHitboxStartFrame() - 1 && _punchSprite->getFrame() <= _punch->getHitboxEndFrame() - 1) {
         setMovement(face * getForce() * MINION1B_PUNCH_FORCE * _scale);
     }
     else {
@@ -276,7 +276,7 @@ void Minion1BModel::punch() {
 }
 
 std::shared_ptr<MeleeActionModel> Minion1BModel::getDamagingAction() {
-    if (_isPunching && _punchSprite->getFrame() == _punch->getHitboxStartTime() - 1) {
+    if (_isPunching && _punchSprite->getFrame() == _punch->getHitboxStartFrame() - 1) {
         return _punch;
     }
     return nullptr;
