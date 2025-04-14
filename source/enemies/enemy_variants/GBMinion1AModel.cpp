@@ -48,11 +48,11 @@ bool Minion1AModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
         attachNodes(assetRef);
 
         for (auto act : actions) {
-            if (act->getActionName() == "slam") {
-                _slam = std::dynamic_pointer_cast<RangedActionModel>(act);
+            if (act->getActionName() == "shoot") {
+                _shoot = std::dynamic_pointer_cast<RangedActionModel>(act);
             }
-            else if (act->getActionName() == "punch") {
-                _punch = std::dynamic_pointer_cast<MeleeActionModel>(act);
+            else if (act->getActionName() == "explode") {
+                _explode = std::dynamic_pointer_cast<MeleeActionModel>(act);
             }
         }
 
@@ -65,35 +65,27 @@ bool Minion1AModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
 void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
-    //move this to new function
-    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_idle"), 3, 4, 10);
-	_idleSprite->setScale(0.5f);
-    _idleSprite->setPosition(0, 10);
-
+    
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 3, 4, 10);
     _walkSprite->setScale(0.5f);
     _walkSprite->setPosition(0, 10);
 
-    _punchSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_punch"), 8, 4, 30);
-    _punchSprite->setScale(0.5f);
-    _punchSprite->setPosition(0, 10);
+    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 8, 4, 30);
+    _explodeSprite->setScale(0.5f);
+    _explodeSprite->setPosition(0, 10);
 
-    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_slam"), 4, 4, 15);
-    _slamSprite->setScale(0.5f);
-    _slamSprite->setPosition(0, 10);
+    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 4, 4, 15);
+    _shootSprite->setScale(0.5f);
+    _shootSprite->setPosition(0, 10);
 
-    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_stun"), 1, 4, 4);
-    _stunSprite->setScale(0.5f);
-    _stunSprite->setPosition(0, 10);
 
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
 
-    getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
-    getSceneNode()->addChild(_punchSprite);
-    getSceneNode()->addChild(_slamSprite);
-    getSceneNode()->addChild(_stunSprite);
+    getSceneNode()->addChild(_explodeSprite);
+    getSceneNode()->addChild(_shootSprite);
+
 
 }
 
@@ -167,11 +159,9 @@ void Minion1AModel::dispose() {
     _sensorNode = nullptr;
     _geometry = nullptr;
     _currentSpriteNode = nullptr;
-    _idleSprite = nullptr;
     _walkSprite = nullptr;
-    _punchSprite = nullptr;
-    _slamSprite = nullptr;
-    _stunSprite = nullptr;
+    _explodeSprite = nullptr;
+    _shootSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -205,15 +195,15 @@ void Minion1AModel::update(float dt) {
 void Minion1AModel::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isPunching && _moveDuration <= 0 && !isStunned()) {
+    if (!_isshootming && !_isexplodeing && _moveDuration <= 0 && !isStunned()) {
         if (isTargetClose()) {
-            if (r % 2 == 0) { // Punch
-                punch();
+            if (r % 2 == 0) { // explode
+                explode();
             }
         }
         else {
-            if (r % 2 == 0) { // Slam
-                slam();
+            if (r % 2 == 0) { // shoot
+                shoot();
             }
             else { // Move closer
                 approachTarget(45);
@@ -222,16 +212,16 @@ void Minion1AModel::nextAction() {
     }
     else {
         if (isStunned()) {
-            _isSlamming = false;
-            _isPunching = false;
+            _isshootming = false;
+            _isexplodeing = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= MINION1A_SLAM_FRAMES - 1) {
-            _isSlamming = false;
+        if (_isshootming && _shootSprite->getFrame() >= MINION1A_shoot_FRAMES - 1) {
+            _isshootming = false;
             setMovement(0);
         }
-        if (_isPunching && _punchSprite->getFrame() >= MINION1A_PUNCH_FRAMES - 1) {
-            _isPunching = false;
+        if (_isexplodeing && _explodeSprite->getFrame() >= MINION1A_explode_FRAMES - 1) {
+            _isexplodeing = false;
             setMovement(0);
         }
     }
@@ -242,14 +232,14 @@ void Minion1AModel::AIMove() {
     float dir_val = dist > 0 ? -1 : 1;
     int face = _faceRight ? 1 : -1;
 
-    if (_moveDuration > 0 && !_isPunching) {
+    if (_moveDuration > 0 && !_isexplodeing) {
         setMovement(_moveDirection * dir_val * getForce());
         setMoveLeft(dist > 0);
         setMoveRight(dist < 0);
         _moveDuration--;
     }
-    else if (_isPunching && _punchSprite->getFrame() >= _punch->getHitboxStartTime() - 1 && _punchSprite->getFrame() <= _punch->getHitboxEndTime() - 1) {
-        setMovement(face * getForce() * MINION1A_PUNCH_FORCE * _scale);
+    else if (_isexplodeing && _explodeSprite->getFrame() >= _explode->getHitboxStartTime() - 1 && _explodeSprite->getFrame() <= _explode->getHitboxEndTime() - 1) {
+        setMovement(face * getForce() * MINION1A_explode_FORCE * _scale);
     }
     else {
         setMovement(0);
@@ -257,36 +247,36 @@ void Minion1AModel::AIMove() {
 
 }
 
-void Minion1AModel::slam() {
+void Minion1AModel::shoot() {
     faceTarget();
     if (rand() % 200 <= _aggression) {
         _aggression -= std::max(0.0f, _aggression - 25);
-        _isSlamming = true;
+        _isshootming = true;
         setMovement(0);
     }
 }
 
-void Minion1AModel::punch() {
+void Minion1AModel::explode() {
 	faceTarget();
     if (rand() % 100 <= _aggression) {
         _aggression -= std::max(0.0f, _aggression - 50);
-        _isPunching = true;
+        _isexplodeing = true;
         setMovement(0);
     }
 }
 
 std::shared_ptr<MeleeActionModel> Minion1AModel::getDamagingAction() {
-    if (_isPunching && _punchSprite->getFrame() == _punch->getHitboxStartTime() - 1) {
-        return _punch;
+    if (_isexplodeing && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
+        return _explode;
     }
     return nullptr;
 }
 
 std::shared_ptr<RangedActionModel> Minion1AModel::getProjectileAction() {
-    std::vector<int> frames = _slam->getProjectileSpawnFrames();
+    std::vector<int> frames = _shoot->getProjectileSpawnFrames();
     for (int frame : frames) {
-        if (_isSlamming && _slamSprite->getFrame() == frame && frameCounter == 0) {
-            return _slam;
+        if (_isshootming && _shootSprite->getFrame() == frame && frameCounter == 0) {
+            return _shoot;
         }
     }
 
@@ -299,21 +289,16 @@ std::shared_ptr<RangedActionModel> Minion1AModel::getProjectileAction() {
 void Minion1AModel::updateAnimation()
 {
 
-    _stunSprite->setVisible(isStunned());
 
-    _walkSprite->setVisible(!isStunned() && !_isPunching && !_isSlamming && (isMoveLeft() || isMoveRight()));
+    _walkSprite->setVisible(!isStunned() && !_isexplodeing && !_isshootming && (isMoveLeft() || isMoveRight()));
 
-    _slamSprite->setVisible(!isStunned() && _isSlamming);
+    _shootSprite->setVisible(!isStunned() && _isshootming);
 
-    _punchSprite->setVisible(!isStunned() && _isPunching);
-
-    _idleSprite->setVisible(!_stunSprite->isVisible() && !_slamSprite->isVisible() && !_punchSprite->isVisible() && !_walkSprite->isVisible());
+    _explodeSprite->setVisible(!isStunned() && _isexplodeing);
 
     playAnimation(_walkSprite);
-    playAnimation(_idleSprite);
-    playAnimation(_slamSprite);
-    playAnimation(_punchSprite);
-    playAnimation(_stunSprite);
+    playAnimation(_shootSprite);
+    playAnimation(_explodeSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

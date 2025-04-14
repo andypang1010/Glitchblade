@@ -41,8 +41,8 @@ using namespace cugl;
 #define ENEMY_SENSOR_HEIGHT   0.1f
 /** The density of the character */
 #define ENEMY_DENSITY    1.0f
-/** The impulse for the character dash-attack */
-#define MINION1A_PUNCH_FORCE       35.0f
+
+#define MINION1A_EXPLODE_FORCE       35.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
 #define ENEMY_KB_DURATION 20
@@ -54,8 +54,8 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1A_SLAM_FRAMES     15
-#define MINION1A_PUNCH_FRAMES     30
+#define MINION1A_SHOOT_FRAMES     15
+#define MINION1A_EXPLODE_FRAMES     30
 
 #define STUN_FRAMES 16
 
@@ -82,8 +82,8 @@ protected:
     bool _isPunching;
     bool _isSlamming;
 
-    std::shared_ptr<MeleeActionModel> _punch;
-    std::shared_ptr<RangedActionModel> _slam;
+    std::shared_ptr<MeleeActionModel> _explode;
+    std::shared_ptr<RangedActionModel> _shoot;
 
     /**
     * Redraws the outline of the physics fixtures to the debug node
@@ -95,8 +95,8 @@ protected:
     virtual void resetDebug() override;
 
 public:
-    std::shared_ptr<scene2::SpriteNode> _punchSprite;
-    std::shared_ptr<scene2::SpriteNode> _slamSprite;
+    std::shared_ptr<scene2::SpriteNode> _explodeSprite;
+    std::shared_ptr<scene2::SpriteNode> _shootSprite;
 
 public:
 
@@ -189,16 +189,16 @@ public:
     void AIMove() override;
 
     /**
-     * Performs the slam attack of minion1A
+     * Performs the shoot attack of minion1A
      *
      */
-    void slam();
+    void shoot();
 
     /**
-     * Performs the punch attack of minion1A
+     * Performs the explode attack of minion1A
      *
      */
-    void punch();
+    void explode();
 
     /**
      * Returns the action when an attack hitbox should be active, or nothing when no attack is active
