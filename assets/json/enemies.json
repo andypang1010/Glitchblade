@@ -5,10 +5,10 @@
             {
                 "type": "melee",
                 "name": "explode",
-                "hitboxPos": [ 1, 2 ],
-                "hitboxSize": [ 2, 4 ],
-                "hitboxStartTime": 7,
-                "hitboxEndTime": 15,
+                "hitboxPos": [ 0, 0 ],
+                "hitboxSize": [ 8, 8 ],
+                "hitboxStartTime": 33,
+                "hitboxEndTime": 61,
                 "hitboxDamage": 20
             },
             {

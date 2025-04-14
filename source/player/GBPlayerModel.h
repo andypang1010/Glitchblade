@@ -67,6 +67,8 @@ protected:
     std::shared_ptr<JsonValue> _playerJSON;
     /** This character's remaining health */
     float _hp;
+    /** how much damage player deals*/
+    int _damage;
     /** The current horizontal movement of the character */
     float _movement;
     /** Which direction is the character facing */
@@ -247,6 +249,7 @@ public:
         _guardCooldownRem = 0;
         _guardRem = 0;
         _parryRem = 0;
+        _damage = 10;// default player dmg
     };
     
     void setConstants();
@@ -383,6 +386,9 @@ public:
     #pragma mark -
     #pragma mark - Attribute Properties
 
+    // Damage
+    int getDamage() const { return _damage;}
+    void setDamage(int value) { _damage = value; }
     // Health
     int getMaxHP() const { return _maxhp;}
     float getHP() const { return _hp; }

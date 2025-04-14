@@ -661,7 +661,7 @@ void GameScene::beginContact(b2Contact* contact) {
     // Player-Enemy Collision
     if (bd1->getName() == enemy_name && isPlayerBody(bd2, fd2)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd1)->damage(100);
+            ((EnemyModel*)bd1)->damage(_player->getDamage());
             _player->setDashRem(0);
             setScreenShake(3, 5);
         }
@@ -670,7 +670,7 @@ void GameScene::beginContact(b2Contact* contact) {
     }
     else if (bd2->getName() == enemy_name && isPlayerBody(bd1, fd1)) {
         if (_player->isDashActive() && !_player->isGuardActive()) {
-            ((EnemyModel*)bd2)->damage(100);
+            ((EnemyModel*)bd2)->damage(_player->getDamage());
             _player->setDashRem(0);
             setScreenShake(3, 5);
         }
@@ -781,13 +781,13 @@ void GameScene::beginContact(b2Contact* contact) {
     if (bd1->getName() == enemy_name && bd2->getName() == proj_name) {
 
         if (((Projectile*)bd2)->getIsPlayerFired()) {
-            ((EnemyModel*)bd1)->damage(20);
+            ((EnemyModel*)bd1)->damage(_player->getDamage());
             removeProjectile((Projectile*)bd2);
         }
     }
     else if (bd2->getName() == enemy_name && bd1->getName() == proj_name) {
         if (((Projectile*)bd1)->getIsPlayerFired()) {
-            ((EnemyModel*)bd2)->damage(20);
+            ((EnemyModel*)bd2)->damage(_player->getDamage());
             removeProjectile((Projectile*)bd1);
         }
     }
