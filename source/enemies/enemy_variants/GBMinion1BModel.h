@@ -54,7 +54,7 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1B_SLAM_FRAMES     15
+#define MINION1B_SLAM_FRAMES     24
 #define MINION1B_PUNCH_FRAMES     30
 
 #define STUN_FRAMES 16
@@ -83,7 +83,7 @@ protected:
     bool _isSlamming;
 
     std::shared_ptr<MeleeActionModel> _punch;
-    std::shared_ptr<RangedActionModel> _slam;
+    std::shared_ptr<MeleeActionModel> _slam;
 
     /**
     * Redraws the outline of the physics fixtures to the debug node
@@ -97,6 +97,7 @@ protected:
 public:
     std::shared_ptr<scene2::SpriteNode> _punchSprite;
     std::shared_ptr<scene2::SpriteNode> _slamSprite;
+	std::shared_ptr<scene2::SpriteNode> _slamVFXSprite;
 
 public:
 
@@ -206,13 +207,6 @@ public:
      * @return the action that needs hitbox, or nullptr when no hitbox is active
      */
     std::shared_ptr<MeleeActionModel> getDamagingAction() override;
-
-    /**
-     * Returns the action when a projectile is going to be shot, or nothing when no attack is active
-     *
-     * @return the action that needs projectile, or nullptr when no ranged attack is active
-     */
-    std::shared_ptr<RangedActionModel> getProjectileAction() override;
 
 #pragma mark -
 #pragma mark Animation Methods

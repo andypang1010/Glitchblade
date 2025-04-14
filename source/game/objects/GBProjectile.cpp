@@ -58,7 +58,7 @@ ObstacleNodePair Projectile::createProjectileNodePair(const std::shared_ptr<Asse
     newProjectile->setDebugColor(physicsJ->get("debug")->getString("color"));
     newProjectile->setDrawScale(scale);
     newProjectile->setSensor(true);
-    newProjectile->setLinearVelocity(projectile->getLinearVelocity() * (Vec2(isFacingRight ? 1 : -1, 1)));
+    newProjectile->setLinearVelocity(projectile->getLinearVelocity() * Vec2(isFacingRight ? 1 : -1, 1));
 
     std::shared_ptr<scene2::SpriteNode> newSprite = scene2::SpriteNode::allocWithSprite(projectile->getSceneNode());
     newSprite->flipHorizontal(newProjectile->getLinearVelocity().x < 0);

@@ -55,36 +55,15 @@
                 "hitboxEndTime": 30,
                 "hitboxDamage": 20
             },
-          {
-            "type": "ranged",
-            "name": "slam",
-            "projectiles": [
-              {
-                "projectileSpawnPosition": {
-                  "x": 3,
-                  "y": 0.8
-                },
-                "projectileSize": {
-                "width": 6,
-                "height": 2
-                },
-                "projectileSpawnFrame": 11,
-                "projectileAnimation": "textures/wave_enemy_1.png",
-                "projectile_animation_row": 2,
-                "projectile_animation_col": 16,
-                "projectile_animation_size": 23,
-                "projectile_animation_offset": {
-                    "x": 0,
-                    "y": 50
-                },
-                "projectileVelocity": {
-                  "x": 20,
-                  "y": 0
-                },
-                "projectileDamage": 20
-              }
-            ]
-          }
+            {
+                "type": "melee",
+                "name": "slam",
+                "hitboxPos": [ 3.5, 0.5 ],
+                "hitboxSize": [ 5, 2 ],
+                "hitboxStartTime": 19,
+                "hitboxEndTime": 23,
+                "hitboxDamage": 20
+            }
         ]
     },
     "boss_1": {

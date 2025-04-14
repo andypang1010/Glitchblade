@@ -49,7 +49,7 @@ bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
 
         for (auto act : actions) {
             if (act->getActionName() == "slam") {
-                _slam = std::dynamic_pointer_cast<RangedActionModel>(act);
+                _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
             }
             else if (act->getActionName() == "punch") {
                 _punch = std::dynamic_pointer_cast<MeleeActionModel>(act);
@@ -78,9 +78,13 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _punchSprite->setScale(0.5f);
     _punchSprite->setPosition(0, 10);
 
-    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_slam"), 4, 4, 15);
+    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_slam"), 6, 4, 24);
     _slamSprite->setScale(0.5f);
     _slamSprite->setPosition(0, 10);
+
+	_slamVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("wave_enemy_1"), 2, 8, 12);
+	_slamVFXSprite->setScale(0.4f);
+	_slamVFXSprite->setPosition(100, -2);
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_stun"), 1, 4, 4);
     _stunSprite->setScale(0.5f);
@@ -92,9 +96,10 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_punchSprite);
-    getSceneNode()->addChild(_slamSprite);
     getSceneNode()->addChild(_stunSprite);
 
+    getSceneNode()->addChild(_slamSprite);
+	getSceneNode()->addChild(_slamVFXSprite);
 }
 
 #pragma mark -
@@ -210,14 +215,12 @@ void Minion1BModel::nextAction() {
             if (r % 2 == 0) { // Punch
                 punch();
             }
-        }
-        else {
-            if (r % 2 == 0) { // Slam
+            else {
                 slam();
             }
-            else { // Move closer
-                approachTarget(45);
-            }
+        }
+        else {
+            approachTarget(45);
         }
     }
     else {
@@ -259,8 +262,8 @@ void Minion1BModel::AIMove() {
 
 void Minion1BModel::slam() {
     faceTarget();
-    if (rand() % 200 <= _aggression) {
-        _aggression -= std::max(0.0f, _aggression - 25);
+    if (rand() % 100 <= _aggression) {
+        _aggression -= std::max(0.0f, _aggression - 50);
         _isSlamming = true;
         setMovement(0);
     }
@@ -279,17 +282,9 @@ std::shared_ptr<MeleeActionModel> Minion1BModel::getDamagingAction() {
     if (_isPunching && _punchSprite->getFrame() == _punch->getHitboxStartTime() - 1) {
         return _punch;
     }
-    return nullptr;
-}
-
-std::shared_ptr<RangedActionModel> Minion1BModel::getProjectileAction() {
-    std::vector<int> frames = _slam->getProjectileSpawnFrames();
-    for (int frame : frames) {
-        if (_isSlamming && _slamSprite->getFrame() == frame && frameCounter == 0) {
-            return _slam;
-        }
+    if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
+        return _slam;
     }
-
     return nullptr;
 }
 
@@ -305,6 +300,8 @@ void Minion1BModel::updateAnimation()
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
+	_slamVFXSprite->setVisible(_slamSprite->isVisible() && _slamSprite->getFrame() >= 18);
+
     _punchSprite->setVisible(!isStunned() && _isPunching);
 
     _idleSprite->setVisible(!_stunSprite->isVisible() && !_slamSprite->isVisible() && !_punchSprite->isVisible() && !_walkSprite->isVisible());
@@ -314,6 +311,8 @@ void Minion1BModel::updateAnimation()
     playAnimation(_slamSprite);
     playAnimation(_punchSprite);
     playAnimation(_stunSprite);
+
+	playVFXAnimation(_slamSprite, _slamVFXSprite, 18);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
