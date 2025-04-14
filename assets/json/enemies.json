@@ -58,8 +58,8 @@
             {
                 "type": "melee",
                 "name": "slam",
-                "hitboxPos": [ 3.5, 0.5 ],
-                "hitboxSize": [ 5, 2 ],
+                "hitboxPos": [ 3.5, 0 ],
+                "hitboxSize": [ 7, 2 ],
                 "hitboxStartTime": 19,
                 "hitboxEndTime": 23,
                 "hitboxDamage": 20

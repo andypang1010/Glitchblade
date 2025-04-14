@@ -54,7 +54,7 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1B_SLAM_FRAMES     24
+#define MINION1B_SLAM_FRAMES     32
 #define MINION1B_PUNCH_FRAMES     30
 
 #define STUN_FRAMES 16
