@@ -20,13 +20,21 @@
                             "x": 10,
                             "y": 5
                         },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
                         "projectileSpawnFrame": 3,
                         "projectileAnimation": "textures/projectile_enemy_1.png",
                         "projectile_animation_row": 1,
                         "projectile_animation_col": 6,
                         "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
                         "projectileVelocity": {
-                            "x": 3,
+                            "x": 15,
                             "y": 0
                         },
                         "projectileDamage": 20
@@ -47,28 +55,15 @@
                 "hitboxEndTime": 30,
                 "hitboxDamage": 20
             },
-          {
-            "type": "ranged",
-            "name": "slam",
-            "projectiles": [
-              {
-                "projectileSpawnPosition": {
-                  "x": 1,
-                  "y": 2
-                },
-                "projectileSpawnFrame": 11,
-                "projectileAnimation": "textures/projectile.png",
-                "projectile_animation_row": 1,
-                "projectile_animation_col": 6,
-                "projectile_animation_size": 6,
-                "projectileVelocity": {
-                  "x": 2,
-                  "y": 0
-                },
-                "projectileDamage": 20
-              }
-            ]
-          }
+            {
+                "type": "melee",
+                "name": "slam",
+                "hitboxPos": [ 3.5, 0 ],
+                "hitboxSize": [ 7, 2 ],
+                "hitboxStartTime": 19,
+                "hitboxEndTime": 23,
+                "hitboxDamage": 20
+            }
         ]
     },
     "boss_1": {
@@ -110,13 +105,21 @@
                             "x": 1,
                             "y": 5
                         },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
                         "projectileSpawnFrame": 6,
-                        "projectileAnimation": "textures/projectile.png",
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
                         "projectile_animation_row": 1,
                         "projectile_animation_col": 6,
                         "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
                         "projectileVelocity": {
-                            "x": 3,
+                            "x": 15,
                             "y": 0
                         },
                         "projectileDamage": 20

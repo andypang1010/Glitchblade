@@ -378,7 +378,7 @@ void LevelController::postUpdate(float dt)
             }
 
             if (projectileAction) {
-                auto projectilePair = Projectile::createProjectile(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition().add(enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(2, 0) : Vec2(-2, 0)), enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), false, enemyCtrlr->getEnemy()->isFacingRight());
+                auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition(), projectileAction->getProjectiles()[0], enemyCtrlr->getEnemy()->isFacingRight());
                 addObstacle(projectilePair);
             }
 
@@ -470,13 +470,6 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
 			for (std::shared_ptr<JsonValue> projectileJSON : action->get("projectiles")->children()) {
 				std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
-
-                spawnPositions.push_back(
-                    Vec2(
-                        projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(), 
-                        projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
-                    )
-                );
                 
                 spawnFrames.push_back(projectileJSON->get("projectileSpawnFrame")->asInt());
 
@@ -488,14 +481,35 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
                         projectileJSON->get("projectileVelocity")->get("y")->asFloat()
                     )
                 );
-                //projectile->setSpriteNode(
-                //    SpriteNode::allocWithSheet(
-                //        Texture::allocWithFile(projectileJSON->getString("projectileAnimation")), 
-                //        action->getInt("animation_row"), 
-                //        action->getInt("animation_col"), 
-                //        action->getInt("animation_size")
-                //    )
-                //);
+
+                projectile->setSize(
+                    Vec2(
+                        projectileJSON->get("projectileSize")->get("width")->asFloat(),
+                        projectileJSON->get("projectileSize")->get("height")->asFloat()
+                    )
+                );
+
+                projectile->setSpawnOffset(
+                    Vec2(
+                        projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(),
+                        projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
+                    )
+                );
+                projectile->setAnimOffset(
+                    Vec2(
+                        projectileJSON->get("projectile_animation_offset")->get("x")->asFloat(),
+                        projectileJSON->get("projectile_animation_offset")->get("y")->asFloat()
+                    )
+                );
+
+                projectile->setSceneNode(
+                    SpriteNode::allocWithSheet(
+                        Texture::allocWithFile(projectileJSON->getString("projectileAnimation")), 
+                        projectileJSON->getInt("projectile_animation_row"),
+                        projectileJSON->getInt("projectile_animation_col"),
+                        projectileJSON->getInt("projectile_animation_size")
+                    )
+                );
 
 				projectiles.push_back(projectile);
 			}

@@ -75,7 +75,9 @@
         "minion1B_stun": {
             "file": "textures/minion1B_stun.png"
         },
-
+        "wave_enemy_1": {
+            "file": "textures/wave_enemy_1.png"
+        },
         "pause_button": {
             "file": "textures/pause_button.png"
         },
