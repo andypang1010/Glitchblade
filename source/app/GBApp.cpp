@@ -35,11 +35,7 @@ void GlitchbladeApp::onStartup() {
     _assets = AssetManager::alloc();
     _batch  = SpriteBatch::alloc();
 
-    showGameScene();
-
     showLevelSelect();
-
-    showGameScene();
     
     // Start-up basic input
 #ifdef CU_TOUCH_SCREEN
@@ -147,6 +143,7 @@ void GlitchbladeApp::update(float dt) {
         _gameplay->init(_assets);
         _gameplay->setSpriteBatch(_batch);
         _levelSelect->init(_assets);
+        _levelSelect->setSpriteBatch(_batch);
         _loaded = true;
         setDeterministic(true);
     }
@@ -267,10 +264,11 @@ void GlitchbladeApp::draw() {
  * Switches the currently rendered scene to the LevelSelect scene.
 */
 void GlitchbladeApp::showLevelSelect() {
-    CULog("UI SHOULD BE DISABLED");
+    CULog("SHOWLEVELSELECT");
     _gameplay->disableUI();
     _gameplay->dispose();
     _currentScene = _levelSelect;
+    _levelSelect->setActive(true);
 }
 
 /**

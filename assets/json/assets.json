@@ -170,6 +170,7 @@
 	},
     "widgets": {
         "ingamescene" : "widgets/ingamescene.json",
+        "levelselectscene" : "widgets/levelselectscene.json",
         "pausebutton" : "widgets/pausebutton.json",
         "hpbar" : "widgets/hpbar.json",
         "pausemenu": "widgets/pausemenu.json"
@@ -183,6 +184,16 @@
                     },
                     "data" : {
                         "key" : "ingamescene"
+                    }
+        },
+        "levelselectscene" : {
+                    "type"      : "Widget",
+                    "comment"   : "This is the root node of level select scene",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "key" : "levelselectscene"
                     }
         },
         "pausemenu" : {

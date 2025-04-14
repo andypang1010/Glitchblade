@@ -75,9 +75,6 @@ protected:
     std::shared_ptr<scene2::Label> _playerHPNode;
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
-
-    // 0 = do not swap; 1 = swap to level select; 2 = swap to game scene
-    int _swapSceneSignal = 0;
     
     // UI
     /** Ingame UI */
@@ -213,9 +210,7 @@ public:
     bool init(const std::shared_ptr<AssetManager>& assets,
               const Rect& rect, const Vec2& gravity);
 
-    int getSwapSignal();
-
-    void setSwapSignal(int signal);
+    void setAllGameplayUIActive(bool active);
     
     
 #pragma mark -

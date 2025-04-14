@@ -54,9 +54,6 @@ using namespace cugl::audio;
 /** The new heavier gravity for this world (so it is not so floaty) */
 #define DEFAULT_GRAVITY -28.9f
 
-
-
-
 #define directions
 Vec2 LEFT = { -1.0f, 0.0f };
 Vec2 RIGHT = { 1.0f, 0.0f };
@@ -231,12 +228,9 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     return true;
 }
 
-int GameScene::getSwapSignal() {
-    return _swapSceneSignal;
-}
-
-void GameScene::setSwapSignal(int signal) {
-    _swapSceneSignal = signal;
+void GameScene::setAllGameplayUIActive(bool active) {
+    _ui->setActive(active);
+    _pauseMenu->setActive(active);
 }
 
 void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
@@ -285,21 +279,22 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         });
     }
     
-    _ui->setActive(_inituiactive);
+    setAllGameplayUIActive(_inituiactive);
 }
 
 void GameScene::disableUI() {
     setInitUIActive(false);
-    if (_ui != nullptr)
-        _ui->setActive(false);
-    else
+    if (_ui != nullptr && _pauseMenu != nullptr) {
+        setAllGameplayUIActive(true);
+    } else
         CULog("_UI IS NULLPTR 285");
 }
 
 void GameScene::enableUI() {
     setInitUIActive(true);
-    if (_ui != nullptr)
-        _ui->setActive(true);
+    if (_ui != nullptr && _pauseMenu != nullptr) {
+        setAllGameplayUIActive(false);
+    }
     else
         CULog("_UI IS NULLPTR 292");
 }

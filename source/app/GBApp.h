@@ -35,7 +35,7 @@ protected:
     /** The primary controller for the game world */
     std::shared_ptr<GameScene> _gameplay = std::make_shared<GameScene>();
     /** The controller for the level select scene */
-    std::shared_ptr<LevelSelectScene> _levelSelect = std::make_shared<LevelSelectScene>();
+    std::shared_ptr<GBLevelSelectScene> _levelSelect = std::make_shared<GBLevelSelectScene>();
     /** The current scene to render */
     std::shared_ptr<GBSceneInterface> _currentScene;
     
