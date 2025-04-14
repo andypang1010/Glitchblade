@@ -192,13 +192,13 @@ public:
      * Performs the shoot attack of minion1A
      *
      */
-    void shoot();
+    void Shoot();
 
     /**
      * Performs the explode attack of minion1A
      *
      */
-    void explode();
+    void Explode();
 
     /**
      * Returns the action when an attack hitbox should be active, or nothing when no attack is active

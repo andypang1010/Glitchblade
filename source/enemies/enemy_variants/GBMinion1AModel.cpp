@@ -198,12 +198,12 @@ void Minion1AModel::nextAction() {
     if (!_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
         if (isTargetClose()) {
             if (r % 2 == 0) { // explode
-                explode();
+                Explode();
             }
         }
         else {
             if (r % 2 == 0) { // shoot
-                shoot();
+                Shoot();
             }
             else { // Move closer
                 approachTarget(45);
@@ -247,7 +247,7 @@ void Minion1AModel::AIMove() {
 
 }
 
-void Minion1AModel::shoot() {
+void Minion1AModel::Shoot() {
     faceTarget();
     if (rand() % 200 <= _aggression) {
         _aggression -= std::max(0.0f, _aggression - 25);
@@ -256,7 +256,7 @@ void Minion1AModel::shoot() {
     }
 }
 
-void Minion1AModel::explode() {
+void Minion1AModel::Explode() {
 	faceTarget();
     if (rand() % 100 <= _aggression) {
         _aggression -= std::max(0.0f, _aggression - 50);
