@@ -61,6 +61,7 @@ using namespace cugl;
 #pragma mark -
 #pragma mark AI Constants
 #define CLOSE_RADIUS     6.0f
+#define FAR_RADIUS     12.0f
 #pragma mark -
 #pragma mark Enemy Model
 /**

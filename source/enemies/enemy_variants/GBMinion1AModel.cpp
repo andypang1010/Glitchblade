@@ -198,18 +198,24 @@ void Minion1AModel::update(float dt) {
 void Minion1AModel::nextAction() {
     int r = rand();
     AIMove();
+    
+    //maintain mid-distance and shoot player
     if (!_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
-        if (isTargetClose() && _hp < 25) {
+        if (isTargetClose()) {
+            if (_hp < 25){
                 explode();
+            }
+            else {
+                avoidTarget(45);
+            }
         }
-        else {
-            if (r % 2 == 0) { // shoot
-                faceTarget();
-                shoot();
-            }
-            else { // Move closer
-                approachTarget(45);
-            }
+        else if (isTargetFar()){
+            approachTarget(45);
+        }
+        
+        else{
+            faceTarget();
+            shoot();
         }
     }
     else {
@@ -250,8 +256,8 @@ void Minion1AModel::AIMove() {
 
 void Minion1AModel::shoot() {
     faceTarget();
-    if (rand() % 200 <= _aggression) {
-        _aggression -= std::max(0.0f, _aggression - 25);
+    if (_aggression > 8) {
+        _aggression = 0;
         _isShooting = true;
         setMovement(0);
     }
