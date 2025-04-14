@@ -124,6 +124,8 @@ public:
     static std::vector<std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json);
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json);
+    
+    std::vector<std::shared_ptr<LevelModel>> getLevels() const { return _levels; }
 
 #pragma mark Getters
     // this is a test method because we will need to access all enemies in the level not just one

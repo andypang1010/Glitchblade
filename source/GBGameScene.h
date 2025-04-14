@@ -48,6 +48,8 @@ using namespace cugl;
  */
 class GameScene : public scene2::Scene2 {
 protected:
+    unsigned int _maxTag;
+    bool cameraLocked;
     /** The asset manager for this game mode. */
     std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonValue> _constantsJSON;
@@ -58,6 +60,10 @@ protected:
     std::shared_ptr<PlatformInput> _input;
     
     // VIEW
+    /** Reference to the current loaded level */
+    std::shared_ptr<LevelModel> _currentLevel;
+    /** Reference to the scene camera */
+    std::shared_ptr<cugl::Camera> _camera;
     /** Reference to the physics root of the scene graph */
     std::shared_ptr<scene2::SceneNode> _worldnode;
     /** Reference to the debug root of the scene graph */
@@ -422,6 +428,15 @@ public:
     * @param  bullet   the bullet to remove
     */
     void removeProjectile(Projectile* bullet);
+    
+    /**
+     * Loads all background/foreground layers and attaches them as children of _worldnode
+     */
+    void setBG();
+    
+    void updateLayersLeft();
+    void updateLayersRight();
+
 
   };
 

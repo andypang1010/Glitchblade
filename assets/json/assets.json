@@ -1,8 +1,5 @@
 {
     "textures": {
-        "background": {
-            "file": "textures/background.png"
-        },
         "ground": {
             "file": "textures/ground.png"
         },

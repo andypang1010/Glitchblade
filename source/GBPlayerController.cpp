@@ -8,7 +8,7 @@ using namespace cugl::audio;
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 
 // CONSTANTS:
-float PLAYER_INIT_POS[] = { 2.5f, 5.0f };
+float PLAYER_INIT_POS[] = { 30.0f, 5.0f };
 
 PlayerController::PlayerController(){}
 

@@ -386,12 +386,16 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
         return level;
     }
 
-	CULog(json->toString().c_str());
+	CULog("%s", json->toString().c_str());
 
-	level->setLevelName(json-> getString("name"));
-
-	CULog(level->getLevelName().c_str());
-    level->setBackground(Texture::allocWithFile(json->getString("background")));
+	level->setLevelName(json->getString("name"));
+    level->setScale(json->getFloat("scale"));
+    
+    for (std::shared_ptr<JsonValue> layer : json->get("layers")->children()) {
+        auto texture = Texture::allocWithFile(layer->getString("file"));
+        unsigned int speed = layer->getInt("speed");
+        level->addLayer(texture, speed);
+    }
     
 	// Parse platforms
     std::vector<std::shared_ptr<Rect>> platforms;
@@ -435,20 +439,20 @@ std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
     // Using Vec2 instead of float pairs
     std::vector<std::vector<Vec2>> wallVertices = {
         {
-            Vec2(defaultWidth / 2, defaultHeight),
+            Vec2(defaultWidth*3.2 / 2, defaultHeight),
             Vec2(0.0f, defaultHeight),
             Vec2(0.0f, 0.0f),
             Vec2(wallThickness, 0.0f),
             Vec2(wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth / 2, defaultHeight - wallThickness)
+            Vec2(defaultWidth*3.7 / 2, defaultHeight - wallThickness)
         },
         {
-            Vec2(defaultWidth, defaultHeight),
-            Vec2(defaultWidth / 2, defaultHeight),
-            Vec2(defaultWidth / 2, defaultHeight - wallThickness),
-            Vec2(defaultWidth - wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth - wallThickness, 0.0f),
-            Vec2(defaultWidth, 0.0f)
+            Vec2(defaultWidth*3.2, defaultHeight),
+            Vec2(defaultWidth*3.2 / 2, defaultHeight),
+            Vec2(defaultWidth*3.2 / 2, defaultHeight - wallThickness),
+            Vec2(defaultWidth*3.2 - wallThickness, defaultHeight - wallThickness),
+            Vec2(defaultWidth*3.2 - wallThickness, 0.0f),
+            Vec2(defaultWidth*3.2, 0.0f)
         }
     };
 
@@ -462,8 +466,8 @@ std::vector<Vec2> LevelController::calculateGroundVertices() {
 
     std::vector<Vec2> groundVertices = {
         Vec2(0.0f, 0.0f),
-        Vec2(defaultWidth, 0.0f),
-        Vec2(defaultWidth, groundThickness),
+        Vec2(defaultWidth*3.2, 0.0f),
+        Vec2(defaultWidth*3.2, groundThickness),
         Vec2(0.0f, groundThickness)
     };
 

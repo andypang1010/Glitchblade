@@ -18,8 +18,9 @@ using namespace cugl::graphics;
  */
 class LevelModel {
 private:
+    float _scale;
 	std::string _levelName;
-	std::shared_ptr<Texture> _background;
+    std::vector<std::pair<std::shared_ptr<Texture>, unsigned int>> _layers;
 	std::vector<std::shared_ptr<Rect>> _platforms;
     std::vector<std::shared_ptr<WaveModel>> _waves;
 
@@ -44,10 +45,13 @@ public:
     // Getter and Setter for _levelName
     std::string getLevelName() const { return _levelName; }
     void setLevelName(const std::string& levelName) { _levelName = levelName; }
-
-    // Getter and Setter for _background
-    std::shared_ptr<Texture> getBackground() const { return _background; }
-    void setBackground(const std::shared_ptr<Texture>& background) { _background = background; }
+    
+    float getScale() { return _scale;}
+    void setScale(float scale) { _scale = scale; }
+    
+    std::vector<std::pair<std::shared_ptr<Texture>, unsigned int>> getLayers() const { return _layers; }
+    void setLayers(std::vector<std::pair<std::shared_ptr<Texture>, unsigned int>>& background) { _layers = background; }
+    void addLayer(const std::shared_ptr<Texture>& layer, unsigned int speed) { _layers.push_back(std::make_pair(layer, speed)); }
 
     // Getter and Setter for _platforms
     std::vector<std::shared_ptr<Rect>> getPlatforms() const { return _platforms; }

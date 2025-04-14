@@ -2,7 +2,42 @@
   "levels": [
     {
       "name": "Level 1",
-      "background": "textures/background.png",
+      "scale" : 0.57,
+      "layers": [
+          {
+              "file": "textures/Scene_1_00.png",
+              "speed" : 1
+          },
+          {
+              "file": "textures/Scene_1_01.png",
+              "speed" : 2
+          },
+          {
+              "file": "textures/Scene_1_02.png",
+              "speed" : 3
+
+          },
+          {
+              "file": "textures/Scene_1_03.png",
+              "speed" : 4
+
+          },
+          {
+              "file": "textures/Scene_1_04.png",
+              "speed" : 5
+
+          },
+          {
+              "file": "textures/Scene_1_05.png",
+              "speed" : 6
+
+          },
+          {
+              "file": "textures/Scene_1_06.png",
+              "speed" : 0
+
+          }
+      ],
       "platforms": [],
       "waves": [
         {
