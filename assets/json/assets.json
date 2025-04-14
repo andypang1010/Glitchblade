@@ -75,6 +75,15 @@
         "minion1B_stun": {
             "file": "textures/minion1B_stun.png"
         },
+        "minion1A_explode": {
+            "file": "textures/minion1A_explode.png"
+        },
+        "minion1A_shoot": {
+            "file": "textures/minion1A_shoot.png"
+        },
+        "minion1A_walk": {
+            "file": "textures/minion1A_walk.png"
+        },
 
         "pause_button": {
             "file": "textures/pause_button.png"
