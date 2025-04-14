@@ -195,7 +195,7 @@ void Minion1AModel::update(float dt) {
 void Minion1AModel::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isshootming && !_isexplodeing && _moveDuration <= 0 && !isStunned()) {
+    if (!_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
         if (isTargetClose()) {
             if (r % 2 == 0) { // explode
                 explode();
@@ -212,16 +212,16 @@ void Minion1AModel::nextAction() {
     }
     else {
         if (isStunned()) {
-            _isshootming = false;
-            _isexplodeing = false;
+            _isShooting = false;
+            _isExploding = false;
             setMovement(0);
         }
-        if (_isshootming && _shootSprite->getFrame() >= MINION1A_shoot_FRAMES - 1) {
-            _isshootming = false;
+        if (_isShooting && _shootSprite->getFrame() >= MINION1A_SHOOT_FRAMES - 1) {
+            _isShooting = false;
             setMovement(0);
         }
-        if (_isexplodeing && _explodeSprite->getFrame() >= MINION1A_explode_FRAMES - 1) {
-            _isexplodeing = false;
+        if (_isExploding && _explodeSprite->getFrame() >= MINION1A_EXPLODE_FRAMES - 1) {
+            _isExploding = false;
             setMovement(0);
         }
     }
@@ -232,14 +232,14 @@ void Minion1AModel::AIMove() {
     float dir_val = dist > 0 ? -1 : 1;
     int face = _faceRight ? 1 : -1;
 
-    if (_moveDuration > 0 && !_isexplodeing) {
+    if (_moveDuration > 0 && !_isExploding) {
         setMovement(_moveDirection * dir_val * getForce());
         setMoveLeft(dist > 0);
         setMoveRight(dist < 0);
         _moveDuration--;
     }
-    else if (_isexplodeing && _explodeSprite->getFrame() >= _explode->getHitboxStartTime() - 1 && _explodeSprite->getFrame() <= _explode->getHitboxEndTime() - 1) {
-        setMovement(face * getForce() * MINION1A_explode_FORCE * _scale);
+    else if (_isExploding && _explodeSprite->getFrame() >= _explode->getHitboxStartTime() - 1 && _explodeSprite->getFrame() <= _explode->getHitboxEndTime() - 1) {
+        setMovement(face * getForce() * MINION1A_EXPLODE_FORCE * _scale);
     }
     else {
         setMovement(0);
@@ -251,7 +251,7 @@ void Minion1AModel::shoot() {
     faceTarget();
     if (rand() % 200 <= _aggression) {
         _aggression -= std::max(0.0f, _aggression - 25);
-        _isshootming = true;
+        _isShooting = true;
         setMovement(0);
     }
 }
@@ -260,13 +260,13 @@ void Minion1AModel::explode() {
 	faceTarget();
     if (rand() % 100 <= _aggression) {
         _aggression -= std::max(0.0f, _aggression - 50);
-        _isexplodeing = true;
+        _isExploding = true;
         setMovement(0);
     }
 }
 
 std::shared_ptr<MeleeActionModel> Minion1AModel::getDamagingAction() {
-    if (_isexplodeing && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
+    if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
         return _explode;
     }
     return nullptr;
@@ -275,7 +275,7 @@ std::shared_ptr<MeleeActionModel> Minion1AModel::getDamagingAction() {
 std::shared_ptr<RangedActionModel> Minion1AModel::getProjectileAction() {
     std::vector<int> frames = _shoot->getProjectileSpawnFrames();
     for (int frame : frames) {
-        if (_isshootming && _shootSprite->getFrame() == frame && frameCounter == 0) {
+        if (_isShooting && _shootSprite->getFrame() == frame && frameCounter == 0) {
             return _shoot;
         }
     }
@@ -290,11 +290,11 @@ void Minion1AModel::updateAnimation()
 {
 
 
-    _walkSprite->setVisible(!isStunned() && !_isexplodeing && !_isshootming && (isMoveLeft() || isMoveRight()));
+    _walkSprite->setVisible(!isStunned() && !_isExploding && !_isShooting && (isMoveLeft() || isMoveRight()));
 
-    _shootSprite->setVisible(!isStunned() && _isshootming);
+    _shootSprite->setVisible(!isStunned() && _isShooting);
 
-    _explodeSprite->setVisible(!isStunned() && _isexplodeing);
+    _explodeSprite->setVisible(!isStunned() && _isExploding);
 
     playAnimation(_walkSprite);
     playAnimation(_shootSprite);

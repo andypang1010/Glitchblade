@@ -79,8 +79,8 @@ protected:
     std::string _sensorName;
     std::string _bodyName;
 
-    bool _isPunching;
-    bool _isSlamming;
+    bool _isExploding;
+    bool _isShooting;
 
     std::shared_ptr<MeleeActionModel> _explode;
     std::shared_ptr<RangedActionModel> _shoot;
@@ -174,9 +174,9 @@ public:
         _canKnockBack = true;
         _stunRem = 0;
 
-        _isPunching = false;
-        _isSlamming = false;
-
+        _isExploding = false;
+        _isShooting = false;
+        
         _moveDuration = 0;
         currentFrame = 0;
     };
