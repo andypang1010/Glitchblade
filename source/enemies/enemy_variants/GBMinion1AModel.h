@@ -41,8 +41,6 @@ using namespace cugl;
 #define ENEMY_SENSOR_HEIGHT   0.1f
 /** The density of the character */
 #define ENEMY_DENSITY    1.0f
-
-#define MINION1A_EXPLODE_FORCE       35.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
 #define ENEMY_KB_DURATION 20
@@ -54,8 +52,9 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1A_SHOOT_FRAMES     15
-#define MINION1A_EXPLODE_FRAMES     30
+#define MINION1A_SHOOT_FRAMES     5
+#define MINION1A_EXPLODE_FRAMES     45
+#define MINION1A_EXPLODEVFX_FRAMES     12
 
 #define STUN_FRAMES 16
 
@@ -96,6 +95,7 @@ protected:
 
 public:
     std::shared_ptr<scene2::SpriteNode> _explodeSprite;
+    std::shared_ptr<scene2::SpriteNode> _explodeVFXSprite;
     std::shared_ptr<scene2::SpriteNode> _shootSprite;
 
 public:
@@ -192,13 +192,13 @@ public:
      * Performs the shoot attack of minion1A
      *
      */
-    void Shoot();
+    void shoot();
 
     /**
      * Performs the explode attack of minion1A
      *
      */
-    void Explode();
+    void explode();
 
     /**
      * Returns the action when an attack hitbox should be active, or nothing when no attack is active

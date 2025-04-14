@@ -1,5 +1,6 @@
 #include "GBLevelController.h"
 #include "../enemies/enemy_variants/GBBoss1Controller.h"
+#include "../enemies/enemy_variants/GBMinion1AController.h"
 #include "../enemies/enemy_variants/GBMinion1BController.h"
 #include "../core/GBTypes.h"
 
@@ -76,7 +77,7 @@ std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()
         return std::make_shared<Boss1Controller>();
     } }, // Should return a Boss1Controller
     { "minion_1A", []() {
-        return std::make_shared<Boss1Controller>();
+        return std::make_shared<Minion1AController>();
     } }, // Should return a Minion1AController
     { "minion_1B", []() {
         return std::make_shared<Minion1BController>();

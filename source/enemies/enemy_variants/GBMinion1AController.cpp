@@ -22,7 +22,7 @@ void Minion1AController::applyForce() {
         if (_enemy->isGrounded()) {
             b2Vec2 vel = enemyBody->GetLinearVelocity();
             vel.x = 0;
-            enemyBody->SetLinearVelocityA(vel);
+            enemyBody->SetLinearVelocity(vel);
         }
         else {
             b2Vec2 force(-_enemy->getDamping() * _enemy->getVX(), 0);

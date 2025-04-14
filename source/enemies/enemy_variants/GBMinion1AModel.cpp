@@ -66,25 +66,28 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
     
-    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 3, 4, 10);
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 8);
     _walkSprite->setScale(0.5f);
     _walkSprite->setPosition(0, 10);
 
-    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 8, 4, 30);
+    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 6, 8, 45);
     _explodeSprite->setScale(0.5f);
     _explodeSprite->setPosition(0, 10);
 
-    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 4, 4, 15);
+    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 1, 5, 5);
     _shootSprite->setScale(0.5f);
     _shootSprite->setPosition(0, 10);
-
-
+    
+    _explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 28);
+    _explodeVFXSprite->setPosition(0, 0);
+ 
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
 
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_explodeSprite);
     getSceneNode()->addChild(_shootSprite);
+    getSceneNode()->addChild(_explodeVFXSprite);
 
 
 }
@@ -196,14 +199,13 @@ void Minion1AModel::nextAction() {
     int r = rand();
     AIMove();
     if (!_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
-        if (isTargetClose()) {
-            if (r % 2 == 0) { // explode
-                Explode();
-            }
+        if (isTargetClose() && _hp < 25) {
+                explode();
         }
         else {
             if (r % 2 == 0) { // shoot
-                Shoot();
+                faceTarget();
+                shoot();
             }
             else { // Move closer
                 approachTarget(45);
@@ -220,8 +222,10 @@ void Minion1AModel::nextAction() {
             _isShooting = false;
             setMovement(0);
         }
-        if (_isExploding && _explodeSprite->getFrame() >= MINION1A_EXPLODE_FRAMES - 1) {
+        if (_isExploding && _explodeVFXSprite->getFrame() >= MINION1A_EXPLODEVFX_FRAMES - 1) {
+            CULog("Setting minion1a hp to 0");
             _isExploding = false;
+            _hp = 0;
             setMovement(0);
         }
     }
@@ -232,14 +236,11 @@ void Minion1AModel::AIMove() {
     float dir_val = dist > 0 ? -1 : 1;
     int face = _faceRight ? 1 : -1;
 
-    if (_moveDuration > 0 && !_isExploding) {
+    if (_moveDuration > 0 && !_isShooting) {
         setMovement(_moveDirection * dir_val * getForce());
         setMoveLeft(dist > 0);
         setMoveRight(dist < 0);
         _moveDuration--;
-    }
-    else if (_isExploding && _explodeSprite->getFrame() >= _explode->getHitboxStartTime() - 1 && _explodeSprite->getFrame() <= _explode->getHitboxEndTime() - 1) {
-        setMovement(face * getForce() * MINION1A_EXPLODE_FORCE * _scale);
     }
     else {
         setMovement(0);
@@ -247,7 +248,7 @@ void Minion1AModel::AIMove() {
 
 }
 
-void Minion1AModel::Shoot() {
+void Minion1AModel::shoot() {
     faceTarget();
     if (rand() % 200 <= _aggression) {
         _aggression -= std::max(0.0f, _aggression - 25);
@@ -256,7 +257,7 @@ void Minion1AModel::Shoot() {
     }
 }
 
-void Minion1AModel::Explode() {
+void Minion1AModel::explode() {
 	faceTarget();
     if (rand() % 100 <= _aggression) {
         _aggression -= std::max(0.0f, _aggression - 50);
@@ -267,6 +268,7 @@ void Minion1AModel::Explode() {
 
 std::shared_ptr<MeleeActionModel> Minion1AModel::getDamagingAction() {
     if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
+        setEnabled(false);
         return _explode;
     }
     return nullptr;
@@ -279,7 +281,6 @@ std::shared_ptr<RangedActionModel> Minion1AModel::getProjectileAction() {
             return _shoot;
         }
     }
-
     return nullptr;
 }
 
@@ -288,6 +289,11 @@ std::shared_ptr<RangedActionModel> Minion1AModel::getProjectileAction() {
 
 void Minion1AModel::updateAnimation()
 {
+    int framenum = 0;
+    framenum = _explodeVFXSprite->getFrame();
+    if (framenum >0){
+        CULog("ExplodeVfx frame #%d before update",framenum);
+    }
 
 
     _walkSprite->setVisible(!isStunned() && !_isExploding && !_isShooting && (isMoveLeft() || isMoveRight()));
@@ -295,11 +301,18 @@ void Minion1AModel::updateAnimation()
     _shootSprite->setVisible(!isStunned() && _isShooting);
 
     _explodeSprite->setVisible(!isStunned() && _isExploding);
+    
+    _explodeVFXSprite->setVisible(_isExploding && _explodeSprite->getFrame() >= _explode->getHitboxStartTime() - 1);
+    
 
     playAnimation(_walkSprite);
     playAnimation(_shootSprite);
     playAnimation(_explodeSprite);
-
+    playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartTime() - 1);
+   
+    if (framenum > 0){
+        CULog("ExplodeVfx frame #%d after update",_explodeVFXSprite->getFrame());
+    }
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
