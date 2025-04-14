@@ -17,8 +17,8 @@
                 "projectiles": [
                     {
                         "projectileSpawnPosition": {
-                            "x": 10,
-                            "y": 5
+                            "x": 1,
+                            "y": 0.5
                         },
                         "projectileSize": {
                             "width": 3,
@@ -31,7 +31,7 @@
                         "projectile_animation_size": 6,
                         "projectile_animation_offset": {
                             "x": 0,
-                            "y": 10
+                            "y": 0
                         },
                         "projectileVelocity": {
                             "x": 15,

@@ -35,7 +35,7 @@ bool Minion1AModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
 
     stunFrame = 16;
 
-    Size nsize = Size(90, 90) / scale;
+    Size nsize = Size(90, 110) / scale;
     nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     _drawScale = scale;
@@ -68,15 +68,15 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 8);
     _walkSprite->setScale(0.5f);
-    _walkSprite->setPosition(0, 10);
+    _walkSprite->setPosition(0, 5);
 
     _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 6, 8, 45);
     _explodeSprite->setScale(0.5f);
-    _explodeSprite->setPosition(0, 10);
+    _explodeSprite->setPosition(0, 5);
 
     _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 1, 5, 5);
     _shootSprite->setScale(0.5f);
-    _shootSprite->setPosition(0, 10);
+    _shootSprite->setPosition(0, 5);
     
     _explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 28);
     _explodeVFXSprite->setPosition(0, 0);
