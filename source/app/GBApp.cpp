@@ -34,6 +34,8 @@ using namespace cugl::audio;
 void GlitchbladeApp::onStartup() {
     _assets = AssetManager::alloc();
     _batch  = SpriteBatch::alloc();
+
+    _currentScene = _gameplay;
     
     // Start-up basic input
 #ifdef CU_TOUCH_SCREEN
@@ -73,7 +75,8 @@ void GlitchbladeApp::onStartup() {
  */
 void GlitchbladeApp::onShutdown() {
     _loading.dispose();
-    _gameplay.dispose();
+    _gameplay->dispose();
+    _levelSelect->dispose();
     _assets = nullptr;
     _batch = nullptr;
     
@@ -137,8 +140,9 @@ void GlitchbladeApp::update(float dt) {
         _loading.update(0.01f);
     } else if (!_loaded) {
         _loading.dispose(); // Disables the input listeners in this mode
-        _gameplay.init(_assets);
-        _gameplay.setSpriteBatch(_batch);
+        _gameplay->init(_assets);
+        _gameplay->setSpriteBatch(_batch);
+        _levelSelect->init(_assets);
         _loaded = true;
         setDeterministic(true);
     }
@@ -165,7 +169,7 @@ void GlitchbladeApp::update(float dt) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GlitchbladeApp::preUpdate(float dt) {
-    _gameplay.preUpdate(dt);
+    _currentScene->preUpdate(dt);
 }
 
 /**
@@ -192,7 +196,7 @@ void GlitchbladeApp::preUpdate(float dt) {
 void GlitchbladeApp::fixedUpdate() {
     // Compute time to report to game scene version of fixedUpdate
     float time = getFixedStep()/1000000.0f;
-    _gameplay.fixedUpdate(time);
+    _currentScene->fixedUpdate(time);
 }
 
 /**
@@ -221,7 +225,7 @@ void GlitchbladeApp::fixedUpdate() {
 void GlitchbladeApp::postUpdate(float dt) {
     // Compute time to report to game scene version of postUpdate
     float time = getFixedRemainder()/1000000.0f;
-    _gameplay.postUpdate(time);
+    _currentScene->postUpdate(time);
 }
 
 /**
@@ -237,7 +241,20 @@ void GlitchbladeApp::draw() {
     if (!_loaded) {
         _loading.render();
     } else {
-        _gameplay.render();
+        _currentScene->render();
     }
 }
 
+/**
+ * Switches the currently rendered scene to the LevelSelect scene.
+*/
+void showLevelSelect() {
+
+}
+
+/**
+    * Switches the currently rendered scene to the GameScene.
+*/
+void showGameScene() {
+
+}

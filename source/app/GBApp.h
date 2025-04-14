@@ -14,7 +14,9 @@
 #ifndef __GB_APP_H__
 #define __GB_APP_H__
 #include <cugl/cugl.h>
+#include "../game/GBSceneInterface.h"
 #include "../game/GBGameScene.h"
+#include "../game/GBLevelSelectScene.h"
 
 /**
  * This class represents the application root for the platform demo.
@@ -28,9 +30,13 @@ protected:
     
     // Player modes
     /** The primary controller for the game world */
-    GameScene _gameplay;
+    std::shared_ptr<GameScene> _gameplay = std::make_shared<GameScene>();
     /** The controller for the loading screen */
     cugl::scene2::LoadingScene _loading;
+    /** The controller for the level select scene */
+    std::shared_ptr<LevelSelectScene> _levelSelect = std::make_shared<LevelSelectScene>();
+    /** The current scene to render */
+    std::shared_ptr<GBSceneInterface> _currentScene;
     
     /** Whether or not we have finished loading all assets */
     bool _loaded;
@@ -205,5 +211,15 @@ public:
      * at all. The default implmentation does nothing.
      */
     virtual void draw() override;
+
+    /**
+     * Switches the currently rendered scene to the LevelSelect scene.
+    */
+    void showLevelSelect();
+
+    /**
+        * Switches the currently rendered scene to the GameScene.
+    */
+    void showGameScene();
 };
 #endif /* __GB_APP_H__ */

@@ -304,6 +304,7 @@ void GameScene::dispose() {
  * Resets the status of the game by resetting player and enemy positions so that we can play again.
  */
 void GameScene::reset() {
+    _current_level_swap_countdown = LEVEL_SWAP_COUNTDOWN_FRAMES;
 	removeAllChildren();
     _world->clear();
     _worldnode->removeAllChildren();

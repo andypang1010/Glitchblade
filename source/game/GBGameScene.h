@@ -36,6 +36,7 @@
 #include "../player/GBPlayerModel.h"
 #include "../enemies/GBEnemyModel.h"
 #include "../levels/GBLevelController.h"
+#include "GBSceneInterface.h"
 #include "ui/GBIngameUI.h"
 #include "ui/GBPauseMenu.h"
 
@@ -50,7 +51,7 @@ using namespace cugl;
  * really a mini-GameEngine in its own right.  As in 3152, we separate it out
  * so that we can have a separate mode for the loading screen.
  */
-class GameScene : public scene2::Scene2 {
+class GameScene : public scene2::Scene2, public GBSceneInterface {
 protected:
     /** The asset manager for this game mode. */
     std::shared_ptr<AssetManager> _assets;
@@ -411,6 +412,11 @@ public:
      * Resets the status of the game so that we can play again.
      */
     void reset();
+
+    // Make compiler stop whining
+    void render(void) {
+        scene2::Scene2::render();
+    }
 
     /**
     * Removes the input Bullet from the world.
