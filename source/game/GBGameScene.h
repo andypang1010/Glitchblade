@@ -23,8 +23,8 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
-#ifndef __GB_GAME_SCENE_H__
-#define __GB_GAME_SCENE_H__
+#pragma once
+
 #include <cugl/cugl.h>
 #include <box2d/b2_world_callbacks.h>
 #include <box2d/b2_fixture.h>
@@ -39,8 +39,6 @@
 #include "GBSceneInterface.h"
 #include "ui/GBIngameUI.h"
 #include "ui/GBPauseMenu.h"
-
-#define LEVEL_SWAP_COUNTDOWN_FRAMES 300
 
 using namespace cugl;
 
@@ -78,11 +76,13 @@ protected:
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
 
-    int _current_level_swap_countdown = LEVEL_SWAP_COUNTDOWN_FRAMES;
+    // 0 = do not swap; 1 = swap to level select; 2 = swap to game scene
+    int _swapSceneSignal = 0;
     
     // UI
     /** Ingame UI */
     std::shared_ptr<GBIngameUI> _ui;
+
     std::shared_ptr<GBPauseMenu> _pauseMenu;
     bool _isPaused = false;
     
@@ -106,6 +106,8 @@ protected:
 
     float _shakeIntensity;
     int _shakeDuration;
+
+    bool _inituiactive = true;
 
     /** Mark set to handle more sophisticated collision callbacks */
     std::unordered_set<b2Fixture*> _sensorFixtures;
@@ -148,6 +150,10 @@ public:
      * Disposes of all (non-static) resources allocated to this mode.
      */
     void dispose();
+
+    void setInitUIActive(bool active) {
+        _inituiactive = active;
+    }
     
     /**
      * Initializes the controller contents, and starts the game
@@ -202,8 +208,14 @@ public:
      * @return  true if the controller is initialized properly, false otherwise.
      */
     void populateUI(const std::shared_ptr<cugl::AssetManager>& assets);
+    void disableUI();
+    void enableUI();
     bool init(const std::shared_ptr<AssetManager>& assets,
               const Rect& rect, const Vec2& gravity);
+
+    int getSwapSignal();
+
+    void setSwapSignal(int signal);
     
     
 #pragma mark -
@@ -444,5 +456,3 @@ public:
     void processScreenShake();
     
   };
-
-#endif /* __GB_GAME_SCENE_H__ */

@@ -231,6 +231,14 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     return true;
 }
 
+int GameScene::getSwapSignal() {
+    return _swapSceneSignal;
+}
+
+void GameScene::setSwapSignal(int signal) {
+    _swapSceneSignal = signal;
+}
+
 void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
 {
     _ui = GBIngameUI::alloc(_assets);
@@ -276,6 +284,24 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
             }
         });
     }
+    
+    _ui->setActive(_inituiactive);
+}
+
+void GameScene::disableUI() {
+    setInitUIActive(false);
+    if (_ui != nullptr)
+        _ui->setActive(false);
+    else
+        CULog("_UI IS NULLPTR 285");
+}
+
+void GameScene::enableUI() {
+    setInitUIActive(true);
+    if (_ui != nullptr)
+        _ui->setActive(true);
+    else
+        CULog("_UI IS NULLPTR 292");
 }
 
 /**
@@ -304,7 +330,6 @@ void GameScene::dispose() {
  * Resets the status of the game by resetting player and enemy positions so that we can play again.
  */
 void GameScene::reset() {
-    _current_level_swap_countdown = LEVEL_SWAP_COUNTDOWN_FRAMES;
 	removeAllChildren();
     _world->clear();
     _worldnode->removeAllChildren();
@@ -501,11 +526,7 @@ void GameScene::fixedUpdate(float step) {
     _levelController->fixedUpdate(step);
 
     if (_levelController->isCurrentLevelComplete()) {
-        CULog("WAITING TO SWAP LEVELS");
-        _current_level_swap_countdown--;
-        if (_current_level_swap_countdown <= 0) {
-            CULog("Do swap logic here"); // need to also reset the swap countdown
-        }
+        setSwapSignal(1);
     }
 }
 

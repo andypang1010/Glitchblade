@@ -35,7 +35,11 @@ void GlitchbladeApp::onStartup() {
     _assets = AssetManager::alloc();
     _batch  = SpriteBatch::alloc();
 
-    _currentScene = _gameplay;
+    showGameScene();
+
+    showLevelSelect();
+
+    showGameScene();
     
     // Start-up basic input
 #ifdef CU_TOUCH_SCREEN
@@ -169,6 +173,20 @@ void GlitchbladeApp::update(float dt) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GlitchbladeApp::preUpdate(float dt) {
+    switch (_currentScene->getSwapSignal()) {
+    case(0):
+        // CULog("NO SWAP");
+        break;
+    case(1):
+        CULog("SWAP TO LS");
+        showLevelSelect();
+        break;
+    case(2):
+        CULog("SWAP TO GS");
+        break;
+    default:
+        CULog("DEFAULT");
+    }
     _currentScene->preUpdate(dt);
 }
 
@@ -248,13 +266,17 @@ void GlitchbladeApp::draw() {
 /**
  * Switches the currently rendered scene to the LevelSelect scene.
 */
-void showLevelSelect() {
-
+void GlitchbladeApp::showLevelSelect() {
+    CULog("UI SHOULD BE DISABLED");
+    _gameplay->disableUI();
+    _gameplay->dispose();
+    _currentScene = _levelSelect;
 }
 
 /**
     * Switches the currently rendered scene to the GameScene.
 */
-void showGameScene() {
-
+void GlitchbladeApp::showGameScene() {
+    _gameplay->enableUI();
+    _currentScene = _gameplay;
 }

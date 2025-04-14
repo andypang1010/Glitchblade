@@ -9,6 +9,7 @@ class LevelSelectScene : public scene2::Scene2, public GBSceneInterface {
 protected:
     /** The asset manager for loading scene assets */
     std::shared_ptr<cugl::AssetManager> _assets;
+    std::shared_ptr<JsonValue> _constantsJSON;
 
     // Root node
     std::shared_ptr<cugl::scene2::SceneNode> _root;
@@ -22,6 +23,14 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _btnLeft;
     std::shared_ptr<cugl::scene2::Button> _btnCenter;
     std::shared_ptr<cugl::scene2::Button> _btnRight;
+
+    std::shared_ptr<scene2::SceneNode> _rootNode;
+
+    // 0 = do not swap; 1 = swap to level select; 2 = swap to game scene
+    int _swapSceneSignal = 0;
+
+    float _scale;
+    Vec2 _offset;
 
     /**
      * Stores which level the user has selected.
@@ -44,10 +53,16 @@ public:
      */
     bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
+    bool init(const std::shared_ptr<AssetManager>& assets, const Rect& rect);
+
     /**
      * Disposes of all (non-static) scene resources.
      */
     void dispose();
+
+    int getSwapSignal();
+
+    void setSwapSignal(int signal);
 
 #pragma mark -
 #pragma mark Scene State

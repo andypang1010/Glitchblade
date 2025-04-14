@@ -11,11 +11,11 @@
 //  Author: Walker White and Anthony Perello
 //  Version: 2/9/17
 //
-#ifndef __GB_APP_H__
-#define __GB_APP_H__
+#pragma once
+
 #include <cugl/cugl.h>
-#include "../game/GBSceneInterface.h"
 #include "../game/GBGameScene.h"
+#include "../game/GBSceneInterface.h"
 #include "../game/GBLevelSelectScene.h"
 
 /**
@@ -29,10 +29,11 @@ protected:
     std::shared_ptr<cugl::AssetManager> _assets;
     
     // Player modes
-    /** The primary controller for the game world */
-    std::shared_ptr<GameScene> _gameplay = std::make_shared<GameScene>();
     /** The controller for the loading screen */
     cugl::scene2::LoadingScene _loading;
+
+    /** The primary controller for the game world */
+    std::shared_ptr<GameScene> _gameplay = std::make_shared<GameScene>();
     /** The controller for the level select scene */
     std::shared_ptr<LevelSelectScene> _levelSelect = std::make_shared<LevelSelectScene>();
     /** The current scene to render */
@@ -222,4 +223,3 @@ public:
     */
     void showGameScene();
 };
-#endif /* __GB_APP_H__ */
