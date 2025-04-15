@@ -7,7 +7,7 @@ void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef,
     std::vector<std::shared_ptr<ActionModel>> actions) {
     std::string enemy_debug_font = _enemyJSON->get("debug")->getString("font");
 
-    _hpNode = scene2::Label::allocWithText("100", assetRef->get<Font>(enemy_debug_font));
+    _hpNode = scene2::Label::allocWithText("1000", assetRef->get<Font>(enemy_debug_font));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
     _hpNode->setForeground(Color4::RED);
     _hpNode->setPosition(0, 115);

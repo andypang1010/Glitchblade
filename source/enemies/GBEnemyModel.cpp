@@ -266,6 +266,7 @@ void EnemyModel::die(std::shared_ptr<scene2::PolygonNode> world) {
         markRemoved(true);
         world->removeChild(_node);
 		setSensor(true);
+		getDebugNode()->removeFromParent();
     }
 }
 

@@ -156,7 +156,6 @@ protected:
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
 
-    float _scale;
     std::shared_ptr<JsonValue> _enemyJSON;
 
     /**
@@ -169,6 +168,7 @@ protected:
     virtual void resetDebug() override;
 
 public:
+    float _scale = 0;
     int currentFrame = 0;
     int frameCounter = 0;
     int stunFrame;
@@ -187,7 +187,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _scale(Application::get()->getDisplayWidth() / 1248) {}
+    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _scale(1248.0f / (float)Application::get()->getDisplayWidth()) {}
 
     /**
      * Destroys this PlayerModel, releasing all resources.
