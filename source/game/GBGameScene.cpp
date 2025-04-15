@@ -174,7 +174,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     
     
     // Create the world and attach the listeners.
-    _world = physics2::ObstacleWorld::alloc(rect, gravity);
+    Rect trylarger = Rect(0, 0, rect.size.width*3, rect.size.height);
+    _world = physics2::ObstacleWorld::alloc(trylarger, gravity);
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
         _collisionController->beginContact(contact);
@@ -182,11 +183,28 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _world->onEndContact = [this](b2Contact* contact) {
         _collisionController->endContact(contact);
         };
+    
+    CULog("Creating empty level controller in gamescene init");
+    _levelController = std::make_unique<LevelController>();
+    CULog("initializing level controller in gamescene init");
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(_offset);
     _debugnode->setName("game_debug_node");
+    
+    _levelController->init(_assets,_constantsJSON, _world, _debugnode); // Initialize the LevelController
+    _currentLevel = _levelController->getLevelByName("Level 1");
+
+    // Create the scene graph
+//    Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
+//    _worldnode = scene2::PolygonNode::alloc();
+//    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+//    _worldnode->setPosition(offset);
+    
+    _camera = getCamera();
+    
+
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
     _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
     _winnode->setAnchor(Vec2::ANCHOR_CENTER);
@@ -200,16 +218,11 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _losenode->setForeground(messagesJ->get("lose")->getString("color"));
     setFailure(false);
     
-    _levelController = std::make_unique<LevelController>();
-    _levelController->init(_assets, _constantsJSON, _world, _debugnode); // Initialize the LevelController
-    // LevelController needs to be initialized before populate() or else we will get nullptr related issues
-
-
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
-        _input =  _levelController->getInputController();
-        if (!_input){
-            CULog("input is null in populate");
-        }
+    _input =  _levelController->getInputController();
+    if (!_input){
+        CULog("input is null in populate");
+    }
     #pragma mark : Player
         _player = _levelController->getPlayerModel();
         if (!_player){
@@ -349,9 +362,13 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     _worldnode->setPosition(_offset);
     addChild(_worldnode);
     addChild(_debugnode);
- 
     addChild(_winnode);
     addChild(_losenode);
+    setBG();
+    for (auto node : _worldnode->getChildren()) {
+        _maxTag = 0;
+        _maxTag = std::max(_maxTag, node->getTag());
+    }
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
     CULog("In populate, after populate level, debug node has %lu children",_debugnode->getChildCount());
@@ -470,6 +487,37 @@ void GameScene::preUpdate(float dt) {
     // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);
     processScreenShake();
+
+    auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
+    auto currPlayerVel = _levelController->getPlayerModel()->getVX();
+    auto frontLayer = _worldnode->getChildByTag(_maxTag);
+    auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
+    auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
+    
+    if (cameraPosLX <= 0 || cameraPosRX >= 4000) {
+        cameraLocked = true;
+        if (cameraPosLX <= 0) {
+            CULog("playerx: %f", currPlayerPosX);
+            if (currPlayerPosX > getBounds().size.width*.66) {
+                cameraLocked = false;
+            }
+        } else {
+            CULog("playerx: %f", currPlayerPosX);
+            if (currPlayerPosX < 4000 - getBounds().size.width*.66) {
+                cameraLocked = false;
+            }
+        }
+    }
+    if (!cameraLocked) {
+        _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
+        _camera->update();
+        if (currPlayerPosX < frontLayer->getPositionX()+frontLayer->getWidth()*.8 && currPlayerVel > 0) {
+            updateLayersLeft();
+        }   else if (currPlayerPosX > frontLayer->getPositionX()+frontLayer->getWidth()*.2 && currPlayerVel < 0) {
+            updateLayersRight();
+        }
+    }
+
 }
 /**
  * The method called to provide a deterministic application loop.
@@ -581,6 +629,34 @@ void GameScene::removeProjectile(Projectile* projectile) {
     std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pop"));
     AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
 }
+
+void GameScene::setBG() {
+    for (auto layerPair : _currentLevel->getLayers()) {
+        std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
+        node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+        node->setScale(_currentLevel->getScale());
+        node->setTag(layerPair.second);
+        _worldnode->addChild(node);
+    }
+}
+
+void GameScene::updateLayersLeft() {
+    for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
+        if (node->getTag() > 0) {
+            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/15, node->getPositionY()));
+        }
+    }
+}
+
+void GameScene::updateLayersRight() {
+    for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
+        if (node->getTag() > 0) {
+            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/15, node->getPositionY()));
+        }
+    }
+}
+
+
 
 void GameScene::setScreenShake(float intensity, int duration) {
     if (_shakeIntensity > intensity) {

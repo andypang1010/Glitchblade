@@ -2,21 +2,55 @@
   "levels": [
     {
       "name": "Level 1",
-      "background": "textures/background2.png",
-      "ground": "textures/ground2.png",
+      "background": "textures/Scene_1_00.png",
+      "scale": 0.57,
+      "layers": [
+          {
+            "file": "textures/Scene_1_01.png",
+            "speed": 1
+          },
+          {
+            "file": "textures/Scene_1_02.png",
+            "speed": 2
+          },
+          {
+            "file": "textures/Scene_1_03.png",
+            "speed": 3
+          },
+          {
+            "file": "textures/Scene_1_04.png",
+            "speed": 4
+          },
+          {
+            "file": "textures/Scene_1_05.png",
+            "speed": 5
+          },
+          {
+            "file": "textures/Scene_1_06.png",
+            "speed": 0
+          }
+      ],
       "platforms": [],
       "waves": [
         {
-            "spawn_intervals": [ 2, 7, 5 ],
-            "enemies": [ "minion_1A", "minion_1A", "minion_1A" ]
+          "spawn_intervals": [
+            2,
+            7,
+            7
+          ],
+          "enemies": [
+            "minion_1B",
+            "minion_1B",
+            "minion_1B"
+          ]
         },
         {
-          "spawn_intervals": [ 2, 3, 2, 5, 2 ],
-            "enemies": [ "minion_1B", "minion_1B", "minion_1A", "minion_1A", "minion_1A" ]
-        },
-        {
-          "spawn_intervals": [ 3 ],
-          "enemies": [ "boss_1" ]
+          "spawn_intervals": [
+            3
+          ],
+          "enemies": [
+            "boss_1"
+          ]
         }
       ]
     }
