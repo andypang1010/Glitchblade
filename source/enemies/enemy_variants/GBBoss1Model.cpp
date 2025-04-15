@@ -117,27 +117,39 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 6, 6);
     _idleSprite->setPosition(0, 50);
+	_idleSprite->setName("idle");
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walking1"), 1, 8, 8);
     _walkSprite->setPosition(0, 50);
+	_walkSprite->setName("walk");
 
     _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 4, 10, 40);
     _slamSprite->setPosition(0, 50);
+	_slamSprite->setName("slam");
 
     _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 4, 10, 40);
     _stabSprite->setPosition(0, 50);
+	_stabSprite->setName("stab");
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
     _stunSprite->setPosition(0, 50);
+	_stunSprite->setName("stun");
 
     _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 2, 10, 15);
     _shootSprite->setPosition(0, 50);
+	_shootSprite->setName("shoot");
 
     _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 4, 10, 40);
     _explodeSprite->setPosition(0, 50);
+	_explodeSprite->setName("explode");
 
 	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 32);
 	_explodeVFXSprite->setPosition(0, 0);
+	_explodeVFXSprite->setName("explode_vfx");
+
+	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_dead"), 5, 10, 45);
+	_deadSprite->setPosition(0, 50);
+	_deadSprite->setName("dead");
 
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
@@ -151,7 +163,6 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 	getSceneNode()->addChild(_explodeSprite);
     getSceneNode()->addChild(_explodeVFXSprite);
-
 }
 
 #pragma mark -
@@ -223,7 +234,6 @@ void Boss1Model::dispose() {
     _node = nullptr;
     _sensorNode = nullptr;
     _geometry = nullptr;
-    _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
     _stabSprite = nullptr;
@@ -231,6 +241,7 @@ void Boss1Model::dispose() {
     _stunSprite = nullptr;
 	_shootSprite = nullptr;
 	_explodeSprite = nullptr;
+    _deadSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -341,7 +352,6 @@ void Boss1Model::AIMove() {
     else {
         setMovement(getMovement() / 3);
     }
-
 }
 
 void Boss1Model::slam() {

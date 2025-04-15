@@ -306,7 +306,6 @@ void PlayerModel::dispose() {
     _geometry = nullptr;
     _sceneNode = nullptr;
     _groundSensorNode = nullptr;
-    _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _guardSprite = nullptr;
     _walkSprite = nullptr;

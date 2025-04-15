@@ -173,11 +173,10 @@ public:
     int frameCounter = 0;
     int stunFrame;
 
-    std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
-
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
     std::shared_ptr<scene2::SpriteNode> _stunSprite;
+    std::shared_ptr<scene2::SpriteNode> _deadSprite;
 
 public:
 
@@ -539,9 +538,12 @@ public:
      */
     virtual std::shared_ptr<RangedActionModel> getProjectileAction();
 
+    void die(std::shared_ptr<scene2::PolygonNode> world);
+
 #pragma mark -
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
+    void playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
     void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame);
     virtual void updateAnimation();
 

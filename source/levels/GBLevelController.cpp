@@ -326,6 +326,11 @@ void LevelController::preUpdate(float dt)
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
             std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
             enemodel->setTargetPos(player->getPosition());
+
+            if (enemyCtrlr->getEnemy()->getHP() <= 0 || enemyCtrlr->getEnemy()->isRemoved()) {
+                continue;
+            }
+
             enemyCtrlr->preUpdate(dt);
         }
     }
@@ -342,7 +347,11 @@ void LevelController::fixedUpdate(float timestep)
         && _currentWaveIndex < _enemyWaves.size() 
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
+            if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr) {
+                continue;
+            }
+
+            if (enemyCtrlr->getEnemy()->getHP() <= 0 || enemyCtrlr->getEnemy()->isRemoved()) {
                 continue;
             }
 
@@ -381,18 +390,18 @@ void LevelController::postUpdate(float dt)
                 addObstacle(projectilePair);
             }
 
-            enemyCtrlr->postUpdate(dt);
-
             if (enemyCtrlr->getEnemy()->getHP() <= 0) {
                 if (enemyCtrlr->getEnemy()->isRemoved()) {
                     continue;
                 }
 
-                _worldNode->removeChild(enemyCtrlr->getEnemy()->getSceneNode());
-                enemyCtrlr->getEnemy()->markRemoved(true);
+                enemyCtrlr->getEnemy()->die(_worldNode);
                 _numEnemiesActive--;
                 //_enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
             }
+
+            enemyCtrlr->postUpdate(dt);
+
         }
     }
 }

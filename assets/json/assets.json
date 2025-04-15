@@ -54,6 +54,9 @@
         "boss1_explode": {
             "file": "textures/boss1_explode.png"
         },
+        "boss1_dead": {
+          "file": "textures/boss1_dead.png"
+        },
         "projectile": {
             "file": "textures/projectile.png"
         },
@@ -78,6 +81,9 @@
         "minion1B_stun": {
             "file": "textures/minion1B_stun.png"
         },
+        "minion1B_dead": {
+          "file": "textures/minion1B_dead.png"
+        },
         "wave_enemy_1": {
             "file": "textures/wave_enemy_1.png"
         },
@@ -90,54 +96,57 @@
         "minion1A_walk": {
             "file": "textures/minion1A_walk.png"
         },
-
-        "pause_button": {
-            "file": "textures/pause_button.png"
-        },
-        "hp_empty": {
-            "file": "textures/hp_bar.png"
-        },
-        "hp_segment": {
-            "file": "textures/hp_segment.png"
-        },
-        "half_hp_segment": {
-            "file": "textures/half_hp_segment.png"
+        "minion1A_dead": {
+          "file": "textures/minion1A_dead.png"
         },
 
-        "menu_background": {
-            "file": "textures/menu_background.png"
-        },
-        "menu_hpbar": {
-            "file": "textures/menu_hpbar.png"
-        },
-        "button_play": {
-            "file": "textures/button_play.png"
-        },
-        "button_setting": {
-            "file": "textures/button_setting.png"
-        },
-        "button_restart": {
-            "file": "textures/button_restart.png"
-        },
-        "button_exit": {
-            "file": "textures/button_exit.png"
-        },
-        "menu_player": {
-            "file": "textures/menu_player.png"
-        },
-
-        "dpad": {
-            "file": "textures/dpad.png",
-            "wrapS": "clamp",
-            "wrapT": "clamp",
-            "atlas": {
-                "up": [ 0, 0, 127, 127 ],
-                "down": [ 128, 0, 255, 127 ],
-                "left": [ 0, 128, 127, 255 ],
-                "right": [ 128, 128, 255, 255 ]
-            }
-        }
+    "pause_button": {
+      "file": "textures/pause_button.png"
     },
+    "hp_empty": {
+      "file": "textures/hp_bar.png"
+    },
+    "hp_segment": {
+      "file": "textures/hp_segment.png"
+    },
+    "half_hp_segment": {
+      "file": "textures/half_hp_segment.png"
+    },
+
+    "menu_background": {
+      "file": "textures/menu_background.png"
+    },
+    "menu_hpbar": {
+      "file": "textures/menu_hpbar.png"
+    },
+    "button_play": {
+      "file": "textures/button_play.png"
+    },
+    "button_setting": {
+      "file": "textures/button_setting.png"
+    },
+    "button_restart": {
+      "file": "textures/button_restart.png"
+    },
+    "button_exit": {
+      "file": "textures/button_exit.png"
+    },
+    "menu_player": {
+      "file": "textures/menu_player.png"
+    },
+
+    "dpad": {
+      "file": "textures/dpad.png",
+      "wrapS": "clamp",
+      "wrapT": "clamp",
+      "atlas": {
+        "up": [ 0, 0, 127, 127 ],
+        "down": [ 128, 0, 255, 127 ],
+        "left": [ 0, 128, 127, 255 ],
+        "right": [ 128, 128, 255, 255 ]
+      }
+    }
+  },
     "sounds": {
         "game": {
             "type":     "sample",
