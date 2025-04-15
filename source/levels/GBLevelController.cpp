@@ -388,6 +388,7 @@ void LevelController::postUpdate(float dt)
                     continue;
                 }
 
+                enemyCtrlr->getEnemy()->getDebugNode()->removeFromParent();
                 _worldNode->removeChild(enemyCtrlr->getEnemy()->getSceneNode());
                 enemyCtrlr->getEnemy()->markRemoved(true);
                 _numEnemiesActive--;
