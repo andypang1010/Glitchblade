@@ -231,7 +231,7 @@ std::shared_ptr<LevelModel> GameScene::getLevelModel(std::string name) {
 
 void GameScene::setAllGameplayUIActive(bool active) {
     _ui->setActive(active);
-    _pauseMenu->setActive(active);
+    // _pauseMenu->setActive(active);
 }
 
 void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
@@ -270,14 +270,24 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
 
     auto restartButton = _pauseMenu->getRestartButton();
     if (restartButton) {
-        restartButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
-                _pauseMenu->setVisible(false);
-                _ui->setVisible(true);
-                setPaused(false);
-                reset();
-            }
-        });
+        // Capture the restart button in the lambda so you can call its deactivate method.
+        // 
+        // 
+        // TODO: THIS ISNT CURRENTLY WORKING.
+        //restartButton->addListener([this, restartButton](const std::string& name, bool down) {
+        //    if (down) {
+        //        // Immediately reset the pressed state.
+        //        restartButton->deactivate();
+
+        //        // Hide pause menu, show game UI, and clear paused status.
+        //        _pauseMenu->setVisible(false);
+        //        _ui->setVisible(true);
+        //        setPaused(false);
+
+        //        // Call reset to restart the level.
+        //        reset();
+        //    }
+        //    });
     }
     
     setAllGameplayUIActive(_inituiactive);
@@ -380,9 +390,6 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
 	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
     AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
-    
-    // Spawn the first wave
-    //_levelController->spawnWave(0);
     
     _active = true;
     _complete = false;
@@ -512,6 +519,13 @@ void GameScene::preUpdate(float dt) {
  * @param step  The number of fixed seconds for this step
  */
 void GameScene::fixedUpdate(float step) {
+
+    if (_pauseMenu != nullptr && _pauseMenu->getExitPressed()) {
+        _pauseMenu->setExitPressed(false);
+        _isPaused = false;
+        setSwapSignal(1);
+        return;
+    }
     
     if (_isPaused) return;
     

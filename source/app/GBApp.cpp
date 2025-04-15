@@ -287,5 +287,6 @@ void GlitchbladeApp::showGameScene(std::string levelToLoad) {
     CULog(levelToLoad.c_str());
 
     _gameplay->populate(_gameplay->getLevelModel(levelToLoad));
+    _gameplay->reset();
     _currentScene = _gameplay;
 }

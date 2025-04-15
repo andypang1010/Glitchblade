@@ -34,7 +34,7 @@
     },
     {
       "name": "Level 3",
-      "background": "textures/background.png",
+      "background": "textures/background3.png",
       "ground": "textures/ground.png",
       "platforms": [],
       "waves": [

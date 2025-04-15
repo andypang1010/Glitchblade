@@ -71,8 +71,9 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
     }
 
     if (_exitButton) {
-        _exitButton->addListener([](const std::string& name, bool down) {
+        _exitButton->addListener([this](const std::string& name, bool down) {
             if (down) CULog("Exit pressed");
+            setExitPressed(true);
         });
         _exitButton->activate();
     }

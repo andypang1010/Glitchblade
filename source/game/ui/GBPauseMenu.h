@@ -31,6 +31,8 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _restartButton;
     std::shared_ptr<cugl::scene2::Button> _exitButton;
     std::shared_ptr<cugl::scene2::Button> _settingButton;
+
+    bool _exitPressed = false;
     
     /** The HP bar container node. */
     std::shared_ptr<cugl::scene2::SceneNode> _hpbar;
@@ -93,6 +95,14 @@ public:
 
     std::shared_ptr<cugl::scene2::Button> getRestartButton() const {
         return _restartButton;
+    }
+
+    bool getExitPressed() {
+        return _exitPressed;
+    }
+
+    void setExitPressed(bool val) {
+        _exitPressed = val;
     }
 };
 
