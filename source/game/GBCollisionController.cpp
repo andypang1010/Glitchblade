@@ -178,7 +178,7 @@ void CollisionController::endContact(b2Contact* contact) {
 void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
     EnemyModel* enemy = (EnemyModel*) enemyObstacle;
     if (_player->isDashActive() && !_player->isGuardActive()) {
-        enemy->damage(100);
+        enemy->damage(10);
         _player->setDashRem(0);
         _screenShake(3, 5);
     }
