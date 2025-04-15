@@ -144,7 +144,6 @@ protected:
     virtual void resetDebug() override;
 
 public:
-    std::shared_ptr<scene2::SpriteNode> _deadSprite;
     std::shared_ptr<scene2::SpriteNode> _stabSprite;
     std::shared_ptr<scene2::SpriteNode> _slamSprite;
     std::shared_ptr<scene2::SpriteNode> _shootSprite;

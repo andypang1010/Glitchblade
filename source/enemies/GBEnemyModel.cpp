@@ -226,6 +226,18 @@ void EnemyModel::update(float dt) {
 
 #pragma mark -
 #pragma mark AI Methods
+void EnemyModel::nextAction() {
+
+}
+
+void EnemyModel::AIMove() {
+
+}
+
+void EnemyModel::updateAnimation() {
+
+}
+
 bool EnemyModel::isTargetClose() {
     return (getPosition() - _targetPos).length() <= CLOSE_RADIUS;
 }
@@ -235,13 +247,25 @@ bool EnemyModel::isTargetFar() {
 }
 
 void EnemyModel::die(std::shared_ptr<scene2::PolygonNode> world) {
-    markRemoved(true);
-    currentFrame = 0;
-    _deadSprite->setVisible(true);
+    for (NodePtr node : _node->getChildren()) {
+		if (node->getName() == "dead") {
+			continue;
+		}
+
+        node->removeFromParent();
+    }
+
+	if (_node->getChildCount() == 0) {
+	    _node->addChild(_deadSprite);
+        _deadSprite->setVisible(true);
+	}
+
     playAnimationOnce(_deadSprite);
 
     if (_deadSprite->getFrame() == _deadSprite->getCount() - 1) {
+        markRemoved(true);
         world->removeChild(_node);
+		setSensor(true);
     }
 }
 
