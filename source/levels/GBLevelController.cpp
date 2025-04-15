@@ -52,8 +52,6 @@ using namespace cugl::scene2;
 #pragma mark Asset Constants
 
 ///////////////// TEXTURES //////////////////////////////////
-/** The key for the ground texture in the asset manager */
-#define GROUND_TEXTURE  "ground"
 /** The key for the regular projectile texture in the asset manager */
 #define PROJECTILE_TEXTURE  "projectile"
 /** The key for the player projectile texture in the asset manager */
@@ -270,7 +268,7 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
 
 #pragma mark : GROUND
     // Get the ground from the level itself
-    image = levelRef->getGround();
+    image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
 
     std::shared_ptr<physics2::PolygonObstacle> groundObj;
     Poly2 ground(calculateGroundVertices());
@@ -539,10 +537,20 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
         CULogError("Invalid or empty JSON node!");
         return level;
     }
+	CULog("%s", json->toString().c_str());
 
-	level->setLevelName(json-> getString("name"));
-    level->setBackground(Texture::allocWithFile(json->getString("background")));
-    level->setGround(Texture::allocWithFile(json->getString("ground")));
+	level->setLevelName(json->getString("name"));
+    level->setScale(json->getFloat("scale"));
+    auto bg = Texture::allocWithFile(json->getString("background"));
+    level->setBackground(bg);
+    auto gr = Texture::allocWithFile(json->getString("ground"));
+    level->setGround(gr);
+    
+    for (std::shared_ptr<JsonValue> layer : json->get("layers")->children()) {
+        auto texture = Texture::allocWithFile(layer->getString("file"));
+        unsigned int speed = layer->getInt("speed");
+        level->addLayer(texture, speed);
+    }
     
 	// Parse platforms
     std::vector<std::shared_ptr<Rect>> platforms;
@@ -586,20 +594,20 @@ std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
     // Using Vec2 instead of float pairs
     std::vector<std::vector<Vec2>> wallVertices = {
         {
-            Vec2(defaultWidth / 2, defaultHeight),
+            Vec2(defaultWidth*3.2 / 2, defaultHeight),
             Vec2(0.0f, defaultHeight),
             Vec2(0.0f, 0.0f),
             Vec2(wallThickness, 0.0f),
             Vec2(wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth / 2, defaultHeight - wallThickness)
+            Vec2(defaultWidth*3.7 / 2, defaultHeight - wallThickness)
         },
         {
-            Vec2(defaultWidth, defaultHeight),
-            Vec2(defaultWidth / 2, defaultHeight),
-            Vec2(defaultWidth / 2, defaultHeight - wallThickness),
-            Vec2(defaultWidth - wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth - wallThickness, 0.0f),
-            Vec2(defaultWidth, 0.0f)
+            Vec2(defaultWidth*3.2, defaultHeight),
+            Vec2(defaultWidth*3.2 / 2, defaultHeight),
+            Vec2(defaultWidth*3.2 / 2, defaultHeight - wallThickness),
+            Vec2(defaultWidth*3.2 - wallThickness, defaultHeight - wallThickness),
+            Vec2(defaultWidth*3.2 - wallThickness, 0.0f),
+            Vec2(defaultWidth*3.2, 0.0f)
         }
     };
 
@@ -613,8 +621,8 @@ std::vector<Vec2> LevelController::calculateGroundVertices() {
 
     std::vector<Vec2> groundVertices = {
         Vec2(0.0f, 0.0f),
-        Vec2(defaultWidth, 0.0f),
-        Vec2(defaultWidth, groundThickness),
+        Vec2(defaultWidth*3.2, 0.0f),
+        Vec2(defaultWidth*3.2, groundThickness),
         Vec2(0.0f, groundThickness)
     };
 
