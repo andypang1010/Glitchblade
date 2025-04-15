@@ -202,12 +202,19 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
     // Process collision only if the projectile was not fired by the player.
     if (!projectile->getIsPlayerFired()) {
         // If the player's invulnerability frames have expired, reset and deal damage.
+        bool deflected = false;
         if (_player->iframe <= 0) {
             if (_player->isParryActive()) {
                 if (!_player->hasProjectile()) {
                     _player->setHasProjectile(true);
                 }
                 _player->damage(0);
+				deflected = true;
+				projectile->setIsPlayerFired(true);
+				projectile->setVX(-projectile->getVX());
+                projectile->setVY(-projectile->getVY());
+                projectile->getSceneNode()->flipHorizontal(!projectile->getSceneNode()->isFlipHorizontal());
+				projectile->getSceneNode()->setColor(cugl::Color4(0, 255, 150, 255));
             }
             else if (_player->isGuardActive()) {
                 _player->damage(5);
@@ -223,7 +230,7 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
             _player->iframe = 60;
         }
         // Remove the projectile and update the UI and pause menu with the current HP.
-        _removeProjectile(projectile);
+        if (!deflected) _removeProjectile(projectile);
         _ui->setHP(_player->getHP());
         _pauseMenu->setHP(_player->getHP());
     }
@@ -236,8 +243,9 @@ void CollisionController::enemyProjectileCollision(Obstacle* enemyObstacle, Obst
     
     // Process collision only if the projectile was fired by the player.
     if (projectile->getIsPlayerFired()) {
-        enemy->damage(20);
+        enemy->damage(10);
         _removeProjectile(projectile);
+        _screenShake(10, 3);
     }
 }
 
