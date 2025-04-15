@@ -139,6 +139,9 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 32);
 	_explodeVFXSprite->setPosition(0, 0);
 
+	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_dead"), 5, 10, 45);
+	_deadSprite->setPosition(0, 50);
+
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
 
@@ -151,7 +154,8 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 	getSceneNode()->addChild(_explodeSprite);
     getSceneNode()->addChild(_explodeVFXSprite);
-
+	getSceneNode()->addChild(_deadSprite);
+    _deadSprite->setVisible(false);
 }
 
 #pragma mark -
@@ -223,7 +227,6 @@ void Boss1Model::dispose() {
     _node = nullptr;
     _sensorNode = nullptr;
     _geometry = nullptr;
-    _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
     _stabSprite = nullptr;
@@ -231,6 +234,7 @@ void Boss1Model::dispose() {
     _stunSprite = nullptr;
 	_shootSprite = nullptr;
 	_explodeSprite = nullptr;
+    _deadSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -341,7 +345,6 @@ void Boss1Model::AIMove() {
     else {
         setMovement(getMovement() / 3);
     }
-
 }
 
 void Boss1Model::slam() {

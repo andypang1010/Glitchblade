@@ -200,10 +200,10 @@ void EnemyModel::dispose() {
     _node = nullptr;
     _sensorNode = nullptr;
     _geometry = nullptr;
-    _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
     _stunSprite = nullptr;
+    _deadSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -234,6 +234,17 @@ bool EnemyModel::isTargetFar() {
 	return (getPosition() - _targetPos).length() >= FAR_RADIUS;
 }
 
+void EnemyModel::die(std::shared_ptr<scene2::PolygonNode> world) {
+    markRemoved(true);
+    currentFrame = 0;
+    _deadSprite->setVisible(true);
+    playAnimationOnce(_deadSprite);
+
+    if (_deadSprite->getFrame() == _deadSprite->getCount() - 1) {
+        world->removeChild(_node);
+    }
+}
+
 void EnemyModel::faceTarget() {
     bool face = _targetPos > getPosition();
     if (_faceRight == face) {
@@ -246,14 +257,6 @@ void EnemyModel::faceTarget() {
         image->flipHorizontal(!image->isFlipHorizontal());
     }
     _faceRight = face;
-}
-
-void EnemyModel::nextAction() {
-    
-}
-
-void EnemyModel::AIMove() {
-
 }
 
 std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
@@ -278,6 +281,19 @@ void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
     }
 }
 
+void EnemyModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite)
+{
+    if (sprite->isVisible()) {
+        frameCounter = (frameCounter + 1) % E_ANIMATION_UPDATE_FRAME;
+        if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0 && sprite->getFrame() < sprite->getCount() - 1) {
+            sprite->setFrame(sprite->getFrame() + 1);
+        }
+    }
+    else {
+        sprite->setFrame(0);
+    }
+}
+
 void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
 {
     if (actionSprite->isVisible()) {
@@ -289,10 +305,6 @@ void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSpri
             vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
         }
     }
-}
-
-void EnemyModel::updateAnimation()
-{
 }
 
 #pragma mark -

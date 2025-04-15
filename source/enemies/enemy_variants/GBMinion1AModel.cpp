@@ -80,7 +80,10 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     
     _explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 28);
     _explodeVFXSprite->setPosition(0, 0);
- 
+
+    _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_dead"), 2, 8, 15);
+    _deadSprite->setPosition(0, 0);
+
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
 
@@ -89,7 +92,8 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_shootSprite);
     getSceneNode()->addChild(_explodeVFXSprite);
 
-
+    getSceneNode()->addChild(_deadSprite);
+    _deadSprite->setVisible(false);
 }
 
 #pragma mark -
@@ -161,10 +165,10 @@ void Minion1AModel::dispose() {
     _node = nullptr;
     _sensorNode = nullptr;
     _geometry = nullptr;
-    _currentSpriteNode = nullptr;
     _walkSprite = nullptr;
     _explodeSprite = nullptr;
     _shootSprite = nullptr;
+    _deadSprite = nullptr;
 }
 
 #pragma mark Cooldowns
