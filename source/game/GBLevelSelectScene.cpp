@@ -25,7 +25,8 @@ bool GBLevelSelectScene::init(const std::shared_ptr<AssetManager>& assets) {
 void GBLevelSelectScene::dispose() {
     if (_active) {
         _levelSelected = "";
-        _levelSelectUI->dispose();
+        if(_levelSelectUI != nullptr)
+            _levelSelectUI->dispose();
         Scene2::dispose();
     }
 }

@@ -55,6 +55,7 @@ bool GBLevelSelectUI::init(const std::shared_ptr<AssetManager>& assets) {
         _level3Button->activate();
         _level3Button->addListener([this](const std::string& name, bool down) {
             if (!down) {
+                CULog("PROCCESSED PRESS");
                 setLoadSceneKey("Level 3");
             }
         });
@@ -65,6 +66,7 @@ bool GBLevelSelectUI::init(const std::shared_ptr<AssetManager>& assets) {
         _level2Button->activate();
         _level2Button->addListener([this](const std::string& name, bool down) {
             if (!down) {
+                CULog("PROCCESSED PRESS");
                 setLoadSceneKey("Level 2");
             }
         });
@@ -75,6 +77,7 @@ bool GBLevelSelectUI::init(const std::shared_ptr<AssetManager>& assets) {
         _level1Button->activate();
         _level1Button->addListener([this](const std::string& name, bool down) {
             if (!down) {
+                CULog("PROCCESSED PRESS");
                 setLoadSceneKey("Level 1");
             }
         });

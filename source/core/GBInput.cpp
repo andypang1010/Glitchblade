@@ -493,7 +493,6 @@ void PlatformInput::touchEndedCB(const TouchEvent& event, bool focus) {
     }
 }
 
-
 /**
  * Callback for a touch moved event.
  *
@@ -503,49 +502,31 @@ void PlatformInput::touchEndedCB(const TouchEvent& event, bool focus) {
  */
 void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous, bool focus) {
     Vec2 pos = event.position;
-    // this logic should change if we want to allow switching input sides
+
     if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
+        if (_ltouch.position == Vec2::ZERO) return;
+
         SwipeType s_type = processSwipe(_ltouch.position, event.position, event.timestamp);
-        //switch (s_type) {
-        //    // can handle actions on left side here if desired
-        //    default:
-        //        // CULog("Doing nothing");
-        //        break;
-        //}
-
-        /*if (s_type != SwipeType::NONE) {
-            clearTouchInstance(_ltouch);
-        }*/
-
         _ltouch.position = pos;
-    //swipe side
-    } else if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
+    }
+    else if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
+        if (_rtouch.position == Vec2::ZERO) return;
+
         SwipeType s_type = processSwipe(_rtouch.position, event.position, event.timestamp);
 
         switch (s_type) {
-            case SwipeType::LEFTDASH:
-                _keyLdash = true;
-                break;
-            case SwipeType::RIGHTDASH:
-                _keyRdash = true;
-                break;
-            case SwipeType::JUMP:
-                _keyJump = true;
-                break;
-            case SwipeType::GUARD:
-                _keyGuard = true;
-                break;
-            case SwipeType::NONE:
-                break;
-            default:
-                break;
+            case SwipeType::LEFTDASH:  _keyLdash = true; break;
+            case SwipeType::RIGHTDASH: _keyRdash = true; break;
+            case SwipeType::JUMP:      _keyJump  = true; break;
+            case SwipeType::GUARD:     _keyGuard = true; break;
+            default: break;
         }
 
-        // If we have used a swipe type, then clear that touch instance
         if (s_type != SwipeType::NONE) {
             clearTouchInstance(_rtouch);
         }
     }
 }
+
 
 
