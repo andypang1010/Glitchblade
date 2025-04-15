@@ -375,7 +375,7 @@ void LevelController::postUpdate(float dt)
             auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
 
             if (damagingAction) {
-                createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndTime() - damagingAction->getHitboxStartTime() + 1);
+                createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1);
             }
 
             if (projectileAction) {
@@ -453,8 +453,8 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
             meleeAction->setHitboxPos(hitboxPos);
             meleeAction->setHitboxSize(hitboxSize);
-            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartTime"));
-            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndTime"));
+            meleeAction->setHitboxStartFrame(action->getFloat("hitboxStartFrame"));
+            meleeAction->setHitboxEndFrame(action->getFloat("hitboxEndFrame"));
             meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
 
             

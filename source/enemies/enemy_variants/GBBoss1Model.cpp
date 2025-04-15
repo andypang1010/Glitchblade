@@ -335,7 +335,7 @@ void Boss1Model::AIMove() {
         _moveDuration--;
     }
 
-    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartFrame() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndFrame() - 1) {
         setMovement(face * getForce() * STAB_FORCE * _scale);
     }
     else {
@@ -381,13 +381,13 @@ void Boss1Model::explode() {
 }
 
 std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {
-    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartTime() - 1) {
+    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartFrame() - 1) {
         return _stab;
     }
-    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
+    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartFrame() - 1) {
         return _slam;
 	}
-	else if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
+	else if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartFrame() - 1) {
 		return _explode;
 	}
     return nullptr;

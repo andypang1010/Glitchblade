@@ -19,10 +19,10 @@ protected:
     cugl::Vec2 _hitboxSize;
 
     /** The start time of the hitbox. */
-    float _hitboxStartTime;
+    float _hitboxStartFrame;
 
     /** The end time of the hitbox. */
-    float _hitboxEndTime;
+    float _hitboxEndFrame;
 
     /** The damage dealt by the hitbox. */
     float _hitboxDamage;
@@ -41,11 +41,11 @@ public:
     cugl::Vec2 getHitboxSize() const;
     void setHitboxSize(const cugl::Vec2& size);
 
-    float getHitboxStartTime() const;
-    void setHitboxStartTime(float startTime);
+    float getHitboxStartFrame() const;
+    void setHitboxStartFrame(float StartFrame);
 
-    float getHitboxEndTime() const;
-    void setHitboxEndTime(float endTime);
+    float getHitboxEndFrame() const;
+    void setHitboxEndFrame(float EndFrame);
 
     float getHitboxDamage() const;
     void setHitboxDamage(float damage);
