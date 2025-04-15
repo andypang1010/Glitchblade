@@ -8,14 +8,16 @@ class GBLevelSelectScene : public cugl::scene2::Scene2, public GBSceneInterface 
 protected:
     std::shared_ptr<cugl::AssetManager> _assets;
     std::shared_ptr<GBLevelSelectUI> _levelSelectUI;
-
     std::shared_ptr<cugl::scene2::Button> _level3Button;
+    std::string _levelSelected = "";
 
 public:
     GBLevelSelectScene() {}
     ~GBLevelSelectScene() { dispose(); }
 
     virtual void dispose() override;
+
+    void setActive(bool active);
 
     bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
@@ -33,4 +35,6 @@ public:
     void postUpdate(float dt);
 
     void preUpdate(float dt);
+    std::string getLevelSelected();
+    void setLevelSelected(std::string lvlString);
 };

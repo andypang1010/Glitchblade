@@ -221,5 +221,5 @@ public:
     /**
         * Switches the currently rendered scene to the GameScene.
     */
-    void showGameScene();
+    void showGameScene(std::string levelToLoad);
 };

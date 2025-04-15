@@ -11,6 +11,8 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _level2Button;
     std::shared_ptr<cugl::scene2::Button> _level3Button;
 
+    std::string _loadSceneKey = "";
+
     bool _active;
 
 public:
@@ -54,6 +56,10 @@ public:
      * @param value whether the scene is currently active
      */
     void setActive(bool value);
+
+    std::string getLoadSceneKey();
+
+    void setLoadSceneKey(std::string key);
 
     bool isActive() const { return _active; }
 };

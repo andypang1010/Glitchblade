@@ -24,11 +24,36 @@ bool GBLevelSelectScene::init(const std::shared_ptr<AssetManager>& assets) {
 
 void GBLevelSelectScene::dispose() {
     if (_active) {
+        _levelSelected = "";
+        _levelSelectUI->dispose();
         Scene2::dispose();
     }
 }
 
-void GBLevelSelectScene::preUpdate(float dt) {}
+void GBLevelSelectScene::setActive(bool active) {
+    _active = active;
+    if(_levelSelectUI != nullptr)
+        _levelSelectUI->setActive(active);
+}
+
+void GBLevelSelectScene::preUpdate(float dt) {
+    std::string keySelected = _levelSelectUI->getLoadSceneKey();
+    if (keySelected != "") {
+        _levelSelected = keySelected;
+        setSwapSignal(2);
+    }
+}
+
+std::string GBLevelSelectScene::getLevelSelected() {
+    return _levelSelected;
+}
+
+void GBLevelSelectScene::setLevelSelected(std::string lvlString) {
+    if (_levelSelectUI != nullptr)
+        _levelSelectUI->setLoadSceneKey(lvlString);
+    _levelSelected = lvlString;
+}
+
 void GBLevelSelectScene::postUpdate(float remain) {}
 void GBLevelSelectScene::render() {
     Scene2::render();

@@ -172,14 +172,15 @@ void GlitchbladeApp::update(float dt) {
 void GlitchbladeApp::preUpdate(float dt) {
     switch (_currentScene->getSwapSignal()) {
     case(0):
-        // CULog("NO SWAP");
         break;
     case(1):
-        CULog("SWAP TO LS");
+        _currentScene->setSwapSignal(0);
         showLevelSelect();
         break;
     case(2):
-        CULog("SWAP TO GS");
+        _levelSelect->setLevelSelected("");
+        _currentScene->setSwapSignal(0);
+        showGameScene(_levelSelect->getLevelSelected());
         break;
     default:
         CULog("DEFAULT");
@@ -264,9 +265,7 @@ void GlitchbladeApp::draw() {
  * Switches the currently rendered scene to the LevelSelect scene.
 */
 void GlitchbladeApp::showLevelSelect() {
-    CULog("SHOWLEVELSELECT");
     _gameplay->disableUI();
-    _gameplay->dispose();
     _currentScene = _levelSelect;
     _levelSelect->setActive(true);
 }
@@ -274,7 +273,8 @@ void GlitchbladeApp::showLevelSelect() {
 /**
     * Switches the currently rendered scene to the GameScene.
 */
-void GlitchbladeApp::showGameScene() {
+void GlitchbladeApp::showGameScene(std::string levelToLoad) {
     _gameplay->enableUI();
+    _levelSelect->setActive(false);
     _currentScene = _gameplay;
 }

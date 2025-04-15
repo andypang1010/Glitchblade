@@ -16,7 +16,6 @@ bool GBLevelSelectUI::init(const std::shared_ptr<AssetManager>& assets) {
 
     auto layer = assets->get<scene2::SceneNode>("levelselectscene");
     if (layer == nullptr) {
-        CULog("LevelSelect scene not found in assets!");
         return false;
     }
 
@@ -54,44 +53,33 @@ bool GBLevelSelectUI::init(const std::shared_ptr<AssetManager>& assets) {
     _level3Button = std::dynamic_pointer_cast<scene2::Button>(level3);
     if (_level3Button) {
         _level3Button->activate();
-        _level3Button->addListener([](const std::string& name, bool down) {
+        _level3Button->addListener([this](const std::string& name, bool down) {
             if (!down) {
-                CULog("Button level3 was clicked");
+                setLoadSceneKey("Level 3");
             }
         });
-    }
-    else {
-        CULog("Level3 button not found directly in levelselect scene.");
     }
 
     _level2Button = std::dynamic_pointer_cast<scene2::Button>(level2);
     if (_level2Button) {
         _level2Button->activate();
-        _level2Button->addListener([](const std::string& name, bool down) {
+        _level2Button->addListener([this](const std::string& name, bool down) {
             if (!down) {
-                CULog("Button level2 was clicked");
+                setLoadSceneKey("Level 2");
             }
         });
-    }
-    else {
-        CULog("Level2 button not found directly in levelselect scene.");
     }
 
     _level1Button = std::dynamic_pointer_cast<scene2::Button>(level1);
     if (_level1Button) {
         _level1Button->activate();
-        _level1Button->addListener([](const std::string& name, bool down) {
+        _level1Button->addListener([this](const std::string& name, bool down) {
             if (!down) {
-                CULog("Button level1 was clicked");
+                setLoadSceneKey("Level 1");
             }
         });
     }
-    else {
-        CULog("Level1 button not found directly in levelselect scene.");
-    }
 
-    // Set the background clear color.
-    Application::get()->setClearColor(Color4f::BLACK);
     return true;
 }
 
@@ -99,6 +87,7 @@ void GBLevelSelectUI::dispose() {
     _level3Button = nullptr;
     _level2Button = nullptr;
     _level1Button = nullptr;
+    _loadSceneKey = "";
     _assets = nullptr;
     removeAllChildren();
 }
@@ -116,8 +105,18 @@ void doButtonSetActive(bool value, const std::shared_ptr<cugl::scene2::Button>& 
 
 void GBLevelSelectUI::setActive(bool value) {
     _active = value;
+    if(value)
+        Application::get()->setClearColor(Color4f::BLACK);
     doButtonSetActive(value, _level1Button);
     doButtonSetActive(value, _level2Button);
     doButtonSetActive(value, _level3Button);
     setVisible(value);
+}
+
+std::string GBLevelSelectUI::getLoadSceneKey() {
+    return _loadSceneKey;
+}
+
+void GBLevelSelectUI::setLoadSceneKey(std::string key) {
+    _loadSceneKey = key;
 }

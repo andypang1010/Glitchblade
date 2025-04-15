@@ -326,12 +326,12 @@ void GameScene::dispose() {
  */
 void GameScene::reset() {
 	removeAllChildren();
+
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-
-    CULog("After debugnode remove all children in gamescene reset:");
-    CULog("_debugnode has %lu children", _debugnode->getChildCount());
+    _failed = false;
+    _complete = false;
     _pauseMenu->removeAllChildren();
     _ui->removeAllChildren();
     setFailure(false);
@@ -521,6 +521,7 @@ void GameScene::fixedUpdate(float step) {
     _levelController->fixedUpdate(step);
 
     if (_levelController->isCurrentLevelComplete()) {
+        reset();
         setSwapSignal(1);
     }
 }
