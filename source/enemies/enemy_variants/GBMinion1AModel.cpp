@@ -273,7 +273,7 @@ void Minion1AModel::explode() {
 }
 
 std::shared_ptr<MeleeActionModel> Minion1AModel::getDamagingAction() {
-    if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
+    if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartFrame() - 1) {
         setEnabled(false);
         return _explode;
     }
@@ -308,13 +308,13 @@ void Minion1AModel::updateAnimation()
 
     _explodeSprite->setVisible(!isStunned() && _isExploding);
     
-    _explodeVFXSprite->setVisible(_isExploding && _explodeSprite->getFrame() >= _explode->getHitboxStartTime() - 1);
+    _explodeVFXSprite->setVisible(_isExploding && _explodeSprite->getFrame() >= _explode->getHitboxStartFrame() - 1);
     
 
     playAnimation(_walkSprite);
     playAnimation(_shootSprite);
     playAnimation(_explodeSprite);
-    playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartTime() - 1);
+    playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartFrame() - 1);
    
     if (framenum > 0){
         CULog("ExplodeVfx frame #%d after update",_explodeVFXSprite->getFrame());

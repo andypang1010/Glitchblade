@@ -7,8 +7,8 @@
                 "name": "explode",
                 "hitboxPos": [ 0, 0 ],
                 "hitboxSize": [ 8, 8 ],
-                "hitboxStartTime": 33,
-                "hitboxEndTime": 61,
+                "hitboxStartFrame": 33,
+                "hitboxEndFrame": 61,
                 "hitboxDamage": 20
             },
             {
@@ -51,8 +51,8 @@
                 "name": "punch",
                 "hitboxPos": [ 4, 0 ],
                 "hitboxSize": [ 4, 2 ],
-                "hitboxStartTime": 21,
-                "hitboxEndTime": 30,
+                "hitboxStartFrame": 21,
+                "hitboxEndFrame": 30,
                 "hitboxDamage": 20
             },
             {
@@ -60,7 +60,7 @@
                 "name": "slam",
                 "hitboxPos": [ 3.5, 0 ],
                 "hitboxSize": [ 7, 2 ],
-                "hitboxStartTime": 19,
+                "hitboxStartFrame": 19,
                 "hitboxEndTime": 23,
                 "hitboxDamage": 20
             }
@@ -74,8 +74,8 @@
                 "name": "stab",
                 "hitboxPos": [ 3, 0 ],
                 "hitboxSize": [ 4, 1.5 ],
-                "hitboxStartTime": 27,
-                "hitboxEndTime": 36,
+                "hitboxStartFrame": 27,
+                "hitboxEndFrame": 36,
                 "hitboxDamage": 20
             },
             {
@@ -83,8 +83,8 @@
                 "name": "slam",
                 "hitboxPos": [ 4, 0 ],
                 "hitboxSize": [ 4, 6 ],
-                "hitboxStartTime": 25,
-                "hitboxEndTime": 31,
+                "hitboxStartFrame": 25,
+                "hitboxEndFrame": 31,
                 "hitboxDamage": 20
             },
             {
@@ -92,8 +92,8 @@
                 "name": "explode",
                 "hitboxPos": [ 0, 0 ],
                 "hitboxSize": [ 10, 10 ],
-                "hitboxStartTime": 26,
-                "hitboxEndTime": 33,
+                "hitboxStartFrame": 26,
+                "hitboxEndFrame": 33,
                 "hitboxDamage": 40
             },
             {
