@@ -110,18 +110,6 @@ protected:
     std::unordered_set<b2Fixture*> _sensorFixtures;
 
 #pragma mark Internal Object Management
-    /**
-     * Lays out the game geography.
-     *
-     * Pay close attention to how we attach physics objects to a scene graph.
-     * The simplest way is to make a subclass, like we do for the dude.  However,
-     * for simple objects you can just use a callback function to lightly couple
-     * them.  This is what we do with the crates.
-     *
-     * This method is really, really long.  In practice, you would replace this
-     * with your serialization loader, which would process a level file.
-     */
-    void populate(const std::shared_ptr<LevelModel>& level);
 
     
 public:
@@ -134,6 +122,8 @@ public:
      * This allows us to use a controller without a heap pointer.
      */
     GameScene();
+
+    bool init(const std::shared_ptr<AssetManager>& assets, std::string levelName);
     
     /**
      * Disposes of all (non-static) resources allocated to this mode.
@@ -147,6 +137,19 @@ public:
      * Disposes of all (non-static) resources allocated to this mode.
      */
     void dispose();
+
+    /**
+     * Lays out the game geography.
+     *
+     * Pay close attention to how we attach physics objects to a scene graph.
+     * The simplest way is to make a subclass, like we do for the dude.  However,
+     * for simple objects you can just use a callback function to lightly couple
+     * them.  This is what we do with the crates.
+     *
+     * This method is really, really long.  In practice, you would replace this
+     * with your serialization loader, which would process a level file.
+     */
+    void populate(const std::shared_ptr<LevelModel>& level);
 
     void setInitUIActive(bool active) {
         _inituiactive = active;
@@ -209,6 +212,8 @@ public:
     void enableUI();
     bool init(const std::shared_ptr<AssetManager>& assets,
               const Rect& rect, const Vec2& gravity);
+
+    std::shared_ptr<LevelModel> getLevelModel(std::string name);
 
     void setAllGameplayUIActive(bool active);
     

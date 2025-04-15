@@ -178,8 +178,9 @@ void GlitchbladeApp::preUpdate(float dt) {
         showLevelSelect();
         break;
     case(2):
-        _levelSelect->setLevelSelected("");
         _currentScene->setSwapSignal(0);
+        CULog("LEVEL SELECTED IS!!!");
+        CULog(_levelSelect->getLevelSelected().c_str());
         showGameScene(_levelSelect->getLevelSelected());
         break;
     default:
@@ -274,7 +275,17 @@ void GlitchbladeApp::showLevelSelect() {
     * Switches the currently rendered scene to the GameScene.
 */
 void GlitchbladeApp::showGameScene(std::string levelToLoad) {
+    _gameplay->dispose();
+    _gameplay->init(_assets);
+    _gameplay->setSpriteBatch(_batch);
     _gameplay->enableUI();
+
+    _levelSelect->setLevelSelected("");
     _levelSelect->setActive(false);
+
+    CULog("TRYING TO LOAD:");
+    CULog(levelToLoad.c_str());
+
+    _gameplay->populate(_gameplay->getLevelModel(levelToLoad));
     _currentScene = _gameplay;
 }

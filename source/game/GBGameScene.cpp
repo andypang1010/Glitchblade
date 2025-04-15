@@ -212,9 +212,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         if (!_player){
             CULog("player is null in populate");
         }
-    
-    // TODO TODO TODO: change this based on level select
-    populate(_levelController->getLevelByName("Level 1"));
 
     // === Initialize in-game UI ===
     populateUI(assets);
@@ -226,6 +223,10 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     Application::get()->setClearColor(Color4f::BLACK);
 
     return true;
+}
+
+std::shared_ptr<LevelModel> GameScene::getLevelModel(std::string name) {
+    return _levelController->getLevelByName(name);
 }
 
 void GameScene::setAllGameplayUIActive(bool active) {
@@ -357,7 +358,7 @@ void GameScene::reset() {
  * with your serialization loader, which would process a level file.
  */
 void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
-    _worldnode = _levelController->makeWorldNode("Level 1");
+    _worldnode = _levelController->makeWorldNode(level->getLevelName());
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
     addChild(_worldnode);
