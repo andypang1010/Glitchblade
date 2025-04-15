@@ -7,7 +7,9 @@ protected:
     /** The asset manager for this game mode. */
     std::shared_ptr<cugl::AssetManager> _assets;
 
-    std::shared_ptr<cugl::scene2::Button> _pauseButton;
+    std::shared_ptr<cugl::scene2::Button> _level1Button;
+    std::shared_ptr<cugl::scene2::Button> _level2Button;
+    std::shared_ptr<cugl::scene2::Button> _level3Button;
 
     bool _active;
 

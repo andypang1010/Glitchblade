@@ -9,7 +9,7 @@ protected:
     std::shared_ptr<cugl::AssetManager> _assets;
     std::shared_ptr<GBLevelSelectUI> _levelSelectUI;
 
-    std::shared_ptr<cugl::scene2::Button> _pauseButton;
+    std::shared_ptr<cugl::scene2::Button> _level3Button;
 
 public:
     GBLevelSelectScene() {}

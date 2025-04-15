@@ -75,9 +75,17 @@
         "minion1B_stun": {
             "file": "textures/minion1B_stun.png"
         },
-
         "pause_button": {
             "file": "textures/pause_button.png"
+        },
+        "level1_button": {
+            "file": "textures/level1_button.png"
+        },
+        "level2_button": {
+            "file": "textures/level2_button.png"
+        },
+        "level3_button": {
+            "file": "textures/level3_button.png"
         },
         "hp_empty": {
             "file": "textures/hp_bar.png"
@@ -172,6 +180,9 @@
         "ingamescene" : "widgets/ingamescene.json",
         "levelselectscene" : "widgets/levelselectscene.json",
         "pausebutton" : "widgets/pausebutton.json",
+        "level1button" : "widgets/level1button.json",
+        "level2button" : "widgets/level2button.json",
+        "level3button" : "widgets/level3button.json",
         "hpbar" : "widgets/hpbar.json",
         "pausemenu": "widgets/pausemenu.json"
     },

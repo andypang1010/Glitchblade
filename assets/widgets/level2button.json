@@ -1,0 +1,35 @@
+{
+  "variables": {},
+  "contents": {
+    "type": "Button",
+    "format": { "type": "Anchored" },
+    "data": {
+      "anchor": [0.5, 0.5],
+      "size": [80, 80],
+      "angle": 0,
+      "position": [0, 0],
+      "visible": true,
+      "upnode": "level_button"
+    },
+    "children": {
+      "level_button": {
+        "type": "Image",
+        "data": {
+          "texture": "level2_button",
+          "anchor": [0.5, 0.5],
+          "size": [80, 80],
+          "angle": 0,
+          "position": [0, 0],
+          "visible": true
+        },
+        "layout": {
+          "x_anchor": "fill",
+          "y_anchor": "center",
+          "absolute": false,
+          "x_offset": 0,
+          "y_offset": 0
+        }
+      }
+    }
+  }
+}

@@ -2,9 +2,7 @@
   "variables": {},
   "contents": {
     "type": "Node",
-    "format": {
-      "type": "Anchored"
-    },
+    "format": { "type": "Anchored" },
     "data": {
       "anchor": [0, 0],
       "size": [2560, 1440],
@@ -12,35 +10,48 @@
       "visible": true
     },
     "children": {
-      "pause": {
+      "level1": {
         "type": "Widget",
         "data": {
-          "key": "pausebutton",
-          "variables": {}
-        },
-        "layout": {
-          "x_anchor": "right",
-          "y_anchor": "top",
-          "absolute": false,
-          "x_offset": -0.06,
-          "y_offset": -0.07
-        }
-      },
-      "hpbar": {
-        "type": "Widget",
-        "data": {
-          "key": "hpbar",
+          "key": "level1button",
           "variables": {}
         },
         "layout": {
           "x_anchor": "left",
-          "y_anchor": "top",
+          "y_anchor": "bottom",
           "absolute": false,
-          "x_offset": 0.08,
-          "y_offset": -0.07
+          "x_offset": 0.1667,
+          "y_offset": 0.5
+        }
+      },
+      "level2": {
+        "type": "Widget",
+        "data": {
+          "key": "level2button",
+          "variables": {}
+        },
+        "layout": {
+          "x_anchor": "left",
+          "y_anchor": "bottom",
+          "absolute": false,
+          "x_offset": 0.5,
+          "y_offset": 0.5
+        }
+      },
+      "level3": {
+        "type": "Widget",
+        "data": {
+          "key": "level3button",
+          "variables": {}
+        },
+        "layout": {
+          "x_anchor": "left",
+          "y_anchor": "bottom",
+          "absolute": false,
+          "x_offset": 0.8333,
+          "y_offset": 0.5
         }
       }
     }
   }
 }
-
