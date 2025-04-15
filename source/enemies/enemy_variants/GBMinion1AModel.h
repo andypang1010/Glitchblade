@@ -1,5 +1,5 @@
-#ifndef __GB_MINION1B_MODEL_H__
-#define __GB_MINION1B_MODEL_H__
+#ifndef __GB_MINION1A_MODEL_H__
+#define __GB_MINION1A_MODEL_H__
 #include <cugl/cugl.h>
 #include "../GBEnemyModel.h"
 #include "../GBActionModel.h"
@@ -41,8 +41,6 @@ using namespace cugl;
 #define ENEMY_SENSOR_HEIGHT   0.1f
 /** The density of the character */
 #define ENEMY_DENSITY    1.0f
-/** The impulse for the character dash-attack */
-#define MINION1B_PUNCH_FORCE       35.0f
 /** The implulse fot the character knockback */
 #define ENEMY_KB       1.0f
 #define ENEMY_KB_DURATION 20
@@ -54,14 +52,16 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1B_SLAM_FRAMES     32
-#define MINION1B_PUNCH_FRAMES     30
+#define MINION1A_SHOOT_FRAMES     5
+#define MINION1A_EXPLODE_FRAMES     45
+#define MINION1A_EXPLODEVFX_FRAMES     12
 
 #define STUN_FRAMES 16
 
 #pragma mark -
 #pragma mark AI Constants
 #define CLOSE_RADIUS     6.0f
+#define FAR_RADIUS     12.0f
 #pragma mark -
 #pragma mark Enemy Model
 /**
@@ -71,19 +71,19 @@ using namespace cugl;
 * experience, using a rectangular shape for a character will regularly snag
 * on a platform.  The round shapes on the end caps lead to smoother movement.
 */
-class Minion1BModel : public EnemyModel {
+class Minion1AModel : public EnemyModel {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
-    CU_DISALLOW_COPY_AND_ASSIGN(Minion1BModel);
+    CU_DISALLOW_COPY_AND_ASSIGN(Minion1AModel);
 protected:
     std::string _sensorName;
     std::string _bodyName;
 
-    bool _isPunching;
-    bool _isSlamming;
+    bool _isExploding;
+    bool _isShooting;
 
-    std::shared_ptr<MeleeActionModel> _punch;
-    std::shared_ptr<MeleeActionModel> _slam;
+    std::shared_ptr<MeleeActionModel> _explode;
+    std::shared_ptr<RangedActionModel> _shoot;
 
     /**
     * Redraws the outline of the physics fixtures to the debug node
@@ -95,9 +95,9 @@ protected:
     virtual void resetDebug() override;
 
 public:
-    std::shared_ptr<scene2::SpriteNode> _punchSprite;
-    std::shared_ptr<scene2::SpriteNode> _slamSprite;
-	std::shared_ptr<scene2::SpriteNode> _slamVFXSprite;
+    std::shared_ptr<scene2::SpriteNode> _explodeSprite;
+    std::shared_ptr<scene2::SpriteNode> _explodeVFXSprite;
+    std::shared_ptr<scene2::SpriteNode> _shootSprite;
 
 public:
 
@@ -108,12 +108,12 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    Minion1BModel() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
+    Minion1AModel() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
 
     /**
      * Destroys this PlayerModel, releasing all resources.
      */
-    virtual ~Minion1BModel(void) override { dispose(); }
+    virtual ~Minion1AModel(void) override { dispose(); }
 
     /**
      * Disposes all resources and assets of this PlayerModel
@@ -158,8 +158,8 @@ public:
      *
      * @return  A newly allocated PlayerModel at the given position with the given scale
      */
-    static std::shared_ptr<Minion1BModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
-        std::shared_ptr<Minion1BModel> result = std::make_shared<Minion1BModel>();
+    static std::shared_ptr<Minion1AModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+        std::shared_ptr<Minion1AModel> result = std::make_shared<Minion1AModel>();
         return (result->init(assetRef, constantsRef, pos, actions) ? result : nullptr);
     }
 
@@ -175,9 +175,9 @@ public:
         _canKnockBack = true;
         _stunRem = 0;
 
-        _isPunching = false;
-        _isSlamming = false;
-
+        _isExploding = false;
+        _isShooting = false;
+        
         _moveDuration = 0;
         currentFrame = 0;
     };
@@ -190,16 +190,16 @@ public:
     void AIMove() override;
 
     /**
-     * Performs the slam attack of minion1B
+     * Performs the shoot attack of minion1A
      *
      */
-    void slam();
+    void shoot();
 
     /**
-     * Performs the punch attack of minion1B
+     * Performs the explode attack of minion1A
      *
      */
-    void punch();
+    void explode();
 
     /**
      * Returns the action when an attack hitbox should be active, or nothing when no attack is active
@@ -207,6 +207,13 @@ public:
      * @return the action that needs hitbox, or nullptr when no hitbox is active
      */
     std::shared_ptr<MeleeActionModel> getDamagingAction() override;
+
+    /**
+     * Returns the action when a projectile is going to be shot, or nothing when no attack is active
+     *
+     * @return the action that needs projectile, or nullptr when no ranged attack is active
+     */
+    std::shared_ptr<RangedActionModel> getProjectileAction() override;
 
 #pragma mark -
 #pragma mark Animation Methods

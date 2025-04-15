@@ -174,18 +174,30 @@ void PlayerController::postUpdate(float dt)
 
 void PlayerController::updateCooldowns()
 {
-#pragma mark Guard cooldown
     if (_player->iframe > 0) _player->iframe--;
+    if (_player->isDamaged()) _player->setDamagedRem(_player->getDamagedRem() - 1);
+#pragma mark Guard cooldown
+    // Update guard release time
+    if (_player->getGuardReleaseRem() > 0) {
+        int newRem = _player->getGuardReleaseRem() - 1;
+        _player->setGuardReleaseRem(newRem);
+    }
     // player inputs guard and cooldown is ready
     if (_player->isGuardBegin()) {
         _player->setGuardCDRem();
         _player->setGuardRem();
         _player->setParryRem();
         _player->setShieldDebugColor(Color4::GREEN);
+        _player->setGuardState(1);
     }
     if (_player->isGuardActive() && !_player->isGuardBegin()) {
         int guardRem = _player->getGuardRem();
         _player->setGuardRem(guardRem - 1);
+        if (guardRem == 1) {
+            // Parry ending on this frame
+            _player->setGuardReleaseRem(PLAYER_HIT_COLOR_DURATION);
+            _player->setGuardState(3);
+        }
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
         if (parryRem == 0) {
@@ -195,11 +207,11 @@ void PlayerController::updateCooldowns()
     }
     // guard not active, update cooldown
     else if (_player->getGuardCDRem() >= 0) {
-        int newCD = _player->getGuardCDRem() - 1;
-        _player->setGuardCDRem((newCD < 0) ? 0 : newCD);
-        if (_player->getGuardCDRem() == 0) {
-            //end guard
-            _player->setShieldDebugColor(Color4(_constantsJSON->get("player")->get("debug")->getString("color")));
+            int newCD = _player->getGuardCDRem() - 1;
+            _player->setGuardCDRem((newCD < 0) ? 0 : newCD);
+            if (_player->getGuardCDRem() == 0) {
+                //end guard
+                _player->setShieldDebugColor(Color4(_constantsJSON->get("player")->get("debug")->getString("color")));
         }
     }
 

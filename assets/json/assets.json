@@ -18,6 +18,15 @@
         "player_guard": {
             "file": "textures/player_guard.png"
         },
+        "player_guard_release": {
+            "file": "textures/player_guard_release.png"
+        },
+        "player_parry_release": {
+            "file": "textures/player_parry_release.png"
+        },
+        "player_damaged": {
+            "file": "textures/player_damaged.png"
+        },
         "player_attack": {
             "file": "textures/player_attack.png"
         },
@@ -68,6 +77,18 @@
         },
         "minion1B_stun": {
             "file": "textures/minion1B_stun.png"
+        },
+        "wave_enemy_1": {
+            "file": "textures/wave_enemy_1.png"
+        },
+        "minion1A_explode": {
+            "file": "textures/minion1A_explode.png"
+        },
+        "minion1A_shoot": {
+            "file": "textures/minion1A_shoot.png"
+        },
+        "minion1A_walk": {
+            "file": "textures/minion1A_walk.png"
         },
 
         "pause_button": {

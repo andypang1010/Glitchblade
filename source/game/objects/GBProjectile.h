@@ -16,21 +16,23 @@ using namespace cugl;
 
 #pragma mark -
 #pragma mark Projectile Model
-class Projectile : public physics2::WheelObstacle {
+class Projectile : public physics2::BoxObstacle {
 private:
     /** This macro disables the copy constructor (not allowed on physics objects) */
     CU_DISALLOW_COPY_AND_ASSIGN(Projectile);
     
 protected:
-    /** The scene graph node for the Projectile. */
-    std::shared_ptr<scene2::SceneNode> _node;
-    std::shared_ptr<scene2::SpriteNode> _sprite_node;
-    std::shared_ptr<graphics::Texture> _texture;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
+
+    /** The scene graph node for the Projectile. */
+    std::shared_ptr<scene2::SpriteNode> _spriteNode;
+    Vec2 _spawnOffset;
+    Vec2 _animOffset;
+    Size _size;
     float _damage;
     bool _isPlayerFired;
-    
+    int frameCounter = 0;
 
 public:
 #pragma mark Constructors
@@ -40,7 +42,7 @@ public:
      * This constructor does not initialize any of the Projectile values beyond
      * the defaults.  To use a Projectile, you must call init().
      */
-    Projectile() : WheelObstacle() { }
+    Projectile() : BoxObstacle() { }
     
     /**
      * Destroys this Projectile, releasing all resources.
@@ -72,10 +74,16 @@ public:
      *
      * @return  A newly allocated Projectile at the given position, with the given radius
      */
-    static std::shared_ptr<Projectile> alloc(const Vec2& pos, float radius, bool isPlayerFired) {
+    static std::shared_ptr<Projectile> alloc(const Vec2& pos, Size size, bool isPlayerFired) {
         std::shared_ptr<Projectile> result = std::make_shared<Projectile>();
         result->setIsPlayerFired(isPlayerFired);
-        return (result->init(pos, radius) ? result : nullptr);
+        return (result->init(pos, size) ? result : nullptr);
+    }
+
+    static std::shared_ptr<Projectile> allocWithProjectile(const Vec2& pos, const std::shared_ptr<Projectile> projectile) {
+		std::shared_ptr<Projectile> result = std::make_shared<Projectile>();
+		result->setIsPlayerFired(projectile->getIsPlayerFired());
+		return (result->init(pos, projectile->getSize()) ? result : nullptr);
     }
 
 #pragma mark -
@@ -89,7 +97,7 @@ public:
      *
      * @return the scene graph node representing this Projectile.
      */
-    const std::shared_ptr<scene2::SceneNode>& getSceneNode() const { return _node; }
+    const std::shared_ptr<scene2::SpriteNode>& getSceneNode() const { return _spriteNode; }
     
     /**
      * Sets the scene graph node representing this Projectile.
@@ -97,16 +105,9 @@ public:
      * @param node  The scene graph node representing this Projectile, which has
      *              been added to the world node already.
      */
-    void setSceneNode(const std::shared_ptr<scene2::SceneNode>& node) {
-        _node = node;
+    void setSceneNode(const std::shared_ptr<scene2::SpriteNode>& node) {
+        _spriteNode = node;
     }
-    
-    /**Get the projectile's sprite node. Use after it is attached with attachSpriteNode(sprite_node).  */
-    const std::shared_ptr<scene2::SpriteNode>& getSpriteNode() const { return _sprite_node; }
-    
-    /** Attach a sprite node to the projectile's (empty) scene node, for sprite animations. */
-    void attachSpriteNode(const std::shared_ptr<scene2::SpriteNode> sprite_node);
-
     
     /**
      * Sets the ratio of the Projectile sprite to the physics body
@@ -129,6 +130,58 @@ public:
 #pragma mark -
 #pragma mark Attribute Properties
     /**
+    * Returns the spawn offset of the projectile.
+    *
+    * @return The spawn offset as a Vec2.
+    */
+    Vec2 getSpawnOffset() const {
+        return _spawnOffset;
+    }
+
+    /**
+    * Sets the spawn offset of the projectile.
+    *
+    * @param offset The new spawn offset as a Vec2.
+    */
+    void setSpawnOffset(const Vec2& offset) {
+        _spawnOffset = offset;
+    }
+    /**
+* Returns the spawn offset of the projectile.
+*
+* @return The spawn offset as a Vec2.
+*/
+    Vec2 getAnimOffset() const {
+        return _animOffset;
+    }
+
+    /**
+    * Sets the spawn offset of the projectile.
+    *
+    * @param offset The new spawn offset as a Vec2.
+    */
+    void setAnimOffset(const Vec2& offset) {
+        _animOffset = offset;
+    }
+
+    /**
+    * Returns the size of the projectile.
+    *
+    * @return The size as a Size object.
+    */
+    Size getSize() const {
+        return _size;
+    }
+
+    /**
+    * Sets the size of the projectile.
+    *
+    * @param size The new size as a Size object.
+    */
+    void setSize(const Size& size) {
+        _size = size;
+    }
+    /**
      * Returns whether the projectile is fired by player or not.
      *
      * @return True iff player fired this projectile.
@@ -145,8 +198,12 @@ public:
     }
 #pragma mark -
 #pragma mark Creating, Destroying Projectiles
+
+    static ObstacleNodePair createProjectileNodePair(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, Vec2 spawnPos, std::shared_ptr<Projectile> projectile, bool isFacingRight);
+
     /** Creates a projectile and returns the obstacle and scene node pair. */
-    static ObstacleNodePair createProjectile(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, Vec2 pos, Vec2 direction, bool isPlayerFired, bool face_right);
+    /*static ObstacleNodePair createProjectile(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, Vec2 pos, Vec2 direction, bool isPlayerFired, bool face_right);*/
+
 #pragma mark -
 #pragma mark Physics Methods
     /**

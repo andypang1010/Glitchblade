@@ -1,5 +1,6 @@
 #include "GBLevelController.h"
 #include "../enemies/enemy_variants/GBBoss1Controller.h"
+#include "../enemies/enemy_variants/GBMinion1AController.h"
 #include "../enemies/enemy_variants/GBMinion1BController.h"
 #include "../core/GBTypes.h"
 
@@ -74,7 +75,7 @@ std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()
         return std::make_shared<Boss1Controller>();
     } }, // Should return a Boss1Controller
     { "minion_1A", []() {
-        return std::make_shared<Boss1Controller>();
+        return std::make_shared<Minion1AController>();
     } }, // Should return a Minion1AController
     { "minion_1B", []() {
         return std::make_shared<Minion1BController>();
@@ -372,11 +373,11 @@ void LevelController::postUpdate(float dt)
             auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
 
             if (damagingAction) {
-                createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndTime() - damagingAction->getHitboxStartTime() + 1);
+                createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1);
             }
 
             if (projectileAction) {
-                auto projectilePair = Projectile::createProjectile(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition().add(enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(2, 0) : Vec2(-2, 0)), enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), false, enemyCtrlr->getEnemy()->isFacingRight());
+                auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition(), projectileAction->getProjectiles()[0], enemyCtrlr->getEnemy()->isFacingRight());
                 addObstacle(projectilePair);
             }
 
@@ -450,8 +451,8 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
             meleeAction->setHitboxPos(hitboxPos);
             meleeAction->setHitboxSize(hitboxSize);
-            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartTime"));
-            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndTime"));
+            meleeAction->setHitboxStartFrame(action->getFloat("hitboxStartFrame"));
+            meleeAction->setHitboxEndFrame(action->getFloat("hitboxEndFrame"));
             meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
 
             
@@ -468,13 +469,6 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
 			for (std::shared_ptr<JsonValue> projectileJSON : action->get("projectiles")->children()) {
 				std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
-
-                spawnPositions.push_back(
-                    Vec2(
-                        projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(), 
-                        projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
-                    )
-                );
                 
                 spawnFrames.push_back(projectileJSON->get("projectileSpawnFrame")->asInt());
 
@@ -486,14 +480,35 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
                         projectileJSON->get("projectileVelocity")->get("y")->asFloat()
                     )
                 );
-                //projectile->setSpriteNode(
-                //    SpriteNode::allocWithSheet(
-                //        Texture::allocWithFile(projectileJSON->getString("projectileAnimation")), 
-                //        action->getInt("animation_row"), 
-                //        action->getInt("animation_col"), 
-                //        action->getInt("animation_size")
-                //    )
-                //);
+
+                projectile->setSize(
+                    Vec2(
+                        projectileJSON->get("projectileSize")->get("width")->asFloat(),
+                        projectileJSON->get("projectileSize")->get("height")->asFloat()
+                    )
+                );
+
+                projectile->setSpawnOffset(
+                    Vec2(
+                        projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(),
+                        projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
+                    )
+                );
+                projectile->setAnimOffset(
+                    Vec2(
+                        projectileJSON->get("projectile_animation_offset")->get("x")->asFloat(),
+                        projectileJSON->get("projectile_animation_offset")->get("y")->asFloat()
+                    )
+                );
+
+                projectile->setSceneNode(
+                    SpriteNode::allocWithSheet(
+                        Texture::allocWithFile(projectileJSON->getString("projectileAnimation")), 
+                        projectileJSON->getInt("projectile_animation_row"),
+                        projectileJSON->getInt("projectile_animation_col"),
+                        projectileJSON->getInt("projectile_animation_size")
+                    )
+                );
 
 				projectiles.push_back(projectile);
 			}

@@ -509,13 +509,13 @@ public:
      *
 	 * @param duration the duration of the movement
      */
-    virtual void approachTarget(int duration) { faceTarget(); _moveDirection = 1; _moveDuration = duration; };
+    virtual void approachTarget(int duration) { faceTarget(); _moveDirection = 1; _moveDuration = 1; };
     /**
    * Make the enemy move away from the target
    *
    * @param duration the duration of the movement
    */
-    virtual void avoidTarget(int duration) { faceTarget(); _moveDirection = -1; _moveDuration = duration; };
+    virtual void avoidTarget(int duration) { faceTarget(); _moveDirection = -1; _moveDuration = 1; };
 
     virtual bool isTargetClose();
     virtual bool isTargetFar();

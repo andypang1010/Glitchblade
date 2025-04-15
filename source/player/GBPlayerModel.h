@@ -45,7 +45,7 @@
 #define __GB_PLAYER_MODEL_H__
 #include <cugl/cugl.h>
 
-#define PLAYER_HIT_COLOR_DURATION 8
+#define PLAYER_HIT_COLOR_DURATION 16
 
 using namespace cugl;
 
@@ -67,6 +67,8 @@ protected:
     std::shared_ptr<JsonValue> _playerJSON;
     /** This character's remaining health */
     float _hp;
+    /** how much damage player deals*/
+    int _damage;
     /** The current horizontal movement of the character */
     float _movement;
     /** Which direction is the character facing */
@@ -79,8 +81,12 @@ protected:
     int  _dashRem;
     /** How long until we can guard again in frames */
     int  _guardCooldownRem = 0;
+    /** How many frames remaining in the guard release animation */
+    int  _guardReleaseRem = 0;
     /** How many frames remaining in the guard (0 when guard is not active) */
     int  _guardRem;
+    /** The state of the guard: 1 = is guarding, 2 = parry release, 3 = normal release, 0 = not guarding */
+    int  _guardState;
     /** How many frames remaining in the parry (0 when parry is not active) */
     int  _parryRem;
     /** Whether we are actively inputting jumping */
@@ -111,6 +117,8 @@ protected:
     /** Whether the dash has been released (reset) */
     bool _dashReset = true;
     int _lastDamagedFrame;
+    /** Remaining time for damaged animation */
+    int _damageRem;
 
     std::string _name;
     std::string _bodyName;
@@ -148,11 +156,15 @@ public:
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
-    std::shared_ptr<scene2::SpriteNode> _guardSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
+    std::shared_ptr<scene2::SpriteNode> _damagedSprite;
+
+    std::shared_ptr<scene2::SpriteNode> _guardSprite;
+    std::shared_ptr<scene2::SpriteNode> _guardReleaseSprite;
+    std::shared_ptr<scene2::SpriteNode> _parryReleaseSprite;
 
 #pragma mark Hidden Constructors
     /**
@@ -246,7 +258,10 @@ public:
         _dashRem = 0;
         _guardCooldownRem = 0;
         _guardRem = 0;
+        _guardState = 0;
         _parryRem = 0;
+        _damageRem = 0;
+        _damage = 10;// default player dmg
     };
     
     void setConstants();
@@ -383,6 +398,12 @@ public:
     #pragma mark -
     #pragma mark - Attribute Properties
 
+    // Damage
+    int getDamage() const { return _damage;}
+    void setDamage(int value) { _damage = value; }
+	bool isDamaged() const { return _damageRem > 0; }
+	void setDamagedRem(int value) { _damageRem = value; }
+	int getDamagedRem() { return _damageRem; }
     // Health
     int getMaxHP() const { return _maxhp;}
     float getHP() const { return _hp; }
@@ -443,6 +464,11 @@ public:
     int getGuardCDRem() { return _guardCooldownRem; }
     void setGuardCDRem(int value = _guard_cooldown) { _guardCooldownRem = value; }
     void setGuardInput(bool value) { _isGuardInput = value; }
+
+	int getGuardState() { return _guardState; }
+	void setGuardState(int value) { _guardState = value; }
+    int getGuardReleaseRem() { return _guardReleaseRem; }
+	void setGuardReleaseRem(int value) { _guardReleaseRem = value; }
 
     // Parrying
     bool isParryActive() { return _parryRem > 0 || isGuardBegin(); }

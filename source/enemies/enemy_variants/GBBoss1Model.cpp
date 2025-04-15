@@ -335,7 +335,7 @@ void Boss1Model::AIMove() {
         _moveDuration--;
     }
 
-    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartFrame() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndFrame() - 1) {
         setMovement(face * getForce() * STAB_FORCE * _scale);
     }
     else {
@@ -364,7 +364,7 @@ void Boss1Model::stab() {
 
 void Boss1Model::shoot() {
 	faceTarget();
-    if (rand() % 100 <= _aggression) {
+    if (_aggression >= 75) {
         _aggression -= std::max(0.0f, _aggression - 10);
         _isShooting = true;
         setMovement(0);
@@ -381,13 +381,13 @@ void Boss1Model::explode() {
 }
 
 std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {
-    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartTime() - 1) {
+    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartFrame() - 1) {
         return _stab;
     }
-    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
+    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartFrame() - 1) {
         return _slam;
 	}
-	else if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
+	else if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartFrame() - 1) {
 		return _explode;
 	}
     return nullptr;
@@ -412,7 +412,7 @@ void Boss1Model::updateAnimation()
 
     _stunSprite->setVisible(isStunned());
 
-    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && (isMoveLeft() || isMoveRight()));
+    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && (isMoveLeft() || isMoveRight()));
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
@@ -424,7 +424,15 @@ void Boss1Model::updateAnimation()
 
     _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= 24);
 
-    _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_stabSprite->isVisible() && !_shootSprite->isVisible() && !_explodeSprite->isVisible() && !_walkSprite->isVisible());
+    _idleSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && !(isMoveLeft() || isMoveRight()));
+
+    //CULog("Stun Spirte Visible: %s", _stunSprite->isVisible() ? "true" : "false");
+    //CULog("Walk Spirte Visible: %s", _walkSprite->isVisible() ? "true" : "false");
+    //CULog("Slam Spirte Visible: %s", _slamSprite->isVisible() ? "true" : "false");
+    //CULog("Stab Spirte Visible: %s", _stabSprite->isVisible() ? "true" : "false");
+    //CULog("Shoot Spirte Visible: %s", _shootSprite->isVisible() ? "true" : "false");
+    //CULog("Explode Spirte Visible: %s", _explodeSprite->isVisible() ? "true" : "false");
+    //CULog("Idle Spirte Visible: %s", _idleSprite->isVisible() ? "true" : "false");
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
