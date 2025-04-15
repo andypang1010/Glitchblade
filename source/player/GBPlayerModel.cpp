@@ -116,9 +116,21 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _jumpDownSprite->setPosition(0, -30);
     _jumpDownSprite->setScale(0.5f);
 
-    _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 3, 4, 12);
+    _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 9, 4, 36);
     _guardSprite->setPosition(0, -30);
     _guardSprite->setScale(0.5f);
+
+    _guardReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard_release"), 2, 4, 5);
+    _guardReleaseSprite->setPosition(0, -30);
+    _guardReleaseSprite->setScale(0.5f);
+
+    _parryReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_parry_release"), 2, 4, 5);
+    _parryReleaseSprite->setPosition(0, -30);
+    _parryReleaseSprite->setScale(0.5f);
+
+    _damagedSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_damaged"), 2, 4, 5);
+    _damagedSprite->setPosition(0, -30);
+    _damagedSprite->setScale(0.5f);
 
     _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 2, 4, 5);
     _attackSprite->setPosition(0, -30);
@@ -129,7 +141,10 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_jumpUpSprite);
     getSceneNode()->addChild(_jumpDownSprite);
     getSceneNode()->addChild(_guardSprite);
+    getSceneNode()->addChild(_guardReleaseSprite);
+	getSceneNode()->addChild(_parryReleaseSprite);
     getSceneNode()->addChild(_attackSprite);
+    getSceneNode()->addChild(_damagedSprite);
     
     setName(_name);
 }
@@ -145,8 +160,23 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void PlayerModel::damage(float value) {
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
-	_sceneNode->setColor(Color4::RED);
+	//_sceneNode->setColor(Color4::RED);
     _lastDamagedFrame = 0;
+    if (!isGuardActive()) {
+        _damageRem = PLAYER_HIT_COLOR_DURATION;
+    }
+    else {
+        if (isParryActive()) {
+            _guardState = 2;
+		}
+        else {
+            _guardState = 3;
+        }
+        _parryRem = 0;
+        _guardRem = 0;
+        _guardCooldownRem = 0;
+        _guardReleaseRem = PLAYER_HIT_COLOR_DURATION;
+    }
 }
 
 /**
@@ -352,13 +382,34 @@ void PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) 
 
 void PlayerModel::updateAnimation()
 {
-    if (isGuardActive()) {
-        _guardSprite->setVisible(true);
+    if (isDamaged()) {
+        _guardSprite->setVisible(false);
+		_guardReleaseSprite->setVisible(false);
+		_parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(true);
+
+        if (_damageRem == PLAYER_HIT_COLOR_DURATION) {
+            currentFrame = 0;
+            _damagedSprite->setFrame(0);
+        }
+
+        playAnimation(_damagedSprite);
+    }
+    else if (isGuardActive()) {
+        _guardSprite->setVisible(true);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         if (isGuardBegin()) {
             currentFrame = 0;
@@ -368,13 +419,43 @@ void PlayerModel::updateAnimation()
         playAnimation(_guardSprite);
     }
 
+    else if (getGuardReleaseRem() > 0) {
+        _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
+
+        if (getGuardReleaseRem() == PLAYER_HIT_COLOR_DURATION) {
+            currentFrame = 0;
+            _guardReleaseSprite->setFrame(0);
+            _parryReleaseSprite->setFrame(0);
+        }
+
+        if (_guardState == 2) {
+            _parryReleaseSprite->setVisible(true);
+            playAnimation(_parryReleaseSprite);
+        }
+        else if (_guardState == 3) {
+            _guardReleaseSprite->setVisible(true);
+            playAnimation(_guardReleaseSprite);
+        }
+    }
+
     else if (isDashActive()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(true);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         if (isDashInput()) {
             currentFrame = 0;
@@ -386,65 +467,83 @@ void PlayerModel::updateAnimation()
 
     else if (isJumpBegin()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(true);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         currentFrame = 0;
         _jumpUpSprite->setFrame(0);
     }
     else if (getVY() > 0 && !isGrounded()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(true);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         playAnimationOnce(_jumpUpSprite);
     }
     else if (getVY() == 0 && !isGrounded()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(true);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         currentFrame = 0;
         _jumpDownSprite->setFrame(0);
     }
     else if (getVY() < 0 && !isGrounded()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(true);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         playAnimationOnce(_jumpDownSprite);
     }
 
     else if (isStrafeLeft() || isStrafeRight()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(true);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         playAnimation(_walkSprite);
     }
 
     else {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(true);
+        _damagedSprite->setVisible(false);
 
         playAnimation(_idleSprite);
     }

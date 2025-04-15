@@ -24,6 +24,15 @@
         "player_guard": {
             "file": "textures/player_guard.png"
         },
+        "player_guard_release": {
+            "file": "textures/player_guard_release.png"
+        },
+        "player_parry_release": {
+            "file": "textures/player_parry_release.png"
+        },
+        "player_damaged": {
+            "file": "textures/player_damaged.png"
+        },
         "player_attack": {
             "file": "textures/player_attack.png"
         },

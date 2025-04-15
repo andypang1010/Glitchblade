@@ -678,7 +678,7 @@ void GameScene::beginContact(b2Contact* contact) {
         ((EnemyModel*)bd2)->setKnocked(true, bd2->getPosition().subtract(_player->getPosition()).normalize());
     }
 
-    // Test: plyaer-hitbox collision
+    // Test: player-hitbox collision
     if (bd1->getName() == "hitbox" && isPlayerBody(bd2, fd2)) {
         if (_player->iframe <= 0) {
             _player->iframe = 60;
@@ -688,7 +688,7 @@ void GameScene::beginContact(b2Contact* contact) {
                 setScreenShake(((Hitbox*)bd1)->getDamage(), 3);
             }
             else if (_player->isParryActive()) {
-
+                _player->damage(0);
                 ((Hitbox*)bd1)->getEnemy()->setStun(((Hitbox*)bd1)->getEnemy()->stunFrame);
                 setScreenShake(3, 5);
             }
@@ -707,6 +707,7 @@ void GameScene::beginContact(b2Contact* contact) {
                 setScreenShake(((Hitbox*)bd2)->getDamage(), 3);
             }
             else if (_player->isParryActive()) {
+                _player->damage(0);
                 ((Hitbox*)bd2)->getEnemy()->setStun(((Hitbox*)bd2)->getEnemy()->stunFrame);
                 setScreenShake(3, 5);
             }
@@ -746,6 +747,7 @@ void GameScene::beginContact(b2Contact* contact) {
     if (shieldHit) {
 
         if (_player->isParryActive()) {
+            _player->damage(0);
             if (!_player->hasProjectile()) {
                 _player->setHasProjectile(true);
             }

@@ -75,7 +75,7 @@
         },
         "guard": {
             "cooldown": 15,
-            "duration": 44
+            "duration": 60
         },
         "parry": {
             "duration": 24
