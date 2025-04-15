@@ -128,12 +128,6 @@ protected:
     std::string _groundSensorName;
     /** The node for debugging the ground sensor */
     std::shared_ptr<scene2::WireNode> _groundSensorNode;
-    /** Ground sensor to represent our feet */
-    b2Fixture* _shieldSensorFixture;
-    /** Reference to the sensor name (since a constant cannot have a pointer) */
-    std::string _shieldSensorName;
-    /** The guard shield when guard is active */
-    std::shared_ptr<scene2::WireNode> _shieldSensorNode;
     /** The player scene node**/
     std::shared_ptr<scene2::SceneNode> _sceneNode;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
@@ -321,14 +315,6 @@ Vec2 getKnockDirection() { return _knockDirection; }
      * @return the name of the ground sensor
      */
     std::string* getGroundSensorName() { return &_groundSensorName; }
-    /**
-     * Returns the name of the shield sensor
-     *
-     * This is used by ContactListener
-     *
-     * @return the name of the shield sensor
-     */
-    std::string* getShieldName() { return &_shieldSensorName; }
 
     /**
      * Returns true if this character is facing right
@@ -502,7 +488,6 @@ public:
     float getMaxSpeed() const { return _maxspeed; }
 
     // Debug
-    void setShieldDebugColor(Color4 c) { _shieldSensorNode->setColor(c); }
 
 
 

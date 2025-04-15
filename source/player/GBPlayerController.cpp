@@ -187,7 +187,6 @@ void PlayerController::updateCooldowns()
         _player->setGuardCDRem();
         _player->setGuardRem();
         _player->setParryRem();
-        _player->setShieldDebugColor(Color4::GREEN);
         _player->setGuardState(1);
     }
     if (_player->isGuardActive() && !_player->isGuardBegin()) {
@@ -200,19 +199,11 @@ void PlayerController::updateCooldowns()
         }
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
-        if (parryRem == 0) {
-            // Parry ending on this frame
-            _player->setShieldDebugColor(Color4::BLUE);
-        }
     }
     // guard not active, update cooldown
     else if (_player->getGuardCDRem() >= 0) {
             int newCD = _player->getGuardCDRem() - 1;
             _player->setGuardCDRem((newCD < 0) ? 0 : newCD);
-            if (_player->getGuardCDRem() == 0) {
-                //end guard
-                _player->setShieldDebugColor(Color4(_constantsJSON->get("player")->get("debug")->getString("color")));
-        }
     }
 
 #pragma mark Jump cooldown
@@ -262,16 +253,6 @@ void PlayerController::updateCooldowns()
         _player->setDashReset(true); // ready to dash again
     }
 
-}
-
-
-
-void PlayerController::activateShield()
-{
-}
-
-void PlayerController::deactivateShield()
-{
 }
 
 void PlayerController::fireProjectile()

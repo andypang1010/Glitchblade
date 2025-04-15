@@ -277,18 +277,6 @@ void PlayerModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getGroundSensorName());
     _groundSensorFixture = _body->CreateFixture(&sensorDef);
-
-    // Create shield circle fixture
-    b2FixtureDef shieldDef;
-    b2CircleShape shieldShape;
-    shieldShape.m_radius = _playerJSON->get("fixtures")->get("shield")->getFloat("radius");
-    shieldShape.m_p.Set(0, 0); // Center of body
-    shieldDef.isSensor = true;
-    shieldDef.shape = &shieldShape;
-    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
-    _shieldSensorFixture = _body->CreateFixture(&shieldDef);
-
-
 }
 
 /**
@@ -318,7 +306,6 @@ void PlayerModel::dispose() {
     _geometry = nullptr;
     _sceneNode = nullptr;
     _groundSensorNode = nullptr;
-    _shieldSensorNode = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _guardSprite = nullptr;
@@ -565,11 +552,10 @@ void PlayerModel::updateAnimation()
 void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
     _debug->setName("player_debug");
-    if (_groundSensorNode == nullptr || _shieldSensorNode == nullptr){
+    if (_groundSensorNode == nullptr){
         setDebug();
     }
     if (_debug->getChildCount() == 0){
-        _debug->addChild(_shieldSensorNode);
         _debug->addChild(_groundSensorNode);
     }
     
@@ -589,13 +575,6 @@ void PlayerModel::setDebug(){
     _groundSensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
     _groundSensorNode->setColor(Color4(_playerJSON->get("debug")->getString("ground_sensor_color")));
     _groundSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
-
-    Poly2 shieldPoly;
-    float radius = _playerJSON->get("fixtures")->get("shield")->getFloat("radius");
-    shieldPoly = PolyFactory().makeNgon(10000, 0, radius, 20);
-    _shieldSensorNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldSensorNode->setPosition(Vec2(_debug->getContentSize() / 2));
-    _shieldSensorNode->setColor(Color4(_playerJSON->get("debug")->getString("color")));
 }
 
 void PlayerModel::setConstants(){
@@ -631,7 +610,6 @@ void PlayerModel::setConstants(){
     
     _name = _playerJSON->getString("name");
     _bodyName = _playerJSON->get("fixture_names")->getString("body");
-    _shieldSensorName = _playerJSON->get("fixture_names")->getString("shield");
     _groundSensorName = _playerJSON->get("fixture_names")->getString("ground");
 
 }

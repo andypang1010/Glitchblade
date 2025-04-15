@@ -78,17 +78,6 @@ public:
     void postUpdate(float dt);
 
     /**
-     * Activates the player�s shield.
-     */
-    void activateShield();
-
-    /**
-     * @brief
-     *
-     */
-    void deactivateShield();
-
-    /**
      * Fires a projectile in the direction the player is facing.
      */
     void fireProjectile();

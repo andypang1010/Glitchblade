@@ -86,25 +86,6 @@ void CollisionController::beginContact(b2Contact* contact) {
         playerProjectileCollision(o1);
     }
 
-
-    // Shield-Projectile Collision
-    Projectile* shieldHit = getProjectileHitShield(o1, fd1, o2, fd2);
-    if (shieldHit) {
-
-        if (_player->isParryActive()) {
-            if (!_player->hasProjectile()) {
-                _player->setHasProjectile(true);
-            }
-            _player->damage(0);
-        }
-        else {
-            _player->damage(10);
-            _ui->setHP(_player->getHP());
-            _pauseMenu->setHP(_player->getHP());
-        }
-        _removeProjectile(shieldHit);
-    }
-
     // Projectile-Projectile Collision
     if (o1->getName() == proj_name && o2->getName() == proj_name) {
 
@@ -222,8 +203,24 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
     if (!projectile->getIsPlayerFired()) {
         // If the player's invulnerability frames have expired, reset and deal damage.
         if (_player->iframe <= 0) {
+            if (_player->isParryActive()) {
+                if (!_player->hasProjectile()) {
+                    _player->setHasProjectile(true);
+                }
+                _player->damage(0);
+            }
+            else if (_player->isGuardActive()) {
+                _player->damage(5);
+                _ui->setHP(_player->getHP());
+                _pauseMenu->setHP(_player->getHP());
+            }
+            else {
+                _player->damage(10);
+                _player->setKnocked(true, _player->getPosition().subtract(projectileObstacle->getPosition()).normalize());
+                _ui->setHP(_player->getHP());
+                _pauseMenu->setHP(_player->getHP());
+            }
             _player->iframe = 60;
-            _player->damage(10);
         }
         // Remove the projectile and update the UI and pause menu with the current HP.
         _removeProjectile(projectile);
@@ -255,23 +252,6 @@ bool CollisionController::isEnemyBody(physics2::Obstacle* b, std::string f ) {
 /**Checks obstacle and fixture to see if it the player body fixture.**/
 bool CollisionController::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
     return (f == _player->getBodyName());
-}
-
-/**
- Checks if contact is projectile hitting player shield and returns the Projectile if so, else NULL.
- */
-Projectile* CollisionController::getProjectileHitShield(physics2::Obstacle* o1, std::string* fd1,
-                                              physics2::Obstacle* o2, std::string* fd2) const {
-    std::string proj_name = _constantsJSON->get("projectile")->getString("name");
-    if (o1->getName() == proj_name && fd2 == _player->getShieldName() &&
-        !((Projectile*)o1)->getIsPlayerFired() && _player->isGuardActive()) {
-        return (Projectile*)o1;
-    }
-    if (o2->getName() == proj_name && fd1 == _player->getShieldName() &&
-        !((Projectile*)o2)->getIsPlayerFired() && _player->isGuardActive()) {
-        return (Projectile*)o2;
-    }
-    return nullptr;
 }
 
 

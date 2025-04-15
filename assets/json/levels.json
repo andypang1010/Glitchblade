@@ -8,7 +8,7 @@
       "waves": [
         {
             "spawn_intervals": [ 2, 7, 5 ],
-            "enemies": [ "minion_1B", "minion_1B", "minion_1A" ]
+            "enemies": [ "minion_1A", "minion_1A", "minion_1A" ]
         },
         {
           "spawn_intervals": [ 2, 3, 2, 5, 2 ],
