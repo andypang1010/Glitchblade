@@ -253,9 +253,6 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     }
 
 #pragma mark : GROUND
-    // Get the ground from the level itself
-    image = levelRef->getGround();
-
     std::shared_ptr<physics2::PolygonObstacle> groundObj;
     Poly2 ground(calculateGroundVertices());
 
@@ -273,8 +270,11 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     setStaticPhysics(groundObj);
 
     ground *= scale;
-    sprite = scene2::PolygonNode::allocWithTexture(image, ground);
-    ObstacleNodePair ground_pair = std::make_pair(groundObj, sprite);
+
+    std::shared_ptr<scene2::SceneNode> invisibleNode = scene2::SceneNode::alloc();
+    invisibleNode->setVisible(false); // Optional but explicit
+
+    ObstacleNodePair ground_pair = std::make_pair(groundObj, invisibleNode);
     obstacle_pairs.push_back(ground_pair);
     
     for (const auto& pair : obstacle_pairs) {
