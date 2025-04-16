@@ -158,7 +158,6 @@ protected:
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
 
-    float _scale;
     std::shared_ptr<JsonValue> _enemyJSON;
 
     /**
@@ -173,7 +172,7 @@ protected:
     virtual void setConstants();
 
 public:
-    int currentFrame = 0;
+    float _scale;
     int frameCounter = 0;
     int stunFrame;
     float worldLeft;
@@ -194,7 +193,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a EnemyModel, you must call init().
      */
-    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _scale(Application::get()->getDisplayWidth() / 1248) {}
+    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _scale(Application::get()->getDisplayWidth() / 1248.0f) {}
 
     /**
      * Destroys this EnemyModel, releasing all resources.
@@ -241,7 +240,6 @@ public:
         _aggression = 0;
         
         _moveDuration = 0;
-        currentFrame = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

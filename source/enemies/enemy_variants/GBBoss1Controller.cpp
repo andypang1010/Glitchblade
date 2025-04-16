@@ -57,9 +57,6 @@ void Boss1Controller::preUpdate(float dt) {
     if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
     if (_stunNode) _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
     
-    applyForce();
-    _enemy->updateAnimation();
-    _enemy->nextAction();
 
     // Apply cooldowns
     _enemy->setAggression(std::min(100.0f, _enemy->getAggression() + dt * 10));
@@ -75,6 +72,9 @@ void Boss1Controller::preUpdate(float dt) {
 
 
 void Boss1Controller::fixedUpdate(float timestep) {
+    applyForce();
+    _enemy->updateAnimation();
+    _enemy->nextAction();
     //don't put code here! it will get called twice in certain cases, between pre and post update (and 0 times other cases).
     // the fixedUpdate for the obstacle world is already handled by the physics world itself, applyForce must stay in preUpdate!
 }
