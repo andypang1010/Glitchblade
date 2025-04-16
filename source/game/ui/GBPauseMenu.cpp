@@ -112,6 +112,8 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
             _hpHalfSegments.push_back(half);
         }
     }
+    
+    _screenOffset = getPosition();
 
     Application::get()->setClearColor(Color4f::CORNFLOWER);
     return true;

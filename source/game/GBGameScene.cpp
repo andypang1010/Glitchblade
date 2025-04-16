@@ -470,6 +470,7 @@ void GameScene::preUpdate(float dt) {
 
 
 	_ui->setHP(_player->getHP());
+    _pauseMenu->setHP(_player->getHP());
 
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
@@ -510,6 +511,22 @@ void GameScene::preUpdate(float dt) {
             updateLayersRight();
         }
     }
+
+    if (_ui != nullptr && _camera != nullptr) {
+        Vec2 camPos = _camera->getPosition();
+        Size viewSize = _camera->getViewport().size;
+
+        Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
+        _ui->setPosition(base + _ui->_screenOffset);
+    }
+    if (_pauseMenu != nullptr && _camera != nullptr) {
+        Vec2 camPos = _camera->getPosition();
+        Size viewSize = _camera->getViewport().size;
+
+        Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
+        _pauseMenu->setPosition(base + _pauseMenu->_screenOffset);
+    }
+
 
 }
 /**
