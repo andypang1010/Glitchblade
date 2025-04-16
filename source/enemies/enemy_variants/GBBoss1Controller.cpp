@@ -13,7 +13,7 @@ void Boss1Controller::init(const std::shared_ptr<AssetManager>& assetRef,
 }
 
 void Boss1Controller::applyForce() {
-    if (!_enemy || !_enemy->isEnabled()) return;
+    if (!_enemy || !_enemy->isEnabled()) {CULog("no enemy boss 1"); return;}
 
     b2Body* enemyBody = _enemy->getBody();
 
