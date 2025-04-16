@@ -480,6 +480,7 @@ void GameScene::preUpdate(float dt) {
     processScreenShake();
 
     auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
+    bool isKnocked = _levelController->getPlayerModel()->isKnockbackActive();
     auto currPlayerVel = _levelController->getPlayerModel()->getVX();
     auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
     auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
@@ -501,26 +502,22 @@ void GameScene::preUpdate(float dt) {
     if (!cameraLocked) {
         _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
         _camera->update();
-        if (currPlayerVel > 0) {
+        if (currPlayerVel > 0 && !isKnocked) {
             updateLayersLeft();
-        }   else if (currPlayerVel < 0) {
+        }   else if (currPlayerVel < 0 && !isKnocked) {
             updateLayersRight();
         }
     }
 
-    if (_ui != nullptr && _camera != nullptr) {
+    if (_ui != nullptr && _camera != nullptr && _pauseMenu != nullptr) {
         Vec2 camPos = _camera->getPosition();
         Size viewSize = _camera->getViewport().size;
 
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setPosition(base + _ui->_screenOffset);
-    }
-    if (_pauseMenu != nullptr && _camera != nullptr) {
-        Vec2 camPos = _camera->getPosition();
-        Size viewSize = _camera->getViewport().size;
-
-        Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _pauseMenu->setPosition(base + _pauseMenu->_screenOffset);
+        _winnode->setPosition(camPos);
+        _losenode->setPosition(camPos);
     }
 
 
@@ -674,7 +671,7 @@ void GameScene::setBG() {
 void GameScene::updateLayersLeft() {
     for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
         if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/5, node->getPositionY()));
+            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/3, node->getPositionY()));
         }
     }
 }
@@ -682,7 +679,7 @@ void GameScene::updateLayersLeft() {
 void GameScene::updateLayersRight() {
     for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
         if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/5, node->getPositionY()));
+            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/3, node->getPositionY()));
         }
     }
 }
