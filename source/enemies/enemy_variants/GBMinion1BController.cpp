@@ -54,13 +54,17 @@ void Minion1BController::applyForce() {
     }
 }
 
-void Minion1BController::fixedUpdate(float timestep) {
+void Minion1BController::preUpdate(float dt) {
+    if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
+    //if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getAggression()));
+    if (_stunNode) _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
+
     applyForce();
     _enemy->updateAnimation();
     _enemy->nextAction();
 
     // Apply cooldowns
-    _enemy->setAggression(std::min(100.0f, _enemy->getAggression() + timestep * 5));
+    _enemy->setAggression(std::min(100.0f, _enemy->getAggression() + dt * 5));
 
     if (_enemy->isKnocked()) {
         _enemy->resetKnocked();
@@ -69,13 +73,15 @@ void Minion1BController::fixedUpdate(float timestep) {
     if (_enemy->isStunned()) {
         _enemy->setStun(_enemy->getStunRem() - 1);
     }
+
 }
 
-void Minion1BController::preUpdate(float dt) {
-    if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
-    //if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getAggression()));
-    if (_stunNode) _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
+void Minion1BController::fixedUpdate(float timestep) {
+    //don't put code here! it will get called twice in certain cases, between pre and post update (and 0 times other cases).
+    // the fixedUpdate for the obstacle world is already handled by the physics world itself, applyForce must stay in preUpdate!
 }
+
+
 
 void Minion1BController::postUpdate(float dt) {
     // No post-update behavior needed yet

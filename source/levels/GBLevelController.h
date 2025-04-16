@@ -201,7 +201,11 @@ public:
     std::vector<Vec2> calculateGroundVertices();
     Vec2 calculateLeftBulletPosition();
     Vec2 calculateRightBulletPosition();
-};
+    
+    static bool canUpdate(std::shared_ptr<EnemyController> enemyCtrlr){
+        return (enemyCtrlr != nullptr && enemyCtrlr->getEnemy()->getBody() != nullptr && !enemyCtrlr->getEnemy()->isRemoved());
+        }
+    };
 
 
 #endif /* LEVEL_CONTROLLER_H */

@@ -316,14 +316,11 @@ void LevelController::preUpdate(float dt)
         && _currentWaveIndex < _enemyWaves.size()
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
-            enemodel->setTargetPos(player->getPosition());
-
-            if (enemyCtrlr->getEnemy()->getHP() <= 0 || enemyCtrlr->getEnemy()->isRemoved()) {
-                continue;
+            if (canUpdate(enemyCtrlr) && enemyCtrlr->getEnemy()->getHP() > 0){
+                std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
+                enemodel->setTargetPos(player->getPosition());
+                enemyCtrlr->preUpdate(dt);
             }
-
-            enemyCtrlr->preUpdate(dt);
         }
     }
 
@@ -339,15 +336,9 @@ void LevelController::fixedUpdate(float timestep)
         && _currentWaveIndex < _enemyWaves.size() 
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr) {
-                continue;
+            if (canUpdate(enemyCtrlr) && enemyCtrlr->getEnemy()->getHP() > 0 ) {
+                enemyCtrlr->fixedUpdate(timestep);
             }
-
-            if (enemyCtrlr->getEnemy()->getHP() <= 0 || enemyCtrlr->getEnemy()->isRemoved()) {
-                continue;
-            }
-
-            enemyCtrlr->fixedUpdate(timestep);
         }
     }
 }
@@ -366,7 +357,7 @@ void LevelController::postUpdate(float dt)
         && _currentWaveIndex < _enemyWaves.size()
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
+            if (!canUpdate(enemyCtrlr)) {
                 continue;
             }
 
