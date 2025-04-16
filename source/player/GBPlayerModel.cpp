@@ -349,19 +349,26 @@ void PlayerModel::update(float dt) {
 #pragma mark -
 #pragma mark Animation
 void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    currentFrame += 1;
-
-    if (currentFrame % _animation_update_frame == 0) {
-        sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
+    if (sprite->isVisible()) {
+        frameCounter = (frameCounter + 1) % _animation_update_frame;
+        if (frameCounter % _animation_update_frame == 0) {
+            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
+        }
+    }
+    else {
+        sprite->setFrame(0);
     }
 }
 
 void PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
-    currentFrame += 1;
-
-    if (currentFrame % _animation_update_frame == 0
-        && sprite->getFrame() < sprite->getCount() - 1) {
-        sprite->setFrame(sprite->getFrame() + 1);
+    if (sprite->isVisible()) {
+        frameCounter = (frameCounter + 1) % _animation_update_frame;
+        if (frameCounter % _animation_update_frame == 0 && sprite->getFrame() < sprite->getCount() - 1) {
+            sprite->setFrame(sprite->getFrame() + 1);
+        }
+    }
+    else {
+        sprite->setFrame(0);
     }
 }
 
@@ -380,11 +387,11 @@ void PlayerModel::updateAnimation()
         _damagedSprite->setVisible(true);
 
         if (_damageRem == PLAYER_HIT_COLOR_DURATION) {
-            currentFrame = 0;
+            frameCounter = 0;
             _damagedSprite->setFrame(0);
         }
 
-        playAnimation(_damagedSprite);
+        playAnimationOnce(_damagedSprite);
     }
     else if (isGuardActive()) {
         _guardSprite->setVisible(true);
@@ -398,11 +405,11 @@ void PlayerModel::updateAnimation()
         _damagedSprite->setVisible(false);
 
         if (isGuardBegin()) {
-            currentFrame = 0;
+            frameCounter = 0;
             _guardSprite->setFrame(0);
         }
 
-        playAnimation(_guardSprite);
+        playAnimationOnce(_guardSprite);
     }
 
     else if (getGuardReleaseRem() > 0) {
@@ -417,18 +424,18 @@ void PlayerModel::updateAnimation()
         _damagedSprite->setVisible(false);
 
         if (getGuardReleaseRem() == PLAYER_HIT_COLOR_DURATION) {
-            currentFrame = 0;
+            frameCounter = 0;
             _guardReleaseSprite->setFrame(0);
             _parryReleaseSprite->setFrame(0);
         }
 
         if (_guardState == 2) {
             _parryReleaseSprite->setVisible(true);
-            playAnimation(_parryReleaseSprite);
+            playAnimationOnce(_parryReleaseSprite);
         }
         else if (_guardState == 3) {
             _guardReleaseSprite->setVisible(true);
-            playAnimation(_guardReleaseSprite);
+            playAnimationOnce(_guardReleaseSprite);
         }
     }
 
@@ -444,11 +451,11 @@ void PlayerModel::updateAnimation()
         _damagedSprite->setVisible(false);
 
         if (isDashInput()) {
-            currentFrame = 0;
+            frameCounter = 0;
             _attackSprite->setFrame(0);
         }
 
-        playAnimation(_attackSprite);
+        playAnimationOnce(_attackSprite);
     }
 
     else if (isJumpBegin()) {
@@ -462,7 +469,7 @@ void PlayerModel::updateAnimation()
         _idleSprite->setVisible(false);
         _damagedSprite->setVisible(false);
 
-        currentFrame = 0;
+        frameCounter = 0;
         _jumpUpSprite->setFrame(0);
     }
     else if (getVY() > 0 && !isGrounded()) {
@@ -489,7 +496,7 @@ void PlayerModel::updateAnimation()
         _idleSprite->setVisible(false);
         _damagedSprite->setVisible(false);
 
-        currentFrame = 0;
+        frameCounter = 0;
         _jumpDownSprite->setFrame(0);
     }
     else if (getVY() < 0 && !isGrounded()) {
