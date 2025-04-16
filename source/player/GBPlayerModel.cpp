@@ -101,39 +101,39 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     setSceneNode(_sceneNode);
 
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_idle"), 3, 4, 11);
-    _idleSprite->setPosition(0, -30);
+    _idleSprite->setPosition(0, -25);
     _idleSprite->setScale(0.5f);
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_walk"), 2, 4, 5);
-    _walkSprite->setPosition(0, -30);
+    _walkSprite->setPosition(0, -25);
     _walkSprite->setScale(0.5f);
 
     _jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpUp"), 2, 4, 5);
-    _jumpUpSprite->setPosition(0, -30);
+    _jumpUpSprite->setPosition(0, -25);
     _jumpUpSprite->setScale(0.5f);
 
     _jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpDown"), 2, 4, 7);
-    _jumpDownSprite->setPosition(0, -30);
+    _jumpDownSprite->setPosition(0, -25);
     _jumpDownSprite->setScale(0.5f);
 
     _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 9, 4, 36);
-    _guardSprite->setPosition(0, -30);
+    _guardSprite->setPosition(0, -25);
     _guardSprite->setScale(0.5f);
 
     _guardReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard_release"), 2, 4, 5);
-    _guardReleaseSprite->setPosition(0, -30);
+    _guardReleaseSprite->setPosition(0, -25);
     _guardReleaseSprite->setScale(0.5f);
 
     _parryReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_parry_release"), 2, 4, 5);
-    _parryReleaseSprite->setPosition(0, -30);
+    _parryReleaseSprite->setPosition(0, -25);
     _parryReleaseSprite->setScale(0.5f);
 
     _damagedSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_damaged"), 2, 4, 5);
-    _damagedSprite->setPosition(0, -30);
+    _damagedSprite->setPosition(0, -25);
     _damagedSprite->setScale(0.5f);
 
     _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 2, 4, 5);
-    _attackSprite->setPosition(0, -30);
+    _attackSprite->setPosition(0, -25);
     _attackSprite->setScale(0.5f);
 
     getSceneNode()->addChild(_idleSprite);
@@ -542,7 +542,7 @@ void PlayerModel::updateAnimation()
     }
 
     _sceneNode->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-    _sceneNode->getChild(_sceneNode->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+    //_sceneNode->getChild(_sceneNode->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
 }
 
 

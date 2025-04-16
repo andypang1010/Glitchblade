@@ -24,12 +24,12 @@ void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const
 
     _input = PlatformInput::alloc(assetRef, constantsRef);
     _player = PlayerModel::alloc(assetRef, constantsRef, PLAYER_INIT_POS);
-#pragma mark hp node
-    _hpNode = scene2::Label::allocWithText(std::to_string(_player->getMaxHP()), assetRef->get<Font>(constantsRef->get("player")->get("debug")->getString("font")));
-    _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _hpNode->setForeground(Color4::CYAN);
-    _hpNode->setPosition(0, 55);
-    _player->getSceneNode()->addChild(_hpNode);
+//#pragma mark hp node
+//    _hpNode = scene2::Label::allocWithText(std::to_string(_player->getMaxHP()), assetRef->get<Font>(constantsRef->get("player")->get("debug")->getString("font")));
+//    _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
+//    _hpNode->setForeground(Color4::CYAN);
+//    _hpNode->setPosition(0, 55);
+//    _player->getSceneNode()->addChild(_hpNode);
 #pragma mark constants
     _assets = assetRef;
     _constantsJSON = constantsRef;
@@ -150,7 +150,7 @@ void PlayerController::preUpdate(float dt)
     _player->setDashRightInput(_input->didDashRight());
     _player->setGuardInput(_input->didGuard());
     _player->setShootInput(_input->didFire());
-    _hpNode->setText(std::to_string((int)_player->getHP()));
+    //_hpNode->setText(std::to_string((int)_player->getHP()));
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
         std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
