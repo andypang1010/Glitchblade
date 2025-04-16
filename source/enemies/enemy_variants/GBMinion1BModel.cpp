@@ -25,42 +25,10 @@ using namespace graphics;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
-    resetAttributes();
+bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    return EnemyModel::init(assetRef, enemyJSON, pos, actions);
+};
 
-    float scale = constantsRef->get("scene")->getFloat("scale");
-    _enemyJSON = constantsRef->get("enemy");
-    std::shared_ptr<graphics::Texture> image;
-    image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
-
-    stunFrame = 16;
-
-    Size nsize = Size(90, 90) / scale;
-    nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
-    nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
-    _drawScale = scale;
-
-    setDebugColor(_enemyJSON->get("debug")->getString("color"));
-    if (BoxObstacle::init(pos, nsize)) {
-        setDensity(ENEMY_DENSITY);
-        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-        attachNodes(assetRef);
-
-        for (auto act : actions) {
-            if (act->getActionName() == "slam") {
-                _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
-            }
-            else if (act->getActionName() == "punch") {
-                _punch = std::dynamic_pointer_cast<MeleeActionModel>(act);
-            }
-        }
-
-        return true;
-    }
-
-    return false;
-}
 
 void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
@@ -113,6 +81,17 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	getSceneNode()->addChild(_slamVFXSprite);
 }
 
+void Minion1BModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
+    for (auto act : actions) {
+        if (act->getActionName() == "slam") {
+            _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
+        }
+        else if (act->getActionName() == "punch") {
+            _punch = std::dynamic_pointer_cast<MeleeActionModel>(act);
+        }
+    }
+}
+
 #pragma mark -
 #pragma mark Physics Methods
 /**
@@ -121,38 +100,9 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
  * This is the primary method to override for custom physics objects
  */
 void Minion1BModel::createFixtures() {
-    if (_body == nullptr) {
-        return;
-    }
-
-    BoxObstacle::createFixtures();
-    b2FixtureDef sensorDef;
-    sensorDef.density = ENEMY_DENSITY;
-    sensorDef.isSensor = true;
-
-    b2Filter filter = b2Filter();
-    filter.maskBits = 0x0001;
-    filter.categoryBits = 0x0002;
-    setFilterData(filter);
-
-    // Sensor dimensions
-    b2Vec2 corners[4];
-    corners[0].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[1].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[2].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[3].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
-
-    b2PolygonShape sensorShape;
-    sensorShape.Set(corners, 4);
-
-    sensorDef.shape = &sensorShape;
-    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
-    _sensorFixture = _body->CreateFixture(&sensorDef);
+    EnemyModel::createFixtures();
 }
+
 
 /**
  * Release the fixtures for this body, reseting the shape
@@ -160,16 +110,9 @@ void Minion1BModel::createFixtures() {
  * This is the primary method to override for custom physics objects.
  */
 void Minion1BModel::releaseFixtures() {
-    if (_body != nullptr) {
-        return;
-    }
-
-    BoxObstacle::releaseFixtures();
-    if (_sensorFixture != nullptr) {
-        _body->DestroyFixture(_sensorFixture);
-        _sensorFixture = nullptr;
-    }
+    EnemyModel::releaseFixtures();
 }
+
 
 /**
  * Disposes all resources and assets of this PlayerModel
@@ -341,11 +284,5 @@ void Minion1BModel::updateAnimation()
  * the texture (e.g. a circular shape attached to a square texture).
  */
 void Minion1BModel::resetDebug() {
-    BoxObstacle::resetDebug();
-    float w = ENEMY_SSHRINK * _dimension.width;
-    float h = ENEMY_SENSOR_HEIGHT;
-    Poly2 dudePoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
-    _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(ENEMY_DEBUG_COLOR);
-    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+    EnemyModel::resetDebug();
 }

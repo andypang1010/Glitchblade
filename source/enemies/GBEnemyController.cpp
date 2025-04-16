@@ -2,10 +2,9 @@
 
 using namespace cugl;
 
-void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef,
-    const std::shared_ptr<JsonValue>& constantsRef,
+void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON,
     std::vector<std::shared_ptr<ActionModel>> actions) {
-    std::string enemy_debug_font = _enemyJSON->get("debug")->getString("font");
+    std::string enemy_debug_font = "debug";
 
     _hpNode = scene2::Label::allocWithText("1000", assetRef->get<Font>(enemy_debug_font));
     _hpNode->setAnchor(Vec2::ANCHOR_CENTER);

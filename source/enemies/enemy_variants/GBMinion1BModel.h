@@ -9,59 +9,11 @@
 using namespace cugl;
 
 #pragma mark -
-#pragma mark Drawing Constants
-/** The texture for the character avatar */
-#define ENEMY_TEXTURE   "enemy"
-/** Identifier to allow us to track the player sensor in ContactListener */
-#define ENEMY_BODY_NAME      "enemybody"
-#define ENEMY_SENSOR_NAME     "enemysensor"
-
-#define E_ANIMATION_UPDATE_FRAME 4
-
-#define ENEMY_HIT_COLOR_DURATION 8
-
-#pragma mark -
-#pragma mark Physics Constants
-/** The factor to multiply by the input */
-#define ENEMY_FORCE      20.0f
-/** The amount to slow the character down */
-#define ENEMY_DAMPING    30.0f
-/** The maximum character speed */
-#define ENEMY_MAXSPEED   10.0f
-/** The maximum character hp */
-#define ENEMY_MAXHP   100.0f
-
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define ENEMY_VSHRINK  0.95f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define ENEMY_HSHRINK  0.7f
-/** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define ENEMY_SSHRINK  0.6f
-/** Height of the sensor attached to the player's feet */
-#define ENEMY_SENSOR_HEIGHT   0.1f
-/** The density of the character */
-#define ENEMY_DENSITY    1.0f
-/** The impulse for the character dash-attack */
-#define MINION1B_PUNCH_FORCE       35.0f
-/** The implulse fot the character knockback */
-#define ENEMY_KB       1.0f
-#define ENEMY_KB_DURATION 20
-/** Debug color for the sensor */
-#define ENEMY_DEBUG_COLOR     Color4::RED
-/** enemy obstacle name*/
-#define ENEMY_NAME      "enemy"
-#define ENEMY_DEBUG_FONT      "debug"
-
-#pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
 #define MINION1B_SLAM_FRAMES     32
 #define MINION1B_PUNCH_FRAMES     30
+#define MINION1B_PUNCH_FORCE       35.0f
 
-#define STUN_FRAMES 16
-
-#pragma mark -
-#pragma mark AI Constants
-#define CLOSE_RADIUS     6.0f
 #pragma mark -
 #pragma mark Enemy Model
 /**
@@ -158,9 +110,9 @@ public:
      *
      * @return  A newly allocated PlayerModel at the given position with the given scale
      */
-    static std::shared_ptr<Minion1BModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    static std::shared_ptr<Minion1BModel> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& minion1BJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
         std::shared_ptr<Minion1BModel> result = std::make_shared<Minion1BModel>();
-        return (result->init(assetRef, constantsRef, pos, actions) ? result : nullptr);
+        return (result->init(assetRef, minion1BJSON, pos, actions) ? result : nullptr);
     }
 
 #pragma mark -
@@ -184,6 +136,7 @@ public:
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/
     void attachNodes(const std::shared_ptr<AssetManager>& assetRef) override;
+    void setActions(std::vector<std::shared_ptr<ActionModel>> actions) override;
 #pragma mark -
 #pragma mark AI Methods
     void nextAction() override;
@@ -246,4 +199,4 @@ public:
 
 };
 
-#endif /* __GB_BOSS1_MODEL_H__ */
+#endif /* __GB_MINION1B_MODEL_H__ */

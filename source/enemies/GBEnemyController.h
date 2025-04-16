@@ -24,7 +24,7 @@ public:
     virtual ~EnemyController() { dispose(); }
 
     virtual void init(const std::shared_ptr<AssetManager>& assetRef,
-        const std::shared_ptr<JsonValue>& constantsRef,
+        const std::shared_ptr<JsonValue>& enemyJSON,
         std::vector<std::shared_ptr<ActionModel>> actions);
 
     virtual void reset();

@@ -105,7 +105,7 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
     std::shared_ptr<EnemyController> enemy = enemyFactoryMap[enemyType]();
 
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, enemyType);
-    enemy->init(_assets, _constantsJSON, actions);
+    enemy->init(_assets, _enemiesJSON, actions);
     return enemy;
 }
 
@@ -137,6 +137,14 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         CULog("Failed to load constants.json");
         return false;
     }
+    
+    // set world_info constants in enemyJSON
+    float scale = _constantsJSON->get("scene")->getFloat("scale");
+    _enemiesJSON->get("world_info")->get("scale")->set(scale);
+    float wall_thickness = _constantsJSON->get("walls")->getFloat("thickness");
+    float worldRight = _constantsJSON->get("scene")->getFloat("default_scene_width") - wall_thickness;
+    _enemiesJSON->get("world_info")->get("worldLeft")->set(wall_thickness);
+    _enemiesJSON->get("world_info")->get("worldRight")->set(worldRight);
 
     _levels = parseLevels(_levelsJSON, _assets);
     if (_levels.empty()) {

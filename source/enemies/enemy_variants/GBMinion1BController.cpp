@@ -5,12 +5,12 @@
 Minion1BController::Minion1BController() : EnemyController() {}
 
 void Minion1BController::init(const std::shared_ptr<AssetManager>& assetRef,
-    const std::shared_ptr<JsonValue>& constantsRef,
+    const std::shared_ptr<JsonValue>& enemiesJSON,
     std::vector<std::shared_ptr<ActionModel>> actions) {
 
-    _enemy = Minion1BModel::alloc(assetRef, constantsRef, ENEMY_INIT_POS, actions);
-    _enemyJSON = constantsRef->get("enemy");
-    EnemyController::init(assetRef, constantsRef, actions);
+    _enemyJSON = enemiesJSON->get("minion_1B");
+    _enemy = Minion1BModel::alloc(assetRef, _enemyJSON, ENEMY_INIT_POS, actions);
+    EnemyController::init(assetRef, _enemyJSON, actions);
 }
 
 void Minion1BController::applyForce() {
@@ -34,7 +34,7 @@ void Minion1BController::applyForce() {
         b2Vec2 force(_enemy->getMovement(), 0);
         enemyBody->ApplyForceToCenter(force, true);
 
-        float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
+        //float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
         // Dash force fetched but unused ?this is where you'd apply it if needed
     }
 

@@ -5,12 +5,11 @@
 Minion1AController::Minion1AController() : EnemyController() {}
 
 void Minion1AController::init(const std::shared_ptr<AssetManager>& assetRef,
-    const std::shared_ptr<JsonValue>& constantsRef,
+    const std::shared_ptr<JsonValue>& enemiesJSON,
     std::vector<std::shared_ptr<ActionModel>> actions) {
-
-    _enemy = Minion1AModel::alloc(assetRef, constantsRef, ENEMY_INIT_POS, actions);
-    _enemyJSON = constantsRef->get("enemy");
-    EnemyController::init(assetRef, constantsRef, actions);
+    _enemyJSON = enemiesJSON->get("minion_1A");
+    _enemy = Minion1AModel::alloc(assetRef, _enemyJSON, ENEMY_INIT_POS, actions);
+    EnemyController::init(assetRef, _enemyJSON, actions);
 }
 
 void Minion1AController::applyForce() {
@@ -34,8 +33,8 @@ void Minion1AController::applyForce() {
         b2Vec2 force(_enemy->getMovement(), 0);
         enemyBody->ApplyForceToCenter(force, true);
 
-        float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
-        // Dash force fetched but unused ?this is where you'd apply it if needed
+//        float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
+//        // Dash force fetched but unused ?this is where you'd apply it if needed
     }
 
     if (_enemy->isKnocked()) {
@@ -53,6 +52,7 @@ void Minion1AController::applyForce() {
         _enemy->setVX(_enemy->getVX() / 3);
     }
 }
+
 void Minion1AController::preUpdate(float dt) {
     if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
     //if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getAggression()));
