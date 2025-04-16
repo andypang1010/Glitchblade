@@ -44,7 +44,7 @@ void Minion1AController::applyForce() {
         enemyBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _enemy->getKnockF()), true);
     }
 
-    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed() && !_enemy->isKnockbackActive()) {
+    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed()) {
         _enemy->setVX(SIGNUM(_enemy->getVX()) * _enemy->getMaxSpeed());
     }
 

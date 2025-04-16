@@ -45,9 +45,10 @@ void Minion1BController::applyForce() {
         enemyBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _enemy->getKnockF()), true);
     }
 
-    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed() && !_enemy->isKnockbackActive()) {
+    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed()) {
         _enemy->setVX(SIGNUM(_enemy->getVX()) * _enemy->getMaxSpeed());
     }
+    CULog("MINION 1B VX: %f",_enemy->getVX());
 
     if (_enemy->isStunned()) {
         _enemy->setVX(_enemy->getVX() / 3);
@@ -55,8 +56,8 @@ void Minion1BController::applyForce() {
 }
 
 void Minion1BController::preUpdate(float dt) {
-    if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
-    //if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getAggression()));
+    //if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
+    if (_hpNode) _hpNode->setText(std::to_string(_enemy->getVX()));
     if (_stunNode) _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
 
 
