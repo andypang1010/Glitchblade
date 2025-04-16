@@ -263,6 +263,7 @@ bool EnemyModel::isTargetFar() {
 }
 
 void EnemyModel::die(std::shared_ptr<scene2::SceneNode> world) {
+    setVX(0);
     for (NodePtr node : _node->getChildren()) {
         if (node->getName() == "dead") {
             continue;
