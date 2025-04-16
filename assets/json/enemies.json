@@ -156,8 +156,8 @@
                         "projectileSpawnFrame": 1,
                         "projectileAnimation": "textures/boss2_shortFire_attack.png",
                         "projectile_animation_row": 1,
-                        "projectile_animation_col": 6,
-                        "projectile_animation_size": 6,
+                        "projectile_animation_col": 5,
+                        "projectile_animation_size": 5,
                         "projectile_animation_offset": {
                             "x": 0,
                             "y": 10

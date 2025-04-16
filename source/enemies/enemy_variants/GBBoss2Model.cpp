@@ -76,67 +76,46 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
     //move this to new function
-    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 6, 6);
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_idle"), 2, 8, 15);
     _idleSprite->setPosition(0, 50);
 	_idleSprite->setName("idle");
 
-    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walking1"), 1, 8, 8);
-    _walkSprite->setPosition(0, 50);
-	_walkSprite->setName("walk");
-
-    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 4, 10, 40);
-    _slamSprite->setPosition(0, 50);
-	_slamSprite->setName("slam");
-
-    _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 4, 10, 40);
-    _stabSprite->setPosition(0, 50);
-	_stabSprite->setName("stab");
-
-    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
+    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_stun_short"), 2, 8, 15);
     _stunSprite->setPosition(0, 50);
 	_stunSprite->setName("stun");
 
-    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 2, 10, 15);
-    _shootSprite->setPosition(0, 50);
-	_shootSprite->setName("shoot");
+    _shortFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_start"), 2, 8, 15);
+    _shortFireStartSprite->setPosition(0, 50);
+    _shortFireStartSprite->setName("shortFireStart");
 
-    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 4, 10, 40);
-    _explodeSprite->setPosition(0, 50);
-	_explodeSprite->setName("explode");
+    _shortFireAttackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_attack"), 1, 8, 5);
+    _shortFireAttackSprite->setPosition(0, 50);
+    _shortFireAttackSprite->setName("shortFireAttack");
 
-	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 32);
-	_explodeVFXSprite->setPosition(0, 0);
-	_explodeVFXSprite->setName("explode_vfx");
+    _shortFireWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_wait"), 1, 8, 5);
+    _shortFireWaitSprite->setPosition(0, 50);
+    _shortFireWaitSprite->setName("shortFireWait");
 
-	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_dead"), 5, 10, 45);
+    _shortFireEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_end"), 1, 9, 8);
+    _shortFireEndSprite->setPosition(0, 50);
+    _shortFireEndSprite->setName("shortFireEnd");
+
+	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_dead"), 5, 10, 45);
 	_deadSprite->setPosition(0, 50);
 	_deadSprite->setName("dead");
 
     getSceneNode()->addChild(_idleSprite);
-    getSceneNode()->addChild(_walkSprite);
-    getSceneNode()->addChild(_slamSprite);
-    getSceneNode()->addChild(_stabSprite);
     getSceneNode()->addChild(_stunSprite);
-	getSceneNode()->addChild(_shootSprite);
-
-	getSceneNode()->addChild(_explodeSprite);
-    getSceneNode()->addChild(_explodeVFXSprite);
-
+	getSceneNode()->addChild(_shortFireStartSprite);
+    getSceneNode()->addChild(_shortFireAttackSprite);
+    getSceneNode()->addChild(_shortFireWaitSprite);
+    getSceneNode()->addChild(_shortFireEndSprite);
 }
 
 void Boss2Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
     for (auto act : actions) {
-        if (act->getActionName() == "slam") {
-            _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
-        }
-        else if (act->getActionName() == "stab") {
-            _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
-        }
-        else if (act->getActionName() == "explode") {
-            _explode = std::dynamic_pointer_cast<MeleeActionModel>(act);
-        }
-        else if (act->getActionName() == "shoot") {
-            _shoot = std::dynamic_pointer_cast<RangedActionModel>(act);
+        if (act->getActionName() == "shortFire") {
+            _shortFire = std::dynamic_pointer_cast<RangedActionModel>(act);
         }
     }
 }
@@ -175,11 +154,11 @@ void Boss2Model::dispose() {
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
-    _stabSprite = nullptr;
-    _slamSprite = nullptr;
     _stunSprite = nullptr;
-	_shootSprite = nullptr;
-	_explodeSprite = nullptr;
+	_shortFireStartSprite = nullptr;
+    _shortFireAttackSprite = nullptr;
+    _shortFireWaitSprite = nullptr;
+    _shortFireEndSprite = nullptr;
     _deadSprite = nullptr;
 }
 
@@ -214,60 +193,16 @@ void Boss2Model::update(float dt) {
 void Boss2Model::nextAction() {
     int r = rand();
     AIMove();
-    if (!_isSlamming && !_isStabbing && !_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
-        if (isTargetClose()) {
-            if (r % 4 == 0) { //Slam
-                slam();
-            }
-            else if (r % 4 == 1) { // Stab
-                stab();
-            }
-            else if (r % 4 == 2) { // Explode
-                explode();
-            }
-            else { // Move away
-                avoidTarget(45);
-            }
-        }
-        else if (isTargetFar()) {
-            if (r % 2 == 0) { // Shoot
-                shoot();
-            }
-            else { // Move closer
-                approachTarget(45);
-            }
-        }
-        else {
-            if (r % 2 == 0) { // Stab
-                stab();
-            }
-            else { // Move closer
-                approachTarget(45);
-            }
-        }
+    if (_moveDuration <= 0 && !isStunned()) {
+        
     }
     else {
         if (isStunned()) {
-            _isSlamming = false;
-            _isStabbing = false;
-			_isShooting = false;
-			_isExploding = false;
+            _isShortFiring = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES - 1) {
-            _isSlamming = false;
-            setMovement(0);
-        }
-        if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES - 1) {
-            _isStabbing = false;
-            setMovement(getMovement());
-        }
-        if (_isShooting && _shootSprite->getFrame() >= SHOOT_FRAMES - 1) {
-            _isShooting = false;
-            setMovement(0);
-        }
-        if (_isExploding && _explodeSprite->getFrame() >= EXPLODE_FRAMES - 1) {
-            _isExploding = false;
+        if (_isShortFiring && _shortFireAttackSprite->getFrame() >= SHOOT_FRAMES - 1) {
+            _isShortFiring = false;
             setMovement(0);
         }
     }
@@ -278,75 +213,30 @@ void Boss2Model::AIMove() {
     float dir_val = dist > 0 ? -1 : 1;
     int face = _faceRight ? 1 : -1;
 
-    if (_moveDuration > 0 && !_isStabbing) {
+    if (_moveDuration > 0) {
         setMovement(_moveDirection * dir_val * getForce());
         setMoveLeft(dist > 0);
         setMoveRight(dist < 0);
         _moveDuration--;
-    }
-
-    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartFrame() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndFrame() - 1) {
-        setMovement(face * getForce() * STAB_FORCE * _scale);
     }
     else {
         setMovement(getMovement() / 3);
     }
 }
 
-void Boss2Model::slam() {
-    faceTarget();
-    if (rand() % 100 <= _aggression) {
-        _aggression -= std::max(0.0f, _aggression - 25);
-        _isSlamming = true;
-        setMovement(0);
-    }
-}
-
-void Boss2Model::stab() {
+void Boss2Model::shortFire() {
 	faceTarget();
-    if (rand() % 100 <= _aggression) {
-        _aggression -= std::max(0.0f, _aggression - 25);
-        _isStabbing = true;
-        setMovement(0);
-    }
-}
-
-void Boss2Model::shoot() {
-	faceTarget();
-    if (_aggression >= 75) {
-        _aggression -= std::max(0.0f, _aggression - 10);
-        _isShooting = true;
-        setMovement(0);
-    }
-}
-
-void Boss2Model::explode() {
-	faceTarget();
-    if (rand() % 200 <= _aggression) {
-        _aggression -= std::max(0.0f, _aggression - 50);
-        _isExploding = true;
-        setMovement(0);
-    }
 }
 
 std::shared_ptr<MeleeActionModel> Boss2Model::getDamagingAction() {
-    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartFrame() - 1) {
-        return _stab;
-    }
-    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartFrame() - 1) {
-        return _slam;
-	}
-	else if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartFrame() - 1) {
-		return _explode;
-	}
     return nullptr;
 }
 
 std::shared_ptr<RangedActionModel> Boss2Model::getProjectileAction() {
-	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
+	std::vector<int> frames = _shortFire->getProjectileSpawnFrames();
     for (int frame : frames) {
-		if (_isShooting && _shootSprite->getFrame() == frame && frameCounter == 0) {
-			return _shoot;
+		if (_isShortFiring && _shortFireAttackSprite->getFrame() == frame && frameCounter == 0) {
+			return _shortFire;
 		}
     }
     
@@ -361,37 +251,15 @@ void Boss2Model::updateAnimation()
 
     _stunSprite->setVisible(isStunned());
 
-    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && (isMoveLeft() || isMoveRight()));
+	_shortFireStartSprite->setVisible(!isStunned() && _isShortFireStarting);
+    _shortFireAttackSprite->setVisible(!isStunned() && _isShortFireAttacking);
+    _shortFireWaitSprite->setVisible(!isStunned() && _isShortFireWaiting);
+    _shortFireEndSprite->setVisible(!isStunned() && _isShortFireEnding);
 
-    _slamSprite->setVisible(!isStunned() && _isSlamming);
+    _idleSprite->setVisible(!isStunned() && !(isMoveLeft() || isMoveRight()));
 
-    _stabSprite->setVisible(!isStunned() && _isStabbing);
-
-	_shootSprite->setVisible(!isStunned() && _isShooting);
-
-	_explodeSprite->setVisible(!isStunned() && _isExploding);
-
-    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= 24);
-
-    _idleSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && !(isMoveLeft() || isMoveRight()));
-
-    //CULog("Stun Spirte Visible: %s", _stunSprite->isVisible() ? "true" : "false");
-    //CULog("Walk Spirte Visible: %s", _walkSprite->isVisible() ? "true" : "false");
-    //CULog("Slam Spirte Visible: %s", _slamSprite->isVisible() ? "true" : "false");
-    //CULog("Stab Spirte Visible: %s", _stabSprite->isVisible() ? "true" : "false");
-    //CULog("Shoot Spirte Visible: %s", _shootSprite->isVisible() ? "true" : "false");
-    //CULog("Explode Spirte Visible: %s", _explodeSprite->isVisible() ? "true" : "false");
-    //CULog("Idle Spirte Visible: %s", _idleSprite->isVisible() ? "true" : "false");
-
-    playAnimation(_walkSprite);
     playAnimation(_idleSprite);
-    playAnimation(_slamSprite);
-    playAnimation(_stabSprite);
     playAnimation(_stunSprite);
-	playAnimation(_shootSprite);
-	playAnimation(_explodeSprite);
-
-    playVFXAnimation(_explodeSprite, _explodeVFXSprite, 24);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

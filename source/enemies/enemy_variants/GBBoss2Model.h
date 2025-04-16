@@ -58,7 +58,7 @@ using namespace cugl;
 #pragma mark Action Constants // TODO: Refactor with Action parser
 #define SLAM_FRAMES     40
 #define STAB_FRAMES     40
-#define SHOOT_FRAMES    15
+#define SHOOT_FRAMES    5
 #define EXPLODE_FRAMES  40
 #define STUN_FRAMES 88
 
@@ -79,15 +79,13 @@ protected:
     std::string _sensorName;
     std::string _bodyName;
 
-    bool _isStabbing;
-    bool _isSlamming;
-    bool _isShooting;
-    bool _isExploding;
+    bool _isShortFireStarting;
+    bool _isShortFireAttacking;
+    bool _isShortFireWaiting;
+    bool _isShortFireEnding;
+    bool _isShortFiring;
 
-    std::shared_ptr<MeleeActionModel> _slam;
-    std::shared_ptr<MeleeActionModel> _stab;
-    std::shared_ptr<RangedActionModel> _shoot;
-    std::shared_ptr<MeleeActionModel> _explode;
+    std::shared_ptr<RangedActionModel> _shortFire;
 
     /**
     * Redraws the outline of the physics fixtures to the debug node
@@ -99,11 +97,10 @@ protected:
     virtual void resetDebug() override;
 
 public:
-    std::shared_ptr<scene2::SpriteNode> _stabSprite;
-    std::shared_ptr<scene2::SpriteNode> _slamSprite;
-    std::shared_ptr<scene2::SpriteNode> _shootSprite;
-    std::shared_ptr<scene2::SpriteNode> _explodeSprite;
-    std::shared_ptr<scene2::SpriteNode> _explodeVFXSprite;
+    std::shared_ptr<scene2::SpriteNode> _shortFireStartSprite;
+    std::shared_ptr<scene2::SpriteNode> _shortFireAttackSprite;
+    std::shared_ptr<scene2::SpriteNode> _shortFireWaitSprite;
+    std::shared_ptr<scene2::SpriteNode> _shortFireEndSprite;
 
 public:
 
@@ -182,13 +179,13 @@ public:
         _canKnockBack = true;
         _stunRem = 0;
 
-        _isStabbing = false;
-        _isSlamming = false;
-        _isShooting = false;
-        _isExploding = false;
+        _isShortFireAttacking = false;
+        _isShortFireWaiting = false;
+        _isShortFireStarting = false;
+        _isShortFireEnding = false;
+        _isShortFiring = false;
 
         _moveDuration = 0;
-        currentFrame = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/
@@ -200,28 +197,10 @@ public:
     void AIMove() override;
 
     /**
-     * Performs the slam attack of boss1
-     *
-     */
-    void slam();
-
-    /**
-     * Performs the stab attack of boss1
-     *
-     */
-    void stab();
-
-    /**
      * Performs the shoot attack of boss1
      *
      */
-    void shoot();
-
-    /**
-     * Performs the explode attack of boss1
-     *
-     */
-    void explode();
+    void shortFire();
 
     /**
      * Returns the action when an attack hitbox should be active, or nothing when no attack is active
