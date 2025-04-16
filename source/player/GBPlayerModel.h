@@ -133,7 +133,7 @@ protected:
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     
     float _drawScale;
-    int currentFrame = 0;
+    int frameCounter = 0;
 
     /**
     * Redraws the outline of the physics fixtures to the debug node
