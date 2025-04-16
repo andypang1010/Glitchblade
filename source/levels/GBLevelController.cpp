@@ -385,11 +385,8 @@ void LevelController::postUpdate(float dt)
                 if (enemyCtrlr->getEnemy()->isRemoved()) {
                     continue;
                 }
-                
 
                 enemyCtrlr->getEnemy()->die(_worldNode);
-                _worldNode->removeChild(enemyCtrlr->getEnemy()->getSceneNode());
-                enemyCtrlr->getEnemy()->markRemoved(true);
                 _numEnemiesActive--;
                 //_enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
             }

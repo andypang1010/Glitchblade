@@ -267,20 +267,26 @@ void EnemyModel::die(std::shared_ptr<scene2::SceneNode> world) {
         if (node->getName() == "dead") {
             continue;
         }
-        
+
         node->removeFromParent();
     }
-    
+
     if (_node->getChildCount() == 0) {
         _node->addChild(_deadSprite);
         _deadSprite->setVisible(true);
     }
-    
+
     playAnimationOnce(_deadSprite);
+
+    if (_deadSprite->getFrame() == _deadSprite->getCount() - 1) {
+        markRemoved(true);
+        world->removeChild(_node);
+        setSensor(true);
+        getDebugNode()->removeFromParent();
+    }
 }
 
 bool EnemyModel::canAvoid(){
-    CULog("(X: %f - width: %f > worldLeft: %f && X: %f + width: %f < worldRight : %f)", getX(), getWidth(), worldLeft, getX(), getWidth(), worldRight);
     return (getX() - getWidth() > worldLeft && getX() + getWidth() < worldRight);
 }
 
