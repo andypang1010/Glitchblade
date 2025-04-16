@@ -76,9 +76,12 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
         float startY = 38.0f;
 
         std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
+        texture->setName("hp_segment");
         std::shared_ptr<cugl::graphics::Texture> halfTexture = _assets->get<cugl::graphics::Texture>("half_hp_segment");
+        texture->setName("hp_segment");
         for (int i = 0; i < 5; ++i) {
             std::shared_ptr<scene2::PolygonNode> segment = scene2::PolygonNode::allocWithTexture(texture);
+            segment->setName("segment");
             segment->setAnchor(Vec2::ANCHOR_TOP_LEFT);
             segment->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + startY);
             segment->setContentSize(Size(segmentWidth, segmentHeight));
@@ -87,6 +90,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
             _hpSegments.push_back(segment);
             
             std::shared_ptr<scene2::PolygonNode> half = scene2::PolygonNode::allocWithTexture(halfTexture);
+            half->setName("half_segment");
             half->setAnchor(Vec2::ANCHOR_TOP_LEFT);
             half->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + 35.0f);
             half->setContentSize(Size(segmentWidth, halfSegmentHeight));
@@ -96,6 +100,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
         }
     }
 
+    _screenOffset = getPosition();
     
     // XNA nostalgia
     Application::get()->setClearColor(Color4f::CORNFLOWER);

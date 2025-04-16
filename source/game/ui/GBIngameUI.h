@@ -31,13 +31,15 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _hpbar;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
-    
+
     int _maxHP = 100;
     int _currentHP = 100;
 
     bool _active;
     
 public:
+    cugl::Vec2 _screenOffset;
+
 #pragma mark -
 #pragma mark Constructors
     

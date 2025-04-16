@@ -42,6 +42,7 @@ protected:
     bool _active;
 
 public:
+    cugl::Vec2 _screenOffset;
 #pragma mark -
 #pragma mark Constructors
 
