@@ -1,5 +1,5 @@
 //
-//  GBPlayerModel.cpp
+//  GBEnemyModel.cpp
 //  PlatformDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -68,14 +68,34 @@ using namespace graphics;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
-    return true;
+bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    _enemyJSON = enemyJSON;
+    setConstants();
+    resetAttributes();
+    setDebugColor(Color4::RED);
+    
+    if (BoxObstacle::init(pos, _size)) {
+        setDensity(_density);
+        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
+        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
+        attachNodes(assetRef);
+        setActions(actions);
+        setName(ENEMY_NAME);
+        setDebugColor(ENEMY_DEBUG_COLOR);
+        return true;
+    }
+
+    return false;
+
 }
 
 void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 }
 
+void EnemyModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
+    
+}
 #pragma mark -
 #pragma mark Attribute Properties
 
@@ -89,7 +109,7 @@ void EnemyModel::damage(float value) {
     _hp = _hp < 0 ? 0 : _hp;
     _aggression += value;
     _aggression = _aggression > 100 ? 100 : _aggression;
-	_lastDamagedFrame = 0;
+    _lastDamagedFrame = 0;
     _node->setColor(Color4::RED);
 }
 
@@ -145,7 +165,7 @@ void EnemyModel::createFixtures() {
 
     BoxObstacle::createFixtures();
     b2FixtureDef sensorDef;
-    sensorDef.density = ENEMY_DENSITY;
+    sensorDef.density = _density;
     sensorDef.isSensor = true;
 
     b2Filter filter = b2Filter();
@@ -155,14 +175,14 @@ void EnemyModel::createFixtures() {
 
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[1].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[2].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[3].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
+    corners[0].x = -_sShrink * getWidth() / 2.0f;
+    corners[0].y = (-getHeight() + _sensorHeight) / 2.0f;
+    corners[1].x = -_sShrink * getWidth() / 2.0f;
+    corners[1].y = (-getHeight() - _sensorHeight) / 2.0f;
+    corners[2].x = _sShrink * getWidth() / 2.0f;
+    corners[2].y = (-getHeight() - _sensorHeight) / 2.0f;
+    corners[3].x = _sShrink * getWidth() / 2.0f;
+    corners[3].y = (-getHeight() + _sensorHeight) / 2.0f;
 
     b2PolygonShape sensorShape;
     sensorShape.Set(corners, 4);
@@ -190,10 +210,10 @@ void EnemyModel::releaseFixtures() {
 }
 
 /**
- * Disposes all resources and assets of this PlayerModel
+ * Disposes all resources and assets of this EnemyModel
  *
  * Any assets owned by this object will be immediately released.  Once
- * disposed, a PlayerModel may not be used until it is initialized again.
+ * disposed, a EnemyModel may not be used until it is initialized again.
  */
 void EnemyModel::dispose() {
     _geometry = nullptr;
@@ -234,40 +254,34 @@ void EnemyModel::AIMove() {
 
 }
 
-void EnemyModel::updateAnimation() {
-
-}
-
 bool EnemyModel::isTargetClose() {
-    return (getPosition() - _targetPos).length() <= CLOSE_RADIUS;
+    return (getPosition() - _targetPos).length() <= _closeDistance;
 }
 
 bool EnemyModel::isTargetFar() {
-	return (getPosition() - _targetPos).length() >= FAR_RADIUS;
+    return (getPosition() - _targetPos).length() >= _farDistance;
 }
 
 void EnemyModel::die(std::shared_ptr<scene2::SceneNode> world) {
     for (NodePtr node : _node->getChildren()) {
-		if (node->getName() == "dead") {
-			continue;
-		}
-
+        if (node->getName() == "dead") {
+            continue;
+        }
+        
         node->removeFromParent();
     }
-
-	if (_node->getChildCount() == 0) {
-	    _node->addChild(_deadSprite);
+    
+    if (_node->getChildCount() == 0) {
+        _node->addChild(_deadSprite);
         _deadSprite->setVisible(true);
-	}
-
-    playAnimationOnce(_deadSprite);
-
-    if (_deadSprite->getFrame() == _deadSprite->getCount() - 1) {
-        markRemoved(true);
-        world->removeChild(_node);
-		setSensor(true);
-		getDebugNode()->removeFromParent();
     }
+    
+    playAnimationOnce(_deadSprite);
+}
+
+bool EnemyModel::canAvoid(){
+    CULog("(X: %f - width: %f > worldLeft: %f && X: %f + width: %f < worldRight : %f)", getX(), getWidth(), worldLeft, getX(), getWidth(), worldRight);
+    return (getX() - getWidth() > worldLeft && getX() + getWidth() < worldRight);
 }
 
 void EnemyModel::faceTarget() {
@@ -332,6 +346,8 @@ void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSpri
     }
 }
 
+void EnemyModel::updateAnimation(){}
+
 #pragma mark -
 #pragma mark Scene Graph Methods
 /**
@@ -343,10 +359,22 @@ void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSpri
  */
 void EnemyModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = ENEMY_SSHRINK * _dimension.width;
-    float h = ENEMY_SENSOR_HEIGHT;
+    float w = _sShrink * _dimension.width;
+    float h = _sensorHeight;
     Poly2 dudePoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
     _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(ENEMY_DEBUG_COLOR);
+    _sensorNode->setColor(Color4::RED);
     _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+}
+
+void EnemyModel::setConstants(){
+    _drawScale = _enemyJSON->_parent->get("world_info")->getFloat("scale");
+    worldLeft = _enemyJSON->_parent->get("world_info")->getFloat("worldLeft");
+    worldRight = _enemyJSON->_parent->get("world_info")->getFloat("worldRight");
+    
+    _size = Size(_enemyJSON->get("size")->get(0)->asFloat(), _enemyJSON->get("size")->get(1)->asFloat());
+    _size.width *= _hShrink;
+    _size.height *= _hShrink;
+    _stunFrames = _enemyJSON->getInt("stunFrames");
+    
 }

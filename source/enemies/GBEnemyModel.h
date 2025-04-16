@@ -1,5 +1,5 @@
 //
-//  GBPlayerModel.h
+//  GBEnemyModel.h
 //  PlatformDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -54,38 +54,13 @@ using namespace cugl;
 #pragma mark Drawing Constants
 /** The texture for the character avatar */
 #define ENEMY_TEXTURE   "enemy"
-/** Identifier to allow us to track the player sensor in ContactListener */
+/** Identifier to allow us to track the Enemy sensor in ContactListener */
 #define ENEMY_BODY_NAME      "enemybody"
 #define ENEMY_SENSOR_NAME     "enemysensor"
 
 #define E_ANIMATION_UPDATE_FRAME 4
 
 #define ENEMY_HIT_COLOR_DURATION 8
-
-#pragma mark -
-#pragma mark Physics Constants
-/** The factor to multiply by the input */
-#define ENEMY_FORCE      20.0f
-/** The amount to slow the character down */
-#define ENEMY_DAMPING    30.0f
-/** The maximum character speed */
-#define ENEMY_MAXSPEED   10.0f
-/** The maximum character hp */
-#define ENEMY_MAXHP   100.0f
-
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define ENEMY_VSHRINK  0.95f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define ENEMY_HSHRINK  0.7f
-/** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define ENEMY_SSHRINK  0.6f
-/** Height of the sensor attached to the player's feet */
-#define ENEMY_SENSOR_HEIGHT   0.1f
-/** The density of the character */
-#define ENEMY_DENSITY    1.0f
-/** The implulse fot the character knockback */
-#define ENEMY_KB       1.0f
-#define ENEMY_KB_DURATION 20
 /** Debug color for the sensor */
 #define ENEMY_DEBUG_COLOR     Color4::RED
 /** enemy obstacle name*/
@@ -93,17 +68,11 @@ using namespace cugl;
 #define ENEMY_DEBUG_FONT      "debug"
 
 #pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-
-#pragma mark -
-#pragma mark AI Constants
-#define CLOSE_RADIUS 6.0f
-#define FAR_RADIUS 12.0f
-
-#pragma mark -
+#pragma mark DEFAULT constants for setter
+#define ENEMY_DEFAULT_KB_DURATION 20
 #pragma mark Enemy Model
 /**
-* Player avatar for the plaform game.
+* Enemy avatar for the plaform game.
 *
 * Note that this class uses a capsule shape, not a rectangular shape.  In our
 * experience, using a rectangular shape for a character will regularly snag
@@ -136,6 +105,38 @@ protected:
     /** Whether our feet are on the ground */
     bool _isGrounded;
     int _lastDamagedFrame;
+    
+#pragma mark  constants
+    int _stunFrames; // longer
+    int _staggerFrames; // shorter
+    
+#pragma mark fixture constants
+    /** The amount to shrink the body fixture (horizontally) relative to the image */
+    float _hShrink = 0.7f;
+    /** The amount to shrink the sensor fixture (horizontally) relative to the image */
+    float _sShrink = 0.6f;
+    /** Height of the sensor attached to the Enemy's feet */
+    float _sensorHeight = 0.1f;
+    Size _size;
+#pragma mark physics constants
+    /** The factor to multiply by the input */
+    float _force = 20.0f;
+    /** The amount to slow the character down */
+    float _damping = 30.0f;
+    /** The maximum character speed */
+    float _maxSpeed = 10.0f;
+    /** The maximum character hp */
+    float _maxHP = 100.0f;
+
+
+    /** The density of the character */
+    float _density = 1.0f;
+    /** The impulse for the character knockback */
+    float _kb = 1.0f;
+    int _kbDuration = 20;
+#pragma mark ai variables
+    float _closeDistance = 6;
+    float _farDistance = 12;
 
     Vec2 _targetPos;
     float _aggression = 0.0f;
@@ -143,6 +144,7 @@ protected:
     int _moveDuration;
     int _moveDirection;
 
+#pragma mark fixtures and body
     std::string _bodyName;
     /** Ground sensor to represent our feet */
     b2Fixture* _sensorFixture;
@@ -156,6 +158,7 @@ protected:
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
 
+    float _scale;
     std::shared_ptr<JsonValue> _enemyJSON;
 
     /**
@@ -166,12 +169,17 @@ protected:
     * the texture (e.g. a circular shape attached to a square texture).
     */
     virtual void resetDebug() override;
+    
+    virtual void setConstants();
 
 public:
-    float _scale = 0;
     int currentFrame = 0;
     int frameCounter = 0;
     int stunFrame;
+    float worldLeft;
+    float worldRight;
+
+    std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
@@ -179,26 +187,25 @@ public:
     std::shared_ptr<scene2::SpriteNode> _deadSprite;
 
 public:
-
 #pragma mark Hidden Constructors
     /**
      * Creates a degenerate enemy object.
      *
      * This constructor does not initialize any of the enemy values beyond
-     * the defaults.  To use a PlayerModel, you must call init().
+     * the defaults.  To use a EnemyModel, you must call init().
      */
     EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _scale(1248.0f / (float)Application::get()->getDisplayWidth()) {}
 
     /**
-     * Destroys this PlayerModel, releasing all resources.
+     * Destroys this EnemyModel, releasing all resources.
      */
     virtual ~EnemyModel(void) { dispose(); }
 
     /**
-     * Disposes all resources and assets of this PlayerModel
+     * Disposes all resources and assets of this EnemyModel
      *
      * Any assets owned by this object will be immediately released.  Once
-     * disposed, a PlayerModel may not be used until it is initialized again.
+     * disposed, a EnemyModel may not be used until it is initialized again.
      */
     virtual void dispose();
 
@@ -224,7 +231,7 @@ public:
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     virtual void resetAttributes() {
-        _hp = ENEMY_MAXHP;
+        _hp = _maxHP;
         _isGrounded = false;
         _isMoveLeft = false;
         _isMoveRight = false;
@@ -232,31 +239,33 @@ public:
         _canKnockBack = true;
         _stunRem = 0;
         _aggression = 0;
-
+        
         _moveDuration = 0;
         currentFrame = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/
     virtual void attachNodes(const std::shared_ptr<AssetManager>& assetRef);
+    
+    virtual void setActions(std::vector<std::shared_ptr<ActionModel>> actions);
 #pragma mark -
 #pragma mark Animation
     /**
-     * Returns the scene graph node representing this PlayerModel.
+     * Returns the scene graph node representing this EnemyModel.
      *
      * By storing a reference to the scene graph node, the model can update
      * the node to be in sync with the physics info. It does this via the
      * {@link Obstacle#update(float)} method.
      *
-     * @return the scene graph node representing this PlayerModel.
+     * @return the scene graph node representing this EnemyModel.
      */
     virtual const std::shared_ptr<scene2::SceneNode>& getSceneNode() const { return _node; }
 
     /**
-     * Sets the scene graph node representing this PlayerModel.
+     * Sets the scene graph node representing this EnemyModel.
      *
      * Note that this method also handles creating the nodes for the body parts
-     * of this PlayerModel. Since the obstacles are decoupled from the scene graph,
+     * of this EnemyModel. Since the obstacles are decoupled from the scene graph,
      * initialization (which creates the obstacles) occurs prior to the call to
      * this method. Therefore, to be drawn to the screen, the nodes of the attached
      * bodies must be added here.
@@ -268,7 +277,7 @@ public:
      * the node to be in sync with the physics info. It does this via the
      * {@link Obstacle#update(float)} method.
      *
-     * @param node  The scene graph node representing this PlayerModel, which has been added to the world node already.
+     * @param node  The scene graph node representing this EnemyModel, which has been added to the world node already.
      */
     virtual void setSceneNode(const std::shared_ptr<scene2::SceneNode>& node) {
         _node = node;
@@ -379,13 +388,13 @@ public:
       * @return value whether the enemy is in a knockback animation.
       */
     virtual bool isKnockbackActive() { return _knockbackRem > 0 || isKnocked(); };
-    virtual float getKnockF() { return ENEMY_KB; }
+    virtual float getKnockF() { return _kb; }
     virtual Vec2 getKnockDirection() { return _knockDirection; }
     /**
-     * Sets whether the player is being knocked back
+     * Sets whether the Enemy is being knocked back
      *
-     * @param value whether the player is being knocked back
-     * @param knockDirection direction that the player will move toward
+     * @param value whether the Enemy is being knocked back
+     * @param knockDirection direction that the Enemy will move toward
      */
     virtual void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
     /**
@@ -404,7 +413,7 @@ public:
      *
      * @param the value that remaining knockback frames should be set to
      */
-    virtual void setKnockbackRem(int value = ENEMY_KB_DURATION) { _knockbackRem = value; };
+    virtual void setKnockbackRem(int value = ENEMY_DEFAULT_KB_DURATION) { _knockbackRem = value; };
 
     /**
      * Sets the stun duration of this enemy.
@@ -445,14 +454,14 @@ public:
      *
      * @return how much force to apply to get the enemy moving
      */
-    virtual float getForce() const { return ENEMY_FORCE; }
+    virtual float getForce() const { return _force; }
 
     /**
      * Returns How hard the brakes are applied to get a enemy to stop moving
      *
      * @return How hard the brakes are applied to get a enemy to stop moving
      */
-    virtual float getDamping() const { return ENEMY_DAMPING; }
+    virtual float getDamping() const { return _damping; }
 
     /**
      * Returns the upper limit on enemy left-right movement.
@@ -461,7 +470,7 @@ public:
      *
      * @return the upper limit on enemy left-right movement.
      */
-    virtual float getMaxSpeed() const { return ENEMY_MAXSPEED; }
+    virtual float getMaxSpeed() const { return _maxSpeed; }
 
     /**
      * Returns the name of the ground sensor
@@ -493,7 +502,7 @@ public:
     /**
      * Sets the target position of this enemy
      *
-     * @param pos the position of target(player)
+     * @param pos the position of target (player)
      */
     virtual void setTargetPos(Vec2 pos) { _targetPos = pos; }
 
@@ -506,7 +515,7 @@ public:
     /**
      * Make the enemy move toward the target
      *
-	 * @param duration the duration of the movement
+     * @param duration the duration of the movement
      */
     virtual void approachTarget(int duration) { faceTarget(); _moveDirection = 1; _moveDuration = 1; };
     /**
@@ -518,11 +527,12 @@ public:
 
     virtual bool isTargetClose();
     virtual bool isTargetFar();
+    virtual bool canAvoid();
     virtual void nextAction();
     virtual void AIMove();
 
     virtual void setAggression(float value) { _aggression = value; }
-	virtual float getAggression() { return _aggression; }
+    virtual float getAggression() { return _aggression; }
 
     /**
      * Returns the action when an attack hitbox should be active, or nothing when no attack is active
@@ -575,8 +585,6 @@ public:
      * @param delta Number of seconds since last animation frame
      */
     virtual void update(float dt) override;
-
-
 
 
 };

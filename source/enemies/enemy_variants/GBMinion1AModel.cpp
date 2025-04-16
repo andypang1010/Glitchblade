@@ -65,6 +65,12 @@ bool Minion1AModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
 void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
+    // need new idle animation for this minion
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 1);
+    _idleSprite->setScale(0.5f);
+    _idleSprite->setPosition(0, 5);
+    _idleSprite->setName("idle");
+
     
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 8);
     _walkSprite->setScale(0.5f);
@@ -93,6 +99,7 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
 
+    getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_explodeSprite);
     getSceneNode()->addChild(_shootSprite);
@@ -308,7 +315,8 @@ void Minion1AModel::updateAnimation()
         CULog("ExplodeVfx frame #%d before update",framenum);
     }
 
-
+    _idleSprite->setVisible(!isStunned() && !_isExploding && !_isShooting && !(isMoveLeft() || isMoveRight()));
+    
     _walkSprite->setVisible(!isStunned() && !_isExploding && !_isShooting && (isMoveLeft() || isMoveRight()));
 
     _shootSprite->setVisible(!isStunned() && _isShooting);
@@ -317,7 +325,8 @@ void Minion1AModel::updateAnimation()
     
     _explodeVFXSprite->setVisible(_isExploding && _explodeSprite->getFrame() >= _explode->getHitboxStartFrame() - 1);
     
-
+    
+    playAnimation(_idleSprite);
     playAnimation(_walkSprite);
     playAnimation(_shootSprite);
     playAnimation(_explodeSprite);
