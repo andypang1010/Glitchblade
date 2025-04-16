@@ -330,9 +330,6 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-
-    CULog("After debugnode remove all children in gamescene reset:");
-    CULog("_debugnode has %lu children", _debugnode->getChildCount());
     _pauseMenu->removeAllChildren();
     _ui->removeAllChildren();
     setFailure(false);
@@ -365,7 +362,6 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     setBG();
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
-    CULog("In populate, after populate level, debug node has %lu children",_debugnode->getChildCount());
     _player = _levelController->getPlayerModel();
 
 

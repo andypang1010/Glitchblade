@@ -344,7 +344,7 @@ void LevelController::fixedUpdate(float timestep)
         && _currentWaveIndex < _enemyWaves.size() 
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            if (canUpdate(enemyCtrlr) && enemyCtrlr->getEnemy()->getHP() > 0 ) {
+            if (canUpdate(enemyCtrlr)) {
                 enemyCtrlr->fixedUpdate(timestep);
             }
         }

@@ -52,7 +52,7 @@
 using namespace cugl;
 
 #pragma mark force
-#define STAB_FORCE       200.0f
+#define STAB_FORCE       80.0f
 
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
