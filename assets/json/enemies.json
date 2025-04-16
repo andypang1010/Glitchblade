@@ -2,7 +2,7 @@
 
     "minion_1A": {
         "health": 50,
-        "size": [90,110],
+        "size": [ 90, 110 ],
         "stunFrames": 16,
         "actions": [
             {
@@ -48,7 +48,7 @@
     },
     "minion_1B": {
         "health": 50,
-        "size": [90,90],
+        "size": [ 90, 90 ],
         "stunFrames": 16,
         "actions": [
             {
@@ -73,7 +73,7 @@
     },
     "boss_1": {
         "health": 200,
-        "size": [90,180],
+        "size": [ 90, 180 ],
         "stunFrames": 88,
         "actions": [
             {
@@ -135,7 +135,44 @@
             }
         ]
     },
-    "world_info":{
+    "boss_2": {
+        "health": 200,
+        "size": [ 90, 180 ],
+        "stunFrames": 88,
+        "actions": [
+            {
+                "type": "ranged",
+                "name": "shortFire",
+                "projectiles": [
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 2,
+                            "y": 0.5
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 1,
+                        "projectileAnimation": "textures/boss2_shortFire_attack.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 15,
+                            "y": 0
+                        },
+                        "projectileDamage": 20
+                    }
+                ]
+            }
+        ]
+    },
+    "world_info": {
         "scale": null,
         "worldLeft": null,
         "worldRight": null
