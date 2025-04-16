@@ -106,10 +106,6 @@ protected:
     bool _isGrounded;
     int _lastDamagedFrame;
     
-#pragma mark  constants
-    int _stunFrames; // longer
-    int _staggerFrames; // shorter
-    
 #pragma mark fixture constants
     /** The amount to shrink the body fixture (horizontally) relative to the image */
     float _hShrink = 0.7f;
@@ -174,7 +170,8 @@ protected:
 public:
     float _scale;
     int frameCounter = 0;
-    int stunFrame;
+    int stunFrames; // longer
+//    int staggerFrames; // shorter
     float worldLeft;
     float worldRight;
 

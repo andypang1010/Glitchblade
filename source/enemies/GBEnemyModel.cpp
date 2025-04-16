@@ -381,6 +381,6 @@ void EnemyModel::setConstants(){
     _size = Size(_enemyJSON->get("size")->get(0)->asFloat(), _enemyJSON->get("size")->get(1)->asFloat()) / _drawScale;
     _size.width *= _hShrink;
     _size.height *= _hShrink;
-    _stunFrames = _enemyJSON->getInt("stunFrames");
+    stunFrames = _enemyJSON->getInt("stunFrames");
     
 }
