@@ -113,9 +113,10 @@ void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_con
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
 }
 
-bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef)
+bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef)
 {
     // Store references to world and debugNode
+    _worldNode = worldNodeRef;
     _worldRef = worldRef;
     _debugNodeRef = debugNodeRef;
 
@@ -137,7 +138,7 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         return false;
     }
 
-	_levels = parseLevels(_levelsJSON);
+    _levels = parseLevels(_levelsJSON, _assets);
     if (_levels.empty()) {
         return false;
     }
@@ -149,13 +150,6 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     _playerController->init(_assets, _constantsJSON);
 
     return true;
-}
-
-std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::string levelName) {
-    std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
-    std::shared_ptr<Texture> bgimage = levelRef->getBackground();
-    _worldNode = scene2::PolygonNode::allocWithTexture(bgimage);
-    return _worldNode;
 }
 
 void LevelController::updateLevel() {
@@ -305,8 +299,6 @@ void LevelController::reset() {
         CULog("Resetting player controller");
         _playerController->reset();
     }
-    // Clear or reset non-init fields
-    _worldNode = nullptr;
 
     // Reset wave attributes
     _enemyWaves.clear();
@@ -527,7 +519,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     return actions;
 }
 
-std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json)
+std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef)
 {
     std::unordered_map<std::string, std::shared_ptr<LevelModel>> levels;
 
@@ -537,14 +529,14 @@ std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::pa
     }
 
     for (std::shared_ptr<JsonValue> level : json->get("levels")->children()) {
-        std::shared_ptr<LevelModel> lModel = parseLevel(level);
+        std::shared_ptr<LevelModel> lModel = parseLevel(level, assetRef);
         levels[lModel->getLevelName()] = lModel;
     }
 
 	return levels;
 }
 
-std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<JsonValue>& json)
+std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef)
 {
     std::shared_ptr<LevelModel> level = std::make_shared<LevelModel>();
 
@@ -556,13 +548,13 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 	level->setLevelName(json->getString("name"));
     level->setScale(json->getFloat("scale"));
-    auto bg = Texture::allocWithFile(json->getString("background"));
+    auto bg = assetRef->get<graphics::Texture>(json->getString("background"));
     level->setBackground(bg);
     auto gr = Texture::allocWithFile(json->getString("ground"));
     level->setGround(gr);
     
     for (std::shared_ptr<JsonValue> layer : json->get("layers")->children()) {
-        auto texture = Texture::allocWithFile(layer->getString("file"));
+        auto texture = assetRef->get<graphics::Texture>(layer->getString("file"));
         unsigned int speed = layer->getInt("speed");
         level->addLayer(texture, speed);
     }

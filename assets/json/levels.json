@@ -2,32 +2,31 @@
   "levels": [
     {
       "name": "Level 1",
-      "background": "textures/Scene_1_00.png",
-      "scale": 0.57,
+      "scale": 0.5,
       "layers": [
           {
-            "file": "textures/Scene_1_01.png",
+              "file": "scene1_bg",
+              "speed": 0
+          },
+          {
+            "file": "scene1_l4",
             "speed": 1
           },
           {
-            "file": "textures/Scene_1_02.png",
+            "file": "scene1_l3",
             "speed": 2
           },
           {
-            "file": "textures/Scene_1_03.png",
+            "file": "scene1_l2",
             "speed": 3
           },
           {
-            "file": "textures/Scene_1_04.png",
+            "file": "scene1_l1",
             "speed": 4
           },
           {
-            "file": "textures/Scene_1_05.png",
-            "speed": 5
-          },
-          {
-            "file": "textures/Scene_1_06.png",
-            "speed": 0
+              "file": "ground",
+              "speed": 0
           }
       ],
       "platforms": [],
