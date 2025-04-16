@@ -1,5 +1,23 @@
 {
     "textures": {
+        "ground" : {
+            "file" : "textures/ground.png"
+        },
+        "scene1_bg" : {
+            "file" : "textures/Scene_1_background.png"
+        },
+        "scene1_l1" : {
+            "file" : "textures/Scene_1_layer_1.png"
+        },
+        "scene1_l2" : {
+            "file" : "textures/Scene_1_layer_2.png"
+        },
+        "scene1_l3" : {
+            "file" : "textures/Scene_1_layer_3.png"
+        },
+        "scene1_l4" : {
+            "file" : "textures/Scene_1_layer_4.png"
+        },
         "player": {
             "file": "textures/player.png"
         },

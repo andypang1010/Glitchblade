@@ -51,7 +51,6 @@ using namespace cugl;
  */
 class GameScene : public scene2::Scene2 {
 protected:
-    unsigned int _maxTag;
     bool cameraLocked;
     /** The asset manager for this game mode. */
     std::shared_ptr<AssetManager> _assets;

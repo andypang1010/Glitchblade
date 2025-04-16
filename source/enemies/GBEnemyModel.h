@@ -538,7 +538,7 @@ public:
      */
     virtual std::shared_ptr<RangedActionModel> getProjectileAction();
 
-    void die(std::shared_ptr<scene2::PolygonNode> world);
+    void die(std::shared_ptr<scene2::SceneNode> world);
 
 #pragma mark -
 #pragma mark Animation Methods

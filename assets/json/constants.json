@@ -22,12 +22,12 @@
     "walls": {
         "vertex_count": 12,
         "wall_count": 2,
-        "thickness": 3,
+        "thickness": 1,
         "name": "wall"
     },
     "ground": {
         "vertex_count": 8,
-        "thickness": 4.4
+        "thickness": 2.2
     },
     "physics": {
         "basic_density": 0,

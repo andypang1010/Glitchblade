@@ -32,7 +32,7 @@ private:
     bool _isCurrentLevelComplete = false;
 
     std::unordered_map<std::string, std::shared_ptr<LevelModel >> _levels;
-    std::shared_ptr<cugl::scene2::PolygonNode> _worldNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _worldNode;
     std::shared_ptr<cugl::scene2::SceneNode> _debugNodeRef;
     std::shared_ptr<cugl::physics2::ObstacleWorld> _worldRef;
 
@@ -117,7 +117,7 @@ public:
     /**
      * Initializes the level controller. Return false on failure
      */
-    bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef);
+    bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef);
 
     /**
     * Creates and returns a worldNode for GameScene to use
@@ -183,9 +183,9 @@ public:
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);
     /** Parses the JSON file and returns a vector of parsed actions. */
-    static std::unordered_map<std::string, std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json);
+    static std::unordered_map<std::string, std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef);
     /** Parses the JSON file and returns a vector of parsed actions. */
-    static std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json);
+    static std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef);
 
 #pragma mark Getters
     // this is a test method because we will need to access all enemies in the level not just one

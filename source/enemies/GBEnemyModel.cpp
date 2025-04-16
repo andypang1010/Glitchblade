@@ -246,7 +246,7 @@ bool EnemyModel::isTargetFar() {
 	return (getPosition() - _targetPos).length() >= FAR_RADIUS;
 }
 
-void EnemyModel::die(std::shared_ptr<scene2::PolygonNode> world) {
+void EnemyModel::die(std::shared_ptr<scene2::SceneNode> world) {
     for (NodePtr node : _node->getChildren()) {
 		if (node->getName() == "dead") {
 			continue;

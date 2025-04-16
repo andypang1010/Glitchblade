@@ -184,6 +184,13 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         _collisionController->endContact(contact);
         };
     
+    // Create the scene graph
+    _worldnode = scene2::SceneNode::alloc();
+    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    _worldnode->setPosition(_offset);
+    
+    _camera = getCamera();
+    
     CULog("Creating empty level controller in gamescene init");
     _levelController = std::make_unique<LevelController>();
     CULog("initializing level controller in gamescene init");
@@ -193,16 +200,10 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _debugnode->setPosition(_offset);
     _debugnode->setName("game_debug_node");
     
-    _levelController->init(_assets,_constantsJSON, _world, _debugnode); // Initialize the LevelController
+    _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
     _currentLevel = _levelController->getLevelByName("Level 1");
 
-    // Create the scene graph
-//    Vec2 offset((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
-//    _worldnode = scene2::PolygonNode::alloc();
-//    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-//    _worldnode->setPosition(offset);
-    
-    _camera = getCamera();
+
     
 
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
@@ -357,18 +358,11 @@ void GameScene::reset() {
  * with your serialization loader, which would process a level file.
  */
 void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
-    _worldnode = _levelController->makeWorldNode("Level 1");
-    _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _worldnode->setPosition(_offset);
     addChild(_worldnode);
     addChild(_debugnode);
     addChild(_winnode);
     addChild(_losenode);
     setBG();
-    for (auto node : _worldnode->getChildren()) {
-        _maxTag = 0;
-        _maxTag = std::max(_maxTag, node->getTag());
-    }
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
     CULog("In populate, after populate level, debug node has %lu children",_debugnode->getChildCount());
@@ -490,7 +484,6 @@ void GameScene::preUpdate(float dt) {
 
     auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
     auto currPlayerVel = _levelController->getPlayerModel()->getVX();
-    auto frontLayer = _worldnode->getChildByTag(_maxTag);
     auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
     auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
     
@@ -511,9 +504,9 @@ void GameScene::preUpdate(float dt) {
     if (!cameraLocked) {
         _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
         _camera->update();
-        if (currPlayerPosX < frontLayer->getPositionX()+frontLayer->getWidth()*.8 && currPlayerVel > 0) {
+        if (currPlayerVel > 0) {
             updateLayersLeft();
-        }   else if (currPlayerPosX > frontLayer->getPositionX()+frontLayer->getWidth()*.2 && currPlayerVel < 0) {
+        }   else if (currPlayerVel < 0) {
             updateLayersRight();
         }
     }
@@ -632,18 +625,43 @@ void GameScene::removeProjectile(Projectile* projectile) {
 
 void GameScene::setBG() {
     for (auto layerPair : _currentLevel->getLayers()) {
+        // Left
         std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node->setScale(_currentLevel->getScale());
+        node->setPosition(Vec2(node->getPositionX()-node->getSize().width, node->getPositionY()));
         node->setTag(layerPair.second);
         _worldnode->addChild(node);
+        
+        // Centered
+        std::shared_ptr<scene2::SceneNode> node2 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+        node2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+        node2->setScale(_currentLevel->getScale());
+        node2->setTag(layerPair.second);
+        _worldnode->addChild(node2);
+        
+        // Right
+        std::shared_ptr<scene2::SceneNode> node3 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+        node3->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+        node3->setScale(_currentLevel->getScale());
+        node3->setPosition(Vec2(node3->getPositionX()+node->getSize().width, node3->getPositionY()));
+        node3->setTag(layerPair.second);
+        _worldnode->addChild(node3);
+        
+        // Right + 1
+        std::shared_ptr<scene2::SceneNode> node4 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+        node4->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+        node4->setScale(_currentLevel->getScale());
+        node4->setPosition(Vec2(node4->getPositionX()+2*node->getSize().width, node4->getPositionY()));
+        node4->setTag(layerPair.second);
+        _worldnode->addChild(node4);
     }
 }
 
 void GameScene::updateLayersLeft() {
     for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
         if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/15, node->getPositionY()));
+            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/5, node->getPositionY()));
         }
     }
 }
@@ -651,7 +669,7 @@ void GameScene::updateLayersLeft() {
 void GameScene::updateLayersRight() {
     for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
         if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/15, node->getPositionY()));
+            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/5, node->getPositionY()));
         }
     }
 }

@@ -52,7 +52,6 @@ public:
     void setScale(float scale) { _scale = scale; }
     
     std::vector<std::pair<std::shared_ptr<Texture>, unsigned int>> getLayers() const { return _layers; }
-    void setLayers(std::vector<std::pair<std::shared_ptr<Texture>, unsigned int>>& background) { _layers = background; }
     void addLayer(const std::shared_ptr<Texture>& layer, unsigned int speed) { _layers.push_back(std::make_pair(layer, speed)); }
 
     // Getter and Setter for _ground
