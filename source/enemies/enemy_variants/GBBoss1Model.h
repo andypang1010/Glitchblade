@@ -188,7 +188,6 @@ public:
         _isExploding = false;
 
         _moveDuration = 0;
-        currentFrame = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

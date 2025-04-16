@@ -324,7 +324,7 @@ void LevelController::preUpdate(float dt)
         && _currentWaveIndex < _enemyWaves.size()
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            if (canUpdate(enemyCtrlr) && enemyCtrlr->getEnemy()->getHP() > 0){
+            if (canUpdate(enemyCtrlr)){
                 std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
                 enemodel->setTargetPos(player->getPosition());
                 enemyCtrlr->preUpdate(dt);
@@ -345,7 +345,28 @@ void LevelController::fixedUpdate(float timestep)
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
             if (canUpdate(enemyCtrlr)) {
+                auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
+                auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
+
+                if (damagingAction) {
+                    createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1));
+                }
+
+                if (projectileAction) {
+                    auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition(), projectileAction->getProjectiles()[0], enemyCtrlr->getEnemy()->isFacingRight());
+                    addObstacle(projectilePair);
+                }
+
                 enemyCtrlr->fixedUpdate(timestep);
+            }
+
+            else if (enemyCtrlr->getEnemy()->getHP() <= 0) {
+                if (enemyCtrlr->getEnemy()->isRemoved()) {
+                    continue;
+                }
+
+                enemyCtrlr->getEnemy()->die(_worldNode);
+                _numEnemiesActive--;
             }
         }
     }
@@ -354,45 +375,16 @@ void LevelController::fixedUpdate(float timestep)
 void LevelController::postUpdate(float dt)
 {
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
-    if (player->isShooting() && player->hasProjectile()) {
-        //ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, player->getPosition(), player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true, player->isFacingRight());
-        //addObstacle(p);
-        //player->setHasProjectile(false);
-    }
 	_playerController->postUpdate(dt);
 
     if (_enemyWaves.size() > 0
         && _currentWaveIndex < _enemyWaves.size()
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            if (!canUpdate(enemyCtrlr)) {
-                continue;
+            if (canUpdate(enemyCtrlr)) {
+
+                enemyCtrlr->postUpdate(dt);
             }
-
-            auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
-            auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
-
-            if (damagingAction) {
-                createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1);
-            }
-
-            if (projectileAction) {
-                auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition(), projectileAction->getProjectiles()[0], enemyCtrlr->getEnemy()->isFacingRight());
-                addObstacle(projectilePair);
-            }
-
-            if (enemyCtrlr->getEnemy()->getHP() <= 0) {
-                if (enemyCtrlr->getEnemy()->isRemoved()) {
-                    continue;
-                }
-
-                enemyCtrlr->getEnemy()->die(_worldNode);
-                _numEnemiesActive--;
-                //_enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
-            }
-
-            enemyCtrlr->postUpdate(dt);
-
         }
     }
 }
@@ -451,11 +443,10 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
             meleeAction->setHitboxPos(hitboxPos);
             meleeAction->setHitboxSize(hitboxSize);
-            meleeAction->setHitboxStartFrame(action->getFloat("hitboxStartFrame"));
-            meleeAction->setHitboxEndFrame(action->getFloat("hitboxEndFrame"));
-            meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
-
-            
+            meleeAction->setHitboxStartFrame(action->getInt("hitboxStartFrame"));
+            CULog("PARSING: %i", action->getInt("hitboxStartFrame"));
+            meleeAction->setHitboxEndFrame(action->getInt("hitboxEndFrame"));
+            meleeAction->setHitboxDamage(action->getInt("hitboxDamage"));
 
             actions.push_back(meleeAction);
         }

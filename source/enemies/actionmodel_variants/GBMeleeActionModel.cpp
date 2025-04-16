@@ -42,28 +42,28 @@ void MeleeActionModel::setHitboxSize(const cugl::Vec2& size) {
 /**
  * Returns the hitbox start time.
  */
-float MeleeActionModel::getHitboxStartFrame() const {
+int MeleeActionModel::getHitboxStartFrame() const {
     return _hitboxStartFrame;
 }
 
 /**
  * Sets the hitbox start time.
  */
-void MeleeActionModel::setHitboxStartFrame(float StartFrame) {
+void MeleeActionModel::setHitboxStartFrame(int StartFrame) {
     _hitboxStartFrame = StartFrame;
 }
 
 /**
  * Returns the hitbox end time.
  */
-float MeleeActionModel::getHitboxEndFrame() const {
+int MeleeActionModel::getHitboxEndFrame() const {
     return _hitboxEndFrame;
 }
 
 /**
  * Sets the hitbox end time.
  */
-void MeleeActionModel::setHitboxEndFrame(float EndFrame) {
+void MeleeActionModel::setHitboxEndFrame(int EndFrame) {
     _hitboxEndFrame = EndFrame;
 }
 

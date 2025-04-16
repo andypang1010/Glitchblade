@@ -385,11 +385,11 @@ void Boss1Model::updateAnimation()
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
-    playAnimation(_slamSprite);
-    playAnimation(_stabSprite);
-    playAnimation(_stunSprite);
-	playAnimation(_shootSprite);
-	playAnimation(_explodeSprite);
+    playAnimationOnce(_slamSprite);
+    playAnimationOnce(_stabSprite);
+    playAnimationOnce(_stunSprite);
+	playAnimationOnce(_shootSprite);
+	playAnimationOnce(_explodeSprite);
 
     playVFXAnimation(_explodeSprite, _explodeVFXSprite, 24);
 

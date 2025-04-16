@@ -203,7 +203,11 @@ public:
     Vec2 calculateRightBulletPosition();
     
     static bool canUpdate(std::shared_ptr<EnemyController> enemyCtrlr){
-        return (enemyCtrlr != nullptr && enemyCtrlr->getEnemy()->getBody() != nullptr && !enemyCtrlr->getEnemy()->isRemoved());
+        return (
+            enemyCtrlr != nullptr && 
+            enemyCtrlr->getEnemy()->getBody() != nullptr && 
+            !enemyCtrlr->getEnemy()->isRemoved() &&
+            enemyCtrlr->getEnemy()->getHP() > 0);
         }
     };
 

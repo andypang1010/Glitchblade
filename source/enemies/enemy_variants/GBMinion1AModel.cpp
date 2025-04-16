@@ -268,8 +268,8 @@ void Minion1AModel::updateAnimation()
     
     playAnimation(_idleSprite);
     playAnimation(_walkSprite);
-    playAnimation(_shootSprite);
-    playAnimation(_explodeSprite);
+    playAnimationOnce(_shootSprite);
+    playAnimationOnce(_explodeSprite);
     playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartFrame() - 1);
    
     if (framenum > 0){
