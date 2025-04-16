@@ -145,6 +145,7 @@ void Minion1BModel::dispose() {
 void Minion1BModel::update(float dt) {
     if (isRemoved()) return;
 
+
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition() * _drawScale);
@@ -263,9 +264,9 @@ void Minion1BModel::updateAnimation()
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
-    playAnimation(_slamSprite);
-    playAnimation(_punchSprite);
-    playAnimation(_stunSprite);
+    playAnimationOnce(_slamSprite);
+    playAnimationOnce(_punchSprite);
+    playAnimationOnce(_stunSprite);
 
 	playVFXAnimation(_slamSprite, _slamVFXSprite, 19);
 
