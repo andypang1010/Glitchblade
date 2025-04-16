@@ -190,6 +190,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _worldnode->setPosition(_offset);
     
     _camera = getCamera();
+    _defCamPos = _camera->getPosition();
     
     CULog("Creating empty level controller in gamescene init");
     _levelController = std::make_unique<LevelController>();
@@ -339,6 +340,7 @@ void GameScene::reset() {
 	populateUI(_assets);
     _ui->setHP(100);
     _pauseMenu->setHP(100);
+    _camera->setPosition(_defCamPos);
 
     Application::get()->setClearColor(Color4f::BLACK);
 }
@@ -486,20 +488,20 @@ void GameScene::preUpdate(float dt) {
     auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
     
     if (cameraPosLX <= 0 || cameraPosRX >= 4000) {
-        cameraLocked = true;
+        _cameraLocked = true;
         if (cameraPosLX <= 0) {
             CULog("playerx: %f", currPlayerPosX);
             if (currPlayerPosX > getBounds().size.width*.66) {
-                cameraLocked = false;
+                _cameraLocked = false;
             }
         } else {
             CULog("playerx: %f", currPlayerPosX);
             if (currPlayerPosX < 4000 - getBounds().size.width*.66) {
-                cameraLocked = false;
+                _cameraLocked = false;
             }
         }
     }
-    if (!cameraLocked) {
+    if (!_cameraLocked) {
         _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
         _camera->update();
         if (currPlayerVel > 0 && !isKnocked) {
