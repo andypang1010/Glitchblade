@@ -1,6 +1,9 @@
 {
+
     "minion_1A": {
         "health": 50,
+        "size": [90,110],
+        "stunFrames": 16,
         "actions": [
             {
                 "type": "melee",
@@ -45,6 +48,8 @@
     },
     "minion_1B": {
         "health": 50,
+        "size": [90,90],
+        "stunFrames": 16,
         "actions": [
             {
                 "type": "melee",
@@ -68,6 +73,8 @@
     },
     "boss_1": {
         "health": 200,
+        "size": [90,180],
+        "stunFrames": 88,
         "actions": [
             {
                 "type": "melee",
@@ -127,5 +134,10 @@
                 ]
             }
         ]
+    },
+    "world_info":{
+        "scale": null,
+        "worldLeft": null,
+        "worldRight": null
     }
 }
