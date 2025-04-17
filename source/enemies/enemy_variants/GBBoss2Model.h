@@ -84,6 +84,7 @@ protected:
     bool _isShortFireWaiting;
     bool _isShortFireEnding;
     bool _isShortFiring;
+    int _shortFireCount;
 
     std::shared_ptr<RangedActionModel> _shortFire;
 
@@ -168,6 +169,10 @@ public:
     }
 
 #pragma mark -
+#pragma mark Attribute Properties
+    void damage(float value) override;
+
+#pragma mark -
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes() override {
@@ -184,6 +189,7 @@ public:
         _isShortFireStarting = false;
         _isShortFireEnding = false;
         _isShortFiring = false;
+        _shortFireCount = 0;
 
         _moveDuration = 0;
     };

@@ -77,31 +77,31 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     setSceneNode(_node);
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_idle"), 2, 8, 15);
-    _idleSprite->setPosition(0, 50);
+    _idleSprite->setPosition(0, 60);
 	_idleSprite->setName("idle");
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_stun_short"), 2, 8, 15);
-    _stunSprite->setPosition(0, 50);
+    _stunSprite->setPosition(0, 60);
 	_stunSprite->setName("stun");
 
     _shortFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_start"), 2, 8, 15);
-    _shortFireStartSprite->setPosition(0, 50);
+    _shortFireStartSprite->setPosition(0, 60);
     _shortFireStartSprite->setName("shortFireStart");
 
     _shortFireAttackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_attack"), 1, 8, 5);
-    _shortFireAttackSprite->setPosition(0, 50);
+    _shortFireAttackSprite->setPosition(0, 60);
     _shortFireAttackSprite->setName("shortFireAttack");
 
     _shortFireWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_wait"), 1, 8, 5);
-    _shortFireWaitSprite->setPosition(0, 50);
+    _shortFireWaitSprite->setPosition(0, 60);
     _shortFireWaitSprite->setName("shortFireWait");
 
     _shortFireEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_end"), 1, 9, 8);
-    _shortFireEndSprite->setPosition(0, 50);
+    _shortFireEndSprite->setPosition(0, 60);
     _shortFireEndSprite->setName("shortFireEnd");
 
-	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_dead"), 5, 10, 45);
-	_deadSprite->setPosition(0, 50);
+	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_dead"), 8, 8, 58);
+	_deadSprite->setPosition(0, 45);
 	_deadSprite->setName("dead");
 
     getSceneNode()->addChild(_idleSprite);
@@ -162,6 +162,13 @@ void Boss2Model::dispose() {
     _deadSprite = nullptr;
 }
 
+void Boss2Model::damage(float value) {
+    EnemyModel::damage(value);
+    if (_isShortFireAttacking || _isShortFireWaiting) {
+        setStun(60);
+    }
+}
+
 #pragma mark Cooldowns
 /**
  * Updates the object's physics state (NOT GAME LOGIC).
@@ -193,17 +200,55 @@ void Boss2Model::update(float dt) {
 void Boss2Model::nextAction() {
     int r = rand();
     AIMove();
-    if (_moveDuration <= 0 && !isStunned()) {
-        
+    if (_moveDuration <= 0 && !isStunned() && !_isShortFiring) {
+        shortFire();
     }
     else {
         if (isStunned()) {
             _isShortFiring = false;
+			_isShortFireStarting = false;
+			_isShortFireAttacking = false;
+			_isShortFireWaiting = false;
+			_isShortFireEnding = false;
             setMovement(0);
         }
-        if (_isShortFiring && _shortFireAttackSprite->getFrame() >= SHOOT_FRAMES - 1) {
-            _isShortFiring = false;
+        if (_isShortFiring) {
+            CULog("start frames: %d", _shortFireStartSprite->getCount());
             setMovement(0);
+            if (!_isShortFireStarting && !_isShortFireAttacking && !_isShortFireWaiting && !_isShortFireEnding) {
+                _isShortFireStarting = true;
+                _shortFireCount = 0;
+            }
+            else if (_isShortFireStarting && _shortFireStartSprite->getFrame() >= _shortFireStartSprite->getCount()-1) {
+                _isShortFireStarting = false;
+                _isShortFireAttacking = true;
+				_shortFireCount++;
+            }
+            else if (_isShortFireAttacking && _shortFireAttackSprite->getFrame() >= _shortFireAttackSprite->getCount() - 1) {
+                if (_shortFireCount >= 3) { // stop repeated shooting
+                    _isShortFireAttacking = false;
+                    _isShortFireEnding = true;
+                }
+				else { // wait for a bit
+					_isShortFireAttacking = false;
+					_isShortFireWaiting = true;
+                }
+            }
+            else if (_isShortFireWaiting && _shortFireWaitSprite->getFrame() >= _shortFireWaitSprite->getCount() - 1) {
+                if (_shortFireCount >= 3) { // stop repeated shooting
+                    _isShortFireWaiting = false;
+                    _isShortFireEnding = true;
+                }
+                else { // return to shooting
+                    _isShortFireWaiting = false;
+                    _isShortFireAttacking = true;
+                    _shortFireCount++;
+                }
+            }
+            else if (_isShortFireEnding && _shortFireEndSprite->getFrame() >= _shortFireEndSprite->getCount() - 1) {
+                _isShortFireEnding = false;
+                _isShortFiring = false;
+            }
         }
     }
 }
@@ -226,6 +271,7 @@ void Boss2Model::AIMove() {
 
 void Boss2Model::shortFire() {
 	faceTarget();
+    _isShortFiring = true;
 }
 
 std::shared_ptr<MeleeActionModel> Boss2Model::getDamagingAction() {
@@ -235,7 +281,7 @@ std::shared_ptr<MeleeActionModel> Boss2Model::getDamagingAction() {
 std::shared_ptr<RangedActionModel> Boss2Model::getProjectileAction() {
 	std::vector<int> frames = _shortFire->getProjectileSpawnFrames();
     for (int frame : frames) {
-		if (_isShortFiring && _shortFireAttackSprite->getFrame() == frame && frameCounter == 0) {
+		if (_isShortFireAttacking && _shortFireAttackSprite->getFrame() == frame && frameCounter == 0) {
 			return _shortFire;
 		}
     }
@@ -256,10 +302,15 @@ void Boss2Model::updateAnimation()
     _shortFireWaitSprite->setVisible(!isStunned() && _isShortFireWaiting);
     _shortFireEndSprite->setVisible(!isStunned() && _isShortFireEnding);
 
-    _idleSprite->setVisible(!isStunned() && !(isMoveLeft() || isMoveRight()));
+    _idleSprite->setVisible(!isStunned() && !_isShortFiring && !(isMoveLeft() || isMoveRight()));
 
     playAnimation(_idleSprite);
     playAnimation(_stunSprite);
+
+    playAnimation(_shortFireStartSprite);
+    playAnimation(_shortFireAttackSprite);
+    playAnimation(_shortFireWaitSprite);
+    playAnimation(_shortFireEndSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
