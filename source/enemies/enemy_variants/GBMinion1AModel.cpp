@@ -38,7 +38,6 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _idleSprite->setScale(0.5f);
     _idleSprite->setPosition(0, 5);
     _idleSprite->setName("idle");
-
     
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 8);
     _walkSprite->setScale(0.5f);
@@ -63,6 +62,8 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	_deadSprite->setScale(0.5f);
     _deadSprite->setPosition(0, 0);
 	_deadSprite->setName("dead");
+
+    _stunFrames = 0;
 
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);
@@ -178,11 +179,11 @@ void Minion1AModel::nextAction() {
             _isExploding = false;
             setMovement(0);
         }
-        if (_isShooting && _shootSprite->getFrame() >= MINION1A_SHOOT_FRAMES - 1) {
+        if (_isShooting && _shootSprite->getFrame() >= _shootSprite->getCount() - 1) {
             _isShooting = false;
             setMovement(0);
         }
-        if (_isExploding && _explodeVFXSprite->getFrame() >= MINION1A_EXPLODEVFX_FRAMES - 1) {
+        if (_isExploding && _explodeVFXSprite->getFrame() >= _explodeVFXSprite->getCount() - 1) {
             CULog("Setting minion1a hp to 0");
             _isExploding = false;
             _hp = 0;

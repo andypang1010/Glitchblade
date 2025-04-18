@@ -55,14 +55,6 @@ using namespace cugl;
 #define STAB_FORCE       80.0f
 
 #pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-#define SLAM_FRAMES     40
-#define STAB_FRAMES     40
-#define SHOOT_FRAMES    15
-#define EXPLODE_FRAMES  40
-#define STUN_FRAMES 88
-
-#pragma mark -
 #pragma mark Enemy Model
 /**
 * Player avatar for the plaform game.

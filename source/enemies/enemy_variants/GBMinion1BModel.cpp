@@ -63,6 +63,7 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _stunSprite->setScale(0.5f);
     _stunSprite->setPosition(0, 10);
     _stunSprite->setName("stun");
+	_stunFrames = _stunSprite->getCount() * 4;
 
     _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_dead"), 4, 4, 15);
     _deadSprite->setScale(0.5f);
@@ -185,11 +186,11 @@ void Minion1BModel::nextAction() {
             _isPunching = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= MINION1B_SLAM_FRAMES - 1) {
+        if (_isSlamming && _slamSprite->getFrame() >= _slamSprite->getCount() - 1) {
             _isSlamming = false;
             setMovement(0);
         }
-        if (_isPunching && _punchSprite->getFrame() >= MINION1B_PUNCH_FRAMES - 1) {
+        if (_isPunching && _punchSprite->getFrame() >= _punchSprite->getCount() - 1) {
             _isPunching = false;
             setMovement(0);
         }

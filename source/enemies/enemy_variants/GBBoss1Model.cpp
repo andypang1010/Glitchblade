@@ -76,31 +76,32 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
     //move this to new function
-    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 6, 6);
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 5, 5);
     _idleSprite->setPosition(0, 50);
 	_idleSprite->setName("idle");
 
-    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walking1"), 1, 8, 8);
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walk"), 1, 7, 7);
     _walkSprite->setPosition(0, 50);
 	_walkSprite->setName("walk");
 
-    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 4, 10, 40);
+    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 8, 5, 40);
     _slamSprite->setPosition(0, 50);
 	_slamSprite->setName("slam");
 
-    _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 4, 10, 40);
+    _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 8, 5, 40);
     _stabSprite->setPosition(0, 50);
 	_stabSprite->setName("stab");
 
-    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
+    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 7, 6, 38);
     _stunSprite->setPosition(0, 50);
 	_stunSprite->setName("stun");
+    _stunFrames = _stunSprite->getCount() * 4;
 
-    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 2, 10, 15);
+    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 3, 5, 15);
     _shootSprite->setPosition(0, 50);
 	_shootSprite->setName("shoot");
 
-    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 4, 10, 40);
+    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 11, 5, 53);
     _explodeSprite->setPosition(0, 50);
 	_explodeSprite->setName("explode");
 
@@ -108,7 +109,7 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	_explodeVFXSprite->setPosition(0, 0);
 	_explodeVFXSprite->setName("explode_vfx");
 
-	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_dead"), 5, 10, 45);
+	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_dead"), 12, 5, 60);
 	_deadSprite->setPosition(0, 50);
 	_deadSprite->setName("dead");
 
@@ -254,19 +255,19 @@ void Boss1Model::nextAction() {
 			_isExploding = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES - 1) {
+        if (_isSlamming && _slamSprite->getFrame() >= _slamSprite->getCount() - 1) {
             _isSlamming = false;
             setMovement(0);
         }
-        if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES - 1) {
+        if (_isStabbing && _stabSprite->getFrame() >= _stabSprite->getCount() - 1) {
             _isStabbing = false;
             setMovement(getMovement());
         }
-        if (_isShooting && _shootSprite->getFrame() >= SHOOT_FRAMES - 1) {
+        if (_isShooting && _shootSprite->getFrame() >= _shootSprite->getCount() - 1) {
             _isShooting = false;
             setMovement(0);
         }
-        if (_isExploding && _explodeSprite->getFrame() >= EXPLODE_FRAMES - 1) {
+        if (_isExploding && _explodeSprite->getFrame() >= _explodeSprite->getCount() - 1) {
             _isExploding = false;
             setMovement(0);
         }
@@ -371,7 +372,7 @@ void Boss1Model::updateAnimation()
 
 	_explodeSprite->setVisible(!isStunned() && _isExploding);
 
-    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= 24);
+    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= _explodeSprite->getCount() - _explodeVFXSprite->getCount());
 
     _idleSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && !(isMoveLeft() || isMoveRight()));
 

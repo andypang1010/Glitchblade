@@ -9,12 +9,6 @@
 using namespace cugl;
 
 #pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1A_SHOOT_FRAMES     5
-#define MINION1A_EXPLODE_FRAMES     45
-#define MINION1A_EXPLODEVFX_FRAMES     12
-
-#pragma mark -
 #pragma mark Enemy Model
 /**
 * Player avatar for the plaform game.

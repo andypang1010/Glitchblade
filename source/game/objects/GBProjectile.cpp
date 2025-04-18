@@ -72,52 +72,6 @@ ObstacleNodePair Projectile::createProjectileNodePair(const std::shared_ptr<Asse
     return proj_pair;
 }
 
-///**
-// * Add a new projectile to the world and send it in the right direction.
-// */
-//ObstacleNodePair Projectile::createProjectile(const std::shared_ptr<AssetManager>& assetRef,const std::shared_ptr<JsonValue>& constantsRef, Vec2 pos, Size size, Vec2 direction, bool isPlayerFired, bool face_right) {
-//    float offset = constantsRef->get("projectile")->getFloat("offset");
-//    float scale = constantsRef->get("scene")->getFloat("scale");
-//    if (isPlayerFired) {
-//        pos.x += (face_right ? offset : -offset);
-//        pos.y += 0.5f;
-//    }
-//    
-//    std::shared_ptr<JsonValue> projJ = isPlayerFired? constantsRef->get("player_projectile"): constantsRef->get("projectile");
-//    std::shared_ptr<JsonValue> physicsJ = constantsRef->get("physics");
-//    std::shared_ptr<JsonValue> fxJ = constantsRef->get("audio")->get("effects");
-//    
-//    std::shared_ptr<Texture> image = assetRef->get<Texture>(projJ->getString("texture"));
-//    float radius = 0.5f * image->getSize().width / scale;
-//
-//    // Change last parameter to test player-fired or regular projectile
-//    std::shared_ptr<Projectile> projectile = alloc(pos, size, isPlayerFired);
-//    projectile->setName(projJ->getString("name"));
-//    projectile->setDensity(physicsJ->getFloat("heavy_density"));
-//    projectile->setBullet(true);
-//    projectile->setGravityScale(0);
-//    projectile->setDebugColor(physicsJ->get("debug")->getString("color"));
-//    projectile->setDrawScale(scale);
-//    projectile->setSensor(true);
-//    projectile->setIsPlayerFired(isPlayerFired);
-//
-//    std::shared_ptr<scene2::SpriteNode> sprite = scene2::SpriteNode::allocWithSheet(image, 1, 1);
-//    projectile->setSceneNode(sprite);
-//
-//    sprite->flipHorizontal(direction.x < 0);
-//    
-//    float proj_speed = projJ->getFloat("speed");
-//    // Compute position and velocity
-//    Vec2 speed = isPlayerFired ? direction.getNormalization()* proj_speed : direction.getNormalization() * proj_speed / 2;
-//    projectile->setLinearVelocity(speed);
-//    ObstacleNodePair proj_pair = std::make_pair(projectile, sprite);
-//    // audio 
-//    std::shared_ptr<audio::Sound> source = assetRef->get<audio::Sound>(fxJ->getString("pew"));
-//    audio::AudioEngine::get()->play(fxJ->getString("pew"), source, false, fxJ->getFloat("volume"), true);
-//    
-//    return proj_pair;
-//}
-
 /**
  * Disposes all resources and assets of this Projectile
  *

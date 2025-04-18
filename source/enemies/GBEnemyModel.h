@@ -170,7 +170,7 @@ protected:
 public:
     float _scale;
     int frameCounter = 0;
-    int stunFrames; // longer
+    int _stunFrames; // longer
 //    int staggerFrames; // shorter
     float worldLeft;
     float worldRight;

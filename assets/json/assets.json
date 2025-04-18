@@ -54,8 +54,8 @@
         "boss1_idle": {
             "file": "textures/boss1_idle.png"
         },
-        "boss1_walking1": {
-            "file": "textures/boss1_walking1.png"
+        "boss1_walk": {
+            "file": "textures/boss1_walk.png"
         },
         "boss1_slam": {
             "file": "textures/boss1_slam.png"

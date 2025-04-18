@@ -185,7 +185,7 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         // If parry is active, stun the enemy.
         else if (_player->isParryActive()) {
             _player->damage(0);
-            enemy->setStun(enemy->stunFrames);
+            enemy->setStun(enemy->_stunFrames);
         }
         // If guard is active, deal half damage with corresponding screen shake.
         else if (_player->isGuardActive()) {

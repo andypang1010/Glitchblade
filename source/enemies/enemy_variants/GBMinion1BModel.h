@@ -8,10 +8,6 @@
 
 using namespace cugl;
 
-#pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1B_SLAM_FRAMES     32
-#define MINION1B_PUNCH_FRAMES     30
 #define MINION1B_PUNCH_FORCE       35.0f
 
 #pragma mark -
