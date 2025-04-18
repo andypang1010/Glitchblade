@@ -120,6 +120,7 @@ protected:
     /** Remaining time for damaged animation */
     int _damageRem;
 
+
     std::string _name;
     std::string _bodyName;
     /** Ground sensor to represent our feet */
@@ -146,6 +147,7 @@ protected:
 
 public:
     int iframe = 0;
+    int _parryCounter = 0;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
@@ -254,6 +256,7 @@ public:
         _parryRem = 0;
         _damageRem = 0;
         _damage = 10;// default player dmg
+        _parryCounter = 0;
     };
     
     void setConstants();
