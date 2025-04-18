@@ -72,11 +72,11 @@
             "duration": 20
         },
         "guard": {
-            "cooldown": 15,
-            "duration": 60
+            "cooldown": 30,
+            "duration": 45
         },
         "parry": {
-            "duration": 24
+            "duration": 15
         },
         "shoot_cooldown": 20,
         "fixtures": {

@@ -152,6 +152,8 @@ void PlayerController::preUpdate(float dt)
     _player->setShootInput(_input->didFire());
     //_hpNode->setText(std::to_string((int)_player->getHP()));
 
+	_player->setDebugColor(_player->isParryActive() ? Color4::RED : _player->isGuardActive() ? Color4::YELLOW : Color4::BLACK);
+
     if (_player->isJumpBegin() && _player->isGrounded()) {
         std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
         std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));

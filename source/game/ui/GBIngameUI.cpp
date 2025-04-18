@@ -140,7 +140,7 @@ void GBIngameUI::setHP(int hp) {
     hp = std::max(0, std::min(hp, 100));
 
     int filled = hp / 20;
-    bool showHalf = (hp % 20) == 10;
+    bool showHalf = (hp % 20) <= 10;
 
     for (int i = 0; i < 5; ++i) {
         _hpSegments[i]->setVisible(i < filled);

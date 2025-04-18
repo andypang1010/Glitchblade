@@ -11,7 +11,7 @@
                 "hitboxSize": [ 8, 8 ],
                 "hitboxStartFrame": 33,
                 "hitboxEndFrame": 40,
-                "hitboxDamage": 20
+                "hitboxDamage": 40
             },
             {
                 "type": "ranged",

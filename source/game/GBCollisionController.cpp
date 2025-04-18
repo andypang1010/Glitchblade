@@ -191,6 +191,8 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
             _player->setGuardRem(0);
             _player->setGuardCDRem(0);
 
+            _screenShake(40, 1);
+
             enemy->setStun(enemy->_stunFrames);
         }
         // If guard is active, deal half damage with corresponding screen shake.
@@ -216,7 +218,15 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                     _player->setHasProjectile(true);
                 }
                 _player->damage(0);
-				deflected = true;
+
+                // Reset guard and parry
+                _player->setParryRem(0);
+                _player->setGuardRem(0);
+                _player->setGuardCDRem(0);
+
+                _screenShake(40, 1);
+				
+                deflected = true;
 				projectile->setIsPlayerFired(true);
 				projectile->setVX(-projectile->getVX());
                 projectile->setVY(-projectile->getVY());

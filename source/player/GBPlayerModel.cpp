@@ -81,7 +81,7 @@ bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const std:
     nsize.height *= _playerJSON->get("fixtures")->get("body")->getFloat("v_shrink");
     _drawScale = scale;
 
-    setDebugColor(_playerJSON->get("debug")->getString("color"));
+    setDebugColor(Color4::BLACK);
 
     if (BoxObstacle::init(pos, nsize)) {
         setDensity(_playerJSON->getFloat("density"));
@@ -636,11 +636,11 @@ float PlayerModel::_maxspeed = 5.0f;
 float PlayerModel::_maxhp = 100.0f;
 int PlayerModel::_jump_cooldown = 5;
 int PlayerModel::_shoot_cooldown = 20;
-int PlayerModel::_guard_cooldown = 15;
+int PlayerModel::_guard_cooldown = 30;
 int PlayerModel::_dash_cooldown = 45;
 
-int PlayerModel::_guard_duration = 44;
-int PlayerModel::_parry_duration = 24;
+int PlayerModel::_guard_duration = 30;
+int PlayerModel::_parry_duration = 5;
 int PlayerModel::_dash_duration = 20;
 int PlayerModel::_knock_duration = 20;
 
