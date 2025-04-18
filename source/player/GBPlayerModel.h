@@ -66,7 +66,7 @@ protected:
     /**JsonValue storing all necessary player constants for fixtures and physics*/
     std::shared_ptr<JsonValue> _playerJSON;
     /** This character's remaining health */
-    float _hp;
+    float _hp = 100;
     /** The current horizontal movement of the character */
     float _movement;
     /** Which direction is the character facing */

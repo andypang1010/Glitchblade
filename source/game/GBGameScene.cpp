@@ -143,10 +143,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
     _constantsJSON = constants_reader->readJson();
     if (_constantsJSON == nullptr) {
-        CULog("Failed to load constants.json");
         return false;
     }
-
     
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
@@ -168,8 +166,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     // Shift to center if a bad fit
     _scale = _size.width == sceneJ->getInt("width") ? _size.width / rect.size.width : _size.height / rect.size.height;
     sceneJ->get("scale")->set(_scale);
-    
-    
+
     // Create the world and attach the listeners.
     _world = physics2::ObstacleWorld::alloc(rect, gravity);
     _world->activateCollisionCallbacks(true);
@@ -201,20 +198,10 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _levelController->init(_assets, _constantsJSON, _world, _debugnode); // Initialize the LevelController
     // LevelController needs to be initialized before populate() or else we will get nullptr related issues
 
-
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
         _input =  _levelController->getInputController();
-        if (!_input){
-            CULog("input is null in populate");
-        }
     #pragma mark : Player
         _player = _levelController->getPlayerModel();
-        if (!_player){
-            CULog("player is null in populate");
-        }
-
-    // === Initialize in-game UI ===
-    populateUI(assets);
     
     _active = true;
     _complete = false;
@@ -231,7 +218,9 @@ std::shared_ptr<LevelModel> GameScene::getLevelModel(std::string name) {
 
 void GameScene::setAllGameplayUIActive(bool active) {
     _ui->setActive(active);
-    // _pauseMenu->setActive(active);
+    _ui->setVisible(active);
+    _pauseMenu->setActive(false); // Never need it active to start
+    _pauseMenu->setActive(false);
 }
 
 void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
@@ -243,6 +232,7 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
     _pauseMenu = GBPauseMenu::alloc(assets);
     if (_pauseMenu != nullptr) {
         _pauseMenu->setVisible(false);
+        _pauseMenu->setActive(false);
         addChild(_pauseMenu);
     }
 
@@ -252,6 +242,7 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
             if (down) {
                 _ui->setVisible(false);
                 _pauseMenu->setVisible(true);
+                _pauseMenu->setActive(true);
                 setPaused(true);
             }
             });
@@ -262,6 +253,7 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         resumeButton->addListener([this](const std::string& name, bool down) {
             if (down) {
                 _pauseMenu->setVisible(false);
+                _pauseMenu->setActive(false);
                 _ui->setVisible(true);
                 setPaused(false);
             }
@@ -271,9 +263,9 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
     auto restartButton = _pauseMenu->getRestartButton();
     if (restartButton) {
         // Capture the restart button in the lambda so you can call its deactivate method.
-        // 
-        // 
-        // TODO: THIS ISNT CURRENTLY WORKING.
+        //
+        //
+        // TODO: RE-ADD THIS
         //restartButton->addListener([this, restartButton](const std::string& name, bool down) {
         //    if (down) {
         //        // Immediately reset the pressed state.
@@ -289,25 +281,22 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         //    }
         //    });
     }
-    
+
     setAllGameplayUIActive(_inituiactive);
 }
 
 void GameScene::disableUI() {
     setInitUIActive(false);
     if (_ui != nullptr && _pauseMenu != nullptr) {
-        setAllGameplayUIActive(true);
-    } else
-        CULog("_UI IS NULLPTR 285");
+        setAllGameplayUIActive(false);
+    }
 }
 
 void GameScene::enableUI() {
     setInitUIActive(true);
     if (_ui != nullptr && _pauseMenu != nullptr) {
-        setAllGameplayUIActive(false);
+        setAllGameplayUIActive(true);
     }
-    else
-        CULog("_UI IS NULLPTR 292");
 }
 
 /**
@@ -336,24 +325,24 @@ void GameScene::dispose() {
  * Resets the status of the game by resetting player and enemy positions so that we can play again.
  */
 void GameScene::reset() {
-	removeAllChildren();
+    removeAllChildren();
 
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    _failed = false;
-    _complete = false;
-    _pauseMenu->removeAllChildren();
     _ui->removeAllChildren();
-    setFailure(false);
-    setComplete(false);
+    _pauseMenu->removeAllChildren();
+
+    _failed   = false;
+    _complete = false;
+
     _levelController->reset();
-    populate(_levelController->getCurrentLevel());
-	populateUI(_assets);
+
     _ui->setHP(100);
     _pauseMenu->setHP(100);
 
     Application::get()->setClearColor(Color4f::BLACK);
+    _populated = false;
 }
 
 /**
@@ -368,31 +357,46 @@ void GameScene::reset() {
  * with your serialization loader, which would process a level file.
  */
 void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
+
+    // Attempted fix
+    if (_worldnode && _worldnode->getParent())   removeChild(_worldnode);
+    if (_debugnode && _debugnode->getParent())   _debugnode->removeFromParent();
+    if (_winnode  && _winnode->getParent())      removeChild(_winnode);
+    if (_losenode && _losenode->getParent())     removeChild(_losenode);
+
     _worldnode = _levelController->makeWorldNode(level->getLevelName());
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
+
     addChild(_worldnode);
     addChild(_debugnode);
- 
     addChild(_winnode);
     addChild(_losenode);
 
-    _levelController->populateLevel(level); // Sets the level we want to populate here
-    CULog("In populate, after populate level, debug node has %lu children",_debugnode->getChildCount());
-    _player = _levelController->getPlayerModel();
+    // === Initialize in-game UI ===
+    populateUI(_assets);
 
+    _ui->setHP(100);
+    _pauseMenu->setHP(100);
+    _ui->setVisible(true);
+    _pauseMenu->setVisible(false);
+    _pauseMenu->setActive(false);
+
+    _levelController->populateLevel(level); // Sets the level we want to populate here
+    _player = _levelController->getPlayerModel();
 
     std::vector<std::shared_ptr<EnemyController>> enemyControllers = _levelController->getEnemyControllers();
 
-    // Add UI elements
+    setAllGameplayUIActive(true);
 
 	// Play the background music on a loop.
     std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
 	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
     AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
-    
+
     _active = true;
     _complete = false;
+    _populated = true;
 }
 
 /**
@@ -519,7 +523,6 @@ void GameScene::preUpdate(float dt) {
  * @param step  The number of fixed seconds for this step
  */
 void GameScene::fixedUpdate(float step) {
-
     if (_pauseMenu != nullptr && _pauseMenu->getExitPressed()) {
         _pauseMenu->setExitPressed(false);
         _isPaused = false;
@@ -536,6 +539,11 @@ void GameScene::fixedUpdate(float step) {
     _levelController->fixedUpdate(step);
 
     if (_levelController->isCurrentLevelComplete()) {
+        reset();
+        setSwapSignal(1);
+    }
+
+    if(_levelController->isCurrentLevelFailed()) {
         reset();
         setSwapSignal(1);
     }

@@ -174,11 +174,14 @@ void GlitchbladeApp::preUpdate(float dt) {
     case(0):
         break;
     case(1):
-        _currentScene->setSwapSignal(0);
+        CULog("GOT SIGNAL TO SHOW LEVEL SELECT");
+        _levelSelect->setSwapSignal(0);
+        _gameplay->setSwapSignal(0);
         showLevelSelect();
         break;
     case(2):
-        _currentScene->setSwapSignal(0);
+        _levelSelect->setSwapSignal(0);
+        _gameplay->setSwapSignal(0);
         showGameScene(_levelSelect->getLevelSelected());
         break;
     default:
@@ -253,6 +256,7 @@ void GlitchbladeApp::postUpdate(float dt) {
  * at all. The default implmentation does nothing.
  */
 void GlitchbladeApp::draw() {
+    CULog("DRAW CALLED");
     if (!_loaded) {
         _loading.render();
     } else {
@@ -273,15 +277,15 @@ void GlitchbladeApp::showLevelSelect() {
     * Switches the currently rendered scene to the GameScene.
 */
 void GlitchbladeApp::showGameScene(std::string levelToLoad) {
-    _gameplay->dispose();
-    _gameplay->init(_assets);
     _gameplay->setSpriteBatch(_batch);
-    _gameplay->enableUI();
 
     _levelSelect->setLevelSelected("");
     _levelSelect->setActive(false);
 
+    if(_gameplay->isPopulated())
+        _gameplay->reset(); // Make sure to reset before populate
     _gameplay->populate(_gameplay->getLevelModel(levelToLoad));
-    // _gameplay->reset();
+    _gameplay->enableUI();
+
     _currentScene = _gameplay;
 }

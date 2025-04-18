@@ -75,6 +75,8 @@ protected:
     std::shared_ptr<scene2::Label> _playerHPNode;
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
+    /** Whether the scene is populated */
+    bool _populated = false;
     
     // UI
     /** Ingame UI */
@@ -153,6 +155,10 @@ public:
 
     void setInitUIActive(bool active) {
         _inituiactive = active;
+    }
+
+    bool isPopulated() {
+        return _populated;
     }
     
     /**

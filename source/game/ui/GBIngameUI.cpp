@@ -98,7 +98,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
 
     
     // XNA nostalgia
-    Application::get()->setClearColor(Color4f::CORNFLOWER);
+    // Application::get()->setClearColor(Color4f::CORNFLOWER);
     return true;
 }
 

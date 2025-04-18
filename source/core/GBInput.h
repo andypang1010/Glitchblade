@@ -267,7 +267,9 @@ public:
      *
      * @return  A newly allocated PlayerModel at the given position with the given scale
      */
+
     static std::shared_ptr<PlatformInput> alloc(const std::shared_ptr<cugl::AssetManager>& assetRef, const std::shared_ptr<cugl::JsonValue>& constantsRef) {
+        CULog("ALLOCED ONCE");
         std::shared_ptr<PlatformInput> result = std::make_shared<PlatformInput>();
         return (result->init(assetRef, constantsRef)? result : nullptr);
     }

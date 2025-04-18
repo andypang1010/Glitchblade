@@ -72,8 +72,10 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
 
     if (_exitButton) {
         _exitButton->addListener([this](const std::string& name, bool down) {
-            if (down) CULog("Exit pressed");
-            setExitPressed(true);
+            if(down) {
+                CULog("SET EXIT PRESSED");
+                setExitPressed(true);
+            }
         });
         _exitButton->activate();
     }
@@ -122,6 +124,11 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GBPauseMenu::dispose() {
+    if (_resumeButton)  _resumeButton->clearListeners();
+    if (_restartButton) _restartButton->clearListeners();
+    if (_exitButton)    _exitButton->clearListeners();
+    if (_settingButton) _settingButton->clearListeners();
+
     _resumeButton = nullptr;
     _restartButton = nullptr;
     _exitButton = nullptr;

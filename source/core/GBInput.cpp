@@ -148,8 +148,7 @@ bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const st
     bounds.size.set(boundsJ->get("size")->getFloat("width"),boundsJ->get("size")->getFloat("height"));
     _tbounds = Application::get()->getDisplayBounds();
     _sbounds = bounds;
-    
-    
+
     createZones();
     clearTouchInstance(_ltouch);
     clearTouchInstance(_rtouch);
@@ -179,7 +178,7 @@ bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const st
     touch->addMotionListener(LISTENER_KEY,[=](const TouchEvent& event, const Vec2& previous, bool focus) {
         this->touchesMovedCB(event, previous, focus);
     });
-	
+
 #endif
     _active = success;
     return success;
@@ -197,6 +196,7 @@ bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const st
  * frame, so we need to accumulate all of the data together.
  */
 void PlatformInput::update(float dt) {
+
 #ifndef CU_TOUCH_SCREEN
     // DESKTOP CONTROLS
     Keyboard* keys = Input::get<Keyboard>();

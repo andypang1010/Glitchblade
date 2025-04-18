@@ -28,9 +28,6 @@ private:
     /** A reference to the level model */
     std::shared_ptr<LevelModel> _currentLevel;
 
-    // Set the current level to be incomplete by default
-    bool _isCurrentLevelComplete = false;
-
     std::unordered_map<std::string, std::shared_ptr<LevelModel >> _levels;
     std::shared_ptr<cugl::scene2::PolygonNode> _worldNode;
     std::shared_ptr<cugl::scene2::SceneNode> _debugNodeRef;
@@ -38,7 +35,6 @@ private:
 
     int _numEnemiesActive = 0;
 
-	int _currentLevelIndex = 0;
 	int _currentWaveIndex = 0;
 	int _currentEnemyIndex = 0;
     float _lastSpawnedTime = 0;
@@ -67,7 +63,11 @@ protected:
 public:
 
     bool isCurrentLevelComplete() {
-        return _enemyWaves.size() > 0 && waveComplete() && _currentWaveIndex == _enemyWaves.size();
+        return (!_enemyWaves.empty()) && waveComplete() && _currentWaveIndex == _enemyWaves.size();
+    }
+
+    bool isCurrentLevelFailed() {
+        return _playerController->getPlayer()->getHP() <= 0;
     }
     
     /**Return a new enemy controller from the enemy name*/
