@@ -3,7 +3,6 @@
     "minion_1A": {
         "health": 50,
         "size": [90,110],
-        "stunFrames": 16,
         "actions": [
             {
                 "type": "melee",
@@ -11,7 +10,7 @@
                 "hitboxPos": [ 0, 0 ],
                 "hitboxSize": [ 8, 8 ],
                 "hitboxStartFrame": 33,
-                "hitboxEndFrame": 61,
+                "hitboxEndFrame": 40,
                 "hitboxDamage": 20
             },
             {
@@ -49,7 +48,6 @@
     "minion_1B": {
         "health": 50,
         "size": [90,90],
-        "stunFrames": 16,
         "actions": [
             {
                 "type": "melee",
@@ -74,7 +72,6 @@
     "boss_1": {
         "health": 200,
         "size": [90,180],
-        "stunFrames": 88,
         "actions": [
             {
                 "type": "melee",
@@ -100,7 +97,7 @@
                 "hitboxPos": [ 0, 0 ],
                 "hitboxSize": [ 10, 10 ],
                 "hitboxStartFrame": 26,
-                "hitboxEndFrame": 33,
+                "hitboxEndFrame": 37,
                 "hitboxDamage": 40
             },
             {

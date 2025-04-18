@@ -173,7 +173,7 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
     std::shared_ptr<EnemyModel> enemy = hitbox->getEnemy();
     // Process collision only if the player's invulnerability frames have expired.
     if (_player->iframe <= 0) {
-        _player->iframe = 60;  // Reset the iframe counter
+        _player->iframe = 15;  // Reset the iframe counter
 
         // If neither guard nor parry is active, apply full damage and knockback.
         if (!_player->isGuardActive() && !_player->isParryActive()) {
@@ -185,12 +185,19 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         // If parry is active, stun the enemy.
         else if (_player->isParryActive()) {
             _player->damage(0);
+
+            // Reset guard and parry
+            _player->setParryRem(0);
+            _player->setGuardRem(0);
+            _player->setGuardCDRem(0);
+
             enemy->setStun(enemy->_stunFrames);
         }
         // If guard is active, deal half damage with corresponding screen shake.
         else if (_player->isGuardActive()) {
             int halfDamage = hitbox->getDamage() / 2;
             _player->damage(halfDamage);
+
             _screenShake(halfDamage, 3);
         }
     }
@@ -227,7 +234,7 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                 _ui->setHP(_player->getHP());
                 _pauseMenu->setHP(_player->getHP());
             }
-            _player->iframe = 60;
+            _player->iframe = 15;
         }
         // Remove the projectile and update the UI and pause menu with the current HP.
         if (!deflected) _removeProjectile(projectile);
