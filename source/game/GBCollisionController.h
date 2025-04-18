@@ -15,6 +15,7 @@
 #include "ui/GBPauseMenu.h"
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
+#include "../CUHaptics.h"
 
 using namespace cugl;
 using namespace cugl::physics2;

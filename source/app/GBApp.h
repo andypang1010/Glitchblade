@@ -15,6 +15,7 @@
 #define __GB_APP_H__
 #include <cugl/cugl.h>
 #include "../game/GBGameScene.h"
+#include "../CUHaptics.h"
 
 /**
  * This class represents the application root for the platform demo.

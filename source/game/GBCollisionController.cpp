@@ -194,6 +194,7 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
             _player->setGuardCDRem(0);
 
             _screenShake(40, 1);
+            Haptics::get()->playTransient(1.0, 1.0);
 
             enemy->setStun(enemy->_stunFrames);
         }
@@ -229,6 +230,7 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                 _player->setGuardCDRem(0);
 
                 _screenShake(40, 1);
+                Haptics::get()->playTransient(1.0, 1.0);
 				
                 deflected = true;
 				projectile->setIsPlayerFired(true);

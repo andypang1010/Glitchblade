@@ -58,6 +58,8 @@ void GlitchbladeApp::onStartup() {
     _loading.start();
     AudioEngine::start();
     Application::onStartup(); // YOU MUST END with call to parent
+
+    Haptics::start();
 }
 
 /**
@@ -86,6 +88,8 @@ void GlitchbladeApp::onShutdown() {
     
     AudioEngine::stop();
     Application::onShutdown();  // YOU MUST END with call to parent
+
+	Haptics::stop();
 }
 
 /**
