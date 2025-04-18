@@ -8,66 +8,6 @@ using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::scene2;
 
-#pragma mark -
-#pragma mark Constants moved from gamescene to here - these maybe should be parsed from JSON or in separate file
-
-#pragma mark -
-#pragma mark Level Geography
-/** This is adjusted by screen aspect ratio to get the height */
-#define GAME_SCENE_WIDTH 1024
-#define GAME_SCENE_HEIGHT 576
-
-/** This is the aspect ratio for physics */
-#define GAME_SCENE_ASPECT 9.0/16.0
-
-/** Width of the game world in Box2d units */
-#define GAME_DEFAULT_WIDTH   32.0f
-/** Height of the game world in Box2d units */
-#define GAME_DEFAULT_HEIGHT  18.0f
-
-
-/** Bullet Spawn Points */
-
-#pragma mark -
-#pragma mark Physics Constants
-/** The density for most physics objects */
-#define BASIC_DENSITY   0.0f
-/** The density for a projectile */
-#define HEAVY_DENSITY   10.0f
-/** Friction of most platforms */
-#define BASIC_FRICTION  0.4f
-/** The restitution for all physics objects */
-#define BASIC_RESTITUTION   0.1f
-/** Offset for pojectile when firing */
-#define PROJECTILE_OFFSET   0.5f
-/** The speed of the projectile after firing */
-#define PROJECTILE_SPEED   30.0f
-
-
-#pragma mark -
-#pragma mark Testing Constants
-/** The radius for enemy to initial attack */
-#define ENEMY_ATTACK_RADIUS     6.0f
-
-#pragma mark -
-#pragma mark Asset Constants
-
-///////////////// TEXTURES //////////////////////////////////
-/** The key for the regular projectile texture in the asset manager */
-#define PROJECTILE_TEXTURE  "projectile"
-/** The key for the player projectile texture in the asset manager */
-#define PLAYER_PROJECTILE_TEXTURE "player_projectile"
-
-///////////////// NAMES /////////////////////////////////////
-#define PROJECTILE_NAME "projectile"
-/** The name of a platform (for object identification) */
-#define GROUND_NAME   "ground"
-
-/** Opacity of the physics outlines */
-#define DEBUG_OPACITY   192
-
-#define WORLD_DEBUG_COLOR    Color4::WHITE
-
 // EnemyController needs to become a base class that all other types of enemies derive from
 std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()>> enemyFactoryMap = {
     { "boss_1", []() {
