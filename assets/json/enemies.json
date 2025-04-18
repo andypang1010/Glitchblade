@@ -1,7 +1,7 @@
 {
 
     "minion_1A": {
-        "health": 50,
+        "max_hp": 50,
         "size": [90,110],
         "actions": [
             {
@@ -46,7 +46,7 @@
         ]
     },
     "minion_1B": {
-        "health": 50,
+        "max_hp": 50,
         "size": [90,90],
         "actions": [
             {
@@ -70,7 +70,7 @@
         ]
     },
     "boss_1": {
-        "health": 200,
+        "max_hp": 200,
         "size": [90,180],
         "actions": [
             {

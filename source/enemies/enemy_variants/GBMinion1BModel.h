@@ -115,18 +115,9 @@ public:
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes() override {
-        _hp = 50;
-        _isGrounded = false;
-        _isMoveLeft = false;
-        _isMoveRight = false;
-        _faceRight = true;
-        _canKnockBack = true;
-        _stunRem = 0;
-
+        EnemyModel::resetAttributes();
         _isPunching = false;
         _isSlamming = false;
-
-        _moveDuration = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

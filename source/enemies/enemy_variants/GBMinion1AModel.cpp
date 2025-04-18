@@ -63,7 +63,7 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _deadSprite->setPosition(0, 0);
 	_deadSprite->setName("dead");
 
-    _stunFrames = 0;
+    stunFrames = 0;
 
     setName(std::string(ENEMY_NAME));
     setDebugColor(ENEMY_DEBUG_COLOR);

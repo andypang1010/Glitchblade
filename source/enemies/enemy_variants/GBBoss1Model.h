@@ -158,7 +158,7 @@ public:
      */
     static std::shared_ptr<Boss1Model> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
         std::shared_ptr<Boss1Model> result = std::make_shared<Boss1Model>();
-        //result->_scale = Application::get()->getDisplayWidth() / 1248;
+        //result->scale = Application::get()->getDisplayWidth() / 1248;
         return (result->init(assetRef, enemyJSON, pos, actions) ? result : nullptr);
     }
 
@@ -166,20 +166,11 @@ public:
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes() override {
-        _hp = 200;
-        _isGrounded = false;
-        _isMoveLeft = false;
-        _isMoveRight = false;
-        _faceRight = true;
-        _canKnockBack = true;
-        _stunRem = 0;
-
+        EnemyModel::resetAttributes();
         _isStabbing = false;
         _isSlamming = false;
         _isShooting = false;
         _isExploding = false;
-
-        _moveDuration = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

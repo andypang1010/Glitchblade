@@ -195,7 +195,7 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
 
             _screenShake(40, 1);
 
-            enemy->setStun(enemy->_stunFrames);
+            enemy->setStun(enemy->stunFrames);
         }
         // If guard is active, deal half damage with corresponding screen shake.
         else if (_player->isGuardActive()) {

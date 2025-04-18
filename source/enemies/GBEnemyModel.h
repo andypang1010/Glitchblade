@@ -168,9 +168,9 @@ protected:
     virtual void setConstants();
 
 public:
-    float _scale;
+    float scale;
     int frameCounter = 0;
-    int _stunFrames; // longer
+    int stunFrames; // longer
 //    int staggerFrames; // shorter
     float worldLeft;
     float worldRight;
@@ -190,7 +190,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a EnemyModel, you must call init().
      */
-    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _scale(Application::get()->getDisplayWidth() / 1248.0f) {}
+    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), scale(Application::get()->getDisplayWidth() / 1248.0f) {}
 
     /**
      * Destroys this EnemyModel, releasing all resources.
@@ -233,10 +233,12 @@ public:
         _isMoveRight = false;
         _faceRight = true;
         _canKnockBack = true;
+        _isKnocked = false;
         _stunRem = 0;
         _aggression = 0;
-        
         _moveDuration = 0;
+        _movement = 0;
+        _lastDamagedFrame = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

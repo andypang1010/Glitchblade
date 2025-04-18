@@ -95,7 +95,7 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 7, 6, 38);
     _stunSprite->setPosition(0, 50);
 	_stunSprite->setName("stun");
-    _stunFrames = _stunSprite->getCount() * 4;
+    stunFrames = _stunSprite->getCount() * 4;
 
     _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 3, 5, 15);
     _shootSprite->setPosition(0, 50);
@@ -287,7 +287,7 @@ void Boss1Model::AIMove() {
     }
 
     else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartFrame() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndFrame() - 1) {
-        setMovement(face * getForce() * STAB_FORCE * _scale);
+        setMovement(face * getForce() * STAB_FORCE * scale);
     }
     else {
         setMovement(getMovement() / 3);
