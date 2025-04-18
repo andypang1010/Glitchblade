@@ -106,7 +106,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    Boss1Model() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
+    Boss1Model() : EnemyModel(){}
 
     /**
      * Destroys this PlayerModel, releasing all resources.
@@ -158,7 +158,7 @@ public:
      */
     static std::shared_ptr<Boss1Model> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
         std::shared_ptr<Boss1Model> result = std::make_shared<Boss1Model>();
-        //result->scale = Application::get()->getDisplayWidth() / 1248;
+        //result->_scale = Application::get()->getDisplayWidth() / 1248;
         return (result->init(assetRef, enemyJSON, pos, actions) ? result : nullptr);
     }
 

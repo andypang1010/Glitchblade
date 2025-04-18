@@ -56,7 +56,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    Minion1BModel() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
+    Minion1BModel() : EnemyModel(){}
 
     /**
      * Destroys this PlayerModel, releasing all resources.

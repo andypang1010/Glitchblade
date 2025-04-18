@@ -105,6 +105,7 @@ protected:
     /** Whether our feet are on the ground */
     bool _isGrounded;
     int _lastDamagedFrame;
+    float _scale;
     
 #pragma mark fixture constants
     /** The amount to shrink the body fixture (horizontally) relative to the image */
@@ -168,7 +169,6 @@ protected:
     virtual void setConstants();
 
 public:
-    float scale;
     int frameCounter = 0;
     int stunFrames; // longer
 //    int staggerFrames; // shorter
@@ -190,7 +190,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a EnemyModel, you must call init().
      */
-    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), scale(Application::get()->getDisplayWidth() / 1248.0f) {}
+    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _scale(Application::get()->getDisplayWidth() / 1248.0f) {}
 
     /**
      * Destroys this EnemyModel, releasing all resources.
