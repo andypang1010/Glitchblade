@@ -63,8 +63,8 @@
                 "name": "slam",
                 "hitboxPos": [ 3.5, -0.5 ],
                 "hitboxSize": [ 7, 1 ],
-                "hitboxStartFrame": 29,
-                "hitboxEndFrame": 32,
+                "hitboxStartFrame": 19,
+                "hitboxEndFrame": 23,
                 "hitboxDamage": 20
             }
         ]

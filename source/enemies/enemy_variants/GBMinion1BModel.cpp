@@ -269,7 +269,7 @@ void Minion1BModel::updateAnimation()
     playAnimationOnce(_punchSprite);
     playAnimationOnce(_stunSprite);
 
-	playVFXAnimation(_slamSprite, _slamVFXSprite, 29);
+	playVFXAnimation(_slamSprite, _slamVFXSprite, 19);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
