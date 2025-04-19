@@ -38,8 +38,9 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     auto headsUpDisplay = assets->get<scene2::SceneNode>("hud");
     auto pauseMenu = assets->get<scene2::SceneNode>("pausemenu");
     auto losePage = assets->get<scene2::SceneNode>("lose");
+    auto winPage = assets->get<scene2::SceneNode>("win");
 
-    if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr) {
+    if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr || winPage == nullptr) {
         return false;
     }
 
@@ -57,9 +58,25 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     losePage->setVisible(false);
     addChild(losePage);
 
+    winPage->setContentSize(Size(1248, 576));
+    winPage->doLayout();
+    winPage->setVisible(false);
+    addChild(winPage);
+
     setActive(true);
 
-    // HUD UI
+    setupHUD(headsUpDisplay);
+    setupPause(pauseMenu);
+    setupLose(losePage);
+    
+    _screenOffset = getPosition();
+
+    Application::get()->setClearColor(Color4f::CORNFLOWER);
+    return true;
+}
+
+void GBIngameUI::setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDisplay)
+{
     _pauseButton = std::dynamic_pointer_cast<scene2::Button>(headsUpDisplay->getChildByName("pause"));
 
     if (_pauseButton) {
@@ -68,7 +85,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
                 CULog("Pause!");
                 _pauseCallback();
             }
-        });
+            });
         _pauseButton->activate();
     }
 
@@ -86,8 +103,10 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
             _hpHalfSegments.push_back(half);
         }
     }
+}
 
-    // Pause Menu UI
+void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
+{
     _resumeButton = std::dynamic_pointer_cast<scene2::Button>(pauseMenu->getChildByName("resume"));
     _retryButton = std::dynamic_pointer_cast<scene2::Button>(pauseMenu->getChildByName("retry"));
     _quitButton = std::dynamic_pointer_cast<scene2::Button>(pauseMenu->getChildByName("quit"));
@@ -99,7 +118,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
                 CULog("Resume pressed");
                 _resumeCallback();
             }
-        });
+            });
         _resumeButton->activate();
     }
 
@@ -109,49 +128,46 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
                 CULog("Retry pressed");
                 _retryCallback();
             }
-        });
+            });
         _retryButton->activate();
     }
-    
+
     if (_quitButton) {
         _quitButton->addListener([](const std::string& name, bool down) {
             if (down) CULog("Quit pressed");
-        });
+            });
         _quitButton->activate();
     }
 
     if (_settingButton) {
         _settingButton->addListener([](const std::string& name, bool down) {
             if (down) CULog("Setting pressed");
-        });
+            });
         _settingButton->activate();
     }
+}
 
-    // Lose Page UI
+void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
+{
     _loseRetryButton = std::dynamic_pointer_cast<scene2::Button>(losePage->getChildByName("lose_retry"));
     _loseQuitButton = std::dynamic_pointer_cast<scene2::Button>(losePage->getChildByName("lose_quit"));
-    
+
     if (_loseRetryButton) {
         _loseRetryButton->addListener([this](const std::string& name, bool down) {
             if (down && _retryCallback) {
                 CULog("Lose Retry pressed");
                 _retryCallback();
             }
-        });
+            });
         _loseRetryButton->activate();
     }
-    
+
     if (_loseQuitButton) {
         _loseQuitButton->addListener([](const std::string& name, bool down) {
             if (down) CULog("Lose Quit pressed");
-        });
+            });
         _loseQuitButton->activate();
     }
-    
-    _screenOffset = getPosition();
-
-    Application::get()->setClearColor(Color4f::CORNFLOWER);
-    return true;
 }
 
 /**
