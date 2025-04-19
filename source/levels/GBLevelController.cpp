@@ -82,7 +82,7 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     float scale = _constantsJSON->get("scene")->getFloat("scale");
     _enemiesJSON->get("world_info")->get("scale")->set(scale);
     float wall_thickness = _constantsJSON->get("walls")->getFloat("thickness");
-    float worldRight = _constantsJSON->get("scene")->getFloat("default_scene_width") - wall_thickness;
+    float worldRight = _constantsJSON->get("scene")->getFloat("world_width") - wall_thickness;
     _enemiesJSON->get("world_info")->get("worldLeft")->set(wall_thickness);
     _enemiesJSON->get("world_info")->get("worldRight")->set(worldRight);
 
@@ -533,27 +533,27 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
-    float defaultWidth =  _constantsJSON->get("scene")->get("default_width")->asFloat(32.0f);
-    float defaultHeight =  _constantsJSON->get("scene")->get("default_height")->asFloat(18.0f);
-    float wallThickness = _constantsJSON->get("walls")->get("thickness")->asFloat(1.0f);
+    float worldWidth =  _constantsJSON->get("scene")->getFloat("world_width");
+    float worldHeight =  _constantsJSON->get("scene")->getFloat("world_height");
+    float wallThickness = _constantsJSON->get("walls")->getFloat("thickness");
 
     // Using Vec2 instead of float pairs
     std::vector<std::vector<Vec2>> wallVertices = {
         {
-            Vec2(defaultWidth*3.2 / 2, defaultHeight),
-            Vec2(0.0f, defaultHeight),
+            Vec2(worldWidth/2, worldHeight),
+            Vec2(0.0f, worldHeight),
             Vec2(0.0f, 0.0f),
             Vec2(wallThickness, 0.0f),
-            Vec2(wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth*3.7 / 2, defaultHeight - wallThickness)
+            Vec2(wallThickness, worldHeight - wallThickness),
+            Vec2(worldWidth/2, worldHeight - wallThickness)
         },
         {
-            Vec2(defaultWidth*3.2, defaultHeight),
-            Vec2(defaultWidth*3.2 / 2, defaultHeight),
-            Vec2(defaultWidth*3.2 / 2, defaultHeight - wallThickness),
-            Vec2(defaultWidth*3.2 - wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth*3.2 - wallThickness, 0.0f),
-            Vec2(defaultWidth*3.2, 0.0f)
+            Vec2(worldWidth, worldHeight),
+            Vec2(worldWidth/2, worldHeight),
+            Vec2(worldWidth/2, worldHeight - wallThickness),
+            Vec2(worldWidth - wallThickness, worldHeight - wallThickness),
+            Vec2(worldWidth - wallThickness, 0.0f),
+            Vec2(worldWidth, 0.0f)
         }
     };
 
@@ -562,13 +562,13 @@ std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
 
 
 std::vector<Vec2> LevelController::calculateGroundVertices() {
-    float defaultWidth = _constantsJSON->get("scene")->get("default_width")->asFloat(32.0f);
-    float groundThickness = _constantsJSON->get("ground")->get("thickness")->asFloat(4.0f);
+    float worldWidth = _constantsJSON->get("scene")->getFloat("world_width");
+    float groundThickness = _constantsJSON->get("ground")->getFloat("thickness");
 
     std::vector<Vec2> groundVertices = {
         Vec2(0.0f, 0.0f),
-        Vec2(defaultWidth*3.2, 0.0f),
-        Vec2(defaultWidth*3.2, groundThickness),
+        Vec2(worldWidth, 0.0f),
+        Vec2(worldWidth, groundThickness),
         Vec2(0.0f, groundThickness)
     };
 
@@ -595,6 +595,7 @@ void LevelController::setStaticPhysics(const std::shared_ptr<physics2::Obstacle>
 }
 
 void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
+     _worldRef->getBounds().origin.x,_worldRef->getBounds().origin.y,_worldRef->getBounds().size.width,_worldRef->getBounds().size.height);
     std::shared_ptr<Obstacle> obj = obstacle_pair.first;
     std::shared_ptr<scene2::SceneNode> node = obstacle_pair.second;
     _worldRef->addObstacle(obj);
