@@ -579,8 +579,8 @@ void GameScene::postUpdate(float remain) {
     // Otherwise, it looks like bullet appears far away
 
 
-    setComplete(_levelController->isCurrentLevelComplete());
-    setFailure(_player->getHP() <= 0);
+    setComplete(_levelController->isLevelWon());
+    setFailure(_levelController->isLevelLost());
 
     // Record failure if necessary.
     if (!_failed && _player->getY() < 0) {

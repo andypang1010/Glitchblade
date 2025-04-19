@@ -71,7 +71,18 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
 
 //    setActive(true);
 
-    // HUD UI
+    setupHUD(headsUpDisplay);
+    setupPause(pauseMenu);
+    setupLose(losePage);
+    
+    _screenOffset = getPosition();
+
+    Application::get()->setClearColor(Color4f::CORNFLOWER);
+    return true;
+}
+
+void GBIngameUI::setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDisplay)
+{
     _pauseButton = std::dynamic_pointer_cast<scene2::Button>(headsUpDisplay->getChildByName("pause"));
 
     if (_pauseButton) {
@@ -97,8 +108,10 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
             _hpHalfSegments.push_back(half);
         }
     }
+}
 
-    // Pause Menu UI
+void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
+{
     _resumeButton = std::dynamic_pointer_cast<scene2::Button>(pauseMenu->getChildByName("resume"));
     _retryButton = std::dynamic_pointer_cast<scene2::Button>(pauseMenu->getChildByName("retry"));
     _quitButton = std::dynamic_pointer_cast<scene2::Button>(pauseMenu->getChildByName("quit"));
@@ -121,7 +134,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
             }
         });
     }
-    
+
     if (_quitButton) {
         _quitButton->addListener([](const std::string& name, bool down) {
             if (down) CULog("Quit pressed");
@@ -133,11 +146,13 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
             if (down) CULog("Setting pressed");
         });
     }
+}
 
-    // Lose Page UI
+void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
+{
     _loseRetryButton = std::dynamic_pointer_cast<scene2::Button>(losePage->getChildByName("lose_retry"));
     _loseQuitButton = std::dynamic_pointer_cast<scene2::Button>(losePage->getChildByName("lose_quit"));
-    
+
     if (_loseRetryButton) {
         _loseRetryButton->addListener([this](const std::string& name, bool down) {
             if (down && _retryCallback) {
@@ -146,7 +161,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
             }
         });
     }
-    
+
     if (_loseQuitButton) {
         _loseQuitButton->addListener([](const std::string& name, bool down) {
             if (down) CULog("Lose Quit pressed");

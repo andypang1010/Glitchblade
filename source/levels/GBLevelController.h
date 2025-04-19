@@ -86,9 +86,24 @@ public:
      */
     ~LevelController();
 
-    bool isCurrentLevelComplete() {
-        // TODO: every time an enemy is defeated(or more optimally??) check if _isCurrentLevelComplete needs to be set to true
-        return _isCurrentLevelComplete;
+    bool isLevelWon() {
+        bool levelWon = true;
+
+        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
+            for (auto enemyController : _enemyControllers) {
+				levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
+            }
+        }
+
+        else {
+            return false;
+        }
+
+        return levelWon;
+    }
+
+    bool isLevelLost() {
+		return _playerController->getPlayer()->getHP() <= 0;
     }
     
     /**Return a new enemy controller from the enemy name*/
