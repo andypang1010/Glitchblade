@@ -38,9 +38,9 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     auto headsUpDisplay = assets->get<scene2::SceneNode>("hud");
     auto pauseMenu = assets->get<scene2::SceneNode>("pausemenu");
     auto losePage = assets->get<scene2::SceneNode>("lose");
-    auto winPage = assets->get<scene2::SceneNode>("win");
+    //auto winPage = assets->get<scene2::SceneNode>("win");
 
-    if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr || winPage == nullptr) {
+    if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr) {
         return false;
     }
 
@@ -58,10 +58,10 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     losePage->setVisible(false);
     addChild(losePage);
 
-    winPage->setContentSize(Size(1248, 576));
-    winPage->doLayout();
-    winPage->setVisible(false);
-    addChild(winPage);
+    //winPage->setContentSize(Size(1248, 576));
+    //winPage->doLayout();
+    //winPage->setVisible(false);
+    //addChild(winPage);
 
     setActive(true);
 
