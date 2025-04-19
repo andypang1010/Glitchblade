@@ -29,6 +29,10 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _retryButton;
     std::shared_ptr<cugl::scene2::Button> _quitButton;
     std::shared_ptr<cugl::scene2::Button> _settingButton;
+    
+    std::function<void()> _pauseCallback;
+    std::function<void()> _resumeCallback;
+    std::function<void()> _retryCallback;
 
     /** HP segments */
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
@@ -82,6 +86,8 @@ public:
      * @param hp  The current HP value (must be <= _maxHP)
      */
     void setHP(int hp);
+    
+    void resetUI();
 
     /**
      * Sets whether the scene is currently active
@@ -91,6 +97,16 @@ public:
     void setActive(bool value);
     
     bool isActive() const { return _active;}
+    
+    void setPauseCallback(const std::function<void()>& callback) { _pauseCallback = callback; }
+    void setResumeCallback(const std::function<void()>& callback) { _resumeCallback = callback; }
+    void setRetryCallback(const std::function<void()>& callback) { _retryCallback = callback; }
+
+    void showHeadsUpDisplay(bool visible);
+    void showPauseMenu(bool visible);
+//    void showSettingMenu(bool visible);
+//    void showWinLayer(bool visible);
+//    void showLoseLayer(bool visible);
     
     // Accessors
     std::shared_ptr<cugl::scene2::Button> getPauseButton() const {

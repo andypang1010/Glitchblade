@@ -256,39 +256,25 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
 {
     _ui = GBIngameUI::alloc(_assets);
     if (_ui != nullptr) {
+        _ui->setPauseCallback([this]() {
+            _ui->showPauseMenu(true);
+            _ui->showHeadsUpDisplay(false);
+            setPaused(true);
+        });
+        _ui->setResumeCallback([this]() {
+            _ui->showPauseMenu(false);
+            _ui->showHeadsUpDisplay(true);
+            setPaused(false);
+        });
+        _ui->setRetryCallback([this]() {
+            _ui->showPauseMenu(false);
+            _ui->showHeadsUpDisplay(true);
+            setPaused(false);
+            reset();
+        });
         addChild(_ui);
     }
-
-    auto pauseButton = _ui->getPauseButton();
-    if (pauseButton) {
-        pauseButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
-                _ui->setVisible(false);
-                setPaused(true);
-            }
-            });
-    }
-
-    auto resumeButton = _ui->getResumeButton();
-    if (resumeButton) {
-        resumeButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
-                _ui->setVisible(true);
-                setPaused(false);
-            }
-            });
-    }
-
-    auto retryButton = _ui->getRetryButton();
-    if (retryButton) {
-        retryButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
-                _ui->setVisible(true);
-                setPaused(false);
-                reset();
-            }
-        });
-    }
+    
 }
 
 /**
@@ -320,13 +306,12 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    _ui->removeAllChildren();
+    addChild(_ui);
+    _ui->resetUI();
     setFailure(false);
     setComplete(false);
     _levelController->reset();
     populate(_levelController->getCurrentLevel());
-	populateUI(_assets);
-    _ui->setHP(100);
     _camera->setPosition(_defCamPos);
 
     Application::get()->setClearColor(Color4f::BLACK);
