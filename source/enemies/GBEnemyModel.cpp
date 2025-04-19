@@ -347,9 +347,14 @@ void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSpri
             vfxSprite->setFrame(0);
         }
 
-        if (actionSprite->getFrame() > startFrame && frameCounter % E_ANIMATION_UPDATE_FRAME == 0 && vfxSprite->getFrame() < vfxSprite->getCount() - 1) {
-            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
+        else if (actionSprite->getFrame() > startFrame) {
+            if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0 && vfxSprite->getFrame() < vfxSprite->getCount() - 1) {
+                vfxSprite->setFrame(vfxSprite->getFrame() + 1);
+            }
         }
+	}
+    else {
+        vfxSprite->setFrame(0);
     }
 }
 
