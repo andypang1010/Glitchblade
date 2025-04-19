@@ -168,6 +168,37 @@
     },
     
     
+    "menu_shadow": {
+        "file": "textures/ingameui/menu_shadow.png"
+    },
+    "pause_menu": {
+        "file": "textures/ingameui/pause_menu.png"
+    },
+    "progress_bar": {
+        "file": "textures/ingameui/progress_bar.png"
+    },
+    "progress_half_segment": {
+        "file": "textures/ingameui/progress_half_segment.png"
+    },
+    "progress_full_segment": {
+        "file": "textures/ingameui/progress_full_segment.png"
+    },
+    "menu_player": {
+        "file": "textures/ingameui/menu_player.png"
+    },
+    "button_resume": {
+        "file": "textures/ingameui/button_resume.png"
+    },
+    "button_quit": {
+        "file": "textures/ingameui/button_quit.png"
+    },
+    "button_retry": {
+        "file": "textures/ingameui/button_retry.png"
+    },
+    "button_setting": {
+        "file": "textures/ingameui/button_setting.png"
+    },
+    
 
     "dpad": {
       "file": "textures/dpad.png",
@@ -224,6 +255,14 @@
         "debug": {
           "file": "fonts/RetroGame.ttf",
           "size":  14
+        },
+        "light pixel-7Regular40": {
+            "file": "fonts/LightPixel7.ttf",
+            "size": 36
+        },
+        "light pixel-7Regular48": {
+            "file": "fonts/LightPixel7.ttf",
+            "size": 36
         }
 	},
     "widgets": {

@@ -50,11 +50,10 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
     addChild(layer);
     setActive(true);
 
-    _resumeButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("play"));
-    _restartButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("restart"));
-    _exitButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("exit"));
+    _resumeButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("resume"));
+    _restartButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("retry"));
+    _exitButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("quit"));
     _settingButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("setting"));
-    _hpbar = layer->getChildByName("hpbar");
 
     if (_resumeButton) {
         _resumeButton->addListener([](const std::string& name, bool down) {
@@ -84,34 +83,34 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
         _settingButton->activate();
     }
 
-    if (_hpbar) {
-        float segmentWidth = 42.0f;
-        float segmentHeight = 61.8f;
-        float halfSegmentHeight = 52.7f;
-        float segmentSpacing = 8.4f;
-        float startX = 15.0f;
-        float startY = 34.0f;
-
-        std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
-        std::shared_ptr<cugl::graphics::Texture> halfTexture = _assets->get<cugl::graphics::Texture>("half_hp_segment");
-        for (int i = 0; i < 5; ++i) {
-            std::shared_ptr<scene2::PolygonNode> segment = scene2::PolygonNode::allocWithTexture(texture);
-            segment->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-            segment->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + startY);
-            segment->setContentSize(Size(segmentWidth, segmentHeight));
-            segment->setVisible(true);
-            _hpbar->addChild(segment);
-            _hpSegments.push_back(segment);
-            
-            std::shared_ptr<scene2::PolygonNode> half = scene2::PolygonNode::allocWithTexture(halfTexture);
-            half->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-            half->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + 31.5f);
-            half->setContentSize(Size(segmentWidth, halfSegmentHeight));
-            half->setVisible(false);
-            _hpbar->addChild(half);
-            _hpHalfSegments.push_back(half);
-        }
-    }
+//    if (_hpbar) {
+//        float segmentWidth = 42.0f;
+//        float segmentHeight = 61.8f;
+//        float halfSegmentHeight = 52.7f;
+//        float segmentSpacing = 8.4f;
+//        float startX = 15.0f;
+//        float startY = 34.0f;
+//
+//        std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
+//        std::shared_ptr<cugl::graphics::Texture> halfTexture = _assets->get<cugl::graphics::Texture>("half_hp_segment");
+//        for (int i = 0; i < 5; ++i) {
+//            std::shared_ptr<scene2::PolygonNode> segment = scene2::PolygonNode::allocWithTexture(texture);
+//            segment->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+//            segment->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + startY);
+//            segment->setContentSize(Size(segmentWidth, segmentHeight));
+//            segment->setVisible(true);
+//            _hpbar->addChild(segment);
+//            _hpSegments.push_back(segment);
+//            
+//            std::shared_ptr<scene2::PolygonNode> half = scene2::PolygonNode::allocWithTexture(halfTexture);
+//            half->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+//            half->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + 31.5f);
+//            half->setContentSize(Size(segmentWidth, halfSegmentHeight));
+//            half->setVisible(false);
+//            _hpbar->addChild(half);
+//            _hpHalfSegments.push_back(half);
+//        }
+//    }
     
     _screenOffset = getPosition();
 
@@ -162,9 +161,9 @@ void GBPauseMenu::setHP(int hp) {
     int filled = hp / 20;
     bool showHalf = (hp % 20) == 10;
 
-    for (int i = 0; i < 5; ++i) {
-        _hpSegments[i]->setVisible(i < filled);
-        _hpHalfSegments[i]->setVisible(i == filled && showHalf);
-    }
-    
+//    for (int i = 0; i < 5; ++i) {
+//        _hpSegments[i]->setVisible(i < filled);
+//        _hpHalfSegments[i]->setVisible(i == filled && showHalf);
+//    }
+//    
 }

@@ -28,7 +28,6 @@ protected:
     /** The pause button in top-right corner. */
     std::shared_ptr<cugl::scene2::Button> _pauseButton;
     /** The HP bar in top-left corner. */
-//    std::shared_ptr<cugl::scene2::SceneNode> _hpbar;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
 
