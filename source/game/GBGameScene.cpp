@@ -263,10 +263,24 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
             setPaused(false);
         });
         _ui->setRetryCallback([this]() {
+//            _ui->showPauseMenu(false);
+//            _ui->showHeadsUpDisplay(true);
+//            setPaused(false);
+//            reset();
+            _ui->setRetryCallback([this]() {
+            CULog("Retry callback START");
             _ui->showPauseMenu(false);
             _ui->showHeadsUpDisplay(true);
             setPaused(false);
+            CULog("Before reset()");
             reset();
+            CULog("Retry callback END");
+            });
+        });
+        _ui->setContinueCallback([this]() {
+            _ui->showWinPage1(false);
+            _ui->showWinPage2(true);
+            setPaused(true);
         });
         addChild(_ui);
     }

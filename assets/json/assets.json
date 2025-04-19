@@ -118,6 +118,7 @@
           "file": "textures/minion1A_dead.png"
         },
 
+        
 
     "button_pause": {
         "file": "textures/ingameui/button_pause.png"
@@ -131,7 +132,6 @@
     "hp_full_segment": {
         "file": "textures/ingameui/hp_full_segment.png"
     },
-    
     
     "menu_shadow": {
         "file": "textures/ingameui/menu_shadow.png"
@@ -179,7 +179,35 @@
     "lose_text": {
         "file": "textures/ingameui/lose_text.png"
     },
+    
+    "win": {
+        "file": "textures/ingameui/win.png"
+    },
+    "time_ind": {
+        "file": "textures/ingameui/time_ind.png"
+    },
+    "win_text": {
+        "file": "textures/ingameui/win_text.png"
+    },
+    "hp_ind": {
+        "file": "textures/ingameui/hp_ind.png"
+    },
+    "parry_ind": {
+        "file": "textures/ingameui/parry_ind.png"
+    },
+    "button_continue": {
+        "file": "textures/ingameui/button_continue.png"
+    },
+    
+    "win_retry": {
+        "file": "textures/ingameui/win_retry.png"
+    },
+    "win_continue": {
+        "file": "textures/ingameui/win_continue.png"
+    },
 
+    
+    
     "dpad": {
       "file": "textures/dpad.png",
       "wrapS": "clamp",
@@ -252,7 +280,9 @@
     "widgets": {
         "hud" : "widgets/hud.json",
         "pausemenu": "widgets/pausemenu.json",
-        "lose": "widgets/lose.json"
+        "lose": "widgets/lose.json",
+        "win1": "widgets/win1.json",
+        "win2": "widgets/win2.json"
     },
     "scene2s" : {
         "hud" : {
@@ -283,6 +313,26 @@
                     },
                     "data" : {
                         "key" : "lose"
+                    }
+        },
+        "win1" : {
+                    "type"      : "Widget",
+                    "comment"   : "This is the root node of the first win page",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "key" : "win1"
+                    }
+        },
+        "win2" : {
+                    "type"      : "Widget",
+                    "comment"   : "This is the root node of the second win page",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "key" : "win2"
                     }
         }
     }

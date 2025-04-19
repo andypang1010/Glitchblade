@@ -34,9 +34,17 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _loseRetryButton;
     std::shared_ptr<cugl::scene2::Button> _loseQuitButton;
     
+    /** The win page 1 buttons */
+    std::shared_ptr<cugl::scene2::Button> _continueButton;
+    
+    /** The win page 2 buttons */
+    std::shared_ptr<cugl::scene2::Button> _winContinueButton;
+    std::shared_ptr<cugl::scene2::Button> _winRetryButton;
+    
     std::function<void()> _pauseCallback;
     std::function<void()> _resumeCallback;
     std::function<void()> _retryCallback;
+    std::function<void()> _continueCallback;
 
     /** HP segments */
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
@@ -46,6 +54,8 @@ protected:
     int _currentHP = 100;
 
     bool _active;
+    
+    void setButtonsActive(std::shared_ptr<cugl::scene2::SceneNode> layer, bool active);
     
 public:
     cugl::Vec2 _screenOffset;
@@ -105,11 +115,13 @@ public:
     void setPauseCallback(const std::function<void()>& callback) { _pauseCallback = callback; }
     void setResumeCallback(const std::function<void()>& callback) { _resumeCallback = callback; }
     void setRetryCallback(const std::function<void()>& callback) { _retryCallback = callback; }
+    void setContinueCallback(const std::function<void()>& callback) { _continueCallback = callback; }
 
     void showHeadsUpDisplay(bool visible);
     void showPauseMenu(bool visible);
 //    void showSettingMenu(bool visible);
-//    void showWinLayer(bool visible);
+    void showWinPage1(bool visible);
+    void showWinPage2(bool visible);
     void showLosePage(bool visible);
     
     // Accessors
