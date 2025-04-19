@@ -153,6 +153,22 @@
       "file": "textures/menu_player.png"
     },
 
+    
+    "button_pause": {
+        "file": "textures/ingameui/button_pause.png"
+    },
+    "hp_bar": {
+        "file": "textures/ingameui/hp_bar.png"
+    },
+    "hp_half_segment": {
+        "file": "textures/ingameui/hp_half_segment.png"
+    },
+    "hp_full_segment": {
+        "file": "textures/ingameui/hp_full_segment.png"
+    },
+    
+    
+
     "dpad": {
       "file": "textures/dpad.png",
       "wrapS": "clamp",

@@ -1,46 +1,299 @@
 {
-  "variables": {},
-  "contents": {
-    "type": "Node",
-    "format": {
-      "type": "Anchored"
-    },
-    "data": {
-      "anchor": [0, 0],
-      "size": [2560, 1440],
-      "position": [0, 0],
-      "visible": true
-    },
-    "children": {
-      "pause": {
-        "type": "Widget",
-        "data": {
-          "key": "pausebutton",
-          "variables": {}
+    "variables": {},
+    "contents": {
+        "type": "Node",
+        "format": {
+            "type": "Anchored"
         },
-        "layout": {
-          "x_anchor": "right",
-          "y_anchor": "top",
-          "absolute": false,
-          "x_offset": -0.06,
-          "y_offset": -0.07
-        }
-      },
-      "hpbar": {
-        "type": "Widget",
         "data": {
-          "key": "hpbar",
-          "variables": {}
+            "anchor": [
+                0,
+                0
+            ],
+            "size": [
+                1248,
+                576
+            ],
+            "angle": 0,
+            "position": [
+                0,
+                0
+            ],
+            "visible": true
         },
-        "layout": {
-          "x_anchor": "left",
-          "y_anchor": "top",
-          "absolute": false,
-          "x_offset": 0.08,
-          "y_offset": -0.07
+        "children": {
+            "pause": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        70,
+                        70
+                    ],
+                    "angle": 0,
+                    "position": [
+                        1146,
+                        474
+                    ],
+                    "visible": true,
+                    "upnode": "button_pause"
+                },
+                "children": {
+                    "button_pause": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_pause",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                70,
+                                70
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "hp_bar": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_bar",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        310,
+                        70
+                    ],
+                    "angle": 0,
+                    "position": [
+                        32,
+                        474
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_5": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        271,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_5": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        46,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        271,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_4": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        216,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_4": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        46,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        216,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_3": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        159,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_3": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        46,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        159,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_2": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        103,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_2": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        46,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        103,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_1": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        47,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_1": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        46,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        47,
+                        489
+                    ],
+                    "visible": true
+                }
+            }
         }
-      }
     }
-  }
 }
-

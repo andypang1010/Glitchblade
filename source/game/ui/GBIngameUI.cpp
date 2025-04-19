@@ -53,7 +53,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     addChild(layer);
     setActive(true);
     _pauseButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("pause"));
-    _hpbar = layer->getChildByName("hpbar");
+//    _hpbar = layer->getChildByName("hpbar");
     
     if (_pauseButton) {
         _pauseButton->addListener([this](const std::string& name, bool pressed) {
@@ -67,36 +67,59 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
         }
     }
     
-    if (_hpbar) {
-        float segmentWidth = 35.0f;
-        float segmentHeight = 55.0f;
-        float halfSegmentHeight = 46.9f;
-        float segmentSpacing = 7.0f;
-        float startX = 15.0f;
-        float startY = 38.0f;
+//    if (_hpbar) {
+//        float segmentWidth = 35.0f;
+//        float segmentHeight = 55.0f;
+//        float halfSegmentHeight = 46.9f;
+//        float segmentSpacing = 7.0f;
+//        float startX = 15.0f;
+//        float startY = 38.0f;
+//
+//        std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
+//        texture->setName("hp_segment");
+//        std::shared_ptr<cugl::graphics::Texture> halfTexture = _assets->get<cugl::graphics::Texture>("half_hp_segment");
+//        texture->setName("hp_segment");
+//        for (int i = 0; i < 5; ++i) {
+//            std::shared_ptr<scene2::PolygonNode> segment = scene2::PolygonNode::allocWithTexture(texture);
+//            segment->setName("segment");
+//            segment->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+//            segment->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + startY);
+//            segment->setContentSize(Size(segmentWidth, segmentHeight));
+//            segment->setVisible(true);
+//            _hpbar->addChild(segment);
+//            _hpSegments.push_back(segment);
+//            
+//            std::shared_ptr<scene2::PolygonNode> half = scene2::PolygonNode::allocWithTexture(halfTexture);
+//            half->setName("half_segment");
+//            half->setAnchor(Vec2::ANCHOR_TOP_LEFT);
+//            half->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + 35.0f);
+//            half->setContentSize(Size(segmentWidth, halfSegmentHeight));
+//            half->setVisible(false);
+//            _hpbar->addChild(half);
+//            _hpHalfSegments.push_back(half);
+//        }
+//    }
+    
+    for (int i = 1; i <= 5; ++i) {
+        // 拼出名字
+        std::string fullName = "hp_full_segment_" + std::to_string(i);
+        std::string halfName = "hp_half_segment_" + std::to_string(i);
 
-        std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
-        texture->setName("hp_segment");
-        std::shared_ptr<cugl::graphics::Texture> halfTexture = _assets->get<cugl::graphics::Texture>("half_hp_segment");
-        texture->setName("hp_segment");
-        for (int i = 0; i < 5; ++i) {
-            std::shared_ptr<scene2::PolygonNode> segment = scene2::PolygonNode::allocWithTexture(texture);
-            segment->setName("segment");
-            segment->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-            segment->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + startY);
-            segment->setContentSize(Size(segmentWidth, segmentHeight));
-            segment->setVisible(true);
-            _hpbar->addChild(segment);
-            _hpSegments.push_back(segment);
-            
-            std::shared_ptr<scene2::PolygonNode> half = scene2::PolygonNode::allocWithTexture(halfTexture);
-            half->setName("half_segment");
-            half->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-            half->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + 35.0f);
-            half->setContentSize(Size(segmentWidth, halfSegmentHeight));
-            half->setVisible(false);
-            _hpbar->addChild(half);
+        // 尝试从当前 UI 场景里查找这两个 widget
+        auto full = layer->getChildByName<scene2::PolygonNode>(fullName);
+        auto half = layer->getChildByName<scene2::PolygonNode>(halfName);
+
+        // 如果找到了就添加进 array
+        if (full != nullptr) {
+            _hpSegments.push_back(full);
+        } else {
+            CULog("Missing full HP segment: %s", fullName.c_str());
+        }
+
+        if (half != nullptr) {
             _hpHalfSegments.push_back(half);
+        } else {
+            CULog("Missing half HP segment: %s", halfName.c_str());
         }
     }
 
@@ -112,7 +135,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
  */
 void GBIngameUI::dispose() {
     _pauseButton = nullptr;
-    _hpbar = nullptr;
+//    _hpbar = nullptr;
     _assets = nullptr;
     
     removeAllChildren();
