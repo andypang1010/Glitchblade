@@ -38,7 +38,6 @@
 #include "../levels/GBLevelController.h"
 #include "GBCollisionController.h"
 #include "ui/GBIngameUI.h"
-#include "ui/GBPauseMenu.h"
 
 using namespace cugl;
 
@@ -87,7 +86,6 @@ protected:
     // UI
     /** Ingame UI */
     std::shared_ptr<GBIngameUI> _ui;
-    std::shared_ptr<GBPauseMenu> _pauseMenu;
     bool _isPaused = false;
     
     /** The Box2D world */

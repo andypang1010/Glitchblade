@@ -28,7 +28,6 @@
 #include "objects/GBProjectile.h"
 #include "../enemies/actionmodel_variants/GBMeleeActionModel.h"
 #include "ui/GBIngameUI.h"
-#include "ui/GBPauseMenu.h"
 
 #include <ctime>
 #include <string>
@@ -245,7 +244,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _collisionController = std::make_unique<CollisionController>(
         _player,
         _ui,
-        _pauseMenu,
         _constantsJSON,
         [this](Projectile* p) { this->removeProjectile(p); },  // Callback for projectile removal
         [this](int i, int d) { this->setScreenShake(i, d); }   // Callback for screen shake
@@ -260,39 +258,31 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
     if (_ui != nullptr) {
         addChild(_ui);
     }
-    _pauseMenu = GBPauseMenu::alloc(assets);
-    if (_pauseMenu != nullptr) {
-        _pauseMenu->setVisible(false);
-        addChild(_pauseMenu);
-    }
 
     auto pauseButton = _ui->getPauseButton();
     if (pauseButton) {
         pauseButton->addListener([this](const std::string& name, bool down) {
             if (down) {
                 _ui->setVisible(false);
-                _pauseMenu->setVisible(true);
                 setPaused(true);
             }
             });
     }
 
-    auto resumeButton = _pauseMenu->getResumeButton();
+    auto resumeButton = _ui->getResumeButton();
     if (resumeButton) {
         resumeButton->addListener([this](const std::string& name, bool down) {
             if (down) {
-                _pauseMenu->setVisible(false);
                 _ui->setVisible(true);
                 setPaused(false);
             }
             });
     }
 
-    auto restartButton = _pauseMenu->getRestartButton();
-    if (restartButton) {
-        restartButton->addListener([this](const std::string& name, bool down) {
+    auto retryButton = _ui->getRetryButton();
+    if (retryButton) {
+        retryButton->addListener([this](const std::string& name, bool down) {
             if (down) {
-                _pauseMenu->setVisible(false);
                 _ui->setVisible(true);
                 setPaused(false);
                 reset();
@@ -314,7 +304,6 @@ void GameScene::dispose() {
         _complete = false;
         _debug = false;
 		_ui = nullptr;
-		_pauseMenu = nullptr;
         Scene2::dispose();
     }
 }
@@ -331,7 +320,6 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    _pauseMenu->removeAllChildren();
     _ui->removeAllChildren();
     setFailure(false);
     setComplete(false);
@@ -339,7 +327,6 @@ void GameScene::reset() {
     populate(_levelController->getCurrentLevel());
 	populateUI(_assets);
     _ui->setHP(100);
-    _pauseMenu->setHP(100);
     _camera->setPosition(_defCamPos);
 
     Application::get()->setClearColor(Color4f::BLACK);
@@ -468,7 +455,6 @@ void GameScene::preUpdate(float dt) {
 
 
 	_ui->setHP(_player->getHP());
-    _pauseMenu->setHP(_player->getHP());
 
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
@@ -511,13 +497,12 @@ void GameScene::preUpdate(float dt) {
         }
     }
 
-    if (_ui != nullptr && _camera != nullptr && _pauseMenu != nullptr) {
+    if (_ui != nullptr && _camera != nullptr) {
         Vec2 camPos = _camera->getPosition();
         Size viewSize = _camera->getViewport().size;
 
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setPosition(base + _ui->_screenOffset);
-        _pauseMenu->setPosition(base + _pauseMenu->_screenOffset);
         _winnode->setPosition(camPos);
         _losenode->setPosition(camPos);
     }

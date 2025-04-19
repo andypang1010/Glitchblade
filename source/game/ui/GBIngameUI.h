@@ -1,24 +1,20 @@
 //
 //  GBIngameUI.h
 //
-//  This module handles the in-game UI, including pause button and HP bar.
-//  Based on:
+//  This module handles all in-game UI, including HUD, pause menu, settings, and win/lose page.
 //
+//  Author: Vince Qian
+//
+//  Reference:
 //  UIButtonScene.h
-//  UI demo
-//
-//  This module shows off a basic button.  The button is backed by a NinePatch
-//  so it can resize dynamically.  It changes the text on a click.
-//
-//  Author: Walker White
-//  Version: 1/20/18
+//  UI Demo by Walker White (Version: 1/20/18)
 //
 #ifndef __GB_INGAME_UI_H__
 #define __GB_INGAME_UI_H__
 #include <cugl/cugl.h>
 
 /**
- * A scene for demoing a simple button
+ * A unified UI scene for in-game HUD, pause menu, and related UI elements.
  */
 class GBIngameUI : public cugl::scene2::SceneNode {
 protected:
@@ -27,7 +23,14 @@ protected:
 
     /** The pause button in top-right corner. */
     std::shared_ptr<cugl::scene2::Button> _pauseButton;
-    /** The HP bar in top-left corner. */
+    
+    /** The pause menu buttons */
+    std::shared_ptr<cugl::scene2::Button> _resumeButton;
+    std::shared_ptr<cugl::scene2::Button> _retryButton;
+    std::shared_ptr<cugl::scene2::Button> _quitButton;
+    std::shared_ptr<cugl::scene2::Button> _settingButton;
+
+    /** HP segments */
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
 
@@ -89,10 +92,27 @@ public:
     
     bool isActive() const { return _active;}
     
+    // Accessors
     std::shared_ptr<cugl::scene2::Button> getPauseButton() const {
         return _pauseButton;
     }
 
+    std::shared_ptr<cugl::scene2::Button> getResumeButton() const {
+        return _resumeButton;
+    }
+
+    std::shared_ptr<cugl::scene2::Button> getRetryButton() const {
+        return _retryButton;
+    }
+
+    std::shared_ptr<cugl::scene2::Button> getQuitButton() const {
+        return _quitButton;
+    }
+
+    std::shared_ptr<cugl::scene2::Button> getSettingButton() const {
+        return _settingButton;
+    }
+    
 };
 
 #endif /* __GB_INGAME_UI_H__ */

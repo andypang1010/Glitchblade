@@ -1,15 +1,19 @@
 ////
 ////  GBIngameUI.cpp
 ////
-////  This module handles all in-game UI, including HUD, pause menu, settings, and win/lose page.
+////  This module handles the in-game UI, including pause button and HP bar.
+////  Based on:
 ////
-////  Author: Vince Qian
-////
-////  Reference:
 ////  UIButtonScene.cpp
-////  UI Demo by Walker White (Version: 1/20/18)
+////  UI Demo
 ////
-//#include "IngameUI.h"
+////  This module shows off a basic button.  The button is backed by a NinePatch
+////  so it can resize dynamically.  It changes the text on a click.
+////
+////  Author: Walker White
+////  Version: 1/20/18
+////
+//#include "GBIngameUI.h"
 //
 //using namespace cugl;
 //
@@ -38,7 +42,7 @@
 //    
 //    setContentSize(Size(1248, 576));
 //    
-//    auto layer = assets->get<scene2::SceneNode>("ingamescene");
+//    auto layer = assets->get<scene2::SceneNode>("hud");
 //    
 //    if (layer == nullptr) {
 //        return false;
@@ -49,7 +53,6 @@
 //    addChild(layer);
 //    setActive(true);
 //    _pauseButton = std::dynamic_pointer_cast<scene2::Button>(layer->getChildByName("pause"));
-//    _hpbar = layer->getChildByName("hpbar");
 //    
 //    if (_pauseButton) {
 //        _pauseButton->addListener([this](const std::string& name, bool pressed) {
@@ -63,35 +66,17 @@
 //        }
 //    }
 //    
-//    if (_hpbar) {
-//        float segmentWidth = 35.0f;
-//        float segmentHeight = 55.0f;
-//        float halfSegmentHeight = 46.9f;
-//        float segmentSpacing = 7.0f;
-//        float startX = 15.0f;
-//        float startY = 38.0f;
+//    for (int i = 1; i <= 5; ++i) {
+//        std::string fullName = "hp_full_segment_" + std::to_string(i);
+//        std::string halfName = "hp_half_segment_" + std::to_string(i);
 //
-//        std::shared_ptr<cugl::graphics::Texture> texture = _assets->get<cugl::graphics::Texture>("hp_segment");
-//        texture->setName("hp_segment");
-//        std::shared_ptr<cugl::graphics::Texture> halfTexture = _assets->get<cugl::graphics::Texture>("half_hp_segment");
-//        texture->setName("hp_segment");
-//        for (int i = 0; i < 5; ++i) {
-//            std::shared_ptr<scene2::PolygonNode> segment = scene2::PolygonNode::allocWithTexture(texture);
-//            segment->setName("segment");
-//            segment->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-//            segment->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + startY);
-//            segment->setContentSize(Size(segmentWidth, segmentHeight));
-//            segment->setVisible(true);
-//            _hpbar->addChild(segment);
-//            _hpSegments.push_back(segment);
-//            
-//            std::shared_ptr<scene2::PolygonNode> half = scene2::PolygonNode::allocWithTexture(halfTexture);
-//            half->setName("half_segment");
-//            half->setAnchor(Vec2::ANCHOR_TOP_LEFT);
-//            half->setPosition(startX + i * (segmentWidth + segmentSpacing), segmentHeight + 35.0f);
-//            half->setContentSize(Size(segmentWidth, halfSegmentHeight));
-//            half->setVisible(false);
-//            _hpbar->addChild(half);
+//        auto full = layer->getChildByName<scene2::PolygonNode>(fullName);
+//        auto half = layer->getChildByName<scene2::PolygonNode>(halfName);
+//
+//        if (full != nullptr) {
+//            _hpSegments.push_back(full);
+//        }
+//        if (half != nullptr) {
 //            _hpHalfSegments.push_back(half);
 //        }
 //    }
@@ -108,9 +93,8 @@
 // */
 //void GBIngameUI::dispose() {
 //    _pauseButton = nullptr;
-//    _hpbar = nullptr;
 //    _assets = nullptr;
-//    
+//
 //    removeAllChildren();
 //}
 //

@@ -12,7 +12,6 @@
 #include "../player/GBPlayerModel.h"
 #include "../enemies/GBEnemyModel.h"
 #include "ui/GBIngameUI.h"
-#include "ui/GBPauseMenu.h"
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
 
@@ -27,7 +26,6 @@ public:
 private:
     std::shared_ptr<PlayerModel> _player;
     std::shared_ptr<GBIngameUI> _ui;
-    std::shared_ptr<GBPauseMenu> _pauseMenu;
     std::shared_ptr<JsonValue> _constantsJSON;
     // captured lambdase from GameScene
     RemoveProjectileCallback _removeProjectile;
@@ -92,7 +90,6 @@ public:
     CollisionController(
         std::shared_ptr<PlayerModel> player,
         std::shared_ptr<GBIngameUI> ui,
-        std::shared_ptr<GBPauseMenu> pauseMenu,
         std::shared_ptr<JsonValue> constantsJSON,
         RemoveProjectileCallback removeProjectile,
         ScreenShakeCallback screenShake

@@ -14,14 +14,12 @@ using namespace cugl::physics2;
 CollisionController::CollisionController(
      std::shared_ptr<PlayerModel> player,
      std::shared_ptr<GBIngameUI> ui,
-     std::shared_ptr<GBPauseMenu> pauseMenu,
      std::shared_ptr<JsonValue> constantsJSON,
      RemoveProjectileCallback removeProjectile,
      ScreenShakeCallback screenShake
 ) :
     _player(player),
     _ui(ui),
-    _pauseMenu(pauseMenu),
     _constantsJSON(constantsJSON),
     _removeProjectile(removeProjectile),
     _screenShake(screenShake){}
@@ -240,20 +238,17 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
             else if (_player->isGuardActive()) {
                 _player->damage(5);
                 _ui->setHP(_player->getHP());
-                _pauseMenu->setHP(_player->getHP());
             }
             else {
                 _player->damage(10);
                 _player->setKnocked(true, _player->getPosition().subtract(projectileObstacle->getPosition()).normalize());
                 _ui->setHP(_player->getHP());
-                _pauseMenu->setHP(_player->getHP());
             }
             _player->iframe = 15;
         }
         // Remove the projectile and update the UI and pause menu with the current HP.
         if (!deflected) _removeProjectile(projectile);
         _ui->setHP(_player->getHP());
-        _pauseMenu->setHP(_player->getHP());
     }
 }
 

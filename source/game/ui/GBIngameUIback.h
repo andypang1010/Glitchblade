@@ -1,13 +1,17 @@
 ////
 ////  GBIngameUI.h
 ////
-////  This module handles all in-game UI, including HUD, pause menu, settings, and win/lose page.
+////  This module handles the in-game UI, including pause button and HP bar.
+////  Based on:
 ////
-////  Author: Vince Qian
-////
-////  Reference:
 ////  UIButtonScene.h
-////  UI Demo by Walker White (Version: 1/20/18)
+////  UI demo
+////
+////  This module shows off a basic button.  The button is backed by a NinePatch
+////  so it can resize dynamically.  It changes the text on a click.
+////
+////  Author: Walker White
+////  Version: 1/20/18
 ////
 //#ifndef __GB_INGAME_UI_H__
 //#define __GB_INGAME_UI_H__
@@ -24,7 +28,6 @@
 //    /** The pause button in top-right corner. */
 //    std::shared_ptr<cugl::scene2::Button> _pauseButton;
 //    /** The HP bar in top-left corner. */
-//    std::shared_ptr<cugl::scene2::SceneNode> _hpbar;
 //    std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
 //    std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
 //
