@@ -9,7 +9,7 @@ void Minion1BController::init(const std::shared_ptr<AssetManager>& assetRef,
     std::vector<std::shared_ptr<ActionModel>> actions) {
 
     _enemyJSON = enemiesJSON->get("minion_1B");
-    _enemy = Minion1BModel::alloc(assetRef, _enemyJSON, ENEMY_INIT_POS, actions);
+    _enemy = Minion1BModel::alloc(assetRef, _enemyJSON, ENEMY_DEFAULT_INIT_POS, actions);
     EnemyController::init(assetRef, _enemyJSON, actions);
 }
 

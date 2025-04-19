@@ -171,9 +171,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
     _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
     _currentLevel = _levelController->getLevelByName("Level 1");
 
-
-    
-
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
     _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
     _winnode->setAnchor(Vec2::ANCHOR_CENTER);

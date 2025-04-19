@@ -50,7 +50,9 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
 }
 
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
+    enemy_controller->setSpawnPosition(getPlayerPosition());
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
+    enemy_controller->inWorld = true;
 }
 
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef)
@@ -306,6 +308,7 @@ void LevelController::fixedUpdate(float timestep)
                 }
 
                 enemyCtrlr->getEnemy()->die(_worldNode);
+                enemyCtrlr->inWorld = false;
                 _numEnemiesActive--;
             }
         }
@@ -595,7 +598,6 @@ void LevelController::setStaticPhysics(const std::shared_ptr<physics2::Obstacle>
 }
 
 void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
-     _worldRef->getBounds().origin.x,_worldRef->getBounds().origin.y,_worldRef->getBounds().size.width,_worldRef->getBounds().size.height);
     std::shared_ptr<Obstacle> obj = obstacle_pair.first;
     std::shared_ptr<scene2::SceneNode> node = obstacle_pair.second;
     _worldRef->addObstacle(obj);
