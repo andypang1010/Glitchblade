@@ -34,12 +34,12 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
     //move this to new function
-    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_idle"), 3, 4, 10);
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_idle"), 5, 2, 10);
 	_idleSprite->setScale(0.5f);
     _idleSprite->setPosition(0, 10);
 	_idleSprite->setName("idle");
 
-    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_walk"), 3, 4, 10);
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_walk"), 5, 2, 10);
     _walkSprite->setScale(0.5f);
     _walkSprite->setPosition(0, 10);
 	_walkSprite->setName("walk");
@@ -59,13 +59,13 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	_slamVFXSprite->setPosition(150, -5);
 	_slamVFXSprite->setName("slam_vfx");
 
-    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_stun"), 1, 4, 4);
+    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_stun"), 5, 4, 20);
     _stunSprite->setScale(0.5f);
     _stunSprite->setPosition(0, 10);
     _stunSprite->setName("stun");
 	stunFrames = _stunSprite->getCount() * 4;
 
-    _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_dead"), 4, 4, 15);
+    _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_dead"), 5, 3, 15);
     _deadSprite->setScale(0.5f);
     _deadSprite->setPosition(0, 10);
 	_deadSprite->setName("dead");

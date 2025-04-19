@@ -44,12 +44,12 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _walkSprite->setPosition(0, 5);
     _walkSprite->setName("walk");
 
-    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 6, 8, 45);
+    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 9, 5, 45);
     _explodeSprite->setScale(0.5f);
     _explodeSprite->setPosition(0, 5);
     _explodeSprite->setName("explode");
 
-    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 1, 5, 5);
+    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 1, 8, 8);
     _shootSprite->setScale(0.5f);
     _shootSprite->setPosition(0, 5);
 	_shootSprite->setName("shoot");
@@ -58,7 +58,7 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _explodeVFXSprite->setPosition(0, 0);
     _explodeVFXSprite->setName("explode_vfx");
 
-    _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_dead"), 2, 8, 15);
+    _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_dead"), 3, 5, 15);
 	_deadSprite->setScale(0.5f);
     _deadSprite->setPosition(0, 0);
 	_deadSprite->setName("dead");
