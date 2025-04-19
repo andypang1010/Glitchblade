@@ -306,13 +306,13 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    addChild(_ui);
-    _ui->resetUI();
     setFailure(false);
     setComplete(false);
     _levelController->reset();
     populate(_levelController->getCurrentLevel());
     _camera->setPosition(_defCamPos);
+    addChild(_ui);
+    _ui->resetUI();
 
     Application::get()->setClearColor(Color4f::BLACK);
 }

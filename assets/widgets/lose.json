@@ -1,0 +1,203 @@
+{
+    "variables": {},
+    "contents": {
+        "type": "Node",
+        "format": {
+            "type": "Anchored"
+        },
+        "data": {
+            "anchor": [
+                0,
+                0
+            ],
+            "size": [
+                1248,
+                576
+            ],
+            "angle": 0,
+            "position": [
+                0,
+                0
+            ],
+            "visible": true
+        },
+        "children": {
+            "cover_shadow": {
+                "type": "Image",
+                "data": {
+                    "texture": "cover_shadow",
+                    "anchor": [
+                        0,
+                        1
+                    ],
+                    "size": [
+                        1248,
+                        576
+                    ],
+                    "angle": 0,
+                    "position": [
+                        0,
+                        0
+                    ],
+                    "visible": true
+                }
+            },
+            "lose": {
+                "type": "Image",
+                "data": {
+                    "texture": "lose",
+                    "anchor": [
+                        0,
+                        1
+                    ],
+                    "size": [
+                        576,
+                        576
+                    ],
+                    "angle": 0,
+                    "position": [
+                        42,
+                        0
+                    ],
+                    "visible": true
+                }
+            },
+            "lose_text": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        1
+                    ],
+                    "size": [
+                        754,
+                        144
+                    ],
+                    "position": [
+                        480,
+                        312
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "light pixel-7Regular144",
+                    "text": "Failure...",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "lose_retry": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        1
+                    ],
+                    "size": [
+                        363,
+                        96
+                    ],
+                    "angle": 0,
+                    "position": [
+                        665,
+                        189
+                    ],
+                    "visible": true,
+                    "upnode": "lose_retry"
+                },
+                "children": {
+                    "lose_retry": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "lose_retry",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                363,
+                                96
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "lose_quit": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        1
+                    ],
+                    "size": [
+                        363,
+                        96
+                    ],
+                    "angle": 0,
+                    "position": [
+                        775,
+                        54
+                    ],
+                    "visible": true,
+                    "upnode": "lose_quit"
+                },
+                "children": {
+                    "lose_quit": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "lose_quit",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                363,
+                                96
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
