@@ -52,10 +52,10 @@
             {
                 "type": "melee",
                 "name": "punch",
-                "hitboxPos": [ 4, 0 ],
+                "hitboxPos": [ 3.5, 0 ],
                 "hitboxSize": [ 4, 2 ],
-                "hitboxStartFrame": 21,
-                "hitboxEndFrame": 30,
+                "hitboxStartFrame": 20,
+                "hitboxEndFrame": 25,
                 "hitboxDamage": 20
             },
             {
