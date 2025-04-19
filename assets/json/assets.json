@@ -164,6 +164,21 @@
         "file": "textures/ingameui/button_setting.png"
     },
     
+    "cover_shadow": {
+        "file": "textures/ingameui/cover_shadow.png"
+    },
+    "lose": {
+        "file": "textures/ingameui/lose.png"
+    },
+    "lose_retry": {
+        "file": "textures/ingameui/lose_retry.png"
+    },
+    "lose_quit": {
+        "file": "textures/ingameui/lose_quit.png"
+    },
+    "lose_text": {
+        "file": "textures/ingameui/lose_text.png"
+    },
 
     "dpad": {
       "file": "textures/dpad.png",
@@ -228,16 +243,21 @@
         "light pixel-7Regular48": {
             "file": "fonts/LightPixel7.ttf",
             "size": 48
+        },
+        "light pixel-7Regular144": {
+            "file": "fonts/LightPixel7.ttf",
+            "size": 144
         }
 	},
     "widgets": {
         "hud" : "widgets/hud.json",
-        "pausemenu": "widgets/pausemenu.json"
+        "pausemenu": "widgets/pausemenu.json",
+        "lose": "widgets/lose.json"
     },
     "scene2s" : {
         "hud" : {
                     "type"      : "Widget",
-                    "comment"   : "This is the root node of ingame scene",
+                    "comment"   : "This is the root node of heads-up displays",
                     "format"    : {
                         "type" : "Anchored"
                     },
@@ -253,6 +273,16 @@
                     },
                     "data" : {
                         "key" : "pausemenu"
+                    }
+        },
+        "lose" : {
+                    "type"      : "Widget",
+                    "comment"   : "This is the root node of lose page",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "key" : "lose"
                     }
         }
     }

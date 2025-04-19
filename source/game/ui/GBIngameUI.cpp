@@ -37,8 +37,9 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
 
     auto headsUpDisplay = assets->get<scene2::SceneNode>("hud");
     auto pauseMenu = assets->get<scene2::SceneNode>("pausemenu");
+    auto losePage = assets->get<scene2::SceneNode>("lose");
 
-    if (headsUpDisplay == nullptr || pauseMenu == nullptr) {
+    if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr) {
         return false;
     }
 
@@ -50,6 +51,11 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     pauseMenu->doLayout();
     pauseMenu->setVisible(false);
     addChild(pauseMenu);
+    
+    losePage->setContentSize(Size(1248, 576));
+    losePage->doLayout();
+    losePage->setVisible(false);
+    addChild(losePage);
 
     setActive(true);
 
@@ -121,6 +127,27 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
         _settingButton->activate();
     }
 
+    // Lose Page UI
+    _loseRetryButton = std::dynamic_pointer_cast<scene2::Button>(losePage->getChildByName("lose_retry"));
+    _loseQuitButton = std::dynamic_pointer_cast<scene2::Button>(losePage->getChildByName("lose_quit"));
+    
+    if (_loseRetryButton) {
+        _loseRetryButton->addListener([this](const std::string& name, bool down) {
+            if (down && _retryCallback) {
+                CULog("Lose Retry pressed");
+                _retryCallback();
+            }
+        });
+        _loseRetryButton->activate();
+    }
+    
+    if (_loseQuitButton) {
+        _loseQuitButton->addListener([](const std::string& name, bool down) {
+            if (down) CULog("Lose Quit pressed");
+        });
+        _loseQuitButton->activate();
+    }
+    
     _screenOffset = getPosition();
 
     Application::get()->setClearColor(Color4f::CORNFLOWER);
@@ -208,10 +235,10 @@ void GBIngameUI::resetUI() {
 //        winLayer->setVisible(false);
 //    }
 //
-//    auto loseLayer = getChildByName("loselayer");
-//    if (loseLayer) {
-//        loseLayer->setVisible(false);
-//    }
+    auto losePage = getChildByName("lose");
+    if (losePage) {
+        losePage->setVisible(false);
+    }
 
     if (_pauseButton && !_pauseButton->isActive()) _pauseButton->activate();
     if (_resumeButton && !_resumeButton->isActive()) _resumeButton->activate();
@@ -225,5 +252,10 @@ void GBIngameUI::showPauseMenu(bool visible) {
 
 void GBIngameUI::showHeadsUpDisplay(bool visible) {
     auto layer = getChildByName("hud");
+    if (layer) layer->setVisible(visible);
+}
+
+void GBIngameUI::showLosePage(bool visible) {
+    auto layer = getChildByName("lose");
     if (layer) layer->setVisible(visible);
 }

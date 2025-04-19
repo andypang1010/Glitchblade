@@ -30,6 +30,10 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _quitButton;
     std::shared_ptr<cugl::scene2::Button> _settingButton;
     
+    /** The lose page buttons */
+    std::shared_ptr<cugl::scene2::Button> _loseRetryButton;
+    std::shared_ptr<cugl::scene2::Button> _loseQuitButton;
+    
     std::function<void()> _pauseCallback;
     std::function<void()> _resumeCallback;
     std::function<void()> _retryCallback;
@@ -106,7 +110,7 @@ public:
     void showPauseMenu(bool visible);
 //    void showSettingMenu(bool visible);
 //    void showWinLayer(bool visible);
-//    void showLoseLayer(bool visible);
+    void showLosePage(bool visible);
     
     // Accessors
     std::shared_ptr<cugl::scene2::Button> getPauseButton() const {

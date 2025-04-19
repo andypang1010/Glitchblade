@@ -28,7 +28,7 @@
                     "texture": "cover_shadow",
                     "anchor": [
                         0,
-                        1
+                        0
                     ],
                     "size": [
                         1248,
@@ -48,7 +48,7 @@
                     "texture": "lose",
                     "anchor": [
                         0,
-                        1
+                        0
                     ],
                     "size": [
                         576,
@@ -63,36 +63,24 @@
                 }
             },
             "lose_text": {
-                "type": "Label",
+                "type": "Image",
                 "data": {
+                    "texture": "lose_text",
                     "anchor": [
-                        0,
-                        1
-                    ],
-                    "size": [
-                        754,
-                        144
-                    ],
-                    "position": [
-                        480,
-                        312
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "light pixel-7Regular144",
-                    "text": "Failure...",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
                         0,
                         0
                     ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
+                    "size": [
+                        735,
+                        144
+                    ],
+                    "angle": 0,
+                    "position": [
+                        480,
+                        348
+                    ],
+                    "visible": true
+                }
             },
             "lose_retry": {
                 "type": "Button",
@@ -102,7 +90,7 @@
                 "data": {
                     "anchor": [
                         0,
-                        1
+                        0
                     ],
                     "size": [
                         363,
@@ -154,7 +142,7 @@
                 "data": {
                     "anchor": [
                         0,
-                        1
+                        0
                     ],
                     "size": [
                         363,

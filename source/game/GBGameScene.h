@@ -74,8 +74,6 @@ protected:
     std::shared_ptr<scene2::SceneNode> _debugnode;
     /** Reference to the win message label */
     std::shared_ptr<scene2::Label> _winnode;
-    /** Reference to the lose message label */
-    std::shared_ptr<scene2::Label> _losenode;
     /** Reference to the enemy HP label */
     std::shared_ptr<scene2::Label> _enemyHPNode;
     /** Reference to the player HP label */

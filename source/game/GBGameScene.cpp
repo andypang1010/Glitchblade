@@ -213,10 +213,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _winnode->setForeground(messagesJ->get("win")->getString("color"));
     setComplete(false);
 
-    _losenode = scene2::Label::allocWithText(messagesJ->get("lose")->getString("text", "lose msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
-    _losenode->setAnchor(Vec2::ANCHOR_CENTER);
-    _losenode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _losenode->setForeground(messagesJ->get("lose")->getString("color"));
     setFailure(false);
     
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
@@ -286,7 +282,6 @@ void GameScene::dispose() {
         _worldnode = nullptr;
         _debugnode = nullptr;
         _winnode = nullptr;
-        _losenode = nullptr;
         _complete = false;
         _debug = false;
 		_ui = nullptr;
@@ -332,7 +327,6 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     addChild(_worldnode);
     addChild(_debugnode);
     addChild(_winnode);
-    addChild(_losenode);
     setBG();
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
@@ -396,11 +390,19 @@ void GameScene::setFailure(bool value) {
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
-        _losenode->setVisible(true);
+        
+        if (_ui) {
+            _ui->showLosePage(true);
+            setPaused(true);
+        }
+        
         _countdown = _constantsJSON->getInt("exit_count");
     }
     else {
-        _losenode->setVisible(false);
+        if (_ui) {
+            _ui->showLosePage(false);
+            setPaused(false);
+        }
         _countdown = -1;
     }
 }
@@ -489,7 +491,6 @@ void GameScene::preUpdate(float dt) {
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setPosition(base + _ui->_screenOffset);
         _winnode->setPosition(camPos);
-        _losenode->setPosition(camPos);
     }
 
 
