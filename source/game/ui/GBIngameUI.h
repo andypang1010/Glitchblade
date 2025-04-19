@@ -78,6 +78,12 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const std::shared_ptr<cugl::AssetManager>& assets);
+
+    void setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage);
+
+    void setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu);
+
+    void setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDisplay);
     
     static std::shared_ptr<GBIngameUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets) {
         std::shared_ptr<GBIngameUI> result = std::make_shared<GBIngameUI>();
