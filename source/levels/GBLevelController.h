@@ -57,7 +57,8 @@ private:
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
     
-
+public:
+	float timeElapsed = 0.0f;
 
 
 protected:
@@ -83,8 +84,25 @@ public:
      */
     ~LevelController();
 
-    bool isLevelWon();
-    bool isLevelLost();
+    bool isLevelWon() {
+        bool levelWon = true;
+
+        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
+            for (auto enemyController : _enemyWaves[_currentWaveIndex]) {
+                levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
+            }
+        }
+
+        else {
+            return false;
+        }
+
+        return levelWon;
+    }
+
+    bool isLevelLost() {
+        return _playerController->getPlayer()->getHP() <= 0;
+    }
     
     /**Return a new enemy controller from the enemy name*/
     std::shared_ptr<EnemyController> createEnemy(std::string enemy_name);

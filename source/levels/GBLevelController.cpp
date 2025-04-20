@@ -39,26 +39,6 @@ LevelController::~LevelController()
 {
 }
 
-bool LevelController::isLevelWon() {
-    bool levelWon = true;
-
-    if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
-        for (auto enemyController : _enemyWaves[_currentWaveIndex]) {
-            levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
-        }
-    }
-
-    else {
-        return false;
-    }
-
-    return levelWon;
-}
-
-bool LevelController::isLevelLost() {
-    return _playerController->getPlayer()->getHP() <= 0;
-}
-
 std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyType) {
     // This will call the correct constructor using make_shared from the enemyFactoryMap
     // Here, all enemy controller types will be treated as their parent class, EnemyController
@@ -274,6 +254,8 @@ void LevelController::reset() {
     _currentEnemyIndex = 0;
 	_lastSpawnedTime = 0;
     _numEnemiesActive = 0;
+
+	_timeSpentInLevel = 0.0f;
 }
 
 void LevelController::preUpdate(float dt)
@@ -297,6 +279,10 @@ void LevelController::preUpdate(float dt)
 
 void LevelController::fixedUpdate(float timestep)
 {
+	if (!isLevelLost() && !isLevelWon()) {
+		_timeSpentInLevel += timestep;
+	}
+
 	_playerController->fixedUpdate(timestep);
     updateLevel();
 
