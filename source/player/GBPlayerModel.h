@@ -123,8 +123,6 @@ protected:
 #pragma mark fixture constants
     /** The amount to shrink the body fixture (horizontally) relative to the image */
     float _hShrink = 0.7f;
-    /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-    float _sShrink = 0.6f;
     /** Height of the sensor attached to the Enemy's feet */
     float _sensorHeight = 0.1f;
     Size _size;

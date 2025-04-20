@@ -257,13 +257,13 @@ void PlayerModel::createFixtures() {
     // Sensor dimensions
 
     b2Vec2 corners[4];
-    corners[0].x = -_sShrink * getWidth() / 2.0f;
+    corners[0].x = - getWidth() / 2.0f;
     corners[0].y = (-getHeight() + _sensorHeight) / 2.0f;
-    corners[1].x = -_sShrink * getWidth() / 2.0f;
+    corners[1].x = - getWidth() / 2.0f;
     corners[1].y = (-getHeight() - _sensorHeight) / 2.0f;
-    corners[2].x = _sShrink * getWidth() / 2.0f;
+    corners[2].x = getWidth() / 2.0f;
     corners[2].y = (-getHeight() - _sensorHeight) / 2.0f;
-    corners[3].x = _sShrink * getWidth() / 2.0f;
+    corners[3].x = getWidth() / 2.0f;
     corners[3].y = (-getHeight() + _sensorHeight) / 2.0f;
 
     b2PolygonShape sensorShape;
@@ -570,7 +570,7 @@ void PlayerModel::resetDebug() {
 
 void PlayerModel::setDebug(){
     // Sensor dimensions
-    float w = _sShrink * _dimension.width;
+    float w = _dimension.width;
     float h = _sensorHeight;
     CULog("player sensor rect is (%f,%f,%f,%f)", -w/2.0, -h/2.0, w, h);
     Poly2 playerPoly(Rect(-w / 2.0f, -h / 2.0f, w, h));
