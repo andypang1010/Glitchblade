@@ -88,55 +88,13 @@ _input(nullptr)
  * memory allocation.  Instead, allocation happens in this method.
  *
  * The game world is scaled so that the screen coordinates do not agree
- * with the Box2d coordinates.  This initializer uses the default scale.
+ * with the Box2d coordinates.  The bounds are in terms of the Box2d
+ * world, not the screen.
  *
  * @param assets    The (loaded) assets for this game mode
- *
- * @return true if the controller is initialized properly, false otherwise.
+ * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
-    return init(assets, Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, DEFAULT_GRAVITY));
-}
-
-/**
- * Initializes the controller contents, and starts the game
- *
- * The constructor does not allocate any objects or memory.  This allows
- * us to have a non-pointer reference to this controller, reducing our
- * memory allocation.  Instead, allocation happens in this method.
- *
- * The game world is scaled so that the screen coordinates do not agree
- * with the Box2d coordinates.  The bounds are in terms of the Box2d
- * world, not the screen.
- *
- * @param assets    The (loaded) assets for this game mode
- * @param rect      The game bounds in Box2d coordinates
- *
- * @return  true if the controller is initialized properly, false otherwise.
- */
-bool GameScene::init(const std::shared_ptr<AssetManager>& assets, const Rect& rect) {
-    return init(assets, rect, Vec2(0, DEFAULT_GRAVITY));
-}
-
-/**
- * Initializes the controller contents, and starts the game
- *
- * The constructor does not allocate any objects or memory.  This allows
- * us to have a non-pointer reference to this controller, reducing our
- * memory allocation.  Instead, allocation happens in this method.
- *
- * The game world is scaled so that the screen coordinates do not agree
- * with the Box2d coordinates.  The bounds are in terms of the Box2d
- * world, not the screen.
- *
- * @param assets    The (loaded) assets for this game mode
- * @param rect      The game bounds in Box2d coordinates
- * @param gravity   The gravitational force on this Box2d world
- *
- * @return  true if the controller is initialized properly, false otherwise.
- */
-bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
-    const Rect& rect, const Vec2& gravity) {
     if (assets == nullptr) {
         return false;
     }
@@ -156,25 +114,34 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     }
     
     _offset = Vec2((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
-
     Rect bounds = getBounds();
     std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
     boundsJ->get("origin")->get("x")->set(bounds.origin.x);
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
     boundsJ->get("size")->get("width")->set(bounds.size.width);
     boundsJ->get("size")->get("height")->set(bounds.size.height);
+//    CULog("bounds orign is (%f, %f) and size is (%f, %f)", bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
+    
+
+    
+    
+    // Create the world and attach the listeners.
+    Rect worldSize = Rect(0, 0, sceneJ->getFloat("world_width"), sceneJ->getFloat("world_height"));
+    Rect screenSize = worldSize;
+    screenSize.size.width /= 3;
+    Vec2 gravity = Vec2(0.0,-28.9);
     
     
     // IMPORTANT: SCALING MUST BE UNIFORM
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
-    _scale = _size.width == sceneJ->getInt("width") ? _size.width / rect.size.width : _size.height / rect.size.height;
+    _scale = _size.width == sceneJ->getInt("width") ? _size.width / screenSize.size.width : _size.height / screenSize.size.height;
+    _worldPixelWidth = worldSize.size.width * _scale;
+    //CULog("_scale is %f", _scale);
     sceneJ->get("scale")->set(_scale);
     
     
-    // Create the world and attach the listeners.
-    Rect trylarger = Rect(0, 0, rect.size.width*3, rect.size.height);
-    _world = physics2::ObstacleWorld::alloc(trylarger, gravity);
+    _world = physics2::ObstacleWorld::alloc(worldSize, gravity);
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
         _collisionController->beginContact(contact);
@@ -182,6 +149,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _world->onEndContact = [this](b2Contact* contact) {
         _collisionController->endContact(contact);
         };
+    
     
     // Create the scene graph
     _worldnode = scene2::SceneNode::alloc();
@@ -512,7 +480,7 @@ void GameScene::fixedUpdate(float step) {
     auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
     auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
     
-    if (cameraPosLX <= 0 || cameraPosRX >= 4000) {
+    if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
         _cameraLocked = true;
         if (cameraPosLX <= 0) {
             CULog("playerx: %f", currPlayerPosX);
@@ -521,7 +489,7 @@ void GameScene::fixedUpdate(float step) {
             }
         } else {
             CULog("playerx: %f", currPlayerPosX);
-            if (currPlayerPosX < 4000 - getBounds().size.width*.66) {
+            if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         }

@@ -81,15 +81,14 @@ bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const std:
     nsize.height *= _playerJSON->get("fixtures")->get("body")->getFloat("v_shrink");
     _drawScale = scale;
 
-    setDebugColor(Color4::BLACK);
-
     if (BoxObstacle::init(pos, nsize)) {
         setDensity(_playerJSON->getFloat("density"));
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-
+        setDebugColor(Color4::BLACK);
         // set the scene node and attach the sprite nodes to it
         attachNodes(assetRef);
+        setName(_name);
         return true;
     }
     return false;
@@ -145,8 +144,6 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	getSceneNode()->addChild(_parryReleaseSprite);
     getSceneNode()->addChild(_attackSprite);
     getSceneNode()->addChild(_damagedSprite);
-    
-    setName(_name);
 }
 
 #pragma mark -
@@ -258,18 +255,16 @@ void PlayerModel::createFixtures() {
     sensorDef.isSensor = true;
 
     // Sensor dimensions
-    float sensorHShrink = _playerJSON->get("fixtures")->get("sensor")->getFloat("h_shrink");
-    float sensorHeight = _playerJSON->get("fixtures")->get("sensor")->getFloat("height");
 
     b2Vec2 corners[4];
-    corners[0].x = -sensorHShrink * getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + sensorHeight) / 2.0f;
-    corners[1].x = -sensorHShrink * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - sensorHeight) / 2.0f;
-    corners[2].x = sensorHShrink * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - sensorHeight) / 2.0f;
-    corners[3].x = sensorHShrink * getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + sensorHeight) / 2.0f;
+    corners[0].x = - getWidth() / 2.0f;
+    corners[0].y = (-getHeight() + _sensorHeight) / 2.0f;
+    corners[1].x = - getWidth() / 2.0f;
+    corners[1].y = (-getHeight() - _sensorHeight) / 2.0f;
+    corners[2].x = getWidth() / 2.0f;
+    corners[2].y = (-getHeight() - _sensorHeight) / 2.0f;
+    corners[3].x = getWidth() / 2.0f;
+    corners[3].y = (-getHeight() + _sensorHeight) / 2.0f;
 
     b2PolygonShape sensorShape;
     sensorShape.Set(corners, 4);
@@ -557,11 +552,13 @@ void PlayerModel::updateAnimation()
  */
 void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
+    _debug->setRelativeColor(false);
     _debug->setName("player_debug");
     if (_groundSensorNode == nullptr){
         setDebug();
     }
     if (_debug->getChildCount() == 0){
+        _groundSensorNode->setColor(Color4::RED);
         _debug->addChild(_groundSensorNode);
     }
     
@@ -573,13 +570,12 @@ void PlayerModel::resetDebug() {
 
 void PlayerModel::setDebug(){
     // Sensor dimensions
-    float sensor_shrink = _playerJSON->get("fixtures")->get("sensor")->getFloat("s_shrink");
-    float sensor_height = _playerJSON->get("fixtures")->get("sensor")->getFloat("height");
-    float w = sensor_shrink * _dimension.width;
-    float h = sensor_height;
-    Poly2 playerPoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
+    float w = _dimension.width;
+    float h = _sensorHeight;
+    CULog("player sensor rect is (%f,%f,%f,%f)", -w/2.0, -h/2.0, w, h);
+    Poly2 playerPoly(Rect(-w / 2.0f, -h / 2.0f, w, h));
     _groundSensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
-    _groundSensorNode->setColor(Color4(_playerJSON->get("debug")->getString("ground_sensor_color")));
+    _groundSensorNode->setRelativeColor(false);
     _groundSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
 }
 

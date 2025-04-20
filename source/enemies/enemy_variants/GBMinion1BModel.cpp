@@ -70,9 +70,6 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _deadSprite->setPosition(0, 10);
 	_deadSprite->setName("dead");
 
-    setName(std::string(ENEMY_NAME));
-    setDebugColor(ENEMY_DEBUG_COLOR);
-
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_punchSprite);
@@ -124,7 +121,7 @@ void Minion1BModel::releaseFixtures() {
 void Minion1BModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
-    _sensorNode = nullptr;
+    _groundSensorNode = nullptr;
     _geometry = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;

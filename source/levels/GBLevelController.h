@@ -201,6 +201,7 @@ public:
     // this is a test method because we will need to access all enemies in the level not just one
     // std::shared_ptr<EnemyModel> getTestEnemyModel() { return _testEnemyController->getEnemy(); };
     // std::shared_ptr<cugl::scene2::SceneNode> getTestEnemyNode() { return _testEnemyController->getEnemy()->getSceneNode(); };
+    Vec2 getPlayerPosition() {return getPlayerModel()->getPosition();};
     std::shared_ptr<PlayerModel> getPlayerModel() { return _playerController->getPlayer(); };
     std::shared_ptr<cugl::scene2::SceneNode> getPlayerNode() { return _playerController->getPlayer()->getSceneNode(); };
     std::shared_ptr<PlatformInput> getInputController() { return _playerController->getInputController(); };

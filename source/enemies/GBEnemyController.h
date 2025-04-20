@@ -13,12 +13,15 @@ using namespace cugl::graphics;
 */
 class EnemyController {
 protected:
+    const float ENEMY_DEFAULT_INIT_POS[2] = { 36.0f, 5.0f };
+    const Vec2 SPAWN_RING = {6.0, 14.0};
     std::shared_ptr<EnemyModel> _enemy;
     std::shared_ptr<JsonValue> _enemyJSON;
     std::shared_ptr<scene2::Label> _hpNode;
     std::shared_ptr<scene2::Label> _stunNode;
-    const float ENEMY_INIT_POS[2] = { 36.0f, 5.0f };
-
+    Vec2 _spawnPosition = ENEMY_DEFAULT_INIT_POS;
+    float worldLeft;
+    float worldRight;
 public:
     EnemyController() {}
     virtual ~EnemyController() { dispose(); }
@@ -34,6 +37,8 @@ public:
     virtual void fixedUpdate(float timestep) = 0;
     virtual void preUpdate(float dt) = 0;
     virtual void postUpdate(float dt) = 0;
-
+    
+    virtual void setSpawnPosition(Vec2 player_pos);
     std::shared_ptr<EnemyModel> getEnemy() const { return _enemy; }
+    bool inWorld = false;
 };

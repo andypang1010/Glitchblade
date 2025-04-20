@@ -171,7 +171,7 @@ void Boss1Model::releaseFixtures() {
 void Boss1Model::dispose() {
     _geometry = nullptr;
     _node = nullptr;
-    _sensorNode = nullptr;
+    _groundSensorNode = nullptr;
     _geometry = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
