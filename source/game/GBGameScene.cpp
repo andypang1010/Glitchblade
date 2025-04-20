@@ -203,13 +203,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
     _currentLevel = _levelController->getLevelByName("Level 1");
 
-
-    
-
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
-
     setComplete(false);
-
     setFailure(false);
     
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
@@ -325,18 +320,12 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     _levelController->populateLevel(level); // Sets the level we want to populate here
     _player = _levelController->getPlayerModel();
 
-
-    std::vector<std::shared_ptr<EnemyController>> enemyControllers = _levelController->getEnemyControllers();
-
     // Add UI elements
 
 	// Play the background music on a loop.
     std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
 	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
     AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
-    
-    // Spawn the first wave
-    //_levelController->spawnWave(0);
     
     _active = true;
     _complete = false;
@@ -554,6 +543,14 @@ void GameScene::fixedUpdate(float step) {
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setPosition(base + _ui->_screenOffset);
     }
+    
+    setComplete(_levelController->isLevelWon());
+    setFailure(_levelController->isLevelLost());
+
+    // Record failure if necessary.
+    if (!_failed && _player->getY() < 0) {
+        setFailure(true);
+    }
 }
 
 /**
@@ -587,15 +584,6 @@ void GameScene::postUpdate(float remain) {
     _levelController->postUpdate(remain);
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
-
-
-    setComplete(_levelController->isLevelWon());
-    setFailure(_levelController->isLevelLost());
-
-    // Record failure if necessary.
-    if (!_failed && _player->getY() < 0) {
-        setFailure(true);
-    }
 
     // Reset the game if we win or lose.
     if (_countdown > 0) {
