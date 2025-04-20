@@ -61,11 +61,8 @@ using namespace cugl;
 #define E_ANIMATION_UPDATE_FRAME 4
 
 #define ENEMY_HIT_COLOR_DURATION 8
-/** Debug color for the sensor */
-#define ENEMY_DEBUG_COLOR     Color4::RED
 /** enemy obstacle name*/
 #define ENEMY_NAME      "enemy"
-#define ENEMY_DEBUG_FONT      "debug"
 
 #pragma mark -
 #pragma mark DEFAULT constants for setter
@@ -148,7 +145,7 @@ protected:
     /** Reference to the sensor name (since a constant cannot have a pointer) */
     std::string _sensorName;
     /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _sensorNode;
+    std::shared_ptr<scene2::WireNode> _groundSensorNode;
 
     /** The scene graph node for the enemy. */
     std::shared_ptr<scene2::SceneNode> _node;
@@ -165,6 +162,8 @@ protected:
     * the texture (e.g. a circular shape attached to a square texture).
     */
     virtual void resetDebug() override;
+    
+    virtual void setDebug();
     
     virtual void setConstants();
 

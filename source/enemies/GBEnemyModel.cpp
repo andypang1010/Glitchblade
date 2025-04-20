@@ -72,7 +72,6 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::
     _enemyJSON = enemyJSON;
     setConstants();
     resetAttributes();
-    setDebugColor(Color4::RED);
     
     if (BoxObstacle::init(pos, _size)) {
         setDensity(_density);
@@ -81,7 +80,7 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::
         attachNodes(assetRef);
         setActions(actions);
         setName(ENEMY_NAME);
-        setDebugColor(ENEMY_DEBUG_COLOR);
+        setDebugColor(Color4::BLUE);
         return true;
     }
 
@@ -218,7 +217,7 @@ void EnemyModel::releaseFixtures() {
 void EnemyModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
-    _sensorNode = nullptr;
+    _groundSensorNode = nullptr;
     _geometry = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
@@ -371,12 +370,20 @@ void EnemyModel::updateAnimation(){}
  */
 void EnemyModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = _sShrink * _dimension.width;
-    float h = _sensorHeight;
-    Poly2 dudePoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
-    _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(Color4::RED);
-    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+    _debug->setName("enemy_debug");
+    if (_groundSensorNode == nullptr){
+        setDebug();
+    }
+    if (_debug->getChildCount() == 0){
+        _groundSensorNode->setRelativeColor(false);
+        _groundSensorNode->setColor(Color4::RED);
+        _debug->addChild(_groundSensorNode);
+    }
+    
+    // necessary during reset, set debug scene node, since BoxObstacle::resetDebug() doesn't handle it correctly.
+    if (_debug->getScene() == nullptr){
+        _scene->addChild(_debug);
+    }
 }
 
 void EnemyModel::setConstants(){
@@ -389,4 +396,13 @@ void EnemyModel::setConstants(){
     _size.height *= _hShrink;    
     
     _maxHP = _enemyJSON->getInt("max_hp");
+}
+
+void EnemyModel::setDebug(){
+    // Sensor dimensions
+    float w = _sShrink * _dimension.width;
+    float h = _sensorHeight;
+    Poly2 groundPoly(Rect(-w / 2.0f, -h / 2.0f, w, h));
+    _groundSensorNode = scene2::WireNode::allocWithTraversal(groundPoly, poly2::Traversal::INTERIOR);
+    _groundSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
 }

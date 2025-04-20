@@ -85,6 +85,7 @@
                 "h_shrink": 0.7
             },
             "sensor": {
+                "s_shrink": 0.6,
                 "h_shrink": 0.6,
                 "height": 0.1
             },
@@ -148,6 +149,7 @@
                 "h_shrink": 0.7
             },
             "sensor": {
+                "s_shrink": 0.6,
                 "h_shrink": 0.6,
                 "height": 0.1
             },
