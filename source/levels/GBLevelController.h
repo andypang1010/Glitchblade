@@ -42,6 +42,7 @@ private:
 	int _currentWaveIndex = 0;
 	int _currentEnemyIndex = 0;
     float _lastSpawnedTime = 0;
+    float _timeSpentInLevel = 0;
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
