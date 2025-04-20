@@ -72,8 +72,6 @@ protected:
     std::shared_ptr<scene2::SceneNode> _worldnode;
     /** Reference to the debug root of the scene graph */
     std::shared_ptr<scene2::SceneNode> _debugnode;
-    /** Reference to the win message label */
-    std::shared_ptr<scene2::Label> _winnode;
     /** Reference to the enemy HP label */
     std::shared_ptr<scene2::Label> _enemyHPNode;
     /** Reference to the player HP label */
@@ -360,6 +358,11 @@ public:
     void updateLayersLeft();
     void updateLayersRight();
 
+    bool _shouldPause = false;
+    bool _shouldResume = false;
+    bool _shouldRetry = false;
+    bool _shouldContinue = false;
+    
     
     void setPaused(bool paused) {
         _isPaused = paused;

@@ -74,12 +74,14 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     setupHUD(headsUpDisplay);
     setupPause(pauseMenu);
     setupLose(losePage);
+    setupWin1(winPage1);
+    setupWin2(winPage2);
     
     showHeadsUpDisplay(true);
-//    showPauseMenu(false);
-//    showLosePage(false);
-//    showWinPage1(false);
-//    showWinPage2(false);
+    showPauseMenu(false);
+    showLosePage(false);
+    showWinPage1(false);
+    showWinPage2(false);
 
     _screenOffset = getPosition();
 

@@ -207,10 +207,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     
 
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
-    _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
-    _winnode->setAnchor(Vec2::ANCHOR_CENTER);
-    _winnode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _winnode->setForeground(messagesJ->get("win")->getString("color"));
+
     setComplete(false);
 
     setFailure(false);
@@ -253,34 +250,18 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
     _ui = GBIngameUI::alloc(_assets);
     if (_ui != nullptr) {
         _ui->setPauseCallback([this]() {
-            _ui->showPauseMenu(true);
-            _ui->showHeadsUpDisplay(false);
-            setPaused(true);
+            _shouldPause = true;
         });
         _ui->setResumeCallback([this]() {
-            _ui->showPauseMenu(false);
-            _ui->showHeadsUpDisplay(true);
-            setPaused(false);
+            _shouldResume = true;
         });
         _ui->setRetryCallback([this]() {
-//            _ui->showPauseMenu(false);
-//            _ui->showHeadsUpDisplay(true);
-//            setPaused(false);
-//            reset();
-            _ui->setRetryCallback([this]() {
-            CULog("Retry callback START");
-            _ui->showPauseMenu(false);
-            _ui->showHeadsUpDisplay(true);
-            setPaused(false);
-            CULog("Before reset()");
-            reset();
-            CULog("Retry callback END");
-            });
+            _shouldRetry = true;
         });
         _ui->setContinueCallback([this]() {
-            _ui->showWinPage1(false);
+            _shouldContinue = true;
+//            _ui->showWinPage1(false);
             _ui->showWinPage2(true);
-            setPaused(true);
         });
         addChild(_ui);
     }
@@ -295,7 +276,6 @@ void GameScene::dispose() {
         _world = nullptr;
         _worldnode = nullptr;
         _debugnode = nullptr;
-        _winnode = nullptr;
         _complete = false;
         _debug = false;
 		_ui = nullptr;
@@ -340,7 +320,6 @@ void GameScene::reset() {
 void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     addChild(_worldnode);
     addChild(_debugnode);
-    addChild(_winnode);
     setBG();
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
@@ -379,11 +358,12 @@ void GameScene::setComplete(bool value) {
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
-        _winnode->setVisible(true);
+        _ui->showWinPage1(true);
+        setPaused(true);
         _countdown = _constantsJSON->getInt("exit_count");
     }
     else if (!value) {
-        _winnode->setVisible(false);
+        setPaused(false);
         _countdown = -1;
     }
 }
@@ -445,7 +425,7 @@ void GameScene::setFailure(bool value) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GameScene::preUpdate(float dt) {
-    if (_isPaused) return;
+//    if (_isPaused) return;
     
     // Process the toggled key commands
     if (_input->didDebug()) { setDebug(!isDebug()); }
@@ -466,6 +446,75 @@ void GameScene::preUpdate(float dt) {
 
     // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);
+    
+    if (_shouldPause) {
+        _shouldPause = false;
+        _ui->showPauseMenu(true);
+        _ui->showHeadsUpDisplay(false);
+        setPaused(true);
+    }
+    
+    if (_shouldResume) {
+        _shouldResume = false;
+        _ui->showPauseMenu(false);
+        _ui->showHeadsUpDisplay(true);
+        setPaused(false);
+    }
+    
+    if (_shouldRetry) {
+        _shouldRetry = false;
+        _ui->showPauseMenu(false);
+        _ui->showHeadsUpDisplay(true);
+        setPaused(false);
+        reset();
+    }
+    
+    if (_shouldContinue) {
+        _shouldContinue = false;
+        _ui->showWinPage1(false);
+        _ui->showWinPage2(true);
+        setPaused(true);
+    }
+    
+    //
+    
+}
+/**
+ * The method called to provide a deterministic application loop.
+ *
+ * This method provides an application loop that runs at a guaranteed fixed
+ * timestep. This method is (logically) invoked every {@link getFixedStep}
+ * microseconds. By that we mean if the method {@link draw} is called at
+ * time T, then this method is guaranteed to have been called exactly
+ * floor(T/s) times this session, where s is the fixed time step.
+ *
+ * This method is always invoked in-between a call to {@link #preUpdate}
+ * and {@link #postUpdate}. However, to guarantee determinism, it is
+ * possible that this method is called multiple times between those two
+ * calls. Depending on the value of {@link #getFixedStep}, it can also
+ * (periodically) be called zero times, particularly if {@link #getFPS}
+ * is much faster.
+ *
+ * As such, this method should only be used for portions of the application
+ * that must be deterministic, such as the physics simulation. It should
+ * not be used to process user input (as no user input is recorded between
+ * {@link #preUpdate} and {@link #postUpdate}) or to animate models.
+ *
+ * The time passed to this method is NOT the same as the one passed to
+ * {@link #preUpdate}. It will always be exactly the same value.
+ *
+ * @param step  The number of fixed seconds for this step
+ */
+void GameScene::fixedUpdate(float step) {
+    
+    if (_isPaused) return;
+    
+    // Turn the physics engine crank.
+    _world->update(step);
+
+    // Update the level controller
+    _levelController->fixedUpdate(step);
+    
     processScreenShake();
 
     auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
@@ -504,46 +553,7 @@ void GameScene::preUpdate(float dt) {
 
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setPosition(base + _ui->_screenOffset);
-        _winnode->setPosition(camPos);
     }
-
-
-}
-/**
- * The method called to provide a deterministic application loop.
- *
- * This method provides an application loop that runs at a guaranteed fixed
- * timestep. This method is (logically) invoked every {@link getFixedStep}
- * microseconds. By that we mean if the method {@link draw} is called at
- * time T, then this method is guaranteed to have been called exactly
- * floor(T/s) times this session, where s is the fixed time step.
- *
- * This method is always invoked in-between a call to {@link #preUpdate}
- * and {@link #postUpdate}. However, to guarantee determinism, it is
- * possible that this method is called multiple times between those two
- * calls. Depending on the value of {@link #getFixedStep}, it can also
- * (periodically) be called zero times, particularly if {@link #getFPS}
- * is much faster.
- *
- * As such, this method should only be used for portions of the application
- * that must be deterministic, such as the physics simulation. It should
- * not be used to process user input (as no user input is recorded between
- * {@link #preUpdate} and {@link #postUpdate}) or to animate models.
- *
- * The time passed to this method is NOT the same as the one passed to
- * {@link #preUpdate}. It will always be exactly the same value.
- *
- * @param step  The number of fixed seconds for this step
- */
-void GameScene::fixedUpdate(float step) {
-    
-    if (_isPaused) return;
-    
-    // Turn the physics engine crank.
-    _world->update(step);
-
-    // Update the level controller
-    _levelController->fixedUpdate(step);
 }
 
 /**
