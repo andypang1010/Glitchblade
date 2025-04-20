@@ -42,6 +42,7 @@ private:
 	int _currentWaveIndex = 0;
 	int _currentEnemyIndex = 0;
     float _lastSpawnedTime = 0;
+    float _timeSpentInLevel = 0;
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
@@ -52,15 +53,13 @@ private:
     float _scale;
     /* Controllers */
 
-    /** One enemy controller for this level controller: It will likely need to be a vector for future levels*/
-    std::vector<std::shared_ptr<EnemyController>> _enemyControllers;
-
 	std::vector<std::vector<std::shared_ptr<EnemyController>>> _enemyWaves;
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
     
-
+public:
+	float timeElapsed = 0.0f;
 
 
 protected:
@@ -90,8 +89,8 @@ public:
         bool levelWon = true;
 
         if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
-            for (auto enemyController : _enemyControllers) {
-				levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
+            for (auto enemyController : _enemyWaves[_currentWaveIndex]) {
+                levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
             }
         }
 
@@ -103,7 +102,7 @@ public:
     }
 
     bool isLevelLost() {
-		return _playerController->getPlayer()->getHP() <= 0;
+        return _playerController->getPlayer()->getHP() <= 0;
     }
     
     /**Return a new enemy controller from the enemy name*/
@@ -114,10 +113,6 @@ public:
     void updateWave();
     void spawnLevel();
     bool waveComplete();
-
-    std::vector<std::shared_ptr<EnemyController>> getEnemyControllers() {
-        return _enemyControllers;
-    }
 
     std::shared_ptr<LevelModel> getLevelByName(std::string name) {
         auto it = _levels.find(name);

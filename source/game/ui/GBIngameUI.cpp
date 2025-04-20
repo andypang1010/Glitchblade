@@ -74,7 +74,15 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     setupHUD(headsUpDisplay);
     setupPause(pauseMenu);
     setupLose(losePage);
+    setupWin1(winPage1);
+    setupWin2(winPage2);
     
+    showHeadsUpDisplay(true);
+    showPauseMenu(false);
+    showLosePage(false);
+    showWinPage1(false);
+    showWinPage2(false);
+
     _screenOffset = getPosition();
 
     Application::get()->setClearColor(Color4f::CORNFLOWER);
@@ -152,7 +160,7 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
 {
     _loseRetryButton = std::dynamic_pointer_cast<scene2::Button>(losePage->getChildByName("lose_retry"));
     _loseQuitButton = std::dynamic_pointer_cast<scene2::Button>(losePage->getChildByName("lose_quit"));
-
+    
     if (_loseRetryButton) {
         _loseRetryButton->addListener([this](const std::string& name, bool down) {
             if (down && _retryCallback) {
@@ -161,13 +169,16 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
             }
         });
     }
-
+    
     if (_loseQuitButton) {
         _loseQuitButton->addListener([](const std::string& name, bool down) {
             if (down) CULog("Lose Quit pressed");
         });
     }
-    
+}
+
+void GBIngameUI::setupWin1(std::shared_ptr<cugl::scene2::SceneNode>& winPage1)
+{
     // Win Page 1 UI
     _continueButton = std::dynamic_pointer_cast<scene2::Button>(winPage1->getChildByName("continue"));
     if (_continueButton) {
@@ -178,7 +189,10 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
             }
         });
     }
-    
+}
+
+void GBIngameUI::setupWin2(std::shared_ptr<cugl::scene2::SceneNode>& winPage2)
+{
     // Win Page 2 UI
     _winContinueButton = std::dynamic_pointer_cast<scene2::Button>(winPage2->getChildByName("win_continue"));
     _winRetryButton = std::dynamic_pointer_cast<scene2::Button>(winPage2->getChildByName("win_retry"));
@@ -198,18 +212,6 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
             }
         });
     }
-    
-    showHeadsUpDisplay(true);
-    showPauseMenu(false);
-    showLosePage(false);
-    showWinPage1(false);
-    showWinPage2(false);
-
-    
-    _screenOffset = getPosition();
-
-    Application::get()->setClearColor(Color4f::CORNFLOWER);
-    return true;
 }
 
 /**

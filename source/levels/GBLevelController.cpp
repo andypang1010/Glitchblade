@@ -91,7 +91,7 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         return false;
     }
 
-    int _numEnemiesActive = 0;
+    _numEnemiesActive = 0;
 
     // Setup player controller
     _playerController = std::make_shared<PlayerController>();
@@ -254,6 +254,8 @@ void LevelController::reset() {
     _currentEnemyIndex = 0;
 	_lastSpawnedTime = 0;
     _numEnemiesActive = 0;
+
+	_timeSpentInLevel = 0.0f;
 }
 
 void LevelController::preUpdate(float dt)
@@ -277,6 +279,10 @@ void LevelController::preUpdate(float dt)
 
 void LevelController::fixedUpdate(float timestep)
 {
+	if (!isLevelLost() && !isLevelWon()) {
+		_timeSpentInLevel += timestep;
+	}
+
 	_playerController->fixedUpdate(timestep);
     updateLevel();
 

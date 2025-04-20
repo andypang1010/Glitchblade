@@ -95,6 +95,10 @@ public:
 
     void setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDisplay);
     
+    void setupWin1(std::shared_ptr<cugl::scene2::SceneNode>& winPage1);
+    
+    void setupWin2(std::shared_ptr<cugl::scene2::SceneNode>& winPage2);
+    
     static std::shared_ptr<GBIngameUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets) {
         std::shared_ptr<GBIngameUI> result = std::make_shared<GBIngameUI>();
         return (result->init(assets) ? result : nullptr);

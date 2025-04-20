@@ -168,10 +168,10 @@ void PlayerController::fixedUpdate(float timestep)
     applyForce();
     updateCooldowns();
 
-    if (_player->_parryCounter == 5) {
-		_player->_parryCounter = 0;
-        _player->setHP(std::min(_player->getHP() + 20.0f, 100.0f));
-    }
+  //  if (_player->_parryCounter == 5) {
+		//_player->_parryCounter = 0;
+  //      _player->setHP(std::min(_player->getHP() + 20.0f, 100.0f));
+  //  }
 }
 
 #pragma mark postUpdate
