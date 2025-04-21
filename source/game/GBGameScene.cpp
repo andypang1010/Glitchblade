@@ -28,7 +28,6 @@
 #include "objects/GBProjectile.h"
 #include "../enemies/actionmodel_variants/GBMeleeActionModel.h"
 #include "ui/GBIngameUI.h"
-#include "ui/GBPauseMenu.h"
 
 #include <ctime>
 #include <string>
@@ -89,55 +88,13 @@ _input(nullptr)
  * memory allocation.  Instead, allocation happens in this method.
  *
  * The game world is scaled so that the screen coordinates do not agree
- * with the Box2d coordinates.  This initializer uses the default scale.
+ * with the Box2d coordinates.  The bounds are in terms of the Box2d
+ * world, not the screen.
  *
  * @param assets    The (loaded) assets for this game mode
- *
- * @return true if the controller is initialized properly, false otherwise.
+ * @return  true if the controller is initialized properly, false otherwise.
  */
 bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
-    return init(assets, Rect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT), Vec2(0, DEFAULT_GRAVITY));
-}
-
-/**
- * Initializes the controller contents, and starts the game
- *
- * The constructor does not allocate any objects or memory.  This allows
- * us to have a non-pointer reference to this controller, reducing our
- * memory allocation.  Instead, allocation happens in this method.
- *
- * The game world is scaled so that the screen coordinates do not agree
- * with the Box2d coordinates.  The bounds are in terms of the Box2d
- * world, not the screen.
- *
- * @param assets    The (loaded) assets for this game mode
- * @param rect      The game bounds in Box2d coordinates
- *
- * @return  true if the controller is initialized properly, false otherwise.
- */
-bool GameScene::init(const std::shared_ptr<AssetManager>& assets, const Rect& rect) {
-    return init(assets, rect, Vec2(0, DEFAULT_GRAVITY));
-}
-
-/**
- * Initializes the controller contents, and starts the game
- *
- * The constructor does not allocate any objects or memory.  This allows
- * us to have a non-pointer reference to this controller, reducing our
- * memory allocation.  Instead, allocation happens in this method.
- *
- * The game world is scaled so that the screen coordinates do not agree
- * with the Box2d coordinates.  The bounds are in terms of the Box2d
- * world, not the screen.
- *
- * @param assets    The (loaded) assets for this game mode
- * @param rect      The game bounds in Box2d coordinates
- * @param gravity   The gravitational force on this Box2d world
- *
- * @return  true if the controller is initialized properly, false otherwise.
- */
-bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
-    const Rect& rect, const Vec2& gravity) {
     if (assets == nullptr) {
         return false;
     }
@@ -157,25 +114,34 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     }
     
     _offset = Vec2((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
-
     Rect bounds = getBounds();
     std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
     boundsJ->get("origin")->get("x")->set(bounds.origin.x);
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
     boundsJ->get("size")->get("width")->set(bounds.size.width);
     boundsJ->get("size")->get("height")->set(bounds.size.height);
+//    CULog("bounds orign is (%f, %f) and size is (%f, %f)", bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
+    
+
+    
+    
+    // Create the world and attach the listeners.
+    Rect worldSize = Rect(0, 0, sceneJ->getFloat("world_width"), sceneJ->getFloat("world_height"));
+    Rect screenSize = worldSize;
+    screenSize.size.width /= 3;
+    Vec2 gravity = Vec2(0.0,-28.9);
     
     
     // IMPORTANT: SCALING MUST BE UNIFORM
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
-    _scale = _size.width == sceneJ->getInt("width") ? _size.width / rect.size.width : _size.height / rect.size.height;
+    _scale = _size.width == sceneJ->getInt("width") ? _size.width / screenSize.size.width : _size.height / screenSize.size.height;
+    _worldPixelWidth = worldSize.size.width * _scale;
+    //CULog("_scale is %f", _scale);
     sceneJ->get("scale")->set(_scale);
     
     
-    // Create the world and attach the listeners.
-    Rect trylarger = Rect(0, 0, rect.size.width*3, rect.size.height);
-    _world = physics2::ObstacleWorld::alloc(trylarger, gravity);
+    _world = physics2::ObstacleWorld::alloc(worldSize, gravity);
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
         _collisionController->beginContact(contact);
@@ -184,12 +150,14 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
         _collisionController->endContact(contact);
         };
     
+    
     // Create the scene graph
     _worldnode = scene2::SceneNode::alloc();
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
     
     _camera = getCamera();
+    _defCamPos = _camera->getPosition();
     
     CULog("Creating empty level controller in gamescene init");
     _levelController = std::make_unique<LevelController>();
@@ -203,20 +171,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
     _currentLevel = _levelController->getLevelByName("Level 1");
 
-
-    
-
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
-    _winnode = scene2::Label::allocWithText(messagesJ->get("win")->getString("text", "win msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
-    _winnode->setAnchor(Vec2::ANCHOR_CENTER);
-    _winnode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _winnode->setForeground(messagesJ->get("win")->getString("color"));
     setComplete(false);
-
-    _losenode = scene2::Label::allocWithText(messagesJ->get("lose")->getString("text", "lose msg json fail"), _assets->get<Font>(messagesJ->getString("font", "retro")));
-    _losenode->setAnchor(Vec2::ANCHOR_CENTER);
-    _losenode->setPosition(_size.width / 2.0f, _size.height / 2.0f);
-    _losenode->setForeground(messagesJ->get("lose")->getString("color"));
     setFailure(false);
     
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
@@ -244,7 +200,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets,
     _collisionController = std::make_unique<CollisionController>(
         _player,
         _ui,
-        _pauseMenu,
         _constantsJSON,
         [this](Projectile* p) { this->removeProjectile(p); },  // Callback for projectile removal
         [this](int i, int d) { this->setScreenShake(i, d); }   // Callback for screen shake
@@ -257,47 +212,23 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
 {
     _ui = GBIngameUI::alloc(_assets);
     if (_ui != nullptr) {
+        _ui->setPauseCallback([this]() {
+            _shouldPause = true;
+        });
+        _ui->setResumeCallback([this]() {
+            _shouldResume = true;
+        });
+        _ui->setRetryCallback([this]() {
+            _shouldRetry = true;
+        });
+        _ui->setContinueCallback([this]() {
+            _shouldContinue = true;
+//            _ui->showWinPage1(false);
+            _ui->showWinPage2(true);
+        });
         addChild(_ui);
     }
-    _pauseMenu = GBPauseMenu::alloc(assets);
-    if (_pauseMenu != nullptr) {
-        _pauseMenu->setVisible(false);
-        addChild(_pauseMenu);
-    }
-
-    auto pauseButton = _ui->getPauseButton();
-    if (pauseButton) {
-        pauseButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
-                _ui->setVisible(false);
-                _pauseMenu->setVisible(true);
-                setPaused(true);
-            }
-            });
-    }
-
-    auto resumeButton = _pauseMenu->getResumeButton();
-    if (resumeButton) {
-        resumeButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
-                _pauseMenu->setVisible(false);
-                _ui->setVisible(true);
-                setPaused(false);
-            }
-            });
-    }
-
-    auto restartButton = _pauseMenu->getRestartButton();
-    if (restartButton) {
-        restartButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
-                _pauseMenu->setVisible(false);
-                _ui->setVisible(true);
-                setPaused(false);
-                reset();
-            }
-        });
-    }
+    
 }
 
 /**
@@ -308,12 +239,9 @@ void GameScene::dispose() {
         _world = nullptr;
         _worldnode = nullptr;
         _debugnode = nullptr;
-        _winnode = nullptr;
-        _losenode = nullptr;
         _complete = false;
         _debug = false;
 		_ui = nullptr;
-		_pauseMenu = nullptr;
         Scene2::dispose();
     }
 }
@@ -330,15 +258,13 @@ void GameScene::reset() {
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
-    _pauseMenu->removeAllChildren();
-    _ui->removeAllChildren();
     setFailure(false);
     setComplete(false);
     _levelController->reset();
     populate(_levelController->getCurrentLevel());
-	populateUI(_assets);
-    _ui->setHP(100);
-    _pauseMenu->setHP(100);
+    _camera->setPosition(_defCamPos);
+    addChild(_ui);
+    _ui->resetUI();
 
     Application::get()->setClearColor(Color4f::BLACK);
 }
@@ -357,15 +283,10 @@ void GameScene::reset() {
 void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     addChild(_worldnode);
     addChild(_debugnode);
-    addChild(_winnode);
-    addChild(_losenode);
     setBG();
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
     _player = _levelController->getPlayerModel();
-
-
-    std::vector<std::shared_ptr<EnemyController>> enemyControllers = _levelController->getEnemyControllers();
 
     // Add UI elements
 
@@ -373,9 +294,6 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
 	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
     AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
-    
-    // Spawn the first wave
-    //_levelController->spawnWave(0);
     
     _active = true;
     _complete = false;
@@ -397,11 +315,12 @@ void GameScene::setComplete(bool value) {
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
-        _winnode->setVisible(true);
+        _ui->showWinPage1(true);
+        setPaused(true);
         _countdown = _constantsJSON->getInt("exit_count");
     }
     else if (!value) {
-        _winnode->setVisible(false);
+        setPaused(false);
         _countdown = -1;
     }
 }
@@ -422,11 +341,19 @@ void GameScene::setFailure(bool value) {
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
-        _losenode->setVisible(true);
+        
+        if (_ui) {
+            _ui->showLosePage(true);
+            setPaused(true);
+        }
+        
         _countdown = _constantsJSON->getInt("exit_count");
     }
     else {
-        _losenode->setVisible(false);
+        if (_ui) {
+            _ui->showLosePage(false);
+            setPaused(false);
+        }
         _countdown = -1;
     }
 }
@@ -455,7 +382,7 @@ void GameScene::setFailure(bool value) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GameScene::preUpdate(float dt) {
-    if (_isPaused) return;
+//    if (_isPaused) return;
     
     // Process the toggled key commands
     if (_input->didDebug()) { setDebug(!isDebug()); }
@@ -466,7 +393,6 @@ void GameScene::preUpdate(float dt) {
 
 
 	_ui->setHP(_player->getHP());
-    _pauseMenu->setHP(_player->getHP());
 
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
@@ -477,50 +403,38 @@ void GameScene::preUpdate(float dt) {
 
     // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);
-    processScreenShake();
-
-    auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
-    bool isKnocked = _levelController->getPlayerModel()->isKnockbackActive();
-    auto currPlayerVel = _levelController->getPlayerModel()->getVX();
-    auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
-    auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
     
-    if (cameraPosLX <= 0 || cameraPosRX >= 4000) {
-        cameraLocked = true;
-        if (cameraPosLX <= 0) {
-            CULog("playerx: %f", currPlayerPosX);
-            if (currPlayerPosX > getBounds().size.width*.66) {
-                cameraLocked = false;
-            }
-        } else {
-            CULog("playerx: %f", currPlayerPosX);
-            if (currPlayerPosX < 4000 - getBounds().size.width*.66) {
-                cameraLocked = false;
-            }
-        }
+    if (_shouldPause) {
+        _shouldPause = false;
+        _ui->showPauseMenu(true);
+        _ui->showHeadsUpDisplay(false);
+        setPaused(true);
     }
-    if (!cameraLocked) {
-        _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
-        _camera->update();
-        if (currPlayerVel > 0 && !isKnocked) {
-            updateLayersLeft();
-        }   else if (currPlayerVel < 0 && !isKnocked) {
-            updateLayersRight();
-        }
+    
+    if (_shouldResume) {
+        _shouldResume = false;
+        _ui->showPauseMenu(false);
+        _ui->showHeadsUpDisplay(true);
+        setPaused(false);
     }
-
-    if (_ui != nullptr && _camera != nullptr && _pauseMenu != nullptr) {
-        Vec2 camPos = _camera->getPosition();
-        Size viewSize = _camera->getViewport().size;
-
-        Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
-        _ui->setPosition(base + _ui->_screenOffset);
-        _pauseMenu->setPosition(base + _pauseMenu->_screenOffset);
-        _winnode->setPosition(camPos);
-        _losenode->setPosition(camPos);
+    
+    if (_shouldRetry) {
+        _shouldRetry = false;
+        _ui->showPauseMenu(false);
+        _ui->showHeadsUpDisplay(true);
+        setPaused(false);
+        reset();
     }
-
-
+    
+    if (_shouldContinue) {
+        _shouldContinue = false;
+        _ui->showWinPage1(false);
+        _ui->showWinPage2(true);
+        setPaused(true);
+    }
+    
+    //
+    
 }
 /**
  * The method called to provide a deterministic application loop.
@@ -557,6 +471,54 @@ void GameScene::fixedUpdate(float step) {
 
     // Update the level controller
     _levelController->fixedUpdate(step);
+    
+    processScreenShake();
+
+    auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
+    bool isKnocked = _levelController->getPlayerModel()->isKnockbackActive();
+    auto currPlayerVel = _levelController->getPlayerModel()->getVX();
+    auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
+    auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
+    
+    if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
+        _cameraLocked = true;
+        if (cameraPosLX <= 0) {
+            CULog("playerx: %f", currPlayerPosX);
+            if (currPlayerPosX > getBounds().size.width*.66) {
+                _cameraLocked = false;
+            }
+        } else {
+            CULog("playerx: %f", currPlayerPosX);
+            if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
+                _cameraLocked = false;
+            }
+        }
+    }
+    if (!_cameraLocked) {
+        _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
+        _camera->update();
+        if (currPlayerVel > 0 && !isKnocked) {
+            updateLayersLeft();
+        }   else if (currPlayerVel < 0 && !isKnocked) {
+            updateLayersRight();
+        }
+    }
+
+    if (_ui != nullptr && _camera != nullptr) {
+        Vec2 camPos = _camera->getPosition();
+        Size viewSize = _camera->getViewport().size;
+
+        Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
+        _ui->setPosition(base + _ui->_screenOffset);
+    }
+    
+    setComplete(_levelController->isLevelWon());
+    setFailure(_levelController->isLevelLost());
+
+    // Record failure if necessary.
+    if (!_failed && _player->getY() < 0) {
+        setFailure(true);
+    }
 }
 
 /**
@@ -590,15 +552,6 @@ void GameScene::postUpdate(float remain) {
     _levelController->postUpdate(remain);
     // Add a bullet AFTER physics allows it to hang in front
     // Otherwise, it looks like bullet appears far away
-
-
-    setComplete(_levelController->isCurrentLevelComplete());
-    setFailure(_player->getHP() <= 0);
-
-    // Record failure if necessary.
-    if (!_failed && _player->getY() < 0) {
-        setFailure(true);
-    }
 
     // Reset the game if we win or lose.
     if (_countdown > 0) {

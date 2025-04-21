@@ -55,14 +55,6 @@ using namespace cugl;
 #define STAB_FORCE       80.0f
 
 #pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-#define SLAM_FRAMES     40
-#define STAB_FRAMES     40
-#define SHOOT_FRAMES    15
-#define EXPLODE_FRAMES  40
-#define STUN_FRAMES 88
-
-#pragma mark -
 #pragma mark Enemy Model
 /**
 * Player avatar for the plaform game.
@@ -114,7 +106,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    Boss1Model() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
+    Boss1Model() : EnemyModel(){}
 
     /**
      * Destroys this PlayerModel, releasing all resources.
@@ -174,20 +166,11 @@ public:
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes() override {
-        _hp = 200;
-        _isGrounded = false;
-        _isMoveLeft = false;
-        _isMoveRight = false;
-        _faceRight = true;
-        _canKnockBack = true;
-        _stunRem = 0;
-
+        EnemyModel::resetAttributes();
         _isStabbing = false;
         _isSlamming = false;
         _isShooting = false;
         _isExploding = false;
-
-        _moveDuration = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

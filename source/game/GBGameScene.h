@@ -38,7 +38,6 @@
 #include "../levels/GBLevelController.h"
 #include "GBCollisionController.h"
 #include "ui/GBIngameUI.h"
-#include "ui/GBPauseMenu.h"
 
 using namespace cugl;
 
@@ -51,7 +50,8 @@ using namespace cugl;
  */
 class GameScene : public scene2::Scene2 {
 protected:
-    bool cameraLocked;
+    bool _cameraLocked;
+    Vec3 _defCamPos;
     /** The asset manager for this game mode. */
     std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonValue> _constantsJSON;
@@ -72,10 +72,6 @@ protected:
     std::shared_ptr<scene2::SceneNode> _worldnode;
     /** Reference to the debug root of the scene graph */
     std::shared_ptr<scene2::SceneNode> _debugnode;
-    /** Reference to the win message label */
-    std::shared_ptr<scene2::Label> _winnode;
-    /** Reference to the lose message label */
-    std::shared_ptr<scene2::Label> _losenode;
     /** Reference to the enemy HP label */
     std::shared_ptr<scene2::Label> _enemyHPNode;
     /** Reference to the player HP label */
@@ -83,10 +79,13 @@ protected:
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
     
+    // Physics objects for the game
+    /** Reference to the player avatar */
+    std::shared_ptr<PlayerModel> _player;
+    
     // UI
     /** Ingame UI */
     std::shared_ptr<GBIngameUI> _ui;
-    std::shared_ptr<GBPauseMenu> _pauseMenu;
     bool _isPaused = false;
     
     /** The Box2D world */
@@ -94,9 +93,8 @@ protected:
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
     Vec2 _offset;
-    // Physics objects for the game
-    /** Reference to the player avatar */
-    std::shared_ptr<PlayerModel>			  _player;
+    /** How wide the physics world is in pixels (=box2d width times scale)*/
+    int _worldPixelWidth;
 
     /** Whether we have completed this "game" */
     bool _complete;
@@ -164,46 +162,8 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const std::shared_ptr<AssetManager>& assets);
-
-    /**
-     * Initializes the controller contents, and starts the game
-     *
-     * The constructor does not allocate any objects or memory.  This allows
-     * us to have a non-pointer reference to this controller, reducing our
-     * memory allocation.  Instead, allocation happens in this method.
-     *
-     * The game world is scaled so that the screen coordinates do not agree
-     * with the Box2d coordinates.  The bounds are in terms of the Box2d
-     * world, not the screen.
-     *
-     * @param assets    The (loaded) assets for this game mode
-     * @param rect      The game bounds in Box2d coordinates
-     *
-     * @return  true if the controller is initialized properly, false otherwise.
-     */
-    bool init(const std::shared_ptr<AssetManager>& assets,
-              const Rect& rect);
     
-    /**
-     * Initializes the controller contents, and starts the game
-     *
-     * The constructor does not allocate any objects or memory.  This allows
-     * us to have a non-pointer reference to this controller, reducing our
-     * memory allocation.  Instead, allocation happens in this method.
-     *
-     * The game world is scaled so that the screen coordinates do not agree
-     * with the Box2d coordinates.  The bounds are in terms of the Box2d
-     * world, not the screen.
-     *
-     * @param assets    The (loaded) assets for this game mode
-     * @param rect      The game bounds in Box2d coordinates
-     * @param gravity   The gravitational force on this Box2d world
-     *
-     * @return  true if the controller is initialized properly, false otherwise.
-     */
     void populateUI(const std::shared_ptr<cugl::AssetManager>& assets);
-    bool init(const std::shared_ptr<AssetManager>& assets,
-              const Rect& rect, const Vec2& gravity);
     
     
 #pragma mark -
@@ -363,6 +323,11 @@ public:
     void updateLayersLeft();
     void updateLayersRight();
 
+    bool _shouldPause = false;
+    bool _shouldResume = false;
+    bool _shouldRetry = false;
+    bool _shouldContinue = false;
+    
     
     void setPaused(bool paused) {
         _isPaused = paused;

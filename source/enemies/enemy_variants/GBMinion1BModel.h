@@ -8,10 +8,6 @@
 
 using namespace cugl;
 
-#pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1B_SLAM_FRAMES     32
-#define MINION1B_PUNCH_FRAMES     30
 #define MINION1B_PUNCH_FORCE       35.0f
 
 #pragma mark -
@@ -60,7 +56,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    Minion1BModel() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
+    Minion1BModel() : EnemyModel(){}
 
     /**
      * Destroys this PlayerModel, releasing all resources.
@@ -119,18 +115,9 @@ public:
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes() override {
-        _hp = 50;
-        _isGrounded = false;
-        _isMoveLeft = false;
-        _isMoveRight = false;
-        _faceRight = true;
-        _canKnockBack = true;
-        _stunRem = 0;
-
+        EnemyModel::resetAttributes();
         _isPunching = false;
         _isSlamming = false;
-
-        _moveDuration = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

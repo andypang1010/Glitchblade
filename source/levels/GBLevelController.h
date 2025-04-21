@@ -42,6 +42,7 @@ private:
 	int _currentWaveIndex = 0;
 	int _currentEnemyIndex = 0;
     float _lastSpawnedTime = 0;
+    float _timeSpentInLevel = 0;
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
@@ -52,15 +53,13 @@ private:
     float _scale;
     /* Controllers */
 
-    /** One enemy controller for this level controller: It will likely need to be a vector for future levels*/
-    std::vector<std::shared_ptr<EnemyController>> _enemyControllers;
-
 	std::vector<std::vector<std::shared_ptr<EnemyController>>> _enemyWaves;
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
     
-
+public:
+	float timeElapsed = 0.0f;
 
 
 protected:
@@ -86,9 +85,24 @@ public:
      */
     ~LevelController();
 
-    bool isCurrentLevelComplete() {
-        // TODO: every time an enemy is defeated(or more optimally??) check if _isCurrentLevelComplete needs to be set to true
-        return _isCurrentLevelComplete;
+    bool isLevelWon() {
+        bool levelWon = true;
+
+        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
+            for (auto enemyController : _enemyWaves[_currentWaveIndex]) {
+                levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
+            }
+        }
+
+        else {
+            return false;
+        }
+
+        return levelWon;
+    }
+
+    bool isLevelLost() {
+        return _playerController->getPlayer()->getHP() <= 0;
     }
     
     /**Return a new enemy controller from the enemy name*/
@@ -99,10 +113,6 @@ public:
     void updateWave();
     void spawnLevel();
     bool waveComplete();
-
-    std::vector<std::shared_ptr<EnemyController>> getEnemyControllers() {
-        return _enemyControllers;
-    }
 
     std::shared_ptr<LevelModel> getLevelByName(std::string name) {
         auto it = _levels.find(name);
@@ -191,6 +201,7 @@ public:
     // this is a test method because we will need to access all enemies in the level not just one
     // std::shared_ptr<EnemyModel> getTestEnemyModel() { return _testEnemyController->getEnemy(); };
     // std::shared_ptr<cugl::scene2::SceneNode> getTestEnemyNode() { return _testEnemyController->getEnemy()->getSceneNode(); };
+    Vec2 getPlayerPosition() {return getPlayerModel()->getPosition();};
     std::shared_ptr<PlayerModel> getPlayerModel() { return _playerController->getPlayer(); };
     std::shared_ptr<cugl::scene2::SceneNode> getPlayerNode() { return _playerController->getPlayer()->getSceneNode(); };
     std::shared_ptr<PlatformInput> getInputController() { return _playerController->getInputController(); };

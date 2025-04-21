@@ -9,7 +9,7 @@ void Minion1BController::init(const std::shared_ptr<AssetManager>& assetRef,
     std::vector<std::shared_ptr<ActionModel>> actions) {
 
     _enemyJSON = enemiesJSON->get("minion_1B");
-    _enemy = Minion1BModel::alloc(assetRef, _enemyJSON, ENEMY_INIT_POS, actions);
+    _enemy = Minion1BModel::alloc(assetRef, _enemyJSON, ENEMY_DEFAULT_INIT_POS, actions);
     EnemyController::init(assetRef, _enemyJSON, actions);
 }
 
@@ -45,7 +45,7 @@ void Minion1BController::applyForce() {
         enemyBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _enemy->getKnockF()), true);
     }
 
-    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed() && !_enemy->isKnockbackActive()) {
+    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed()) {
         _enemy->setVX(SIGNUM(_enemy->getVX()) * _enemy->getMaxSpeed());
     }
 
@@ -56,7 +56,7 @@ void Minion1BController::applyForce() {
 
 void Minion1BController::preUpdate(float dt) {
     if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
-    //if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getAggression()));
+    //if (_hpNode) _hpNode->setText(std::to_string(_enemy->getVX()));
     if (_stunNode) _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
 
 

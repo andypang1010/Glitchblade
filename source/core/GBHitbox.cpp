@@ -48,7 +48,7 @@ void Hitbox::update(float dt) {
     setPosition(_enemy->getPosition() + _offset);
 
     _duration -= dt / (1.0 / FPS);
-    if (_duration <= 0) {
+    if (_duration <= 0 || _enemy->isStunned()) {
         markRemoved(true);
     }
 

@@ -1,9 +1,8 @@
 {
 
     "minion_1A": {
-        "health": 50,
-        "size": [ 90, 110 ],
-        "stunFrames": 16,
+        "max_hp": 50,
+        "size": [90,110],
         "actions": [
             {
                 "type": "melee",
@@ -11,8 +10,8 @@
                 "hitboxPos": [ 0, 0 ],
                 "hitboxSize": [ 8, 8 ],
                 "hitboxStartFrame": 33,
-                "hitboxEndFrame": 61,
-                "hitboxDamage": 20
+                "hitboxEndFrame": 40,
+                "hitboxDamage": 40
             },
             {
                 "type": "ranged",
@@ -47,34 +46,32 @@
         ]
     },
     "minion_1B": {
-        "health": 50,
-        "size": [ 90, 90 ],
-        "stunFrames": 16,
+        "max_hp": 50,
+        "size": [90,90],
         "actions": [
             {
                 "type": "melee",
                 "name": "punch",
-                "hitboxPos": [ 4, 0 ],
+                "hitboxPos": [ 3.5, 0 ],
                 "hitboxSize": [ 4, 2 ],
-                "hitboxStartFrame": 21,
-                "hitboxEndFrame": 30,
+                "hitboxStartFrame": 20,
+                "hitboxEndFrame": 25,
                 "hitboxDamage": 20
             },
             {
                 "type": "melee",
                 "name": "slam",
-                "hitboxPos": [ 3.5, 0 ],
-                "hitboxSize": [ 7, 2 ],
+                "hitboxPos": [ 3.5, -0.5 ],
+                "hitboxSize": [ 7, 1 ],
                 "hitboxStartFrame": 19,
-                "hitboxEndTime": 23,
+                "hitboxEndFrame": 23,
                 "hitboxDamage": 20
             }
         ]
     },
     "boss_1": {
-        "health": 200,
-        "size": [ 90, 180 ],
-        "stunFrames": 88,
+        "max_hp": 200,
+        "size": [90,180],
         "actions": [
             {
                 "type": "melee",
@@ -100,7 +97,7 @@
                 "hitboxPos": [ 0, 0 ],
                 "hitboxSize": [ 10, 10 ],
                 "hitboxStartFrame": 26,
-                "hitboxEndFrame": 33,
+                "hitboxEndFrame": 37,
                 "hitboxDamage": 40
             },
             {
@@ -138,7 +135,6 @@
     "boss_2": {
         "health": 200,
         "size": [ 90, 180 ],
-        "stunFrames": 88,
         "actions": [
             {
                 "type": "ranged",

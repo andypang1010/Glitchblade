@@ -119,6 +119,14 @@ protected:
     int _lastDamagedFrame;
     /** Remaining time for damaged animation */
     int _damageRem;
+    
+#pragma mark fixture constants
+    /** The amount to shrink the body fixture (horizontally) relative to the image */
+    float _hShrink = 0.7f;
+    /** Height of the sensor attached to the Enemy's feet */
+    float _sensorHeight = 0.1f;
+    Size _size;
+
 
     std::string _name;
     std::string _bodyName;
@@ -131,7 +139,6 @@ protected:
     /** The player scene node**/
     std::shared_ptr<scene2::SceneNode> _sceneNode;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
-    
     float _drawScale;
     int frameCounter = 0;
 
@@ -146,6 +153,7 @@ protected:
 
 public:
     int iframe = 0;
+    int _parryCounter = 0;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
@@ -254,6 +262,7 @@ public:
         _parryRem = 0;
         _damageRem = 0;
         _damage = 10;// default player dmg
+        _parryCounter = 0;
     };
     
     void setConstants();

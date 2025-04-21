@@ -9,12 +9,6 @@
 using namespace cugl;
 
 #pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-#define MINION1A_SHOOT_FRAMES     5
-#define MINION1A_EXPLODE_FRAMES     45
-#define MINION1A_EXPLODEVFX_FRAMES     12
-
-#pragma mark -
 #pragma mark Enemy Model
 /**
 * Player avatar for the plaform game.
@@ -60,7 +54,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    Minion1AModel() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
+    Minion1AModel() : EnemyModel(){}
 
     /**
      * Destroys this PlayerModel, releasing all resources.
@@ -119,18 +113,9 @@ public:
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes() override {
-        _hp = 50;
-        _isGrounded = false;
-        _isMoveLeft = false;
-        _isMoveRight = false;
-        _faceRight = true;
-        _canKnockBack = true;
-        _stunRem = 0;
-
+        EnemyModel::resetAttributes();
         _isExploding = false;
         _isShooting = false;
-        
-        _moveDuration = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

@@ -76,27 +76,27 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
     //move this to new function
-    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_idle"), 2, 8, 15);
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_idle"), 3, 5, 15);
     _idleSprite->setPosition(0, 60);
 	_idleSprite->setName("idle");
 
-    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_stun_short"), 2, 8, 15);
+    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_stun_short"), 3, 5, 15);
     _stunSprite->setPosition(0, 60);
 	_stunSprite->setName("stun");
 
-    _shortFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_start"), 2, 8, 15);
+    _shortFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_start"), 3, 5, 15);
     _shortFireStartSprite->setPosition(0, 60);
     _shortFireStartSprite->setName("shortFireStart");
 
-    _shortFireAttackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_attack"), 1, 8, 5);
+    _shortFireAttackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_attack"), 1, 5, 5);
     _shortFireAttackSprite->setPosition(0, 60);
     _shortFireAttackSprite->setName("shortFireAttack");
 
-    _shortFireWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_wait"), 1, 8, 5);
+    _shortFireWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_wait"), 1, 5, 5);
     _shortFireWaitSprite->setPosition(0, 60);
     _shortFireWaitSprite->setName("shortFireWait");
 
-    _shortFireEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_end"), 1, 9, 8);
+    _shortFireEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_end"), 2, 4, 8);
     _shortFireEndSprite->setPosition(0, 60);
     _shortFireEndSprite->setName("shortFireEnd");
 
@@ -149,7 +149,7 @@ void Boss2Model::releaseFixtures() {
 void Boss2Model::dispose() {
     _geometry = nullptr;
     _node = nullptr;
-    _sensorNode = nullptr;
+    _groundSensorNode = nullptr;
     _geometry = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;

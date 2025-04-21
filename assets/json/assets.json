@@ -54,8 +54,8 @@
         "boss1_idle": {
             "file": "textures/boss1_idle.png"
         },
-        "boss1_walking1": {
-            "file": "textures/boss1_walking1.png"
+        "boss1_walk": {
+            "file": "textures/boss1_walk.png"
         },
         "boss1_slam": {
             "file": "textures/boss1_slam.png"
@@ -163,53 +163,108 @@
             "file": "textures/minion1A_dead.png"
         },
 
-        "pause_button": {
-            "file": "textures/pause_button.png"
-        },
-        "hp_empty": {
-            "file": "textures/hp_bar.png"
-        },
-        "hp_segment": {
-            "file": "textures/hp_segment.png"
-        },
-        "half_hp_segment": {
-            "file": "textures/half_hp_segment.png"
-        },
+        
 
-        "menu_background": {
-            "file": "textures/menu_background.png"
-        },
-        "menu_hpbar": {
-            "file": "textures/menu_hpbar.png"
-        },
-        "button_play": {
-            "file": "textures/button_play.png"
-        },
-        "button_setting": {
-            "file": "textures/button_setting.png"
-        },
-        "button_restart": {
-            "file": "textures/button_restart.png"
-        },
-        "button_exit": {
-            "file": "textures/button_exit.png"
-        },
-        "menu_player": {
-            "file": "textures/menu_player.png"
-        },
-
-        "dpad": {
-            "file": "textures/dpad.png",
-            "wrapS": "clamp",
-            "wrapT": "clamp",
-            "atlas": {
-                "up": [ 0, 0, 127, 127 ],
-                "down": [ 128, 0, 255, 127 ],
-                "left": [ 0, 128, 127, 255 ],
-                "right": [ 128, 128, 255, 255 ]
-            }
-        }
+    "button_pause": {
+        "file": "textures/ingameui/button_pause.png"
     },
+    "hp_bar": {
+        "file": "textures/ingameui/hp_bar.png"
+    },
+    "hp_half_segment": {
+        "file": "textures/ingameui/hp_half_segment.png"
+    },
+    "hp_full_segment": {
+        "file": "textures/ingameui/hp_full_segment.png"
+    },
+    
+    "menu_shadow": {
+        "file": "textures/ingameui/menu_shadow.png"
+    },
+    "pause_menu": {
+        "file": "textures/ingameui/pause_menu.png"
+    },
+    "progress_bar": {
+        "file": "textures/ingameui/progress_bar.png"
+    },
+    "progress_half_segment": {
+        "file": "textures/ingameui/progress_half_segment.png"
+    },
+    "progress_full_segment": {
+        "file": "textures/ingameui/progress_full_segment.png"
+    },
+    "menu_player": {
+        "file": "textures/ingameui/menu_player.png"
+    },
+    "button_resume": {
+        "file": "textures/ingameui/button_resume.png"
+    },
+    "button_quit": {
+        "file": "textures/ingameui/button_quit.png"
+    },
+    "button_retry": {
+        "file": "textures/ingameui/button_retry.png"
+    },
+    "button_setting": {
+        "file": "textures/ingameui/button_setting.png"
+    },
+    
+    "cover_shadow": {
+        "file": "textures/ingameui/cover_shadow.png"
+    },
+    "lose": {
+        "file": "textures/ingameui/lose.png"
+    },
+    "lose_retry": {
+        "file": "textures/ingameui/lose_retry.png"
+    },
+    "lose_quit": {
+        "file": "textures/ingameui/lose_quit.png"
+    },
+    "lose_text": {
+        "file": "textures/ingameui/lose_text.png"
+    },
+    
+    "win": {
+        "file": "textures/ingameui/win.png"
+    },
+    "time_ind": {
+        "file": "textures/ingameui/time_ind.png"
+    },
+    "win_text": {
+        "file": "textures/ingameui/win_text.png"
+    },
+    "hp_ind": {
+        "file": "textures/ingameui/hp_ind.png"
+    },
+    "parry_ind": {
+        "file": "textures/ingameui/parry_ind.png"
+    },
+    "button_continue": {
+        "file": "textures/ingameui/button_continue.png"
+    },
+    
+    "win_retry": {
+        "file": "textures/ingameui/win_retry.png"
+    },
+    "win_continue": {
+        "file": "textures/ingameui/win_continue.png"
+    },
+
+    
+    
+    "dpad": {
+      "file": "textures/dpad.png",
+      "wrapS": "clamp",
+      "wrapT": "clamp",
+      "atlas": {
+        "up": [ 0, 0, 127, 127 ],
+        "down": [ 128, 0, 255, 127 ],
+        "left": [ 0, 128, 127, 255 ],
+        "right": [ 128, 128, 255, 255 ]
+      }
+    }
+  },
     "sounds": {
         "game": {
             "type":     "sample",
@@ -253,23 +308,36 @@
         "debug": {
           "file": "fonts/RetroGame.ttf",
           "size":  14
+        },
+        "light pixel-7Regular40": {
+            "file": "fonts/LightPixel7.ttf",
+            "size": 40
+        },
+        "light pixel-7Regular48": {
+            "file": "fonts/LightPixel7.ttf",
+            "size": 48
+        },
+        "light pixel-7Regular144": {
+            "file": "fonts/LightPixel7.ttf",
+            "size": 144
         }
 	},
     "widgets": {
-        "ingamescene" : "widgets/ingamescene.json",
-        "pausebutton" : "widgets/pausebutton.json",
-        "hpbar" : "widgets/hpbar.json",
-        "pausemenu": "widgets/pausemenu.json"
+        "hud" : "widgets/hud.json",
+        "pausemenu": "widgets/pausemenu.json",
+        "lose": "widgets/lose.json",
+        "win1": "widgets/win1.json",
+        "win2": "widgets/win2.json"
     },
     "scene2s" : {
-        "ingamescene" : {
+        "hud" : {
                     "type"      : "Widget",
-                    "comment"   : "This is the root node of ingame scene",
+                    "comment"   : "This is the root node of heads-up displays",
                     "format"    : {
                         "type" : "Anchored"
                     },
                     "data" : {
-                        "key" : "ingamescene"
+                        "key" : "hud"
                     }
         },
         "pausemenu" : {
@@ -280,6 +348,36 @@
                     },
                     "data" : {
                         "key" : "pausemenu"
+                    }
+        },
+        "lose" : {
+                    "type"      : "Widget",
+                    "comment"   : "This is the root node of lose page",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "key" : "lose"
+                    }
+        },
+        "win1" : {
+                    "type"      : "Widget",
+                    "comment"   : "This is the root node of the first win page",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "key" : "win1"
+                    }
+        },
+        "win2" : {
+                    "type"      : "Widget",
+                    "comment"   : "This is the root node of the second win page",
+                    "format"    : {
+                        "type" : "Anchored"
+                    },
+                    "data" : {
+                        "key" : "win2"
                     }
         }
     }

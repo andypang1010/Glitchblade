@@ -3,8 +3,8 @@
         "width": 1248,
         "height": 576,
         "aspect": 0.4615,
-        "default_width": 39,
-        "default_height": 18,
+        "world_width": 117,
+        "world_height": 18,
         "gravity": -28.9,
         "texture": "background",
         "scale": null,
@@ -72,7 +72,7 @@
             "duration": 20
         },
         "guard": {
-            "cooldown": 15,
+            "cooldown": 30,
             "duration": 60
         },
         "parry": {
@@ -85,6 +85,7 @@
                 "h_shrink": 0.7
             },
             "sensor": {
+                "s_shrink": 0.6,
                 "h_shrink": 0.6,
                 "height": 0.1
             },
@@ -148,6 +149,7 @@
                 "h_shrink": 0.7
             },
             "sensor": {
+                "s_shrink": 0.6,
                 "h_shrink": 0.6,
                 "height": 0.1
             },

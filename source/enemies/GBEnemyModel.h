@@ -61,11 +61,8 @@ using namespace cugl;
 #define E_ANIMATION_UPDATE_FRAME 4
 
 #define ENEMY_HIT_COLOR_DURATION 8
-/** Debug color for the sensor */
-#define ENEMY_DEBUG_COLOR     Color4::RED
 /** enemy obstacle name*/
 #define ENEMY_NAME      "enemy"
-#define ENEMY_DEBUG_FONT      "debug"
 
 #pragma mark -
 #pragma mark DEFAULT constants for setter
@@ -105,16 +102,11 @@ protected:
     /** Whether our feet are on the ground */
     bool _isGrounded;
     int _lastDamagedFrame;
-    
-#pragma mark  constants
-    int _stunFrames; // longer
-    int _staggerFrames; // shorter
+    float _scale;
     
 #pragma mark fixture constants
     /** The amount to shrink the body fixture (horizontally) relative to the image */
     float _hShrink = 0.7f;
-    /** The amount to shrink the sensor fixture (horizontally) relative to the image */
-    float _sShrink = 0.6f;
     /** Height of the sensor attached to the Enemy's feet */
     float _sensorHeight = 0.1f;
     Size _size;
@@ -151,7 +143,7 @@ protected:
     /** Reference to the sensor name (since a constant cannot have a pointer) */
     std::string _sensorName;
     /** The node for debugging the ground sensor */
-    std::shared_ptr<scene2::WireNode> _sensorNode;
+    std::shared_ptr<scene2::WireNode> _groundSensorNode;
 
     /** The scene graph node for the enemy. */
     std::shared_ptr<scene2::SceneNode> _node;
@@ -169,12 +161,14 @@ protected:
     */
     virtual void resetDebug() override;
     
+    virtual void setDebug();
+    
     virtual void setConstants();
 
 public:
-    float _scale;
     int frameCounter = 0;
-    int stunFrame;
+    int stunFrames; // longer
+//    int staggerFrames; // shorter
     float worldLeft;
     float worldRight;
 
@@ -236,10 +230,12 @@ public:
         _isMoveRight = false;
         _faceRight = true;
         _canKnockBack = true;
+        _isKnocked = false;
         _stunRem = 0;
         _aggression = 0;
-        
         _moveDuration = 0;
+        _movement = 0;
+        _lastDamagedFrame = 0;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/

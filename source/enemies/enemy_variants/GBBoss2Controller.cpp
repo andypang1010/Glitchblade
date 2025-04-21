@@ -8,7 +8,7 @@ void Boss2Controller::init(const std::shared_ptr<AssetManager>& assetRef,
     const std::shared_ptr<JsonValue>& enemiesJSON,
     std::vector<std::shared_ptr<ActionModel>> actions) {
     _enemyJSON = enemiesJSON->get("boss_2");
-    _enemy = Boss2Model::alloc(assetRef, _enemyJSON, ENEMY_INIT_POS, actions);
+    _enemy = Boss2Model::alloc(assetRef, _enemyJSON, ENEMY_DEFAULT_INIT_POS, actions);
     EnemyController::init(assetRef, _enemyJSON, actions);
 }
 

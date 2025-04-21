@@ -9,66 +9,6 @@ using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::scene2;
 
-#pragma mark -
-#pragma mark Constants moved from gamescene to here - these maybe should be parsed from JSON or in separate file
-
-#pragma mark -
-#pragma mark Level Geography
-/** This is adjusted by screen aspect ratio to get the height */
-#define GAME_SCENE_WIDTH 1024
-#define GAME_SCENE_HEIGHT 576
-
-/** This is the aspect ratio for physics */
-#define GAME_SCENE_ASPECT 9.0/16.0
-
-/** Width of the game world in Box2d units */
-#define GAME_DEFAULT_WIDTH   32.0f
-/** Height of the game world in Box2d units */
-#define GAME_DEFAULT_HEIGHT  18.0f
-
-
-/** Bullet Spawn Points */
-
-#pragma mark -
-#pragma mark Physics Constants
-/** The density for most physics objects */
-#define BASIC_DENSITY   0.0f
-/** The density for a projectile */
-#define HEAVY_DENSITY   10.0f
-/** Friction of most platforms */
-#define BASIC_FRICTION  0.4f
-/** The restitution for all physics objects */
-#define BASIC_RESTITUTION   0.1f
-/** Offset for pojectile when firing */
-#define PROJECTILE_OFFSET   0.5f
-/** The speed of the projectile after firing */
-#define PROJECTILE_SPEED   30.0f
-
-
-#pragma mark -
-#pragma mark Testing Constants
-/** The radius for enemy to initial attack */
-#define ENEMY_ATTACK_RADIUS     6.0f
-
-#pragma mark -
-#pragma mark Asset Constants
-
-///////////////// TEXTURES //////////////////////////////////
-/** The key for the regular projectile texture in the asset manager */
-#define PROJECTILE_TEXTURE  "projectile"
-/** The key for the player projectile texture in the asset manager */
-#define PLAYER_PROJECTILE_TEXTURE "player_projectile"
-
-///////////////// NAMES /////////////////////////////////////
-#define PROJECTILE_NAME "projectile"
-/** The name of a platform (for object identification) */
-#define GROUND_NAME   "ground"
-
-/** Opacity of the physics outlines */
-#define DEBUG_OPACITY   192
-
-#define WORLD_DEBUG_COLOR    Color4::WHITE
-
 // EnemyController needs to become a base class that all other types of enemies derive from
 std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()>> enemyFactoryMap = {
     { "boss_1", []() {
@@ -114,7 +54,9 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
 }
 
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
+    enemy_controller->setSpawnPosition(getPlayerPosition());
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
+    enemy_controller->inWorld = true;
 }
 
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef)
@@ -146,7 +88,7 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     float scale = _constantsJSON->get("scene")->getFloat("scale");
     _enemiesJSON->get("world_info")->get("scale")->set(scale);
     float wall_thickness = _constantsJSON->get("walls")->getFloat("thickness");
-    float worldRight = _constantsJSON->get("scene")->getFloat("default_scene_width") - wall_thickness;
+    float worldRight = _constantsJSON->get("scene")->getFloat("world_width") - wall_thickness;
     _enemiesJSON->get("world_info")->get("worldLeft")->set(wall_thickness);
     _enemiesJSON->get("world_info")->get("worldRight")->set(worldRight);
 
@@ -155,7 +97,7 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         return false;
     }
 
-    int _numEnemiesActive = 0;
+    _numEnemiesActive = 0;
 
     // Setup player controller
     _playerController = std::make_shared<PlayerController>();
@@ -318,6 +260,8 @@ void LevelController::reset() {
     _currentEnemyIndex = 0;
 	_lastSpawnedTime = 0;
     _numEnemiesActive = 0;
+
+	_timeSpentInLevel = 0.0f;
 }
 
 void LevelController::preUpdate(float dt)
@@ -341,6 +285,10 @@ void LevelController::preUpdate(float dt)
 
 void LevelController::fixedUpdate(float timestep)
 {
+	if (!isLevelLost() && !isLevelWon()) {
+		_timeSpentInLevel += timestep;
+	}
+
 	_playerController->fixedUpdate(timestep);
     updateLevel();
 
@@ -370,6 +318,7 @@ void LevelController::fixedUpdate(float timestep)
                 }
 
                 enemyCtrlr->getEnemy()->die(_worldNode);
+                enemyCtrlr->inWorld = false;
                 _numEnemiesActive--;
             }
         }
@@ -597,27 +546,27 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
-    float defaultWidth =  _constantsJSON->get("scene")->get("default_width")->asFloat(32.0f);
-    float defaultHeight =  _constantsJSON->get("scene")->get("default_height")->asFloat(18.0f);
-    float wallThickness = _constantsJSON->get("walls")->get("thickness")->asFloat(1.0f);
+    float worldWidth =  _constantsJSON->get("scene")->getFloat("world_width");
+    float worldHeight =  _constantsJSON->get("scene")->getFloat("world_height");
+    float wallThickness = _constantsJSON->get("walls")->getFloat("thickness");
 
     // Using Vec2 instead of float pairs
     std::vector<std::vector<Vec2>> wallVertices = {
         {
-            Vec2(defaultWidth*3.2 / 2, defaultHeight),
-            Vec2(0.0f, defaultHeight),
+            Vec2(worldWidth/2, worldHeight),
+            Vec2(0.0f, worldHeight),
             Vec2(0.0f, 0.0f),
             Vec2(wallThickness, 0.0f),
-            Vec2(wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth*3.7 / 2, defaultHeight - wallThickness)
+            Vec2(wallThickness, worldHeight - wallThickness),
+            Vec2(worldWidth/2, worldHeight - wallThickness)
         },
         {
-            Vec2(defaultWidth*3.2, defaultHeight),
-            Vec2(defaultWidth*3.2 / 2, defaultHeight),
-            Vec2(defaultWidth*3.2 / 2, defaultHeight - wallThickness),
-            Vec2(defaultWidth*3.2 - wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth*3.2 - wallThickness, 0.0f),
-            Vec2(defaultWidth*3.2, 0.0f)
+            Vec2(worldWidth, worldHeight),
+            Vec2(worldWidth/2, worldHeight),
+            Vec2(worldWidth/2, worldHeight - wallThickness),
+            Vec2(worldWidth - wallThickness, worldHeight - wallThickness),
+            Vec2(worldWidth - wallThickness, 0.0f),
+            Vec2(worldWidth, 0.0f)
         }
     };
 
@@ -626,13 +575,13 @@ std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
 
 
 std::vector<Vec2> LevelController::calculateGroundVertices() {
-    float defaultWidth = _constantsJSON->get("scene")->get("default_width")->asFloat(32.0f);
-    float groundThickness = _constantsJSON->get("ground")->get("thickness")->asFloat(4.0f);
+    float worldWidth = _constantsJSON->get("scene")->getFloat("world_width");
+    float groundThickness = _constantsJSON->get("ground")->getFloat("thickness");
 
     std::vector<Vec2> groundVertices = {
         Vec2(0.0f, 0.0f),
-        Vec2(defaultWidth*3.2, 0.0f),
-        Vec2(defaultWidth*3.2, groundThickness),
+        Vec2(worldWidth, 0.0f),
+        Vec2(worldWidth, groundThickness),
         Vec2(0.0f, groundThickness)
     };
 

@@ -38,19 +38,18 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _idleSprite->setScale(0.5f);
     _idleSprite->setPosition(0, 5);
     _idleSprite->setName("idle");
-
     
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 8);
     _walkSprite->setScale(0.5f);
     _walkSprite->setPosition(0, 5);
     _walkSprite->setName("walk");
 
-    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 6, 8, 45);
+    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 9, 5, 45);
     _explodeSprite->setScale(0.5f);
     _explodeSprite->setPosition(0, 5);
     _explodeSprite->setName("explode");
 
-    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 1, 5, 5);
+    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 1, 8, 8);
     _shootSprite->setScale(0.5f);
     _shootSprite->setPosition(0, 5);
 	_shootSprite->setName("shoot");
@@ -59,13 +58,14 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _explodeVFXSprite->setPosition(0, 0);
     _explodeVFXSprite->setName("explode_vfx");
 
-    _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_dead"), 2, 8, 15);
+    _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_dead"), 3, 5, 15);
 	_deadSprite->setScale(0.5f);
     _deadSprite->setPosition(0, 0);
 	_deadSprite->setName("dead");
 
+    stunFrames = 0;
+
     setName(std::string(ENEMY_NAME));
-    setDebugColor(ENEMY_DEBUG_COLOR);
 
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
@@ -113,7 +113,7 @@ void Minion1AModel::releaseFixtures() {
 void Minion1AModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
-    _sensorNode = nullptr;
+    _groundSensorNode = nullptr;
     _geometry = nullptr;
     _walkSprite = nullptr;
     _explodeSprite = nullptr;
@@ -178,11 +178,11 @@ void Minion1AModel::nextAction() {
             _isExploding = false;
             setMovement(0);
         }
-        if (_isShooting && _shootSprite->getFrame() >= MINION1A_SHOOT_FRAMES - 1) {
+        if (_isShooting && _shootSprite->getFrame() >= _shootSprite->getCount() - 1) {
             _isShooting = false;
             setMovement(0);
         }
-        if (_isExploding && _explodeVFXSprite->getFrame() >= MINION1A_EXPLODEVFX_FRAMES - 1) {
+        if (_isExploding && _explodeVFXSprite->getFrame() >= _explodeVFXSprite->getCount() - 1) {
             CULog("Setting minion1a hp to 0");
             _isExploding = false;
             _hp = 0;
