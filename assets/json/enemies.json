@@ -1,7 +1,7 @@
 {
 
     "minion_1A": {
-        "max_hp": 50,
+        "max_hp": 40,
         "size": [90,110],
         "actions": [
             {
@@ -11,7 +11,7 @@
                 "hitboxSize": [ 8, 8 ],
                 "hitboxStartFrame": 33,
                 "hitboxEndFrame": 40,
-                "hitboxDamage": 40
+                "hitboxDamage": 20
             },
             {
                 "type": "ranged",
@@ -39,7 +39,7 @@
                             "x": 15,
                             "y": 0
                         },
-                        "projectileDamage": 20
+                        "projectileDamage": 10
                     }
                 ]
             }
@@ -56,7 +56,7 @@
                 "hitboxSize": [ 4, 2 ],
                 "hitboxStartFrame": 20,
                 "hitboxEndFrame": 25,
-                "hitboxDamage": 20
+                "hitboxDamage": 10
             },
             {
                 "type": "melee",
@@ -65,7 +65,7 @@
                 "hitboxSize": [ 7, 1 ],
                 "hitboxStartFrame": 19,
                 "hitboxEndFrame": 23,
-                "hitboxDamage": 20
+                "hitboxDamage": 10
             }
         ]
     },

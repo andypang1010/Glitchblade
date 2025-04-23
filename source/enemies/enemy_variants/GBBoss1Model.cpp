@@ -392,7 +392,7 @@ void Boss1Model::updateAnimation()
 	playAnimationOnce(_shootSprite);
 	playAnimationOnce(_explodeSprite);
 
-    playVFXAnimation(_explodeSprite, _explodeVFXSprite, 24);
+    playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartFrame() - 1);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

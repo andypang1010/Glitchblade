@@ -18,6 +18,9 @@ void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const 
 
     _enemy->getSceneNode()->addChild(_hpNode);
     _enemy->getSceneNode()->addChild(_stunNode);
+
+	_hpNode->setVisible(false);
+    _stunNode->setVisible(false);
 }
 
 void EnemyController::reset() {
