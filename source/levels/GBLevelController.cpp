@@ -46,13 +46,16 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
 
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, enemyType);
     enemy->init(_assets, _enemiesJSON, actions);
+	enemy->getEnemy()->getSceneNode()->setVisible(false);
     return enemy;
 }
 
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
     enemy_controller->setSpawnPosition(getPlayerPosition());
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
+    enemy_controller->getEnemy()->getSceneNode()->setVisible(true);
     enemy_controller->inWorld = true;
+
 }
 
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef)
