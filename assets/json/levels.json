@@ -29,7 +29,18 @@
               "speed": 0
           }
       ],
-      "platforms": [],
+      "platforms": [
+        {
+          "origin": {
+            "x": 20.0,
+            "y": 6.0
+          },
+          "size": {
+            "width": 5.0,
+            "height": 2.0
+          }
+        }
+      ],
       "waves": [
         {
           "spawn_intervals": [

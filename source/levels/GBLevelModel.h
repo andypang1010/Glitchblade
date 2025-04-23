@@ -23,7 +23,7 @@ private:
     std::shared_ptr<Texture> _ground;
     std::shared_ptr<Texture> _background;
     std::vector<std::pair<std::shared_ptr<Texture>, unsigned int>> _layers;
-	std::vector<std::shared_ptr<Rect>> _platforms;
+	std::vector<Rect> _platforms;
     std::vector<std::shared_ptr<WaveModel>> _waves;
 
 public:
@@ -63,8 +63,8 @@ public:
     void setBackground(const std::shared_ptr<Texture>& bg) { _background = bg; }
 
     // Getter and Setter for _platforms
-    std::vector<std::shared_ptr<Rect>> getPlatforms() const { return _platforms; }
-    void setPlatforms(const std::vector<std::shared_ptr<Rect>>& platforms) { _platforms = platforms; }
+    std::vector<Rect> getPlatforms() const { return _platforms; }
+    void setPlatforms(const std::vector<Rect>& platforms) { _platforms = platforms; }
 
     // Getter and Setter for _waves
     std::vector<std::shared_ptr<WaveModel>> getWaves() const { return _waves; }

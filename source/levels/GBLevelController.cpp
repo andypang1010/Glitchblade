@@ -176,6 +176,7 @@ void LevelController::populateLevel(const std::shared_ptr<LevelModel>& level) {
     _currentLevel = level;
     createStaticObstacles(level);
     addObstacle(std::make_pair(getPlayerModel(), getPlayerNode()));
+	addObstacle(createPlatform(_currentLevel->getPlatforms()[0]));
 }
 
 // TODO: we should not use assetRef, load background & ground based on the level in the future
@@ -359,6 +360,20 @@ void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, 
     }
 }
 
+ObstacleNodePair LevelController::createPlatform(Rect rect)
+{
+    std::shared_ptr<physics2::BoxObstacle> platform = physics2::BoxObstacle::alloc(rect.origin, rect.size);
+    // You cannot add constant "".  Must stringify
+    platform->setName(std::string(_constantsJSON->get("walls")->getString("name")));
+    // Set the physics attributes
+    setStaticPhysics(platform);
+    std::shared_ptr<PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(
+        Texture::alloc(rect.size.width, rect.size.height, Texture::PixelFormat::RED), 
+        rect);
+
+    return std::make_pair(platform, sprite);
+}
+
 /**
  * Parses the JSON file and returns a vector of parsed actions.
  */
@@ -511,15 +526,15 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
     }
     
 	// Parse platforms
-    std::vector<std::shared_ptr<Rect>> platforms;
+    std::vector<Rect> platforms;
 
 	for (std::shared_ptr<JsonValue> platform : json->get("platforms")->children()) {
-		std::shared_ptr<Rect> rect = std::make_shared<Rect>();
+        Rect rect = Rect();
 
-		rect->origin.x = platform->get("origin")->get("x")->asFloat();
-		rect->origin.y = platform->get("origin")->get("y")->asFloat();
-		rect->size.width = platform->get("size")->get("width")->asFloat();
-		rect->size.height = platform->get("size")->get("height")->asFloat();
+        rect.origin.x = platform->get("origin")->get("x")->asFloat();
+        rect.origin.y = platform->get("origin")->get("y")->asFloat();
+        rect.size.width = platform->get("size")->get("width")->asFloat();
+        rect.size.height = platform->get("size")->get("height")->asFloat();
 
 		platforms.push_back(rect);
 	}
