@@ -49,6 +49,10 @@ protected:
     /** HP segments */
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
+    
+    std::shared_ptr<cugl::scene2::Label> _timeNum;
+    std::shared_ptr<cugl::scene2::Label> _parryNum;
+    std::shared_ptr<cugl::scene2::Label> _hpNum;
 
     int _maxHP = 100;
     int _currentHP = 100;
@@ -113,13 +117,6 @@ public:
     
     void resetUI();
 
-    /**
-     * Sets whether the scene is currently active
-     *
-     * @param value whether the scene is currently active
-     */
-    void setActive(bool value);
-    
     bool isActive() const { return _active;}
     
     void setPauseCallback(const std::function<void()>& callback) { _pauseCallback = callback; }
@@ -133,6 +130,8 @@ public:
     void showWinPage1(bool visible);
     void showWinPage2(bool visible);
     void showLosePage(bool visible);
+    
+    void updateStats(float timeSpent, int parryCount);
     
     // Accessors
     std::shared_ptr<cugl::scene2::Button> getPauseButton() const {

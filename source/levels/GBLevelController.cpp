@@ -613,3 +613,10 @@ void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
     _worldNode->addChild(node);
 }
 
+float LevelController::getTimeSpentInLevel() const {
+    return _timeSpentInLevel;
+}
+
+std::shared_ptr<PlayerController> LevelController::getPlayerController() const {
+    return _playerController;
+}

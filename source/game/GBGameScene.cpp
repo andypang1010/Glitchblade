@@ -312,6 +312,9 @@ void GameScene::setComplete(bool value) {
     bool change = _complete != value;
     _complete = value;
     if (value && change) {
+        float timeSpent = _levelController->getTimeSpentInLevel();
+        int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
+        _ui->updateStats(timeSpent, parryCount);
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));

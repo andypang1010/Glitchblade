@@ -60,6 +60,10 @@ private:
     
 public:
 	float timeElapsed = 0.0f;
+    
+#pragma mark send statistics
+    float getTimeSpentInLevel() const;
+    std::shared_ptr<PlayerController> getPlayerController() const;
 
 
 protected:
@@ -221,6 +225,5 @@ public:
             enemyCtrlr->getEnemy()->getHP() > 0);
         }
     };
-
 
 #endif /* LEVEL_CONTROLLER_H */

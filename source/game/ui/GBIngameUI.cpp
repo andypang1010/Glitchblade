@@ -44,6 +44,10 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr || winPage1 == nullptr || winPage2 == nullptr) {
         return false;
     }
+    
+    _timeNum = std::dynamic_pointer_cast<scene2::Label>(winPage1->getChildByName("time_num"));
+    _parryNum = std::dynamic_pointer_cast<scene2::Label>(winPage1->getChildByName("parry_num"));
+    _hpNum = std::dynamic_pointer_cast<scene2::Label>(winPage1->getChildByName("hp_num"));
 
     headsUpDisplay->setContentSize(Size(1248, 576));
     headsUpDisplay->doLayout();
@@ -68,8 +72,6 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     winPage2->doLayout();
     winPage2->setVisible(false);
     addChild(winPage2);
-
-//    setActive(true);
 
     setupHUD(headsUpDisplay);
     setupPause(pauseMenu);
@@ -228,34 +230,6 @@ void GBIngameUI::dispose() {
     removeAllChildren();
 }
 
-/**
- * Sets whether the scene is currently active
- *
- * @param value whether the scene is currently active
- */
-void GBIngameUI::setActive(bool value) {
-//    _active = value;
-//
-//    if (_pauseButton) {
-//        value ? _pauseButton->activate() : _pauseButton->deactivate();
-//    }
-//
-//    if (_resumeButton) {
-//        value ? _resumeButton->activate() : _resumeButton->deactivate();
-//    }
-//    if (_retryButton) {
-//        value ? _retryButton->activate() : _retryButton->deactivate();
-//    }
-//    if (_quitButton) {
-//        value ? _quitButton->activate() : _quitButton->deactivate();
-//    }
-//    if (_settingButton) {
-//        value ? _settingButton->activate() : _settingButton->deactivate();
-//    }
-//
-//    setVisible(value);
-}
-
 void GBIngameUI::setHP(int hp) {
     hp = std::max(0, std::min(hp, 100));
 
@@ -266,55 +240,23 @@ void GBIngameUI::setHP(int hp) {
         _hpSegments[i]->setVisible(i < filled);
         _hpHalfSegments[i]->setVisible(i == filled && showHalf);
     }
+    _currentHP = hp;
 }
 
 void GBIngameUI::resetUI() {
     _currentHP = _maxHP;
     setHP(_currentHP);
-
-//    _active = true;
-    
     showHeadsUpDisplay(true);
     showPauseMenu(false);
     showLosePage(false);
     showWinPage1(false);
     showWinPage2(false);
-    
-//    auto hud = getChildByName("hud");
-//        if (hud) {
-//            hud->setVisible(true);
-//        }
-//
-//    auto pausemenu = getChildByName("pausemenu");
-//    if (pausemenu) {
-//        pausemenu->setVisible(false);
-//    }
-//
-//    auto settingMenu = getChildByName("settingmenu");
-//    if (settingMenu) {
-//        settingMenu->setVisible(false);
-//    }
-//
-//    auto win1 = getChildByName("win1");
-//    if (win1) {
-//        win1->setVisible(false);
-//    }
-//    
-//    auto win2 = getChildByName("win2");
-//    if (win2) {
-//        win2->setVisible(false);
-//    }
-//
-//    auto lose = getChildByName("lose");
-//    if (lose) {
-//        lose->setVisible(false);
-//    }
-//
-//    if (_pauseButton && !_pauseButton->isActive()) _pauseButton->activate();
-//    if (_resumeButton && !_resumeButton->isActive()) _resumeButton->activate();
-//    if (_retryButton && !_retryButton->isActive()) _retryButton->activate();
 }
 
+
+/**
+ * Manage activation and visibility of pages
+ */
 void GBIngameUI::setButtonsActive(std::shared_ptr<scene2::SceneNode> layer, bool active) {
     if (!layer) return;
 
@@ -363,5 +305,23 @@ void GBIngameUI::showWinPage2(bool visible) {
     if (layer) {
         layer->setVisible(visible);
         setButtonsActive(layer, visible);
+    }
+}
+
+void GBIngameUI::updateStats(float timeSpent, int parryCount) {
+    if (_timeNum) {
+        int minutes = static_cast<int>(timeSpent) / 60;
+        int seconds = static_cast<int>(timeSpent) % 60;
+        char timeStr[16];
+        snprintf(timeStr, sizeof(timeStr), "%d:%02d", minutes, seconds);
+        _timeNum->setText(timeStr);
+    }
+
+    if (_parryNum) {
+        _parryNum->setText(std::to_string(parryCount));
+    }
+    
+    if (_hpNum) {
+        _hpNum->setText(std::to_string(_currentHP));
     }
 }
