@@ -123,6 +123,9 @@
         "projectile": {
             "file": "textures/projectile.png"
         },
+        "laser": {
+            "file": "textures/enemy_laser_column.png"
+        },
         "player_projectile": {
             "file": "textures/player_projectile.png"
         },
@@ -163,108 +166,108 @@
             "file": "textures/minion1A_dead.png"
         },
 
-        
 
-    "button_pause": {
-        "file": "textures/ingameui/button_pause.png"
-    },
-    "hp_bar": {
-        "file": "textures/ingameui/hp_bar.png"
-    },
-    "hp_half_segment": {
-        "file": "textures/ingameui/hp_half_segment.png"
-    },
-    "hp_full_segment": {
-        "file": "textures/ingameui/hp_full_segment.png"
-    },
-    
-    "menu_shadow": {
-        "file": "textures/ingameui/menu_shadow.png"
-    },
-    "pause_menu": {
-        "file": "textures/ingameui/pause_menu.png"
-    },
-    "progress_bar": {
-        "file": "textures/ingameui/progress_bar.png"
-    },
-    "progress_half_segment": {
-        "file": "textures/ingameui/progress_half_segment.png"
-    },
-    "progress_full_segment": {
-        "file": "textures/ingameui/progress_full_segment.png"
-    },
-    "menu_player": {
-        "file": "textures/ingameui/menu_player.png"
-    },
-    "button_resume": {
-        "file": "textures/ingameui/button_resume.png"
-    },
-    "button_quit": {
-        "file": "textures/ingameui/button_quit.png"
-    },
-    "button_retry": {
-        "file": "textures/ingameui/button_retry.png"
-    },
-    "button_setting": {
-        "file": "textures/ingameui/button_setting.png"
-    },
-    
-    "cover_shadow": {
-        "file": "textures/ingameui/cover_shadow.png"
-    },
-    "lose": {
-        "file": "textures/ingameui/lose.png"
-    },
-    "lose_retry": {
-        "file": "textures/ingameui/lose_retry.png"
-    },
-    "lose_quit": {
-        "file": "textures/ingameui/lose_quit.png"
-    },
-    "lose_text": {
-        "file": "textures/ingameui/lose_text.png"
-    },
-    
-    "win": {
-        "file": "textures/ingameui/win.png"
-    },
-    "time_ind": {
-        "file": "textures/ingameui/time_ind.png"
-    },
-    "win_text": {
-        "file": "textures/ingameui/win_text.png"
-    },
-    "hp_ind": {
-        "file": "textures/ingameui/hp_ind.png"
-    },
-    "parry_ind": {
-        "file": "textures/ingameui/parry_ind.png"
-    },
-    "button_continue": {
-        "file": "textures/ingameui/button_continue.png"
-    },
-    
-    "win_retry": {
-        "file": "textures/ingameui/win_retry.png"
-    },
-    "win_continue": {
-        "file": "textures/ingameui/win_continue.png"
-    },
 
-    
-    
-    "dpad": {
-      "file": "textures/dpad.png",
-      "wrapS": "clamp",
-      "wrapT": "clamp",
-      "atlas": {
-        "up": [ 0, 0, 127, 127 ],
-        "down": [ 128, 0, 255, 127 ],
-        "left": [ 0, 128, 127, 255 ],
-        "right": [ 128, 128, 255, 255 ]
-      }
-    }
-  },
+        "button_pause": {
+            "file": "textures/ingameui/button_pause.png"
+        },
+        "hp_bar": {
+            "file": "textures/ingameui/hp_bar.png"
+        },
+        "hp_half_segment": {
+            "file": "textures/ingameui/hp_half_segment.png"
+        },
+        "hp_full_segment": {
+            "file": "textures/ingameui/hp_full_segment.png"
+        },
+
+        "menu_shadow": {
+            "file": "textures/ingameui/menu_shadow.png"
+        },
+        "pause_menu": {
+            "file": "textures/ingameui/pause_menu.png"
+        },
+        "progress_bar": {
+            "file": "textures/ingameui/progress_bar.png"
+        },
+        "progress_half_segment": {
+            "file": "textures/ingameui/progress_half_segment.png"
+        },
+        "progress_full_segment": {
+            "file": "textures/ingameui/progress_full_segment.png"
+        },
+        "menu_player": {
+            "file": "textures/ingameui/menu_player.png"
+        },
+        "button_resume": {
+            "file": "textures/ingameui/button_resume.png"
+        },
+        "button_quit": {
+            "file": "textures/ingameui/button_quit.png"
+        },
+        "button_retry": {
+            "file": "textures/ingameui/button_retry.png"
+        },
+        "button_setting": {
+            "file": "textures/ingameui/button_setting.png"
+        },
+
+        "cover_shadow": {
+            "file": "textures/ingameui/cover_shadow.png"
+        },
+        "lose": {
+            "file": "textures/ingameui/lose.png"
+        },
+        "lose_retry": {
+            "file": "textures/ingameui/lose_retry.png"
+        },
+        "lose_quit": {
+            "file": "textures/ingameui/lose_quit.png"
+        },
+        "lose_text": {
+            "file": "textures/ingameui/lose_text.png"
+        },
+
+        "win": {
+            "file": "textures/ingameui/win.png"
+        },
+        "time_ind": {
+            "file": "textures/ingameui/time_ind.png"
+        },
+        "win_text": {
+            "file": "textures/ingameui/win_text.png"
+        },
+        "hp_ind": {
+            "file": "textures/ingameui/hp_ind.png"
+        },
+        "parry_ind": {
+            "file": "textures/ingameui/parry_ind.png"
+        },
+        "button_continue": {
+            "file": "textures/ingameui/button_continue.png"
+        },
+
+        "win_retry": {
+            "file": "textures/ingameui/win_retry.png"
+        },
+        "win_continue": {
+            "file": "textures/ingameui/win_continue.png"
+        },
+
+
+
+        "dpad": {
+            "file": "textures/dpad.png",
+            "wrapS": "clamp",
+            "wrapT": "clamp",
+            "atlas": {
+                "up": [ 0, 0, 127, 127 ],
+                "down": [ 128, 0, 255, 127 ],
+                "left": [ 0, 128, 127, 255 ],
+                "right": [ 128, 128, 255, 255 ]
+            }
+        }
+    },
     "sounds": {
         "game": {
             "type":     "sample",

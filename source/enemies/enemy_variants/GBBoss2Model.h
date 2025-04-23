@@ -86,7 +86,13 @@ protected:
     bool _isShortFiring;
     int _shortFireCount;
 
+    bool _isTeleportStarting;
+    bool _isTeleportEnding;
+
+    bool _isShootingLaser;
+
     std::shared_ptr<RangedActionModel> _shortFire;
+	std::shared_ptr<MeleeActionModel> _laser;
 
     /**
     * Redraws the outline of the physics fixtures to the debug node
@@ -102,6 +108,12 @@ public:
     std::shared_ptr<scene2::SpriteNode> _shortFireAttackSprite;
     std::shared_ptr<scene2::SpriteNode> _shortFireWaitSprite;
     std::shared_ptr<scene2::SpriteNode> _shortFireEndSprite;
+
+	std::shared_ptr<scene2::SpriteNode> _teleportStartSprite;
+	std::shared_ptr<scene2::SpriteNode> _teleportEndSprite;
+
+    std::shared_ptr<scene2::SpriteNode> _laserSprite;
+    std::shared_ptr<scene2::SpriteNode> _laserVFXSprite;
 
 public:
 
@@ -191,6 +203,9 @@ public:
         _isShortFiring = false;
         _shortFireCount = 0;
 
+		_isTeleportStarting = false;
+		_isTeleportEnding = false;
+
         _moveDuration = 0;
     };
 
@@ -207,6 +222,14 @@ public:
      *
      */
     void shortFire();
+
+    void handleShortFire();
+
+	void teleport();
+
+    void headFire();
+
+    void laser();
 
     /**
      * Returns the action when an attack hitbox should be active, or nothing when no attack is active

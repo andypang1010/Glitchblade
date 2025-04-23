@@ -100,8 +100,24 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _shortFireEndSprite->setPosition(0, 60);
     _shortFireEndSprite->setName("shortFireEnd");
 
-	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_dead"), 8, 8, 58);
-	_deadSprite->setPosition(0, 45);
+    _teleportStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_teleport_start"), 3, 5, 13);
+    _teleportStartSprite->setPosition(0, 60);
+    _teleportStartSprite->setName("teleportStart");
+
+    _teleportEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_teleport_end"), 3, 5, 15);
+    _teleportEndSprite->setPosition(0, 60);
+    _teleportEndSprite->setName("teleportEnd");
+
+    _laserSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_laser"), 15, 4, 60);
+    _laserSprite->setPosition(0, 60);
+    _laserSprite->setName("laser");
+
+    _laserVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("laser"), 19, 2, 38);
+    _laserVFXSprite->setPosition(1150, 0);
+    _laserVFXSprite->setName("laser_vfx");
+
+	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_dead"), 15, 4, 58);
+	_deadSprite->setPosition(0, 60);
 	_deadSprite->setName("dead");
 
     getSceneNode()->addChild(_idleSprite);
@@ -110,6 +126,11 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_shortFireAttackSprite);
     getSceneNode()->addChild(_shortFireWaitSprite);
     getSceneNode()->addChild(_shortFireEndSprite);
+	getSceneNode()->addChild(_teleportStartSprite);
+	getSceneNode()->addChild(_teleportEndSprite);
+
+    getSceneNode()->addChild(_laserVFXSprite);
+	getSceneNode()->addChild(_laserSprite);
 }
 
 void Boss2Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
@@ -117,7 +138,12 @@ void Boss2Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
         if (act->getActionName() == "shortFire") {
             _shortFire = std::dynamic_pointer_cast<RangedActionModel>(act);
         }
+        if (act->getActionName() == "laser") {
+			_laser = std::dynamic_pointer_cast<MeleeActionModel>(act);
+        }
     }
+    _closeDistance = 12;
+    _farDistance = 24;
 }
 
 #pragma mark -
@@ -164,9 +190,9 @@ void Boss2Model::dispose() {
 
 void Boss2Model::damage(float value) {
     EnemyModel::damage(value);
-    if (_isShortFireAttacking || _isShortFireWaiting) {
-        setStun(60);
-    }
+    //if (_isShortFireAttacking || _isShortFireWaiting) {
+    //    setStun(60);
+    //}
 }
 
 #pragma mark Cooldowns
@@ -200,8 +226,34 @@ void Boss2Model::update(float dt) {
 void Boss2Model::nextAction() {
     int r = rand();
     AIMove();
-    if (_moveDuration <= 0 && !isStunned() && !_isShortFiring) {
-        shortFire();
+    if (_moveDuration <= 0 && !isStunned() && !_isShootingLaser && !_isShortFiring && !_isTeleportStarting && !_isTeleportEnding) {
+        if (isTargetClose()) {
+            if (r % 2 == 0) {
+                shortFire();
+            }
+            else {
+                teleport();
+            }
+        }
+        else if (isTargetFar()) {
+            if (r % 2 == 0) {
+                teleport();
+            }
+            else {
+                shortFire();
+            }
+        }
+        else {
+            if (r % 3 == 0) {
+                shortFire();
+            }
+            else if (r % 3 == 1) {
+                laser();
+            }
+            else {
+                teleport();
+            }
+        }
     }
     else {
         if (isStunned()) {
@@ -210,45 +262,30 @@ void Boss2Model::nextAction() {
 			_isShortFireAttacking = false;
 			_isShortFireWaiting = false;
 			_isShortFireEnding = false;
+			_isTeleportStarting = false;
+			_isTeleportEnding = false;
+            _isShootingLaser = false;
             setMovement(0);
         }
         if (_isShortFiring) {
-            CULog("start frames: %d", _shortFireStartSprite->getCount());
+			handleShortFire();
+        }
+        if (_isTeleportStarting && _teleportStartSprite->getFrame() >= _teleportStartSprite->getCount() - 1) {
+            _isTeleportStarting = false;
+			_isTeleportEnding = true;
+			int randOffset = rand() % 2 == 0 ? -12 : 12;
+            setPosition(_targetPos.x + randOffset, getPosition().y);
             setMovement(0);
-            if (!_isShortFireStarting && !_isShortFireAttacking && !_isShortFireWaiting && !_isShortFireEnding) {
-                _isShortFireStarting = true;
-                _shortFireCount = 0;
-            }
-            else if (_isShortFireStarting && _shortFireStartSprite->getFrame() >= _shortFireStartSprite->getCount()-1) {
-                _isShortFireStarting = false;
-                _isShortFireAttacking = true;
-				_shortFireCount++;
-            }
-            else if (_isShortFireAttacking && _shortFireAttackSprite->getFrame() >= _shortFireAttackSprite->getCount() - 1) {
-                if (_shortFireCount >= 3) { // stop repeated shooting
-                    _isShortFireAttacking = false;
-                    _isShortFireEnding = true;
-                }
-				else { // wait for a bit
-					_isShortFireAttacking = false;
-					_isShortFireWaiting = true;
-                }
-            }
-            else if (_isShortFireWaiting && _shortFireWaitSprite->getFrame() >= _shortFireWaitSprite->getCount() - 1) {
-                if (_shortFireCount >= 3) { // stop repeated shooting
-                    _isShortFireWaiting = false;
-                    _isShortFireEnding = true;
-                }
-                else { // return to shooting
-                    _isShortFireWaiting = false;
-                    _isShortFireAttacking = true;
-                    _shortFireCount++;
-                }
-            }
-            else if (_isShortFireEnding && _shortFireEndSprite->getFrame() >= _shortFireEndSprite->getCount() - 1) {
-                _isShortFireEnding = false;
-                _isShortFiring = false;
-            }
+        }
+        if (_isTeleportEnding && _teleportEndSprite->getFrame() >= _teleportEndSprite->getCount() - 1) {
+            faceTarget();
+			_isTeleportEnding = false;
+			setEnabled(true);
+            setMovement(0);
+        }
+        if (_isShootingLaser && _laserSprite->getFrame() >= _laserSprite->getCount() - 1) {
+			_isShootingLaser = false;
+            setMovement(0);
         }
     }
 }
@@ -265,7 +302,7 @@ void Boss2Model::AIMove() {
         _moveDuration--;
     }
     else {
-        setMovement(getMovement() / 3);
+        setMovement(0);
     }
 }
 
@@ -274,7 +311,59 @@ void Boss2Model::shortFire() {
     _isShortFiring = true;
 }
 
+void Boss2Model::handleShortFire() {
+    setMovement(0);
+    if (!_isShortFireStarting && !_isShortFireAttacking && !_isShortFireWaiting && !_isShortFireEnding) {
+        _isShortFireStarting = true;
+        _shortFireCount = 0;
+    }
+    else if (_isShortFireStarting && _shortFireStartSprite->getFrame() >= _shortFireStartSprite->getCount() - 1) {
+        _isShortFireStarting = false;
+        _isShortFireAttacking = true;
+        _shortFireCount++;
+    }
+    else if (_isShortFireAttacking && _shortFireAttackSprite->getFrame() >= _shortFireAttackSprite->getCount() - 1) {
+        if (_shortFireCount >= 3) { // stop repeated shooting
+            _isShortFireAttacking = false;
+            _isShortFireEnding = true;
+        }
+        else { // wait for a bit
+            _isShortFireAttacking = false;
+            _isShortFireWaiting = true;
+        }
+    }
+    else if (_isShortFireWaiting && _shortFireWaitSprite->getFrame() >= _shortFireWaitSprite->getCount() - 1) {
+        if (_shortFireCount >= 3) { // stop repeated shooting
+            _isShortFireWaiting = false;
+            _isShortFireEnding = true;
+        }
+        else { // return to shooting
+            _isShortFireWaiting = false;
+            _isShortFireAttacking = true;
+            _shortFireCount++;
+        }
+    }
+    else if (_isShortFireEnding && _shortFireEndSprite->getFrame() >= _shortFireEndSprite->getCount() - 1) {
+        _isShortFireEnding = false;
+        _isShortFiring = false;
+    }
+}
+
+void Boss2Model::teleport() {
+    faceTarget();
+	setEnabled(false);
+	_isTeleportStarting = true;
+}
+
+void Boss2Model::laser() {
+    faceTarget();
+	_isShootingLaser = true;
+}
+
 std::shared_ptr<MeleeActionModel> Boss2Model::getDamagingAction() {
+    if (_isShootingLaser && _laserSprite->getFrame() == _laser->getHitboxStartFrame() - 1) {
+        return _laser;
+    }
     return nullptr;
 }
 
@@ -301,8 +390,13 @@ void Boss2Model::updateAnimation()
     _shortFireAttackSprite->setVisible(!isStunned() && _isShortFireAttacking);
     _shortFireWaitSprite->setVisible(!isStunned() && _isShortFireWaiting);
     _shortFireEndSprite->setVisible(!isStunned() && _isShortFireEnding);
+	_teleportStartSprite->setVisible(!isStunned() && _isTeleportStarting);
+	_teleportEndSprite->setVisible(!isStunned() && _isTeleportEnding);
+	_laserSprite->setVisible(!isStunned() && _isShootingLaser);
 
-    _idleSprite->setVisible(!isStunned() && !_isShortFiring && !(isMoveLeft() || isMoveRight()));
+    _laserVFXSprite->setVisible(_laserSprite->isVisible() && _laserSprite->getFrame() >= 17 && _laserSprite->getFrame() <= 55);
+
+    _idleSprite->setVisible(!isStunned() && !_isShootingLaser && !_isTeleportStarting && !_isTeleportEnding && !_isShortFireStarting && !_isShortFireAttacking && !_isShortFireWaiting && !_isShortFireEnding && !(isMoveLeft() || isMoveRight()));
 
     playAnimation(_idleSprite);
     playAnimation(_stunSprite);
@@ -311,6 +405,12 @@ void Boss2Model::updateAnimation()
     playAnimation(_shortFireAttackSprite);
     playAnimation(_shortFireWaitSprite);
     playAnimation(_shortFireEndSprite);
+
+    playAnimation(_laserSprite);
+    playVFXAnimation(_laserSprite, _laserVFXSprite, 17);
+
+	playAnimation(_teleportStartSprite);
+	playAnimation(_teleportEndSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

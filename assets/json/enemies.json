@@ -165,6 +165,15 @@
                         "projectileDamage": 20
                     }
                 ]
+            },
+            {
+                "type": "melee",
+                "name": "laser",
+                "hitboxPos": [ 20, 0 ],
+                "hitboxSize": [ 40, 3 ],
+                "hitboxStartFrame": 32,
+                "hitboxEndFrame": 50,
+                "hitboxDamage": 10
             }
         ]
     },
