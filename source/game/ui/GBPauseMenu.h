@@ -58,7 +58,7 @@ public:
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      */
-    virtual void dispose() override;
+    void dispose() override;
 
     /**
      * Initializes the controller contents, and starts the game
@@ -93,16 +93,12 @@ public:
         return _resumeButton;
     }
 
+    std::shared_ptr<cugl::scene2::Button> getExitButton() const {
+        return _exitButton;
+    }
+
     std::shared_ptr<cugl::scene2::Button> getRestartButton() const {
         return _restartButton;
-    }
-
-    bool getExitPressed() {
-        return _exitPressed;
-    }
-
-    void setExitPressed(bool val) {
-        _exitPressed = val;
     }
 };
 

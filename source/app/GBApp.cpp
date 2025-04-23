@@ -256,7 +256,6 @@ void GlitchbladeApp::postUpdate(float dt) {
  * at all. The default implmentation does nothing.
  */
 void GlitchbladeApp::draw() {
-    CULog("DRAW CALLED");
     if (!_loaded) {
         _loading.render();
     } else {

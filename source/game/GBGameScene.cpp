@@ -282,6 +282,17 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         //    });
     }
 
+    auto exitButton = _pauseMenu->getExitButton();
+    if (exitButton) {
+        exitButton->addListener([this](const std::string& name, bool down) {
+            if(down) {
+                _isPaused = false;
+                setSwapSignal(1);
+            }
+        });
+        exitButton->activate();
+    }
+
     setAllGameplayUIActive(_inituiactive);
 }
 
@@ -523,13 +534,6 @@ void GameScene::preUpdate(float dt) {
  * @param step  The number of fixed seconds for this step
  */
 void GameScene::fixedUpdate(float step) {
-    if (_pauseMenu != nullptr && _pauseMenu->getExitPressed()) {
-        _pauseMenu->setExitPressed(false);
-        _isPaused = false;
-        setSwapSignal(1);
-        return;
-    }
-    
     if (_isPaused) return;
     
     // Turn the physics engine crank.

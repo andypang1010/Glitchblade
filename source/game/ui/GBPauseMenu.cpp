@@ -29,6 +29,7 @@ using namespace cugl;
  * @return true if the controller is initialized properly, false otherwise.
  */
 bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
+    CULog("INIT CALLED PAUSEMENU");
     if (assets == nullptr) {
         return false;
     } else if (!SceneNode::init()) {
@@ -68,16 +69,6 @@ bool GBPauseMenu::init(const std::shared_ptr<AssetManager>& assets) {
             if (down) CULog("Restart pressed");
         });
         _restartButton->activate();
-    }
-
-    if (_exitButton) {
-        _exitButton->addListener([this](const std::string& name, bool down) {
-            if(down) {
-                CULog("SET EXIT PRESSED");
-                setExitPressed(true);
-            }
-        });
-        _exitButton->activate();
     }
 
     if (_settingButton) {
