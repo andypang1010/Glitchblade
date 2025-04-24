@@ -422,11 +422,11 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
             _lastSwipe =  (xdiff > 0) ? SwipeType::RIGHTDASH : SwipeType::LEFTDASH;
         // Y magnitude > X magnitude (so Y must have passed AND be dominant axis)
         } else {
-            _lastSwipe = (ydiff > 0) ? SwipeType::GUARD : SwipeType::JUMP;
+            _lastSwipe = (ydiff > 0) ? SwipeType::DOWNDASH : SwipeType::JUMP;
         }
     }
     else if (yguardpass) {
-        _lastSwipe = SwipeType::GUARD;
+        _lastSwipe = SwipeType::DOWNDASH;
     }
     else {
         _lastSwipe = SwipeType::NONE;
@@ -542,8 +542,8 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
             case SwipeType::JUMP:
                 _keyJump = true;
                 break;
-            case SwipeType::GUARD:
-                _keyGuard = true;
+            case SwipeType::DOWNDASH:
+                // no downward dash implemented yet
                 break;
             case SwipeType::NONE:
                 break;

@@ -134,7 +134,7 @@ protected:
         /** Swiped up (for jump) */
         JUMP,
         /** Swiped down (for guard) */
-        GUARD,
+        DOWNDASH,
         /** The "swipe" did not meet the swipe threshold */
         NONE,
     };
