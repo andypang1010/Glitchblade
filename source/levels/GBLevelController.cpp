@@ -176,7 +176,10 @@ void LevelController::populateLevel(const std::shared_ptr<LevelModel>& level) {
     _currentLevel = level;
     createStaticObstacles(level);
     addObstacle(std::make_pair(getPlayerModel(), getPlayerNode()));
-	addObstacle(createPlatform(_currentLevel->getPlatforms()[0]));
+
+	for (Rect platform : _currentLevel->getPlatforms()) {
+		createPlatform(platform);
+	}
 }
 
 // TODO: we should not use assetRef, load background & ground based on the level in the future
@@ -360,19 +363,39 @@ void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, 
     }
 }
 
-ObstacleNodePair LevelController::createPlatform(Rect rect)
+void LevelController::createPlatform(Rect rect)
 {
+    b2Filter enemyWallFilter = b2Filter();
+    enemyWallFilter.categoryBits = 0x0001;
+    enemyWallFilter.maskBits = 0x0002;
+
     std::shared_ptr<physics2::BoxObstacle> platform = physics2::BoxObstacle::alloc(rect.origin, rect.size);
+    std::shared_ptr<physics2::BoxObstacle> leftWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x - rect.size.width / 2, rect.origin.y + rect.size.height), Size(1,1));
+    std::shared_ptr<physics2::BoxObstacle> rightWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x + rect.size.width / 2, rect.origin.y + rect.size.height), Size(1, 1));
+
     // You cannot add constant "".  Must stringify
     platform->setName(std::string(_constantsJSON->get("walls")->getString("name")));
+    leftWall->setName(std::string(_constantsJSON->get("walls")->getString("name")));
+    rightWall->setName(std::string(_constantsJSON->get("walls")->getString("name")));
+
     // Set the physics attributes
     setStaticPhysics(platform);
+    setStaticPhysics(leftWall);
+    setStaticPhysics(rightWall);
 
-    std::shared_ptr<PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(
-        Texture::alloc(rect.size.width, rect.size.height, Texture::PixelFormat::RED), 
-        rect);
+	leftWall->setFilterData(enemyWallFilter);
+	rightWall->setFilterData(enemyWallFilter);
 
-    return std::make_pair(platform, sprite);
+    std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(
+        Texture::alloc(rect.size.width, rect.size.height, Texture::PixelFormat::RED));
+    std::shared_ptr<PolygonNode> leftWallSprite = scene2::PolygonNode::allocWithTexture(
+        Texture::alloc(1, 1, Texture::PixelFormat::RED));
+    std::shared_ptr<PolygonNode> rightWallSprite = scene2::PolygonNode::allocWithTexture(
+        Texture::alloc(1, 1, Texture::PixelFormat::RED));
+
+    addObstacle(std::make_pair(platform, platformSprite));
+	addObstacle(std::make_pair(leftWall, leftWallSprite));
+    addObstacle(std::make_pair(rightWall, rightWallSprite));
 }
 
 /**
