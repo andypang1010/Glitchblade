@@ -19,8 +19,8 @@
                 "projectiles": [
                     {
                         "projectileSpawnPosition": {
-                            "x": 1,
-                            "y": 0.5
+                            "x": 0.75,
+                            "y": 0.25
                         },
                         "projectileSize": {
                             "width": 3,
@@ -107,7 +107,7 @@
                     {
                         "projectileSpawnPosition": {
                             "x": 2,
-                            "y": 0.5
+                            "y": 0
                         },
                         "projectileSize": {
                             "width": 3,
@@ -134,7 +134,7 @@
     },
     "boss_2": {
         "health": 200,
-        "size": [ 90, 180 ],
+        "size": [ 180, 180 ],
         "actions": [
             {
                 "type": "ranged",
@@ -142,8 +142,8 @@
                 "projectiles": [
                     {
                         "projectileSpawnPosition": {
-                            "x": 2,
-                            "y": 0.5
+                            "x": 1,
+                            "y": 0
                         },
                         "projectileSize": {
                             "width": 3,
@@ -161,6 +161,84 @@
                         "projectileVelocity": {
                             "x": 15,
                             "y": 0
+                        },
+                        "projectileDamage": 20
+                    }
+                ]
+            },
+            {
+                "type": "ranged",
+                "name": "headFire",
+                "projectiles": [
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 0,
+                            "y": 1
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 3,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": 15
+                        },
+                        "projectileDamage": 20
+                    },
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 0.5,
+                            "y": 1.25
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 6,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": 15
+                        },
+                        "projectileDamage": 20
+                    },
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 1,
+                            "y": 1.5
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 9,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": 15
                         },
                         "projectileDamage": 20
                     }

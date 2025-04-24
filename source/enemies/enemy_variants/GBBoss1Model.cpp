@@ -343,12 +343,14 @@ std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {
     return nullptr;
 }
 
-std::shared_ptr<RangedActionModel> Boss1Model::getProjectileAction() {
+std::shared_ptr<Projectile> Boss1Model::getProjectile() {
 	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
+    int count = 0;
     for (int frame : frames) {
 		if (_isShooting && _shootSprite->getFrame() == frame && frameCounter == 0) {
-			return _shoot;
+			return _shoot->getProjectiles()[count];
 		}
+		count++;
     }
     
     return nullptr;

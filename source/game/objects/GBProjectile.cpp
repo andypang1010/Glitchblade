@@ -59,12 +59,18 @@ ObstacleNodePair Projectile::createProjectileNodePair(const std::shared_ptr<Asse
     newProjectile->setDrawScale(scale);
     newProjectile->setSensor(true);
     newProjectile->setLinearVelocity(projectile->getLinearVelocity() * Vec2(isFacingRight ? 1 : -1, 1));
+	
 
     std::shared_ptr<scene2::SpriteNode> newSprite = scene2::SpriteNode::allocWithSprite(projectile->getSceneNode());
     newSprite->flipHorizontal(newProjectile->getLinearVelocity().x < 0);
     newSprite->setPosition(projectile->getAnimOffset());
 //    CULog(projectile->getAnimOffset().toString().c_str());
 	newSprite->setFrame(0);
+
+    // Set angle for verticle projectiles. TODO: calculate angle between velocity and positive x so any angle can be drawn
+    if (newProjectile->getLinearVelocity().x == 0) {
+        newProjectile->setAngle(M_PI / 2);
+    }
 
 	newProjectile->setSceneNode(newSprite);
 

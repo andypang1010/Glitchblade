@@ -308,7 +308,7 @@ std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
     return nullptr;
 }
 
-std::shared_ptr<RangedActionModel> EnemyModel::getProjectileAction() {
+std::shared_ptr<Projectile> EnemyModel::getProjectile() {
     return nullptr;
 }
 

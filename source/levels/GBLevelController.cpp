@@ -298,14 +298,15 @@ void LevelController::fixedUpdate(float timestep)
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
             if (canUpdate(enemyCtrlr)) {
                 auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
-                auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
+                auto enemyProjectile = enemyCtrlr->getEnemy()->getProjectile();
 
                 if (damagingAction) {
                     createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1));
                 }
 
-                if (projectileAction) {
-                    auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition(), projectileAction->getProjectiles()[0], enemyCtrlr->getEnemy()->isFacingRight());
+                if (enemyProjectile) {
+					Vec2 offset = enemyCtrlr->getEnemy()->isFacingRight() ? enemyProjectile->getSpawnOffset() : Vec2(-enemyProjectile->getSpawnOffset().x, enemyProjectile->getSpawnOffset().y);
+                    auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition()+offset, enemyProjectile, enemyCtrlr->getEnemy()->isFacingRight());
                     addObstacle(projectilePair);
                 }
 

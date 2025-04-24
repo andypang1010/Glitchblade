@@ -86,12 +86,20 @@ protected:
     bool _isShortFiring;
     int _shortFireCount;
 
+    bool _isHeadFireStarting;
+    bool _isHeadFireAttacking;
+    bool _isHeadFireWaiting;
+    bool _isHeadFireEnding;
+    bool _isHeadFiring;
+    int _headFireCount;
+
     bool _isTeleportStarting;
     bool _isTeleportEnding;
 
     bool _isShootingLaser;
 
     std::shared_ptr<RangedActionModel> _shortFire;
+	std::shared_ptr<RangedActionModel> _headFire;
 	std::shared_ptr<MeleeActionModel> _laser;
 
     /**
@@ -108,6 +116,11 @@ public:
     std::shared_ptr<scene2::SpriteNode> _shortFireAttackSprite;
     std::shared_ptr<scene2::SpriteNode> _shortFireWaitSprite;
     std::shared_ptr<scene2::SpriteNode> _shortFireEndSprite;
+
+    std::shared_ptr<scene2::SpriteNode> _headFireStartSprite;
+    std::shared_ptr<scene2::SpriteNode> _headFireAttackSprite;
+    std::shared_ptr<scene2::SpriteNode> _headFireWaitSprite;
+    std::shared_ptr<scene2::SpriteNode> _headFireEndSprite;
 
 	std::shared_ptr<scene2::SpriteNode> _teleportStartSprite;
 	std::shared_ptr<scene2::SpriteNode> _teleportEndSprite;
@@ -206,6 +219,15 @@ public:
 		_isTeleportStarting = false;
 		_isTeleportEnding = false;
 
+		_isShootingLaser = false;
+
+        _isHeadFireAttacking = false;
+        _isHeadFireWaiting = false;
+        _isHeadFireStarting = false;
+        _isHeadFireEnding = false;
+        _isHeadFiring = false;
+        _headFireCount = 0;
+
         _moveDuration = 0;
     };
 
@@ -229,6 +251,8 @@ public:
 
     void headFire();
 
+    void handleHeadFire();
+
     void laser();
 
     /**
@@ -243,7 +267,7 @@ public:
      *
      * @return the action that needs projectile, or nullptr when no ranged attack is active
      */
-    std::shared_ptr<RangedActionModel> getProjectileAction() override;
+    std::shared_ptr<Projectile> getProjectile() override;
 
 #pragma mark -
 #pragma mark Animation Methods
