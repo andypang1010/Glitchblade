@@ -562,6 +562,7 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 	level->setLevelName(json->getString("name"));
     level->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    level->setBGN(json->getInt("width"));
     auto bg = assetRef->get<graphics::Texture>(json->getString("background"));
     level->setBackground(bg);
     auto gr = Texture::allocWithFile(json->getString("ground"));

@@ -3,6 +3,7 @@
     {
       "name": "Level 1",
       "scale": 1,
+      "width" : 8,
       "layers": [
         {
           "file": "scene1_bg",
@@ -71,6 +72,7 @@
     {
         "name": "Level 2",
         "scale": 1,
+        "width": 8,
         "layers": [
             {
           "file": "scene2_bg",
@@ -160,6 +162,7 @@
       {
         "name": "Level 3",
         "scale": 1,
+        "width": 8,
         "layers": [
             {
                 "file": "scene3_bg",

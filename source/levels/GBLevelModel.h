@@ -19,6 +19,7 @@ using namespace cugl::graphics;
 class LevelModel {
 private:
     float _scale;
+    int _tiles;
 	std::string _levelName;
     std::shared_ptr<Texture> _ground;
     std::shared_ptr<Texture> _background;
@@ -69,6 +70,11 @@ public:
     // Getter and Setter for _waves
     std::vector<std::shared_ptr<WaveModel>> getWaves() const { return _waves; }
     void setWaves(const std::vector<std::shared_ptr<WaveModel>>& waves) { _waves = waves; }
+    
+    // Getter and Setter for width of level (in terms of BG "tiles")
+    int getBGN() { return _tiles; }
+    void setBGN(int tiles) { _tiles = tiles; }
+    
 };
 
 #endif /* __GB_LEVEL_MODEL_H__ */
