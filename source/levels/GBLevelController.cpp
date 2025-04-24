@@ -367,6 +367,7 @@ ObstacleNodePair LevelController::createPlatform(Rect rect)
     platform->setName(std::string(_constantsJSON->get("walls")->getString("name")));
     // Set the physics attributes
     setStaticPhysics(platform);
+
     std::shared_ptr<PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(
         Texture::alloc(rect.size.width, rect.size.height, Texture::PixelFormat::RED), 
         rect);
