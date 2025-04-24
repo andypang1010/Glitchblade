@@ -166,8 +166,7 @@ void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
         }
 
         else {
-            _player->_comboMeter += 20;
-            _player->_lastComboElapsedTime = 0;
+            _player->incrementComboCounter();
         }
 
         _player->setDashRem(0);
@@ -188,22 +187,19 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         // If neither guard nor parry is active, apply full damage and knockback.
         if (!_player->isGuardActive() && !_player->isParryActive()) {
             int damage = hitbox->getDamage();
-            _player->damage(damage);
 
-			_player->_isNextAttackEnhanced = false;
-            _player->_comboMeter = 0;
+            _player->damage(damage);
+            _player->resetCombo();
 
             _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
             _screenShake(damage, 3);
         }
         // If parry is active, stun the enemy.
         else if (_player->isParryActive()) {
-            _player->damage(0);
 
             if (!_player->_isNextAttackEnhanced) 
             {
-                _player->_comboMeter += 20;
-                _player->_lastComboElapsedTime = 0;
+                _player->incrementComboCounter();
             }
 
 			_player->_parryCounter++;
@@ -239,12 +235,10 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                 if (!_player->hasProjectile()) {
                     _player->setHasProjectile(true);
                 }
-                _player->damage(0);
 
                 if (!_player->_isNextAttackEnhanced)
                 {
-                    _player->_comboMeter += 20;
-                    _player->_lastComboElapsedTime = 0;
+                    _player->incrementComboCounter();
                 }
 
                 _player->_parryCounter++;
@@ -269,7 +263,8 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
             }
             else {
                 _player->damage(projectile->getDamage());
-                _player->_comboMeter = 0;
+                _player->resetCombo();
+
                 _player->setKnocked(true, _player->getPosition().subtract(projectileObstacle->getPosition()).normalize());
                 _ui->setHP(_player->getHP());
             }

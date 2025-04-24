@@ -174,7 +174,9 @@ void PlayerController::fixedUpdate(float timestep)
 		_player->_comboMeter = std::max(_player->_comboMeter - timestep * 10, 0.0f);
 	}
 
-	CULog("COMBO METER: %f", _player->_comboMeter);
+    if (_player->_isNextAttackEnhanced) {
+        CULog("NEXT ATTACK ENHANCED");
+    }
 
     if (_player->_comboMeter >= 100)
     {

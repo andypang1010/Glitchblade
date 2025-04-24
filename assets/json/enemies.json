@@ -39,7 +39,7 @@
                             "x": 15,
                             "y": 0
                         },
-                        "projectileDamage": 10
+                        "projectileDamage": 20
                     }
                 ]
             }
@@ -56,7 +56,7 @@
                 "hitboxSize": [ 4, 2 ],
                 "hitboxStartFrame": 20,
                 "hitboxEndFrame": 25,
-                "hitboxDamage": 10
+                "hitboxDamage": 20
             },
             {
                 "type": "melee",
@@ -65,7 +65,7 @@
                 "hitboxSize": [ 7, 1 ],
                 "hitboxStartFrame": 19,
                 "hitboxEndFrame": 23,
-                "hitboxDamage": 10
+                "hitboxDamage": 20
             }
         ]
     },

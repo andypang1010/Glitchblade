@@ -277,6 +277,16 @@ public:
     void debugHelper();
     void reset();
 
+    void resetCombo() {
+        _comboMeter = 0;
+		_isNextAttackEnhanced = false;
+    }
+
+    void incrementComboCounter() {
+        _comboMeter = std::min(_comboMeter + 20, 100.0f);
+        _lastComboElapsedTime = 0;
+    }
+
     /**Attach the scene nodes (sprite sheets) to the player**/
     void attachNodes(const std::shared_ptr<AssetManager>& assetRef);
 

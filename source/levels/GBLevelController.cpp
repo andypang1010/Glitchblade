@@ -396,7 +396,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
             meleeAction->setHitboxPos(hitboxPos);
             meleeAction->setHitboxSize(hitboxSize);
             meleeAction->setHitboxStartFrame(action->getInt("hitboxStartFrame"));
-            CULog("PARSING: %i", action->getInt("hitboxStartFrame"));
+            //CULog("PARSING: %i", action->getInt("hitboxStartFrame"));
             meleeAction->setHitboxEndFrame(action->getInt("hitboxEndFrame"));
             meleeAction->setHitboxDamage(action->getInt("hitboxDamage"));
 

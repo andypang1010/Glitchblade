@@ -156,7 +156,7 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 */
 void PlayerModel::damage(float value) {
     _hp -= value;
-    _hp = _hp < 0 ? 0 : _hp;
+	_hp = std::clamp(_hp, 0.0f, _maxhp);
 	//_sceneNode->setColor(Color4::RED);
     _lastDamagedFrame = 0;
     if (!isGuardActive()) {
