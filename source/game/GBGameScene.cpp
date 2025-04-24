@@ -263,7 +263,7 @@ void GameScene::reset() {
     _complete = false;
 
     _levelController->reset();
-    populate(_levelController->getCurrentLevel());
+    // populate(_levelController->getCurrentLevel());
     if(_camera != nullptr)
         _camera->setPosition(_defCamPos);
     _ui->resetUI();
