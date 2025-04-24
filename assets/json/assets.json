@@ -308,7 +308,6 @@
                 "key" : "hud"
             }
         },
-
         "levelselectscene" : {
             "type"      : "Widget",
             "comment"   : "This is the root node of level select scene",

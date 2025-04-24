@@ -34,6 +34,13 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
     return enemy;
 }
 
+std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::string levelName) {
+    std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
+    std::shared_ptr<Texture> bgimage = levelRef->getBackground();
+    _worldNode = scene2::PolygonNode::allocWithTexture(bgimage);
+    return _worldNode;
+}
+
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
     enemy_controller->setSpawnPosition(getPlayerPosition());
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
@@ -45,7 +52,6 @@ void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_con
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef)
 {
     // Store references to world and debugNode
-    _worldNode = worldNodeRef;
     _worldRef = worldRef;
     _debugNodeRef = debugNodeRef;
 
@@ -467,6 +473,7 @@ std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::pa
     }
 
     for (std::shared_ptr<JsonValue> level : json->get("levels")->children()) {
+        auto thing = level;
         std::shared_ptr<LevelModel> lModel = parseLevel(level, assetRef);
         levels[lModel->getLevelName()] = lModel;
     }
@@ -490,7 +497,10 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
     level->setBackground(bg);
     auto gr = Texture::allocWithFile(json->getString("ground"));
     level->setGround(gr);
-    
+
+    CULog("YEPYEPYEPYEP");
+    CULog("%s", json->toString().c_str());
+    auto whatsmyjson = json;
     for (std::shared_ptr<JsonValue> layer : json->get("layers")->children()) {
         auto texture = assetRef->get<graphics::Texture>(layer->getString("file"));
         unsigned int speed = layer->getInt("speed");

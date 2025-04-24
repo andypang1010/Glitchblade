@@ -29,7 +29,7 @@ private:
     std::shared_ptr<LevelModel> _currentLevel;
 
     std::unordered_map<std::string, std::shared_ptr<LevelModel >> _levels;
-    std::shared_ptr<cugl::scene2::SceneNode> _worldNode;
+    std::shared_ptr<cugl::scene2::PolygonNode> _worldNode;
     std::shared_ptr<cugl::scene2::SceneNode> _debugNodeRef;
     std::shared_ptr<cugl::physics2::ObstacleWorld> _worldRef;
 

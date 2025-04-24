@@ -19,6 +19,7 @@
 //  Author: Walker White and Anthony Perello
 //  Version:  2/9/24
 //
+
 #include "GBGameScene.h"
 #include <box2d/b2_world.h>
 #include <box2d/b2_contact.h>
@@ -39,6 +40,7 @@ using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::audio;
+
 // Constants moved to LevelController.cpp
 // NOTE: THE SCENE WIDTH/HEIGHT, ASPECT, DEFAULT WIDTH/HEIGHT ARE CURRENTLY COPIED IN LEVELCONTROLLER WITH GAME_ PREFIX
 /** This is adjusted by screen aspect ratio to get the height */
@@ -54,12 +56,14 @@ using namespace cugl::audio;
 #define DEFAULT_GRAVITY -28.9f
 
 #define directions
-Vec2 LEFT = { -1.0f, 0.0f };
-Vec2 RIGHT = { 1.0f, 0.0f };
-Vec2 UP = { 0.0f, 1.0f };
-Vec2 DOWN = { 0.0f, -1.0f };
+Vec2 LEFT  = { -1.0f,  0.0f };
+Vec2 RIGHT = {  1.0f,  0.0f };
+Vec2 UP    = {  0.0f,  1.0f };
+Vec2 DOWN  = {  0.0f, -1.0f };
+
 #pragma mark -
 #pragma mark Constructors
+
 /**
  * Creates a new game world with the default values.
  *
@@ -67,14 +71,13 @@ Vec2 DOWN = { 0.0f, -1.0f };
  * This allows us to use a controller without a heap pointer.
  */
 GameScene::GameScene() : Scene2(),
-_worldnode(nullptr),
-_debugnode(nullptr),
-_world(nullptr),
-_levelController(nullptr),
-_complete(false),
-_debug(false),
-_input(nullptr)
-{
+                         _worldnode(nullptr),
+                         _debugnode(nullptr),
+                         _world(nullptr),
+                         _levelController(nullptr),
+                         _complete(false),
+                         _debug(false),
+                         _input(nullptr) {
 }
 
 /**
@@ -96,101 +99,91 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
         return false;
     }
     _assets = assets;
+
     // prepare constants
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
     _constantsJSON = constants_reader->readJson();
     if (_constantsJSON == nullptr) {
         return false;
     }
-    
+
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
         return false;
     }
-    
-    _offset = Vec2((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
+
+    // Cache the camera
+    _camera    = getCamera();
+    _defCamPos = _camera->getPosition();
+
+    // compute letterbox offset
+    _offset = Vec2((_size.width  - sceneJ->getInt("width"))  / 2.0f,
+                   (_size.height - sceneJ->getInt("height")) / 2.0f);
     Rect bounds = getBounds();
-    std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
+    auto boundsJ = sceneJ->get("bounds");
     boundsJ->get("origin")->get("x")->set(bounds.origin.x);
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
-    boundsJ->get("size")->get("width")->set(bounds.size.width);
-    boundsJ->get("size")->get("height")->set(bounds.size.height);
-//    CULog("bounds orign is (%f, %f) and size is (%f, %f)", bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
-    
+    boundsJ->get("size"  )->get("width")->set(bounds.size.width);
+    boundsJ->get("size"  )->get("height")->set(bounds.size.height);
 
-    
-    
-    // Create the world and attach the listeners.
-    Rect worldSize = Rect(0, 0, sceneJ->getFloat("world_width"), sceneJ->getFloat("world_height"));
-    Rect screenSize = worldSize;
-    screenSize.size.width /= 3;
-    Vec2 gravity = Vec2(0.0,-28.9);
-    
-    
-    // IMPORTANT: SCALING MUST BE UNIFORM
-    // This means that we cannot change the aspect ratio of the physics world
-    // Shift to center if a bad fit
-    _scale = _size.width == sceneJ->getInt("width") ? _size.width / screenSize.size.width : _size.height / screenSize.size.height;
+    // Create physics world
+    Rect worldSize = Rect(0, 0,
+                          sceneJ->getFloat("world_width"),
+                          sceneJ->getFloat("world_height"));
+    _scale = (_size.width == sceneJ->getInt("width"))
+             ? _size.width /  worldSize.size.width
+             : _size.height / worldSize.size.height;
     _worldPixelWidth = worldSize.size.width * _scale;
-    //CULog("_scale is %f", _scale);
     sceneJ->get("scale")->set(_scale);
-    
-    
+
+    Vec2 gravity(0.0f, -28.9f);
     _world = physics2::ObstacleWorld::alloc(worldSize, gravity);
     _world->activateCollisionCallbacks(true);
     _world->onBeginContact = [this](b2Contact* contact) {
         _collisionController->beginContact(contact);
-        };
-    _world->onEndContact = [this](b2Contact* contact) {
+    };
+    _world->onEndContact   = [this](b2Contact* contact) {
         _collisionController->endContact(contact);
-        };
-    
-    
-    // Create the scene graph
+    };
+
+    // Create scene graph nodes
     _worldnode = scene2::SceneNode::alloc();
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
-    
-    _camera = getCamera();
-    _defCamPos = _camera->getPosition();
-    
-    CULog("Creating empty level controller in gamescene init");
-    _levelController = std::make_unique<LevelController>();
-    CULog("initializing level controller in gamescene init");
+
     _debugnode = scene2::SceneNode::alloc();
-    _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
+    _debugnode->setScale(_scale);
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(_offset);
     _debugnode->setName("game_debug_node");
-    
-    _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
+
+    // Initialize LevelController (only once!)
+    _levelController = std::make_unique<LevelController>();
+    _levelController->init(_assets, _constantsJSON, _world, _debugnode, _worldnode);
     _currentLevel = _levelController->getLevelByName("Level 1");
 
-    std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
+    // Set up input and player refs
+    _input  = _levelController->getInputController();
+    _player = _levelController->getPlayerModel();
+
+    // UI & state defaults
     setComplete(false);
     setFailure(false);
-    
-    _levelController = std::make_shared<LevelController>();
-    _levelController->init(_assets, _constantsJSON, _world, _debugnode); // Initialize the LevelController
-    // LevelController needs to be initialized before populate() or else we will get nullptr related issues
-
-    #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
-        _input =  _levelController->getInputController();
-    #pragma mark : Player
-        _player = _levelController->getPlayerModel();
-    
-    _active = true;
+    _active   = true;
     _complete = false;
-    setDebug(false); // Debug on by default
-
+    setDebug(false);
     Application::get()->setClearColor(Color4f::BLACK);
-    
+
+    // Build and attach the level into the scene
+    // populate(_currentLevel);
+
+    // After the scene graph is built, wire up collision callbacks
     _collisionController = std::make_unique<CollisionController>(
-        _player,
-        _ui,
-        _constantsJSON,
-        [this](Projectile* p) { this->removeProjectile(p); },  // Callback for projectile removal
-        [this](int i, int d) { this->setScreenShake(i, d); }   // Callback for screen shake
+            _player,
+            _ui,
+            _constantsJSON,
+            [this](Projectile* p) { removeProjectile(p); },
+            [this](int i,int d)  { setScreenShake(i,d); }
     );
 
     return true;
@@ -201,14 +194,10 @@ std::shared_ptr<LevelModel> GameScene::getLevelModel(std::string name) {
 }
 
 void GameScene::setAllGameplayUIActive(bool active) {
-    _ui->setActive(active);
     _ui->setVisible(active);
-    _pauseMenu->setActive(false); // Never need it active to start
-    _pauseMenu->setActive(false);
 }
 
-void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
-{
+void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets) {
     _ui = GBIngameUI::alloc(_assets);
     if (_ui != nullptr) {
         _ui->setPauseCallback([this]() {
@@ -222,154 +211,70 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         });
         _ui->setContinueCallback([this]() {
             _shouldContinue = true;
-//            _ui->showWinPage1(false);
             _ui->showWinPage2(true);
         });
-        addChild(_ui);
     }
-    _pauseMenu = GBPauseMenu::alloc(assets);
-    if (_pauseMenu != nullptr) {
-        _pauseMenu->setVisible(false);
-        _pauseMenu->setActive(false);
-        addChild(_pauseMenu);
-    }
-
     auto pauseButton = _ui->getPauseButton();
     if (pauseButton) {
         pauseButton->addListener([this](const std::string& name, bool down) {
             if (down) {
                 _ui->setVisible(false);
-                _pauseMenu->setVisible(true);
-                _pauseMenu->setActive(true);
                 setPaused(true);
             }
-            });
-    }
-
-    auto resumeButton = _pauseMenu->getResumeButton();
-    if (resumeButton) {
-        resumeButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
-                _pauseMenu->setVisible(false);
-                _pauseMenu->setActive(false);
-                _ui->setVisible(true);
-                setPaused(false);
-            }
-            });
-    }
-
-    auto restartButton = _pauseMenu->getRestartButton();
-    if (restartButton) {
-        // Capture the restart button in the lambda so you can call its deactivate method.
-        //
-        //
-        // TODO: RE-ADD THIS
-        //restartButton->addListener([this, restartButton](const std::string& name, bool down) {
-        //    if (down) {
-        //        // Immediately reset the pressed state.
-        //        restartButton->deactivate();
-
-        //        // Hide pause menu, show game UI, and clear paused status.
-        //        _pauseMenu->setVisible(false);
-        //        _ui->setVisible(true);
-        //        setPaused(false);
-
-        //        // Call reset to restart the level.
-        //        reset();
-        //    }
-        //    });
-    }
-
-    auto exitButton = _pauseMenu->getExitButton();
-    if (exitButton) {
-        exitButton->addListener([this](const std::string& name, bool down) {
-            if(down) {
-                _isPaused = false;
-                setSwapSignal(1);
-            }
         });
-        exitButton->activate();
     }
-
     setAllGameplayUIActive(_inituiactive);
 }
 
 void GameScene::disableUI() {
     setInitUIActive(false);
-    if (_ui != nullptr && _pauseMenu != nullptr) {
+    if (_ui) {
         setAllGameplayUIActive(false);
     }
 }
 
 void GameScene::enableUI() {
     setInitUIActive(true);
-    if (_ui != nullptr && _pauseMenu != nullptr) {
+    if (_ui) {
         setAllGameplayUIActive(true);
     }
 }
 
-/**
- * Disposes of all (non-static) resources allocated to this mode.
- */
 void GameScene::dispose() {
     if (_active) {
-        _world = nullptr;
-        _worldnode = nullptr;
-        _debugnode = nullptr;
-        _complete = false;
-        _debug = false;
-		_ui = nullptr;
+        _world      = nullptr;
+        _worldnode  = nullptr;
+        _debugnode  = nullptr;
+        _complete   = false;
+        _debug      = false;
+        _ui         = nullptr;
         Scene2::dispose();
     }
 }
 
-
-#pragma mark -
-#pragma mark Level Layout
-
-/**
- * Resets the status of the game by resetting player and enemy positions so that we can play again.
- */
 void GameScene::reset() {
     removeAllChildren();
-
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
     _ui->removeAllChildren();
-    _pauseMenu->removeAllChildren();
 
     _failed   = false;
     _complete = false;
 
     _levelController->reset();
     populate(_levelController->getCurrentLevel());
-    _camera->setPosition(_defCamPos);
-    addChild(_ui);
+    if(_camera != nullptr)
+        _camera->setPosition(_defCamPos);
     _ui->resetUI();
 
     Application::get()->setClearColor(Color4f::BLACK);
     _populated = false;
 }
 
-/**
- * Lays out the game geography.
- *
- * Pay close attention to how we attach physics objects to a scene graph.
- * The simplest way is to make a subclass, like we do for the Dude.  However,
- * for simple objects you can just use a callback function to lightly couple
- * them.  This is what we do with the crates.
- *
- * This method is really, really long.  In practice, you would replace this
- * with your serialization loader, which would process a level file.
- */
 void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
-
-    // Attempted fix
     if (_worldnode && _worldnode->getParent())   removeChild(_worldnode);
     if (_debugnode && _debugnode->getParent())   _debugnode->removeFromParent();
-    if (_winnode  && _winnode->getParent())      removeChild(_winnode);
-    if (_losenode && _losenode->getParent())     removeChild(_losenode);
 
     _worldnode = _levelController->makeWorldNode(level->getLevelName());
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -377,89 +282,63 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
 
     addChild(_worldnode);
     addChild(_debugnode);
-    addChild(_winnode);
-    addChild(_losenode);
 
-    // === Initialize in-game UI ===
     populateUI(_assets);
+    addChild(_ui);
 
     _ui->setHP(100);
-    _pauseMenu->setHP(100);
     _ui->setVisible(true);
-    _pauseMenu->setVisible(false);
-    _pauseMenu->setActive(false);
 
-    _levelController->populateLevel(level); // Sets the level we want to populate here
+    setBG();
+    _levelController->populateLevel(level);
     _player = _levelController->getPlayerModel();
-
-    std::vector<std::shared_ptr<EnemyController>> enemyControllers = _levelController->getEnemyControllers();
-
     setAllGameplayUIActive(true);
 
-	// Play the background music on a loop.
-    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
+    auto musicJ = _constantsJSON->get("audio")->get("music");
+    auto source = _assets->get<Sound>(musicJ->getString("game"));
     AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
-    
-    _active = true;
-    _complete = false;
+
+    _active    = true;
+    _complete  = false;
     _populated = true;
 }
 
-/**
-* Sets whether the level is completed.
-*
-* If true, the level will advance after a countdown
-*
-* @param value whether the level is completed.
-*/
 void GameScene::setComplete(bool value) {
-    if (_failed)
-        return; // Do not win if lost
+    if (_failed) return;
     bool change = _complete != value;
     _complete = value;
     if (value && change) {
         float timeSpent = _levelController->getTimeSpentInLevel();
-        int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
+        int parryCount  = _levelController->getPlayerController()->getPlayer()->_parryCounter;
         _ui->updateStats(timeSpent, parryCount);
-        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+
+        auto musicJ = _constantsJSON->get("audio")->get("music");
+        auto source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
+
         _ui->showWinPage1(true);
         setPaused(true);
         _countdown = _constantsJSON->getInt("exit_count");
-    }
-    else if (!value) {
+    } else if (!value) {
         setPaused(false);
         _countdown = -1;
     }
 }
 
-/**
- * Sets whether the level is failed.
- *
- * If true, the level will reset after a countdown
- *
- * @param value whether the level is failed.
- */
 void GameScene::setFailure(bool value) {
-    if (_complete)
-        return; // Do not fail if won
-    bool change = _complete != value;
+    if (_complete) return;
+    bool change = _failed != value;
     _failed = value;
     if (value && change) {
-        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+        auto musicJ = _constantsJSON->get("audio")->get("music");
+        auto source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
-        
         if (_ui) {
             _ui->showLosePage(true);
             setPaused(true);
         }
-        
         _countdown = _constantsJSON->getInt("exit_count");
-    }
-    else {
+    } else {
         if (_ui) {
             _ui->showLosePage(false);
             setPaused(false);
@@ -468,66 +347,32 @@ void GameScene::setFailure(bool value) {
     }
 }
 
-
-#pragma mark -
-#pragma mark Physics Handling
-/**
- * The method called to indicate the start of a deterministic loop.
- *
- * This method is used instead of {@link #update} if {@link #setDeterministic}
- * is set to true. It marks the beginning of the core application loop,
- * which is concluded with a call to {@link #postUpdate}.
- *
- * This method should be used to process any events that happen early in
- * the application loop, such as user input or events created by the
- * {@link schedule} method. In particular, no new user input will be
- * recorded between the time this method is called and {@link #postUpdate}
- * is invoked.
- *
- * Note that the time passed as a parameter is the time measured from the
- * start of the previous frame to the start of the current frame. It is
- * measured before any input or callbacks are processed. It agrees with
- * the value sent to {@link #postUpdate} this animation frame.
- *
- * @param dt    The amount of time (in seconds) since the last frame
- */
 void GameScene::preUpdate(float dt) {
-//    if (_isPaused) return;
-    
-    // Process the toggled key commands
     if (_input->didDebug()) { setDebug(!isDebug()); }
     if (_input->didReset()) { reset(); }
-    if (_input->didExit()) {
-        Application::get()->quit();
-    }
+    if (_input->didExit())  { Application::get()->quit(); }
 
-
-	_ui->setHP(_player->getHP());
-
-
+    _ui->setHP(_player->getHP());
     if (_player->isJumpBegin() && _player->isGrounded()) {
-        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
-        AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
+        auto fxJ = _constantsJSON->get("audio")->get("effects");
+        auto source = _assets->get<Sound>(fxJ->getString("jump"));
+        AudioEngine::get()->play(fxJ->getString("jump"), source, false, fxJ->getFloat("volume"));
     }
 
-    // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);
-    
+
     if (_shouldPause) {
         _shouldPause = false;
         _ui->showPauseMenu(true);
         _ui->showHeadsUpDisplay(false);
         setPaused(true);
     }
-    
     if (_shouldResume) {
         _shouldResume = false;
         _ui->showPauseMenu(false);
         _ui->showHeadsUpDisplay(true);
         setPaused(false);
     }
-    
     if (_shouldRetry) {
         _shouldRetry = false;
         _ui->showPauseMenu(false);
@@ -535,233 +380,142 @@ void GameScene::preUpdate(float dt) {
         setPaused(false);
         reset();
     }
-    
     if (_shouldContinue) {
         _shouldContinue = false;
         _ui->showWinPage1(false);
         _ui->showWinPage2(true);
         setPaused(true);
     }
-    
-    //
-    
 }
-/**
- * The method called to provide a deterministic application loop.
- *
- * This method provides an application loop that runs at a guaranteed fixed
- * timestep. This method is (logically) invoked every {@link getFixedStep}
- * microseconds. By that we mean if the method {@link draw} is called at
- * time T, then this method is guaranteed to have been called exactly
- * floor(T/s) times this session, where s is the fixed time step.
- *
- * This method is always invoked in-between a call to {@link #preUpdate}
- * and {@link #postUpdate}. However, to guarantee determinism, it is
- * possible that this method is called multiple times between those two
- * calls. Depending on the value of {@link #getFixedStep}, it can also
- * (periodically) be called zero times, particularly if {@link #getFPS}
- * is much faster.
- *
- * As such, this method should only be used for portions of the application
- * that must be deterministic, such as the physics simulation. It should
- * not be used to process user input (as no user input is recorded between
- * {@link #preUpdate} and {@link #postUpdate}) or to animate models.
- *
- * The time passed to this method is NOT the same as the one passed to
- * {@link #preUpdate}. It will always be exactly the same value.
- *
- * @param step  The number of fixed seconds for this step
- */
+
 void GameScene::fixedUpdate(float step) {
     if (_isPaused) return;
-    
-    // Turn the physics engine crank.
+
     _world->update(step);
-
-    // Update the level controller
     _levelController->fixedUpdate(step);
-
-    if (_levelController->isCurrentLevelComplete()) {
-        reset();
-        setSwapSignal(1);
-    }
-
-    if(_levelController->isCurrentLevelFailed()) {
-        reset();
-        setSwapSignal(1);
-    }
-    
     processScreenShake();
 
-    auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
+    float currX = _levelController->getPlayerNode()->getPositionX();
     bool isKnocked = _levelController->getPlayerModel()->isKnockbackActive();
-    auto currPlayerVel = _levelController->getPlayerModel()->getVX();
-    auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
-    auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
-    
-    if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
+    float velX = _levelController->getPlayerModel()->getVX();
+
+    if (_camera == nullptr)
+        CULog("SHOULDNT EVER HAPPEN!!!!");
+    float camLX = _camera->getPosition().x - _camera->getViewport().size.width/2;
+    float camRX = _camera->getPosition().x + _camera->getViewport().size.width/2;
+    if (camLX <= 0 || camRX >= _worldPixelWidth) {
         _cameraLocked = true;
-        if (cameraPosLX <= 0) {
-            CULog("playerx: %f", currPlayerPosX);
-            if (currPlayerPosX > getBounds().size.width*.66) {
-                _cameraLocked = false;
-            }
+        if (camLX <= 0) {
+            if (currX > getBounds().size.width * .66f) _cameraLocked = false;
         } else {
-            CULog("playerx: %f", currPlayerPosX);
-            if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
-                _cameraLocked = false;
-            }
+            if (currX < _worldPixelWidth - getBounds().size.width * .66f) _cameraLocked = false;
         }
     }
     if (!_cameraLocked) {
-        _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
+        _camera->translate(Vec2((currX - _camera->getPosition().x)*.05f, 0));
         _camera->update();
-        if (currPlayerVel > 0 && !isKnocked) {
+        if (velX > 0 && !isKnocked) {
             updateLayersLeft();
-        }   else if (currPlayerVel < 0 && !isKnocked) {
+        } else if (velX < 0 && !isKnocked) {
             updateLayersRight();
         }
     }
 
-    if (_ui != nullptr && _camera != nullptr) {
-        Vec2 camPos = _camera->getPosition();
-        Size viewSize = _camera->getViewport().size;
-
-        Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
+    if (_ui && _camera) {
+        Vec2 base = _camera->getPosition() - Vec2(_camera->getViewport().size.width/2,
+                                                  _camera->getViewport().size.height/2);
         _ui->setPosition(base + _ui->_screenOffset);
     }
-    
+
     setComplete(_levelController->isLevelWon());
     setFailure(_levelController->isLevelLost());
 
-    // Record failure if necessary.
     if (!_failed && _player->getY() < 0) {
         setFailure(true);
     }
 }
 
-/**
- * The method called to indicate the end of a deterministic loop.
- *
- * This method is used instead of {@link #update} if {@link #setDeterministic}
- * is set to true. It marks the end of the core application loop, which was
- * begun with a call to {@link #preUpdate}.
- *
- * This method is the final portion of the update loop called before any
- * drawing occurs. As such, it should be used to implement any final
- * animation in response to the simulation provided by {@link #fixedUpdate}.
- * In particular, it should be used to interpolate any visual differences
- * between the the simulation timestep and the FPS.
- *
- * This method should not be used to process user input, as no new input
- * will have been recorded since {@link #preUpdate} was called.
- *
- * Note that the time passed as a parameter is the time measured from the
- * last call to {@link #fixedUpdate}. That is because this method is used
- * to interpolate object position for animation.
- *
- * @param remain    The amount of time (in seconds) last fixedUpdate
- */
 void GameScene::postUpdate(float remain) {
-    
     if (_isPaused) return;
-    
-    // Since items may be deleted, garbage collect
+
     _world->garbageCollect();
     _levelController->postUpdate(remain);
-    // Add a bullet AFTER physics allows it to hang in front
-    // Otherwise, it looks like bullet appears far away
 
-    // Reset the game if we win or lose.
     if (_countdown > 0) {
-        _countdown--;
-    }
-    else if (_countdown == 0) {
+        --_countdown;
+    } else if (_countdown == 0) {
         reset();
     }
 
-    // postUpdate the LevelController
     _levelController->postUpdate(remain);
 }
 
-
-#pragma mark collision helpers
-/**
- * Removes a new projectile from the world.
- *
- * @param  projectile   the projectile to remove
- */
 void GameScene::removeProjectile(Projectile* projectile) {
-    // do not attempt to remove a projectile that has already been removed
-    if (projectile->isRemoved()) {
-        return;
-    }
+    if (projectile->isRemoved()) return;
+
     _worldnode->removeChild(projectile->getSceneNode());
     projectile->setDebugScene(nullptr);
     projectile->markRemoved(true);
-    
-    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-    std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pop"));
+
+    auto fxJ = _constantsJSON->get("audio")->get("effects");
+    auto source = _assets->get<Sound>(fxJ->getString("pop"));
     AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
 }
 
 void GameScene::setBG() {
-    for (auto layerPair : _currentLevel->getLayers()) {
-        // Left
-        std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
+    for (auto pair : _currentLevel->getLayers()) {
+        auto node = scene2::PolygonNode::allocWithTexture(pair.first);
         node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node->setScale(_currentLevel->getScale());
-        node->setPosition(Vec2(node->getPositionX()-node->getSize().width, node->getPositionY()));
-        node->setTag(layerPair.second);
+        node->setPosition(Vec2(node->getPositionX() - node->getSize().width,
+                               node->getPositionY()));
+        node->setTag(pair.second);
         _worldnode->addChild(node);
-        
-        // Centered
-        std::shared_ptr<scene2::SceneNode> node2 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+
+        auto node2 = scene2::PolygonNode::allocWithTexture(pair.first);
         node2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node2->setScale(_currentLevel->getScale());
-        node2->setTag(layerPair.second);
+        node2->setTag(pair.second);
         _worldnode->addChild(node2);
-        
-        // Right
-        std::shared_ptr<scene2::SceneNode> node3 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+
+        auto node3 = scene2::PolygonNode::allocWithTexture(pair.first);
         node3->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node3->setScale(_currentLevel->getScale());
-        node3->setPosition(Vec2(node3->getPositionX()+node->getSize().width, node3->getPositionY()));
-        node3->setTag(layerPair.second);
+        node3->setPosition(Vec2(node3->getPositionX() + node->getSize().width,
+                                node3->getPositionY()));
+        node3->setTag(pair.second);
         _worldnode->addChild(node3);
-        
-        // Right + 1
-        std::shared_ptr<scene2::SceneNode> node4 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+
+        auto node4 = scene2::PolygonNode::allocWithTexture(pair.first);
         node4->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node4->setScale(_currentLevel->getScale());
-        node4->setPosition(Vec2(node4->getPositionX()+2*node->getSize().width, node4->getPositionY()));
-        node4->setTag(layerPair.second);
+        node4->setPosition(Vec2(node4->getPositionX() + 2 * node->getSize().width,
+                                node4->getPositionY()));
+        node4->setTag(pair.second);
         _worldnode->addChild(node4);
     }
 }
 
 void GameScene::updateLayersLeft() {
-    for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
+    for (auto node : _worldnode->getChildren()) {
         if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/3, node->getPositionY()));
+            node->setPosition(Vec2(node->getPositionX() - static_cast<float>(node->getTag())/3,
+                                   node->getPositionY()));
         }
     }
 }
 
 void GameScene::updateLayersRight() {
-    for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
+    for (auto node : _worldnode->getChildren()) {
         if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/3, node->getPositionY()));
+            node->setPosition(Vec2(node->getPositionX() + static_cast<float>(node->getTag())/3,
+                                   node->getPositionY()));
         }
     }
 }
 
-
-
 void GameScene::setScreenShake(float intensity, int duration) {
-    if (_shakeIntensity > intensity) {
-        return;
-    }
+    if (_shakeIntensity > intensity) return;
     _shakeIntensity = intensity;
     _shakeDuration = duration;
 }
@@ -769,12 +523,11 @@ void GameScene::setScreenShake(float intensity, int duration) {
 void GameScene::processScreenShake() {
     Vec2 target = Vec2::ZERO;
     if (_shakeDuration > 0) {
-        _shakeDuration--;
-        int shakeX = rand() % 2 ? _shakeIntensity : -_shakeIntensity;
-        int shakeY = rand() % 2 ? _shakeIntensity : -_shakeIntensity;
-        target = Vec2(shakeX, shakeY);
-    }
-    else {
+        --_shakeDuration;
+        int sx = (rand() % 2 ? _shakeIntensity : -_shakeIntensity);
+        int sy = (rand() % 2 ? _shakeIntensity : -_shakeIntensity);
+        target = Vec2(sx, sy);
+    } else {
         _shakeIntensity = 0;
     }
     _worldnode->setPosition(_worldnode->getPosition() + (target - _worldnode->getPosition()) / 2);

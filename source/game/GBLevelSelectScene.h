@@ -17,7 +17,7 @@ public:
 
     virtual void dispose() override;
 
-    void setActive(bool active);
+    void setActive(bool active) override;
 
     bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
@@ -28,13 +28,13 @@ public:
 
     const std::shared_ptr<GBLevelSelectUI>& getIngameUI() const { return _levelSelectUI; }
 
-    void render();
+    void render() override;
 
-    void fixedUpdate(float dt);
+    void fixedUpdate(float dt) override;
 
-    void postUpdate(float dt);
+    void postUpdate(float dt) override;
 
-    void preUpdate(float dt);
+    void preUpdate(float dt) override;
     std::string getLevelSelected();
     void setLevelSelected(std::string lvlString);
 };
