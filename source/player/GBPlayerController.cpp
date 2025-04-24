@@ -168,6 +168,19 @@ void PlayerController::fixedUpdate(float timestep)
     applyForce();
     updateCooldowns();
 
+	_player->_lastComboElapsedTime += timestep;
+
+	CULog("COMBO METER: %f", _player->_comboMeter);
+
+    if (_player->_comboMeter >= 100 && _player->getHP() < _player->getMaxHP()) {
+        _player->setHP(std::min(_player->getHP() + 20.0f, 100.0f));
+		_player->_comboMeter = 0;
+    }
+
+	if (_player->_lastComboElapsedTime >= 5 && _player->_comboMeter > 0) {
+		_player->_comboMeter = std::max(_player->_comboMeter - timestep * 10, 0.0f);
+	}
+
   //  if (_player->_parryCounter == 5) {
 		//_player->_parryCounter = 0;
   //      _player->setHP(std::min(_player->getHP() + 20.0f, 100.0f));

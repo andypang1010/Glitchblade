@@ -159,6 +159,10 @@ void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
     if (_player->isDashActive() && !_player->isGuardActive()) {
         enemy->damage(10);
         _player->setDashRem(0);
+
+        _player->_comboMeter += 20;
+		_player->_lastComboElapsedTime = 0;
+
         _screenShake(3, 5);
     }
     _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
@@ -177,12 +181,16 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         if (!_player->isGuardActive() && !_player->isParryActive()) {
             int damage = hitbox->getDamage();
             _player->damage(damage);
+            _player->_comboMeter = 0;
             _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
             _screenShake(damage, 3);
         }
         // If parry is active, stun the enemy.
         else if (_player->isParryActive()) {
             _player->damage(0);
+
+            _player->_comboMeter += 20;
+            _player->_lastComboElapsedTime = 0;
 
 			_player->_parryCounter++;
 
@@ -219,6 +227,9 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                 }
                 _player->damage(0);
 
+                _player->_comboMeter += 20;
+                _player->_lastComboElapsedTime = 0;
+
                 _player->_parryCounter++;
 
                 // Reset guard and parry
@@ -236,11 +247,12 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
 				projectile->getSceneNode()->setColor(cugl::Color4(0, 255, 150, 255));
             }
             else if (_player->isGuardActive()) {
-                _player->damage(5);
+                _player->damage(projectile->getDamage() / 2);
                 _ui->setHP(_player->getHP());
             }
             else {
-                _player->damage(10);
+                _player->damage(projectile->getDamage());
+                _player->_comboMeter = 0;
                 _player->setKnocked(true, _player->getPosition().subtract(projectileObstacle->getPosition()).normalize());
                 _ui->setHP(_player->getHP());
             }

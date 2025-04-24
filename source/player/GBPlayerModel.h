@@ -154,6 +154,8 @@ protected:
 public:
     int iframe = 0;
     int _parryCounter = 0;
+    float _comboMeter = 0;
+    float _lastComboElapsedTime = 0;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
@@ -262,7 +264,10 @@ public:
         _parryRem = 0;
         _damageRem = 0;
         _damage = 10;// default player dmg
+        
         _parryCounter = 0;
+		_comboMeter = 0;
+        _lastComboElapsedTime = 0;
     };
     
     void setConstants();
