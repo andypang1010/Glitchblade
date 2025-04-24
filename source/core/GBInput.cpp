@@ -107,7 +107,9 @@ _keyLeft(false),
 _keyRight(false),
 _horizontal(0.0f),
 _joystick(false),
-_hasJumped(false) {
+_hasJumped(false),
+_lastSwipe(SwipeType::NONE)
+{
 }
 
 /**
@@ -266,6 +268,7 @@ void PlatformInput::clear() {
     _rdashPressed = false;
     _ldashPressed = false;
     _guardPressed = false;
+    _lastSwipe = SwipeType::NONE;
 }
 
 #pragma mark -
@@ -416,18 +419,20 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
     if (xpass || ypass) {
         // X magnitude > Y magnitude (so X must have passed AND be dominant axis)
         if (absxdiff > absydiff) {
-            return (xdiff > 0) ? SwipeType::RIGHTDASH : SwipeType::LEFTDASH;
+            _lastSwipe =  (xdiff > 0) ? SwipeType::RIGHTDASH : SwipeType::LEFTDASH;
         // Y magnitude > X magnitude (so Y must have passed AND be dominant axis)
         } else {
-            return (ydiff > 0) ? SwipeType::GUARD : SwipeType::JUMP;
+            _lastSwipe = (ydiff > 0) ? SwipeType::DOWNDASH : SwipeType::JUMP;
         }
     }
     else if (yguardpass) {
-        return SwipeType::GUARD;
+        _lastSwipe = SwipeType::DOWNDASH;
     }
-    
-    // Return NONE if one of the other swipe types haven't been returned already
-    return SwipeType::NONE;
+    else {
+        _lastSwipe = SwipeType::NONE;
+    }
+     
+    return _lastSwipe;
 }
 
 #pragma mark -
@@ -457,6 +462,7 @@ void PlatformInput::touchBeganCB(const TouchEvent& event, bool focus) {
             // Only process if no touch in zone
             // Right half is now for other actions (jump/fire/dash)
             if (_rtouch.touchids.empty()) {
+                _lastSwipe = SwipeType::NONE;
                 _keyFire = (event.timestamp.ellapsedMillis(_rtime) <= DOUBLE_CLICK);
                 _rtouch.position = event.position;
                 _rtouch.timestamp.mark();
@@ -482,6 +488,10 @@ void PlatformInput::touchEndedCB(const TouchEvent& event, bool focus) {
     Vec2 pos = event.position;
     Zone zone = getZone(pos);
     if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
+        if (_lastSwipe == SwipeType::NONE){
+//            CULog("GUARDED USING TAP!");
+            _keyGuard = true;
+    }
         _rtime = event.timestamp;
         _rtouch.touchids.clear();
     } else if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
@@ -521,7 +531,7 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
     //swipe side
     } else if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
         SwipeType s_type = processSwipe(_rtouch.position, event.position, event.timestamp);
-
+        _lastSwipe = s_type;
         switch (s_type) {
             case SwipeType::LEFTDASH:
                 _keyLdash = true;
@@ -532,8 +542,8 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
             case SwipeType::JUMP:
                 _keyJump = true;
                 break;
-            case SwipeType::GUARD:
-                _keyGuard = true;
+            case SwipeType::DOWNDASH:
+                // no downward dash implemented yet
                 break;
             case SwipeType::NONE:
                 break;
