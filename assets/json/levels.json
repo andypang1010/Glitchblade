@@ -30,46 +30,54 @@
           }
       ],
       "platforms": [],
-      "waves": [
-        {
-          "spawn_intervals": [
-            3
-          ],
-            "enemies": [
-                "minion_1A"
-            ]
-        },
-        {
-          "spawn_intervals": [
-            3,
-            7
-          ],
-          "enemies": [
-            "minion_1A",
-            "minion_1B"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            3,
-            7,
-            7
-          ],
-          "enemies": [
-            "minion_1B",
-            "minion_1A",
-            "minion_1B"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            3
-          ],
-          "enemies": [
-            "boss_1"
-          ]
-        }
-      ]
+        "waves": [
+            {
+                "spawn_intervals": [
+                    3
+                ],
+                "enemies": [
+                    "boss_2"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3,
+                    7
+                ],
+                "enemies": [
+                    "minion_1A",
+                    "minion_1B"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3,
+                    7,
+                    7
+                ],
+                "enemies": [
+                    "minion_1B",
+                    "minion_1A",
+                    "minion_1B"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3
+                ],
+                "enemies": [
+                    "boss_1"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3
+                ],
+                "enemies": [
+                    "boss_2"
+                ]
+            }
+        ]
     }
   ]
 }

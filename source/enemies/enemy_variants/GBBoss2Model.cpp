@@ -166,7 +166,7 @@ void Boss2Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
 		}
     }
     _closeDistance = 12;
-    _farDistance = 24;
+    _farDistance = 19;
 }
 
 #pragma mark -
@@ -221,9 +221,9 @@ void Boss2Model::dispose() {
 
 void Boss2Model::damage(float value) {
     EnemyModel::damage(value);
-    //if (_isShortFireAttacking || _isShortFireWaiting) {
-    //    setStun(60);
-    //}
+    if (_isShortFireAttacking || _isShortFireWaiting || _isHeadFireAttacking || _isHeadFireWaiting) {
+        setStun(60);
+    }
 }
 
 #pragma mark Cooldowns
@@ -260,8 +260,7 @@ void Boss2Model::nextAction() {
     if (_moveDuration <= 0 && !isStunned() && !_isShootingLaser && !_isShortFiring && !_isHeadFiring && !_isTeleportStarting && !_isTeleportEnding) {
         if (isTargetClose()) {
             if (r % 2 == 0) {
-                //shortFire();
-				headFire();
+                shortFire();
             }
             else {
                 teleport();
@@ -321,10 +320,10 @@ void Boss2Model::nextAction() {
 			_isTeleportEnding = true;
             float newPos;
             if (_targetPos.x < getPosition().x) {
-                newPos = _targetPos.x - 12 < worldLeft ? _targetPos.x + 16 : _targetPos.x - 12;
+                newPos = _targetPos.x - 16 < worldLeft ? _targetPos.x + 20 : _targetPos.x - 16;
             }
             else {
-				newPos = _targetPos.x + 12 > worldRight ? _targetPos.x - 16 : _targetPos.x + 12;
+				newPos = _targetPos.x + 16 > worldRight ? _targetPos.x - 20 : _targetPos.x + 16;
             }
             setPosition(newPos, getPosition().y);
             setMovement(0);
