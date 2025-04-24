@@ -3,8 +3,8 @@
         "width": 1248,
         "height": 576,
         "aspect": 0.4615,
-        "default_width": 39,
-        "default_height": 18,
+        "world_width": 117,
+        "world_height": 18,
         "gravity": -28.9,
         "texture": "background",
         "scale": null,
@@ -22,14 +22,12 @@
     "walls": {
         "vertex_count": 12,
         "wall_count": 2,
-        "thickness": 3,
+        "thickness": 1,
         "name": "wall"
     },
     "ground": {
         "vertex_count": 8,
-        "thickness": 4.4,
-        "texture": "ground",
-        "name": "ground"
+        "thickness": 2.2
     },
     "physics": {
         "basic_density": 0,
@@ -74,11 +72,11 @@
             "duration": 20
         },
         "guard": {
-            "cooldown": 15,
-            "duration": 44
+            "cooldown": 30,
+            "duration": 45
         },
         "parry": {
-            "duration": 24
+            "duration": 15
         },
         "shoot_cooldown": 20,
         "fixtures": {
@@ -87,6 +85,7 @@
                 "h_shrink": 0.7
             },
             "sensor": {
+                "s_shrink": 0.6,
                 "h_shrink": 0.6,
                 "height": 0.1
             },
@@ -150,6 +149,7 @@
                 "h_shrink": 0.7
             },
             "sensor": {
+                "s_shrink": 0.6,
                 "h_shrink": 0.6,
                 "height": 0.1
             },

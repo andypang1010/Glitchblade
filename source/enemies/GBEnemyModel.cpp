@@ -1,5 +1,5 @@
 //
-//  GBPlayerModel.cpp
+//  GBEnemyModel.cpp
 //  PlatformDemo
 //
 //  This encapsulates all of the information for the character avatar.  Note how this
@@ -68,14 +68,33 @@ using namespace graphics;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
-    return true;
+bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    _enemyJSON = enemyJSON;
+    setConstants();
+    resetAttributes();
+    
+    if (BoxObstacle::init(pos, _size)) {
+        setDensity(_density);
+        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
+        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
+        attachNodes(assetRef);
+        setActions(actions);
+        setName(ENEMY_NAME);
+        setDebugColor(Color4::BLUE);
+        return true;
+    }
+
+    return false;
+
 }
 
 void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 }
 
+void EnemyModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
+    
+}
 #pragma mark -
 #pragma mark Attribute Properties
 
@@ -89,7 +108,7 @@ void EnemyModel::damage(float value) {
     _hp = _hp < 0 ? 0 : _hp;
     _aggression += value;
     _aggression = _aggression > 100 ? 100 : _aggression;
-	_lastDamagedFrame = 0;
+    _lastDamagedFrame = 0;
     _node->setColor(Color4::RED);
 }
 
@@ -145,7 +164,7 @@ void EnemyModel::createFixtures() {
 
     BoxObstacle::createFixtures();
     b2FixtureDef sensorDef;
-    sensorDef.density = ENEMY_DENSITY;
+    sensorDef.density = _density;
     sensorDef.isSensor = true;
 
     b2Filter filter = b2Filter();
@@ -155,14 +174,14 @@ void EnemyModel::createFixtures() {
 
     // Sensor dimensions
     b2Vec2 corners[4];
-    corners[0].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[1].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[2].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[3].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
+    corners[0].x = - getWidth() / 2.0f;
+    corners[0].y = (-getHeight() + _sensorHeight) / 2.0f;
+    corners[1].x = - getWidth() / 2.0f;
+    corners[1].y = (-getHeight() - _sensorHeight) / 2.0f;
+    corners[2].x =  getWidth() / 2.0f;
+    corners[2].y = (-getHeight() - _sensorHeight) / 2.0f;
+    corners[3].x =  getWidth() / 2.0f;
+    corners[3].y = (-getHeight() + _sensorHeight) / 2.0f;
 
     b2PolygonShape sensorShape;
     sensorShape.Set(corners, 4);
@@ -190,20 +209,20 @@ void EnemyModel::releaseFixtures() {
 }
 
 /**
- * Disposes all resources and assets of this PlayerModel
+ * Disposes all resources and assets of this EnemyModel
  *
  * Any assets owned by this object will be immediately released.  Once
- * disposed, a PlayerModel may not be used until it is initialized again.
+ * disposed, a EnemyModel may not be used until it is initialized again.
  */
 void EnemyModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
-    _sensorNode = nullptr;
+    _groundSensorNode = nullptr;
     _geometry = nullptr;
-    _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
     _stunSprite = nullptr;
+    _deadSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -217,42 +236,58 @@ void EnemyModel::dispose() {
 void EnemyModel::update(float dt) {
     if (isRemoved()) return;
 
-    updateAnimation();
-    nextAction();
-
-    // Apply cooldowns
-
-    if (isKnocked()) {
-        resetKnocked();
-    }
-
-    if (isStunned()) {
-        _stunRem--;
-    }
-
     BoxObstacle::update(dt);
     if (_node != nullptr) {
         _node->setPosition(getPosition() * _drawScale);
         _node->setAngle(getAngle());
     }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
-    }
 }
 
 #pragma mark -
 #pragma mark AI Methods
+void EnemyModel::nextAction() {
+
+}
+
+void EnemyModel::AIMove() {
+
+}
+
 bool EnemyModel::isTargetClose() {
-    return (getPosition() - _targetPos).length() <= CLOSE_RADIUS;
+    return (getPosition() - _targetPos).length() <= _closeDistance;
 }
 
 bool EnemyModel::isTargetFar() {
-	return (getPosition() - _targetPos).length() >= FAR_RADIUS;
+    return (getPosition() - _targetPos).length() >= _farDistance;
+}
+
+void EnemyModel::die(std::shared_ptr<scene2::SceneNode> world) {
+    setVX(0);
+    for (NodePtr node : _node->getChildren()) {
+        if (node->getName() == "dead") {
+            continue;
+        }
+
+        node->removeFromParent();
+    }
+
+    if (_node->getChildCount() == 0) {
+        _node->addChild(_deadSprite);
+        _deadSprite->setVisible(true);
+    }
+
+    playAnimationOnce(_deadSprite);
+
+    if (_deadSprite->getFrame() == _deadSprite->getCount() - 1) {
+        markRemoved(true);
+        world->removeChild(_node);
+        setSensor(true);
+        getDebugNode()->removeFromParent();
+    }
+}
+
+bool EnemyModel::canAvoid(){
+    return (getX() - getWidth() > worldLeft && getX() + getWidth() < worldRight);
 }
 
 void EnemyModel::faceTarget() {
@@ -269,14 +304,6 @@ void EnemyModel::faceTarget() {
     _faceRight = face;
 }
 
-void EnemyModel::nextAction() {
-    
-}
-
-void EnemyModel::AIMove() {
-
-}
-
 std::shared_ptr<MeleeActionModel> EnemyModel::getDamagingAction() {
     return nullptr;
 }
@@ -289,12 +316,8 @@ std::shared_ptr<RangedActionModel> EnemyModel::getProjectileAction() {
 #pragma mark Animation Methods
 void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
     if (sprite->isVisible()) {
-        currentFrame++;
-        if (currentFrame > sprite->getCount() * E_ANIMATION_UPDATE_FRAME) {
-            currentFrame = 0;
-        }
-
-        if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
+        frameCounter = (frameCounter + 1) % E_ANIMATION_UPDATE_FRAME;
+        if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0) {
             sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
         }
     }
@@ -303,22 +326,38 @@ void EnemyModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
     }
 }
 
-void EnemyModel::updateAnimation()
+void EnemyModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite)
 {
+    if (sprite->isVisible()) {
+        frameCounter = (frameCounter + 1) % E_ANIMATION_UPDATE_FRAME;
+        if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0 && sprite->getFrame() < sprite->getCount() - 1) {
+            sprite->setFrame(sprite->getFrame() + 1);
+        }
+    }
+    else {
+        sprite->setFrame(0);
+    }
 }
 
 void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
 {
     if (actionSprite->isVisible()) {
-        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
+        if (actionSprite->getFrame() == startFrame) {
             vfxSprite->setFrame(0);
         }
 
-        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
+        else if (actionSprite->getFrame() > startFrame) {
+            if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0 && vfxSprite->getFrame() < vfxSprite->getCount() - 1) {
+                vfxSprite->setFrame(vfxSprite->getFrame() + 1);
+            }
         }
+	}
+    else {
+        vfxSprite->setFrame(0);
     }
 }
+
+void EnemyModel::updateAnimation(){}
 
 #pragma mark -
 #pragma mark Scene Graph Methods
@@ -331,10 +370,39 @@ void EnemyModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSpri
  */
 void EnemyModel::resetDebug() {
     BoxObstacle::resetDebug();
-    float w = ENEMY_SSHRINK * _dimension.width;
-    float h = ENEMY_SENSOR_HEIGHT;
-    Poly2 dudePoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
-    _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(ENEMY_DEBUG_COLOR);
-    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+    _debug->setName("enemy_debug");
+    if (_groundSensorNode == nullptr){
+        setDebug();
+    }
+    if (_debug->getChildCount() == 0){
+        _groundSensorNode->setRelativeColor(false);
+        _groundSensorNode->setColor(Color4::RED);
+        _debug->addChild(_groundSensorNode);
+    }
+    
+    // necessary during reset, set debug scene node, since BoxObstacle::resetDebug() doesn't handle it correctly.
+    if (_debug->getScene() == nullptr){
+        _scene->addChild(_debug);
+    }
+}
+
+void EnemyModel::setConstants(){
+    _drawScale = _enemyJSON->_parent->get("world_info")->getFloat("scale");
+    worldLeft = _enemyJSON->_parent->get("world_info")->getFloat("worldLeft");
+    worldRight = _enemyJSON->_parent->get("world_info")->getFloat("worldRight");
+    
+    _size = Size(_enemyJSON->get("size")->get(0)->asFloat(), _enemyJSON->get("size")->get(1)->asFloat()) / _drawScale;
+    _size.width *= _hShrink;
+    _size.height *= _hShrink;    
+    
+    _maxHP = _enemyJSON->getInt("max_hp");
+}
+
+void EnemyModel::setDebug(){
+    // Sensor dimensions
+    float w = _dimension.width;
+    float h = _sensorHeight;
+    Poly2 groundPoly(Rect(-w / 2.0f, -h / 2.0f, w, h));
+    _groundSensorNode = scene2::WireNode::allocWithTraversal(groundPoly, poly2::Traversal::INTERIOR);
+    _groundSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
 }

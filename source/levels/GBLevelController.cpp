@@ -1,73 +1,12 @@
 #include "GBLevelController.h"
 #include "../enemies/enemy_variants/GBBoss1Controller.h"
+#include "../enemies/enemy_variants/GBMinion1AController.h"
 #include "../enemies/enemy_variants/GBMinion1BController.h"
 #include "../core/GBTypes.h"
 
 using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::scene2;
-
-#pragma mark -
-#pragma mark Constants moved from gamescene to here - these maybe should be parsed from JSON or in separate file
-
-#pragma mark -
-#pragma mark Level Geography
-/** This is adjusted by screen aspect ratio to get the height */
-#define GAME_SCENE_WIDTH 1024
-#define GAME_SCENE_HEIGHT 576
-
-/** This is the aspect ratio for physics */
-#define GAME_SCENE_ASPECT 9.0/16.0
-
-/** Width of the game world in Box2d units */
-#define GAME_DEFAULT_WIDTH   32.0f
-/** Height of the game world in Box2d units */
-#define GAME_DEFAULT_HEIGHT  18.0f
-
-
-/** Bullet Spawn Points */
-
-#pragma mark -
-#pragma mark Physics Constants
-/** The density for most physics objects */
-#define BASIC_DENSITY   0.0f
-/** The density for a projectile */
-#define HEAVY_DENSITY   10.0f
-/** Friction of most platforms */
-#define BASIC_FRICTION  0.4f
-/** The restitution for all physics objects */
-#define BASIC_RESTITUTION   0.1f
-/** Offset for pojectile when firing */
-#define PROJECTILE_OFFSET   0.5f
-/** The speed of the projectile after firing */
-#define PROJECTILE_SPEED   30.0f
-
-
-#pragma mark -
-#pragma mark Testing Constants
-/** The radius for enemy to initial attack */
-#define ENEMY_ATTACK_RADIUS     6.0f
-
-#pragma mark -
-#pragma mark Asset Constants
-
-///////////////// TEXTURES //////////////////////////////////
-/** The key for the ground texture in the asset manager */
-#define GROUND_TEXTURE  "ground"
-/** The key for the regular projectile texture in the asset manager */
-#define PROJECTILE_TEXTURE  "projectile"
-/** The key for the player projectile texture in the asset manager */
-#define PLAYER_PROJECTILE_TEXTURE "player_projectile"
-
-///////////////// NAMES /////////////////////////////////////
-#define PROJECTILE_NAME "projectile"
-/** The name of a platform (for object identification) */
-#define GROUND_NAME   "ground"
-
-/** Opacity of the physics outlines */
-#define DEBUG_OPACITY   192
-
-#define WORLD_DEBUG_COLOR    Color4::WHITE
 
 // EnemyController needs to become a base class that all other types of enemies derive from
 std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()>> enemyFactoryMap = {
@@ -76,7 +15,7 @@ std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()
         return std::make_shared<Boss1Controller>();
     } }, // Should return a Boss1Controller
     { "minion_1A", []() {
-        return std::make_shared<Boss1Controller>();
+        return std::make_shared<Minion1AController>();
     } }, // Should return a Minion1AController
     { "minion_1B", []() {
         return std::make_shared<Minion1BController>();
@@ -90,17 +29,23 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
     std::shared_ptr<EnemyController> enemy = enemyFactoryMap[enemyType]();
 
     std::vector<std::shared_ptr<ActionModel>> actions = LevelController::parseActions(_enemiesJSON, enemyType);
-    enemy->init(_assets, _constantsJSON, actions);
+    enemy->init(_assets, _enemiesJSON, actions);
+	enemy->getEnemy()->getSceneNode()->setVisible(false);
     return enemy;
 }
 
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
+    enemy_controller->setSpawnPosition(getPlayerPosition());
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
+    enemy_controller->getEnemy()->getSceneNode()->setVisible(true);
+    enemy_controller->inWorld = true;
+
 }
 
-bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef)
+bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef)
 {
     // Store references to world and debugNode
+    _worldNode = worldNodeRef;
     _worldRef = worldRef;
     _debugNodeRef = debugNodeRef;
 
@@ -121,26 +66,27 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         CULog("Failed to load constants.json");
         return false;
     }
+    
+    // set world_info constants in enemyJSON
+    float scale = _constantsJSON->get("scene")->getFloat("scale");
+    _enemiesJSON->get("world_info")->get("scale")->set(scale);
+    float wall_thickness = _constantsJSON->get("walls")->getFloat("thickness");
+    float worldRight = _constantsJSON->get("scene")->getFloat("world_width") - wall_thickness;
+    _enemiesJSON->get("world_info")->get("worldLeft")->set(wall_thickness);
+    _enemiesJSON->get("world_info")->get("worldRight")->set(worldRight);
 
-	_levels = parseLevels(_levelsJSON);
+    _levels = parseLevels(_levelsJSON, _assets);
     if (_levels.empty()) {
         return false;
     }
 
-    int _numEnemiesActive = 0;
+    _numEnemiesActive = 0;
 
     // Setup player controller
     _playerController = std::make_shared<PlayerController>();
     _playerController->init(_assets, _constantsJSON);
 
     return true;
-}
-
-std::shared_ptr<cugl::scene2::PolygonNode> LevelController::makeWorldNode(std::string levelName) {
-    std::shared_ptr<LevelModel> levelRef = getLevelByName(levelName);
-    std::shared_ptr<Texture> bgimage = levelRef->getBackground();
-    _worldNode = scene2::PolygonNode::allocWithTexture(bgimage);
-    return _worldNode;
 }
 
 void LevelController::updateLevel() {
@@ -253,6 +199,9 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     }
 
 #pragma mark : GROUND
+    // Get the ground from the level itself
+    image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
+
     std::shared_ptr<physics2::PolygonObstacle> groundObj;
     Poly2 ground(calculateGroundVertices());
 
@@ -290,8 +239,6 @@ void LevelController::reset() {
         CULog("Resetting player controller");
         _playerController->reset();
     }
-    // Clear or reset non-init fields
-    _worldNode = nullptr;
 
     // Reset wave attributes
     _enemyWaves.clear();
@@ -299,6 +246,8 @@ void LevelController::reset() {
     _currentEnemyIndex = 0;
 	_lastSpawnedTime = 0;
     _numEnemiesActive = 0;
+
+	_timeSpentInLevel = 0.0f;
 }
 
 void LevelController::preUpdate(float dt)
@@ -309,9 +258,11 @@ void LevelController::preUpdate(float dt)
         && _currentWaveIndex < _enemyWaves.size()
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
-            enemodel->setTargetPos(player->getPosition());
-            enemyCtrlr->preUpdate(dt);
+            if (canUpdate(enemyCtrlr)){
+                std::shared_ptr<EnemyModel> enemodel = enemyCtrlr->getEnemy();
+                enemodel->setTargetPos(player->getPosition());
+                enemyCtrlr->preUpdate(dt);
+            }
         }
     }
 
@@ -320,6 +271,10 @@ void LevelController::preUpdate(float dt)
 
 void LevelController::fixedUpdate(float timestep)
 {
+	if (!isLevelLost() && !isLevelWon()) {
+		_timeSpentInLevel += timestep;
+	}
+
 	_playerController->fixedUpdate(timestep);
     updateLevel();
 
@@ -327,11 +282,31 @@ void LevelController::fixedUpdate(float timestep)
         && _currentWaveIndex < _enemyWaves.size() 
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
-                continue;
+            if (canUpdate(enemyCtrlr)) {
+                auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
+                auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
+
+                if (damagingAction) {
+                    createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1));
+                }
+
+                if (projectileAction) {
+                    auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition(), projectileAction->getProjectiles()[0], enemyCtrlr->getEnemy()->isFacingRight());
+                    addObstacle(projectilePair);
+                }
+
+                enemyCtrlr->fixedUpdate(timestep);
             }
 
-            enemyCtrlr->fixedUpdate(timestep);
+            else if (enemyCtrlr->getEnemy()->getHP() <= 0) {
+                if (enemyCtrlr->getEnemy()->isRemoved()) {
+                    continue;
+                }
+
+                enemyCtrlr->getEnemy()->die(_worldNode);
+                enemyCtrlr->inWorld = false;
+                _numEnemiesActive--;
+            }
         }
     }
 }
@@ -339,44 +314,15 @@ void LevelController::fixedUpdate(float timestep)
 void LevelController::postUpdate(float dt)
 {
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
-    if (player->isShooting() && player->hasProjectile()) {
-        //ObstacleNodePair p = Projectile::createProjectile(_assets, _constantsJSON, player->getPosition(), player->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), true, player->isFacingRight());
-        //addObstacle(p);
-        //player->setHasProjectile(false);
-    }
 	_playerController->postUpdate(dt);
 
     if (_enemyWaves.size() > 0
         && _currentWaveIndex < _enemyWaves.size()
         && _enemyWaves[_currentWaveIndex].size() > 0) {
         for (auto enemyCtrlr : _enemyWaves[_currentWaveIndex]) {
-            if (enemyCtrlr == nullptr || enemyCtrlr->getEnemy()->getBody() == nullptr || enemyCtrlr->getEnemy()->isRemoved()) {
-                continue;
-            }
+            if (canUpdate(enemyCtrlr)) {
 
-            auto damagingAction = enemyCtrlr->getEnemy()->getDamagingAction();
-            auto projectileAction = enemyCtrlr->getEnemy()->getProjectileAction();
-
-            if (damagingAction) {
-                createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxEndTime() - damagingAction->getHitboxStartTime() + 1);
-            }
-
-            if (projectileAction) {
-                auto projectilePair = Projectile::createProjectile(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition().add(enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(2, 0) : Vec2(-2, 0)), enemyCtrlr->getEnemy()->isFacingRight() ? Vec2(1, 0) : Vec2(-1, 0), false, enemyCtrlr->getEnemy()->isFacingRight());
-                addObstacle(projectilePair);
-            }
-
-            enemyCtrlr->postUpdate(dt);
-
-            if (enemyCtrlr->getEnemy()->getHP() <= 0) {
-                if (enemyCtrlr->getEnemy()->isRemoved()) {
-                    continue;
-                }
-
-                _worldNode->removeChild(enemyCtrlr->getEnemy()->getSceneNode());
-                enemyCtrlr->getEnemy()->markRemoved(true);
-                _numEnemiesActive--;
-                //_enemyControllers.erase(std::remove(_enemyControllers.begin(), _enemyControllers.end(), enemyCtrlr), _enemyControllers.end());
+                enemyCtrlr->postUpdate(dt);
             }
         }
     }
@@ -427,33 +373,25 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
         std::string type = action->getString("type");
         std::string name = action->getString("name");
 
-        std::string animationPath = action->getString("animation");
-        std::shared_ptr<Texture> animationTexture = Texture::allocWithFile(animationPath);
-        std::shared_ptr<SpriteNode> animationSprite = SpriteNode::allocWithSheet(animationTexture, action->getInt("animation_row"), action->getInt("animation_col"), action->getInt("animation_size"));
-        animationSprite->setFrame(0);
-
         if (type == "melee") {
             auto meleeAction = std::make_shared<MeleeActionModel>();
             meleeAction->setActionName(name);
-            meleeAction->setActionAnimation(animationSprite);
 
             cugl::Vec2 hitboxPos(action->get("hitboxPos")->asFloatArray().front(), action->get("hitboxPos")->asFloatArray().back());
             cugl::Vec2 hitboxSize(action->get("hitboxSize")->asFloatArray().front(), action->get("hitboxSize")->asFloatArray().back());
 
             meleeAction->setHitboxPos(hitboxPos);
             meleeAction->setHitboxSize(hitboxSize);
-            meleeAction->setHitboxStartTime(action->getFloat("hitboxStartTime"));
-            meleeAction->setHitboxEndTime(action->getFloat("hitboxEndTime"));
-            meleeAction->setHitboxDamage(action->getFloat("hitboxDamage"));
-
-            
+            meleeAction->setHitboxStartFrame(action->getInt("hitboxStartFrame"));
+            CULog("PARSING: %i", action->getInt("hitboxStartFrame"));
+            meleeAction->setHitboxEndFrame(action->getInt("hitboxEndFrame"));
+            meleeAction->setHitboxDamage(action->getInt("hitboxDamage"));
 
             actions.push_back(meleeAction);
         }
         else if (type == "ranged") {
             auto rangedAction = std::make_shared<RangedActionModel>();
             rangedAction->setActionName(name);
-            rangedAction->setActionAnimation(animationSprite);
 
 			std::vector<std::shared_ptr<Projectile>> projectiles;
 			std::vector<Vec2> spawnPositions;
@@ -461,13 +399,6 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
 
 			for (std::shared_ptr<JsonValue> projectileJSON : action->get("projectiles")->children()) {
 				std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>();
-
-                spawnPositions.push_back(
-                    Vec2(
-                        projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(), 
-                        projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
-                    )
-                );
                 
                 spawnFrames.push_back(projectileJSON->get("projectileSpawnFrame")->asInt());
 
@@ -479,14 +410,35 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
                         projectileJSON->get("projectileVelocity")->get("y")->asFloat()
                     )
                 );
-                //projectile->setSpriteNode(
-                //    SpriteNode::allocWithSheet(
-                //        Texture::allocWithFile(projectileJSON->getString("projectileAnimation")), 
-                //        action->getInt("animation_row"), 
-                //        action->getInt("animation_col"), 
-                //        action->getInt("animation_size")
-                //    )
-                //);
+
+                projectile->setSize(
+                    Vec2(
+                        projectileJSON->get("projectileSize")->get("width")->asFloat(),
+                        projectileJSON->get("projectileSize")->get("height")->asFloat()
+                    )
+                );
+
+                projectile->setSpawnOffset(
+                    Vec2(
+                        projectileJSON->get("projectileSpawnPosition")->get("x")->asFloat(),
+                        projectileJSON->get("projectileSpawnPosition")->get("y")->asFloat()
+                    )
+                );
+                projectile->setAnimOffset(
+                    Vec2(
+                        projectileJSON->get("projectile_animation_offset")->get("x")->asFloat(),
+                        projectileJSON->get("projectile_animation_offset")->get("y")->asFloat()
+                    )
+                );
+
+                projectile->setSceneNode(
+                    SpriteNode::allocWithSheet(
+                        Texture::allocWithFile(projectileJSON->getString("projectileAnimation")), 
+                        projectileJSON->getInt("projectile_animation_row"),
+                        projectileJSON->getInt("projectile_animation_col"),
+                        projectileJSON->getInt("projectile_animation_size")
+                    )
+                );
 
 				projectiles.push_back(projectile);
 			}
@@ -505,7 +457,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
     return actions;
 }
 
-std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json)
+std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::parseLevels(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef)
 {
     std::unordered_map<std::string, std::shared_ptr<LevelModel>> levels;
 
@@ -515,14 +467,14 @@ std::unordered_map<std::string, std::shared_ptr<LevelModel>> LevelController::pa
     }
 
     for (std::shared_ptr<JsonValue> level : json->get("levels")->children()) {
-        std::shared_ptr<LevelModel> lModel = parseLevel(level);
+        std::shared_ptr<LevelModel> lModel = parseLevel(level, assetRef);
         levels[lModel->getLevelName()] = lModel;
     }
 
 	return levels;
 }
 
-std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<JsonValue>& json)
+std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef)
 {
     std::shared_ptr<LevelModel> level = std::make_shared<LevelModel>();
 
@@ -530,10 +482,20 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
         CULogError("Invalid or empty JSON node!");
         return level;
     }
+	CULog("%s", json->toString().c_str());
 
-	level->setLevelName(json-> getString("name"));
-    level->setBackground(Texture::allocWithFile(json->getString("background")));
-    level->setGround(Texture::allocWithFile(json->getString("ground")));
+	level->setLevelName(json->getString("name"));
+    level->setScale(json->getFloat("scale"));
+    auto bg = assetRef->get<graphics::Texture>(json->getString("background"));
+    level->setBackground(bg);
+    auto gr = Texture::allocWithFile(json->getString("ground"));
+    level->setGround(gr);
+    
+    for (std::shared_ptr<JsonValue> layer : json->get("layers")->children()) {
+        auto texture = assetRef->get<graphics::Texture>(layer->getString("file"));
+        unsigned int speed = layer->getInt("speed");
+        level->addLayer(texture, speed);
+    }
     
 	// Parse platforms
     std::vector<std::shared_ptr<Rect>> platforms;
@@ -570,27 +532,27 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
-    float defaultWidth =  _constantsJSON->get("scene")->get("default_width")->asFloat(32.0f);
-    float defaultHeight =  _constantsJSON->get("scene")->get("default_height")->asFloat(18.0f);
-    float wallThickness = _constantsJSON->get("walls")->get("thickness")->asFloat(1.0f);
+    float worldWidth =  _constantsJSON->get("scene")->getFloat("world_width");
+    float worldHeight =  _constantsJSON->get("scene")->getFloat("world_height");
+    float wallThickness = _constantsJSON->get("walls")->getFloat("thickness");
 
     // Using Vec2 instead of float pairs
     std::vector<std::vector<Vec2>> wallVertices = {
         {
-            Vec2(defaultWidth / 2, defaultHeight),
-            Vec2(0.0f, defaultHeight),
+            Vec2(worldWidth/2, worldHeight),
+            Vec2(0.0f, worldHeight),
             Vec2(0.0f, 0.0f),
             Vec2(wallThickness, 0.0f),
-            Vec2(wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth / 2, defaultHeight - wallThickness)
+            Vec2(wallThickness, worldHeight - wallThickness),
+            Vec2(worldWidth/2, worldHeight - wallThickness)
         },
         {
-            Vec2(defaultWidth, defaultHeight),
-            Vec2(defaultWidth / 2, defaultHeight),
-            Vec2(defaultWidth / 2, defaultHeight - wallThickness),
-            Vec2(defaultWidth - wallThickness, defaultHeight - wallThickness),
-            Vec2(defaultWidth - wallThickness, 0.0f),
-            Vec2(defaultWidth, 0.0f)
+            Vec2(worldWidth, worldHeight),
+            Vec2(worldWidth/2, worldHeight),
+            Vec2(worldWidth/2, worldHeight - wallThickness),
+            Vec2(worldWidth - wallThickness, worldHeight - wallThickness),
+            Vec2(worldWidth - wallThickness, 0.0f),
+            Vec2(worldWidth, 0.0f)
         }
     };
 
@@ -599,13 +561,13 @@ std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
 
 
 std::vector<Vec2> LevelController::calculateGroundVertices() {
-    float defaultWidth = _constantsJSON->get("scene")->get("default_width")->asFloat(32.0f);
-    float groundThickness = _constantsJSON->get("ground")->get("thickness")->asFloat(4.0f);
+    float worldWidth = _constantsJSON->get("scene")->getFloat("world_width");
+    float groundThickness = _constantsJSON->get("ground")->getFloat("thickness");
 
     std::vector<Vec2> groundVertices = {
         Vec2(0.0f, 0.0f),
-        Vec2(defaultWidth, 0.0f),
-        Vec2(defaultWidth, groundThickness),
+        Vec2(worldWidth, 0.0f),
+        Vec2(worldWidth, groundThickness),
         Vec2(0.0f, groundThickness)
     };
 
@@ -641,3 +603,10 @@ void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
     _worldNode->addChild(node);
 }
 
+float LevelController::getTimeSpentInLevel() const {
+    return _timeSpentInLevel;
+}
+
+std::shared_ptr<PlayerController> LevelController::getPlayerController() const {
+    return _playerController;
+}

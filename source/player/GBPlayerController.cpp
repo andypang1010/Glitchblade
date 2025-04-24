@@ -8,7 +8,7 @@ using namespace cugl::audio;
 #define SIGNUM(x)  ((x > 0) - (x < 0))
 
 // CONSTANTS:
-float PLAYER_INIT_POS[] = { 2.5f, 5.0f };
+float PLAYER_INIT_POS[] = { 30.0f, 5.0f };
 
 PlayerController::PlayerController() {}
 
@@ -24,12 +24,12 @@ void PlayerController::init(const std::shared_ptr<AssetManager>& assetRef, const
 
     _input = PlatformInput::alloc(assetRef, constantsRef);
     _player = PlayerModel::alloc(assetRef, constantsRef, PLAYER_INIT_POS);
-#pragma mark hp node
-    _hpNode = scene2::Label::allocWithText(std::to_string(_player->getMaxHP()), assetRef->get<Font>(constantsRef->get("player")->get("debug")->getString("font")));
-    _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
-    _hpNode->setForeground(Color4::CYAN);
-    _hpNode->setPosition(0, 55);
-    _player->getSceneNode()->addChild(_hpNode);
+//#pragma mark hp node
+//    _hpNode = scene2::Label::allocWithText(std::to_string(_player->getMaxHP()), assetRef->get<Font>(constantsRef->get("player")->get("debug")->getString("font")));
+//    _hpNode->setAnchor(Vec2::ANCHOR_CENTER);
+//    _hpNode->setForeground(Color4::CYAN);
+//    _hpNode->setPosition(0, 55);
+//    _player->getSceneNode()->addChild(_hpNode);
 #pragma mark constants
     _assets = assetRef;
     _constantsJSON = constantsRef;
@@ -150,7 +150,9 @@ void PlayerController::preUpdate(float dt)
     _player->setDashRightInput(_input->didDashRight());
     _player->setGuardInput(_input->didGuard());
     _player->setShootInput(_input->didFire());
-    _hpNode->setText(std::to_string((int)_player->getHP()));
+    //_hpNode->setText(std::to_string((int)_player->getHP()));
+
+	_player->setDebugColor(_player->isParryActive() ? Color4::RED : _player->isGuardActive() ? Color4::YELLOW : Color4::BLACK);
 
     if (_player->isJumpBegin() && _player->isGrounded()) {
         std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
@@ -165,6 +167,11 @@ void PlayerController::fixedUpdate(float timestep)
     _player->updateAnimation();
     applyForce();
     updateCooldowns();
+
+  //  if (_player->_parryCounter == 5) {
+		//_player->_parryCounter = 0;
+  //      _player->setHP(std::min(_player->getHP() + 20.0f, 100.0f));
+  //  }
 }
 
 #pragma mark postUpdate
@@ -174,33 +181,36 @@ void PlayerController::postUpdate(float dt)
 
 void PlayerController::updateCooldowns()
 {
-#pragma mark Guard cooldown
     if (_player->iframe > 0) _player->iframe--;
+    if (_player->isDamaged()) _player->setDamagedRem(_player->getDamagedRem() - 1);
+#pragma mark Guard cooldown
+    // Update guard release time
+    if (_player->getGuardReleaseRem() > 0) {
+        int newRem = _player->getGuardReleaseRem() - 1;
+        _player->setGuardReleaseRem(newRem);
+    }
     // player inputs guard and cooldown is ready
     if (_player->isGuardBegin()) {
         _player->setGuardCDRem();
         _player->setGuardRem();
         _player->setParryRem();
-        _player->setShieldDebugColor(Color4::GREEN);
+        _player->setGuardState(1);
     }
     if (_player->isGuardActive() && !_player->isGuardBegin()) {
         int guardRem = _player->getGuardRem();
         _player->setGuardRem(guardRem - 1);
+        if (guardRem == 1) {
+            // Parry ending on this frame
+            _player->setGuardReleaseRem(PLAYER_HIT_COLOR_DURATION);
+            _player->setGuardState(3);
+        }
         int parryRem = _player->getParryRem();
         _player->setParryRem(parryRem > 0 ? parryRem - 1 : 0);
-        if (parryRem == 0) {
-            // Parry ending on this frame
-            _player->setShieldDebugColor(Color4::BLUE);
-        }
     }
     // guard not active, update cooldown
     else if (_player->getGuardCDRem() >= 0) {
-        int newCD = _player->getGuardCDRem() - 1;
-        _player->setGuardCDRem((newCD < 0) ? 0 : newCD);
-        if (_player->getGuardCDRem() == 0) {
-            //end guard
-            _player->setShieldDebugColor(Color4(_constantsJSON->get("player")->get("debug")->getString("color")));
-        }
+            int newCD = _player->getGuardCDRem() - 1;
+            _player->setGuardCDRem((newCD < 0) ? 0 : newCD);
     }
 
 #pragma mark Jump cooldown
@@ -250,16 +260,6 @@ void PlayerController::updateCooldowns()
         _player->setDashReset(true); // ready to dash again
     }
 
-}
-
-
-
-void PlayerController::activateShield()
-{
-}
-
-void PlayerController::deactivateShield()
-{
 }
 
 void PlayerController::fireProjectile()

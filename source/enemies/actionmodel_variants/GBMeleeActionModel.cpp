@@ -4,7 +4,7 @@
  * Default constructor.
  * Initializes all hitbox-related values to defaults.
  */
-MeleeActionModel::MeleeActionModel() : _hitboxPos(0, 0), _hitboxSize(0, 0), _hitboxStartTime(0.0f), _hitboxEndTime(0.0f), _hitboxDamage(0.0f) {}
+MeleeActionModel::MeleeActionModel() : _hitboxPos(0, 0), _hitboxSize(0, 0), _hitboxStartFrame(0.0f), _hitboxEndFrame(0.0f), _hitboxDamage(0.0f) {}
 
 /**
  * Virtual destructor.
@@ -42,29 +42,29 @@ void MeleeActionModel::setHitboxSize(const cugl::Vec2& size) {
 /**
  * Returns the hitbox start time.
  */
-float MeleeActionModel::getHitboxStartTime() const {
-    return _hitboxStartTime;
+int MeleeActionModel::getHitboxStartFrame() const {
+    return _hitboxStartFrame;
 }
 
 /**
  * Sets the hitbox start time.
  */
-void MeleeActionModel::setHitboxStartTime(float startTime) {
-    _hitboxStartTime = startTime;
+void MeleeActionModel::setHitboxStartFrame(int StartFrame) {
+    _hitboxStartFrame = StartFrame;
 }
 
 /**
  * Returns the hitbox end time.
  */
-float MeleeActionModel::getHitboxEndTime() const {
-    return _hitboxEndTime;
+int MeleeActionModel::getHitboxEndFrame() const {
+    return _hitboxEndFrame;
 }
 
 /**
  * Sets the hitbox end time.
  */
-void MeleeActionModel::setHitboxEndTime(float endTime) {
-    _hitboxEndTime = endTime;
+void MeleeActionModel::setHitboxEndFrame(int EndFrame) {
+    _hitboxEndFrame = EndFrame;
 }
 
 /**

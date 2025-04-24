@@ -37,8 +37,8 @@
 #include "../enemies/GBEnemyModel.h"
 #include "../levels/GBLevelController.h"
 #include "GBSceneInterface.h"
+#include "GBCollisionController.h"
 #include "ui/GBIngameUI.h"
-#include "ui/GBPauseMenu.h"
 
 using namespace cugl;
 
@@ -51,24 +51,28 @@ using namespace cugl;
  */
 class GameScene : public scene2::Scene2, public GBSceneInterface {
 protected:
+    bool _cameraLocked;
+    Vec3 _defCamPos;
     /** The asset manager for this game mode. */
     std::shared_ptr<AssetManager> _assets;
     std::shared_ptr<JsonValue> _constantsJSON;
     // CONTROLLERS
     /** LevelController for managing the level progress of the current game */
-    std::shared_ptr<LevelController> _levelController;
+    std::unique_ptr<LevelController> _levelController;
+    /** CollisionController for handling collisions in the physics world */
+    std::unique_ptr<CollisionController> _collisionController;
     // delete this input controller
     std::shared_ptr<PlatformInput> _input;
     
     // VIEW
+    /** Reference to the current loaded level */
+    std::shared_ptr<LevelModel> _currentLevel;
+    /** Reference to the scene camera */
+    std::shared_ptr<cugl::Camera> _camera;
     /** Reference to the physics root of the scene graph */
     std::shared_ptr<scene2::SceneNode> _worldnode;
     /** Reference to the debug root of the scene graph */
     std::shared_ptr<scene2::SceneNode> _debugnode;
-    /** Reference to the win message label */
-    std::shared_ptr<scene2::Label> _winnode;
-    /** Reference to the lose message label */
-    std::shared_ptr<scene2::Label> _losenode;
     /** Reference to the enemy HP label */
     std::shared_ptr<scene2::Label> _enemyHPNode;
     /** Reference to the player HP label */
@@ -78,11 +82,13 @@ protected:
     /** Whether the scene is populated */
     bool _populated = false;
     
+    // Physics objects for the game
+    /** Reference to the player avatar */
+    std::shared_ptr<PlayerModel> _player;
+    
     // UI
     /** Ingame UI */
     std::shared_ptr<GBIngameUI> _ui;
-
-    std::shared_ptr<GBPauseMenu> _pauseMenu;
     bool _isPaused = false;
     
     /** The Box2D world */
@@ -90,9 +96,8 @@ protected:
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _scale;
     Vec2 _offset;
-    // Physics objects for the game
-    /** Reference to the player avatar */
-    std::shared_ptr<PlayerModel>			  _player;
+    /** How wide the physics world is in pixels (=box2d width times scale)*/
+    int _worldPixelWidth;
 
     /** Whether we have completed this "game" */
     bool _complete;
@@ -107,9 +112,6 @@ protected:
     int _shakeDuration;
 
     bool _inituiactive = true;
-
-    /** Mark set to handle more sophisticated collision callbacks */
-    std::unordered_set<b2Fixture*> _sensorFixtures;
 
 #pragma mark Internal Object Management
 
@@ -176,43 +178,7 @@ public:
      * @return true if the controller is initialized properly, false otherwise.
      */
     bool init(const std::shared_ptr<AssetManager>& assets);
-
-    /**
-     * Initializes the controller contents, and starts the game
-     *
-     * The constructor does not allocate any objects or memory.  This allows
-     * us to have a non-pointer reference to this controller, reducing our
-     * memory allocation.  Instead, allocation happens in this method.
-     *
-     * The game world is scaled so that the screen coordinates do not agree
-     * with the Box2d coordinates.  The bounds are in terms of the Box2d
-     * world, not the screen.
-     *
-     * @param assets    The (loaded) assets for this game mode
-     * @param rect      The game bounds in Box2d coordinates
-     *
-     * @return  true if the controller is initialized properly, false otherwise.
-     */
-    bool init(const std::shared_ptr<AssetManager>& assets,
-              const Rect& rect);
     
-    /**
-     * Initializes the controller contents, and starts the game
-     *
-     * The constructor does not allocate any objects or memory.  This allows
-     * us to have a non-pointer reference to this controller, reducing our
-     * memory allocation.  Instead, allocation happens in this method.
-     *
-     * The game world is scaled so that the screen coordinates do not agree
-     * with the Box2d coordinates.  The bounds are in terms of the Box2d
-     * world, not the screen.
-     *
-     * @param assets    The (loaded) assets for this game mode
-     * @param rect      The game bounds in Box2d coordinates
-     * @param gravity   The gravitational force on this Box2d world
-     *
-     * @return  true if the controller is initialized properly, false otherwise.
-     */
     void populateUI(const std::shared_ptr<cugl::AssetManager>& assets);
     void disableUI();
     void enableUI();
@@ -282,71 +248,6 @@ public:
     
 #pragma mark -
 #pragma mark Collision Handling
-    /**
-    * Processes the start of a collision
-    *
-    * This method is called when we first get a collision between two objects.  We use
-    * this method to test if it is the "right" kind of collision.  In particular, we
-    * use it to test if we make it to the win door.  We also us it to eliminate bullets.
-    *
-    * @param  contact  The two bodies that collided
-    */
-    void beginContact(b2Contact* contact);
-
-    /**
-    * Processes the end of a collision
-    *
-    * This method is called when we no longer have a collision between two objects.
-    * We use this method allow the character to jump again.
-    *
-    * @param  contact  The two bodies that collided
-    */
-    void endContact(b2Contact* contact);
-    
-    /**
-     *
-     * This function returns true if the provided Obstacle b is an enemy body
-     * and if the fixture name `f` matches the enemy's body name.
-     *
-     * @param b Pointer to the Obstacle  being checked.
-     * @param f Pointer to the fixture's user data (string).
-     * @return True if the fixture and body correspond to an enemy body, false otherwise.
-     */
-    bool isEnemyBody(physics2::Obstacle* b, std::string f);
-    /**
-     *
-     * This function returns true if the provided Obstacle b is the player body
-     * and if the fixture name `f` matches the player's body name.
-     *
-     * @param b Pointer to the Obstacle  being checked.
-     * @param f Pointer to the fixture's user data (string).
-     * @return True if the fixture and body correspond to the player body, false otherwise.
-     */
-    bool isPlayerBody(physics2::Obstacle* b,const std::string* f);
-    /**
-     * @brief Checks if a projectile is hitting the player's shield.
-     *
-     * This function examines two possible (body, fixture) pairs to determine if a projectile
-     * has collided with the player's shield. It returns a pointer to the projectile if a valid
-     * collision is detected, otherwise returns nullptr.
-     *
-     * @param bd1 The first body involved in the contact.
-     * @param fd1 The user data of the first fixture.
-     * @param bd2 The second body involved in the contact.
-     * @param fd2 The user data of the second fixture.
-     * @return A pointer to the projectile that hit the shield, or nullptr if no such collision occurred.
-     *
-     * @note The function ensures that the projectile was not fired by the player and that the player's
-     * shield is active before confirming a valid collision.
-     */
-    Projectile* getProjectileHitShield(physics2::Obstacle* bd1, std::string* fd1,
-                                                physics2::Obstacle* bd2, std::string* fd2) const;
-
-    /**
- Checks if contact is projectile hitting player shield and returns the Projectile if so, else NULL.
- */
-    Projectile* getEnemyHitShield(physics2::Obstacle* bd1, std::string* fd1,
-        physics2::Obstacle* bd2, std::string* fd2) const;
 
 #pragma mark -
 #pragma mark Gameplay Handling
@@ -442,6 +343,20 @@ public:
     * @param  bullet   the bullet to remove
     */
     void removeProjectile(Projectile* bullet);
+    
+    /**
+     * Loads all background/foreground layers and attaches them as children of _worldnode
+     */
+    void setBG();
+    
+    void updateLayersLeft();
+    void updateLayersRight();
+
+    bool _shouldPause = false;
+    bool _shouldResume = false;
+    bool _shouldRetry = false;
+    bool _shouldContinue = false;
+    
     
     void setPaused(bool paused) {
         _isPaused = paused;

@@ -29,7 +29,7 @@ private:
     std::shared_ptr<LevelModel> _currentLevel;
 
     std::unordered_map<std::string, std::shared_ptr<LevelModel >> _levels;
-    std::shared_ptr<cugl::scene2::PolygonNode> _worldNode;
+    std::shared_ptr<cugl::scene2::SceneNode> _worldNode;
     std::shared_ptr<cugl::scene2::SceneNode> _debugNodeRef;
     std::shared_ptr<cugl::physics2::ObstacleWorld> _worldRef;
 
@@ -38,6 +38,7 @@ private:
 	int _currentWaveIndex = 0;
 	int _currentEnemyIndex = 0;
     float _lastSpawnedTime = 0;
+    float _timeSpentInLevel = 0;
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
@@ -48,25 +49,39 @@ private:
     float _scale;
     /* Controllers */
 
-    /** One enemy controller for this level controller: It will likely need to be a vector for future levels*/
-    std::vector<std::shared_ptr<EnemyController>> _enemyControllers;
-
 	std::vector<std::vector<std::shared_ptr<EnemyController>>> _enemyWaves;
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
     
-
+public:
+	float timeElapsed = 0.0f;
+    
+#pragma mark send statistics
+    float getTimeSpentInLevel() const;
+    std::shared_ptr<PlayerController> getPlayerController() const;
 
 
 protected:
 public:
 
-    bool isCurrentLevelComplete() {
-        return (!_enemyWaves.empty()) && waveComplete() && _currentWaveIndex == _enemyWaves.size();
+    bool isLevelWon() {
+        bool levelWon = true;
+
+        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
+            for (auto enemyController : _enemyWaves[_currentWaveIndex]) {
+                levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
+            }
+        }
+
+        else {
+            return false;
+        }
+
+        return levelWon;
     }
 
-    bool isCurrentLevelFailed() {
+    bool isLevelLost() {
         return _playerController->getPlayer()->getHP() <= 0;
     }
     
@@ -78,10 +93,6 @@ public:
     void updateWave();
     void spawnLevel();
     bool waveComplete();
-
-    std::vector<std::shared_ptr<EnemyController>> getEnemyControllers() {
-        return _enemyControllers;
-    }
 
     std::shared_ptr<LevelModel> getLevelByName(std::string name) {
         auto it = _levels.find(name);
@@ -96,7 +107,7 @@ public:
     /**
      * Initializes the level controller. Return false on failure
      */
-    bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef);
+    bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef);
 
     /**
     * Creates and returns a worldNode for GameScene to use
@@ -162,14 +173,15 @@ public:
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);
     /** Parses the JSON file and returns a vector of parsed actions. */
-    static std::unordered_map<std::string, std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json);
+    static std::unordered_map<std::string, std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef);
     /** Parses the JSON file and returns a vector of parsed actions. */
-    static std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json);
+    static std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef);
 
 #pragma mark Getters
     // this is a test method because we will need to access all enemies in the level not just one
     // std::shared_ptr<EnemyModel> getTestEnemyModel() { return _testEnemyController->getEnemy(); };
     // std::shared_ptr<cugl::scene2::SceneNode> getTestEnemyNode() { return _testEnemyController->getEnemy()->getSceneNode(); };
+    Vec2 getPlayerPosition() {return getPlayerModel()->getPosition();};
     std::shared_ptr<PlayerModel> getPlayerModel() { return _playerController->getPlayer(); };
     std::shared_ptr<cugl::scene2::SceneNode> getPlayerNode() { return _playerController->getPlayer()->getSceneNode(); };
     std::shared_ptr<PlatformInput> getInputController() { return _playerController->getInputController(); };
@@ -180,7 +192,14 @@ public:
     std::vector<Vec2> calculateGroundVertices();
     Vec2 calculateLeftBulletPosition();
     Vec2 calculateRightBulletPosition();
-};
-
+    
+    static bool canUpdate(std::shared_ptr<EnemyController> enemyCtrlr){
+        return (
+            enemyCtrlr != nullptr && 
+            enemyCtrlr->getEnemy()->getBody() != nullptr && 
+            !enemyCtrlr->getEnemy()->isRemoved() &&
+            enemyCtrlr->getEnemy()->getHP() > 0);
+        }
+    };
 
 #endif /* LEVEL_CONTROLLER_H */

@@ -45,7 +45,7 @@
 #define __GB_PLAYER_MODEL_H__
 #include <cugl/cugl.h>
 
-#define PLAYER_HIT_COLOR_DURATION 8
+#define PLAYER_HIT_COLOR_DURATION 16
 
 using namespace cugl;
 
@@ -67,6 +67,8 @@ protected:
     std::shared_ptr<JsonValue> _playerJSON;
     /** This character's remaining health */
     float _hp = 100;
+    /** how much damage player deals*/
+    int _damage;
     /** The current horizontal movement of the character */
     float _movement;
     /** Which direction is the character facing */
@@ -79,8 +81,12 @@ protected:
     int  _dashRem;
     /** How long until we can guard again in frames */
     int  _guardCooldownRem = 0;
+    /** How many frames remaining in the guard release animation */
+    int  _guardReleaseRem = 0;
     /** How many frames remaining in the guard (0 when guard is not active) */
     int  _guardRem;
+    /** The state of the guard: 1 = is guarding, 2 = parry release, 3 = normal release, 0 = not guarding */
+    int  _guardState;
     /** How many frames remaining in the parry (0 when parry is not active) */
     int  _parryRem;
     /** Whether we are actively inputting jumping */
@@ -111,6 +117,16 @@ protected:
     /** Whether the dash has been released (reset) */
     bool _dashReset = true;
     int _lastDamagedFrame;
+    /** Remaining time for damaged animation */
+    int _damageRem;
+    
+#pragma mark fixture constants
+    /** The amount to shrink the body fixture (horizontally) relative to the image */
+    float _hShrink = 0.7f;
+    /** Height of the sensor attached to the Enemy's feet */
+    float _sensorHeight = 0.1f;
+    Size _size;
+
 
     std::string _name;
     std::string _bodyName;
@@ -120,18 +136,11 @@ protected:
     std::string _groundSensorName;
     /** The node for debugging the ground sensor */
     std::shared_ptr<scene2::WireNode> _groundSensorNode;
-    /** Ground sensor to represent our feet */
-    b2Fixture* _shieldSensorFixture;
-    /** Reference to the sensor name (since a constant cannot have a pointer) */
-    std::string _shieldSensorName;
-    /** The guard shield when guard is active */
-    std::shared_ptr<scene2::WireNode> _shieldSensorNode;
     /** The player scene node**/
     std::shared_ptr<scene2::SceneNode> _sceneNode;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
-    
     float _drawScale;
-    int currentFrame = 0;
+    int frameCounter = 0;
 
     /**
     * Redraws the outline of the physics fixtures to the debug node
@@ -144,15 +153,18 @@ protected:
 
 public:
     int iframe = 0;
-
-    std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
+    int _parryCounter = 0;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
-    std::shared_ptr<scene2::SpriteNode> _guardSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
+    std::shared_ptr<scene2::SpriteNode> _damagedSprite;
+
+    std::shared_ptr<scene2::SpriteNode> _guardSprite;
+    std::shared_ptr<scene2::SpriteNode> _guardReleaseSprite;
+    std::shared_ptr<scene2::SpriteNode> _parryReleaseSprite;
 
 #pragma mark Hidden Constructors
     /**
@@ -246,7 +258,11 @@ public:
         _dashRem = 0;
         _guardCooldownRem = 0;
         _guardRem = 0;
+        _guardState = 0;
         _parryRem = 0;
+        _damageRem = 0;
+        _damage = 10;// default player dmg
+        _parryCounter = 0;
     };
     
     void setConstants();
@@ -306,14 +322,6 @@ Vec2 getKnockDirection() { return _knockDirection; }
      * @return the name of the ground sensor
      */
     std::string* getGroundSensorName() { return &_groundSensorName; }
-    /**
-     * Returns the name of the shield sensor
-     *
-     * This is used by ContactListener
-     *
-     * @return the name of the shield sensor
-     */
-    std::string* getShieldName() { return &_shieldSensorName; }
 
     /**
      * Returns true if this character is facing right
@@ -383,6 +391,12 @@ public:
     #pragma mark -
     #pragma mark - Attribute Properties
 
+    // Damage
+    int getDamage() const { return _damage;}
+    void setDamage(int value) { _damage = value; }
+	bool isDamaged() const { return _damageRem > 0; }
+	void setDamagedRem(int value) { _damageRem = value; }
+	int getDamagedRem() { return _damageRem; }
     // Health
     int getMaxHP() const { return _maxhp;}
     float getHP() const { return _hp; }
@@ -444,6 +458,11 @@ public:
     void setGuardCDRem(int value = _guard_cooldown) { _guardCooldownRem = value; }
     void setGuardInput(bool value) { _isGuardInput = value; }
 
+	int getGuardState() { return _guardState; }
+	void setGuardState(int value) { _guardState = value; }
+    int getGuardReleaseRem() { return _guardReleaseRem; }
+	void setGuardReleaseRem(int value) { _guardReleaseRem = value; }
+
     // Parrying
     bool isParryActive() { return _parryRem > 0 || isGuardBegin(); }
     int getParryRem() { return _parryRem; }
@@ -476,7 +495,6 @@ public:
     float getMaxSpeed() const { return _maxspeed; }
 
     // Debug
-    void setShieldDebugColor(Color4 c) { _shieldSensorNode->setColor(c); }
 
 
 

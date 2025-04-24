@@ -25,74 +25,69 @@ using namespace graphics;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
-    resetAttributes();
+bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    return EnemyModel::init(assetRef, enemyJSON, pos, actions);
+};
 
-    float scale = constantsRef->get("scene")->getFloat("scale");
-    _enemyJSON = constantsRef->get("enemy");
-    std::shared_ptr<graphics::Texture> image;
-    image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
-
-    Size nsize = Size(90, 90) / scale;
-    nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
-    nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
-    _drawScale = scale;
-
-    setDebugColor(_enemyJSON->get("debug")->getString("color"));
-    if (BoxObstacle::init(pos, nsize)) {
-        setDensity(ENEMY_DENSITY);
-        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-        attachNodes(assetRef);
-
-        for (auto act : actions) {
-            if (act->getActionName() == "slam") {
-                _slam = std::dynamic_pointer_cast<RangedActionModel>(act);
-            }
-            else if (act->getActionName() == "punch") {
-                _punch = std::dynamic_pointer_cast<MeleeActionModel>(act);
-            }
-        }
-
-        return true;
-    }
-
-    return false;
-}
 
 void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
     //move this to new function
-    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_idle"), 3, 4, 10);
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_idle"), 5, 2, 10);
 	_idleSprite->setScale(0.5f);
     _idleSprite->setPosition(0, 10);
+	_idleSprite->setName("idle");
 
-    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_walk"), 3, 4, 10);
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_walk"), 5, 2, 10);
     _walkSprite->setScale(0.5f);
     _walkSprite->setPosition(0, 10);
+	_walkSprite->setName("walk");
 
     _punchSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_punch"), 8, 4, 30);
     _punchSprite->setScale(0.5f);
     _punchSprite->setPosition(0, 10);
+	_punchSprite->setName("punch");
 
-    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_slam"), 4, 4, 15);
+    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_slam"), 8, 4, 32);
     _slamSprite->setScale(0.5f);
     _slamSprite->setPosition(0, 10);
+	_slamSprite->setName("slam");
 
-    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_stun"), 1, 4, 4);
+	_slamVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("wave_enemy_1"), 1, 8, 8);
+	_slamVFXSprite->setScale(0.4f);
+	_slamVFXSprite->setPosition(150, -5);
+	_slamVFXSprite->setName("slam_vfx");
+
+    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_stun"), 5, 4, 20);
     _stunSprite->setScale(0.5f);
     _stunSprite->setPosition(0, 10);
+    _stunSprite->setName("stun");
+	stunFrames = _stunSprite->getCount() * 4;
 
-    setName(std::string(ENEMY_NAME));
-    setDebugColor(ENEMY_DEBUG_COLOR);
+    _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_dead"), 5, 3, 15);
+    _deadSprite->setScale(0.5f);
+    _deadSprite->setPosition(0, 10);
+	_deadSprite->setName("dead");
 
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_punchSprite);
-    getSceneNode()->addChild(_slamSprite);
     getSceneNode()->addChild(_stunSprite);
 
+    getSceneNode()->addChild(_slamSprite);
+	getSceneNode()->addChild(_slamVFXSprite);
+}
+
+void Minion1BModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
+    for (auto act : actions) {
+        if (act->getActionName() == "slam") {
+            _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
+        }
+        else if (act->getActionName() == "punch") {
+            _punch = std::dynamic_pointer_cast<MeleeActionModel>(act);
+        }
+    }
 }
 
 #pragma mark -
@@ -103,38 +98,9 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
  * This is the primary method to override for custom physics objects
  */
 void Minion1BModel::createFixtures() {
-    if (_body == nullptr) {
-        return;
-    }
-
-    BoxObstacle::createFixtures();
-    b2FixtureDef sensorDef;
-    sensorDef.density = ENEMY_DENSITY;
-    sensorDef.isSensor = true;
-
-    b2Filter filter = b2Filter();
-    filter.maskBits = 0x0001;
-    filter.categoryBits = 0x0002;
-    setFilterData(filter);
-
-    // Sensor dimensions
-    b2Vec2 corners[4];
-    corners[0].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[1].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[2].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[3].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
-
-    b2PolygonShape sensorShape;
-    sensorShape.Set(corners, 4);
-
-    sensorDef.shape = &sensorShape;
-    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
-    _sensorFixture = _body->CreateFixture(&sensorDef);
+    EnemyModel::createFixtures();
 }
+
 
 /**
  * Release the fixtures for this body, reseting the shape
@@ -142,16 +108,9 @@ void Minion1BModel::createFixtures() {
  * This is the primary method to override for custom physics objects.
  */
 void Minion1BModel::releaseFixtures() {
-    if (_body != nullptr) {
-        return;
-    }
-
-    BoxObstacle::releaseFixtures();
-    if (_sensorFixture != nullptr) {
-        _body->DestroyFixture(_sensorFixture);
-        _sensorFixture = nullptr;
-    }
+    EnemyModel::releaseFixtures();
 }
+
 
 /**
  * Disposes all resources and assets of this PlayerModel
@@ -162,14 +121,15 @@ void Minion1BModel::releaseFixtures() {
 void Minion1BModel::dispose() {
     _geometry = nullptr;
     _node = nullptr;
-    _sensorNode = nullptr;
+    _groundSensorNode = nullptr;
     _geometry = nullptr;
-    _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _walkSprite = nullptr;
     _punchSprite = nullptr;
     _slamSprite = nullptr;
     _stunSprite = nullptr;
+    _deadSprite = nullptr;
+
 }
 
 #pragma mark Cooldowns
@@ -183,19 +143,6 @@ void Minion1BModel::dispose() {
 void Minion1BModel::update(float dt) {
     if (isRemoved()) return;
 
-    updateAnimation();
-    nextAction();
-
-    // Apply cooldowns
-	_aggression = std::min(100.0f, _aggression + dt*5);
-
-    if (isKnocked()) {
-        resetKnocked();
-    }
-
-    if (isStunned()) {
-        _stunRem--;
-    }
 
     BoxObstacle::update(dt);
     if (_node != nullptr) {
@@ -222,14 +169,12 @@ void Minion1BModel::nextAction() {
             if (r % 2 == 0) { // Punch
                 punch();
             }
-        }
-        else {
-            if (r % 2 == 0) { // Slam
+            else {
                 slam();
             }
-            else { // Move closer
-                approachTarget(45);
-            }
+        }
+        else {
+            approachTarget(45);
         }
     }
     else {
@@ -238,11 +183,11 @@ void Minion1BModel::nextAction() {
             _isPunching = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= MINION1B_SLAM_FRAMES - 1) {
+        if (_isSlamming && _slamSprite->getFrame() >= _slamSprite->getCount() - 1) {
             _isSlamming = false;
             setMovement(0);
         }
-        if (_isPunching && _punchSprite->getFrame() >= MINION1B_PUNCH_FRAMES - 1) {
+        if (_isPunching && _punchSprite->getFrame() >= _punchSprite->getCount() - 1) {
             _isPunching = false;
             setMovement(0);
         }
@@ -260,7 +205,7 @@ void Minion1BModel::AIMove() {
         setMoveRight(dist < 0);
         _moveDuration--;
     }
-    else if (_isPunching && _punchSprite->getFrame() >= _punch->getHitboxStartTime() - 1 && _punchSprite->getFrame() <= _punch->getHitboxEndTime() - 1) {
+    else if (_isPunching && _punchSprite->getFrame() >= _punch->getHitboxStartFrame() - 1 && _punchSprite->getFrame() <= _punch->getHitboxEndFrame() - 1) {
         setMovement(face * getForce() * MINION1B_PUNCH_FORCE * _scale);
     }
     else {
@@ -271,8 +216,8 @@ void Minion1BModel::AIMove() {
 
 void Minion1BModel::slam() {
     faceTarget();
-    if (rand() % 200 <= _aggression) {
-        _aggression -= std::max(0.0f, _aggression - 25);
+    if (rand() % 100 <= _aggression) {
+        _aggression -= std::max(0.0f, _aggression - 50);
         _isSlamming = true;
         setMovement(0);
     }
@@ -288,80 +233,44 @@ void Minion1BModel::punch() {
 }
 
 std::shared_ptr<MeleeActionModel> Minion1BModel::getDamagingAction() {
-    if (_isPunching && _punchSprite->getFrame() == _punch->getHitboxStartTime() - 1) {
+    if (_isPunching && _punchSprite->getFrame() == _punch->getHitboxStartFrame() - 1) {
         return _punch;
     }
-    return nullptr;
-}
-
-std::shared_ptr<RangedActionModel> Minion1BModel::getProjectileAction() {
-    std::vector<int> frames = _slam->getProjectileSpawnFrames();
-    for (int frame : frames) {
-        if (_isSlamming && currentFrame == frame * E_ANIMATION_UPDATE_FRAME) {
-            return _slam;
-        }
+    if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartFrame() - 1) {
+        return _slam;
     }
-
     return nullptr;
 }
 
 #pragma mark -
 #pragma mark Animation Methods
-void Minion1BModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite->isVisible()) {
-        currentFrame++;
-        if (currentFrame > sprite->getCount() * E_ANIMATION_UPDATE_FRAME) {
-            currentFrame = 0;
-        }
-
-        if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
-        }
-    }
-    else {
-        sprite->setFrame(0);
-    }
-}
 
 void Minion1BModel::updateAnimation()
 {
 
     _stunSprite->setVisible(isStunned());
 
-    _walkSprite->setVisible(!isStunned() && !_isPunching && !_isSlamming && isGrounded() && (isMoveLeft() || isMoveRight()));
+    _walkSprite->setVisible(!isStunned() && !_isPunching && !_isSlamming && (isMoveLeft() || isMoveRight()));
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
+	_slamVFXSprite->setVisible(_slamSprite->isVisible() && _slamSprite->getFrame() >= 19);
+
     _punchSprite->setVisible(!isStunned() && _isPunching);
 
-    if (_stunRem == STUN_FRAMES) {
-        currentFrame = 0;
-    }
-
-    _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_punchSprite->isVisible() && !_walkSprite->isVisible());
+    _idleSprite->setVisible(!_stunSprite->isVisible() && !_slamSprite->isVisible() && !_punchSprite->isVisible() && !_walkSprite->isVisible());
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
-    playAnimation(_slamSprite);
-    playAnimation(_punchSprite);
-    playAnimation(_stunSprite);
+    playAnimationOnce(_slamSprite);
+    playAnimationOnce(_punchSprite);
+    playAnimationOnce(_stunSprite);
+
+	playVFXAnimation(_slamSprite, _slamVFXSprite, _slam->getHitboxStartFrame() - 1);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-}
-
-void Minion1BModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
-{
-    if (actionSprite->isVisible()) {
-        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
-            vfxSprite->setFrame(0);
-        }
-
-        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
-        }
-    }
 }
 
 #pragma mark -
@@ -374,11 +283,5 @@ void Minion1BModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionS
  * the texture (e.g. a circular shape attached to a square texture).
  */
 void Minion1BModel::resetDebug() {
-    BoxObstacle::resetDebug();
-    float w = ENEMY_SSHRINK * _dimension.width;
-    float h = ENEMY_SENSOR_HEIGHT;
-    Poly2 dudePoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
-    _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(ENEMY_DEBUG_COLOR);
-    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+    EnemyModel::resetDebug();
 }

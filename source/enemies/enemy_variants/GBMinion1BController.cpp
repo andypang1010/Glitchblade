@@ -5,12 +5,12 @@
 Minion1BController::Minion1BController() : EnemyController() {}
 
 void Minion1BController::init(const std::shared_ptr<AssetManager>& assetRef,
-    const std::shared_ptr<JsonValue>& constantsRef,
+    const std::shared_ptr<JsonValue>& enemiesJSON,
     std::vector<std::shared_ptr<ActionModel>> actions) {
 
-    _enemy = Minion1BModel::alloc(assetRef, constantsRef, ENEMY_INIT_POS, actions);
-    _enemyJSON = constantsRef->get("enemy");
-    EnemyController::init(assetRef, constantsRef, actions);
+    _enemyJSON = enemiesJSON->get("minion_1B");
+    _enemy = Minion1BModel::alloc(assetRef, _enemyJSON, ENEMY_DEFAULT_INIT_POS, actions);
+    EnemyController::init(assetRef, _enemyJSON, actions);
 }
 
 void Minion1BController::applyForce() {
@@ -34,7 +34,7 @@ void Minion1BController::applyForce() {
         b2Vec2 force(_enemy->getMovement(), 0);
         enemyBody->ApplyForceToCenter(force, true);
 
-        float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
+        //float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
         // Dash force fetched but unused ?this is where you'd apply it if needed
     }
 
@@ -45,7 +45,7 @@ void Minion1BController::applyForce() {
         enemyBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _enemy->getKnockF()), true);
     }
 
-    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed() && !_enemy->isKnockbackActive()) {
+    if (fabs(_enemy->getVX()) >= _enemy->getMaxSpeed()) {
         _enemy->setVX(SIGNUM(_enemy->getVX()) * _enemy->getMaxSpeed());
     }
 
@@ -54,15 +54,34 @@ void Minion1BController::applyForce() {
     }
 }
 
-void Minion1BController::fixedUpdate(float timestep) {
-    applyForce();
-}
-
 void Minion1BController::preUpdate(float dt) {
     if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getHP()));
-    //if (_hpNode) _hpNode->setText(std::to_string((int)_enemy->getAggression()));
+    //if (_hpNode) _hpNode->setText(std::to_string(_enemy->getVX()));
     if (_stunNode) _stunNode->setText((_enemy->isStunned() ? "STUN" : ""));
+
+
+    // Apply cooldowns
+    _enemy->setAggression(std::min(100.0f, _enemy->getAggression() + dt * 5));
+
+    if (_enemy->isKnocked()) {
+        _enemy->resetKnocked();
+    }
+
+    if (_enemy->isStunned()) {
+        _enemy->setStun(_enemy->getStunRem() - 1);
+    }
+
 }
+
+void Minion1BController::fixedUpdate(float timestep) {
+    applyForce();
+    _enemy->updateAnimation();
+    _enemy->nextAction();
+    //don't put code here! it will get called twice in certain cases, between pre and post update (and 0 times other cases).
+    // the fixedUpdate for the obstacle world is already handled by the physics world itself, applyForce must stay in preUpdate!
+}
+
+
 
 void Minion1BController::postUpdate(float dt) {
     // No post-update behavior needed yet

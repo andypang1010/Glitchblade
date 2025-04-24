@@ -68,77 +68,50 @@ using namespace graphics;
  *
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
-bool Boss1Model::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
-    resetAttributes();
-
-    float scale = constantsRef->get("scene")->getFloat("scale");
-    _enemyJSON = constantsRef->get("enemy");
-    std::shared_ptr<graphics::Texture> image;
-    image = assetRef->get<graphics::Texture>(ENEMY_TEXTURE);
-
-    Size nsize = Size(90, 180) / scale;
-    nsize.width *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
-    nsize.height *= _enemyJSON->get("fixtures")->get("body")->getFloat("h_shrink");
-    _drawScale = scale;
-
-    setDebugColor(_enemyJSON->get("debug")->getString("color"));
-    if (BoxObstacle::init(pos, nsize)) {
-        setDensity(ENEMY_DENSITY);
-        setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
-        setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-        attachNodes(assetRef);
-
-        for (auto act : actions) {
-            if (act->getActionName() == "slam") {
-                _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
-            }
-            else if (act->getActionName() == "stab") {
-                _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
-            }
-            else if (act->getActionName() == "explode") {
-                _explode = std::dynamic_pointer_cast<MeleeActionModel>(act);
-            }
-            else if (act->getActionName() == "shoot") {
-                _shoot = std::dynamic_pointer_cast<RangedActionModel>(act);
-            }
-        }
-
-        return true;
-    }
-
-    return false;
-}
+bool Boss1Model::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    return EnemyModel::init(assetRef, enemyJSON, pos, actions);
+};
 
 void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _node = scene2::SceneNode::alloc();
     setSceneNode(_node);
     //move this to new function
-    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 6, 6);
+    _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 5, 5);
     _idleSprite->setPosition(0, 50);
+	_idleSprite->setName("idle");
 
-    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walking1"), 1, 8, 8);
+    _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walk"), 1, 7, 7);
     _walkSprite->setPosition(0, 50);
+	_walkSprite->setName("walk");
 
-    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 4, 10, 40);
+    _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 8, 5, 40);
     _slamSprite->setPosition(0, 50);
+	_slamSprite->setName("slam");
 
-    _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 4, 10, 40);
+    _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 8, 5, 40);
     _stabSprite->setPosition(0, 50);
+	_stabSprite->setName("stab");
 
-    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 3, 10, 22);
+    _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 7, 6, 38);
     _stunSprite->setPosition(0, 50);
+	_stunSprite->setName("stun");
+    stunFrames = _stunSprite->getCount() * 4;
 
-    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 2, 10, 15);
+    _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 3, 5, 15);
     _shootSprite->setPosition(0, 50);
+	_shootSprite->setName("shoot");
 
-    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 4, 10, 40);
+    _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 11, 5, 53);
     _explodeSprite->setPosition(0, 50);
+	_explodeSprite->setName("explode");
 
 	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 32);
 	_explodeVFXSprite->setPosition(0, 0);
+	_explodeVFXSprite->setName("explode_vfx");
 
-    setName(std::string(ENEMY_NAME));
-    setDebugColor(ENEMY_DEBUG_COLOR);
+	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_dead"), 12, 5, 60);
+	_deadSprite->setPosition(0, 50);
+	_deadSprite->setName("dead");
 
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
@@ -152,6 +125,23 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 }
 
+void Boss1Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
+    for (auto act : actions) {
+        if (act->getActionName() == "slam") {
+            _slam = std::dynamic_pointer_cast<MeleeActionModel>(act);
+        }
+        else if (act->getActionName() == "stab") {
+            _stab = std::dynamic_pointer_cast<MeleeActionModel>(act);
+        }
+        else if (act->getActionName() == "explode") {
+            _explode = std::dynamic_pointer_cast<MeleeActionModel>(act);
+        }
+        else if (act->getActionName() == "shoot") {
+            _shoot = std::dynamic_pointer_cast<RangedActionModel>(act);
+        }
+    }
+}
+
 #pragma mark -
 #pragma mark Physics Methods
 /**
@@ -160,37 +150,7 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
  * This is the primary method to override for custom physics objects
  */
 void Boss1Model::createFixtures() {
-    if (_body == nullptr) {
-        return;
-    }
-
-    BoxObstacle::createFixtures();
-    b2FixtureDef sensorDef;
-    sensorDef.density = ENEMY_DENSITY;
-    sensorDef.isSensor = true;
-
-    b2Filter filter = b2Filter();
-    filter.maskBits = 0x0001;
-    filter.categoryBits = 0x0002;
-    setFilterData(filter);
-
-    // Sensor dimensions
-    b2Vec2 corners[4];
-    corners[0].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[1].x = -ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[2].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - ENEMY_SENSOR_HEIGHT) / 2.0f;
-    corners[3].x = ENEMY_SSHRINK * getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + ENEMY_SENSOR_HEIGHT) / 2.0f;
-
-    b2PolygonShape sensorShape;
-    sensorShape.Set(corners, 4);
-
-    sensorDef.shape = &sensorShape;
-    sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
-    _sensorFixture = _body->CreateFixture(&sensorDef);
+    EnemyModel::createFixtures();
 }
 
 /**
@@ -199,15 +159,7 @@ void Boss1Model::createFixtures() {
  * This is the primary method to override for custom physics objects.
  */
 void Boss1Model::releaseFixtures() {
-    if (_body != nullptr) {
-        return;
-    }
-
-    BoxObstacle::releaseFixtures();
-    if (_sensorFixture != nullptr) {
-        _body->DestroyFixture(_sensorFixture);
-        _sensorFixture = nullptr;
-    }
+    EnemyModel::releaseFixtures();
 }
 
 /**
@@ -219,7 +171,7 @@ void Boss1Model::releaseFixtures() {
 void Boss1Model::dispose() {
     _geometry = nullptr;
     _node = nullptr;
-    _sensorNode = nullptr;
+    _groundSensorNode = nullptr;
     _geometry = nullptr;
     _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
@@ -229,6 +181,7 @@ void Boss1Model::dispose() {
     _stunSprite = nullptr;
 	_shootSprite = nullptr;
 	_explodeSprite = nullptr;
+    _deadSprite = nullptr;
 }
 
 #pragma mark Cooldowns
@@ -241,20 +194,6 @@ void Boss1Model::dispose() {
  */
 void Boss1Model::update(float dt) {
     if (isRemoved()) return;
-
-    updateAnimation();
-    nextAction();
-
-    // Apply cooldowns
-    _aggression = std::min(100.0f, _aggression + dt*10);
-
-    if (isKnocked()) {
-        resetKnocked();
-    }
-
-    if (isStunned()) {
-        _stunRem--;
-    }
 
     BoxObstacle::update(dt);
     if (_node != nullptr) {
@@ -316,19 +255,19 @@ void Boss1Model::nextAction() {
 			_isExploding = false;
             setMovement(0);
         }
-        if (_isSlamming && _slamSprite->getFrame() >= SLAM_FRAMES - 1) {
+        if (_isSlamming && _slamSprite->getFrame() >= _slamSprite->getCount() - 1) {
             _isSlamming = false;
             setMovement(0);
         }
-        if (_isStabbing && _stabSprite->getFrame() >= STAB_FRAMES - 1) {
+        if (_isStabbing && _stabSprite->getFrame() >= _stabSprite->getCount() - 1) {
             _isStabbing = false;
             setMovement(getMovement());
         }
-        if (_isShooting && _shootSprite->getFrame() >= SHOOT_FRAMES - 1) {
+        if (_isShooting && _shootSprite->getFrame() >= _shootSprite->getCount() - 1) {
             _isShooting = false;
             setMovement(0);
         }
-        if (_isExploding && _explodeSprite->getFrame() >= EXPLODE_FRAMES - 1) {
+        if (_isExploding && _explodeSprite->getFrame() >= _explodeSprite->getCount() - 1) {
             _isExploding = false;
             setMovement(0);
         }
@@ -347,13 +286,12 @@ void Boss1Model::AIMove() {
         _moveDuration--;
     }
 
-    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartTime() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndTime() - 1) {
+    else if (_isStabbing && _stabSprite->getFrame() >= _stab->getHitboxStartFrame() - 1 && _stabSprite->getFrame() <= _stab->getHitboxEndFrame() - 1) {
         setMovement(face * getForce() * STAB_FORCE * _scale);
     }
     else {
         setMovement(getMovement() / 3);
     }
-
 }
 
 void Boss1Model::slam() {
@@ -376,7 +314,7 @@ void Boss1Model::stab() {
 
 void Boss1Model::shoot() {
 	faceTarget();
-    if (rand() % 100 <= _aggression) {
+    if (_aggression >= 75) {
         _aggression -= std::max(0.0f, _aggression - 10);
         _isShooting = true;
         setMovement(0);
@@ -393,13 +331,13 @@ void Boss1Model::explode() {
 }
 
 std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {
-    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartTime() - 1) {
+    if (_isStabbing && _stabSprite->getFrame() == _stab->getHitboxStartFrame() - 1) {
         return _stab;
     }
-    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartTime() - 1) {
+    else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartFrame() - 1) {
         return _slam;
 	}
-	else if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartTime() - 1) {
+	else if (_isExploding && _explodeSprite->getFrame() == _explode->getHitboxStartFrame() - 1) {
 		return _explode;
 	}
     return nullptr;
@@ -408,7 +346,7 @@ std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {
 std::shared_ptr<RangedActionModel> Boss1Model::getProjectileAction() {
 	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
     for (int frame : frames) {
-		if (_isShooting && currentFrame == frame * E_ANIMATION_UPDATE_FRAME) {
+		if (_isShooting && _shootSprite->getFrame() == frame && frameCounter == 0) {
 			return _shoot;
 		}
     }
@@ -418,28 +356,13 @@ std::shared_ptr<RangedActionModel> Boss1Model::getProjectileAction() {
 
 #pragma mark -
 #pragma mark Animation Methods
-void Boss1Model::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite->isVisible()) {
-        currentFrame++;
-        if (currentFrame > sprite->getCount() * E_ANIMATION_UPDATE_FRAME) {
-            currentFrame = 0;
-        }
-
-        if (currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
-        }
-    }
-    else {
-        sprite->setFrame(0);
-    }
-}
 
 void Boss1Model::updateAnimation()
 {
 
     _stunSprite->setVisible(isStunned());
 
-    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && isGrounded() && (isMoveLeft() || isMoveRight()));
+    _walkSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && (isMoveLeft() || isMoveRight()));
 
     _slamSprite->setVisible(!isStunned() && _isSlamming);
 
@@ -449,40 +372,31 @@ void Boss1Model::updateAnimation()
 
 	_explodeSprite->setVisible(!isStunned() && _isExploding);
 
-    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && currentFrame >= 96);
+    _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= _explodeSprite->getCount() - _explodeVFXSprite->getCount());
 
-    if (_stunRem == STUN_FRAMES) {
-        currentFrame = 0;
-    }
+    _idleSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && !(isMoveLeft() || isMoveRight()));
 
-    _idleSprite->setVisible(!isStunned() && !_slamSprite->isVisible() && !_stabSprite->isVisible() && !_shootSprite->isVisible() && !_explodeSprite->isVisible() && !_walkSprite->isVisible());
+    //CULog("Stun Spirte Visible: %s", _stunSprite->isVisible() ? "true" : "false");
+    //CULog("Walk Spirte Visible: %s", _walkSprite->isVisible() ? "true" : "false");
+    //CULog("Slam Spirte Visible: %s", _slamSprite->isVisible() ? "true" : "false");
+    //CULog("Stab Spirte Visible: %s", _stabSprite->isVisible() ? "true" : "false");
+    //CULog("Shoot Spirte Visible: %s", _shootSprite->isVisible() ? "true" : "false");
+    //CULog("Explode Spirte Visible: %s", _explodeSprite->isVisible() ? "true" : "false");
+    //CULog("Idle Spirte Visible: %s", _idleSprite->isVisible() ? "true" : "false");
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
-    playAnimation(_slamSprite);
-    playAnimation(_stabSprite);
-    playAnimation(_stunSprite);
-	playAnimation(_shootSprite);
-	playAnimation(_explodeSprite);
+    playAnimationOnce(_slamSprite);
+    playAnimationOnce(_stabSprite);
+    playAnimationOnce(_stunSprite);
+	playAnimationOnce(_shootSprite);
+	playAnimationOnce(_explodeSprite);
 
-    playVFXAnimation(_explodeSprite, _explodeVFXSprite, 24);
+    playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartFrame() - 1);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-}
-
-void Boss1Model::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame)
-{
-    if (actionSprite->isVisible()) {
-        if (currentFrame == startFrame * E_ANIMATION_UPDATE_FRAME) {
-            vfxSprite->setFrame(0);
-        }
-
-        if (currentFrame > startFrame * E_ANIMATION_UPDATE_FRAME && currentFrame % E_ANIMATION_UPDATE_FRAME == 0) {
-            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
-        }
-    }
 }
 
 #pragma mark -
@@ -495,11 +409,8 @@ void Boss1Model::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSpri
  * the texture (e.g. a circular shape attached to a square texture).
  */
 void Boss1Model::resetDebug() {
-    BoxObstacle::resetDebug();
-    float w = ENEMY_SSHRINK * _dimension.width;
-    float h = ENEMY_SENSOR_HEIGHT;
-    Poly2 dudePoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
-    _sensorNode = scene2::WireNode::allocWithTraversal(dudePoly, poly2::Traversal::INTERIOR);
-    _sensorNode->setColor(ENEMY_DEBUG_COLOR);
-    _sensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+    EnemyModel::resetDebug();
 }
+
+
+

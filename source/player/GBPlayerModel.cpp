@@ -81,15 +81,14 @@ bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const std:
     nsize.height *= _playerJSON->get("fixtures")->get("body")->getFloat("v_shrink");
     _drawScale = scale;
 
-    setDebugColor(_playerJSON->get("debug")->getString("color"));
-
     if (BoxObstacle::init(pos, nsize)) {
         setDensity(_playerJSON->getFloat("density"));
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE
-
+        setDebugColor(Color4::BLACK);
         // set the scene node and attach the sprite nodes to it
         attachNodes(assetRef);
+        setName(_name);
         return true;
     }
     return false;
@@ -101,27 +100,39 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     setSceneNode(_sceneNode);
 
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_idle"), 3, 4, 11);
-    _idleSprite->setPosition(0, -30);
+    _idleSprite->setPosition(0, -25);
     _idleSprite->setScale(0.5f);
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_walk"), 2, 4, 5);
-    _walkSprite->setPosition(0, -30);
+    _walkSprite->setPosition(0, -25);
     _walkSprite->setScale(0.5f);
 
     _jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpUp"), 2, 4, 5);
-    _jumpUpSprite->setPosition(0, -30);
+    _jumpUpSprite->setPosition(0, -25);
     _jumpUpSprite->setScale(0.5f);
 
     _jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpDown"), 2, 4, 7);
-    _jumpDownSprite->setPosition(0, -30);
+    _jumpDownSprite->setPosition(0, -25);
     _jumpDownSprite->setScale(0.5f);
 
-    _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 3, 4, 12);
-    _guardSprite->setPosition(0, -30);
+    _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 9, 4, 36);
+    _guardSprite->setPosition(0, -25);
     _guardSprite->setScale(0.5f);
 
+    _guardReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard_release"), 2, 4, 5);
+    _guardReleaseSprite->setPosition(0, -25);
+    _guardReleaseSprite->setScale(0.5f);
+
+    _parryReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_parry_release"), 2, 4, 5);
+    _parryReleaseSprite->setPosition(0, -25);
+    _parryReleaseSprite->setScale(0.5f);
+
+    _damagedSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_damaged"), 2, 4, 5);
+    _damagedSprite->setPosition(0, -25);
+    _damagedSprite->setScale(0.5f);
+
     _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 2, 4, 5);
-    _attackSprite->setPosition(0, -30);
+    _attackSprite->setPosition(0, -25);
     _attackSprite->setScale(0.5f);
 
     getSceneNode()->addChild(_idleSprite);
@@ -129,9 +140,10 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_jumpUpSprite);
     getSceneNode()->addChild(_jumpDownSprite);
     getSceneNode()->addChild(_guardSprite);
+    getSceneNode()->addChild(_guardReleaseSprite);
+	getSceneNode()->addChild(_parryReleaseSprite);
     getSceneNode()->addChild(_attackSprite);
-    
-    setName(_name);
+    getSceneNode()->addChild(_damagedSprite);
 }
 
 #pragma mark -
@@ -145,8 +157,23 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void PlayerModel::damage(float value) {
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
-	_sceneNode->setColor(Color4::RED);
+	//_sceneNode->setColor(Color4::RED);
     _lastDamagedFrame = 0;
+    if (!isGuardActive()) {
+        _damageRem = PLAYER_HIT_COLOR_DURATION;
+    }
+    else {
+        if (isParryActive()) {
+            _guardState = 2;
+		}
+        else {
+            _guardState = 3;
+        }
+        _parryRem = 0;
+        _guardRem = 0;
+        _guardCooldownRem = 0;
+        _guardReleaseRem = PLAYER_HIT_COLOR_DURATION;
+    }
 }
 
 /**
@@ -228,18 +255,16 @@ void PlayerModel::createFixtures() {
     sensorDef.isSensor = true;
 
     // Sensor dimensions
-    float sensorHShrink = _playerJSON->get("fixtures")->get("sensor")->getFloat("h_shrink");
-    float sensorHeight = _playerJSON->get("fixtures")->get("sensor")->getFloat("height");
 
     b2Vec2 corners[4];
-    corners[0].x = -sensorHShrink * getWidth() / 2.0f;
-    corners[0].y = (-getHeight() + sensorHeight) / 2.0f;
-    corners[1].x = -sensorHShrink * getWidth() / 2.0f;
-    corners[1].y = (-getHeight() - sensorHeight) / 2.0f;
-    corners[2].x = sensorHShrink * getWidth() / 2.0f;
-    corners[2].y = (-getHeight() - sensorHeight) / 2.0f;
-    corners[3].x = sensorHShrink * getWidth() / 2.0f;
-    corners[3].y = (-getHeight() + sensorHeight) / 2.0f;
+    corners[0].x = - getWidth() / 2.0f;
+    corners[0].y = (-getHeight() + _sensorHeight) / 2.0f;
+    corners[1].x = - getWidth() / 2.0f;
+    corners[1].y = (-getHeight() - _sensorHeight) / 2.0f;
+    corners[2].x = getWidth() / 2.0f;
+    corners[2].y = (-getHeight() - _sensorHeight) / 2.0f;
+    corners[3].x = getWidth() / 2.0f;
+    corners[3].y = (-getHeight() + _sensorHeight) / 2.0f;
 
     b2PolygonShape sensorShape;
     sensorShape.Set(corners, 4);
@@ -247,18 +272,6 @@ void PlayerModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getGroundSensorName());
     _groundSensorFixture = _body->CreateFixture(&sensorDef);
-
-    // Create shield circle fixture
-    b2FixtureDef shieldDef;
-    b2CircleShape shieldShape;
-    shieldShape.m_radius = _playerJSON->get("fixtures")->get("shield")->getFloat("radius");
-    shieldShape.m_p.Set(0, 0); // Center of body
-    shieldDef.isSensor = true;
-    shieldDef.shape = &shieldShape;
-    shieldDef.userData.pointer = reinterpret_cast<uintptr_t>(getShieldName());
-    _shieldSensorFixture = _body->CreateFixture(&shieldDef);
-
-
 }
 
 /**
@@ -288,8 +301,6 @@ void PlayerModel::dispose() {
     _geometry = nullptr;
     _sceneNode = nullptr;
     _groundSensorNode = nullptr;
-    _shieldSensorNode = nullptr;
-    _currentSpriteNode = nullptr;
     _idleSprite = nullptr;
     _guardSprite = nullptr;
     _walkSprite = nullptr;
@@ -333,124 +344,200 @@ void PlayerModel::update(float dt) {
 #pragma mark -
 #pragma mark Animation
 void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
-    currentFrame += 1;
-
-    if (currentFrame % _animation_update_frame == 0) {
-        sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
+    if (sprite->isVisible()) {
+        frameCounter = (frameCounter + 1) % _animation_update_frame;
+        if (frameCounter % _animation_update_frame == 0) {
+            sprite->setFrame((sprite->getFrame() + 1) % sprite->getCount());
+        }
+    }
+    else {
+        sprite->setFrame(0);
     }
 }
 
 void PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
-    currentFrame += 1;
-
-    if (currentFrame % _animation_update_frame == 0
-        && sprite->getFrame() < sprite->getCount() - 1) {
-        sprite->setFrame(sprite->getFrame() + 1);
+    if (sprite->isVisible()) {
+        frameCounter = (frameCounter + 1) % _animation_update_frame;
+        if (frameCounter % _animation_update_frame == 0 && sprite->getFrame() < sprite->getCount() - 1) {
+            sprite->setFrame(sprite->getFrame() + 1);
+        }
+    }
+    else {
+        sprite->setFrame(0);
     }
 }
 
 
 void PlayerModel::updateAnimation()
 {
-    if (isGuardActive()) {
-        _guardSprite->setVisible(true);
+    if (isDamaged()) {
+        _guardSprite->setVisible(false);
+		_guardReleaseSprite->setVisible(false);
+		_parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(true);
+
+        if (_damageRem == PLAYER_HIT_COLOR_DURATION) {
+            frameCounter = 0;
+            _damagedSprite->setFrame(0);
+        }
+
+        playAnimationOnce(_damagedSprite);
+    }
+    else if (isGuardActive()) {
+        _guardSprite->setVisible(true);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         if (isGuardBegin()) {
-            currentFrame = 0;
+            frameCounter = 0;
             _guardSprite->setFrame(0);
         }
 
-        playAnimation(_guardSprite);
+        playAnimationOnce(_guardSprite);
+    }
+
+    else if (getGuardReleaseRem() > 0) {
+        _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
+        _attackSprite->setVisible(false);
+        _jumpUpSprite->setVisible(false);
+        _jumpDownSprite->setVisible(false);
+        _walkSprite->setVisible(false);
+        _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
+
+        if (getGuardReleaseRem() == PLAYER_HIT_COLOR_DURATION) {
+            frameCounter = 0;
+            _guardReleaseSprite->setFrame(0);
+            _parryReleaseSprite->setFrame(0);
+        }
+
+        if (_guardState == 2) {
+            _parryReleaseSprite->setVisible(true);
+            playAnimationOnce(_parryReleaseSprite);
+        }
+        else if (_guardState == 3) {
+            _guardReleaseSprite->setVisible(true);
+            playAnimationOnce(_guardReleaseSprite);
+        }
     }
 
     else if (isDashActive()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(true);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         if (isDashInput()) {
-            currentFrame = 0;
+            frameCounter = 0;
             _attackSprite->setFrame(0);
         }
 
-        playAnimation(_attackSprite);
+        playAnimationOnce(_attackSprite);
     }
 
     else if (isJumpBegin()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(true);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
-        currentFrame = 0;
+        frameCounter = 0;
         _jumpUpSprite->setFrame(0);
     }
     else if (getVY() > 0 && !isGrounded()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(true);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         playAnimationOnce(_jumpUpSprite);
     }
     else if (getVY() == 0 && !isGrounded()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(true);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
-        currentFrame = 0;
+        frameCounter = 0;
         _jumpDownSprite->setFrame(0);
     }
     else if (getVY() < 0 && !isGrounded()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(true);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         playAnimationOnce(_jumpDownSprite);
     }
 
     else if (isStrafeLeft() || isStrafeRight()) {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(true);
         _idleSprite->setVisible(false);
+        _damagedSprite->setVisible(false);
 
         playAnimation(_walkSprite);
     }
 
     else {
         _guardSprite->setVisible(false);
+        _guardReleaseSprite->setVisible(false);
+        _parryReleaseSprite->setVisible(false);
         _attackSprite->setVisible(false);
         _jumpUpSprite->setVisible(false);
         _jumpDownSprite->setVisible(false);
         _walkSprite->setVisible(false);
         _idleSprite->setVisible(true);
+        _damagedSprite->setVisible(false);
 
         playAnimation(_idleSprite);
     }
 
     _sceneNode->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-    _sceneNode->getChild(_sceneNode->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+    //_sceneNode->getChild(_sceneNode->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
 }
 
 
@@ -465,12 +552,13 @@ void PlayerModel::updateAnimation()
  */
 void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
+    _debug->setRelativeColor(false);
     _debug->setName("player_debug");
-    if (_groundSensorNode == nullptr || _shieldSensorNode == nullptr){
+    if (_groundSensorNode == nullptr){
         setDebug();
     }
     if (_debug->getChildCount() == 0){
-        _debug->addChild(_shieldSensorNode);
+        _groundSensorNode->setColor(Color4::RED);
         _debug->addChild(_groundSensorNode);
     }
     
@@ -482,21 +570,13 @@ void PlayerModel::resetDebug() {
 
 void PlayerModel::setDebug(){
     // Sensor dimensions
-    float sensor_shrink = _playerJSON->get("fixtures")->get("sensor")->getFloat("s_shrink");
-    float sensor_height = _playerJSON->get("fixtures")->get("sensor")->getFloat("height");
-    float w = sensor_shrink * _dimension.width;
-    float h = sensor_height;
-    Poly2 playerPoly(Rect(-w / 0.1f, -h / 2.0f, w, h));
+    float w = _dimension.width;
+    float h = _sensorHeight;
+    CULog("player sensor rect is (%f,%f,%f,%f)", -w/2.0, -h/2.0, w, h);
+    Poly2 playerPoly(Rect(-w / 2.0f, -h / 2.0f, w, h));
     _groundSensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
-    _groundSensorNode->setColor(Color4(_playerJSON->get("debug")->getString("ground_sensor_color")));
+    _groundSensorNode->setRelativeColor(false);
     _groundSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
-
-    Poly2 shieldPoly;
-    float radius = _playerJSON->get("fixtures")->get("shield")->getFloat("radius");
-    shieldPoly = PolyFactory().makeNgon(10000, 0, radius, 20);
-    _shieldSensorNode = scene2::WireNode::allocWithPoly(shieldPoly);
-    _shieldSensorNode->setPosition(Vec2(_debug->getContentSize() / 2));
-    _shieldSensorNode->setColor(Color4(_playerJSON->get("debug")->getString("color")));
 }
 
 void PlayerModel::setConstants(){
@@ -532,7 +612,6 @@ void PlayerModel::setConstants(){
     
     _name = _playerJSON->getString("name");
     _bodyName = _playerJSON->get("fixture_names")->getString("body");
-    _shieldSensorName = _playerJSON->get("fixture_names")->getString("shield");
     _groundSensorName = _playerJSON->get("fixture_names")->getString("ground");
 
 }
@@ -553,11 +632,11 @@ float PlayerModel::_maxspeed = 5.0f;
 float PlayerModel::_maxhp = 100.0f;
 int PlayerModel::_jump_cooldown = 5;
 int PlayerModel::_shoot_cooldown = 20;
-int PlayerModel::_guard_cooldown = 15;
+int PlayerModel::_guard_cooldown = 30;
 int PlayerModel::_dash_cooldown = 45;
 
-int PlayerModel::_guard_duration = 44;
-int PlayerModel::_parry_duration = 24;
+int PlayerModel::_guard_duration = 30;
+int PlayerModel::_parry_duration = 5;
 int PlayerModel::_dash_duration = 20;
 int PlayerModel::_knock_duration = 20;
 

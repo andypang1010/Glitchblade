@@ -21,7 +21,7 @@ class PlayerController {
 private:
     /** Reference to the player model */
     std::shared_ptr<PlayerModel> _player;
-    std::shared_ptr<scene2::Label> _hpNode;
+    //std::shared_ptr<scene2::Label> _hpNode;
     /** Controller for abstracting out input across multiple platforms */
     std::shared_ptr<PlatformInput> _input;
     /** Data */
@@ -76,17 +76,6 @@ public:
      * @param remain    The amount of time (in seconds) last fixedUpdate
      */
     void postUpdate(float dt);
-
-    /**
-     * Activates the player�s shield.
-     */
-    void activateShield();
-
-    /**
-     * @brief
-     *
-     */
-    void deactivateShield();
 
     /**
      * Fires a projectile in the direction the player is facing.

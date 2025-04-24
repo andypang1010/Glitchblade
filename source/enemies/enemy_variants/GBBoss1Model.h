@@ -51,62 +51,9 @@
 
 using namespace cugl;
 
-#pragma mark -
-#pragma mark Drawing Constants
-/** The texture for the character avatar */
-#define ENEMY_TEXTURE   "enemy"
-/** Identifier to allow us to track the player sensor in ContactListener */
-#define ENEMY_BODY_NAME      "enemybody"
-#define ENEMY_SENSOR_NAME     "enemysensor"
+#pragma mark force
+#define STAB_FORCE       80.0f
 
-#define E_ANIMATION_UPDATE_FRAME 4
-
-#define ENEMY_HIT_COLOR_DURATION 8
-
-#pragma mark -
-#pragma mark Physics Constants
-/** The factor to multiply by the input */
-#define ENEMY_FORCE      20.0f
-/** The amount to slow the character down */
-#define ENEMY_DAMPING    30.0f
-/** The maximum character speed */
-#define ENEMY_MAXSPEED   10.0f
-/** The maximum character hp */
-#define ENEMY_MAXHP   100.0f
-
-/** The amount to shrink the body fixture (vertically) relative to the image */
-#define ENEMY_VSHRINK  0.95f
-/** The amount to shrink the body fixture (horizontally) relative to the image */
-#define ENEMY_HSHRINK  0.7f
-/** The amount to shrink the sensor fixture (horizontally) relative to the image */
-#define ENEMY_SSHRINK  0.6f
-/** Height of the sensor attached to the player's feet */
-#define ENEMY_SENSOR_HEIGHT   0.1f
-/** The density of the character */
-#define ENEMY_DENSITY    1.0f
-/** The impulse for the character dash-attack */
-#define STAB_FORCE       200.0f
-/** The implulse fot the character knockback */
-#define ENEMY_KB       1.0f
-#define ENEMY_KB_DURATION 20
-/** Debug color for the sensor */
-#define ENEMY_DEBUG_COLOR     Color4::RED
-/** enemy obstacle name*/
-#define ENEMY_NAME      "enemy"
-#define ENEMY_DEBUG_FONT      "debug"
-
-#pragma mark -
-#pragma mark Action Constants // TODO: Refactor with Action parser
-#define SLAM_FRAMES     40
-#define STAB_FRAMES     40
-#define SHOOT_FRAMES    15
-#define EXPLODE_FRAMES  40
-
-#define STUN_FRAMES 88
-
-#pragma mark -
-#pragma mark AI Constants
-#define CLOSE_RADIUS     6.0f
 #pragma mark -
 #pragma mark Enemy Model
 /**
@@ -159,7 +106,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    Boss1Model() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
+    Boss1Model() : EnemyModel(){}
 
     /**
      * Destroys this PlayerModel, releasing all resources.
@@ -190,7 +137,7 @@ public:
      *
      * @return  true if the obstacle is initialized properly, false otherwise.
      */
-    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) override;
+    virtual bool init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) override;
 
 
 #pragma mark -
@@ -209,35 +156,26 @@ public:
      *
      * @return  A newly allocated PlayerModel at the given position with the given scale
      */
-    static std::shared_ptr<Boss1Model> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    static std::shared_ptr<Boss1Model> alloc(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
         std::shared_ptr<Boss1Model> result = std::make_shared<Boss1Model>();
         //result->_scale = Application::get()->getDisplayWidth() / 1248;
-        return (result->init(assetRef, constantsRef, pos, actions) ? result : nullptr);
+        return (result->init(assetRef, enemyJSON, pos, actions) ? result : nullptr);
     }
 
 #pragma mark -
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
     void resetAttributes() override {
-        _hp = 200;
-        _isGrounded = false;
-        _isMoveLeft = false;
-        _isMoveRight = false;
-        _faceRight = true;
-        _canKnockBack = true;
-        _stunRem = 0;
-
+        EnemyModel::resetAttributes();
         _isStabbing = false;
         _isSlamming = false;
-		_isShooting = false;
-		_isExploding = false;
-
-        _moveDuration = 0;
-        currentFrame = 0;
+        _isShooting = false;
+        _isExploding = false;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/
     void attachNodes(const std::shared_ptr<AssetManager>& assetRef) override;
+    void setActions(std::vector<std::shared_ptr<ActionModel>> actions) override;
 #pragma mark -
 #pragma mark AI Methods
     void nextAction() override;
@@ -283,10 +221,7 @@ public:
 
 #pragma mark -
 #pragma mark Animation Methods
-    void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) override;
     void updateAnimation() override;
-
-    void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> actionSprite, std::shared_ptr<scene2::SpriteNode> vfxSprite, int startFrame) override;
 
 #pragma mark -
 #pragma mark Physics Methods
