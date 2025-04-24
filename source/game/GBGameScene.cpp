@@ -590,37 +590,23 @@ void GameScene::removeProjectile(Projectile* projectile) {
 }
 
 void GameScene::setBG() {
-    for (auto layerPair : _currentLevel->getLayers()) {
-        // Left
-        std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
-        node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        node->setScale(_currentLevel->getScale());
-        node->setPosition(Vec2(node->getPositionX()-node->getSize().width, node->getPositionY()));
-        node->setTag(layerPair.second);
-        _worldnode->addChild(node);
-        
-        // Centered
-        std::shared_ptr<scene2::SceneNode> node2 = scene2::PolygonNode::allocWithTexture(layerPair.first);
-        node2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        node2->setScale(_currentLevel->getScale());
-        node2->setTag(layerPair.second);
-        _worldnode->addChild(node2);
-        
-        // Right
-        std::shared_ptr<scene2::SceneNode> node3 = scene2::PolygonNode::allocWithTexture(layerPair.first);
-        node3->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        node3->setScale(_currentLevel->getScale());
-        node3->setPosition(Vec2(node3->getPositionX()+node->getSize().width, node3->getPositionY()));
-        node3->setTag(layerPair.second);
-        _worldnode->addChild(node3);
-        
-        // Right + 1
-        std::shared_ptr<scene2::SceneNode> node4 = scene2::PolygonNode::allocWithTexture(layerPair.first);
-        node4->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        node4->setScale(_currentLevel->getScale());
-        node4->setPosition(Vec2(node4->getPositionX()+2*node->getSize().width, node4->getPositionY()));
-        node4->setTag(layerPair.second);
-        _worldnode->addChild(node4);
+    int bgCount = _currentLevel->getBGN();
+    float scale = _currentLevel->getScale();
+    
+    for (const auto& layerPair : _currentLevel->getLayers()) {
+        for (int i = 0; i < bgCount; ++i) {
+            std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
+            node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+            node->setScale(scale);
+            float textureWidth = node->getSize().width;
+
+            // Position nodes starting from -1 * textureWidth (to provide buffer for parallax)
+            float xPos = (i - 1) * textureWidth;
+            node->setPosition(Vec2(xPos, 0));
+            
+            node->setTag(layerPair.second);
+            _worldnode->addChild(node);
+        }
     }
 }
 
