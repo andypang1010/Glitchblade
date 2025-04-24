@@ -107,7 +107,9 @@ _keyLeft(false),
 _keyRight(false),
 _horizontal(0.0f),
 _joystick(false),
-_hasJumped(false) {
+_hasJumped(false),
+_lastSwipe(SwipeType::NONE)
+{
 }
 
 /**
@@ -266,6 +268,7 @@ void PlatformInput::clear() {
     _rdashPressed = false;
     _ldashPressed = false;
     _guardPressed = false;
+    _lastSwipe = SwipeType::NONE;
 }
 
 #pragma mark -
@@ -416,18 +419,20 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
     if (xpass || ypass) {
         // X magnitude > Y magnitude (so X must have passed AND be dominant axis)
         if (absxdiff > absydiff) {
-            return (xdiff > 0) ? SwipeType::RIGHTDASH : SwipeType::LEFTDASH;
+            _lastSwipe =  (xdiff > 0) ? SwipeType::RIGHTDASH : SwipeType::LEFTDASH;
         // Y magnitude > X magnitude (so Y must have passed AND be dominant axis)
         } else {
-            return (ydiff > 0) ? SwipeType::GUARD : SwipeType::JUMP;
+            _lastSwipe = (ydiff > 0) ? SwipeType::GUARD : SwipeType::JUMP;
         }
     }
     else if (yguardpass) {
-        return SwipeType::GUARD;
+        _lastSwipe = SwipeType::GUARD;
     }
-    
-    // Return NONE if one of the other swipe types haven't been returned already
-    return SwipeType::NONE;
+    else {
+        _lastSwipe = SwipeType::NONE;
+    }
+     
+    return _lastSwipe;
 }
 
 #pragma mark -

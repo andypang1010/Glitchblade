@@ -39,20 +39,6 @@ using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::audio;
-// Constants moved to LevelController.cpp
-// NOTE: THE SCENE WIDTH/HEIGHT, ASPECT, DEFAULT WIDTH/HEIGHT ARE CURRENTLY COPIED IN LEVELCONTROLLER WITH GAME_ PREFIX
-/** This is adjusted by screen aspect ratio to get the height */
-#define SCENE_WIDTH 1248
-#define SCENE_HEIGHT 576
-/** This is the aspect ratio for physics */
-#define SCENE_ASPECT 9.0/19.5
-/** Width of the game world in Box2d units */
-#define DEFAULT_WIDTH   39.0f
-/** Height of the game world in Box2d units */
-#define DEFAULT_HEIGHT  18.0f
-/** The new heavier gravity for this world (so it is not so floaty) */
-#define DEFAULT_GRAVITY -28.9f
-
 
 
 
@@ -136,6 +122,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
     _scale = _size.width == sceneJ->getInt("width") ? _size.width / screenSize.size.width : _size.height / screenSize.size.height;
+    CULog("_scale in gamescene is %f", _scale);
+
     _worldPixelWidth = worldSize.size.width * _scale;
     //CULog("_scale is %f", _scale);
     sceneJ->get("scale")->set(_scale);
