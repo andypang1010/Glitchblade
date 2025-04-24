@@ -147,10 +147,6 @@
         "platforms": [],
         "waves": [
               {
-                  "walls": [
-                      0.0,
-                      4.375
-                  ],
                   "spawn_intervals": [
                       1
                   ],
@@ -159,10 +155,6 @@
                   ]
               },
               {
-                  "walls": [
-                      1.0,
-                      2.0
-                  ],
                   "spawn_intervals": [
                       1
                   ],
