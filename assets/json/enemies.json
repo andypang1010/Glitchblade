@@ -245,6 +245,36 @@
                 ]
             },
             {
+                "type": "ranged",
+                "name": "headFireFall",
+                "projectiles": [
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 3,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": -15
+                        },
+                        "projectileDamage": 20
+                    }
+                ]
+            },
+            {
                 "type": "melee",
                 "name": "laser",
                 "hitboxPos": [ 20, 0 ],

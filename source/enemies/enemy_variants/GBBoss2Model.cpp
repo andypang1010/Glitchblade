@@ -164,9 +164,12 @@ void Boss2Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
 		if (act->getActionName() == "headFire") {
 			_headFire = std::dynamic_pointer_cast<RangedActionModel>(act);
 		}
+        if (act->getActionName() == "headFireFall") {
+            _headFireFall = std::dynamic_pointer_cast<RangedActionModel>(act);
+        }
     }
     _closeDistance = 12;
-    _farDistance = 19;
+    _farDistance = 18;
 }
 
 #pragma mark -
@@ -478,6 +481,15 @@ std::shared_ptr<Projectile> Boss2Model::getProjectile() {
 		}
         count++;
 	}
+
+    // Handle head fire falling projectiles
+    if (_isHeadFireAttacking && _headFireWaitSprite->getFrame() % 3 == 0 && frameCounter == 0) {
+		float randOffset = rand() % 2 == 0 ? -(rand() % 8) : rand() % 8;
+        randOffset = randOffset > 0 ? std::min(randOffset, worldRight - getPosition().x - 2) : std::max(randOffset, worldLeft - getPosition().x + 2);
+        CULog("offset: %f", randOffset);
+        _headFireFall->getProjectiles()[0]->setSpawnOffset(Vec2(randOffset, 5.5));
+        return _headFireFall->getProjectiles()[0];
+    }
     
     return nullptr;
 }

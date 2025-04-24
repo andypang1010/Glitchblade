@@ -100,6 +100,7 @@ protected:
 
     std::shared_ptr<RangedActionModel> _shortFire;
 	std::shared_ptr<RangedActionModel> _headFire;
+    std::shared_ptr<RangedActionModel> _headFireFall;
 	std::shared_ptr<MeleeActionModel> _laser;
 
     /**

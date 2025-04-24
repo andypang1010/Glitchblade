@@ -70,9 +70,7 @@ ObstacleNodePair Projectile::createProjectileNodePair(const std::shared_ptr<Asse
 	newSprite->setFrame(0);
 
     // Set angle for verticle projectiles. TODO: calculate angle between velocity and positive x so any angle can be drawn
-    if (newProjectile->getLinearVelocity().x == 0) {
-        newProjectile->setAngle(M_PI / 2);
-    }
+    newProjectile->setAngle(Vec2::angle(Vec2(1, 0), newProjectile->getLinearVelocity()));
 
 	newProjectile->setSceneNode(newSprite);
 
