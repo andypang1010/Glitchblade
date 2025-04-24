@@ -68,7 +68,7 @@ protected:
     /** This character's remaining health */
     float _hp;
     /** how much damage player deals*/
-    int _damage;
+    int _damage = 10;
     /** The current horizontal movement of the character */
     float _movement;
     /** Which direction is the character facing */
@@ -156,6 +156,7 @@ public:
     int _parryCounter = 0;
     float _comboMeter = 0;
     float _lastComboElapsedTime = 0;
+    bool _isNextAttackEnhanced = false;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
@@ -268,6 +269,7 @@ public:
         _parryCounter = 0;
 		_comboMeter = 0;
         _lastComboElapsedTime = 0;
+		_isNextAttackEnhanced = false;
     };
     
     void setConstants();
@@ -397,7 +399,7 @@ public:
     #pragma mark - Attribute Properties
 
     // Damage
-    int getDamage() const { return _damage;}
+    int getDamage() const { return _damage * (_isNextAttackEnhanced ? 4 : 1); }
     void setDamage(int value) { _damage = value; }
 	bool isDamaged() const { return _damageRem > 0; }
 	void setDamagedRem(int value) { _damageRem = value; }

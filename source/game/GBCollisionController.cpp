@@ -154,16 +154,24 @@ void CollisionController::endContact(b2Contact* contact) {
 }
 
 #pragma mark collision case helpers
+
 void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
     EnemyModel* enemy = (EnemyModel*) enemyObstacle;
     if (_player->isDashActive() && !_player->isGuardActive()) {
-        enemy->damage(10);
+        enemy->damage(_player->getDamage());
+        _screenShake(_player->_isNextAttackEnhanced ? 30 : 3, 5);
+
+        if (_player->_isNextAttackEnhanced) {
+            _player->_isNextAttackEnhanced = false;
+        }
+
+        else {
+            _player->_comboMeter += 20;
+            _player->_lastComboElapsedTime = 0;
+        }
+
         _player->setDashRem(0);
 
-        _player->_comboMeter += 20;
-		_player->_lastComboElapsedTime = 0;
-
-        _screenShake(3, 5);
     }
     _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
     enemy->setKnocked(true, enemy->getPosition().subtract(_player->getPosition()).normalize());
@@ -181,7 +189,10 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         if (!_player->isGuardActive() && !_player->isParryActive()) {
             int damage = hitbox->getDamage();
             _player->damage(damage);
+
+			_player->_isNextAttackEnhanced = false;
             _player->_comboMeter = 0;
+
             _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
             _screenShake(damage, 3);
         }
@@ -189,8 +200,11 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         else if (_player->isParryActive()) {
             _player->damage(0);
 
-            _player->_comboMeter += 20;
-            _player->_lastComboElapsedTime = 0;
+            if (!_player->_isNextAttackEnhanced) 
+            {
+                _player->_comboMeter += 20;
+                _player->_lastComboElapsedTime = 0;
+            }
 
 			_player->_parryCounter++;
 
@@ -227,8 +241,11 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                 }
                 _player->damage(0);
 
-                _player->_comboMeter += 20;
-                _player->_lastComboElapsedTime = 0;
+                if (!_player->_isNextAttackEnhanced)
+                {
+                    _player->_comboMeter += 20;
+                    _player->_lastComboElapsedTime = 0;
+                }
 
                 _player->_parryCounter++;
 
