@@ -486,12 +486,12 @@ void GameScene::fixedUpdate(float step) {
     if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
         _cameraLocked = true;
         if (cameraPosLX <= 0) {
-            CULog("playerx: %f", currPlayerPosX);
+            //CULog("playerx: %f", currPlayerPosX);
             if (currPlayerPosX > getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         } else {
-            CULog("playerx: %f", currPlayerPosX);
+            //CULog("playerx: %f", currPlayerPosX);
             if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
                 _cameraLocked = false;
             }

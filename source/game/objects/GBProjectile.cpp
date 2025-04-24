@@ -61,6 +61,8 @@ ObstacleNodePair Projectile::createProjectileNodePair(const std::shared_ptr<Asse
     newProjectile->setLinearVelocity(projectile->getLinearVelocity() * Vec2(isFacingRight ? 1 : -1, 1));
 	
 
+	newProjectile->setDamage(projectile->getDamage());
+
     std::shared_ptr<scene2::SpriteNode> newSprite = scene2::SpriteNode::allocWithSprite(projectile->getSceneNode());
     newSprite->flipHorizontal(newProjectile->getLinearVelocity().x < 0);
     newSprite->setPosition(projectile->getAnimOffset());

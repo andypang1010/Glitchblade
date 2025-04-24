@@ -168,6 +168,32 @@ void PlayerController::fixedUpdate(float timestep)
     applyForce();
     updateCooldowns();
 
+	_player->_lastComboElapsedTime += timestep;
+
+	if (_player->_lastComboElapsedTime >= 5 && _player->_comboMeter > 0) {
+		_player->_comboMeter = std::max(_player->_comboMeter - timestep * 10, 0.0f);
+	}
+
+    if (_player->_isNextAttackEnhanced) {
+        CULog("NEXT ATTACK ENHANCED");
+    }
+
+    if (_player->_comboMeter >= 100)
+    {
+        if (_player->getHP() < _player->getMaxHP()) {
+            _player->setHP(std::min(_player->getHP() + 20.0f, 100.0f));
+        }
+
+        else {
+			_player->_isNextAttackEnhanced = true;
+        }
+
+		_player->_comboMeter = 0;
+    }
+
+    _player->getSceneNode()->setColor(_player->_isNextAttackEnhanced ? Color4::YELLOW : Color4::WHITE);
+
+
   //  if (_player->_parryCounter == 5) {
 		//_player->_parryCounter = 0;
   //      _player->setHP(std::min(_player->getHP() + 20.0f, 100.0f));

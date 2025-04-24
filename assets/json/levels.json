@@ -42,7 +42,7 @@
         {
           "spawn_intervals": [
             3,
-            5
+            7
           ],
           "enemies": [
             "minion_1A",
