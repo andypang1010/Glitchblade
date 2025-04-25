@@ -17,7 +17,7 @@ protected:
     std::shared_ptr<LevelSelectUI> _ui;
     bool _isPaused = false;
 
-    std::string _scene_to_load = "";
+    int _scene_to_load = 0;
 
 public:
 #pragma mark -
@@ -47,5 +47,5 @@ public:
 
 #pragma mark -
 #pragma mark State Info
-    std::string sceneToLoad();
+    int sceneToLoad();
 };

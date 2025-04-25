@@ -18,6 +18,7 @@ using namespace cugl::graphics;
 using namespace cugl::scene2;
 using namespace cugl::audio;
 
+#define MAX_SCENE 3
 
 #pragma mark -
 #pragma mark Application State
@@ -261,17 +262,28 @@ void GlitchbladeApp::draw() {
         _loading.render();
     } else {
         if (_gameplay != nullptr) {
+
             _gameplay->render();
-            bool shouldQuit = _gameplay->doQuit();
-            if (shouldQuit) {
+
+            if (_gameplay->doQuit()) {
                 initLevelSelectScene();
+            }
+            else if (_gameplay->continueNextLevel()) {
+                _currentScene += 1;
+                if (_currentScene <= MAX_SCENE) {
+                    initGameScene("Level " + std::to_string(_currentScene));
+                } else {
+                    CULog("Did all levels!");
+                    initLevelSelectScene();
+                }
             }
         }
         else if (_levelSelect != nullptr) {
             _levelSelect->render();
-            std::string scene_string = _levelSelect->sceneToLoad();
-            if (scene_string != "") {
-                initGameScene(scene_string);
+            int scene_num = _levelSelect->sceneToLoad();
+            if (scene_num != 0) {
+                _currentScene = scene_num;
+                initGameScene("Level " + std::to_string(scene_num));
             }
         }
     }

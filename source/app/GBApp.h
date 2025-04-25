@@ -39,6 +39,9 @@ protected:
     
     /** Whether or not we have finished loading all assets */
     bool _loaded;
+
+    /** The current scene being played */
+    int _currentScene = 0;
     
 public:
 #pragma mark Constructors

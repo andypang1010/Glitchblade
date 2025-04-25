@@ -32,13 +32,13 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets)
     _ui = LevelSelectUI::alloc(_assets);
     if (_ui != nullptr) {
         _ui->setLevel1Callback([this]() {
-            _scene_to_load = "Level 1";
+            _scene_to_load = 1;
             });
         _ui->setLevel2Callback([this]() {
-            _scene_to_load = "Level 2";
+            _scene_to_load = 2;
             });
         _ui->setLevel3Callback([this]() {
-            _scene_to_load = "Level 3";
+            _scene_to_load = 3;
             });
         addChild(_ui);
         _ui->setVisible(true);
@@ -48,7 +48,7 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets)
     return true;
 }
 
-std::string LevelSelectScene::sceneToLoad()
+int LevelSelectScene::sceneToLoad()
 {
     return _scene_to_load;
 }

@@ -110,6 +110,7 @@ protected:
 
     /** Whether to quit to the level select menu */
     bool _doQuit = false;
+    bool _continueNextLevel = false;
 
 #pragma mark Internal Object Management
     /**
@@ -356,6 +357,10 @@ public:
     */
     bool doQuit() {
         return _doQuit;
+    }
+
+    bool continueNextLevel() {
+        return _continueNextLevel;
     }
     
   };

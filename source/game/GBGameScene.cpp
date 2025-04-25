@@ -220,11 +220,13 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         });
         _ui->setLoseQuitCallback([this]() {
             CULog("Want to loseQuit from gamescene!");
+            _doQuit = true;
         });
         _ui->setSettingsCallback([this]() {
             CULog("Want to settings from gamescene!");
         });
         _ui->setWinContinueCallback([this]() {
+            _continueNextLevel = true;
             CULog("Want to winContinue from gamescene!");
         });
 
