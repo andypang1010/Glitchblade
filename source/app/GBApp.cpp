@@ -262,6 +262,10 @@ void GlitchbladeApp::draw() {
     } else {
         if (_gameplay != nullptr) {
             _gameplay->render();
+            bool shouldQuit = _gameplay->doQuit();
+            if (shouldQuit) {
+                initLevelSelectScene();
+            }
         }
         else if (_levelSelect != nullptr) {
             _levelSelect->render();

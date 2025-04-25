@@ -211,21 +211,23 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         });
         _ui->setContinueCallback([this]() {
             _shouldContinue = true;
-//            _ui->showWinPage1(false);
+            // _ui->showWinPage1(false);
             _ui->showWinPage2(true);
         });
         _ui->setQuitCallback([this]() {
             CULog("Want to quit from gamescene!");
-            });
+            _doQuit = true;
+        });
         _ui->setLoseQuitCallback([this]() {
             CULog("Want to loseQuit from gamescene!");
-            });
+        });
         _ui->setSettingsCallback([this]() {
             CULog("Want to settings from gamescene!");
-            });
+        });
         _ui->setWinContinueCallback([this]() {
             CULog("Want to winContinue from gamescene!");
-            });
+        });
+
         addChild(_ui);
     }
     

@@ -108,6 +108,9 @@ protected:
     float _shakeIntensity;
     int _shakeDuration;
 
+    /** Whether to quit to the level select menu */
+    bool _doQuit = false;
+
 #pragma mark Internal Object Management
     /**
      * Lays out the game geography.
@@ -347,6 +350,13 @@ public:
      *
      */
     void processScreenShake();
+
+    /**
+     * Whether to quit the game & go to the level select
+    */
+    bool doQuit() {
+        return _doQuit;
+    }
     
   };
 

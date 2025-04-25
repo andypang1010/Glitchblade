@@ -147,15 +147,19 @@ void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
 
     if (_quitButton) {
         _quitButton->addListener([this](const std::string& name, bool down) {
-            if (down) CULog("Quit pressed");
-            _quitCallback();
+            if (down && _quitCallback) {
+                CULog("Quit pressed");
+                _quitCallback();
+            }
         });
     }
 
     if (_settingButton) {
         _settingButton->addListener([this](const std::string& name, bool down) {
-            if (down) CULog("Setting pressed");
-            _settingsCallback();
+            if (down && _settingsCallback) {
+                CULog("Setting pressed");
+                _settingsCallback();
+            }
         });
     }
 }
@@ -176,8 +180,10 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
     
     if (_loseQuitButton) {
         _loseQuitButton->addListener([this](const std::string& name, bool down) {
-            if (down) CULog("Lose Quit pressed");
-            _loseQuitCallback();
+            if (down && _loseQuitCallback) {
+                CULog("Lose Quit pressed");
+                _loseQuitCallback();
+            }
         });
     }
 }
@@ -224,11 +230,28 @@ void GBIngameUI::setupWin2(std::shared_ptr<cugl::scene2::SceneNode>& winPage2)
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GBIngameUI::dispose() {
+    _pauseButton->clearListeners();
+    _resumeButton->clearListeners();
+    _retryButton->clearListeners();
+    _quitButton->clearListeners();
+    _settingButton->clearListeners();
+    _loseRetryButton->clearListeners();
+    _loseQuitButton->clearListeners();
+    _continueButton->clearListeners();
+    _winContinueButton->clearListeners();
+    _winRetryButton->clearListeners();
+
     _pauseButton = nullptr;
     _resumeButton = nullptr;
     _retryButton = nullptr;
     _quitButton = nullptr;
     _settingButton = nullptr;
+    _loseRetryButton = nullptr;
+    _loseQuitButton = nullptr;
+    _continueButton = nullptr;
+    _winContinueButton = nullptr;
+    _winRetryButton = nullptr;
+
     _assets = nullptr;
 
     removeAllChildren();

@@ -16,6 +16,11 @@ void LevelSelectUI::setButtonsActive(std::shared_ptr<cugl::scene2::SceneNode> la
 
 void LevelSelectUI::dispose() {
     _assets = nullptr;
+
+    _level1Button->clearListeners();
+    _level2Button->clearListeners();
+    _level3Button->clearListeners();
+
     _level1Button = nullptr;
     _level2Button = nullptr;
     _level3Button = nullptr;
@@ -64,7 +69,7 @@ void LevelSelectUI::setupMenu(std::shared_ptr<cugl::scene2::SceneNode>& menu)
 
     if (_level1Button) {
         _level1Button->addListener([this](const std::string& name, bool down) {
-            if (down) {
+            if (down && _level1Callback) {
                 CULog("Pressed level 1 button");
                 _level1Callback();
             }
@@ -73,7 +78,7 @@ void LevelSelectUI::setupMenu(std::shared_ptr<cugl::scene2::SceneNode>& menu)
 
     if (_level2Button) {
         _level2Button->addListener([this](const std::string& name, bool down) {
-            if (down) {
+            if (down && _level2Callback) {
                 CULog("Pressed level 2 button");
                 _level2Callback();
             }
@@ -82,7 +87,7 @@ void LevelSelectUI::setupMenu(std::shared_ptr<cugl::scene2::SceneNode>& menu)
 
     if (_level3Button) {
         _level3Button->addListener([this](const std::string& name, bool down) {
-            if (down) {
+            if (down && _level3Callback) {
                 CULog("Pressed level 3 button");
                 _level3Callback();
             }
