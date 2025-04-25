@@ -31,7 +31,6 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets)
 
     _ui = LevelSelectUI::alloc(_assets);
     if (_ui != nullptr) {
-        CULog("YEAH SETTING CALLBACKS");
         _ui->setLevel1Callback([this]() {
             _scene_to_load = "Level 1";
             });
