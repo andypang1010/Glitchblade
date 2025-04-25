@@ -9,6 +9,7 @@
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
 #include "../core/GBHitbox.h"
+#include "../core/GBAudio.h"
 using namespace cugl::physics2;
 // Constructor
 CollisionController::CollisionController(
@@ -196,8 +197,8 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         }
         // If parry is active, stun the enemy.
         else if (_player->isParryActive()) {
-
-            if (!_player->_isNextAttackEnhanced) 
+            AudioHelper::play_sfx("parry");
+            if (!_player->_isNextAttackEnhanced)
             {
                 _player->incrementComboCounter();
             }
@@ -232,6 +233,7 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
         bool deflected = false;
         if (_player->iframe <= 0) {
             if (_player->isParryActive()) {
+                AudioHelper::play_sfx("parry");
                 if (!_player->hasProjectile()) {
                     _player->setHasProjectile(true);
                 }

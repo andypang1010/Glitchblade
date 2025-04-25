@@ -187,6 +187,7 @@
             "pop": "pop",
             "jump": "jump",
             "guard": "guard",
+            "parry": "parry",
             "player_damage" : "player_damage",
             "volume": 0.8
         }

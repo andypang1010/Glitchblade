@@ -307,11 +307,17 @@
             "file":     "sounds/guard_bop_phaser.wav",
             "volume":   0.5
         },
+        "parry": {
+            "type":     "sample",
+            "file":     "sounds/parry_rodswipe_v06.wav",
+            "volume":   0.5
+        },
         "player_damage": {
             "type":     "sample",
             "file":     "sounds/dmg_flanged_v06.wav",
             "volume":   0.5
         }
+
     },
 	"fonts": {
         "retro": {
