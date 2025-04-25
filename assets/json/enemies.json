@@ -251,7 +251,7 @@
                 "hitboxSize": [ 40, 3 ],
                 "hitboxStartFrame": 32,
                 "hitboxEndFrame": 50,
-                "hitboxDamage": 10
+                "hitboxDamage": 40
             }
         ]
     },
