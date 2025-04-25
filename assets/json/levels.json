@@ -33,14 +33,6 @@
         "waves": [
             {
                 "spawn_intervals": [
-                    3
-                ],
-                "enemies": [
-                    "boss_2"
-                ]
-            },
-            {
-                "spawn_intervals": [
                     3,
                     7
                 ],
