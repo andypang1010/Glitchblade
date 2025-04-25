@@ -1,6 +1,7 @@
 #include "GBPlayerController.h"
 #include "../core/GBInput.h"
 #include "GBPlayerModel.h"
+#include "GBAudio.h"
 using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::audio;
@@ -154,13 +155,10 @@ void PlayerController::preUpdate(float dt)
 
 	_player->setDebugColor(_player->isParryActive() ? Color4::RED : _player->isGuardActive() ? Color4::YELLOW : Color4::BLACK);
 
-    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-    float fx_volume = fxJ->getFloat("volume");
 
+#pragma mark sfx
     if (_player->isGuardBegin()){
-        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("guard"));
-        AudioEngine::get()->play(fxJ->getString("guard"),source,false,fx_volume);
+        AudioHelper::play_sfx("guard");
     }
 
 }

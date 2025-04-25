@@ -28,6 +28,7 @@
 #include "objects/GBProjectile.h"
 #include "../enemies/actionmodel_variants/GBMeleeActionModel.h"
 #include "ui/GBIngameUI.h"
+#include "../core/GBAudio.h"
 
 #include <ctime>
 #include <string>
@@ -92,7 +93,9 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
         CULog("Failed to load constants.json");
         return false;
     }
-
+    
+    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
+    AudioHelper::init(fxJ, assets);
     
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
@@ -381,7 +384,7 @@ void GameScene::preUpdate(float dt) {
     if (_input->didExit()) {
         Application::get()->quit();
     }
-
+    
 	_ui->setHP(_player->getHP());
 
     // Call preUpdate on the LevelController
@@ -563,10 +566,6 @@ void GameScene::removeProjectile(Projectile* projectile) {
     _worldnode->removeChild(projectile->getSceneNode());
     projectile->setDebugScene(nullptr);
     projectile->markRemoved(true);
-    
-    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-    std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("pop"));
-    AudioEngine::get()->play(fxJ->getString("pop"), source, false, fxJ->getFloat("volume"), true);
 }
 
 void GameScene::setBG() {
