@@ -67,6 +67,8 @@ private:
     bool  _keyRdash;
     /** Whether the guard key is down (spacebar) */
     bool  _keyGuard;
+
+    cugl::Touchscreen* _touch;
   
 protected:
     // INPUT RESULTS
@@ -246,7 +248,9 @@ public:
      * Disposes of this input controller, releasing all listeners.
      */
     ~PlatformInput() { dispose(); }
-    
+
+    void clearListeners();
+
     /**
      * Deactivates this input controller, releasing all listeners.
      *

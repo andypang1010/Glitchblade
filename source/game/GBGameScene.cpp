@@ -106,7 +106,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
     boundsJ->get("size")->get("width")->set(bounds.size.width);
     boundsJ->get("size")->get("height")->set(bounds.size.height);
-//    CULog("bounds orign is (%f, %f) and size is (%f, %f)", bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
     
 
     
@@ -122,10 +121,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
     _scale = _size.width == sceneJ->getInt("width") ? _size.width / screenSize.size.width : _size.height / screenSize.size.height;
-    CULog("_scale in gamescene is %f", _scale);
 
     _worldPixelWidth = worldSize.size.width * _scale;
-    //CULog("_scale is %f", _scale);
     sceneJ->get("scale")->set(_scale);
     
     
@@ -146,10 +143,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     
     _camera = getCamera();
     _defCamPos = _camera->getPosition();
-    
-    CULog("Creating empty level controller in gamescene init");
+
     _levelController = std::make_unique<LevelController>();
-    CULog("initializing level controller in gamescene init");
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -165,14 +160,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
     _input =  _levelController->getInputController();
-    if (!_input){
-        CULog("input is null in populate");
-    }
     #pragma mark : Player
         _player = _levelController->getPlayerModel();
-        if (!_player){
-            CULog("player is null in populate");
-        }
     
     populate(_levelController->getLevelByName(levelName));
 
@@ -239,6 +228,13 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameScene::dispose() {
+    _input->clear();
+    _input->clearListeners();
+
+    _world->onEndContact = nullptr;
+    _world->onBeginContact = nullptr;
+
+    removeAllChildren();
     if (_active) {
         _world = nullptr;
         _worldnode = nullptr;
@@ -295,9 +291,9 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     // Add UI elements
 
 	// Play the background music on a loop.
-    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
-    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
+//    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+//	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
+//    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
     
     _active = true;
     _complete = false;
@@ -490,12 +486,10 @@ void GameScene::fixedUpdate(float step) {
     if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
         _cameraLocked = true;
         if (cameraPosLX <= 0) {
-            //CULog("playerx: %f", currPlayerPosX);
             if (currPlayerPosX > getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         } else {
-            //CULog("playerx: %f", currPlayerPosX);
             if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
                 _cameraLocked = false;
             }

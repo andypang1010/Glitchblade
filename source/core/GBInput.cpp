@@ -150,13 +150,13 @@ bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const st
     bounds.size.set(boundsJ->get("size")->getFloat("width"),boundsJ->get("size")->getFloat("height"));
     _tbounds = Application::get()->getDisplayBounds();
     _sbounds = bounds;
-    
-    
+
+
     createZones();
     clearTouchInstance(_ltouch);
     clearTouchInstance(_rtouch);
     clearTouchInstance(_mtouch);
-    
+
     // joystick nodes
     _leftnode = scene2::PolygonNode::allocWithTexture(assetRef->get<Texture>(LEFT_IMAGE));
     _leftnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_RIGHT);
@@ -167,26 +167,33 @@ bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const st
     _rightnode->SceneNode::setAnchor(Vec2::ANCHOR_MIDDLE_LEFT);
     _rightnode->setScale(0.35f);
     _rightnode->setVisible(false);
-    
+
 #ifndef CU_TOUCH_SCREEN
     success = Input::activate<Keyboard>();
 #else
-    Touchscreen* touch = Input::get<Touchscreen>();
-    touch->addBeginListener(LISTENER_KEY,[=](const TouchEvent& event, bool focus) {
+    _touch = Input::get<Touchscreen>();
+    _touch->addBeginListener(LISTENER_KEY,[=](const TouchEvent& event, bool focus) {
         this->touchBeganCB(event,focus);
     });
-    touch->addEndListener(LISTENER_KEY,[=](const TouchEvent& event, bool focus) {
+    _touch->addEndListener(LISTENER_KEY,[=](const TouchEvent& event, bool focus) {
         this->touchEndedCB(event,focus);
     });
-    touch->addMotionListener(LISTENER_KEY,[=](const TouchEvent& event, const Vec2& previous, bool focus) {
+    _touch->addMotionListener(LISTENER_KEY,[=](const TouchEvent& event, const Vec2& previous, bool focus) {
         this->touchesMovedCB(event, previous, focus);
     });
-	
+
 #endif
     _active = success;
     return success;
 }
 
+void PlatformInput::clearListeners() {
+    if(_touch != nullptr) {
+        _touch->removeBeginListener(LISTENER_KEY);
+        _touch->removeEndListener(LISTENER_KEY);
+        _touch->removeMotionListener(LISTENER_KEY);
+    }
+}
 
 /**
  * Processes the currently cached inputs.
@@ -489,7 +496,6 @@ void PlatformInput::touchEndedCB(const TouchEvent& event, bool focus) {
     Zone zone = getZone(pos);
     if (_rtouch.touchids.find(event.touch) != _rtouch.touchids.end()) {
         if (_lastSwipe == SwipeType::NONE){
-//            CULog("GUARDED USING TAP!");
             _keyGuard = true;
     }
         _rtime = event.timestamp;
@@ -516,16 +522,6 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
     // this logic should change if we want to allow switching input sides
     if (_ltouch.touchids.find(event.touch) != _ltouch.touchids.end()) {
         SwipeType s_type = processSwipe(_ltouch.position, event.position, event.timestamp);
-        //switch (s_type) {
-        //    // can handle actions on left side here if desired
-        //    default:
-        //        // CULog("Doing nothing");
-        //        break;
-        //}
-
-        /*if (s_type != SwipeType::NONE) {
-            clearTouchInstance(_ltouch);
-        }*/
 
         _ltouch.position = pos;
     //swipe side

@@ -137,7 +137,7 @@ public:
      * This allows us to use a controller without a heap pointer.
      */
     GameScene();
-    
+
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      *
