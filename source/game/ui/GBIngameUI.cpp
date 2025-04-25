@@ -87,7 +87,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
 
     _screenOffset = getPosition();
 
-    Application::get()->setClearColor(Color4f::CORNFLOWER);
+    Application::get()->setClearColor(Color4f::BLACK);
     return true;
 }
 
@@ -146,14 +146,16 @@ void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
     }
 
     if (_quitButton) {
-        _quitButton->addListener([](const std::string& name, bool down) {
+        _quitButton->addListener([this](const std::string& name, bool down) {
             if (down) CULog("Quit pressed");
+            _quitCallback();
         });
     }
 
     if (_settingButton) {
-        _settingButton->addListener([](const std::string& name, bool down) {
+        _settingButton->addListener([this](const std::string& name, bool down) {
             if (down) CULog("Setting pressed");
+            _settingsCallback();
         });
     }
 }
@@ -173,8 +175,9 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
     }
     
     if (_loseQuitButton) {
-        _loseQuitButton->addListener([](const std::string& name, bool down) {
+        _loseQuitButton->addListener([this](const std::string& name, bool down) {
             if (down) CULog("Lose Quit pressed");
+            _loseQuitCallback();
         });
     }
 }
@@ -202,6 +205,7 @@ void GBIngameUI::setupWin2(std::shared_ptr<cugl::scene2::SceneNode>& winPage2)
         _winContinueButton->addListener([this](const std::string& name, bool down) {
             if (down) {
                 CULog("Win Continue pressed");
+                _winContinueCallback();
             }
         });
     }

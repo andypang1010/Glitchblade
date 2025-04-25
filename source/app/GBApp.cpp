@@ -53,6 +53,9 @@ void GlitchbladeApp::onStartup() {
     _loaded = false;
     _loading.init(_assets,"json/assets.json");
     _loading.setSpriteBatch(_batch);
+
+    // Set background color to black
+    setClearColor(Color4f::BLACK);
     
     // Queue up the other assets
     _loading.start();
@@ -73,7 +76,8 @@ void GlitchbladeApp::onStartup() {
  */
 void GlitchbladeApp::onShutdown() {
     _loading.dispose();
-    _gameplay.dispose();
+    if (_gameplay != nullptr)
+        _gameplay->dispose();
     _assets = nullptr;
     _batch = nullptr;
     
@@ -117,6 +121,8 @@ void GlitchbladeApp::onResume() {
     AudioEngine::get()->resume();
 }
 
+// TODO TODO TODO TODO call this when ready
+// initGameScene("Level 1");
 
 #pragma mark -
 #pragma mark Application Loop
@@ -137,11 +143,25 @@ void GlitchbladeApp::update(float dt) {
         _loading.update(0.01f);
     } else if (!_loaded) {
         _loading.dispose(); // Disables the input listeners in this mode
-        _gameplay.init(_assets);
-        _gameplay.setSpriteBatch(_batch);
         _loaded = true;
         setDeterministic(true);
+        initLevelSelectScene();
     }
+}
+
+// Create and init _gameplay
+void GlitchbladeApp::initGameScene(std::string levelName) {
+    _levelSelect = nullptr; // Remove the levelSelect scene
+    _gameplay = std::make_shared<GameScene>();
+    _gameplay->init(_assets, levelName);
+    _gameplay->setSpriteBatch(_batch);
+}
+
+void GlitchbladeApp::initLevelSelectScene() {
+    _gameplay = nullptr; // Remove the gameplay scene
+    _levelSelect = std::make_shared<LevelSelectScene>();
+    _levelSelect->init(_assets);
+    _levelSelect->setSpriteBatch(_batch);
 }
 
 /**
@@ -165,7 +185,8 @@ void GlitchbladeApp::update(float dt) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GlitchbladeApp::preUpdate(float dt) {
-    _gameplay.preUpdate(dt);
+    if (_gameplay != nullptr)
+        _gameplay->preUpdate(dt);
 }
 
 /**
@@ -192,7 +213,8 @@ void GlitchbladeApp::preUpdate(float dt) {
 void GlitchbladeApp::fixedUpdate() {
     // Compute time to report to game scene version of fixedUpdate
     float time = getFixedStep()/1000000.0f;
-    _gameplay.fixedUpdate(time);
+    if (_gameplay != nullptr)
+        _gameplay->fixedUpdate(time);
 }
 
 /**
@@ -221,7 +243,8 @@ void GlitchbladeApp::fixedUpdate() {
 void GlitchbladeApp::postUpdate(float dt) {
     // Compute time to report to game scene version of postUpdate
     float time = getFixedRemainder()/1000000.0f;
-    _gameplay.postUpdate(time);
+    if (_gameplay != nullptr)
+        _gameplay->postUpdate(time);
 }
 
 /**
@@ -237,7 +260,16 @@ void GlitchbladeApp::draw() {
     if (!_loaded) {
         _loading.render();
     } else {
-        _gameplay.render();
+        if (_gameplay != nullptr) {
+            _gameplay->render();
+        }
+        else if (_levelSelect != nullptr) {
+            _levelSelect->render();
+            std::string scene_string = _levelSelect->sceneToLoad();
+            if (scene_string != "") {
+                initGameScene(scene_string);
+            }
+        }
     }
 }
 

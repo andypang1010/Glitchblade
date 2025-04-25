@@ -158,10 +158,11 @@ public:
      * with the Box2d coordinates.  This initializer uses the default scale.
      *
      * @param assets    The (loaded) assets for this game mode
+     * @param levelName The name of the level to load
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<AssetManager>& assets);
+    bool init(const std::shared_ptr<AssetManager>& assets, std::string levelName);
     
     void populateUI(const std::shared_ptr<cugl::AssetManager>& assets);
     

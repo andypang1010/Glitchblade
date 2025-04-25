@@ -45,6 +45,10 @@ protected:
     std::function<void()> _resumeCallback;
     std::function<void()> _retryCallback;
     std::function<void()> _continueCallback;
+    std::function<void()> _loseQuitCallback;
+    std::function<void()> _quitCallback;
+    std::function<void()> _settingsCallback;
+    std::function<void()> _winContinueCallback;
 
     /** HP segments */
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
@@ -123,6 +127,10 @@ public:
     void setResumeCallback(const std::function<void()>& callback) { _resumeCallback = callback; }
     void setRetryCallback(const std::function<void()>& callback) { _retryCallback = callback; }
     void setContinueCallback(const std::function<void()>& callback) { _continueCallback = callback; }
+    void setLoseQuitCallback(const std::function<void()>& callback) { _loseQuitCallback = callback; }
+    void setQuitCallback(const std::function<void()>& callback) { _quitCallback = callback; }
+    void setSettingsCallback(const std::function<void()>& callback) { _settingsCallback = callback; }
+    void setWinContinueCallback(const std::function<void()>& callback) { _winContinueCallback = callback; }
 
     void showHeadsUpDisplay(bool visible);
     void showPauseMenu(bool visible);

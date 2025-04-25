@@ -15,6 +15,7 @@
 #define __GB_APP_H__
 #include <cugl/cugl.h>
 #include "../game/GBGameScene.h"
+#include "../game/GBLevelSelectScene.h"
 
 /**
  * This class represents the application root for the platform demo.
@@ -28,7 +29,11 @@ protected:
     
     // Player modes
     /** The primary controller for the game world */
-    GameScene _gameplay;
+    std::shared_ptr<GameScene> _gameplay = nullptr;
+
+    /** The primary controller for the level select */
+    std::shared_ptr<LevelSelectScene> _levelSelect = nullptr;
+
     /** The controller for the loading screen */
     cugl::scene2::LoadingScene _loading;
     
@@ -124,6 +129,16 @@ public:
      * @param dt    The amount of time (in seconds) since the last frame
      */
     virtual void update(float dt) override;
+
+    /**
+     * The method to init the GameScene with the given level.
+    */
+    void initGameScene(std::string levelName);
+
+    /**
+     * The method to init the LevelSelectScene.
+    */
+    void initLevelSelectScene();
     
     /**
      * The method called to indicate the start of a deterministic loop.

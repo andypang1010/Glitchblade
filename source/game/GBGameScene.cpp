@@ -80,7 +80,7 @@ _input(nullptr)
  * @param assets    The (loaded) assets for this game mode
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
+bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string levelName) {
     if (assets == nullptr) {
         return false;
     }
@@ -157,7 +157,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
     _debugnode->setName("game_debug_node");
     
     _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
-    _currentLevel = _levelController->getLevelByName("Level 1");
+    _currentLevel = _levelController->getLevelByName(levelName);
 
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
     setComplete(false);
@@ -174,7 +174,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
             CULog("player is null in populate");
         }
     
-    populate(_levelController->getLevelByName("Level 1"));
+    populate(_levelController->getLevelByName(levelName));
 
     // === Initialize in-game UI ===
     populateUI(assets);
@@ -214,6 +214,18 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
 //            _ui->showWinPage1(false);
             _ui->showWinPage2(true);
         });
+        _ui->setQuitCallback([this]() {
+            CULog("Want to quit from gamescene!");
+            });
+        _ui->setLoseQuitCallback([this]() {
+            CULog("Want to loseQuit from gamescene!");
+            });
+        _ui->setSettingsCallback([this]() {
+            CULog("Want to settings from gamescene!");
+            });
+        _ui->setWinContinueCallback([this]() {
+            CULog("Want to winContinue from gamescene!");
+            });
         addChild(_ui);
     }
     
