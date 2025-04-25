@@ -382,15 +382,7 @@ void GameScene::preUpdate(float dt) {
         Application::get()->quit();
     }
 
-
 	_ui->setHP(_player->getHP());
-
-
-    if (_player->isJumpBegin() && _player->isGrounded()) {
-        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
-        AudioEngine::get()->play(fxJ->getString("jump"),source,false,fxJ->getFloat("volume"));
-    }
 
     // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);

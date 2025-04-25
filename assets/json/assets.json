@@ -301,7 +301,12 @@
             "type":     "sample",
             "file":     "sounds/plop.wav",
             "volume":   0.5
-        }                
+        },
+        "guard": {
+            "type":     "sample",
+            "file":     "sounds/guard_bop_phaser.wav",
+            "volume":   0.5
+        }
     },
 	"fonts": {
         "retro": {

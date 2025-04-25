@@ -154,10 +154,13 @@ void PlayerController::preUpdate(float dt)
 
 	_player->setDebugColor(_player->isParryActive() ? Color4::RED : _player->isGuardActive() ? Color4::YELLOW : Color4::BLACK);
 
-    if (_player->isJumpBegin() && _player->isGrounded()) {
+    std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
+    float fx_volume = fxJ->getFloat("volume");
+
+    if (_player->isGuardBegin()){
         std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
-        AudioEngine::get()->play(fxJ->getString("jump"), source, false, fxJ->getFloat("volume"));
+        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("guard"));
+        AudioEngine::get()->play(fxJ->getString("guard"),source,false,fx_volume);
     }
 
 }

@@ -186,6 +186,7 @@
             "pew": "pew",
             "pop": "pop",
             "jump": "jump",
+            "guard": "guard",
             "volume": 0.8
         }
     },
