@@ -22,16 +22,16 @@
             "file": "textures/Scene_2_background.png"
         },
         "scene2_l1": {
-            "file": "textures/Scene_1_layer_1.png"
+            "file": "textures/Scene_2_Layer_1.png"
         },
         "scene2_l2": {
-            "file": "textures/Scene_1_layer_2.png"
+            "file": "textures/Scene_2_Layer_2.png"
         },
         "scene2_l3": {
-            "file": "textures/Scene_1_layer_3.png"
+            "file": "textures/Scene_2_Layer_3.png"
         },
         "scene2_l4": {
-            "file": "textures/Scene_1_layer_4.png"
+            "file": "textures/Scene_2_Layer_4.png"
         },
         "scene3_bg": {
             "file": "textures/Scene_3_background.png"
