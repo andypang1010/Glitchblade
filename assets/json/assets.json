@@ -291,6 +291,28 @@
         "win_continue": {
             "file": "textures/ingameui/win_continue.png"
         },
+        
+        
+        "levelselect_bg_1": {
+            "file": "textures/levelselect/levelselect_bg_1.png"
+        },
+        "selector1_3_1": {
+            "file": "textures/levelselect/selector1_3_1.png"
+        },
+        "selector1_2_1": {
+            "file": "textures/levelselect/selector1_2_1.png"
+        },
+        "selector1_1_1": {
+            "file": "textures/levelselect/selector1_1_1.png"
+        },
+        "button_lshome": {
+            "file": "textures/levelselect/button_lshome.png"
+        },
+        "button_lssetting": {
+            "file": "textures/levelselect/button_lssetting.png"
+        },
+        
+        
         "dpad": {
             "file": "textures/dpad.png",
             "wrapS": "clamp",
@@ -367,6 +389,10 @@
             "file": "fonts/RetroGame.ttf",
             "size": 14
         },
+        "light pixel-7Regular32": {
+            "file": "fonts/LightPixel7.ttf",
+            "size": 32
+        },
         "light pixel-7Regular40": {
             "file": "fonts/LightPixel7.ttf",
             "size": 40
@@ -386,7 +412,8 @@
         "levelselectmenu": "widgets/levelselectmenu.json",
         "lose": "widgets/lose.json",
         "win1": "widgets/win1.json",
-        "win2": "widgets/win2.json"
+        "win2": "widgets/win2.json",
+        "levelselect1": "widgets/levelselect1.json"
     },
     "scene2s": {
         "hud": {
@@ -416,7 +443,7 @@
                 "type": "Anchored"
             },
             "data": {
-                "key": "levelselectmenu"
+                "key": "levelselect1"
             }
         },
         "lose": {
