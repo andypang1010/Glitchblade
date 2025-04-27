@@ -69,6 +69,7 @@ using namespace graphics;
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool Boss2Model::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    _headFireFallCount = 0;
     return EnemyModel::init(assetRef, enemyJSON, pos, actions);
 };
 
@@ -484,15 +485,17 @@ std::shared_ptr<Projectile> Boss2Model::getProjectile() {
     count = 0;
 	for (int frame : frames) {
 		if (_isHeadFireAttacking && _headFireAttackSprite->getFrame() == frame && frameCounter == 0) {
+            _headFireFallCount += 2;
             return _headFire->getProjectiles()[count];
 		}
         count++;
 	}
 
     // Handle head fire falling projectiles
-    if (_headFireTimer > 0 && _headFireTimer <= 9) {
+    if (_headFireTimer > 0 && _headFireFallCount > 0 && _headFireTimer <= _headFireFallCount) {
 		float randOffset = rand() % 2 == 0 ? -(rand() % 16) : rand() % 16;
         _headFireFall->getProjectiles()[0]->setSpawnOffset(Vec2(randOffset, 7.5));
+        _headFireFallCount--;
         return _headFireFall->getProjectiles()[0];
     }
     

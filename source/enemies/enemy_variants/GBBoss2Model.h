@@ -51,15 +51,9 @@
 
 using namespace cugl;
 
-#pragma mark force
-#define STAB_FORCE       80.0f
-
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
-#define SLAM_FRAMES     40
-#define STAB_FRAMES     40
 #define SHOOT_FRAMES    5
-#define EXPLODE_FRAMES  40
 #define STUN_FRAMES 88
 
 #pragma mark -
@@ -92,6 +86,8 @@ protected:
     bool _isHeadFireEnding;
     bool _isHeadFiring;
     int _headFireCount;
+
+	int _headFireFallCount;
     int _headFireTimer;
 
     bool _isTeleportStarting;
@@ -246,6 +242,7 @@ public:
         _isHeadFireEnding = false;
         _isHeadFiring = false;
         _headFireCount = 0;
+        _headFireFallCount = 0;
 
         _moveDuration = 0;
     };

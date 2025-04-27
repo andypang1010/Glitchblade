@@ -18,6 +18,7 @@ using namespace cugl::graphics;
 using namespace cugl::scene2;
 using namespace cugl::audio;
 
+#define MAX_SCENE 3
 
 #pragma mark -
 #pragma mark Application State
@@ -34,14 +35,14 @@ using namespace cugl::audio;
 void GlitchbladeApp::onStartup() {
     _assets = AssetManager::alloc();
     _batch  = SpriteBatch::alloc();
-    
+
     // Start-up basic input
 #ifdef CU_TOUCH_SCREEN
     Input::activate<Touchscreen>();
 #else
     Input::activate<Mouse>();
 #endif
-    
+
     _assets->attach<Font>(FontLoader::alloc()->getHook());
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Sound>(SoundLoader::alloc()->getHook());
@@ -53,7 +54,10 @@ void GlitchbladeApp::onStartup() {
     _loaded = false;
     _loading.init(_assets,"json/assets.json");
     _loading.setSpriteBatch(_batch);
-    
+
+    // Set background color to black
+    setClearColor(Color4f::BLACK);
+
     // Queue up the other assets
     _loading.start();
     AudioEngine::start();
@@ -73,17 +77,18 @@ void GlitchbladeApp::onStartup() {
  */
 void GlitchbladeApp::onShutdown() {
     _loading.dispose();
-    _gameplay.dispose();
+    if (_gameplay != nullptr)
+        _gameplay->dispose();
     _assets = nullptr;
     _batch = nullptr;
-    
+
     // Shutdown input
 #ifdef CU_TOUCH_SCREEN
     Input::deactivate<Touchscreen>();
 #else
     Input::deactivate<Mouse>();
 #endif
-    
+
     AudioEngine::stop();
     Application::onShutdown();  // YOU MUST END with call to parent
 }
@@ -117,6 +122,8 @@ void GlitchbladeApp::onResume() {
     AudioEngine::get()->resume();
 }
 
+// TODO TODO TODO TODO call this when ready
+// initGameScene("Level 1");
 
 #pragma mark -
 #pragma mark Application Loop
@@ -137,11 +144,25 @@ void GlitchbladeApp::update(float dt) {
         _loading.update(0.01f);
     } else if (!_loaded) {
         _loading.dispose(); // Disables the input listeners in this mode
-        _gameplay.init(_assets);
-        _gameplay.setSpriteBatch(_batch);
         _loaded = true;
         setDeterministic(true);
+        initLevelSelectScene();
     }
+}
+
+// Create and init _gameplay
+void GlitchbladeApp::initGameScene(std::string levelName) {
+    _levelSelect = nullptr;
+    _gameplay = std::make_shared<GameScene>();
+    _gameplay->init(_assets, levelName);
+    _gameplay->setSpriteBatch(_batch);
+}
+
+void GlitchbladeApp::initLevelSelectScene() {
+    _gameplay = nullptr;
+    _levelSelect = std::make_shared<LevelSelectScene>();
+    _levelSelect->init(_assets);
+    _levelSelect->setSpriteBatch(_batch);
 }
 
 /**
@@ -165,7 +186,8 @@ void GlitchbladeApp::update(float dt) {
  * @param dt    The amount of time (in seconds) since the last frame
  */
 void GlitchbladeApp::preUpdate(float dt) {
-    _gameplay.preUpdate(dt);
+    if (_gameplay != nullptr)
+        _gameplay->preUpdate(dt);
 }
 
 /**
@@ -192,7 +214,8 @@ void GlitchbladeApp::preUpdate(float dt) {
 void GlitchbladeApp::fixedUpdate() {
     // Compute time to report to game scene version of fixedUpdate
     float time = getFixedStep()/1000000.0f;
-    _gameplay.fixedUpdate(time);
+    if (_gameplay != nullptr)
+        _gameplay->fixedUpdate(time);
 }
 
 /**
@@ -221,7 +244,8 @@ void GlitchbladeApp::fixedUpdate() {
 void GlitchbladeApp::postUpdate(float dt) {
     // Compute time to report to game scene version of postUpdate
     float time = getFixedRemainder()/1000000.0f;
-    _gameplay.postUpdate(time);
+    if (_gameplay != nullptr)
+        _gameplay->postUpdate(time);
 }
 
 /**
@@ -237,7 +261,31 @@ void GlitchbladeApp::draw() {
     if (!_loaded) {
         _loading.render();
     } else {
-        _gameplay.render();
+        if (_gameplay != nullptr) {
+
+            _gameplay->render();
+
+            if (_gameplay->doQuit()) {
+                initLevelSelectScene();
+            }
+            else if (_gameplay->continueNextLevel()) {
+                _currentScene += 1;
+                if (_currentScene <= MAX_SCENE) {
+                    initGameScene("Level " + std::to_string(_currentScene));
+                } else {
+                    CULog("Did all levels!");
+                    initLevelSelectScene();
+                }
+            }
+        }
+        else if (_levelSelect != nullptr) {
+            _levelSelect->render();
+            int scene_num = _levelSelect->sceneToLoad();
+            if (scene_num != 0) {
+                _currentScene = scene_num;
+                initGameScene("Level " + std::to_string(scene_num));
+            }
+        }
     }
 }
 

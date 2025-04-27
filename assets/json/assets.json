@@ -18,6 +18,36 @@
         "scene1_l4": {
             "file": "textures/Scene_1_layer_4.png"
         },
+        "scene2_bg": {
+            "file": "textures/Scene_2_background.png"
+        },
+        "scene2_l1": {
+            "file": "textures/Scene_2_Layer_1.png"
+        },
+        "scene2_l2": {
+            "file": "textures/Scene_2_Layer_2.png"
+        },
+        "scene2_l3": {
+            "file": "textures/Scene_2_Layer_3.png"
+        },
+        "scene2_l4": {
+            "file": "textures/Scene_2_Layer_4.png"
+        },
+        "scene3_bg": {
+            "file": "textures/Scene_3_background.png"
+        },
+        "scene3_l1": {
+            "file": "textures/Scene_1_layer_1.png"
+        },
+        "scene3_l2": {
+            "file": "textures/Scene_1_layer_2.png"
+        },
+        "scene3_l3": {
+            "file": "textures/Scene_1_layer_3.png"
+        },
+        "scene3_l4": {
+            "file": "textures/Scene_1_layer_4.png"
+        },
         "player": {
             "file": "textures/player.png"
         },
@@ -165,9 +195,6 @@
         "minion1A_dead": {
             "file": "textures/minion1A_dead.png"
         },
-
-
-
         "button_pause": {
             "file": "textures/ingameui/button_pause.png"
         },
@@ -180,12 +207,17 @@
         "hp_full_segment": {
             "file": "textures/ingameui/hp_full_segment.png"
         },
-
         "menu_shadow": {
             "file": "textures/ingameui/menu_shadow.png"
         },
+        "level_select_menu_shadow": {
+            "file": "textures/ingameui/level_select_menu_shadow.png"
+        },
         "pause_menu": {
             "file": "textures/ingameui/pause_menu.png"
+        },
+        "level_select_menu": {
+            "file": "textures/ingameui/level_select_menu.png"
         },
         "progress_bar": {
             "file": "textures/ingameui/progress_bar.png"
@@ -211,7 +243,15 @@
         "button_setting": {
             "file": "textures/ingameui/button_setting.png"
         },
-
+        "level1_button": {
+            "file": "textures/ingameui/level1_button.png"
+        },
+        "level2_button": {
+            "file": "textures/ingameui/level2_button.png"
+        },
+        "level3_button": {
+            "file": "textures/ingameui/level3_button.png"
+        },
         "cover_shadow": {
             "file": "textures/ingameui/cover_shadow.png"
         },
@@ -227,7 +267,6 @@
         "lose_text": {
             "file": "textures/ingameui/lose_text.png"
         },
-
         "win": {
             "file": "textures/ingameui/win.png"
         },
@@ -246,71 +285,113 @@
         "button_continue": {
             "file": "textures/ingameui/button_continue.png"
         },
-
         "win_retry": {
             "file": "textures/ingameui/win_retry.png"
         },
         "win_continue": {
             "file": "textures/ingameui/win_continue.png"
         },
-
-
-
+        
+        
+        "levelselect_bg_1": {
+            "file": "textures/levelselect/levelselect_bg_1.png"
+        },
+        "selector1_3_1": {
+            "file": "textures/levelselect/selector1_3_1.png"
+        },
+        "selector1_2_1": {
+            "file": "textures/levelselect/selector1_2_1.png"
+        },
+        "selector1_1_1": {
+            "file": "textures/levelselect/selector1_1_1.png"
+        },
+        "button_lshome": {
+            "file": "textures/levelselect/button_lshome.png"
+        },
+        "button_lssetting": {
+            "file": "textures/levelselect/button_lssetting.png"
+        },
+        
+        
         "dpad": {
             "file": "textures/dpad.png",
             "wrapS": "clamp",
             "wrapT": "clamp",
             "atlas": {
-                "up": [ 0, 0, 127, 127 ],
-                "down": [ 128, 0, 255, 127 ],
-                "left": [ 0, 128, 127, 255 ],
-                "right": [ 128, 128, 255, 255 ]
+                "up": [
+                    0,
+                    0,
+                    127,
+                    127
+                ],
+                "down": [
+                    128,
+                    0,
+                    255,
+                    127
+                ],
+                "left": [
+                    0,
+                    128,
+                    127,
+                    255
+                ],
+                "right": [
+                    128,
+                    128,
+                    255,
+                    255
+                ]
             }
         }
     },
     "sounds": {
         "game": {
-            "type":     "sample",
-            "file":     "sounds/DD_Main.ogg",
-            "stream":   true,
-            "volume":   0.5
+            "type": "sample",
+            "file": "sounds/DD_Main.ogg",
+            "stream": true,
+            "volume": 0.5
         },
         "win": {
-            "type":     "sample",
-            "file":     "sounds/DD_Victory.ogg",
-            "stream":   true,
-            "volume":   0.5
+            "type": "sample",
+            "file": "sounds/DD_Victory.ogg",
+            "stream": true,
+            "volume": 0.5
         },
         "lose": {
-            "type":     "sample",
-            "file":     "sounds/DD_Failure.ogg",
-            "stream":   true,
-            "volume":   0.5
+            "type": "sample",
+            "file": "sounds/DD_Failure.ogg",
+            "stream": true,
+            "volume": 0.5
         },
         "jump": {
-            "type":     "sample",
-            "file":     "sounds/jump.wav",
-            "volume":   0.5
+            "type": "sample",
+            "file": "sounds/jump.wav",
+            "volume": 0.5
         },
         "pew": {
-            "type":     "sample",
-            "file":     "sounds/pew.wav",
-            "volume":   0.5
+            "type": "sample",
+            "file": "sounds/pew.wav",
+            "volume": 0.5
         },
         "pop": {
-            "type":     "sample",
-            "file":     "sounds/plop.wav",
-            "volume":   0.5
-        }                
+            "type": "sample",
+            "file": "sounds/plop.wav",
+            "volume": 0.5
+        }
     },
-	"fonts": {
+    "fonts": {
         "retro": {
-          "file": "fonts/RetroGame.ttf",
-          "size": 64
+            "file": "fonts/RetroGame.ttf",
+            "size": 64
         },
         "debug": {
-          "file": "fonts/RetroGame.ttf",
-          "size":  14
+            "file": "fonts/RetroGame.ttf",
+            "size": 14
+        },
+        "light pixel-7Regular32": {
+            "file": "fonts/LightPixel7.ttf",
+            "size": 32
         },
         "light pixel-7Regular40": {
             "file": "fonts/LightPixel7.ttf",
@@ -324,64 +405,76 @@
             "file": "fonts/LightPixel7.ttf",
             "size": 144
         }
-	},
+    },
     "widgets": {
-        "hud" : "widgets/hud.json",
+        "hud": "widgets/hud.json",
         "pausemenu": "widgets/pausemenu.json",
+        "levelselectmenu": "widgets/levelselectmenu.json",
         "lose": "widgets/lose.json",
         "win1": "widgets/win1.json",
-        "win2": "widgets/win2.json"
+        "win2": "widgets/win2.json",
+        "levelselect1": "widgets/levelselect1.json"
     },
-    "scene2s" : {
-        "hud" : {
-                    "type"      : "Widget",
-                    "comment"   : "This is the root node of heads-up displays",
-                    "format"    : {
-                        "type" : "Anchored"
-                    },
-                    "data" : {
-                        "key" : "hud"
-                    }
+    "scene2s": {
+        "hud": {
+            "type": "Widget",
+            "comment": "This is the root node of heads-up displays",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "hud"
+            }
         },
-        "pausemenu" : {
-                    "type"      : "Widget",
-                    "comment"   : "This is the root node of pause menu",
-                    "format"    : {
-                        "type" : "Anchored"
-                    },
-                    "data" : {
-                        "key" : "pausemenu"
-                    }
+        "pausemenu": {
+            "type": "Widget",
+            "comment": "This is the root node of pause menu",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "pausemenu"
+            }
         },
-        "lose" : {
-                    "type"      : "Widget",
-                    "comment"   : "This is the root node of lose page",
-                    "format"    : {
-                        "type" : "Anchored"
-                    },
-                    "data" : {
-                        "key" : "lose"
-                    }
+        "levelselectmenu": {
+            "type": "Widget",
+            "comment": "This is the root node of level select menu",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "levelselect1"
+            }
         },
-        "win1" : {
-                    "type"      : "Widget",
-                    "comment"   : "This is the root node of the first win page",
-                    "format"    : {
-                        "type" : "Anchored"
-                    },
-                    "data" : {
-                        "key" : "win1"
-                    }
+        "lose": {
+            "type": "Widget",
+            "comment": "This is the root node of lose page",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "lose"
+            }
         },
-        "win2" : {
-                    "type"      : "Widget",
-                    "comment"   : "This is the root node of the second win page",
-                    "format"    : {
-                        "type" : "Anchored"
-                    },
-                    "data" : {
-                        "key" : "win2"
-                    }
+        "win1": {
+            "type": "Widget",
+            "comment": "This is the root node of the first win page",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "win1"
+            }
+        },
+        "win2": {
+            "type": "Widget",
+            "comment": "This is the root node of the second win page",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "win2"
+            }
         }
     }
 }

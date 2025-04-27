@@ -1,0 +1,255 @@
+{
+    "variables": {},
+    "contents": {
+        "type": "Node",
+        "format": {
+            "type": "Anchored"
+        },
+        "data": {
+            "anchor": [
+                0,
+                0
+            ],
+            "size": [
+                1248,
+                576
+            ],
+            "angle": 0,
+            "position": [
+                0,
+                0
+            ],
+            "visible": true
+        },
+        "children": {
+            "menu_shadow": {
+                "type": "Image",
+                "data": {
+                    "texture": "level_select_menu_shadow",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        1248,
+                        576
+                    ],
+                    "angle": 0,
+                    "position": [
+                        0,
+                        0
+                    ],
+                    "visible": true
+                }
+            },
+            "menu": {
+                "type": "Image",
+                "data": {
+                    "texture": "level_select_menu",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        544,
+                        202
+                    ],
+                    "angle": 0,
+                    "position": [
+                        352,
+                        226
+                    ],
+                    "visible": true
+                }
+            },
+            "menu_text": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        240,
+                        48
+                    ],
+                    "position": [
+                        897,
+                        295
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "light pixel-7Regular48",
+                    "text": "SELECT A LEVEL",
+                    "foreground": "#ffffffff",
+                    "background": "#FF000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "level1": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        96,
+                        96
+                    ],
+                    "angle": 0,
+                    "position": [
+                        448,
+                        279
+                    ],
+                    "visible": true,
+                    "upnode": "level1_button"
+                },
+                "children": {
+                    "level1_button": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "level1_button",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                96,
+                                96
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "level2": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        96,
+                        96
+                    ],
+                    "angle": 0,
+                    "position": [
+                        580,
+                        279
+                    ],
+                    "visible": true,
+                    "upnode": "level2_button"
+                },
+                "children": {
+                    "level2_button": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "level2_button",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                96,
+                                96
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "level3": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        96,
+                        96
+                    ],
+                    "angle": 0,
+                    "position": [
+                        712,
+                        279
+                    ],
+                    "visible": true,
+                    "upnode": "level3_button"
+                },
+                "children": {
+                    "level3_button": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "level3_button",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                96,
+                                96
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

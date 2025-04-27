@@ -67,6 +67,8 @@ private:
     bool  _keyRdash;
     /** Whether the guard key is down (spacebar) */
     bool  _keyGuard;
+
+    cugl::Touchscreen* _touch;
   
 protected:
     // INPUT RESULTS
@@ -134,7 +136,7 @@ protected:
         /** Swiped up (for jump) */
         JUMP,
         /** Swiped down (for guard) */
-        GUARD,
+        DOWNDASH,
         /** The "swipe" did not meet the swipe threshold */
         NONE,
     };
@@ -168,6 +170,8 @@ protected:
 	cugl::Timestamp _mtime;
     /** The timestamp for a double tap on the left */
     cugl::Timestamp _ltime;
+    /** The swipe action in the swipe zone for the most recent touch instance*/
+    SwipeType _lastSwipe;
 
     /**
      * Defines the zone boundaries, so we can quickly categorize touches.
@@ -244,7 +248,9 @@ public:
      * Disposes of this input controller, releasing all listeners.
      */
     ~PlatformInput() { dispose(); }
-    
+
+    void clearListeners();
+
     /**
      * Deactivates this input controller, releasing all listeners.
      *

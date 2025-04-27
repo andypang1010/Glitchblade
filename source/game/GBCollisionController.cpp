@@ -9,6 +9,7 @@
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
 #include "../core/GBHitbox.h"
+
 using namespace cugl::physics2;
 // Constructor
 CollisionController::CollisionController(
@@ -49,12 +50,6 @@ void CollisionController::beginContact(b2Contact* contact) {
 
     std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
     std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
-
-    // No idea what this if block is doing; previously was only used for CULogs
-    if (!fix1->GetUserData().pointer || !fix2->GetUserData().pointer) {
-    }
-    else {
-    }
 
     Obstacle* o1 = reinterpret_cast<Obstacle*>(body1->GetUserData().pointer);
     Obstacle* o2 = reinterpret_cast<Obstacle*>(body2->GetUserData().pointer);
@@ -301,7 +296,6 @@ bool CollisionController::isEnemyBody(physics2::Obstacle* b, std::string f ) {
 bool CollisionController::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
     return (f == _player->getBodyName());
 }
-
 
 void CollisionController::reset() {
     _sensorFixtures.clear();
