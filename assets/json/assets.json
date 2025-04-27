@@ -390,19 +390,27 @@
             "size": 14
         },
         "light pixel-7Regular32": {
-            "file": "fonts/LightPixel7.ttf",
+            "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 32
         },
         "light pixel-7Regular40": {
-            "file": "fonts/LightPixel7.ttf",
+            "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 40
         },
         "light pixel-7Regular48": {
-            "file": "fonts/LightPixel7.ttf",
+            "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 48
         },
         "light pixel-7Regular144": {
-            "file": "fonts/LightPixel7.ttf",
+            "file": "fonts/Oxanium-SemiBold.ttf",
+            "size": 144
+        },
+        "oxaniumSemibold40": {
+            "file": "fonts/Oxanium-SemiBold.ttf",
+            "size": 40
+        },
+        "oxaniumSemibold144": {
+            "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 144
         }
     },
@@ -412,7 +420,7 @@
         "levelselectmenu": "widgets/levelselectmenu.json",
         "lose": "widgets/lose.json",
         "win1": "widgets/win1.json",
-        "win2": "widgets/win2.json",
+        "win": "widgets/win.json",
         "levelselect1": "widgets/levelselect1.json"
     },
     "scene2s": {
@@ -466,14 +474,14 @@
                 "key": "win1"
             }
         },
-        "win2": {
+        "win": {
             "type": "Widget",
-            "comment": "This is the root node of the second win page",
+            "comment": "This is the root node of win page",
             "format": {
                 "type": "Anchored"
             },
             "data": {
-                "key": "win2"
+                "key": "win"
             }
         }
     }

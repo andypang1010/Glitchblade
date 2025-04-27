@@ -22,57 +22,69 @@
             "visible": true
         },
         "children": {
-            "pause": {
-                "type": "Button",
-                "format": {
-                    "type": "Anchored"
-                },
+            "time_num": {
+                "type": "Label",
                 "data": {
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
-                        70,
-                        70
+                        120,
+                        40
+                    ],
+                    "position": [
+                        1024,
+                        490
                     ],
                     "angle": 0,
-                    "position": [
-                        1146,
-                        474
-                    ],
                     "visible": true,
-                    "upnode": "button_pause"
+                    "font": "oxaniumSemibold40",
+                    "text": "0:00",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "middle",
+                    "halign": "right"
                 },
-                "children": {
-                    "button_pause": {
-                        "type": "Image",
-                        "data": {
-                            "texture": "button_pause",
-                            "anchor": [
-                                0,
-                                1
-                            ],
-                            "size": [
-                                70,
-                                70
-                            ],
-                            "angle": 0,
-                            "position": [
-                                0,
-                                0
-                            ],
-                            "visible": true
-                        },
-                        "layout": {
-                            "x_anchor": "left",
-                            "y_anchor": "top",
-                            "absolute": false,
-                            "x_offset": 0,
-                            "y_offset": 0
-                        }
-                    }
-                }
+                "children": {}
+            },
+            "enemy_num": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        320,
+                        40
+                    ],
+                    "position": [
+                        520,
+                        490
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Enemy 5/10",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "middle",
+                    "halign": "center"
+                },
+                "children": {}
             },
             "hp_bar": {
                 "type": "Image",
@@ -83,33 +95,13 @@
                         0
                     ],
                     "size": [
-                        310,
-                        70
+                        222,
+                        64
                     ],
                     "angle": 0,
                     "position": [
                         32,
-                        474
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_5": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        33,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        271,
-                        489
+                        480
                     ],
                     "visible": true
                 }
@@ -123,33 +115,13 @@
                         0
                     ],
                     "size": [
-                        46,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        271,
-                        489
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_4": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
                         33,
                         40
                     ],
                     "angle": 0,
                     "position": [
-                        216,
-                        489
+                        201.63,
+                        492
                     ],
                     "visible": true
                 }
@@ -163,33 +135,13 @@
                         0
                     ],
                     "size": [
-                        46,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        216,
-                        489
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_3": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
                         33,
                         40
                     ],
                     "angle": 0,
                     "position": [
-                        159,
-                        489
+                        162.93,
+                        492
                     ],
                     "visible": true
                 }
@@ -203,33 +155,13 @@
                         0
                     ],
                     "size": [
-                        46,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        159,
-                        489
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_2": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
                         33,
                         40
                     ],
                     "angle": 0,
                     "position": [
-                        103,
-                        489
+                        122.81,
+                        492
                     ],
                     "visible": true
                 }
@@ -243,33 +175,13 @@
                         0
                     ],
                     "size": [
-                        46,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        103,
-                        489
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_1": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
                         33,
                         40
                     ],
                     "angle": 0,
                     "position": [
-                        47,
-                        489
+                        83.41,
+                        492
                     ],
                     "visible": true
                 }
@@ -283,15 +195,167 @@
                         0
                     ],
                     "size": [
-                        46,
+                        33,
                         40
                     ],
                     "angle": 0,
                     "position": [
-                        47,
-                        489
+                        44,
+                        492
                     ],
                     "visible": true
+                }
+            },
+            "hp_half_segment_5": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        24,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        201.63,
+                        492
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_4": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        24,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        162.93,
+                        492
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_3": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        24,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        122.81,
+                        492
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_2": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        24,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        83.41,
+                        492
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_1": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        24,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        44,
+                        492
+                    ],
+                    "visible": true
+                }
+            },
+            "pause": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        40,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        1164,
+                        492
+                    ],
+                    "visible": true,
+                    "upnode": "button_pause"
+                },
+                "children": {
+                    "button_pause": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_pause",
+                            "anchor": [
+                                0,
+                                0.5
+                            ],
+                            "size": [
+                                40,
+                                40
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
                 }
             }
         }

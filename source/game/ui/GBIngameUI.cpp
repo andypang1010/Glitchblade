@@ -39,15 +39,16 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     auto pauseMenu = assets->get<scene2::SceneNode>("pausemenu");
     auto losePage = assets->get<scene2::SceneNode>("lose");
     auto winPage1 = assets->get<scene2::SceneNode>("win1");
-    auto winPage2 = assets->get<scene2::SceneNode>("win2");
+    auto winPage = assets->get<scene2::SceneNode>("win");
 
-    if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr || winPage1 == nullptr || winPage2 == nullptr) {
+    if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr || winPage1 == nullptr || winPage == nullptr) {
         return false;
     }
-    
-    _timeNum = std::dynamic_pointer_cast<scene2::Label>(winPage1->getChildByName("time_num"));
-    _parryNum = std::dynamic_pointer_cast<scene2::Label>(winPage1->getChildByName("parry_num"));
-    _hpNum = std::dynamic_pointer_cast<scene2::Label>(winPage1->getChildByName("hp_num"));
+
+    _hudTimeNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("time_num"));
+    _timeNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("time_num"));
+    _parryNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("parry_num"));
+    _hpNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("hp_num"));
 
     headsUpDisplay->setContentSize(Size(1248, 576));
     headsUpDisplay->doLayout();
@@ -68,22 +69,22 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     winPage1->setVisible(false);
     addChild(winPage1);
     
-    winPage2->setContentSize(Size(1248, 576));
-    winPage2->doLayout();
-    winPage2->setVisible(false);
-    addChild(winPage2);
+    winPage->setContentSize(Size(1248, 576));
+    winPage->doLayout();
+    winPage->setVisible(false);
+    addChild(winPage);
 
     setupHUD(headsUpDisplay);
     setupPause(pauseMenu);
     setupLose(losePage);
     setupWin1(winPage1);
-    setupWin2(winPage2);
+    setupWin(winPage);
     
-    showHeadsUpDisplay(true);
+    showHeadsUpDisplay(true, true);
     showPauseMenu(false);
     showLosePage(false);
     showWinPage1(false);
-    showWinPage2(false);
+    showWinPage(false);
 
     _screenOffset = getPosition();
 
@@ -202,11 +203,10 @@ void GBIngameUI::setupWin1(std::shared_ptr<cugl::scene2::SceneNode>& winPage1)
     }
 }
 
-void GBIngameUI::setupWin2(std::shared_ptr<cugl::scene2::SceneNode>& winPage2)
+void GBIngameUI::setupWin(std::shared_ptr<cugl::scene2::SceneNode>& winPage)
 {
-    // Win Page 2 UI
-    _winContinueButton = std::dynamic_pointer_cast<scene2::Button>(winPage2->getChildByName("win_continue"));
-    _winRetryButton = std::dynamic_pointer_cast<scene2::Button>(winPage2->getChildByName("win_retry"));
+    _winContinueButton = std::dynamic_pointer_cast<scene2::Button>(winPage->getChildByName("win_continue"));
+    _winRetryButton = std::dynamic_pointer_cast<scene2::Button>(winPage->getChildByName("win_retry"));
     if (_winContinueButton) {
         _winContinueButton->addListener([this](const std::string& name, bool down) {
             if (down) {
@@ -271,14 +271,24 @@ void GBIngameUI::setHP(int hp) {
     _currentHP = hp;
 }
 
+void GBIngameUI::setTime(float timeSpent) {
+    int minutes = static_cast<int>(timeSpent) / 60;
+    int seconds = static_cast<int>(timeSpent) % 60;
+    char timeStr[16];
+    snprintf(timeStr, sizeof(timeStr), "%d:%02d", minutes, seconds);
+    if (_hudTimeNum) {
+        _hudTimeNum->setText(timeStr);
+    }
+}
+
 void GBIngameUI::resetUI() {
     _currentHP = _maxHP;
     setHP(_currentHP);
-    showHeadsUpDisplay(true);
+    showHeadsUpDisplay(true, true);
     showPauseMenu(false);
     showLosePage(false);
     showWinPage1(false);
-    showWinPage2(false);
+    showWinPage(false);
 }
 
 
@@ -304,11 +314,12 @@ void GBIngameUI::showPauseMenu(bool visible) {
     }
 }
 
-void GBIngameUI::showHeadsUpDisplay(bool visible) {
+void GBIngameUI::showHeadsUpDisplay(bool visible, bool active) {
     auto layer = getChildByName("hud");
     if (layer) {
         layer->setVisible(visible);
-        setButtonsActive(layer, visible);
+        layer->getChildByName("pause")->setVisible(active);
+        setButtonsActive(layer, active);
     }
 }
 
@@ -328,8 +339,8 @@ void GBIngameUI::showWinPage1(bool visible) {
     }
 }
 
-void GBIngameUI::showWinPage2(bool visible) {
-    auto layer = getChildByName("win2");
+void GBIngameUI::showWinPage(bool visible) {
+    auto layer = getChildByName("win");
     if (layer) {
         layer->setVisible(visible);
         setButtonsActive(layer, visible);

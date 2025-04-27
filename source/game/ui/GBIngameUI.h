@@ -54,6 +54,7 @@ protected:
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
     
+    std::shared_ptr<cugl::scene2::Label> _hudTimeNum;
     std::shared_ptr<cugl::scene2::Label> _timeNum;
     std::shared_ptr<cugl::scene2::Label> _parryNum;
     std::shared_ptr<cugl::scene2::Label> _hpNum;
@@ -105,7 +106,7 @@ public:
     
     void setupWin1(std::shared_ptr<cugl::scene2::SceneNode>& winPage1);
     
-    void setupWin2(std::shared_ptr<cugl::scene2::SceneNode>& winPage2);
+    void setupWin(std::shared_ptr<cugl::scene2::SceneNode>& winPage);
     
     static std::shared_ptr<GBIngameUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets) {
         std::shared_ptr<GBIngameUI> result = std::make_shared<GBIngameUI>();
@@ -118,6 +119,8 @@ public:
      * @param hp  The current HP value (must be <= _maxHP)
      */
     void setHP(int hp);
+    
+    void setTime(float timeSpent);
     
     void resetUI();
 
@@ -132,11 +135,11 @@ public:
     void setSettingsCallback(const std::function<void()>& callback) { _settingsCallback = callback; }
     void setWinContinueCallback(const std::function<void()>& callback) { _winContinueCallback = callback; }
 
-    void showHeadsUpDisplay(bool visible);
+    void showHeadsUpDisplay(bool visible, bool active);
     void showPauseMenu(bool visible);
 //    void showSettingMenu(bool visible);
     void showWinPage1(bool visible);
-    void showWinPage2(bool visible);
+    void showWinPage(bool visible);
     void showLosePage(bool visible);
     
     void updateStats(float timeSpent, int parryCount);
