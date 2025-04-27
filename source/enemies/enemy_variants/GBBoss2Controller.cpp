@@ -63,6 +63,8 @@ void Boss2Controller::preUpdate(float dt) {
 
     // Apply cooldowns
     _enemy->setAggression(std::min(100.0f, _enemy->getAggression() + dt * 10));
+    std::dynamic_pointer_cast<Boss2Model>(_enemy)->setTeleportCD(std::max(0, std::dynamic_pointer_cast<Boss2Model>(_enemy)->getTeleportCD() - 1));
+    std::dynamic_pointer_cast<Boss2Model>(_enemy)->setHeadFireTimer(std::max(0, std::dynamic_pointer_cast<Boss2Model>(_enemy)->getHeadFireTimer() - 1));
 
     if (_enemy->isKnocked()) {
         _enemy->resetKnocked();

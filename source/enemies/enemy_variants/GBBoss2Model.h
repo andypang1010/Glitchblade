@@ -92,9 +92,11 @@ protected:
     bool _isHeadFireEnding;
     bool _isHeadFiring;
     int _headFireCount;
+    int _headFireTimer;
 
     bool _isTeleportStarting;
     bool _isTeleportEnding;
+    int _teleportCD;
 
     bool _isShootingLaser;
 
@@ -198,6 +200,22 @@ public:
 #pragma mark Attribute Properties
     void damage(float value) override;
 
+	void setTeleportCD(int value) {
+		_teleportCD = value;
+	}
+
+	int getTeleportCD() {
+		return _teleportCD;
+	}
+
+	void setHeadFireTimer(int value) {
+		_headFireTimer = value;
+	}
+
+	int getHeadFireTimer() {
+		return _headFireTimer;
+	}
+
 #pragma mark -
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
@@ -244,13 +262,13 @@ public:
      * Performs the shoot attack of boss1
      *
      */
-    void shortFire();
+    void shortFire(int repeat);
 
     void handleShortFire();
 
 	void teleport();
 
-    void headFire();
+    void headFire(int repeat);
 
     void handleHeadFire();
 

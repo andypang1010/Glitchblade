@@ -162,7 +162,7 @@
                             "x": 15,
                             "y": 0
                         },
-                        "projectileDamage": 20
+                        "projectileDamage": 10
                     }
                 ]
             },
@@ -192,7 +192,7 @@
                             "x": 0,
                             "y": 15
                         },
-                        "projectileDamage": 20
+                        "projectileDamage": 10
                     },
                     {
                         "projectileSpawnPosition": {
@@ -216,7 +216,7 @@
                             "x": 0,
                             "y": 15
                         },
-                        "projectileDamage": 20
+                        "projectileDamage": 10
                     },
                     {
                         "projectileSpawnPosition": {
@@ -240,7 +240,7 @@
                             "x": 0,
                             "y": 15
                         },
-                        "projectileDamage": 20
+                        "projectileDamage": 10
                     }
                 ]
             },
@@ -268,9 +268,9 @@
                         },
                         "projectileVelocity": {
                             "x": 0,
-                            "y": -15
+                            "y": -10
                         },
-                        "projectileDamage": 20
+                        "projectileDamage": 10
                     }
                 ]
             },
@@ -281,7 +281,7 @@
                 "hitboxSize": [ 40, 3 ],
                 "hitboxStartFrame": 32,
                 "hitboxEndFrame": 50,
-                "hitboxDamage": 10
+                "hitboxDamage": 20
             }
         ]
     },

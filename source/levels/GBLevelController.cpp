@@ -309,8 +309,10 @@ void LevelController::fixedUpdate(float timestep)
 
                 if (enemyProjectile) {
 					Vec2 offset = enemyCtrlr->getEnemy()->isFacingRight() ? enemyProjectile->getSpawnOffset() : Vec2(-enemyProjectile->getSpawnOffset().x, enemyProjectile->getSpawnOffset().y);
-                    auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition()+offset, enemyProjectile, enemyCtrlr->getEnemy()->isFacingRight());
-                    addObstacle(projectilePair);
+                    auto projectilePair = Projectile::createProjectileNodePair(_assets, _constantsJSON, enemyCtrlr->getEnemy()->getPosition() + offset, enemyProjectile, enemyCtrlr->getEnemy()->isFacingRight());
+                    if (_worldRef->inBounds(projectilePair.first.get())) {
+                        addObstacle(projectilePair);
+                    }
                 }
 
                 enemyCtrlr->fixedUpdate(timestep);

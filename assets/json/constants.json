@@ -4,7 +4,7 @@
         "height": 576,
         "aspect": 0.4615,
         "world_width": 117,
-        "world_height": 18,
+        "world_height": 22,
         "gravity": -28.9,
         "texture": "background",
         "scale": null,
