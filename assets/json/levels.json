@@ -4,72 +4,146 @@
       "name": "Level 1",
       "scale": 0.5,
       "layers": [
-          {
-              "file": "scene1_bg",
-              "speed": 0
-          },
-          {
-            "file": "scene1_l4",
-            "speed": 1
-          },
-          {
-            "file": "scene1_l3",
-            "speed": 2
-          },
-          {
-            "file": "scene1_l2",
-            "speed": 3
-          },
-          {
-            "file": "scene1_l1",
-            "speed": 4
-          },
-          {
-              "file": "ground",
-              "speed": 0
-          }
+        {
+          "file": "scene1_bg",
+          "speed": 0
+        },
+        {
+          "file": "scene1_l4",
+          "speed": 1
+        },
+        {
+          "file": "scene1_l3",
+          "speed": 2
+        },
+        {
+          "file": "scene1_l2",
+          "speed": 3
+        },
+        {
+          "file": "scene1_l1",
+          "speed": 4
+        },
+        {
+          "file": "ground",
+          "speed": 0
+        }
       ],
       "platforms": [],
-        "waves": [
+      "waves": [
+        {
+          "spawn_intervals": [
+            3,
+            7
+          ],
+          "enemies": [
+            "minion_1A",
+            "minion_1B"
+          ]
+        },
+        {
+          "spawn_intervals": [
+            3,
+            7,
+            7
+          ],
+          "enemies": [
+            "minion_1B",
+            "minion_1A",
+            "minion_1B"
+          ]
+        },
+        {
+          "spawn_intervals": [
+            3
+          ],
+          "enemies": [
+            "boss_1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Level 2",
+      "scale": 0.5,
+      "layers": [
+        {
+          "file": "scene2_bg",
+          "speed": 0
+        },
+        {
+          "file": "scene2_l4",
+          "speed": 1
+        },
+        {
+          "file": "scene2_l3",
+          "speed": 2
+        },
+        {
+          "file": "scene2_l2",
+          "speed": 3
+        },
+        {
+          "file": "scene2_l1",
+          "speed": 4
+        },
+        {
+          "file": "ground",
+          "speed": 0
+        }
+      ],
+      "platforms": [],
+      "waves": [
+        {
+          "spawn_intervals": [
+            3
+          ],
+          "enemies": [
+            "boss_2"
+          ]
+        }
+      ]
+    },
+      {
+        "name": "Level 3",
+        "scale": 0.5,
+        "layers": [
             {
-                "spawn_intervals": [
-                    3,
-                    7
-                ],
-                "enemies": [
-                    "minion_1A",
-                    "minion_1B"
-                ]
+                "file": "scene3_bg",
+                "speed": 0
             },
             {
-                "spawn_intervals": [
-                    3,
-                    7,
-                    7
-                ],
-                "enemies": [
-                    "minion_1B",
-                    "minion_1A",
-                    "minion_1B"
-                ]
+              "file": "scene3_l4",
+              "speed": 1
             },
             {
-                "spawn_intervals": [
-                    3
-                ],
-                "enemies": [
-                    "boss_1"
-                ]
+              "file": "scene3_l3",
+              "speed": 2
             },
             {
-                "spawn_intervals": [
-                    3
-                ],
-                "enemies": [
-                    "boss_2"
-                ]
+              "file": "scene3_l2",
+              "speed": 3
+            },
+            {
+              "file": "scene3_l1",
+              "speed": 4
+            },
+            {
+                "file": "ground",
+                "speed": 0
             }
-        ]
-    }
+        ],
+        "platforms": [],
+          "waves": [
+              {
+                  "spawn_intervals": [
+                      3
+                  ],
+                  "enemies": [
+                      "boss_2"
+                  ]
+              }
+          ]
+      }
   ]
 }

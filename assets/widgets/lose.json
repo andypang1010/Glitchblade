@@ -63,24 +63,36 @@
                 }
             },
             "lose_text": {
-                "type": "Image",
+                "type": "Label",
                 "data": {
-                    "texture": "lose_text",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
-                        735,
-                        144
+                        754,
+                        180
+                    ],
+                    "position": [
+                        535,
+                        335
                     ],
                     "angle": 0,
-                    "position": [
-                        480,
-                        348
+                    "visible": true,
+                    "font": "oxaniumSemibold144",
+                    "text": "Defeat...",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
                     ],
-                    "visible": true
-                }
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
             },
             "lose_retry": {
                 "type": "Button",
@@ -93,28 +105,67 @@
                         0
                     ],
                     "size": [
-                        363,
+                        241,
                         96
                     ],
                     "angle": 0,
                     "position": [
-                        665,
-                        189
+                        926,
+                        220
                     ],
                     "visible": true,
-                    "upnode": "lose_retry"
+                    "upnode": "RETRY"
                 },
                 "children": {
-                    "lose_retry": {
+                    "RETRY": {
+                        "type": "Label",
+                        "data": {
+                            "anchor": [
+                                0.5,
+                                1
+                            ],
+                            "size": [
+                                124,
+                                50
+                            ],
+                            "position": [
+                                117,
+                                21
+                            ],
+                            "angle": 0,
+                            "visible": true,
+                            "font": "oxaniumSemibold40",
+                            "text": "RETRY",
+                            "foreground": "#ffffffff",
+                            "background": "#00000000",
+                            "padding": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "valign": "top",
+                            "halign": "left"
+                        },
+                        "children": {},
+                        "layout": {
+                            "x_anchor": "center",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0.24,
+                            "y_offset": -0.26
+                        }
+                    },
+                    "button_retry": {
                         "type": "Image",
                         "data": {
-                            "texture": "lose_retry",
+                            "texture": "button_retry",
                             "anchor": [
                                 0,
                                 1
                             ],
                             "size": [
-                                363,
+                                96,
                                 96
                             ],
                             "angle": 0,
@@ -145,28 +196,67 @@
                         0
                     ],
                     "size": [
-                        363,
+                        241,
                         96
                     ],
                     "angle": 0,
                     "position": [
-                        775,
-                        54
+                        926,
+                        92
                     ],
                     "visible": true,
-                    "upnode": "lose_quit"
+                    "upnode": "QUIT"
                 },
                 "children": {
-                    "lose_quit": {
-                        "type": "Image",
+                    "QUIT": {
+                        "type": "Label",
                         "data": {
-                            "texture": "lose_quit",
                             "anchor": [
-                                0,
+                                0.5,
                                 1
                             ],
                             "size": [
-                                363,
+                                92,
+                                50
+                            ],
+                            "position": [
+                                133,
+                                21
+                            ],
+                            "angle": 0,
+                            "visible": true,
+                            "font": "oxaniumSemibold40",
+                            "text": "QUIT",
+                            "foreground": "#ffffffff",
+                            "background": "#00000000",
+                            "padding": [
+                                0,
+                                0,
+                                0,
+                                0
+                            ],
+                            "valign": "top",
+                            "halign": "left"
+                        },
+                        "children": {},
+                        "layout": {
+                            "x_anchor": "center",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0.24,
+                            "y_offset": -0.26
+                        }
+                    },
+                    "button_quit": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_quit",
+                            "anchor": [
+                                0,
+                                0.5
+                            ],
+                            "size": [
+                                96,
                                 96
                             ],
                             "angle": 0,
@@ -178,13 +268,205 @@
                         },
                         "layout": {
                             "x_anchor": "left",
-                            "y_anchor": "top",
+                            "y_anchor": "middle",
                             "absolute": false,
                             "x_offset": 0,
                             "y_offset": 0
                         }
                     }
                 }
+            },
+            "time_ind": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        105,
+                        50
+                    ],
+                    "position": [
+                        618,
+                        268
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Time: ",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "time_num": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        120,
+                        50
+                    ],
+                    "position": [
+                        758,
+                        268
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "3:00",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "right"
+                },
+                "children": {}
+            },
+            "parry_ind": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        111,
+                        50
+                    ],
+                    "position": [
+                        618,
+                        175
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Parry:",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "enemy_ind": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        186,
+                        50
+                    ],
+                    "position": [
+                        618,
+                        82
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Defeated:",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "parry_num": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        120,
+                        50
+                    ],
+                    "position": [
+                        758,
+                        175
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": " 10",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "right"
+                },
+                "children": {}
+            },
+            "enemy_num": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        120,
+                        50
+                    ],
+                    "position": [
+                        758,
+                        82
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": " 5/10",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "right"
+                },
+                "children": {}
             }
         }
     }

@@ -76,7 +76,7 @@
             "duration": 60
         },
         "parry": {
-            "duration": 24
+            "duration": 18
         },
         "shoot_cooldown": 20,
         "fixtures": {
