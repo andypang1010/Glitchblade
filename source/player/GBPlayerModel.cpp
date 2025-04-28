@@ -135,6 +135,10 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _attackSprite->setPosition(0, -25);
     _attackSprite->setScale(0.5f);
 
+	_overloadVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("overload"), 1, 4, 4);
+	_overloadVFXSprite->setPosition(0, -25);
+	_overloadVFXSprite->setScale(0.5f);
+
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_jumpUpSprite);
@@ -144,6 +148,8 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	getSceneNode()->addChild(_parryReleaseSprite);
     getSceneNode()->addChild(_attackSprite);
     getSceneNode()->addChild(_damagedSprite);
+
+	getSceneNode()->addChild(_overloadVFXSprite);
 }
 
 #pragma mark -
@@ -367,9 +373,28 @@ void PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) 
     }
 }
 
+void PlayerModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite) {
+    if (vfxSprite->isVisible()) {
+        if (frameCounter % _animation_update_frame == 0) {
+            vfxSprite->setFrame((vfxSprite->getFrame() + 1) % vfxSprite->getCount());
+        }
+    }
+    else {
+        vfxSprite->setFrame(0);
+    }
+}
+
 
 void PlayerModel::updateAnimation()
 {
+    if (_isNextAttackEnhanced) {
+		_overloadVFXSprite->setVisible(true);
+		playVFXAnimation(_overloadVFXSprite);
+	}
+    else {
+        _overloadVFXSprite->setVisible(false);
+    }
+
     if (isDamaged()) {
         _guardSprite->setVisible(false);
 		_guardReleaseSprite->setVisible(false);

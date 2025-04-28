@@ -223,11 +223,12 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameScene::dispose() {
-    _input->clear();
-    _input->clearListeners();
 
     _world->onEndContact = nullptr;
     _world->onBeginContact = nullptr;
+
+    _input->clear();
+    _input->clearListeners();
 
     removeAllChildren();
     if (_active) {

@@ -78,6 +78,9 @@
         "player_attack": {
             "file": "textures/player_attack.png"
         },
+        "overload": {
+            "file": "textures/overload.png"
+        },
         "enemy": {
             "file": "textures/enemy.png"
         },

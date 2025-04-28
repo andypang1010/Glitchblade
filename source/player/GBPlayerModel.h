@@ -169,6 +169,8 @@ public:
     std::shared_ptr<scene2::SpriteNode> _guardReleaseSprite;
     std::shared_ptr<scene2::SpriteNode> _parryReleaseSprite;
 
+	std::shared_ptr<scene2::SpriteNode> _overloadVFXSprite;
+
 #pragma mark Hidden Constructors
     /**
      * Creates a degenerate player object.
@@ -351,6 +353,7 @@ Vec2 getKnockDirection() { return _knockDirection; }
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
     void playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
+	void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite);
     void updateAnimation();
 
 #pragma mark -
