@@ -310,7 +310,9 @@ void GameScene::setComplete(bool value) {
     if (value && change) {
         float timeSpent = _levelController->getTimeSpentInLevel();
         int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
-        _ui->updateStats(timeSpent, parryCount);
+        int spawnedCount = _levelController->getSpawnedInWave();
+        int totalCount = _levelController->getTotalInWave();
+        _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
@@ -345,7 +347,9 @@ void GameScene::setFailure(bool value) {
         if (_ui) {
             float timeSpent = _levelController->getTimeSpentInLevel();
             int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
-            _ui->updateStats(timeSpent, parryCount);
+            int spawnedCount = _levelController->getSpawnedInWave();
+            int totalCount = _levelController->getTotalInWave();
+            _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
             _ui->showHeadsUpDisplay(false, false);
             _ui->showLosePage(true);
             setPaused(true);

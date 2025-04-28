@@ -380,7 +380,7 @@
                         0
                     ],
                     "size": [
-                        140,
+                        186,
                         50
                     ],
                     "position": [
@@ -390,7 +390,7 @@
                     "angle": 0,
                     "visible": true,
                     "font": "oxaniumSemibold40",
-                    "text": "Enemy:",
+                    "text": "Defeated:",
                     "foreground": "#ffffffff",
                     "background": "#00000000",
                     "padding": [

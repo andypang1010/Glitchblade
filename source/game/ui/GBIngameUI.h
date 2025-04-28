@@ -152,7 +152,7 @@ public:
     void showWinPage(bool visible);
     void showLosePage(bool visible);
     
-    void updateStats(float timeSpent, int parryCount);
+    void updateStats(float timeSpent, int parryCount, int spawnedCount, int totalCount);
     
     // Accessors
     std::shared_ptr<cugl::scene2::Button> getPauseButton() const {

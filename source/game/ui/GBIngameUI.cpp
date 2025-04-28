@@ -286,9 +286,6 @@ void GBIngameUI::setTime(float timeSpent) {
 }
 
 void GBIngameUI::setProgression(int spawnedCount, int totalCount) {
-    if (spawnedCount > 0) {
-        spawnedCount--;
-    }
     if (_hudEnemyNum) {
         std::string text = "Enemy " + std::to_string(spawnedCount) + "/" + std::to_string(totalCount);
         _hudEnemyNum->setText(text);
@@ -361,7 +358,7 @@ void GBIngameUI::showWinPage(bool visible) {
     }
 }
 
-void GBIngameUI::updateStats(float timeSpent, int parryCount) {
+void GBIngameUI::updateStats(float timeSpent, int parryCount, int spawnedCount, int totalCount) {
     int minutes = static_cast<int>(timeSpent) / 60;
     int seconds = static_cast<int>(timeSpent) % 60;
     char timeStr[16];
@@ -387,12 +384,10 @@ void GBIngameUI::updateStats(float timeSpent, int parryCount) {
     }
     
     if (_loseEnemyNum) {
-//        _loseEnemyNum->setText(_hudEnemyNum->getText());
-        std::string text = _hudEnemyNum->getText();
-        if (text.length() > 6) {
-            _loseEnemyNum->setText(text.substr(6));
-        } else {
-            _loseEnemyNum->setText(text);
+        if (spawnedCount > 0) {
+            spawnedCount--;
         }
+        std::string text = std::to_string(spawnedCount) + "/" + std::to_string(totalCount);
+        _loseEnemyNum->setText(text);
     }
 }
