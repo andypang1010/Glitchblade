@@ -32,7 +32,6 @@ void Projectile::update(float dt) {
 	BoxObstacle::update(dt);
     if (_spriteNode != nullptr) {
         _spriteNode->setPosition(getPosition()*_drawScale + getAnimOffset().getRotation(Vec2::angle(Vec2(1, 0), getLinearVelocity())));
-        CULog("Projectile angle: %f", getAngle());
         _spriteNode->setAngle(getAngle());
     
         frameCounter++;

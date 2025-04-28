@@ -162,7 +162,7 @@
                             "x": 15,
                             "y": 0
                         },
-                        "projectileDamage": 10
+                        "projectileDamage": 20
                     }
                 ]
             },
@@ -192,7 +192,7 @@
                             "x": 0,
                             "y": 15
                         },
-                        "projectileDamage": 10
+                        "projectileDamage": 20
                     },
                     {
                         "projectileSpawnPosition": {
@@ -216,7 +216,7 @@
                             "x": 0,
                             "y": 15
                         },
-                        "projectileDamage": 10
+                        "projectileDamage": 20
                     },
                     {
                         "projectileSpawnPosition": {
@@ -240,7 +240,7 @@
                             "x": 0,
                             "y": 15
                         },
-                        "projectileDamage": 10
+                        "projectileDamage": 20
                     }
                 ]
             },
