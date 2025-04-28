@@ -78,6 +78,9 @@
         "player_attack": {
             "file": "textures/player_attack.png"
         },
+        "player_dead": {
+            "file": "textures/player_dead.png"
+        },
         "overload": {
             "file": "textures/overload.png"
         },

@@ -164,6 +164,7 @@ public:
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
     std::shared_ptr<scene2::SpriteNode> _damagedSprite;
+    std::shared_ptr<scene2::SpriteNode> _deadSprite;
 
     std::shared_ptr<scene2::SpriteNode> _guardSprite;
     std::shared_ptr<scene2::SpriteNode> _guardReleaseSprite;
