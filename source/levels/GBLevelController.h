@@ -97,7 +97,8 @@ public:
     bool isLevelWon() {
         bool levelWon = true;
 
-        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
+        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1
+            && _enemyWaves.size() > 0) {
             for (auto enemyController : _enemyWaves[_currentWaveIndex]) {
                 levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
             }
