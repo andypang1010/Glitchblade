@@ -46,9 +46,13 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     }
 
     _hudTimeNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("time_num"));
-    _timeNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("time_num"));
-    _parryNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("parry_num"));
-    _hpNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("hp_num"));
+    _hudEnemyNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("enemy_num"));
+    _winTimeNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("time_num"));
+    _winParryNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("parry_num"));
+    _winHpNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("hp_num"));
+    _loseTimeNum = std::dynamic_pointer_cast<scene2::Label>(losePage->getChildByName("time_num"));
+    _loseParryNum = std::dynamic_pointer_cast<scene2::Label>(losePage->getChildByName("parry_num"));
+    _loseEnemyNum = std::dynamic_pointer_cast<scene2::Label>(losePage->getChildByName("enemy_num"));
 
     headsUpDisplay->setContentSize(Size(1248, 576));
     headsUpDisplay->doLayout();
@@ -281,6 +285,13 @@ void GBIngameUI::setTime(float timeSpent) {
     }
 }
 
+void GBIngameUI::setProgression(int totalCount, int defeatedCount) {
+    if (_hudEnemyNum) {
+        std::string text = "Enemy " + std::to_string(defeatedCount) + "/" + std::to_string(totalCount);
+        _hudEnemyNum->setText(text);
+    }
+}
+
 void GBIngameUI::resetUI() {
     _currentHP = _maxHP;
     setHP(_currentHP);
@@ -348,19 +359,31 @@ void GBIngameUI::showWinPage(bool visible) {
 }
 
 void GBIngameUI::updateStats(float timeSpent, int parryCount) {
-    if (_timeNum) {
-        int minutes = static_cast<int>(timeSpent) / 60;
-        int seconds = static_cast<int>(timeSpent) % 60;
-        char timeStr[16];
-        snprintf(timeStr, sizeof(timeStr), "%d:%02d", minutes, seconds);
-        _timeNum->setText(timeStr);
+    int minutes = static_cast<int>(timeSpent) / 60;
+    int seconds = static_cast<int>(timeSpent) % 60;
+    char timeStr[16];
+    snprintf(timeStr, sizeof(timeStr), "%d:%02d", minutes, seconds);
+    
+    if (_winTimeNum) {
+        _winTimeNum->setText(timeStr);
+    }
+    if (_loseTimeNum) {
+        _loseTimeNum->setText(timeStr);
     }
 
-    if (_parryNum) {
-        _parryNum->setText(std::to_string(parryCount));
+    if (_winParryNum) {
+        _winParryNum->setText(std::to_string(parryCount));
     }
     
-    if (_hpNum) {
-        _hpNum->setText(std::to_string(_currentHP));
+    if (_loseParryNum) {
+        _loseParryNum->setText(std::to_string(parryCount));
+    }
+    
+    if (_winHpNum) {
+        _winHpNum->setText(std::to_string(_currentHP));
+    }
+    
+    if (_loseEnemyNum) {
+        _loseEnemyNum->setText(_hudEnemyNum->getText());
     }
 }

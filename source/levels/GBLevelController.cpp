@@ -149,7 +149,10 @@ void LevelController::updateWave() {
 
 void LevelController::spawnLevel() {
     std::vector<std::shared_ptr<WaveModel>> waves = _currentLevel->getWaves();
-
+    
+    _totalEnemyCount = 0;
+    _defeatedEnemyCount = 0;
+    
     for (auto wave : waves) {
         std::vector<std::string> enemiesString = wave->getEnemies();
         std::vector<float> spawnIntervals = wave->getSpawnIntervals();
@@ -157,6 +160,7 @@ void LevelController::spawnLevel() {
 
         for (auto enemyType : enemiesString) {
             enemyControllers.push_back(createEnemy(enemyType));
+            _totalEnemyCount++;
         }
 
         _enemyWaves.push_back(enemyControllers);
@@ -324,6 +328,7 @@ void LevelController::fixedUpdate(float timestep)
                 enemyCtrlr->getEnemy()->die(_worldNode);
                 enemyCtrlr->inWorld = false;
                 _numEnemiesActive--;
+                _defeatedEnemyCount++;
             }
         }
     }
@@ -623,6 +628,14 @@ void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
 
 float LevelController::getTimeSpentInLevel() const {
     return _timeSpentInLevel;
+}
+
+int LevelController::getTotalEnemyCount() const {
+    return _totalEnemyCount;
+}
+
+int LevelController::getDefeatedEnemyCount() const {
+    return _defeatedEnemyCount;
 }
 
 std::shared_ptr<PlayerController> LevelController::getPlayerController() const {

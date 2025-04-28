@@ -53,11 +53,20 @@ protected:
     /** HP segments */
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
-    
+   
+    // HUD statistics
     std::shared_ptr<cugl::scene2::Label> _hudTimeNum;
-    std::shared_ptr<cugl::scene2::Label> _timeNum;
-    std::shared_ptr<cugl::scene2::Label> _parryNum;
-    std::shared_ptr<cugl::scene2::Label> _hpNum;
+    std::shared_ptr<cugl::scene2::Label> _hudEnemyNum;
+
+    // Win page statistics
+    std::shared_ptr<cugl::scene2::Label> _winTimeNum;
+    std::shared_ptr<cugl::scene2::Label> _winParryNum;
+    std::shared_ptr<cugl::scene2::Label> _winHpNum;
+
+    // Lose page statistics
+    std::shared_ptr<cugl::scene2::Label> _loseTimeNum;
+    std::shared_ptr<cugl::scene2::Label> _loseParryNum;
+    std::shared_ptr<cugl::scene2::Label> _loseEnemyNum;
 
     int _maxHP = 100;
     int _currentHP = 100;
@@ -121,6 +130,7 @@ public:
     void setHP(int hp);
     
     void setTime(float timeSpent);
+    void setProgression(int totalCount, int defeatedCount);
     
     void resetUI();
 
