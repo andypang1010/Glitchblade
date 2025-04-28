@@ -500,7 +500,7 @@ void GameScene::fixedUpdate(float step) {
 
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setTime(_levelController->getTimeSpentInLevel());
-        _ui->setProgression(_levelController->getTotalEnemyCount(),_levelController->getDefeatedEnemyCount());
+        _ui->setProgression(_levelController->getSpawnedInWave(),_levelController->getTotalInWave());
         _ui->setPosition(base + _ui->_screenOffset);
     }
     

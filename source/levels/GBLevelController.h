@@ -45,7 +45,7 @@ private:
     float _timeSpentInLevel = 0;
     
     int _totalEnemyCount = 0;
-    int _defeatedEnemyCount = 0;
+    int _spawnedEnemyCount = 0;
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
@@ -66,8 +66,8 @@ public:
     
 #pragma mark send statistics
     float getTimeSpentInLevel() const;
-    int getTotalEnemyCount() const;
-    int getDefeatedEnemyCount() const;
+    int getTotalInWave() const;
+    int getSpawnedInWave() const;
     std::shared_ptr<PlayerController> getPlayerController() const;
 
 

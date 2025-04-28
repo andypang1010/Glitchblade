@@ -59,7 +59,7 @@ void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_con
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
     enemy_controller->getEnemy()->getSceneNode()->setVisible(true);
     enemy_controller->inWorld = true;
-
+	_spawnedEnemyCount++;
 }
 
 bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& constantsRef, const std::shared_ptr<cugl::physics2::ObstacleWorld>& worldRef, const std::shared_ptr<cugl::scene2::SceneNode>& debugNodeRef, const std::shared_ptr<cugl::scene2::SceneNode>& worldNodeRef)
@@ -124,9 +124,11 @@ void LevelController::updateLevel() {
         _numEnemiesActive = 0;
 		_currentEnemyIndex = 0;
         _currentWaveIndex++;
+		_spawnedEnemyCount = 0;
     }
 
     updateWave();
+	_totalEnemyCount = _enemyWaves[_currentWaveIndex].size();
 }
 
 void LevelController::updateWave() {
@@ -151,7 +153,7 @@ void LevelController::spawnLevel() {
     std::vector<std::shared_ptr<WaveModel>> waves = _currentLevel->getWaves();
     
     _totalEnemyCount = 0;
-    _defeatedEnemyCount = 0;
+    _spawnedEnemyCount = 0;
     
     for (auto wave : waves) {
         std::vector<std::string> enemiesString = wave->getEnemies();
@@ -328,7 +330,6 @@ void LevelController::fixedUpdate(float timestep)
                 enemyCtrlr->getEnemy()->die(_worldNode);
                 enemyCtrlr->inWorld = false;
                 _numEnemiesActive--;
-                _defeatedEnemyCount++;
             }
         }
     }
@@ -630,12 +631,12 @@ float LevelController::getTimeSpentInLevel() const {
     return _timeSpentInLevel;
 }
 
-int LevelController::getTotalEnemyCount() const {
+int LevelController::getTotalInWave() const {
     return _totalEnemyCount;
 }
 
-int LevelController::getDefeatedEnemyCount() const {
-    return _defeatedEnemyCount;
+int LevelController::getSpawnedInWave() const {
+    return _spawnedEnemyCount;
 }
 
 std::shared_ptr<PlayerController> LevelController::getPlayerController() const {

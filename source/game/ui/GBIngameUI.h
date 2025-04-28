@@ -130,7 +130,7 @@ public:
     void setHP(int hp);
     
     void setTime(float timeSpent);
-    void setProgression(int totalCount, int defeatedCount);
+    void setProgression(int spawnedCount, int totalCount);
     
     void resetUI();
 

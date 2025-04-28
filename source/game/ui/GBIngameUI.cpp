@@ -285,9 +285,9 @@ void GBIngameUI::setTime(float timeSpent) {
     }
 }
 
-void GBIngameUI::setProgression(int totalCount, int defeatedCount) {
+void GBIngameUI::setProgression(int spawnedCount, int totalCount) {
     if (_hudEnemyNum) {
-        std::string text = "Enemy " + std::to_string(defeatedCount) + "/" + std::to_string(totalCount);
+        std::string text = "Enemy " + std::to_string(spawnedCount) + "/" + std::to_string(totalCount);
         _hudEnemyNum->setText(text);
     }
 }
