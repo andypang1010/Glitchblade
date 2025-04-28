@@ -123,7 +123,7 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _guardReleaseSprite->setPosition(0, -25);
     _guardReleaseSprite->setScale(0.5f);
 
-    _parryReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_parry_release"), 2, 4, 5);
+    _parryReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_parry_release"), 2, 3, 6);
     _parryReleaseSprite->setPosition(0, -25);
     _parryReleaseSprite->setScale(0.5f);
 

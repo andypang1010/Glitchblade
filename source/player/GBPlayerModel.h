@@ -86,7 +86,7 @@ protected:
     /** How many frames remaining in the guard (0 when guard is not active) */
     int  _guardRem;
     /** The state of the guard: 1 = is guarding, 2 = parry release, 3 = normal release, 0 = not guarding */
-    int  _guardState;
+    int  _guardState = 0;
     /** How many frames remaining in the parry (0 when parry is not active) */
     int  _parryRem;
     /** Whether we are actively inputting jumping */

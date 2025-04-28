@@ -198,6 +198,7 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
             }
 
 			_player->_parryCounter++;
+            _player->damage(0);
 
             // Reset guard and parry
             _player->setParryRem(0);
@@ -237,6 +238,7 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                 }
 
                 _player->_parryCounter++;
+                _player->damage(0);
 
                 // Reset guard and parry
                 _player->setParryRem(0);
