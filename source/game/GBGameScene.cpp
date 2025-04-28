@@ -198,11 +198,6 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         _ui->setRetryCallback([this]() {
             _shouldRetry = true;
         });
-        _ui->setContinueCallback([this]() {
-            _shouldContinue = true;
-            // _ui->showWinPage1(false);
-            _ui->showWinPage2(true);
-        });
         _ui->setQuitCallback([this]() {
             CULog("Want to quit from gamescene!");
             _doQuit = true;
@@ -228,11 +223,12 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameScene::dispose() {
-    _input->clear();
-    _input->clearListeners();
 
     _world->onEndContact = nullptr;
     _world->onBeginContact = nullptr;
+
+    _input->clear();
+    _input->clearListeners();
 
     removeAllChildren();
     if (_active) {
@@ -314,11 +310,14 @@ void GameScene::setComplete(bool value) {
     if (value && change) {
         float timeSpent = _levelController->getTimeSpentInLevel();
         int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
-        _ui->updateStats(timeSpent, parryCount);
+        int spawnedCount = _levelController->getSpawnedInWave();
+        int totalCount = _levelController->getTotalInWave();
+        _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
-        _ui->showWinPage1(true);
+        _ui->showHeadsUpDisplay(false, false);
+        _ui->showWinPage(true);
         setPaused(true);
         _countdown = _constantsJSON->getInt("exit_count");
     }
@@ -346,6 +345,12 @@ void GameScene::setFailure(bool value) {
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         
         if (_ui) {
+            float timeSpent = _levelController->getTimeSpentInLevel();
+            int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
+            int spawnedCount = _levelController->getSpawnedInWave();
+            int totalCount = _levelController->getTotalInWave();
+            _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
+            _ui->showHeadsUpDisplay(false, false);
             _ui->showLosePage(true);
             setPaused(true);
         }
@@ -354,6 +359,7 @@ void GameScene::setFailure(bool value) {
     }
     else {
         if (_ui) {
+            _ui->showHeadsUpDisplay(true, true);
             _ui->showLosePage(false);
             setPaused(false);
         }
@@ -410,33 +416,24 @@ void GameScene::preUpdate(float dt) {
     if (_shouldPause) {
         _shouldPause = false;
         _ui->showPauseMenu(true);
-        _ui->showHeadsUpDisplay(false);
+        _ui->showHeadsUpDisplay(true, false);
         setPaused(true);
     }
     
     if (_shouldResume) {
         _shouldResume = false;
         _ui->showPauseMenu(false);
-        _ui->showHeadsUpDisplay(true);
+        _ui->showHeadsUpDisplay(true, true);
         setPaused(false);
     }
     
     if (_shouldRetry) {
         _shouldRetry = false;
         _ui->showPauseMenu(false);
-        _ui->showHeadsUpDisplay(true);
+        _ui->showHeadsUpDisplay(true, true);
         setPaused(false);
         reset();
     }
-    
-    if (_shouldContinue) {
-        _shouldContinue = false;
-        _ui->showWinPage1(false);
-        _ui->showWinPage2(true);
-        setPaused(true);
-    }
-    
-    //
     
 }
 /**
@@ -510,6 +507,8 @@ void GameScene::fixedUpdate(float step) {
         Size viewSize = _camera->getViewport().size;
 
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
+        _ui->setTime(_levelController->getTimeSpentInLevel());
+        _ui->setProgression(_levelController->getSpawnedInWave(),_levelController->getTotalInWave());
         _ui->setPosition(base + _ui->_screenOffset);
     }
     

@@ -53,10 +53,20 @@ protected:
     /** HP segments */
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
-    
-    std::shared_ptr<cugl::scene2::Label> _timeNum;
-    std::shared_ptr<cugl::scene2::Label> _parryNum;
-    std::shared_ptr<cugl::scene2::Label> _hpNum;
+   
+    // HUD statistics
+    std::shared_ptr<cugl::scene2::Label> _hudTimeNum;
+    std::shared_ptr<cugl::scene2::Label> _hudEnemyNum;
+
+    // Win page statistics
+    std::shared_ptr<cugl::scene2::Label> _winTimeNum;
+    std::shared_ptr<cugl::scene2::Label> _winParryNum;
+    std::shared_ptr<cugl::scene2::Label> _winHpNum;
+
+    // Lose page statistics
+    std::shared_ptr<cugl::scene2::Label> _loseTimeNum;
+    std::shared_ptr<cugl::scene2::Label> _loseParryNum;
+    std::shared_ptr<cugl::scene2::Label> _loseEnemyNum;
 
     int _maxHP = 100;
     int _currentHP = 100;
@@ -105,7 +115,7 @@ public:
     
     void setupWin1(std::shared_ptr<cugl::scene2::SceneNode>& winPage1);
     
-    void setupWin2(std::shared_ptr<cugl::scene2::SceneNode>& winPage2);
+    void setupWin(std::shared_ptr<cugl::scene2::SceneNode>& winPage);
     
     static std::shared_ptr<GBIngameUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets) {
         std::shared_ptr<GBIngameUI> result = std::make_shared<GBIngameUI>();
@@ -118,6 +128,9 @@ public:
      * @param hp  The current HP value (must be <= _maxHP)
      */
     void setHP(int hp);
+    
+    void setTime(float timeSpent);
+    void setProgression(int spawnedCount, int totalCount);
     
     void resetUI();
 
@@ -132,14 +145,14 @@ public:
     void setSettingsCallback(const std::function<void()>& callback) { _settingsCallback = callback; }
     void setWinContinueCallback(const std::function<void()>& callback) { _winContinueCallback = callback; }
 
-    void showHeadsUpDisplay(bool visible);
+    void showHeadsUpDisplay(bool visible, bool active);
     void showPauseMenu(bool visible);
 //    void showSettingMenu(bool visible);
     void showWinPage1(bool visible);
-    void showWinPage2(bool visible);
+    void showWinPage(bool visible);
     void showLosePage(bool visible);
     
-    void updateStats(float timeSpent, int parryCount);
+    void updateStats(float timeSpent, int parryCount, int spawnedCount, int totalCount);
     
     // Accessors
     std::shared_ptr<cugl::scene2::Button> getPauseButton() const {

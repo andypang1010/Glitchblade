@@ -86,7 +86,7 @@ protected:
     /** How many frames remaining in the guard (0 when guard is not active) */
     int  _guardRem;
     /** The state of the guard: 1 = is guarding, 2 = parry release, 3 = normal release, 0 = not guarding */
-    int  _guardState;
+    int  _guardState = 0;
     /** How many frames remaining in the parry (0 when parry is not active) */
     int  _parryRem;
     /** Whether we are actively inputting jumping */
@@ -164,10 +164,13 @@ public:
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
     std::shared_ptr<scene2::SpriteNode> _damagedSprite;
+    std::shared_ptr<scene2::SpriteNode> _deadSprite;
 
     std::shared_ptr<scene2::SpriteNode> _guardSprite;
     std::shared_ptr<scene2::SpriteNode> _guardReleaseSprite;
     std::shared_ptr<scene2::SpriteNode> _parryReleaseSprite;
+
+	std::shared_ptr<scene2::SpriteNode> _overloadVFXSprite;
 
 #pragma mark Hidden Constructors
     /**
@@ -351,6 +354,7 @@ Vec2 getKnockDirection() { return _knockDirection; }
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
     void playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
+	void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite);
     void updateAnimation();
 
 #pragma mark -

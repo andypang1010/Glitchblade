@@ -43,6 +43,9 @@ private:
 	int _currentEnemyIndex = 0;
     float _lastSpawnedTime = 0;
     float _timeSpentInLevel = 0;
+    
+    int _totalEnemyCount = 0;
+    int _spawnedEnemyCount = 0;
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
@@ -63,6 +66,8 @@ public:
     
 #pragma mark send statistics
     float getTimeSpentInLevel() const;
+    int getTotalInWave() const;
+    int getSpawnedInWave() const;
     std::shared_ptr<PlayerController> getPlayerController() const;
 
 
@@ -106,7 +111,8 @@ public:
     }
 
     bool isLevelLost() {
-        return _playerController->getPlayer()->getHP() <= 0;
+        return _playerController->getPlayer()->getHP() <= 0 && 
+            _playerController->getPlayer()->_deadSprite->getFrame() >= _playerController->getPlayer()->_deadSprite->getCount() - 1;
     }
     
     /**Return a new enemy controller from the enemy name*/
