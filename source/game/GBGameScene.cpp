@@ -343,6 +343,9 @@ void GameScene::setFailure(bool value) {
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         
         if (_ui) {
+            float timeSpent = _levelController->getTimeSpentInLevel();
+            int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
+            _ui->updateStats(timeSpent, parryCount);
             _ui->showHeadsUpDisplay(false, false);
             _ui->showLosePage(true);
             setPaused(true);

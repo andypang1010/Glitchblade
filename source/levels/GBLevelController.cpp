@@ -124,11 +124,11 @@ void LevelController::updateLevel() {
         _numEnemiesActive = 0;
 		_currentEnemyIndex = 0;
         _currentWaveIndex++;
-		_spawnedEnemyCount = 0;
+		//_spawnedEnemyCount = 0;
     }
 
     updateWave();
-	_totalEnemyCount = _enemyWaves[_currentWaveIndex].size();
+	//_totalEnemyCount = _enemyWaves[_currentWaveIndex].size();
 }
 
 void LevelController::updateWave() {
