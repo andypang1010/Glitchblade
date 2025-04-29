@@ -3,7 +3,7 @@
     {
       "name": "Level 1",
       "scale": 0.5,
-      "width" : 4,
+      "width" : 8,
       "layers": [
         {
           "file": "scene1_bg",
@@ -65,10 +65,11 @@
       ]
     },
     {
-        "name": "Level 2",
-        "scale": 0.5,
-        "layers": [
-            {
+      "name": "Level 2",
+      "scale": 0.5,
+      "width" : 8,
+      "layers": [
+        {
           "file": "scene2_bg",
                 "speed": 0
             },
@@ -108,40 +109,65 @@
       {
         "name": "Level 3",
         "scale": 0.5,
+        "width" : 8,
         "layers": [
             {
-                "file": "scene3_bg",
-                "speed": 0
+              "file": "scene3_bg",
+              "speed": 0
             },
             {
-              "file": "scene3_l4",
+              "file": "scene3_l6",
               "speed": 1
             },
             {
-              "file": "scene3_l3",
+              "file": "scene3_l5",
               "speed": 2
             },
             {
-              "file": "scene3_l2",
+              "file": "scene3_l4",
               "speed": 3
             },
             {
-              "file": "scene3_l1",
+              "file": "scene3_l3",
               "speed": 4
             },
             {
-                "file": "ground",
-                "speed": 0
+              "file": "scene3_l2",
+              "speed": 4
+            },
+            {
+              "file": "scene3_l1",
+              "speed": 0
+            },
+            {
+              "file": "ground",
+              "speed": 0
             }
         ],
         "platforms": [],
-          "waves": [
+        "waves": [
               {
+                  "walls": [
+                      0.0,
+                      4.375
+                  ],
                   "spawn_intervals": [
-                      3
+                      1
                   ],
                   "enemies": [
-                      "boss_2"
+                      "minion_1A"
+                  ]
+              },
+              {
+                  "walls": [
+                      1.0,
+                      2.0
+                  ],
+                  "spawn_intervals": [
+                      1
+                  ],
+                  "enemies": [
+                      "minion_1A"
                   ]
               }
           ]
