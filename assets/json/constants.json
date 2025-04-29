@@ -117,7 +117,7 @@
             "movement": {
                 "force": 20,
                 "damping": 30,
-                "max_speed": 10
+                "max_speed": 5
             },
             "jump": {
                 "cooldown": 5,

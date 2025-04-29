@@ -116,7 +116,7 @@ protected:
     /** The amount to slow the character down */
     float _damping = 30.0f;
     /** The maximum character speed */
-    float _maxSpeed = 10.0f;
+    float _maxSpeed = 5.0f;
     /** The maximum character hp */
     float _maxHP = 100.0f;
 
