@@ -196,26 +196,47 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     std::shared_ptr<scene2::PolygonNode> sprite;
     std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
 
+    EarclipTriangulator triangulator;
+
+#pragma mark : GROUND
+
+    image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
+    std::shared_ptr<physics2::PolygonObstacle> groundObj;
+    Poly2 ground(calculateGroundVertices());
+
+    triangulator.set(ground.vertices);
+    triangulator.calculate();
+    ground.setIndices(triangulator.getTriangulation());
+    triangulator.clear();
+
+    groundObj = physics2::PolygonObstacle::allocWithAnchor(ground, Vec2::ANCHOR_CENTER);
+    groundObj->setName("GROUND OBJECT");
+
+    setStaticPhysics(groundObj);
+    ground *= scale;
+    sprite = scene2::PolygonNode::allocWithTexture(image, ground);
+
+    ObstacleNodePair ground_pair = std::make_pair(groundObj, sprite);
+    obstacle_pairs.push_back(ground_pair);
+
 #pragma mark : Walls
     // All walls and platforms share the same texture
     std::shared_ptr<JsonValue> wallsJ = _constantsJSON->get("walls");
-    image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
+
     std::vector<std::vector<Vec2>> walls = calculateWallVertices();
-    int w_count = wallsJ->getInt("wall_count");
-    for (int ii = 0; ii < w_count ; ii++) {
+    for (auto wallVector : walls) {
+
         std::shared_ptr<physics2::PolygonObstacle> wallObj;
-        Poly2 wall(walls[ii]);
-        // Call this on a polygon to get a solid shape
-        EarclipTriangulator triangulator;
+        Poly2 wall(wallVector);
+
         triangulator.set(wall.vertices);
         triangulator.calculate();
         wall.setIndices(triangulator.getTriangulation());
         triangulator.clear();
 
         wallObj = physics2::PolygonObstacle::allocWithAnchor(wall, Vec2::ANCHOR_CENTER);
-        // You cannot add constant "".  Must stringify
         wallObj->setName(std::string(wallsJ->getString("name")));
-        // Set the physics attributes
+
         setStaticPhysics(wallObj);
         wall *= scale;
         sprite = scene2::PolygonNode::allocWithTexture(image, wall);
@@ -223,31 +244,6 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
         ObstacleNodePair wall_pair = std::make_pair(wallObj, sprite);
         obstacle_pairs.push_back(wall_pair); // Add wall obj
     }
-
-#pragma mark : GROUND
-    // Get the ground from the level itself
-    image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
-
-    std::shared_ptr<physics2::PolygonObstacle> groundObj;
-    Poly2 ground(calculateGroundVertices());
-
-    EarclipTriangulator triangulator;
-    triangulator.set(ground.vertices);
-    triangulator.calculate();
-    ground.setIndices(triangulator.getTriangulation());
-    triangulator.clear();
-
-    groundObj = physics2::PolygonObstacle::allocWithAnchor(ground, Vec2::ANCHOR_CENTER);
-    // You cannot add constant "".  Must stringify
-    groundObj->setName("GROUND OBJECT");
-
-    // Set the physics attributes
-    setStaticPhysics(groundObj);
-
-    ground *= scale;
-    sprite = scene2::PolygonNode::allocWithTexture(image, ground);
-    ObstacleNodePair ground_pair = std::make_pair(groundObj, sprite);
-    obstacle_pairs.push_back(ground_pair);
     
     for (const auto& pair : obstacle_pairs) {
         // add obstacle and set node position
@@ -566,20 +562,16 @@ std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
     // Using Vec2 instead of float pairs
     std::vector<std::vector<Vec2>> wallVertices = {
         {
-            Vec2(worldWidth/2, worldHeight),
-            Vec2(0.0f, worldHeight),
             Vec2(0.0f, 0.0f),
             Vec2(wallThickness, 0.0f),
-            Vec2(wallThickness, worldHeight - wallThickness),
-            Vec2(worldWidth/2, worldHeight - wallThickness)
+            Vec2(wallThickness, worldHeight),
+            Vec2(0.0f, worldHeight)
         },
         {
-            Vec2(worldWidth, worldHeight),
-            Vec2(worldWidth/2, worldHeight),
-            Vec2(worldWidth/2, worldHeight - wallThickness),
-            Vec2(worldWidth - wallThickness, worldHeight - wallThickness),
             Vec2(worldWidth - wallThickness, 0.0f),
-            Vec2(worldWidth, 0.0f)
+            Vec2(worldWidth, 0.0f),
+            Vec2(worldWidth, worldHeight),
+            Vec2(worldWidth - wallThickness, worldHeight)
         }
     };
 
