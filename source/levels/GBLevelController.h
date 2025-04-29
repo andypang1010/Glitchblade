@@ -243,7 +243,6 @@ public:
 
     void updateLeftZone(int wallsIndex);
     void updateRightZone(int wallsIndex);
-    
 
 #pragma mark Getters
     // this is a test method because we will need to access all enemies in the level not just one
