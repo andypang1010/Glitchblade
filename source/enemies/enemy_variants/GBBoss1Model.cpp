@@ -46,6 +46,7 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 #include "../actionmodel_variants/GBRangedActionModel.h"
+#include "../../core/GBAudio.h"
 
 using namespace cugl;
 using namespace graphics;
@@ -224,6 +225,7 @@ void Boss1Model::nextAction() {
                 stab();
             }
             else if (r % 4 == 2) { // Explode
+                AudioHelper::play_sfx("explode");
                 explode();
             }
             else { // Move away

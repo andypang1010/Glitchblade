@@ -375,29 +375,24 @@
             "file": "sounds/jump.wav",
             "volume": 0.5
         },
-        "pew": {
-            "type": "sample",
-            "file": "sounds/pew.wav",
-            "volume": 0.5
-        },
-        "pop": {
-            "type":     "sample",
-            "file":     "sounds/plop.wav",
-            "volume":   0.5
-        },
-        "guard": {
+        "guard_1": {
             "type":     "sample",
             "file":     "sounds/guard_bop_phaser.wav",
             "volume":   0.5
         },
-        "parry": {
+        "parry_1": {
             "type":     "sample",
             "file":     "sounds/parry_rodswipe_v06.wav",
             "volume":   0.5
         },
-        "player_damage": {
+        "player_damage_1": {
             "type":     "sample",
             "file":     "sounds/dmg_flanged_v06.wav",
+            "volume":   0.5
+        },
+        "explode_1": {
+            "type":     "sample",
+            "file":     "sounds/explosion_sweep_v07.wav",
             "volume":   0.5
         }
     },

@@ -2,6 +2,7 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 #include "../actionmodel_variants/GBRangedActionModel.h"
+#include "../../core/GBAudio.h"
 #include "GBMinion1AModel.h"
 
 using namespace cugl;
@@ -157,6 +158,7 @@ void Minion1AModel::nextAction() {
     if (!_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
         if (isTargetClose()) {
             if (_hp < 25){
+                AudioHelper::play_sfx("explode");
                 explode();
             }
             else {

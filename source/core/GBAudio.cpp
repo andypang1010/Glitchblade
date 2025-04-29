@@ -19,12 +19,11 @@ void AudioHelper::play_sfx(const std::string& fx_name) {
         CULog("audio helper not inited properly");
         return;
     }
-
-    std::string mapped_name = _fxJSON->getString(fx_name);
-    CULog("Mapped name in play_sfx is %s", mapped_name.c_str());
-    
     float fx_volume = _fxJSON->getFloat("volume");
-
+    
+    int version = rand() % _fxJSON->getInt(fx_name) + 1 ;
+    std::string mapped_name = fx_name + ("_" + std::to_string(version));
+    
     std::shared_ptr<Sound> source = _assets->get<Sound>(mapped_name);
 
     if (source) {

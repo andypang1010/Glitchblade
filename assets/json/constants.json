@@ -183,12 +183,11 @@
             "volume": 0.7
         },
         "effects": {
-            "pew": "pew",
-            "pop": "pop",
-            "jump": "jump",
-            "guard": "guard",
-            "parry": "parry",
-            "player_damage" : "player_damage",
+            "jump": 1,
+            "guard": 1,
+            "parry": 1,
+            "player_damage" : 1,
+            "explode" : 1,
             "volume": 0.8
         }
     },
