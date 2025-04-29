@@ -84,6 +84,7 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_stun_short"), 3, 5, 15);
     _stunSprite->setPosition(0, 60);
 	_stunSprite->setName("stun");
+    stunFrames = _stunSprite->getCount() * 4;
 
     _shortFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_start"), 3, 5, 15);
     _shortFireStartSprite->setPosition(0, 60);
@@ -226,7 +227,7 @@ void Boss2Model::dispose() {
 void Boss2Model::damage(float value) {
     EnemyModel::damage(value);
     if (_isShortFireAttacking || _isShortFireWaiting || _isHeadFireAttacking || _isHeadFireWaiting) {
-        setStun(60);
+        setStun(stunFrames);
     }
 }
 
