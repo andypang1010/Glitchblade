@@ -139,7 +139,12 @@ void LevelController::updateWave() {
 	if (_currentWaveIndex >= _enemyWaves.size() || _currentEnemyIndex >= _enemyWaves[_currentWaveIndex].size()) {
         return;
 	}
-
+    
+    for (auto child : _worldNode->getChildren()) {
+        if (child->getName() == "wall") {
+            child->dispose();
+        }
+    }
     float spawnInterval = _currentLevel->getWaves()[_currentWaveIndex]->getSpawnIntervals()[_currentEnemyIndex];
 
     if (_lastSpawnedTime >= spawnInterval && _numEnemiesActive < MAX_NUM_ENEMIES) {
@@ -229,26 +234,9 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
 #pragma mark : Walls
     // All walls and platforms share the same texture
     std::shared_ptr<JsonValue> wallsJ = _constantsJSON->get("walls");
-
-    std::vector<std::vector<Vec2>> walls = calculateWallVertices();
-    for (auto wallVector : walls) {
-
-        std::shared_ptr<physics2::PolygonObstacle> wallObj;
-        Poly2 wall(wallVector);
-
-        triangulator.set(wall.vertices);
-        triangulator.calculate();
-        wall.setIndices(triangulator.getTriangulation());
-        triangulator.clear();
-
-        wallObj = physics2::PolygonObstacle::allocWithAnchor(wall, Vec2::ANCHOR_CENTER);
-        wallObj->setName(std::string(wallsJ->getString("name")));
-
-        setStaticPhysics(wallObj);
-        wall *= scale;
-        sprite = scene2::PolygonNode::allocWithTexture(image, wall);
-        
-        ObstacleNodePair wall_pair = std::make_pair(wallObj, sprite);
+    auto default_walls = wallsJ->get("level_bounds")->asFloatArray();
+    for (float wallPos : default_walls) {
+        auto wall_pair = createWall(wallPos);
         obstacle_pairs.push_back(wall_pair); // Add wall obj
     }
     
@@ -607,6 +595,40 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 }
 
 
+ObstacleNodePair LevelController::createWall(float xPos) {
+    std::shared_ptr<JsonValue> wallsJ = _constantsJSON->get("walls");
+    float scale = _constantsJSON->get("scene")->getFloat("scale");
+    float height =  _constantsJSON->get("scene")->getFloat("world_height");
+    float thickness = _constantsJSON->get("walls")->getFloat("thickness");
+    
+    std::vector<Vec2> wallVerts = {
+        Vec2(xPos, height),
+        Vec2(xPos, 0.0f),
+        Vec2(xPos + thickness, 0.0f),
+        Vec2(xPos + thickness, height)
+    };
+
+    Poly2 wall(wallVerts);
+
+    EarclipTriangulator triangulator;
+    triangulator.set(wall.vertices);
+    triangulator.calculate();
+    wall.setIndices(triangulator.getTriangulation());
+    triangulator.clear();
+
+    wall *= scale;
+
+    auto wallObj = physics2::PolygonObstacle::allocWithAnchor(wall, Vec2::ANCHOR_BOTTOM_LEFT);
+    wallObj->setName(std::string(wallsJ->getString("name")));
+    setStaticPhysics(wallObj);
+    std::shared_ptr<Texture> image;
+    std::shared_ptr<scene2::PolygonNode> sprite;
+    image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
+    sprite = scene2::PolygonNode::allocWithTexture(image, wall);
+    ObstacleNodePair wall_pair = std::make_pair(wallObj, sprite);
+
+    return wall_pair;
+}
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
     float worldWidth =  _constantsJSON->get("scene")->getFloat("world_width");

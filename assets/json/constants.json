@@ -22,8 +22,9 @@
     "walls": {
         "vertex_count": 8,
         "wall_count": 2,
-        "thickness": 1,
-        "name": "wall"
+        "thickness": 0.0125,
+        "name": "wall",
+        "level_bounds": [0.0, 3.65625]
     },
     "platforms": {
         "name": "platform"

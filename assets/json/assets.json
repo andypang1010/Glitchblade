@@ -3,6 +3,9 @@
         "ground": {
             "file": "textures/ground.png"
         },
+        "scene1_a": {
+            "file": "textures/Scene_1_Arena.png"
+        },
         "scene1_bg": {
             "file": "textures/Scene_1_background.png"
         },
@@ -17,6 +20,9 @@
         },
         "scene1_l4": {
             "file": "textures/Scene_1_layer_4.png"
+        },
+        "scene2_a": {
+            "file": "textures/Scene_2_Arena.png"
         },
         "scene2_bg": {
             "file": "textures/Scene_2_background.png"
@@ -36,17 +42,26 @@
         "scene3_bg": {
             "file": "textures/Scene_3_background.png"
         },
+        "scene3_a": {
+            "file": "textures/Scene_3_Arena.png"
+        },
         "scene3_l1": {
-            "file": "textures/Scene_1_layer_1.png"
+            "file": "textures/Scene_3_layer_1.png"
         },
         "scene3_l2": {
-            "file": "textures/Scene_1_layer_2.png"
+            "file": "textures/Scene_3_layer_2.png"
         },
         "scene3_l3": {
-            "file": "textures/Scene_1_layer_3.png"
+            "file": "textures/Scene_3_layer_3.png"
         },
         "scene3_l4": {
-            "file": "textures/Scene_1_layer_4.png"
+            "file": "textures/Scene_3_layer_4.png"
+        },
+        "scene3_l5": {
+            "file": "textures/Scene_3_layer_5.png"
+        },
+        "scene3_l6": {
+            "file": "textures/Scene_3_layer_6.png"
         },
         "platform":  {
             "file": "textures/platform.png"
@@ -418,7 +433,7 @@
     "sounds": {
         "game": {
             "type": "sample",
-            "file": "sounds/DD_Main.ogg",
+            "file": "sounds/GB_MAIN.ogg",
             "stream": true,
             "volume": 0.5
         },

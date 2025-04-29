@@ -165,28 +165,36 @@
         "width": 8,
         "layers": [
             {
-                "file": "scene3_bg",
-                "speed": 0
+              "file": "scene3_bg",
+              "speed": 0
             },
             {
-              "file": "scene3_l4",
+              "file": "scene3_l6",
               "speed": 1
             },
             {
-              "file": "scene3_l3",
+              "file": "scene3_l5",
               "speed": 2
             },
             {
-              "file": "scene3_l2",
+              "file": "scene3_l4",
               "speed": 3
             },
             {
-              "file": "scene3_l1",
+              "file": "scene3_l3",
               "speed": 4
             },
             {
-                "file": "ground",
-                "speed": 0
+              "file": "scene3_l2",
+              "speed": 4
+            },
+            {
+              "file": "scene3_l1",
+              "speed": 0
+            },
+            {
+              "file": "ground",
+              "speed": 0
             }
         ],
         "platforms": [
