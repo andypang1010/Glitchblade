@@ -40,6 +40,8 @@ using namespace cugl::graphics;
 /** The key for dashing right */
 #define RDASH_KEY KeyCode::D
 /** The key for guarding */
+#define DDASH_KEY KeyCode::S
+/** The key for downward dash */
 #define GUARD_KEY KeyCode::SPACE
 
 /** How close we need to be for a multi touch */
@@ -222,6 +224,7 @@ void PlatformInput::update(float dt) {
     _keyRight = keys->keyDown(RIGHT_KEY);
     _keyLdash = keys->keyPressed(LDASH_KEY);
     _keyRdash = keys->keyPressed(RDASH_KEY);
+    _keyDdash = keys->keyPressed(DDASH_KEY);
     _keyGuard = keys->keyPressed(GUARD_KEY);
 #endif
 
@@ -232,10 +235,12 @@ void PlatformInput::update(float dt) {
 	_jumpPressed  = _keyJump;
     _ldashPressed = _keyLdash;
     _rdashPressed = _keyRdash;
+    _ddashPressed = _keyDdash;
     _leftPressed = _keyLeft;
     _rightPressed = _keyRight;
     _guardPressed = _keyGuard;
-    
+
+
 	// Directional controls
 	_horizontal = 0.0f;
 	if (_leftPressed) {

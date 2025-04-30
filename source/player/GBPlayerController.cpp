@@ -60,7 +60,7 @@ void PlayerController::applyForce() {
     }
     b2Body* playerBody = _player->getBody();
     // Don't want to be moving.f Damp out player motion
-    if (_player->getMovement() == 0.0f && !_player->isDashActive() && !_player->isKnockbackActive()) {
+    if (_player->getMovement() == 0.0f && !_player->isDashLRActive() && !_player->isKnockbackActive()) {
         if (_player->isGrounded()) {
             // Instant friction on the grounds
             b2Vec2 vel = playerBody->GetLinearVelocity();
@@ -94,7 +94,7 @@ void PlayerController::applyForce() {
 
     if (!_player->isParryActive()) {
         // Dash!
-#pragma mark dash force
+#pragma mark L/R dash force
         if (_player->isDashLeftBegin()) {
             _player->faceLeft();
             // b2Vec2 force(-_player->getDashF(),0);
@@ -108,10 +108,18 @@ void PlayerController::applyForce() {
             playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
         }
 
-        if (_player->isDashActive())
+        if (_player->isDashLRActive())
         {
             playerBody->SetLinearVelocity(b2Vec2(_player->getVX(), 0));
         }
+    }
+#pragma mark DOWN dash force
+    if (_player->isDashDownBegin()) {
+        playerBody->SetLinearVelocity(b2Vec2(playerBody->GetLinearVelocity().x, -_player->getDashF()));
+    }
+
+    if (_player->isDashDownActive()){
+        playerBody->SetLinearVelocity(b2Vec2(0, _player->getVY()));
     }
 
 #pragma mark knockback force
@@ -123,7 +131,7 @@ void PlayerController::applyForce() {
     }
  
     // Velocity too high, clamp it
-    if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashActive() && !_player->isKnockbackActive()) {
+    if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashLRActive() && !_player->isKnockbackActive()) {
         _player->setVX(SIGNUM(_player->getVX()) * _player->getMaxSpeed());
     }
 }
@@ -288,6 +296,7 @@ void PlayerController::updateCooldowns()
 
     // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
     if (!_player->getDashReset() && _player->getDashCDRem() <= 0 && !(_player->isDashInput())) {
+        _player->resetDashType();
         _player->setDashReset(true); // ready to dash again
     }
 

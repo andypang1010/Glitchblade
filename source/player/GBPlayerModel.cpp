@@ -215,12 +215,12 @@ void PlayerModel::setMovement(float value) {
     scene2::TexturedNode* image = dynamic_cast<scene2::TexturedNode*>(_sceneNode.get());
     if (image != nullptr) {
         // Don't flip if it means overriding a dash direction
-        if (!isDashActive()) {
+        if (!isDashLRActive()) {
             image->flipHorizontal(!image->isFlipHorizontal());
         }
     }
 
-    if (!isDashActive()) {
+    if (!isDashLRActive()) {
         _faceRight = face;
     }
 }
@@ -461,15 +461,33 @@ void PlayerModel::updateAnimation()
         }
     }
 
-    else if (isDashActive()) {
+    else if (isDashLRActive()) {
         setOnlyVisible(_attackSprite);
 
-        if (isDashBegin()) {
+        if (isDashLRBegin()) {
+            _dashType = DashType::LR;
             frameCounter = 0;
             _attackSprite->setFrame(0);
         }
 
         playAnimationOnce(_attackSprite);
+    }
+    
+    else if (isDashDownActive()) {
+        setOnlyVisible(_dashDownStartSprite);
+        if (isDashDownBegin()) {
+            _dashType = DashType::DOWN;
+            frameCounter = 0;
+            _dashDownStartSprite->setFrame(0);
+        }
+        if (_isGrounded) {
+            CULog("Grounded during dash down");
+            setOnlyVisible(_dashDownEndSprite);
+            playAnimationOnce(_dashDownEndSprite);
+        }
+        else {
+            playAnimationOnce(_dashDownStartSprite);
+        }
     }
 
     else if (isJumpBegin()) {
@@ -478,6 +496,7 @@ void PlayerModel::updateAnimation()
         frameCounter = 0;
         _jumpUpSprite->setFrame(0);
     }
+    
     else if (getVY() > 0 && !isGrounded()) {
         setOnlyVisible(_jumpUpSprite);
         playAnimationOnce(_jumpUpSprite);
@@ -492,6 +511,8 @@ void PlayerModel::updateAnimation()
         setOnlyVisible(_jumpDownSprite);
         playAnimationOnce(_jumpDownSprite);
     }
+    
+    
 
     else if (isStrafeLeft() || isStrafeRight()) {
         setOnlyVisible(_walkSprite);
