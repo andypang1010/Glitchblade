@@ -40,7 +40,7 @@ using namespace cugl::graphics;
 /** The key for dashing right */
 #define RDASH_KEY KeyCode::D
 /** The key for guarding */
-#define GUARD_KEY KeyCode::S
+#define GUARD_KEY KeyCode::SPACE
 
 /** How close we need to be for a multi touch */
 #define NEAR_TOUCH      100
@@ -92,10 +92,12 @@ _firePressed(false),
 _jumpPressed(false),
 _rdashPressed(false),
 _ldashPressed(false),
+_ddashPressed(false),
 _guardPressed(false),
 _keyGuard(false),
 _keyLdash(false),
 _keyRdash(false),
+_keyDdash(false),
 _leftPressed(false),
 _rightPressed(false),
 _keyJump(false),
@@ -422,7 +424,7 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
     bool xpass = absxdiff > thresh;
     bool ypass = absydiff > thresh;
 
-    bool yguardpass = ydiff > GUARD_LENGTH;
+    bool yddashpass = ydiff > GUARD_LENGTH;
 
     // Ensure at least one axis has passed the threshold
     if (xpass || ypass) {
@@ -434,7 +436,7 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
             _lastSwipe = (ydiff > 0) ? SwipeType::DOWNDASH : SwipeType::JUMP;
         }
     }
-    else if (yguardpass) {
+    else if (yddashpass) {
         _lastSwipe = SwipeType::DOWNDASH;
     }
     else {
@@ -541,7 +543,7 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
                 _keyJump = true;
                 break;
             case SwipeType::DOWNDASH:
-                // no downward dash implemented yet
+                _keyDdash = true;
                 break;
             case SwipeType::NONE:
                 break;
