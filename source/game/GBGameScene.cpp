@@ -283,11 +283,11 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
     _player = _levelController->getPlayerModel();
-    
-    // Play the background music on a loop.
-//    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-//	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
-//    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
+
+	// Play the background music on a loop.
+    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
+    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
     
     _active = true;
     _complete = false;

@@ -369,7 +369,7 @@
     "sounds": {
         "game": {
             "type": "sample",
-            "file": "sounds/GB_MAIN.ogg",
+            "file": "sounds/balatro.ogg",
             "stream": true,
             "volume": 0.5
         },
