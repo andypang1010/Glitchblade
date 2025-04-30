@@ -60,7 +60,7 @@
         },
         "jump": {
             "cooldown": 5,
-            "force": 55
+            "force": 45
         },
         "dash": {
             "cooldown": 45,
