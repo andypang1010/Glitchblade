@@ -454,7 +454,7 @@ void Boss2Model::handleHeadFire() {
 
 void Boss2Model::teleport() {
     faceTarget();
-    if (_teleportCD <= 0) {
+    if (_teleportCD <= 0 && getPosition().y < 4.2) {
         setEnabled(false);
         _isTeleportStarting = true;
         _teleportCD = 180;
@@ -495,7 +495,7 @@ std::shared_ptr<Projectile> Boss2Model::getProjectile() {
     // Handle head fire falling projectiles
     if (_headFireTimer > 0 && _headFireFallCount > 0 && _headFireTimer <= _headFireFallCount) {
 		float randOffset = rand() % 2 == 0 ? -(rand() % 16) : rand() % 16;
-        _headFireFall->getProjectiles()[0]->setSpawnOffset(Vec2(randOffset, 7.5));
+        _headFireFall->getProjectiles()[0]->setSpawnOffset(Vec2(randOffset, 6.5));
         _headFireFallCount--;
         return _headFireFall->getProjectiles()[0];
     }
