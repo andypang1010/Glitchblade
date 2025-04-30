@@ -343,12 +343,14 @@ std::shared_ptr<MeleeActionModel> Boss1Model::getDamagingAction() {
     return nullptr;
 }
 
-std::shared_ptr<RangedActionModel> Boss1Model::getProjectileAction() {
+std::shared_ptr<Projectile> Boss1Model::getProjectile() {
 	std::vector<int> frames = _shoot->getProjectileSpawnFrames();
+    int count = 0;
     for (int frame : frames) {
 		if (_isShooting && _shootSprite->getFrame() == frame && frameCounter == 0) {
-			return _shoot;
+			return _shoot->getProjectiles()[count];
 		}
+		count++;
     }
     
     return nullptr;
@@ -375,14 +377,6 @@ void Boss1Model::updateAnimation()
     _explodeVFXSprite->setVisible(_explodeSprite->isVisible() && _explodeSprite->getFrame() >= _explodeSprite->getCount() - _explodeVFXSprite->getCount());
 
     _idleSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && !(isMoveLeft() || isMoveRight()));
-
-    //CULog("Stun Spirte Visible: %s", _stunSprite->isVisible() ? "true" : "false");
-    //CULog("Walk Spirte Visible: %s", _walkSprite->isVisible() ? "true" : "false");
-    //CULog("Slam Spirte Visible: %s", _slamSprite->isVisible() ? "true" : "false");
-    //CULog("Stab Spirte Visible: %s", _stabSprite->isVisible() ? "true" : "false");
-    //CULog("Shoot Spirte Visible: %s", _shootSprite->isVisible() ? "true" : "false");
-    //CULog("Explode Spirte Visible: %s", _explodeSprite->isVisible() ? "true" : "false");
-    //CULog("Idle Spirte Visible: %s", _idleSprite->isVisible() ? "true" : "false");
 
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);

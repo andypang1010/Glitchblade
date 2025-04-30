@@ -9,6 +9,7 @@
 #include <box2d/b2_contact.h>
 #include <box2d/b2_collision.h>
 #include "../core/GBHitbox.h"
+
 using namespace cugl::physics2;
 // Constructor
 CollisionController::CollisionController(
@@ -49,12 +50,6 @@ void CollisionController::beginContact(b2Contact* contact) {
 
     std::string* fd1 = reinterpret_cast<std::string*>(fix1->GetUserData().pointer);
     std::string* fd2 = reinterpret_cast<std::string*>(fix2->GetUserData().pointer);
-
-    // No idea what this if block is doing; previously was only used for CULogs
-    if (!fix1->GetUserData().pointer || !fix2->GetUserData().pointer) {
-    }
-    else {
-    }
 
     Obstacle* o1 = reinterpret_cast<Obstacle*>(body1->GetUserData().pointer);
     Obstacle* o2 = reinterpret_cast<Obstacle*>(body2->GetUserData().pointer);
@@ -154,12 +149,23 @@ void CollisionController::endContact(b2Contact* contact) {
 }
 
 #pragma mark collision case helpers
+
 void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
     EnemyModel* enemy = (EnemyModel*) enemyObstacle;
     if (_player->isDashActive() && !_player->isGuardActive()) {
-        enemy->damage(10);
+        enemy->damage(_player->getDamage());
+        _screenShake(_player->_isNextAttackEnhanced ? 30 : 3, 5);
+
+        if (_player->_isNextAttackEnhanced) {
+            _player->_isNextAttackEnhanced = false;
+        }
+
+        else {
+            _player->incrementComboCounter();
+        }
+
         _player->setDashRem(0);
-        _screenShake(3, 5);
+
     }
     _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
     enemy->setKnocked(true, enemy->getPosition().subtract(_player->getPosition()).normalize());
@@ -176,15 +182,23 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         // If neither guard nor parry is active, apply full damage and knockback.
         if (!_player->isGuardActive() && !_player->isParryActive()) {
             int damage = hitbox->getDamage();
+
             _player->damage(damage);
+            _player->resetCombo();
+
             _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
             _screenShake(damage, 3);
         }
         // If parry is active, stun the enemy.
         else if (_player->isParryActive()) {
-            _player->damage(0);
+
+            if (!_player->_isNextAttackEnhanced) 
+            {
+                _player->incrementComboCounter();
+            }
 
 			_player->_parryCounter++;
+            _player->damage(0);
 
             // Reset guard and parry
             _player->setParryRem(0);
@@ -193,7 +207,9 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
 
             _screenShake(40, 1);
 
-            enemy->setStun(enemy->stunFrames);
+            if (hitbox->getIsParriable()) {
+                enemy->setStun(enemy->stunFrames);
+            }
         }
         // If guard is active, deal half damage with corresponding screen shake.
         else if (_player->isGuardActive()) {
@@ -217,9 +233,14 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                 if (!_player->hasProjectile()) {
                     _player->setHasProjectile(true);
                 }
-                _player->damage(0);
+
+                if (!_player->_isNextAttackEnhanced)
+                {
+                    _player->incrementComboCounter();
+                }
 
                 _player->_parryCounter++;
+                _player->damage(0);
 
                 // Reset guard and parry
                 _player->setParryRem(0);
@@ -236,11 +257,13 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
 				projectile->getSceneNode()->setColor(cugl::Color4(0, 255, 150, 255));
             }
             else if (_player->isGuardActive()) {
-                _player->damage(5);
+                _player->damage(projectile->getDamage() / 2);
                 _ui->setHP(_player->getHP());
             }
             else {
-                _player->damage(10);
+                _player->damage(projectile->getDamage());
+                _player->resetCombo();
+
                 _player->setKnocked(true, _player->getPosition().subtract(projectileObstacle->getPosition()).normalize());
                 _ui->setHP(_player->getHP());
             }
@@ -277,7 +300,6 @@ bool CollisionController::isEnemyBody(physics2::Obstacle* b, std::string f ) {
 bool CollisionController::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
     return (f == _player->getBodyName());
 }
-
 
 void CollisionController::reset() {
     _sensorFixtures.clear();

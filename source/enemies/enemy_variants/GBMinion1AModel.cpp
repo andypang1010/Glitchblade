@@ -234,12 +234,14 @@ std::shared_ptr<MeleeActionModel> Minion1AModel::getDamagingAction() {
     return nullptr;
 }
 
-std::shared_ptr<RangedActionModel> Minion1AModel::getProjectileAction() {
+std::shared_ptr<Projectile> Minion1AModel::getProjectile() {
     std::vector<int> frames = _shoot->getProjectileSpawnFrames();
+    int count = 0;
     for (int frame : frames) {
         if (_isShooting && _shootSprite->getFrame() == frame && frameCounter == 0) {
-            return _shoot;
+            return _shoot->getProjectiles()[count];
         }
+        count++;
     }
     return nullptr;
 }

@@ -11,7 +11,8 @@
                 "hitboxSize": [ 8, 8 ],
                 "hitboxStartFrame": 33,
                 "hitboxEndFrame": 40,
-                "hitboxDamage": 20
+                "hitboxDamage": 20,
+                "parriable": false
             },
             {
                 "type": "ranged",
@@ -19,8 +20,8 @@
                 "projectiles": [
                     {
                         "projectileSpawnPosition": {
-                            "x": 1,
-                            "y": 0.5
+                            "x": 0.75,
+                            "y": 0.25
                         },
                         "projectileSize": {
                             "width": 3,
@@ -39,7 +40,7 @@
                             "x": 15,
                             "y": 0
                         },
-                        "projectileDamage": 10
+                        "projectileDamage": 20
                     }
                 ]
             }
@@ -56,7 +57,8 @@
                 "hitboxSize": [ 4, 2 ],
                 "hitboxStartFrame": 20,
                 "hitboxEndFrame": 25,
-                "hitboxDamage": 10
+                "hitboxDamage": 20,
+                "parriable": true
             },
             {
                 "type": "melee",
@@ -65,7 +67,8 @@
                 "hitboxSize": [ 7, 1 ],
                 "hitboxStartFrame": 19,
                 "hitboxEndFrame": 23,
-                "hitboxDamage": 10
+                "hitboxDamage": 20,
+                "parriable": true
             }
         ]
     },
@@ -80,7 +83,8 @@
                 "hitboxSize": [ 4, 1.5 ],
                 "hitboxStartFrame": 27,
                 "hitboxEndFrame": 36,
-                "hitboxDamage": 20
+                "hitboxDamage": 20,
+                "parriable": true
             },
             {
                 "type": "melee",
@@ -89,7 +93,8 @@
                 "hitboxSize": [ 4, 6 ],
                 "hitboxStartFrame": 25,
                 "hitboxEndFrame": 31,
-                "hitboxDamage": 20
+                "hitboxDamage": 20,
+                "parriable": true
             },
             {
                 "type": "melee",
@@ -98,7 +103,8 @@
                 "hitboxSize": [ 10, 10 ],
                 "hitboxStartFrame": 26,
                 "hitboxEndFrame": 37,
-                "hitboxDamage": 40
+                "hitboxDamage": 40,
+                "parriable": false
             },
             {
                 "type": "ranged",
@@ -107,7 +113,7 @@
                     {
                         "projectileSpawnPosition": {
                             "x": 2,
-                            "y": 0.5
+                            "y": 0
                         },
                         "projectileSize": {
                             "width": 3,
@@ -132,7 +138,161 @@
             }
         ]
     },
-    "world_info":{
+    "boss_2": {
+        "health": 200,
+        "size": [ 180, 180 ],
+        "actions": [
+            {
+                "type": "ranged",
+                "name": "shortFire",
+                "projectiles": [
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 1,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 15,
+                            "y": 0
+                        },
+                        "projectileDamage": 20
+                    }
+                ]
+            },
+            {
+                "type": "ranged",
+                "name": "headFire",
+                "projectiles": [
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 0,
+                            "y": 1
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 3,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": 15
+                        },
+                        "projectileDamage": 20
+                    },
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 0.5,
+                            "y": 1.25
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 6,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": 15
+                        },
+                        "projectileDamage": 20
+                    },
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 1,
+                            "y": 1.5
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 9,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": 15
+                        },
+                        "projectileDamage": 20
+                    }
+                ]
+            },
+            {
+                "type": "ranged",
+                "name": "headFireFall",
+                "projectiles": [
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "projectileSize": {
+                            "width": 2,
+                            "height": 1
+                        },
+                        "projectileSpawnFrame": 3,
+                        "projectileAnimation": "textures/projectile_enemy_2.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": -30,
+                            "y": 0
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": -10
+                        },
+                        "projectileDamage": 10
+                    }
+                ]
+            },
+            {
+                "type": "melee",
+                "name": "laser",
+                "hitboxPos": [ 20, 0 ],
+                "hitboxSize": [ 40, 3 ],
+                "hitboxStartFrame": 32,
+                "hitboxEndFrame": 50,
+                "hitboxDamage": 20,
+                "parriable": false
+            }
+        ]
+    },
+    "world_info": {
         "scale": null,
         "worldLeft": null,
         "worldRight": null

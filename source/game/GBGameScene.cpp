@@ -39,20 +39,6 @@ using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::audio;
-// Constants moved to LevelController.cpp
-// NOTE: THE SCENE WIDTH/HEIGHT, ASPECT, DEFAULT WIDTH/HEIGHT ARE CURRENTLY COPIED IN LEVELCONTROLLER WITH GAME_ PREFIX
-/** This is adjusted by screen aspect ratio to get the height */
-#define SCENE_WIDTH 1248
-#define SCENE_HEIGHT 576
-/** This is the aspect ratio for physics */
-#define SCENE_ASPECT 9.0/19.5
-/** Width of the game world in Box2d units */
-#define DEFAULT_WIDTH   39.0f
-/** Height of the game world in Box2d units */
-#define DEFAULT_HEIGHT  18.0f
-/** The new heavier gravity for this world (so it is not so floaty) */
-#define DEFAULT_GRAVITY -28.9f
-
 
 
 
@@ -94,7 +80,7 @@ _input(nullptr)
  * @param assets    The (loaded) assets for this game mode
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
+bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string levelName) {
     if (assets == nullptr) {
         return false;
     }
@@ -120,7 +106,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
     boundsJ->get("size")->get("width")->set(bounds.size.width);
     boundsJ->get("size")->get("height")->set(bounds.size.height);
-//    CULog("bounds orign is (%f, %f) and size is (%f, %f)", bounds.origin.x,bounds.origin.y,bounds.size.width,bounds.size.height);
     
 
     
@@ -136,8 +121,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
     _scale = _size.width == sceneJ->getInt("width") ? _size.width / screenSize.size.width : _size.height / screenSize.size.height;
+
     _worldPixelWidth = worldSize.size.width * _scale;
-    //CULog("_scale is %f", _scale);
     sceneJ->get("scale")->set(_scale);
     
     
@@ -158,10 +143,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
     
     _camera = getCamera();
     _defCamPos = _camera->getPosition();
-    
-    CULog("Creating empty level controller in gamescene init");
+
     _levelController = std::make_unique<LevelController>();
-    CULog("initializing level controller in gamescene init");
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
@@ -169,7 +152,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
     _debugnode->setName("game_debug_node");
     
     _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
-    _currentLevel = _levelController->getLevelByName("Level 1");
+    _currentLevel = _levelController->getLevelByName(levelName);
 
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
     setComplete(false);
@@ -177,16 +160,10 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets) {
     
     #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
     _input =  _levelController->getInputController();
-    if (!_input){
-        CULog("input is null in populate");
-    }
     #pragma mark : Player
         _player = _levelController->getPlayerModel();
-        if (!_player){
-            CULog("player is null in populate");
-        }
     
-    populate(_levelController->getLevelByName("Level 1"));
+    populate(_levelController->getLevelByName(levelName));
 
     // === Initialize in-game UI ===
     populateUI(assets);
@@ -221,11 +198,22 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
         _ui->setRetryCallback([this]() {
             _shouldRetry = true;
         });
-        _ui->setContinueCallback([this]() {
-            _shouldContinue = true;
-//            _ui->showWinPage1(false);
-            _ui->showWinPage2(true);
+        _ui->setQuitCallback([this]() {
+            CULog("Want to quit from gamescene!");
+            _doQuit = true;
         });
+        _ui->setLoseQuitCallback([this]() {
+            CULog("Want to loseQuit from gamescene!");
+            _doQuit = true;
+        });
+        _ui->setSettingsCallback([this]() {
+            CULog("Want to settings from gamescene!");
+        });
+        _ui->setWinContinueCallback([this]() {
+            _continueNextLevel = true;
+            CULog("Want to winContinue from gamescene!");
+        });
+
         addChild(_ui);
     }
     
@@ -235,6 +223,14 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameScene::dispose() {
+
+    _world->onEndContact = nullptr;
+    _world->onBeginContact = nullptr;
+
+    _input->clear();
+    _input->clearListeners();
+
+    removeAllChildren();
     if (_active) {
         _world = nullptr;
         _worldnode = nullptr;
@@ -291,9 +287,9 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     // Add UI elements
 
 	// Play the background music on a loop.
-    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
-    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
+//    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+//	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
+//    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
     
     _active = true;
     _complete = false;
@@ -314,11 +310,14 @@ void GameScene::setComplete(bool value) {
     if (value && change) {
         float timeSpent = _levelController->getTimeSpentInLevel();
         int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
-        _ui->updateStats(timeSpent, parryCount);
+        int spawnedCount = _levelController->getSpawnedInWave();
+        int totalCount = _levelController->getTotalInWave();
+        _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
-        _ui->showWinPage1(true);
+        _ui->showHeadsUpDisplay(false, false);
+        _ui->showWinPage(true);
         setPaused(true);
         _countdown = _constantsJSON->getInt("exit_count");
     }
@@ -346,6 +345,12 @@ void GameScene::setFailure(bool value) {
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         
         if (_ui) {
+            float timeSpent = _levelController->getTimeSpentInLevel();
+            int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
+            int spawnedCount = _levelController->getSpawnedInWave();
+            int totalCount = _levelController->getTotalInWave();
+            _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
+            _ui->showHeadsUpDisplay(false, false);
             _ui->showLosePage(true);
             setPaused(true);
         }
@@ -354,6 +359,7 @@ void GameScene::setFailure(bool value) {
     }
     else {
         if (_ui) {
+            _ui->showHeadsUpDisplay(true, true);
             _ui->showLosePage(false);
             setPaused(false);
         }
@@ -410,33 +416,24 @@ void GameScene::preUpdate(float dt) {
     if (_shouldPause) {
         _shouldPause = false;
         _ui->showPauseMenu(true);
-        _ui->showHeadsUpDisplay(false);
+        _ui->showHeadsUpDisplay(true, false);
         setPaused(true);
     }
     
     if (_shouldResume) {
         _shouldResume = false;
         _ui->showPauseMenu(false);
-        _ui->showHeadsUpDisplay(true);
+        _ui->showHeadsUpDisplay(true, true);
         setPaused(false);
     }
     
     if (_shouldRetry) {
         _shouldRetry = false;
         _ui->showPauseMenu(false);
-        _ui->showHeadsUpDisplay(true);
+        _ui->showHeadsUpDisplay(true, true);
         setPaused(false);
         reset();
     }
-    
-    if (_shouldContinue) {
-        _shouldContinue = false;
-        _ui->showWinPage1(false);
-        _ui->showWinPage2(true);
-        setPaused(true);
-    }
-    
-    //
     
 }
 /**
@@ -486,12 +483,10 @@ void GameScene::fixedUpdate(float step) {
     if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
         _cameraLocked = true;
         if (cameraPosLX <= 0) {
-            CULog("playerx: %f", currPlayerPosX);
             if (currPlayerPosX > getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         } else {
-            CULog("playerx: %f", currPlayerPosX);
             if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
@@ -512,6 +507,8 @@ void GameScene::fixedUpdate(float step) {
         Size viewSize = _camera->getViewport().size;
 
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
+        _ui->setTime(_levelController->getTimeSpentInLevel());
+        _ui->setProgression(_levelController->getSpawnedInWave(),_levelController->getTotalInWave());
         _ui->setPosition(base + _ui->_screenOffset);
     }
     

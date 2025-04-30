@@ -22,10 +22,10 @@
             "visible": true
         },
         "children": {
-            "cover_shadow": {
+            "menu_shadow": {
                 "type": "Image",
                 "data": {
-                    "texture": "cover_shadow",
+                    "texture": "level_select_menu_shadow",
                     "anchor": [
                         0,
                         0
@@ -42,27 +42,59 @@
                     "visible": true
                 }
             },
-            "win": {
+            "menu": {
                 "type": "Image",
                 "data": {
-                    "texture": "win",
+                    "texture": "level_select_menu",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
-                        576,
-                        576
+                        544,
+                        202
                     ],
                     "angle": 0,
                     "position": [
-                        0,
-                        0
+                        352,
+                        226
                     ],
                     "visible": true
                 }
             },
-            "win_retry": {
+            "menu_text": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        240,
+                        48
+                    ],
+                    "position": [
+                        897,
+                        295
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "light pixel-7Regular48",
+                    "text": "SELECT A LEVEL",
+                    "foreground": "#ffffffff",
+                    "background": "#FF000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "level1": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -73,28 +105,28 @@
                         0
                     ],
                     "size": [
-                        363,
+                        96,
                         96
                     ],
                     "angle": 0,
                     "position": [
-                        665,
-                        189
+                        448,
+                        279
                     ],
                     "visible": true,
-                    "upnode": "win_retry"
+                    "upnode": "level1_button"
                 },
                 "children": {
-                    "win_retry": {
+                    "level1_button": {
                         "type": "Image",
                         "data": {
-                            "texture": "win_retry",
+                            "texture": "level1_button",
                             "anchor": [
                                 0,
                                 1
                             ],
                             "size": [
-                                363,
+                                96,
                                 96
                             ],
                             "angle": 0,
@@ -114,7 +146,7 @@
                     }
                 }
             },
-            "win_continue": {
+            "level2": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -125,28 +157,28 @@
                         0
                     ],
                     "size": [
-                        363,
+                        96,
                         96
                     ],
                     "angle": 0,
                     "position": [
-                        775,
-                        54
+                        580,
+                        279
                     ],
                     "visible": true,
-                    "upnode": "win_continue"
+                    "upnode": "level2_button"
                 },
                 "children": {
-                    "win_continue": {
+                    "level2_button": {
                         "type": "Image",
                         "data": {
-                            "texture": "win_continue",
+                            "texture": "level2_button",
                             "anchor": [
                                 0,
                                 1
                             ],
                             "size": [
-                                363,
+                                96,
                                 96
                             ],
                             "angle": 0,
@@ -166,24 +198,56 @@
                     }
                 }
             },
-            "win_text": {
-                "type": "Image",
+            "level3": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
                 "data": {
-                    "texture": "win_text",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
-                        692,
-                        188
+                        96,
+                        96
                     ],
                     "angle": 0,
                     "position": [
-                        520,
-                        304
+                        712,
+                        279
                     ],
-                    "visible": true
+                    "visible": true,
+                    "upnode": "level3_button"
+                },
+                "children": {
+                    "level3_button": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "level3_button",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                96,
+                                96
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
                 }
             }
         }

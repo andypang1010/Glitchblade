@@ -27,6 +27,9 @@ protected:
     /** The damage dealt by the hitbox. */
     float _hitboxDamage;
 
+    /** Whether the attack can be parried */
+    bool _isParriable;
+
 public:
     /** Default constructor. */
     MeleeActionModel();
@@ -49,6 +52,9 @@ public:
 
     float getHitboxDamage() const;
     void setHitboxDamage(float damage);
+
+	bool getIsParriable() const;
+    void setIsParriable(bool parriable);
 };
 
 #endif // ACTION_MODEL_H

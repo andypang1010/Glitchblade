@@ -116,7 +116,7 @@ protected:
     /** The amount to slow the character down */
     float _damping = 30.0f;
     /** The maximum character speed */
-    float _maxSpeed = 10.0f;
+    float _maxSpeed = 5.0f;
     /** The maximum character hp */
     float _maxHP = 100.0f;
 
@@ -536,11 +536,11 @@ public:
     virtual std::shared_ptr<MeleeActionModel> getDamagingAction();
 
     /**
-     * Returns the action when a projectile is going to be shot, or nothing when no attack is active
+     * Returns the projectile that is going to be shot, or nothing when no attack is active
      *
-     * @return the action that needs projectile, or nullptr when no ranged attack is active
+     * @return the current projectile information, or nullptr when no ranged attack is active
      */
-    virtual std::shared_ptr<RangedActionModel> getProjectileAction();
+    virtual std::shared_ptr<Projectile> getProjectile();
 
     void die(std::shared_ptr<scene2::SceneNode> world);
 

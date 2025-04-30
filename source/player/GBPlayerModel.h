@@ -68,7 +68,7 @@ protected:
     /** This character's remaining health */
     float _hp;
     /** how much damage player deals*/
-    int _damage;
+    int _damage = 10;
     /** The current horizontal movement of the character */
     float _movement;
     /** Which direction is the character facing */
@@ -86,7 +86,7 @@ protected:
     /** How many frames remaining in the guard (0 when guard is not active) */
     int  _guardRem;
     /** The state of the guard: 1 = is guarding, 2 = parry release, 3 = normal release, 0 = not guarding */
-    int  _guardState;
+    int  _guardState = 0;
     /** How many frames remaining in the parry (0 when parry is not active) */
     int  _parryRem;
     /** Whether we are actively inputting jumping */
@@ -154,6 +154,9 @@ protected:
 public:
     int iframe = 0;
     int _parryCounter = 0;
+    float _comboMeter = 0;
+    float _lastComboElapsedTime = 0;
+    bool _isNextAttackEnhanced = false;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
@@ -161,10 +164,13 @@ public:
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
     std::shared_ptr<scene2::SpriteNode> _damagedSprite;
+    std::shared_ptr<scene2::SpriteNode> _deadSprite;
 
     std::shared_ptr<scene2::SpriteNode> _guardSprite;
     std::shared_ptr<scene2::SpriteNode> _guardReleaseSprite;
     std::shared_ptr<scene2::SpriteNode> _parryReleaseSprite;
+
+	std::shared_ptr<scene2::SpriteNode> _overloadVFXSprite;
 
 #pragma mark Hidden Constructors
     /**
@@ -262,13 +268,27 @@ public:
         _parryRem = 0;
         _damageRem = 0;
         _damage = 10;// default player dmg
+        
         _parryCounter = 0;
+		_comboMeter = 0;
+        _lastComboElapsedTime = 0;
+		_isNextAttackEnhanced = false;
     };
     
     void setConstants();
     void setDebug();
     void debugHelper();
     void reset();
+
+    void resetCombo() {
+        _comboMeter = 0;
+		_isNextAttackEnhanced = false;
+    }
+
+    void incrementComboCounter() {
+        _comboMeter = std::min(_comboMeter + 20, 100.0f);
+        _lastComboElapsedTime = 0;
+    }
 
     /**Attach the scene nodes (sprite sheets) to the player**/
     void attachNodes(const std::shared_ptr<AssetManager>& assetRef);
@@ -334,6 +354,7 @@ Vec2 getKnockDirection() { return _knockDirection; }
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
     void playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
+	void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite);
     void updateAnimation();
 
 #pragma mark -
@@ -392,7 +413,7 @@ public:
     #pragma mark - Attribute Properties
 
     // Damage
-    int getDamage() const { return _damage;}
+    int getDamage() const { return _damage * (_isNextAttackEnhanced ? 4 : 1); }
     void setDamage(int value) { _damage = value; }
 	bool isDamaged() const { return _damageRem > 0; }
 	void setDamagedRem(int value) { _damageRem = value; }

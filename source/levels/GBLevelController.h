@@ -43,6 +43,9 @@ private:
 	int _currentEnemyIndex = 0;
     float _lastSpawnedTime = 0;
     float _timeSpentInLevel = 0;
+    
+    int _totalEnemyCount = 0;
+    int _spawnedEnemyCount = 0;
 
     /* Data */
     std::shared_ptr<AssetManager> _assets;
@@ -63,6 +66,8 @@ public:
     
 #pragma mark send statistics
     float getTimeSpentInLevel() const;
+    int getTotalInWave() const;
+    int getSpawnedInWave() const;
     std::shared_ptr<PlayerController> getPlayerController() const;
 
 
@@ -92,7 +97,8 @@ public:
     bool isLevelWon() {
         bool levelWon = true;
 
-        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
+        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1
+            && _enemyWaves.size() > 0) {
             for (auto enemyController : _enemyWaves[_currentWaveIndex]) {
                 levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
             }
@@ -106,7 +112,8 @@ public:
     }
 
     bool isLevelLost() {
-        return _playerController->getPlayer()->getHP() <= 0;
+        return _playerController->getPlayer()->getHP() <= 0 && 
+            _playerController->getPlayer()->_deadSprite->getFrame() >= _playerController->getPlayer()->_deadSprite->getCount() - 1;
     }
     
     /**Return a new enemy controller from the enemy name*/
@@ -192,7 +199,7 @@ public:
     /**
     * Adds a new hitbox to the world.
     */
-    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration);
+    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration, bool parriable);
     void createPlatform(Rect rect);
 
     /** Parses the JSON file and returns a vector of parsed actions. */

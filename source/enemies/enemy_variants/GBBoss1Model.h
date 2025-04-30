@@ -217,7 +217,7 @@ public:
      *
      * @return the action that needs projectile, or nullptr when no ranged attack is active
      */
-    std::shared_ptr<RangedActionModel> getProjectileAction() override;
+    std::shared_ptr<Projectile> getProjectile() override;
 
 #pragma mark -
 #pragma mark Animation Methods

@@ -119,7 +119,8 @@ public:
     /** Reset the collision controller (eg for a new level) */
     void reset();
 
-
+    /** Cleans up listeners */
+    void dispose();
 };
 
 

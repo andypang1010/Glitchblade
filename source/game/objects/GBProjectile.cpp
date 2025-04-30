@@ -31,7 +31,7 @@ using namespace cugl::scene2;
 void Projectile::update(float dt) {
 	BoxObstacle::update(dt);
     if (_spriteNode != nullptr) {
-        _spriteNode->setPosition(getPosition()*_drawScale);
+        _spriteNode->setPosition(getPosition()*_drawScale + getAnimOffset().getRotation(Vec2::angle(Vec2(1, 0), getLinearVelocity())));
         _spriteNode->setAngle(getAngle());
     
         frameCounter++;
@@ -39,6 +39,10 @@ void Projectile::update(float dt) {
             _spriteNode->setFrame((_spriteNode->getFrame() + 1) % _spriteNode->getCount());
             frameCounter = 0;
 		}
+    }
+
+    if (getPosition().y <= -50) {
+        markRemoved(true);
     }
 }
 
@@ -59,12 +63,19 @@ ObstacleNodePair Projectile::createProjectileNodePair(const std::shared_ptr<Asse
     newProjectile->setDrawScale(scale);
     newProjectile->setSensor(true);
     newProjectile->setLinearVelocity(projectile->getLinearVelocity() * Vec2(isFacingRight ? 1 : -1, 1));
+    newProjectile->setAnimOffset(projectile->getAnimOffset());
+	
+
+	newProjectile->setDamage(projectile->getDamage());
 
     std::shared_ptr<scene2::SpriteNode> newSprite = scene2::SpriteNode::allocWithSprite(projectile->getSceneNode());
     newSprite->flipHorizontal(newProjectile->getLinearVelocity().x < 0);
     newSprite->setPosition(projectile->getAnimOffset());
 //    CULog(projectile->getAnimOffset().toString().c_str());
 	newSprite->setFrame(0);
+
+    // Set angle for verticle projectiles.
+    newProjectile->setAngle(Vec2::angle(Vec2(1, 0), newProjectile->getLinearVelocity()));
 
 	newProjectile->setSceneNode(newSprite);
 

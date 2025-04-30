@@ -15,6 +15,7 @@
 #define __GB_APP_H__
 #include <cugl/cugl.h>
 #include "../game/GBGameScene.h"
+#include "../game/GBLevelSelectScene.h"
 
 /**
  * This class represents the application root for the platform demo.
@@ -25,16 +26,23 @@ protected:
     std::shared_ptr<cugl::graphics::SpriteBatch> _batch;
     /** The global asset manager */
     std::shared_ptr<cugl::AssetManager> _assets;
-    
+
     // Player modes
     /** The primary controller for the game world */
-    GameScene _gameplay;
+    std::shared_ptr<GameScene> _gameplay = nullptr;
+
+    /** The primary controller for the level select */
+    std::shared_ptr<LevelSelectScene> _levelSelect = nullptr;
+
     /** The controller for the loading screen */
     cugl::scene2::LoadingScene _loading;
-    
+
     /** Whether or not we have finished loading all assets */
     bool _loaded;
-    
+
+    /** The current scene being played */
+    int _currentScene = 0;
+
 public:
 #pragma mark Constructors
     /**
@@ -47,7 +55,7 @@ public:
      * advanced configuration of the application before it starts.
      */
     GlitchbladeApp() : cugl::Application(), _loaded(false) {}
-    
+
     /**
      * Disposes of this application, releasing all resources.
      *
@@ -56,8 +64,8 @@ public:
      * special to do here.
      */
     ~GlitchbladeApp() { }
-    
-    
+
+
 #pragma mark Application State
 
     /**
@@ -71,7 +79,7 @@ public:
      * causing the application to run.
      */
     virtual void onStartup() override;
-    
+
     /**
      * The method called when the application is ready to quit.
      *
@@ -84,7 +92,7 @@ public:
      * causing the application to be deleted.
      */
     virtual void onShutdown() override;
-    
+
     /**
      * The method called when the application is suspended and put in the background.
      *
@@ -97,7 +105,7 @@ public:
      * the background.
      */
     virtual void onSuspend() override;
-    
+
     /**
      * The method called when the application resumes and put in the foreground.
      *
@@ -109,8 +117,8 @@ public:
      * paused before app suspension.
      */
     virtual void onResume()  override;
-    
-    
+
+
 #pragma mark Application Loop
     /**
      * The method called to update the application data.
@@ -124,7 +132,17 @@ public:
      * @param dt    The amount of time (in seconds) since the last frame
      */
     virtual void update(float dt) override;
-    
+
+    /**
+     * The method to init the GameScene with the given level.
+    */
+    void initGameScene(std::string levelName);
+
+    /**
+     * The method to init the LevelSelectScene.
+    */
+    void initLevelSelectScene();
+
     /**
      * The method called to indicate the start of a deterministic loop.
      *
@@ -146,7 +164,7 @@ public:
      * @param dt    The amount of time (in seconds) since the last frame
      */
     virtual void preUpdate(float dt) override;
-    
+
     /**
      * The method called to provide a deterministic application loop.
      *
@@ -194,7 +212,7 @@ public:
      * @param dt    The amount of time (in seconds) since the last frame
      */
     virtual void postUpdate(float dt) override;
-    
+
     /**
      * The method called to draw the application to the screen.
      *
