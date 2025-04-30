@@ -84,6 +84,7 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_stun_short"), 3, 5, 15);
     _stunSprite->setPosition(0, 60);
 	_stunSprite->setName("stun");
+    stunFrames = _stunSprite->getCount() * 4;
 
     _shortFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_start"), 3, 5, 15);
     _shortFireStartSprite->setPosition(0, 60);
@@ -226,7 +227,7 @@ void Boss2Model::dispose() {
 void Boss2Model::damage(float value) {
     EnemyModel::damage(value);
     if (_isShortFireAttacking || _isShortFireWaiting || _isHeadFireAttacking || _isHeadFireWaiting) {
-        setStun(60);
+        setStun(stunFrames);
     }
 }
 
@@ -453,7 +454,7 @@ void Boss2Model::handleHeadFire() {
 
 void Boss2Model::teleport() {
     faceTarget();
-    if (_teleportCD <= 0) {
+    if (_teleportCD <= 0 && getPosition().y < 4.2) {
         setEnabled(false);
         _isTeleportStarting = true;
         _teleportCD = 180;
@@ -494,7 +495,7 @@ std::shared_ptr<Projectile> Boss2Model::getProjectile() {
     // Handle head fire falling projectiles
     if (_headFireTimer > 0 && _headFireFallCount > 0 && _headFireTimer <= _headFireFallCount) {
 		float randOffset = rand() % 2 == 0 ? -(rand() % 16) : rand() % 16;
-        _headFireFall->getProjectiles()[0]->setSpawnOffset(Vec2(randOffset, 7.5));
+        _headFireFall->getProjectiles()[0]->setSpawnOffset(Vec2(randOffset, 6.5));
         _headFireFallCount--;
         return _headFireFall->getProjectiles()[0];
     }
