@@ -74,6 +74,7 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     std::shared_ptr<JsonReader> enemies_reader = JsonReader::allocWithAsset("json/enemies.json");
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
     std::shared_ptr<JsonReader> levels_reader = JsonReader::allocWithAsset("json/levels.json");
+    std::shared_ptr<JsonReader> save_reader = JsonReader::allocWithAsset("json/save.json");
     
     _enemiesJSON = enemies_reader->readJson();
     if (_enemiesJSON == nullptr) {
@@ -86,6 +87,15 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
         CULog("Failed to load constants.json");
         return false;
     }
+
+    _saveJSON = save_reader->readJson();
+    if (_saveJSON == nullptr) {
+        CULog("Failed to load save.json");
+        return false;
+    }
+
+    int saveTest = _saveJSON->getInt("max_unlocked_level");
+    CULog("Save json test: %d", saveTest);
     
     // set world_info constants in enemyJSON
     float scale = _constantsJSON->get("scene")->getFloat("scale");

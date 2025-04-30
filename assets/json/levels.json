@@ -137,10 +137,11 @@
           "waves": [
               {
                   "spawn_intervals": [
-                      3
+                      3, 3
                   ],
                   "enemies": [
-                      "boss_2"
+                    "boss_1",
+                    "boss_2"
                   ]
               }
           ]

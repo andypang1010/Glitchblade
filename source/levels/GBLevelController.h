@@ -52,6 +52,7 @@ private:
     std::shared_ptr<JsonValue> _enemiesJSON;
     std::shared_ptr<JsonValue> _constantsJSON;
     std::shared_ptr<JsonValue> _levelsJSON;
+    std::shared_ptr<JsonValue> _saveJSON;
     cugl::Rect* _bounds;
     float _scale;
     /* Controllers */
