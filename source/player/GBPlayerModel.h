@@ -153,6 +153,15 @@ protected:
     */
     virtual void resetDebug() override;
 
+#pragma mark dash handling
+    enum class DashType {
+        LR,
+        DOWN,
+        NONE,
+    };
+    /** Type of the current dash action or NONE*/
+    DashType _dashType;
+    
 public:
     int iframe = 0;
     int _parryCounter = 0;
@@ -459,8 +468,13 @@ public:
     // Dashing
     bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset; }
     bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset; }
-    bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); }
+    bool isDashDownBegin() const {return _isDashDownInput && _dashCooldownRem <= 0 && _dashReset && !_isGrounded;}
+    bool isDashLRBegin() { return isDashLeftBegin() || isDashRightBegin() ; }
+    bool isDashBegin() {return isDashLRBegin() || isDashDownBegin(); }
+    bool isDashLRActive() { return (_dashRem > 0 && _dashType == DashType::LR) || isDashLRBegin(); }
+    bool isDashDownActive() { return (_dashRem > 0 && _dashType == DashType::DOWN) || isDashDownBegin(); }
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); }
+
     int getDashRem() { return _dashRem; }
     void setDashRem(int value = _dash_duration) { _dashRem = value; }
     int getDashCDRem() { return _dashCooldownRem; }
@@ -468,16 +482,17 @@ public:
     bool isDashLeftInput() const { return _isDashLeftInput; }
     bool isDashRightInput() const { return _isDashRightInput; }
     bool isDashInput() const { return isDashRightInput() || isDashLeftInput(); }
-    void setDashInput(bool value) { _isDashLeftInput = value; }
     
     // Dash
     bool getDashReset() const { return _dashReset; }
     void setDashReset(bool r) { _dashReset = r; }
     void setDashRightInput(bool value) { _isDashRightInput = value; }
     void setDashLeftInput(bool value) { _isDashLeftInput = value; }
+    /** Call this when dash is over */
+    void resetDashType() {_dashType = DashType::NONE;}
+
 
     // Downward Dash
-    bool isDashDownBegin() const {return _isDashDownInput && !_isGrounded;}
     void setDashDownInput(bool value) { _isDashDownInput = value; }
     
     // Guarding
