@@ -487,6 +487,7 @@ void PlayerModel::updateAnimation()
         }
         if (_isGrounded) {
             CULog("Grounded during dash down");
+            frameCounter = 0;
             setOnlyVisible(_dashDownEndSprite);
             playAnimationOnce(_dashDownEndSprite);
         }
