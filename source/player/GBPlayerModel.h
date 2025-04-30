@@ -99,6 +99,8 @@ protected:
     bool _isDashLeftInput;
     /** Whether we are actively inputting dash right*/
     bool _isDashRightInput;
+    /** Whether we are actively inputting dash down*/
+    bool _isDashDownInput;
     /** Whether we are actively inputting the guard*/
     bool _isGuardInput;
     /** Whether we have a (swallowed) projectile*/
@@ -162,6 +164,9 @@ public:
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
+    std::shared_ptr<scene2::SpriteNode> _dashDownStartSprite;
+    std::shared_ptr<scene2::SpriteNode> _dashDownEndSprite;
+
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
     std::shared_ptr<scene2::SpriteNode> _damagedSprite;
     std::shared_ptr<scene2::SpriteNode> _deadSprite;
@@ -250,6 +255,7 @@ public:
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput = false;
+        _isDashDownInput = false;
         _isStrafeLeft = false;
         _isStrafeRight = false;
         _isDashLeftInput = false;
@@ -463,13 +469,17 @@ public:
     bool isDashRightInput() const { return _isDashRightInput; }
     bool isDashInput() const { return isDashRightInput() || isDashLeftInput(); }
     void setDashInput(bool value) { _isDashLeftInput = value; }
-        
+    
     // Dash
     bool getDashReset() const { return _dashReset; }
     void setDashReset(bool r) { _dashReset = r; }
     void setDashRightInput(bool value) { _isDashRightInput = value; }
     void setDashLeftInput(bool value) { _isDashLeftInput = value; }
 
+    // Downward Dash
+    bool isDashDownBegin() const {return _isDashDownInput && !_isGrounded;}
+    void setDashDownInput(bool value) { _isDashDownInput = value; }
+    
     // Guarding
     bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0; }
     bool isGuardActive() { return _guardRem > 0 || isGuardBegin(); }
@@ -517,7 +527,10 @@ public:
 
     // Debug
 
-
+protected:
+    /*Set all the other sprite nodes to be invisible and this one visible. 
+     If null don't set any visible sprite nodes*/
+    void setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite);
 
     
 };

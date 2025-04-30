@@ -152,6 +152,7 @@ void PlayerController::preUpdate(float dt)
     _player->setJumpInput(_input->didJump());
     _player->setDashLeftInput(_input->didDashLeft());
     _player->setDashRightInput(_input->didDashRight());
+    _player->setDashDownInput(_input->didDashDown());
     _player->setGuardInput(_input->didGuard());
     _player->setShootInput(_input->didFire());
     //_hpNode->setText(std::to_string((int)_player->getHP()));

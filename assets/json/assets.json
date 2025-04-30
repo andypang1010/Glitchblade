@@ -63,6 +63,12 @@
         "player_jumpDown": {
             "file": "textures/player_jumpDown.png"
         },
+        "player_dashDown_start": {
+            "file": "textures/player_dashDown_start.png"
+        },
+        "player_dashDown_end": {
+            "file": "textures/player_dashDown_end.png"
+        },
         "player_guard": {
             "file": "textures/player_guard.png"
         },

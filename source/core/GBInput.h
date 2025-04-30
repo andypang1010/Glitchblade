@@ -65,8 +65,11 @@ private:
     bool  _keyLdash;
     /** Whether the right dash key is down (D) */
     bool  _keyRdash;
+    /** Whether the downward dash key is down */
+    bool  _keyDdash;
     /** Whether the guard key is down (spacebar) */
     bool  _keyGuard;
+
 
     cugl::Touchscreen* _touch;
   
@@ -84,6 +87,8 @@ protected:
     bool _ldashPressed;
     /** Whether the right dash action was chosen. */
     bool _rdashPressed;
+    /** Whether the down dash action was chosen. */
+    bool _ddashPressed;
     /** Whether the jump action was chosen. */
     bool _jumpPressed;
     /** Whether the guard action was chosen. */
@@ -359,6 +364,12 @@ public:
      * @return if the right dash input was received.
      */
     float didDashRight() const { return _rdashPressed; }
+    /**
+     * Returns if the downward dash input was received.
+     *
+     * @return if the downward dash input was received.
+     */
+    float didDashDown() const { return _ddashPressed; }
 
     /**
      * Returns if the guard input was received.
