@@ -188,11 +188,13 @@ bool PlatformInput::init(const std::shared_ptr<AssetManager>& assetRef, const st
 }
 
 void PlatformInput::clearListeners() {
-    if(_touch != nullptr) {
-        _touch->removeBeginListener(LISTENER_KEY);
-        _touch->removeEndListener(LISTENER_KEY);
-        _touch->removeMotionListener(LISTENER_KEY);
-    }
+    #ifdef CU_TOUCH_SCREEN
+        if(_touch != nullptr) {
+            _touch->removeBeginListener(LISTENER_KEY);
+            _touch->removeEndListener(LISTENER_KEY);
+            _touch->removeMotionListener(LISTENER_KEY);
+        }
+    #endif
 }
 
 /**
