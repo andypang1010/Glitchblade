@@ -377,17 +377,58 @@
         },
         "guard_1": {
             "type":     "sample",
-            "file":     "sounds/guard_bop_phaser.wav",
+            "file":     "sounds/player/guard/guard_unid_v03.wav",
+            "volume":   0.5
+        },
+        "guard_2": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v05.wav",
+            "volume":   0.5
+        },
+        "guard_3": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v04.wav",
+            "volume":   0.5
+        },
+        "guard_4": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v08.wav",
             "volume":   0.5
         },
         "parry_1": {
             "type":     "sample",
-            "file":     "sounds/parry_rodswipe_v06.wav",
-            "volume":   0.5
+            "file":     "sounds/player/parry/guard_chords_v06.wav",
+            "volume":   0.3
+        },
+
+        "parry_2": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_chords_v24.wav",
+            "volume":   0.3
+        },
+        "parry_3": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_other_chords_v04.wav",
+            "volume":   0.3
+        },
+        "parry_4": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_other_chords_v05.wav",
+            "volume":   0.3
+        },
+        "parry_5": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_other_chords_v06.wav",
+            "volume":   0.3
+        },
+        "parry_6": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_other_chords_v07.wav",
+            "volume":   0.3
         },
         "player_damage_1": {
             "type":     "sample",
-            "file":     "sounds/dmg_flanged_v06.wav",
+            "file":     "sounds/player/damage/dmg_flanged_v06.wav",
             "volume":   0.5
         },
         "explode_1": {
