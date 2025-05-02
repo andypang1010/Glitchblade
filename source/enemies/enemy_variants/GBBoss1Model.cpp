@@ -315,8 +315,10 @@ void Boss1Model::stab() {
 }
 
 void Boss1Model::shoot() {
+
 	faceTarget();
     if (_aggression >= 75) {
+        AudioHelper::play_sfx("projectile");
         _aggression -= std::max(0.0f, _aggression - 10);
         _isShooting = true;
         setMovement(0);

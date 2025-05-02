@@ -213,6 +213,7 @@ void Minion1AModel::AIMove() {
 void Minion1AModel::shoot() {
     faceTarget();
     if (_aggression > 8) {
+        AudioHelper::play_sfx("projectile");
         _aggression = 0;
         _isShooting = true;
         setMovement(0);

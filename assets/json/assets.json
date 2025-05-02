@@ -431,9 +431,69 @@
             "file":     "sounds/player/damage/dmg_flanged_v06.wav",
             "volume":   0.5
         },
+        "player_damage_2": {
+            "type":     "sample",
+            "file":     "sounds/player/damage/dmg_flanged_v05.wav",
+            "volume":   0.5
+        },
+        "player_damage_3": {
+            "type":     "sample",
+            "file":     "sounds/player/damage/dmg_flanged_v04.wav",
+            "volume":   0.5
+        },
+        "player_damage_4": {
+            "type":     "sample",
+            "file":     "sounds/player/damage/dmg_flanged_v03.wav",
+            "volume":   0.5
+        },
         "explode_1": {
             "type":     "sample",
             "file":     "sounds/explosion_sweep_v07.wav",
+            "volume":   0.5
+        },
+        "projectile_1": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v09.wav",
+            "volume":   0.5
+        },
+        "projectile_2": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v08.wav",
+            "volume":   0.5
+        },
+        "projectile_3": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v07.wav",
+            "volume":   0.5
+        },
+        "projectile_4": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v06.wav",
+            "volume":   0.5
+        },
+        "projectile_5": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v05.wav",
+            "volume":   0.5
+        },
+        "projectile_6": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v04.wav",
+            "volume":   0.5
+        },
+        "projectile_7": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v03.wav",
+            "volume":   0.5
+        },
+        "projectile_8": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v02.wav",
+            "volume":   0.5
+        },
+        "projectile_9": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v01.wav",
             "volume":   0.5
         }
     },
