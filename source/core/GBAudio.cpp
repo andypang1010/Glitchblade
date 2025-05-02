@@ -14,7 +14,7 @@ void AudioHelper::init(std::shared_ptr<JsonValue> fxJSON, std::shared_ptr<AssetM
     _assets = assets;
 }
 
-void AudioHelper::play_sfx(const std::string& fx_name) {
+void AudioHelper::playSfx(const std::string& fx_name) {
     if (!_fxJSON || !_assets) {
         CULog("audio helper not inited properly");
         return;

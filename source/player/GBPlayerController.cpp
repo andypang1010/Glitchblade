@@ -162,7 +162,7 @@ void PlayerController::preUpdate(float dt)
 
 #pragma mark sfx
     if (_player->isGuardBegin()){
-        AudioHelper::play_sfx("guard");
+        AudioHelper::playSfx("guard");
     }
 
 }
@@ -275,6 +275,7 @@ void PlayerController::updateCooldowns()
     }
 #pragma mark dash cooldowns
     if (_player->isDashBegin()) {
+        AudioHelper::playSfx("player_dash");
         _player->setDashRem();
         _player->setDashCDRem();
         _player->setDashReset(false); //only needed (and is it really needed?) for keyboard

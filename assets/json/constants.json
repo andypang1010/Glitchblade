@@ -187,7 +187,8 @@
             "guard": 4,
             "parry": 6,
             "player_damage" : 4,
-            "explode" : 1,
+            "player_dash": 5,
+            "explode" : 3,
             "projectile" : 9,
             "volume": 0.8
         }

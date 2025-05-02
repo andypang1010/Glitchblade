@@ -192,7 +192,7 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
         }
         // If parry is active, stun the enemy.
         else if (_player->isParryActive()) {
-            AudioHelper::play_sfx("parry");
+            AudioHelper::playSfx("parry");
             if (!_player->_isNextAttackEnhanced)
             {
                 _player->incrementComboCounter();
@@ -229,7 +229,7 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
         bool deflected = false;
         if (_player->iframe <= 0) {
             if (_player->isParryActive()) {
-                AudioHelper::play_sfx("parry");
+                AudioHelper::playSfx("parry");
                 if (!_player->hasProjectile()) {
                     _player->setHasProjectile(true);
                 }

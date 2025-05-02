@@ -158,7 +158,7 @@ void Minion1AModel::nextAction() {
     if (!_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
         if (isTargetClose()) {
             if (_hp < 25){
-                AudioHelper::play_sfx("explode");
+                AudioHelper::playSfx("explode");
                 explode();
             }
             else {
@@ -213,7 +213,7 @@ void Minion1AModel::AIMove() {
 void Minion1AModel::shoot() {
     faceTarget();
     if (_aggression > 8) {
-        AudioHelper::play_sfx("projectile");
+        AudioHelper::playSfx("projectile");
         _aggression = 0;
         _isShooting = true;
         setMovement(0);

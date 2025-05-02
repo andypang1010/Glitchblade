@@ -169,7 +169,7 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void PlayerModel::damage(float value) {
     #pragma mark sfx
     if (value > 0){
-        AudioHelper::play_sfx("player_damage");
+        AudioHelper::playSfx("player_damage");
     }
     _hp -= value;
 	_hp = std::clamp(_hp, 0.0f, _maxhp);

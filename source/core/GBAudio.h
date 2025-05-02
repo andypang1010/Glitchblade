@@ -11,7 +11,7 @@ class AudioHelper {
 public:
     static void init(std::shared_ptr<JsonValue> fxJSON, std::shared_ptr<AssetManager> assets);
 
-    static void play_sfx(const std::string& fx_name);
+    static void playSfx(const std::string& fx_name);
 
     
     static void dispose();
