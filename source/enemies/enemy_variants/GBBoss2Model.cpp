@@ -69,6 +69,7 @@ using namespace graphics;
  * @return  true if the obstacle is initialized properly, false otherwise.
  */
 bool Boss2Model::init(const std::shared_ptr<AssetManager>& assetRef, const std::shared_ptr<JsonValue>& enemyJSON, const Vec2& pos, std::vector<std::shared_ptr<ActionModel>> actions) {
+    _headFireFallCount = 0;
     return EnemyModel::init(assetRef, enemyJSON, pos, actions);
 };
 
@@ -83,6 +84,7 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_stun_short"), 3, 5, 15);
     _stunSprite->setPosition(0, 60);
 	_stunSprite->setName("stun");
+    stunFrames = _stunSprite->getCount() * 4;
 
     _shortFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_start"), 3, 5, 15);
     _shortFireStartSprite->setPosition(0, 60);
@@ -164,9 +166,12 @@ void Boss2Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
 		if (act->getActionName() == "headFire") {
 			_headFire = std::dynamic_pointer_cast<RangedActionModel>(act);
 		}
+        if (act->getActionName() == "headFireFall") {
+            _headFireFall = std::dynamic_pointer_cast<RangedActionModel>(act);
+        }
     }
     _closeDistance = 12;
-    _farDistance = 19;
+    _farDistance = 18;
 }
 
 #pragma mark -
@@ -222,7 +227,7 @@ void Boss2Model::dispose() {
 void Boss2Model::damage(float value) {
     EnemyModel::damage(value);
     if (_isShortFireAttacking || _isShortFireWaiting || _isHeadFireAttacking || _isHeadFireWaiting) {
-        setStun(60);
+        setStun(stunFrames);
     }
 }
 
@@ -260,9 +265,9 @@ void Boss2Model::nextAction() {
     if (_moveDuration <= 0 && !isStunned() && !_isShootingLaser && !_isShortFiring && !_isHeadFiring && !_isTeleportStarting && !_isTeleportEnding) {
         if (isTargetClose()) {
             if (r % 2 == 0) {
-                shortFire();
+                shortFire(1);
             }
-            else {
+            else{
                 teleport();
             }
         }
@@ -271,21 +276,24 @@ void Boss2Model::nextAction() {
                 teleport();
             }
             else if (r % 3 == 1){
-                shortFire();
+                shortFire(3);
             }
             else {
-				headFire();
+				headFire(3);
             }
         }
         else {
-            if (r % 3 == 0) {
-                shortFire();
+            if (r % 4 == 0) {
+                shortFire(3);
             }
-            else if (r % 3 == 1) {
+            else if (r % 4 == 1) {
                 laser();
             }
-            else {
+            else if (r % 4 == 2){
                 teleport();
+            }
+            else {
+                headFire(3);
             }
         }
     }
@@ -357,29 +365,31 @@ void Boss2Model::AIMove() {
     }
 }
 
-void Boss2Model::shortFire() {
+void Boss2Model::shortFire(int repeat) {
 	faceTarget();
     _isShortFiring = true;
+    _shortFireCount = repeat;
 }
 
-void Boss2Model::headFire() {
+void Boss2Model::headFire(int repeat) {
     faceTarget();
     _isHeadFiring = true;
+    _headFireCount = repeat;
+    _headFireTimer = 300;
 }
 
 void Boss2Model::handleShortFire() {
     setMovement(0);
     if (!_isShortFireStarting && !_isShortFireAttacking && !_isShortFireWaiting && !_isShortFireEnding) {
         _isShortFireStarting = true;
-        _shortFireCount = 0;
     }
     else if (_isShortFireStarting && _shortFireStartSprite->getFrame() >= _shortFireStartSprite->getCount() - 1) {
         _isShortFireStarting = false;
         _isShortFireAttacking = true;
-        _shortFireCount++;
+        _shortFireCount--;
     }
     else if (_isShortFireAttacking && _shortFireAttackSprite->getFrame() >= _shortFireAttackSprite->getCount() - 1) {
-        if (_shortFireCount >= 3) { // stop repeated shooting
+        if (_shortFireCount <= 0) { // stop repeated shooting
             _isShortFireAttacking = false;
             _isShortFireEnding = true;
         }
@@ -389,14 +399,14 @@ void Boss2Model::handleShortFire() {
         }
     }
     else if (_isShortFireWaiting && _shortFireWaitSprite->getFrame() >= _shortFireWaitSprite->getCount() - 1) {
-        if (_shortFireCount >= 3) { // stop repeated shooting
+        if (_shortFireCount <= 0) { // stop repeated shooting
             _isShortFireWaiting = false;
             _isShortFireEnding = true;
         }
         else { // return to shooting
             _isShortFireWaiting = false;
             _isShortFireAttacking = true;
-            _shortFireCount++;
+            _shortFireCount--;
         }
     }
     else if (_isShortFireEnding && _shortFireEndSprite->getFrame() >= _shortFireEndSprite->getCount() - 1) {
@@ -409,15 +419,14 @@ void Boss2Model::handleHeadFire() {
     setMovement(0);
     if (!_isHeadFireStarting && !_isHeadFireAttacking && !_isHeadFireWaiting && !_isHeadFireEnding) {
         _isHeadFireStarting = true;
-        _headFireCount = 0;
     }
     else if (_isHeadFireStarting && _headFireStartSprite->getFrame() >= _headFireStartSprite->getCount() - 1) {
         _isHeadFireStarting = false;
         _isHeadFireAttacking = true;
-        _headFireCount++;
+        _headFireCount--;
     }
     else if (_isHeadFireAttacking && _headFireAttackSprite->getFrame() >= _headFireAttackSprite->getCount() - 1) {
-        if (_headFireCount >= 3) { // stop repeated shooting
+        if (_headFireCount <= 0) { // stop repeated shooting
             _isHeadFireAttacking = false;
             _isHeadFireEnding = true;
         }
@@ -427,14 +436,14 @@ void Boss2Model::handleHeadFire() {
         }
     }
     else if (_isHeadFireWaiting && _headFireWaitSprite->getFrame() >= _headFireWaitSprite->getCount() - 1) {
-        if (_headFireCount >= 3) { // stop repeated shooting
+        if (_headFireCount <= 0) { // stop repeated shooting
             _isHeadFireWaiting = false;
             _isHeadFireEnding = true;
         }
         else { // return to shooting
             _isHeadFireWaiting = false;
             _isHeadFireAttacking = true;
-            _headFireCount++;
+            _headFireCount--;
         }
     }
     else if (_isHeadFireEnding && _headFireEndSprite->getFrame() >= _headFireEndSprite->getCount() - 1) {
@@ -445,8 +454,11 @@ void Boss2Model::handleHeadFire() {
 
 void Boss2Model::teleport() {
     faceTarget();
-	setEnabled(false);
-	_isTeleportStarting = true;
+    if (_teleportCD <= 0 && getPosition().y < 4.2) {
+        setEnabled(false);
+        _isTeleportStarting = true;
+        _teleportCD = 180;
+    }
 }
 
 void Boss2Model::laser() {
@@ -474,10 +486,19 @@ std::shared_ptr<Projectile> Boss2Model::getProjectile() {
     count = 0;
 	for (int frame : frames) {
 		if (_isHeadFireAttacking && _headFireAttackSprite->getFrame() == frame && frameCounter == 0) {
+            _headFireFallCount += 2;
             return _headFire->getProjectiles()[count];
 		}
         count++;
 	}
+
+    // Handle head fire falling projectiles
+    if (_headFireTimer > 0 && _headFireFallCount > 0 && _headFireTimer <= _headFireFallCount) {
+		float randOffset = rand() % 2 == 0 ? -(rand() % 16) : rand() % 16;
+        _headFireFall->getProjectiles()[0]->setSpawnOffset(Vec2(randOffset, 6.5));
+        _headFireFallCount--;
+        return _headFireFall->getProjectiles()[0];
+    }
     
     return nullptr;
 }

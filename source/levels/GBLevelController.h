@@ -97,7 +97,8 @@ public:
     bool isLevelWon() {
         bool levelWon = true;
 
-        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1) {
+        if (_currentWaveIndex == _currentLevel->getWaves().size() - 1
+            && _enemyWaves.size() > 0) {
             for (auto enemyController : _enemyWaves[_currentWaveIndex]) {
                 levelWon &= enemyController->getEnemy()->isRemoved() && enemyController->getEnemy()->getHP() <= 0;
             }
@@ -198,7 +199,7 @@ public:
     /**
     * Adds a new hitbox to the world.
     */
-    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration);
+    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration, bool parriable);
 
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);

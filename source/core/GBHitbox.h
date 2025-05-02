@@ -25,6 +25,8 @@ protected:
     float _duration;
     /** The damage of this hitbox */
     int _damage;
+    /** Whether the hitbox attack can be parried to stun the enemy */
+	bool _isParriable;
 
 public:
 #pragma mark Constructors
@@ -49,7 +51,7 @@ public:
      */
     void dispose();
 
-    virtual bool init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration);
+    virtual bool init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration, bool parriable);
     
 #pragma mark -
 #pragma mark Static Constructors
@@ -68,9 +70,9 @@ public:
      *
      * @return  A newly allocated Projectile at the given position, with the given radius
      */
-    static std::shared_ptr<Hitbox> alloc(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration) {
+    static std::shared_ptr<Hitbox> alloc(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration, bool parriable) {
         std::shared_ptr<Hitbox> result = std::make_shared<Hitbox>();
-        return (result->init(enemy, pos, size, scale, damage, duration) ? result : nullptr);
+        return (result->init(enemy, pos, size, scale, damage, duration, parriable) ? result : nullptr);
     }
 
 #pragma mark -
@@ -168,6 +170,22 @@ public:
     void setDamage(int value) {
         _damage = value;
     }
+
+	/**
+	 * Returns whether the hitbox can be parried
+	 *
+	 * @return true if the hitbox can be parried, false otherwise
+	 */
+	bool getIsParriable() const { return _isParriable; }
+
+	/**
+	 * Sets whether the hitbox can be parried
+	 *
+	 * @param value new parriable value
+	 */
+	void setIsParriable(bool value) {
+		_isParriable = value;
+	}
 
 #pragma mark -
 #pragma mark Physics Methods

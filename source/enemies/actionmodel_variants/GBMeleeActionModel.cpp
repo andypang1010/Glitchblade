@@ -4,7 +4,7 @@
  * Default constructor.
  * Initializes all hitbox-related values to defaults.
  */
-MeleeActionModel::MeleeActionModel() : _hitboxPos(0, 0), _hitboxSize(0, 0), _hitboxStartFrame(0.0f), _hitboxEndFrame(0.0f), _hitboxDamage(0.0f) {}
+MeleeActionModel::MeleeActionModel() : _hitboxPos(0, 0), _hitboxSize(0, 0), _hitboxStartFrame(0.0f), _hitboxEndFrame(0.0f), _hitboxDamage(0.0f), _isParriable(true) {}
 
 /**
  * Virtual destructor.
@@ -79,4 +79,18 @@ float MeleeActionModel::getHitboxDamage() const {
  */
 void MeleeActionModel::setHitboxDamage(float damage) {
     _hitboxDamage = damage;
+}
+
+/**
+ * Returns whether the hitbox can be parried.
+ */
+bool MeleeActionModel::getIsParriable() const {
+	return _isParriable;
+}
+
+/**
+ * Sets whether the hitbox can be parried.
+ */
+void MeleeActionModel::setIsParriable(bool parriable) {
+	_isParriable = parriable;
 }

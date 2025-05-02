@@ -51,15 +51,9 @@
 
 using namespace cugl;
 
-#pragma mark force
-#define STAB_FORCE       80.0f
-
 #pragma mark -
 #pragma mark Action Constants // TODO: Refactor with Action parser
-#define SLAM_FRAMES     40
-#define STAB_FRAMES     40
 #define SHOOT_FRAMES    5
-#define EXPLODE_FRAMES  40
 #define STUN_FRAMES 88
 
 #pragma mark -
@@ -93,13 +87,18 @@ protected:
     bool _isHeadFiring;
     int _headFireCount;
 
+	int _headFireFallCount;
+    int _headFireTimer;
+
     bool _isTeleportStarting;
     bool _isTeleportEnding;
+    int _teleportCD;
 
     bool _isShootingLaser;
 
     std::shared_ptr<RangedActionModel> _shortFire;
 	std::shared_ptr<RangedActionModel> _headFire;
+    std::shared_ptr<RangedActionModel> _headFireFall;
 	std::shared_ptr<MeleeActionModel> _laser;
 
     /**
@@ -197,6 +196,22 @@ public:
 #pragma mark Attribute Properties
     void damage(float value) override;
 
+	void setTeleportCD(int value) {
+		_teleportCD = value;
+	}
+
+	int getTeleportCD() {
+		return _teleportCD;
+	}
+
+	void setHeadFireTimer(int value) {
+		_headFireTimer = value;
+	}
+
+	int getHeadFireTimer() {
+		return _headFireTimer;
+	}
+
 #pragma mark -
 #pragma mark Level Control and Constructor Helpers
     /** Reset all the enemy attributes to their initial values*/
@@ -227,6 +242,7 @@ public:
         _isHeadFireEnding = false;
         _isHeadFiring = false;
         _headFireCount = 0;
+        _headFireFallCount = 0;
 
         _moveDuration = 0;
     };
@@ -243,13 +259,13 @@ public:
      * Performs the shoot attack of boss1
      *
      */
-    void shortFire();
+    void shortFire(int repeat);
 
     void handleShortFire();
 
 	void teleport();
 
-    void headFire();
+    void headFire(int repeat);
 
     void handleHeadFire();
 

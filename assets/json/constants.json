@@ -20,7 +20,7 @@
         }
     },
     "walls": {
-        "vertex_count": 12,
+        "vertex_count": 8,
         "wall_count": 2,
         "thickness": 1,
         "name": "wall"
@@ -117,7 +117,7 @@
             "movement": {
                 "force": 20,
                 "damping": 30,
-                "max_speed": 10
+                "max_speed": 5
             },
             "jump": {
                 "cooldown": 5,

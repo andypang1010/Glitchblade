@@ -11,7 +11,8 @@
                 "hitboxSize": [ 8, 8 ],
                 "hitboxStartFrame": 33,
                 "hitboxEndFrame": 40,
-                "hitboxDamage": 20
+                "hitboxDamage": 20,
+                "parriable": false
             },
             {
                 "type": "ranged",
@@ -56,7 +57,8 @@
                 "hitboxSize": [ 4, 2 ],
                 "hitboxStartFrame": 20,
                 "hitboxEndFrame": 25,
-                "hitboxDamage": 20
+                "hitboxDamage": 20,
+                "parriable": true
             },
             {
                 "type": "melee",
@@ -65,7 +67,8 @@
                 "hitboxSize": [ 7, 1 ],
                 "hitboxStartFrame": 19,
                 "hitboxEndFrame": 23,
-                "hitboxDamage": 20
+                "hitboxDamage": 20,
+                "parriable": true
             }
         ]
     },
@@ -80,7 +83,8 @@
                 "hitboxSize": [ 4, 1.5 ],
                 "hitboxStartFrame": 27,
                 "hitboxEndFrame": 36,
-                "hitboxDamage": 20
+                "hitboxDamage": 20,
+                "parriable": true
             },
             {
                 "type": "melee",
@@ -89,7 +93,8 @@
                 "hitboxSize": [ 4, 6 ],
                 "hitboxStartFrame": 25,
                 "hitboxEndFrame": 31,
-                "hitboxDamage": 20
+                "hitboxDamage": 20,
+                "parriable": true
             },
             {
                 "type": "melee",
@@ -98,7 +103,8 @@
                 "hitboxSize": [ 10, 10 ],
                 "hitboxStartFrame": 26,
                 "hitboxEndFrame": 37,
-                "hitboxDamage": 40
+                "hitboxDamage": 40,
+                "parriable": false
             },
             {
                 "type": "ranged",
@@ -245,13 +251,44 @@
                 ]
             },
             {
+                "type": "ranged",
+                "name": "headFireFall",
+                "projectiles": [
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 0,
+                            "y": 0
+                        },
+                        "projectileSize": {
+                            "width": 2,
+                            "height": 1
+                        },
+                        "projectileSpawnFrame": 3,
+                        "projectileAnimation": "textures/projectile_enemy_2.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": -30,
+                            "y": 0
+                        },
+                        "projectileVelocity": {
+                            "x": 0,
+                            "y": -10
+                        },
+                        "projectileDamage": 10
+                    }
+                ]
+            },
+            {
                 "type": "melee",
                 "name": "laser",
                 "hitboxPos": [ 20, 0 ],
                 "hitboxSize": [ 40, 3 ],
                 "hitboxStartFrame": 32,
                 "hitboxEndFrame": 50,
-                "hitboxDamage": 40
+                "hitboxDamage": 20,
+                "parriable": false
             }
         ]
     },

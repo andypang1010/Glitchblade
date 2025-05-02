@@ -13,10 +13,11 @@ using namespace cugl::scene2;
 
 #define FPS 60
 
-bool Hitbox::init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration) {
+bool Hitbox::init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration, bool parriable) {
     _drawScale = scale;
     setDuration(duration);
     setDamage(damage);
+	setIsParriable(parriable);
     if (!enemy->isFacingRight()) {
         pos.x = -pos.x;
     }
