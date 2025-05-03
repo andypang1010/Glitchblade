@@ -46,6 +46,7 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 #include "../actionmodel_variants/GBRangedActionModel.h"
+#include "../../core/GBAudio.h"
 
 using namespace cugl;
 using namespace graphics;
@@ -105,7 +106,7 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _explodeSprite->setPosition(0, 50);
 	_explodeSprite->setName("explode");
 
-	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 32);
+	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 28);
 	_explodeVFXSprite->setPosition(0, 0);
 	_explodeVFXSprite->setName("explode_vfx");
 
@@ -224,6 +225,7 @@ void Boss1Model::nextAction() {
                 stab();
             }
             else if (r % 4 == 2) { // Explode
+                AudioHelper::playSfx("explode");
                 explode();
             }
             else { // Move away
@@ -313,8 +315,10 @@ void Boss1Model::stab() {
 }
 
 void Boss1Model::shoot() {
+
 	faceTarget();
     if (_aggression >= 75) {
+        AudioHelper::playSfx("projectile");
         _aggression -= std::max(0.0f, _aggression - 10);
         _isShooting = true;
         setMovement(0);

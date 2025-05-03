@@ -378,15 +378,161 @@
             "file": "sounds/jump.wav",
             "volume": 0.5
         },
-        "pew": {
-            "type": "sample",
-            "file": "sounds/pew.wav",
-            "volume": 0.5
+        "guard_1": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v03.wav",
+            "volume":   0.5
         },
-        "pop": {
-            "type": "sample",
-            "file": "sounds/plop.wav",
-            "volume": 0.5
+        "guard_2": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v05.wav",
+            "volume":   0.5
+        },
+        "guard_3": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v04.wav",
+            "volume":   0.5
+        },
+        "guard_4": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v08.wav",
+            "volume":   0.5
+        },
+        "parry_1": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_chords_v06.wav",
+            "volume":   0.2
+        },
+
+        "parry_2": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_chords_v24.wav",
+            "volume":   0.2
+        },
+        "parry_3": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_other_chords_v04.wav",
+            "volume":   0.2
+        },
+        "parry_4": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_other_chords_v05.wav",
+            "volume":   0.2
+        },
+        "parry_5": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_other_chords_v06.wav",
+            "volume":   0.2
+        },
+        "parry_6": {
+            "type":     "sample",
+            "file":     "sounds/player/parry/guard_other_chords_v07.wav",
+            "volume":   0.2
+        },
+        "player_damage_1": {
+            "type":     "sample",
+            "file":     "sounds/player/damage/dmg_flanged_v06.wav",
+            "volume":   0.5
+        },
+        "player_damage_2": {
+            "type":     "sample",
+            "file":     "sounds/player/damage/dmg_flanged_v05.wav",
+            "volume":   0.5
+        },
+        "player_damage_3": {
+            "type":     "sample",
+            "file":     "sounds/player/damage/dmg_flanged_v04.wav",
+            "volume":   0.5
+        },
+        "player_damage_4": {
+            "type":     "sample",
+            "file":     "sounds/player/damage/dmg_flanged_v03.wav",
+            "volume":   0.5
+        },
+        "player_dash_1": {
+            "type":     "sample",
+            "file":     "sounds/player/dash/cyborg_dash_v01.wav",
+            "volume":   0.5
+        },
+        "player_dash_2": {
+            "type":     "sample",
+            "file":     "sounds/player/dash/cyborg_dash_v02.wav",
+            "volume":   0.5
+        },
+        "player_dash_3": {
+            "type":     "sample",
+            "file":     "sounds/player/dash/cyborg_dash_v03.wav",
+            "volume":   0.5
+        },
+        "player_dash_4": {
+            "type":     "sample",
+            "file":     "sounds/player/dash/cyborg_dash_v04.wav",
+            "volume":   0.5
+        },
+        "player_dash_5": {
+            "type":     "sample",
+            "file":     "sounds/player/dash/cyborg_dash_v05.wav",
+            "volume":   0.5
+        },
+        "explode_1": {
+            "type":     "sample",
+            "file":     "sounds/enemy/explosion/explosion3s_clean_v01.wav",
+            "volume":   0.5
+        },
+        "explode_2": {
+            "type":     "sample",
+            "file":     "sounds/enemy/explosion/explosion3s_clean_v02.wav",
+            "volume":   0.5
+        },
+        "explode_3": {
+            "type":     "sample",
+            "file":     "sounds/enemy/explosion/explosion3s_clean_v03.wav",
+            "volume":   0.5
+        },
+        "projectile_1": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v09.wav",
+            "volume":   0.5
+        },
+        "projectile_2": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v08.wav",
+            "volume":   0.5
+        },
+        "projectile_3": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v07.wav",
+            "volume":   0.5
+        },
+        "projectile_4": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v06.wav",
+            "volume":   0.5
+        },
+        "projectile_5": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v05.wav",
+            "volume":   0.5
+        },
+        "projectile_6": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v04.wav",
+            "volume":   0.5
+        },
+        "projectile_7": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v03.wav",
+            "volume":   0.5
+        },
+        "projectile_8": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v02.wav",
+            "volume":   0.5
+        },
+        "projectile_9": {
+            "type":     "sample",
+            "file":     "sounds/enemy/projectile/phaser_shoot_v01.wav",
+            "volume":   0.5
         }
     },
     "fonts": {
