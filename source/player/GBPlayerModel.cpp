@@ -45,6 +45,7 @@
 #include <cugl/scene2/CUPolygonNode.h>
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
+#include "../core/GBAudio.h"
 using namespace cugl::graphics;
 
 
@@ -176,6 +177,10 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 * @param value the amount of hp reduction.
 */
 void PlayerModel::damage(float value) {
+    #pragma mark sfx
+    if (value > 0){
+        AudioHelper::playSfx("player_damage");
+    }
     _hp -= value;
 	_hp = std::clamp(_hp, 0.0f, _maxhp);
 	//_sceneNode->setColor(Color4::RED);
