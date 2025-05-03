@@ -346,9 +346,7 @@ void PlayerModel::dispose() {
  * @param delta Number of seconds since last animation frame
  */
 void PlayerModel::update(float dt) {
-    if (_landingDash){
-        CULog("Currently landing dash");
-    }
+
     if (_isGuardInput)
     {
         CULog("PLAYER GUARD INPUT: %s", _isGuardInput ? "TRUE" : "FALSE");
@@ -389,16 +387,17 @@ bool PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) 
     CULog("Playing animation once");
     if (!sprite->isVisible()) {
         sprite->setFrame(0);
-        return false;
     }
     
-    frameCounter = (frameCounter + 1) % _animation_update_frame;
-    if (frameCounter % _animation_update_frame == 0){
-        if (sprite->getFrame() < sprite->getCount() - 1) {
-            sprite->setFrame(sprite->getFrame() + 1);
-        }
-        else if (sprite->getFrame() == sprite->getCount() - 1 ){
-            return true;
+    else {
+        frameCounter = (frameCounter + 1) % _animation_update_frame;
+        if (frameCounter % _animation_update_frame == 0){
+            if (sprite->getFrame() < sprite->getCount() - 1) {
+                sprite->setFrame(sprite->getFrame() + 1);
+            }
+            else if (sprite->getFrame() == sprite->getCount() - 1 ){
+                return true;
+            }
         }
     }
     return false;
@@ -446,7 +445,6 @@ void PlayerModel::updateAnimation()
         playAnimationOnce(_damagedSprite);
     }
     else if (isGuardActive()) {
-        CULog("setting guard visible");
         setOnlyVisible(_guardSprite);
 
         if (isGuardBegin()) {
@@ -477,7 +475,6 @@ void PlayerModel::updateAnimation()
     }
 
     else if (isDashLRActive()) {
-        CULog("Setting attack sprite");
         setOnlyVisible(_attackSprite);
 
         if (isDashLRBegin()) {
@@ -490,7 +487,6 @@ void PlayerModel::updateAnimation()
     }
     
     else if (isDashDownActive()) {
-        CULog("dash down is active");
         setOnlyVisible(_dashDownStartSprite);
         if (isDashDownBegin()) {
             _dashType = DashType::DOWN;
@@ -512,7 +508,7 @@ void PlayerModel::updateAnimation()
         }
     }
     
-    if (_landingDash){
+    else if (_landingDash){
         CULog("landing dash true");
         // (if finished last frame of landing animation)
         if (playAnimationOnce(_dashDownEndSprite)){
@@ -522,7 +518,6 @@ void PlayerModel::updateAnimation()
     }
 
     else if (isJumpBegin()) {
-        CULog("setting jump up visible");
         setOnlyVisible(_jumpUpSprite);
 
         frameCounter = 0;
