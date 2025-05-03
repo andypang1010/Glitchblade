@@ -187,7 +187,7 @@ void LevelController::populateLevel(const std::shared_ptr<LevelModel>& level) {
     createStaticObstacles(level);
     addObstacle(std::make_pair(getPlayerModel(), getPlayerNode()));
 
-	for (Rect platform : _currentLevel->getPlatforms()) {
+	for (const Rect& platform : _currentLevel->getPlatforms()) {
 		createPlatform(platform);
 	}
 }
@@ -198,7 +198,6 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     ObstacleNodePairs obstacle_pairs;
     std::shared_ptr<Texture> image;
     std::shared_ptr<scene2::PolygonNode> sprite;
-    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
 
     EarclipTriangulator triangulator;
 
@@ -377,7 +376,6 @@ void LevelController::createPlatform(Rect rect)
     b2Filter enemyWallFilter = b2Filter();
     enemyWallFilter.categoryBits = 0x0001;
     enemyWallFilter.maskBits = 0x0002;
-
     std::shared_ptr<physics2::BoxObstacle> platform = physics2::BoxObstacle::alloc(rect.origin, rect.size);
     std::shared_ptr<physics2::BoxObstacle> leftWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x - rect.size.width / 2 - 0.05, rect.origin.y + rect.size.height - 0.9), Size(0.1, rect.size.height + 0.2));
     std::shared_ptr<physics2::BoxObstacle> rightWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x + rect.size.width / 2 + 0.05, rect.origin.y + rect.size.height - 0.9), Size(0.1, rect.size.height + 0.2));
@@ -394,13 +392,10 @@ void LevelController::createPlatform(Rect rect)
 
 	leftWall->setFilterData(enemyWallFilter);
 	rightWall->setFilterData(enemyWallFilter);
-
     std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(
-        Texture::alloc(rect.size.width, rect.size.height, Texture::PixelFormat::RED));
-    std::shared_ptr<PolygonNode> leftWallSprite = scene2::PolygonNode::allocWithTexture(
-        Texture::alloc(1, 1, Texture::PixelFormat::RED));
-    std::shared_ptr<PolygonNode> rightWallSprite = scene2::PolygonNode::allocWithTexture(
-        Texture::alloc(1, 1, Texture::PixelFormat::RED));
+        _assets->get<Texture>("platform"), rect * _constantsJSON->get("scene")->getFloat("scale"));
+    std::shared_ptr<PolygonNode> leftWallSprite = scene2::PolygonNode::alloc();
+    std::shared_ptr<PolygonNode> rightWallSprite = scene2::PolygonNode::alloc();
 
     addObstacle(std::make_pair(platform, platformSprite));
 	addObstacle(std::make_pair(leftWall, leftWallSprite));
