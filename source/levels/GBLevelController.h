@@ -113,7 +113,8 @@ public:
     }
 
     bool isLevelLost() {
-        return _playerController->getPlayer()->getHP() <= 0 && 
+        
+        return _playerController->getPlayer()->getHP() <= 0 &&
             _playerController->getPlayer()->_deadSprite->getFrame() >= _playerController->getPlayer()->_deadSprite->getCount() - 1;
     }
     

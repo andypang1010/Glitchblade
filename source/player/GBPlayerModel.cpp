@@ -384,6 +384,9 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
 }
 
 bool PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
+    if (sprite == _deadSprite){
+        CULog("On player deadsprite frame %d and total count is %d", sprite->getFrame(), sprite->getCount());
+    }
     CULog("Playing animation once");
     if (!sprite->isVisible()) {
         sprite->setFrame(0);
@@ -422,7 +425,6 @@ void PlayerModel::updateAnimation()
     if (_hp <= 0) {
         setOnlyVisible(_deadSprite);
 		playAnimationOnce(_deadSprite);
-
         return;
     }
 
@@ -637,6 +639,7 @@ void PlayerModel::reset(){
     //setDebugScene(nullptr);
     _scene = nullptr; // set debug scene to nullptr
     resetAttributes();
+    resetSpriteFrames();
 }
 
 void PlayerModel::setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite) { 
