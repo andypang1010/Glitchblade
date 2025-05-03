@@ -346,7 +346,9 @@ void PlayerModel::dispose() {
  * @param delta Number of seconds since last animation frame
  */
 void PlayerModel::update(float dt) {
-
+    if (_landingDash){
+        CULog("Currently landing dash");
+    }
     if (_isGuardInput)
     {
         CULog("PLAYER GUARD INPUT: %s", _isGuardInput ? "TRUE" : "FALSE");
@@ -383,16 +385,23 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
     }
 }
 
-void PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite->isVisible()) {
-        frameCounter = (frameCounter + 1) % _animation_update_frame;
-        if (frameCounter % _animation_update_frame == 0 && sprite->getFrame() < sprite->getCount() - 1) {
+bool PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
+    CULog("Playing animation once");
+    if (!sprite->isVisible()) {
+        sprite->setFrame(0);
+        return false;
+    }
+    
+    frameCounter = (frameCounter + 1) % _animation_update_frame;
+    if (frameCounter % _animation_update_frame == 0){
+        if (sprite->getFrame() < sprite->getCount() - 1) {
             sprite->setFrame(sprite->getFrame() + 1);
         }
+        else if (sprite->getFrame() == sprite->getCount() - 1 ){
+            return true;
+        }
     }
-    else {
-        sprite->setFrame(0);
-    }
+    return false;
 }
 
 void PlayerModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite) {
@@ -437,6 +446,7 @@ void PlayerModel::updateAnimation()
         playAnimationOnce(_damagedSprite);
     }
     else if (isGuardActive()) {
+        CULog("setting guard visible");
         setOnlyVisible(_guardSprite);
 
         if (isGuardBegin()) {
@@ -467,6 +477,7 @@ void PlayerModel::updateAnimation()
     }
 
     else if (isDashLRActive()) {
+        CULog("Setting attack sprite");
         setOnlyVisible(_attackSprite);
 
         if (isDashLRBegin()) {
@@ -479,24 +490,39 @@ void PlayerModel::updateAnimation()
     }
     
     else if (isDashDownActive()) {
+        CULog("dash down is active");
         setOnlyVisible(_dashDownStartSprite);
         if (isDashDownBegin()) {
             _dashType = DashType::DOWN;
             frameCounter = 0;
             _dashDownStartSprite->setFrame(0);
         }
-        if (_isGrounded) {
+        if (_isGrounded && !_landingDash) {
             CULog("Grounded during dash down");
+            // no longer actively dashing
+            setDashRem(0);
+            _landingDash = true;
             frameCounter = 0;
+            _dashDownEndSprite->setFrame(0);
             setOnlyVisible(_dashDownEndSprite);
-            playAnimationOnce(_dashDownEndSprite);
         }
+
         else {
             playAnimationOnce(_dashDownStartSprite);
         }
     }
+    
+    if (_landingDash){
+        CULog("landing dash true");
+        // (if finished last frame of landing animation)
+        if (playAnimationOnce(_dashDownEndSprite)){
+            CULog("Setting landing dash to false");
+            _landingDash = false;
+        };
+    }
 
     else if (isJumpBegin()) {
+        CULog("setting jump up visible");
         setOnlyVisible(_jumpUpSprite);
 
         frameCounter = 0;
