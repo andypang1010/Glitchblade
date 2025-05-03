@@ -3,6 +3,7 @@
 #include "../enemies/enemy_variants/GBBoss2Controller.h"
 #include "../enemies/enemy_variants/GBMinion1AController.h"
 #include "../enemies/enemy_variants/GBMinion1BController.h"
+#include "../enemies/enemy_variants/GBMinion2AController.h"
 #include "../core/GBTypes.h"
 
 using namespace cugl::graphics;
@@ -24,6 +25,9 @@ std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()
     { "boss_2", []() {
         return std::make_shared<Boss2Controller>();
     } }, // Should return a Boss2Controller
+    { "minion_2A", []() {
+        return std::make_shared<Minion2AController>();
+    } } // Should return a Minion2AController
     // Add more as desired here
 };
 

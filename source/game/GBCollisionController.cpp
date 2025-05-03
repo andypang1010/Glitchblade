@@ -253,7 +253,7 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
 				projectile->setIsPlayerFired(true);
 				projectile->setVX(-projectile->getVX());
                 projectile->setVY(-projectile->getVY());
-                projectile->getSceneNode()->flipHorizontal(!projectile->getSceneNode()->isFlipHorizontal());
+                //projectile->getSceneNode()->flipHorizontal(!projectile->getSceneNode()->isFlipHorizontal());
 				projectile->getSceneNode()->setColor(cugl::Color4(0, 255, 150, 255));
             }
             else if (_player->isGuardActive()) {

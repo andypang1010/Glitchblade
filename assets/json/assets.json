@@ -201,6 +201,15 @@
         "minion1A_dead": {
             "file": "textures/minion1A_dead.png"
         },
+        "minion2A_shoot": {
+            "file": "textures/minion2A_shoot.png"
+        },
+        "minion2A_idle": {
+            "file": "textures/minion2A_idle.png"
+        },
+        "minion2A_dead": {
+            "file": "textures/minion2A_dead.png"
+        },
         "button_pause": {
             "file": "textures/ingameui/button_pause.png"
         },
@@ -297,8 +306,8 @@
         "win_continue": {
             "file": "textures/ingameui/win_continue.png"
         },
-        
-        
+
+
         "levelselect_bg_1": {
             "file": "textures/levelselect/levelselect_bg_1.png"
         },
@@ -317,8 +326,8 @@
         "button_lssetting": {
             "file": "textures/levelselect/button_lssetting.png"
         },
-        
-        
+
+
         "dpad": {
             "file": "textures/dpad.png",
             "wrapS": "clamp",
