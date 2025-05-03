@@ -118,6 +118,9 @@ protected:
     bool _isGrounded;
     /** Whether the dash has been released (reset) */
     bool _dashReset = true;
+    /** Whether the player is in the dash down end animation (which should block other actions) */
+    bool _landingDash;
+    
     int _lastDamagedFrame;
     /** Remaining time for damaged animation */
     int _damageRem;
@@ -273,6 +276,8 @@ public:
         _hasProjectile = false;
         _faceRight = true;
         _dashReset = true; //must init to true to be able to dash?
+        _landingDash = false;
+        
         _shootCooldownRem = 0;
         _jumpCooldownRem = 0;
         _dashCooldownRem = 0;
@@ -368,7 +373,8 @@ Vec2 getKnockDirection() { return _knockDirection; }
 #pragma mark -
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
-    void playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
+    /** returns true when just completed the final frame of the sprite*/
+    bool playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
 	void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite);
     void updateAnimation();
 
@@ -458,18 +464,20 @@ public:
     void setStrafeRight(bool value) { _isStrafeRight = value; }
     bool isStrafeLeft() { return _isStrafeLeft; }
     bool isStrafeRight() { return _isStrafeRight; }
-
+#pragma mark animation cancelling handled here:
+    // to remove animation cancelling of downward dash landing, simply remove { && !_landingDash } in the isDash...Begin() and isJumpBegin
     // Jumping
-    bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
+    bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0 /*&& !_landingDash*/; }
     int getJumpCDRem() { return _jumpCooldownRem; }
     void setJumpCDRem(int value = _jump_cooldown) { _jumpCooldownRem = value; }
     void setJumpInput(bool value) { _isJumpInput = value; }
 
     // Dashing
-    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset; }
-    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset; }
-    bool isDashDownBegin() const {return _isDashDownInput && _dashCooldownRem <= 0 && _dashReset && !_isGrounded;}
-    bool isDashLRBegin() { return isDashLeftBegin() || isDashRightBegin() ; }
+
+    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset/* && !_landingDash*/; }
+    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset /*&& !_landingDash*/; }
+    bool isDashDownBegin() {return _isDashDownInput && _dashCooldownRem <= 0 && _dashReset && !_isGrounded /*&& !_landingDash*/;}
+    bool isDashLRBegin() { return isDashLeftBegin() || isDashRightBegin(); }
     bool isDashBegin() {return isDashLRBegin() || isDashDownBegin(); }
     bool isDashLRActive() { return (_dashRem > 0 && _dashType == DashType::LR) || isDashLRBegin(); }
     bool isDashDownActive() { return (_dashRem > 0 && _dashType == DashType::DOWN) || isDashDownBegin(); }
@@ -496,7 +504,7 @@ public:
     void setDashDownInput(bool value) { _isDashDownInput = value; }
     
     // Guarding
-    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0; }
+    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0 /*&&!_landingDash*/; }
     bool isGuardActive() { return _guardRem > 0 || isGuardBegin(); }
     int getGuardRem() { return _guardRem; }
     void setGuardRem(int value = _guard_duration) { _guardRem = value; }
