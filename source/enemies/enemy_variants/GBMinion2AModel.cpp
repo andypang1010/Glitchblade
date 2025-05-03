@@ -141,7 +141,7 @@ void Minion2AModel::nextAction() {
     
     //maintain mid-distance and shoot player
     if (!_isShooting && !isStunned()) {
-        if (isTargetClose()) {
+        if (!isTargetFar()) {
             avoidTarget(30);
         }
         else {
