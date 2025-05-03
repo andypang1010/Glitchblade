@@ -57,6 +57,7 @@ private:
     /* Controllers */
 
 	std::vector<std::vector<std::shared_ptr<EnemyController>>> _enemyWaves;
+    std::vector<ObstacleNodePair> _platforms;
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;

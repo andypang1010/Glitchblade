@@ -269,6 +269,8 @@ void LevelController::reset() {
 	_lastSpawnedTime = 0;
     _numEnemiesActive = 0;
 
+	_platforms.clear();
+
 	_timeSpentInLevel = 0.0f;
 }
 
@@ -289,6 +291,20 @@ void LevelController::preUpdate(float dt)
     }
 
 	_playerController->preUpdate(dt);
+	CULog("PLAYER SCENE NODE SIZE: %s", player->getSceneNode()->getContentSize().toString().c_str());
+
+    for (auto platform : _platforms) {
+        platform.second->setPosition(platform.first->getPosition() * _constantsJSON->get("scene")->getFloat("scale"));
+		platform.second->setScale(1);
+		platform.second->setAnchor(Vec2::ANCHOR_CENTER);
+        //platform.second->getChild(0)->setPosition(Vec2::ZERO);
+        //CULog("PLATFORM OBSTACLE POSITION: %s", platform.first->getPosition().toString().c_str());
+		CULog("PLATFORM SCENE NODE POSITION: %s", platform.second->getPosition().toString().c_str());
+		CULog("PLATFORM SCENE NODE SIZE: %s", platform.second->getContentSize().toString().c_str());
+		//CULog("PLATFORM CHILD NODE POSITION: %s", platform.second->getChild(0)->getPosition().toString().c_str());
+		//CULog("PLATFORM CHILD NODE SIZE: %s", platform.second->getChild(0)->getContentSize().toString().c_str());
+        CULog("");
+    }
 }
 
 void LevelController::fixedUpdate(float timestep)
@@ -392,14 +408,21 @@ void LevelController::createPlatform(Rect rect)
 
 	leftWall->setFilterData(enemyWallFilter);
 	rightWall->setFilterData(enemyWallFilter);
-    std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(
-        _assets->get<Texture>("platform"), rect * _constantsJSON->get("scene")->getFloat("scale"));
+
+    std::shared_ptr<SceneNode> platformSceneNode = scene2::SceneNode::alloc();
     std::shared_ptr<PolygonNode> leftWallSprite = scene2::PolygonNode::alloc();
     std::shared_ptr<PolygonNode> rightWallSprite = scene2::PolygonNode::alloc();
+    
+    std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("platform"));
+	//platformSprite->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
+	//platformSceneNode->addChild(platformSprite);
 
+    //platformNewSprite->setVisible(true);
     addObstacle(std::make_pair(platform, platformSprite));
 	addObstacle(std::make_pair(leftWall, leftWallSprite));
     addObstacle(std::make_pair(rightWall, rightWallSprite));
+
+	_platforms.push_back(std::make_pair(platform, platformSprite));
 }
 
 /**
