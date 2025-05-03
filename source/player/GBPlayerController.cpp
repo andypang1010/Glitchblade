@@ -1,7 +1,7 @@
 #include "GBPlayerController.h"
 #include "../core/GBInput.h"
 #include "GBPlayerModel.h"
-#include "GBAudio.h"
+#include "../core/GBAudio.h"
 using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::audio;
