@@ -1,6 +1,7 @@
 #include "GBPlayerController.h"
 #include "../core/GBInput.h"
 #include "GBPlayerModel.h"
+#include "../core/GBAudio.h"
 using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::audio;
@@ -158,10 +159,10 @@ void PlayerController::preUpdate(float dt)
 
 	_player->setDebugColor(_player->isParryActive() ? Color4::RED : _player->isGuardActive() ? Color4::YELLOW : Color4::BLACK);
 
-    if (_player->isJumpBegin() && _player->isGrounded()) {
-        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
-        AudioEngine::get()->play(fxJ->getString("jump"), source, false, fxJ->getFloat("volume"));
+
+#pragma mark sfx
+    if (_player->isGuardBegin()){
+        AudioHelper::playSfx("guard");
     }
 
 }
@@ -276,6 +277,7 @@ void PlayerController::updateCooldowns()
     }
 #pragma mark dash cooldowns
     if (_player->isDashBegin()) {
+        AudioHelper::playSfx("player_dash");
         _player->setDashRem();
         _player->setDashCDRem();
         _player->setDashReset(false); //only needed (and is it really needed?) for keyboard
