@@ -401,7 +401,7 @@ void LevelController::createPlatform(Rect rect)
     std::shared_ptr<physics2::BoxObstacle> rightWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x + rect.size.width / 2 + 0.05, rect.origin.y + rect.size.height - 0.9), Size(0.1, rect.size.height + 0.2));
 
     // You cannot add constant "".  Must stringify
-    platform->setName(std::string(_constantsJSON->get("walls")->getString("name")));
+    platform->setName(std::string(_constantsJSON->get("platforms")->getString("name")));
     leftWall->setName(std::string(_constantsJSON->get("walls")->getString("name")));
     rightWall->setName(std::string(_constantsJSON->get("walls")->getString("name")));
 
