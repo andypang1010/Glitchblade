@@ -123,7 +123,38 @@
                 "speed": 0
             }
         ],
-        "platforms": [],
+        "platforms": [
+          {
+            "origin": {
+              "x": 20.0,
+              "y": 6.0
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 40.0,
+              "y": 6.0
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 30.0,
+              "y": 11.0
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          }
+        ],
         "waves": [
             {
                 "spawn_intervals": [
@@ -164,7 +195,38 @@
                 "speed": 0
             }
         ],
-        "platforms": [],
+        "platforms": [
+          {
+            "origin": {
+              "x": 20.0,
+              "y": 6.0
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 40.0,
+              "y": 6.0
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 30.0,
+              "y": 11.0
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          }
+        ],
           "waves": [
               {
                   "spawn_intervals": [
