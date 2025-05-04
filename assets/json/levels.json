@@ -39,6 +39,26 @@
             "width": 8.0,
             "height": 1
           }
+        },
+        {
+          "origin": {
+            "x": 26.0,
+            "y": 6.0
+          },
+          "size": {
+            "width": 8.0,
+            "height": 1
+          }
+        },
+        {
+          "origin": {
+            "x": 23.0,
+            "y": 10.0
+          },
+          "size": {
+            "width": 8.0,
+            "height": 1
+          }
         }
       ],
       "waves": [
