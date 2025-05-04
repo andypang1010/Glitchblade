@@ -53,7 +53,7 @@ void EnemyController::setSpawnPosition(Vec2 player_pos){
     // approximate middle of world with _enemy->worldRight / 2
     int direction = player_pos.x < _enemy->worldRight / 2? 1: -1;
     spawn_pos.x += direction * distance;
-    spawn_pos.y += 2.0;
+    spawn_pos.y = 5.0;
     if (spawn_pos.x > _enemy->worldLeft && spawn_pos.x < _enemy->worldRight){
         CULog("Setting enemy spawn to (%f, %f)", spawn_pos.x, spawn_pos.y);
         _enemy->setPosition(spawn_pos);

@@ -172,8 +172,8 @@ void EnemyModel::createFixtures() {
     sensorDef.isSensor = true;
 
     b2Filter filter = b2Filter();
-    filter.maskBits = 0x0001;
-    filter.categoryBits = 0x0002;
+    filter.maskBits = 0x0001; // collide with
+    filter.categoryBits = 0x0002; // this is in group
     setFilterData(filter);
 
     // Sensor dimensions
