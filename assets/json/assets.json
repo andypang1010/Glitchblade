@@ -48,6 +48,9 @@
         "scene3_l4": {
             "file": "textures/Scene_1_layer_4.png"
         },
+        "platform":  {
+            "file": "textures/platform.png"
+        },
         "player": {
             "file": "textures/player.png"
         },

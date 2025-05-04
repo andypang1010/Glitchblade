@@ -170,6 +170,12 @@ void PlayerController::preUpdate(float dt)
 void PlayerController::fixedUpdate(float timestep)
 {
     _player->updateAnimation();
+    
+    if (_player->getHP() <= 0) {
+        _player->setLinearVelocity(Vec2(0, 0));
+        return;
+    }
+
     applyForce();
     updateCooldowns();
 
@@ -178,10 +184,6 @@ void PlayerController::fixedUpdate(float timestep)
 	if (_player->_lastComboElapsedTime >= 5 && _player->_comboMeter > 0) {
 		_player->_comboMeter = std::max(_player->_comboMeter - timestep * 10, 0.0f);
 	}
-
-    if (_player->_isNextAttackEnhanced) {
-        CULog("NEXT ATTACK ENHANCED");
-    }
 
     if (_player->_comboMeter >= 100)
     {

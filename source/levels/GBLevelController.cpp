@@ -186,6 +186,10 @@ void LevelController::populateLevel(const std::shared_ptr<LevelModel>& level) {
     _currentLevel = level;
     createStaticObstacles(level);
     addObstacle(std::make_pair(getPlayerModel(), getPlayerNode()));
+
+	for (const Rect& platform : _currentLevel->getPlatforms()) {
+		createPlatform(platform);
+	}
 }
 
 // TODO: we should not use assetRef, load background & ground based on the level in the future
@@ -194,7 +198,6 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     ObstacleNodePairs obstacle_pairs;
     std::shared_ptr<Texture> image;
     std::shared_ptr<scene2::PolygonNode> sprite;
-    std::shared_ptr<scene2::SceneNode> node = scene2::SceneNode::alloc();
 
     EarclipTriangulator triangulator;
 
@@ -266,6 +269,8 @@ void LevelController::reset() {
 	_lastSpawnedTime = 0;
     _numEnemiesActive = 0;
 
+	_platforms.clear();
+
 	_timeSpentInLevel = 0.0f;
 }
 
@@ -286,6 +291,20 @@ void LevelController::preUpdate(float dt)
     }
 
 	_playerController->preUpdate(dt);
+	CULog("PLAYER SCENE NODE SIZE: %s", player->getSceneNode()->getContentSize().toString().c_str());
+
+    for (auto platform : _platforms) {
+        platform.second->setPosition(platform.first->getPosition() * _constantsJSON->get("scene")->getFloat("scale"));
+		platform.second->setScale(1);
+		platform.second->setAnchor(Vec2::ANCHOR_CENTER);
+        //platform.second->getChild(0)->setPosition(Vec2::ZERO);
+        //CULog("PLATFORM OBSTACLE POSITION: %s", platform.first->getPosition().toString().c_str());
+		CULog("PLATFORM SCENE NODE POSITION: %s", platform.second->getPosition().toString().c_str());
+		CULog("PLATFORM SCENE NODE SIZE: %s", platform.second->getContentSize().toString().c_str());
+		//CULog("PLATFORM CHILD NODE POSITION: %s", platform.second->getChild(0)->getPosition().toString().c_str());
+		//CULog("PLATFORM CHILD NODE SIZE: %s", platform.second->getChild(0)->getContentSize().toString().c_str());
+        CULog("");
+    }
 }
 
 void LevelController::fixedUpdate(float timestep)
@@ -366,6 +385,44 @@ void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, 
     if (_worldRef->inBounds(hitbox.get())) {
         addObstacle(ObstacleNodePair(hitbox, sprite));
     }
+}
+
+void LevelController::createPlatform(Rect rect)
+{
+    b2Filter enemyWallFilter = b2Filter();
+    enemyWallFilter.categoryBits = 0x0001;
+    enemyWallFilter.maskBits = 0x0002;
+    std::shared_ptr<physics2::BoxObstacle> platform = physics2::BoxObstacle::alloc(rect.origin, rect.size);
+    std::shared_ptr<physics2::BoxObstacle> leftWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x - rect.size.width / 2 - 0.05, rect.origin.y + rect.size.height - 0.9), Size(0.1, rect.size.height + 0.2));
+    std::shared_ptr<physics2::BoxObstacle> rightWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x + rect.size.width / 2 + 0.05, rect.origin.y + rect.size.height - 0.9), Size(0.1, rect.size.height + 0.2));
+
+    // You cannot add constant "".  Must stringify
+    platform->setName(std::string(_constantsJSON->get("walls")->getString("name")));
+    leftWall->setName(std::string(_constantsJSON->get("walls")->getString("name")));
+    rightWall->setName(std::string(_constantsJSON->get("walls")->getString("name")));
+
+    // Set the physics attributes
+    setStaticPhysics(platform);
+    setStaticPhysics(leftWall);
+    setStaticPhysics(rightWall);
+
+	leftWall->setFilterData(enemyWallFilter);
+	rightWall->setFilterData(enemyWallFilter);
+
+    std::shared_ptr<SceneNode> platformSceneNode = scene2::SceneNode::alloc();
+    std::shared_ptr<PolygonNode> leftWallSprite = scene2::PolygonNode::alloc();
+    std::shared_ptr<PolygonNode> rightWallSprite = scene2::PolygonNode::alloc();
+    
+    std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("platform"));
+	//platformSprite->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
+	//platformSceneNode->addChild(platformSprite);
+
+    //platformNewSprite->setVisible(true);
+    addObstacle(std::make_pair(platform, platformSprite));
+	addObstacle(std::make_pair(leftWall, leftWallSprite));
+    addObstacle(std::make_pair(rightWall, rightWallSprite));
+
+	_platforms.push_back(std::make_pair(platform, platformSprite));
 }
 
 /**
@@ -521,15 +578,15 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
     }
     
 	// Parse platforms
-    std::vector<std::shared_ptr<Rect>> platforms;
+    std::vector<Rect> platforms;
 
 	for (std::shared_ptr<JsonValue> platform : json->get("platforms")->children()) {
-		std::shared_ptr<Rect> rect = std::make_shared<Rect>();
+        Rect rect = Rect();
 
-		rect->origin.x = platform->get("origin")->get("x")->asFloat();
-		rect->origin.y = platform->get("origin")->get("y")->asFloat();
-		rect->size.width = platform->get("size")->get("width")->asFloat();
-		rect->size.height = platform->get("size")->get("height")->asFloat();
+        rect.origin.x = platform->get("origin")->get("x")->asFloat();
+        rect.origin.y = platform->get("origin")->get("y")->asFloat();
+        rect.size.width = platform->get("size")->get("width")->asFloat();
+        rect.size.height = platform->get("size")->get("height")->asFloat();
 
 		platforms.push_back(rect);
 	}

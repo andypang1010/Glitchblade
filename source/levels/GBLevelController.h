@@ -57,6 +57,7 @@ private:
     /* Controllers */
 
 	std::vector<std::vector<std::shared_ptr<EnemyController>>> _enemyWaves;
+    std::vector<ObstacleNodePair> _platforms;
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
@@ -200,6 +201,7 @@ public:
     * Adds a new hitbox to the world.
     */
     void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration, bool parriable);
+    void createPlatform(Rect rect);
 
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::vector<std::shared_ptr<ActionModel>> parseActions(const std::shared_ptr<JsonValue>& json, const std::string enemyName);

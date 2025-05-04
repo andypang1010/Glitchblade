@@ -171,7 +171,7 @@
             "color": "yellow"
         },
         "lose": {
-            "text": "FAILURE!",
+            "text": "DEFEAT!",
             "color": "red"
         }
     },
