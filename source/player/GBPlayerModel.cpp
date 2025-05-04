@@ -384,10 +384,9 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
 }
 
 bool PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
-    if (sprite == _deadSprite){
-        CULog("On player deadsprite frame %d and total count is %d", sprite->getFrame(), sprite->getCount());
-    }
-    CULog("Playing animation once");
+//    if (sprite == _deadSprite){
+//        CULog("On player deadsprite frame %d and total count is %d", sprite->getFrame(), sprite->getCount());
+//    }
     if (!sprite->isVisible()) {
         sprite->setFrame(0);
     }
@@ -489,6 +488,21 @@ void PlayerModel::updateAnimation()
     }
     
     else if (isDashDownActive()) {
+        CULog("Dash Down is Active!, _dashRem is %d, isDashDownBegin() is %d _dashType is:", _dashRem, isDashDownBegin());
+        switch (_dashType) {
+            case DashType::DOWN:
+                CULog("DOWN");
+                break;
+            case DashType::LR:
+                CULog("LR");
+                break;
+            case DashType::NONE:
+                CULog("NONE");
+                break;
+            default:
+                break;
+        }
+        
         setOnlyVisible(_dashDownStartSprite);
         if (isDashDownBegin()) {
             _dashType = DashType::DOWN;

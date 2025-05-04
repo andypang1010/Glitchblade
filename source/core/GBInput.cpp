@@ -264,6 +264,7 @@ void PlatformInput::update(float dt) {
     _keyGuard = false;
     _keyLdash = false;
     _keyRdash = false;
+    _keyDdash = false;
         if (_joystick){
         processJoystick();
     }
@@ -283,6 +284,7 @@ void PlatformInput::clear() {
     _rightPressed = false;
     _rdashPressed = false;
     _ldashPressed = false;
+    _ddashPressed = false;
     _guardPressed = false;
     _lastSwipe = SwipeType::NONE;
 }
@@ -545,9 +547,11 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
                 _keyRdash = true;
                 break;
             case SwipeType::JUMP:
+                CULog("JUMPING");
                 _keyJump = true;
                 break;
             case SwipeType::DOWNDASH:
+                CULog("DOWNDASHING");
                 _keyDdash = true;
                 break;
             case SwipeType::NONE:
