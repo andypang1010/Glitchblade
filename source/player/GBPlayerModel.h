@@ -393,7 +393,7 @@ Vec2 getKnockDirection() { return _knockDirection; }
 #pragma mark -
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
-    /** returns true when just completed the final frame of the sprite*/
+    /** returns true when just completed the final frame of the sprite or the sprite is not actively visible*/
     bool playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
 	void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite);
     void updateAnimation();

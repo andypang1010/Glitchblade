@@ -224,7 +224,10 @@ void PlayerController::postUpdate(float dt)
 void PlayerController::updateCooldowns()
 {
     if (_player->iframe > 0) _player->iframe--;
-    if (_player->isDamaged()) _player->setDamagedRem(_player->getDamagedRem() - 1);
+    if (_player->isDamaged()) {
+        _player->setDamagedRem(_player->getDamagedRem() - 1);
+    }
+    
 #pragma mark Guard cooldown
     // Update guard release time
     if (_player->getGuardReleaseRem() > 0) {
