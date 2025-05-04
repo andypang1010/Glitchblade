@@ -90,9 +90,10 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::
 }
 
 void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
-
+    _node = scene2::SceneNode::alloc();
+    _node->setVisible(false);
+    setSceneNode(_node);
 }
-
 void EnemyModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
     
 }

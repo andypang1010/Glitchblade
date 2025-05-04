@@ -32,8 +32,7 @@ bool Minion1AModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
 
 
 void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
-    _node = scene2::SceneNode::alloc();
-    setSceneNode(_node);
+    EnemyModel::attachNodes(assetRef);
     // need new idle animation for this minion
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 1);
     _idleSprite->setScale(0.5f);

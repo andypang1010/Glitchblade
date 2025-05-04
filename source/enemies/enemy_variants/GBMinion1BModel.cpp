@@ -31,8 +31,7 @@ bool Minion1BModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
 
 
 void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
-    _node = scene2::SceneNode::alloc();
-    setSceneNode(_node);
+    EnemyModel::attachNodes(assetRef);
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_idle"), 5, 2, 10);
 	_idleSprite->setScale(0.5f);
