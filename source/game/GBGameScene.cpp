@@ -404,6 +404,7 @@ void GameScene::preUpdate(float dt) {
     }
     
 	_ui->setHP(_player->getHP());
+    _ui->updateComboBar(_player->_comboMeter);
 
     // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);

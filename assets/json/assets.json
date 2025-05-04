@@ -207,6 +207,9 @@
         "hp_bar": {
             "file": "textures/ingameui/hp_bar.png"
         },
+        "combo_bar": {
+            "file": "textures/ingameui/combo_bar.png"
+        },
         "hp_half_segment": {
             "file": "textures/ingameui/hp_half_segment.png"
         },
