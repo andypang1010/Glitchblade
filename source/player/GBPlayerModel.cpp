@@ -347,13 +347,6 @@ void PlayerModel::dispose() {
  */
 void PlayerModel::update(float dt) {
 
-    if (_isGuardInput)
-    {
-        CULog("PLAYER GUARD INPUT: %s", _isGuardInput ? "TRUE" : "FALSE");
-        CULog("PLAYER GUARD CD REMAINING: %i", _guardCooldownRem);
-        CULog("");
-    }
-
     BoxObstacle::update(dt);
     if (_sceneNode != nullptr) {
         _sceneNode->setPosition(getPosition() * _drawScale);
@@ -384,9 +377,6 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
 }
 
 bool PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
-//    if (sprite == _deadSprite){
-//        CULog("On player deadsprite frame %d and total count is %d", sprite->getFrame(), sprite->getCount());
-//    }
     if (!sprite->isVisible()) {
         sprite->setFrame(0);
     }
@@ -488,21 +478,6 @@ void PlayerModel::updateAnimation()
     }
     
     else if (isDashDownActive()) {
-        CULog("Dash Down is Active!, _dashRem is %d, isDashDownBegin() is %d _dashType is:", _dashRem, isDashDownBegin());
-        switch (_dashType) {
-            case DashType::DOWN:
-                CULog("DOWN");
-                break;
-            case DashType::LR:
-                CULog("LR");
-                break;
-            case DashType::NONE:
-                CULog("NONE");
-                break;
-            default:
-                break;
-        }
-        
         setOnlyVisible(_dashDownStartSprite);
         if (isDashDownBegin()) {
             _dashType = DashType::DOWN;
@@ -510,7 +485,6 @@ void PlayerModel::updateAnimation()
             _dashDownStartSprite->setFrame(0);
         }
         if (_isGrounded && !_landingDash) {
-            CULog("Grounded during dash down");
             // no longer actively dashing
             setDashRem(0);
             _landingDash = true;
@@ -525,10 +499,8 @@ void PlayerModel::updateAnimation()
     }
     
     else if (_landingDash){
-        CULog("landing dash true");
         // (if finished last frame of landing animation)
         if (playAnimationOnce(_dashDownEndSprite)){
-            CULog("Setting landing dash to false");
             _landingDash = false;
         };
     }
