@@ -46,6 +46,7 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 #include "actionmodel_variants/GBRangedActionModel.h"
+#include "../core/GBAudio.h"
 
 using namespace cugl;
 using namespace graphics;
@@ -89,9 +90,10 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::
 }
 
 void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
-
+    _node = scene2::SceneNode::alloc();
+    _node->setVisible(false);
+    setSceneNode(_node);
 }
-
 void EnemyModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
     
 }
@@ -104,6 +106,8 @@ void EnemyModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
 * @param value the amount of hp reduction.
 */
 void EnemyModel::damage(float value) {
+    // placeholder sfx
+    AudioHelper::playSfx("player_damage");
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
     _aggression += value;

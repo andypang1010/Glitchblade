@@ -74,8 +74,7 @@ bool Boss2Model::init(const std::shared_ptr<AssetManager>& assetRef, const std::
 };
 
 void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
-    _node = scene2::SceneNode::alloc();
-    setSceneNode(_node);
+    EnemyModel::attachNodes(assetRef);
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_idle"), 3, 5, 15);
     _idleSprite->setPosition(0, 60);

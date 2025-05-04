@@ -1,6 +1,7 @@
 #include "GBPlayerController.h"
 #include "../core/GBInput.h"
 #include "GBPlayerModel.h"
+#include "../core/GBAudio.h"
 using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::audio;
@@ -60,7 +61,7 @@ void PlayerController::applyForce() {
     }
     b2Body* playerBody = _player->getBody();
     // Don't want to be moving.f Damp out player motion
-    if (_player->getMovement() == 0.0f && !_player->isDashActive() && !_player->isKnockbackActive()) {
+    if (_player->getMovement() == 0.0f && !_player->isDashLRActive() && !_player->isKnockbackActive()) {
         if (_player->isGrounded()) {
             // Instant friction on the grounds
             b2Vec2 vel = playerBody->GetLinearVelocity();
@@ -94,7 +95,7 @@ void PlayerController::applyForce() {
 
     if (!_player->isParryActive()) {
         // Dash!
-#pragma mark dash force
+#pragma mark L/R dash force
         if (_player->isDashLeftBegin()) {
             _player->faceLeft();
             // b2Vec2 force(-_player->getDashF(),0);
@@ -108,10 +109,18 @@ void PlayerController::applyForce() {
             playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
         }
 
-        if (_player->isDashActive())
+        if (_player->isDashLRActive())
         {
             playerBody->SetLinearVelocity(b2Vec2(_player->getVX(), 0));
         }
+    }
+#pragma mark DOWN dash force
+    if (_player->isDashDownBegin()) {
+        playerBody->SetLinearVelocity(b2Vec2(playerBody->GetLinearVelocity().x, -_player->getDashF()));
+    }
+
+    if (_player->isDashDownActive()){
+        playerBody->SetLinearVelocity(b2Vec2(0, _player->getVY()));
     }
 
 #pragma mark knockback force
@@ -123,7 +132,7 @@ void PlayerController::applyForce() {
     }
  
     // Velocity too high, clamp it
-    if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashActive() && !_player->isKnockbackActive()) {
+    if (fabs(_player->getVX()) >= _player->getMaxSpeed() && !_player->isDashLRActive() && !_player->isKnockbackActive()) {
         _player->setVX(SIGNUM(_player->getVX()) * _player->getMaxSpeed());
     }
 }
@@ -152,16 +161,17 @@ void PlayerController::preUpdate(float dt)
     _player->setJumpInput(_input->didJump());
     _player->setDashLeftInput(_input->didDashLeft());
     _player->setDashRightInput(_input->didDashRight());
+    _player->setDashDownInput(_input->didDashDown());
     _player->setGuardInput(_input->didGuard());
     _player->setShootInput(_input->didFire());
     //_hpNode->setText(std::to_string((int)_player->getHP()));
 
 	_player->setDebugColor(_player->isParryActive() ? Color4::RED : _player->isGuardActive() ? Color4::YELLOW : Color4::BLACK);
 
-    if (_player->isJumpBegin() && _player->isGrounded()) {
-        std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(fxJ->getString("jump"));
-        AudioEngine::get()->play(fxJ->getString("jump"), source, false, fxJ->getFloat("volume"));
+
+#pragma mark sfx
+    if (_player->isGuardBegin()){
+        AudioHelper::playSfx("guard");
     }
 
 }
@@ -169,6 +179,12 @@ void PlayerController::preUpdate(float dt)
 void PlayerController::fixedUpdate(float timestep)
 {
     _player->updateAnimation();
+    
+    if (_player->getHP() <= 0) {
+        _player->setLinearVelocity(Vec2(0, 0));
+        return;
+    }
+
     applyForce();
     updateCooldowns();
 
@@ -177,10 +193,6 @@ void PlayerController::fixedUpdate(float timestep)
 	if (_player->_lastComboElapsedTime >= 5 && _player->_comboMeter > 0) {
 		_player->_comboMeter = std::max(_player->_comboMeter - timestep * 10, 0.0f);
 	}
-
-    if (_player->_isNextAttackEnhanced) {
-        CULog("NEXT ATTACK ENHANCED");
-    }
 
     if (_player->_comboMeter >= 100)
     {
@@ -212,7 +224,10 @@ void PlayerController::postUpdate(float dt)
 void PlayerController::updateCooldowns()
 {
     if (_player->iframe > 0) _player->iframe--;
-    if (_player->isDamaged()) _player->setDamagedRem(_player->getDamagedRem() - 1);
+    if (_player->isDamaged()) {
+        _player->setDamagedRem(_player->getDamagedRem() - 1);
+    }
+    
 #pragma mark Guard cooldown
     // Update guard release time
     if (_player->getGuardReleaseRem() > 0) {
@@ -274,6 +289,7 @@ void PlayerController::updateCooldowns()
     }
 #pragma mark dash cooldowns
     if (_player->isDashBegin()) {
+        AudioHelper::playSfx("player_dash");
         _player->setDashRem();
         _player->setDashCDRem();
         _player->setDashReset(false); //only needed (and is it really needed?) for keyboard
@@ -287,6 +303,8 @@ void PlayerController::updateCooldowns()
 
     // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
     if (!_player->getDashReset() && _player->getDashCDRem() <= 0 && !(_player->isDashInput())) {
+        CULog("resetting dash");
+        _player->resetDashType();
         _player->setDashReset(true); // ready to dash again
     }
 

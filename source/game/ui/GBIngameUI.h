@@ -53,6 +53,13 @@ protected:
     /** HP segments */
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpSegments;
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
+    
+    // Combo meter UI
+    std::shared_ptr<cugl::scene2::PolygonNode> _comboBarBG;
+    std::shared_ptr<cugl::scene2::PolygonNode> _comboBarFG;
+
+    float _comboValue = 0.0f;
+    float _comboMax = 100.0f;
    
     // HUD statistics
     std::shared_ptr<cugl::scene2::Label> _hudTimeNum;
@@ -153,6 +160,8 @@ public:
     void showLosePage(bool visible);
     
     void updateStats(float timeSpent, int parryCount, int spawnedCount, int totalCount);
+    
+    void updateComboBar(float value);
     
     // Accessors
     std::shared_ptr<cugl::scene2::Button> getPauseButton() const {

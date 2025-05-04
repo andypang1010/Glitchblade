@@ -106,6 +106,26 @@
                     "visible": true
                 }
             },
+            "combo_bar": {
+                "type": "Image",
+                "data": {
+                    "texture": "combo_bar",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        222,
+                        64
+                    ],
+                    "angle": 0,
+                    "position": [
+                        32,
+                        480
+                    ],
+                    "visible": true
+                }
+            },
             "hp_full_segment_5": {
                 "type": "Image",
                 "data": {

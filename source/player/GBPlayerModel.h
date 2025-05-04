@@ -99,6 +99,8 @@ protected:
     bool _isDashLeftInput;
     /** Whether we are actively inputting dash right*/
     bool _isDashRightInput;
+    /** Whether we are actively inputting dash down*/
+    bool _isDashDownInput;
     /** Whether we are actively inputting the guard*/
     bool _isGuardInput;
     /** Whether we have a (swallowed) projectile*/
@@ -116,6 +118,9 @@ protected:
     bool _isGrounded;
     /** Whether the dash has been released (reset) */
     bool _dashReset = true;
+    /** Whether the player is in the dash down end animation (which should block other actions) */
+    bool _landingDash;
+    
     int _lastDamagedFrame;
     /** Remaining time for damaged animation */
     int _damageRem;
@@ -151,6 +156,15 @@ protected:
     */
     virtual void resetDebug() override;
 
+#pragma mark dash handling
+    enum class DashType {
+        LR,
+        DOWN,
+        NONE,
+    };
+    /** Type of the current dash action or NONE*/
+    DashType _dashType;
+    
 public:
     int iframe = 0;
     int _parryCounter = 0;
@@ -162,6 +176,9 @@ public:
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpUpSprite;
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
+    std::shared_ptr<scene2::SpriteNode> _dashDownStartSprite;
+    std::shared_ptr<scene2::SpriteNode> _dashDownEndSprite;
+
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
     std::shared_ptr<scene2::SpriteNode> _damagedSprite;
     std::shared_ptr<scene2::SpriteNode> _deadSprite;
@@ -250,6 +267,7 @@ public:
         _isGrounded = false;
         _isShootInput = false;
         _isJumpInput = false;
+        _isDashDownInput = false;
         _isStrafeLeft = false;
         _isStrafeRight = false;
         _isDashLeftInput = false;
@@ -258,6 +276,8 @@ public:
         _hasProjectile = false;
         _faceRight = true;
         _dashReset = true; //must init to true to be able to dash?
+        _landingDash = false;
+        
         _shootCooldownRem = 0;
         _jumpCooldownRem = 0;
         _dashCooldownRem = 0;
@@ -272,6 +292,7 @@ public:
         _parryCounter = 0;
 		_comboMeter = 0;
         _lastComboElapsedTime = 0;
+        frameCounter = 0;
 		_isNextAttackEnhanced = false;
     };
     
@@ -284,7 +305,26 @@ public:
         _comboMeter = 0;
 		_isNextAttackEnhanced = false;
     }
+    
+    void resetSpriteFrames(){
+        _idleSprite->setFrame(0);
+        _walkSprite->setFrame(0);
+        _jumpUpSprite->setFrame(0);
+        _jumpDownSprite->setFrame(0);
+        _dashDownStartSprite->setFrame(0);
+        _dashDownEndSprite->setFrame(0);
 
+        _attackSprite->setFrame(0);
+        _damagedSprite->setFrame(0);
+        _deadSprite->setFrame(0);
+
+        _guardSprite->setFrame(0);
+        _guardReleaseSprite->setFrame(0);
+        _parryReleaseSprite->setFrame(0);
+
+        _overloadVFXSprite->setFrame(0);
+        
+    }
     void incrementComboCounter() {
         _comboMeter = std::min(_comboMeter + 20, 100.0f);
         _lastComboElapsedTime = 0;
@@ -353,7 +393,8 @@ Vec2 getKnockDirection() { return _knockDirection; }
 #pragma mark -
 #pragma mark Animation Methods
     void playAnimation(std::shared_ptr<scene2::SpriteNode> sprite);
-    void playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
+    /** returns true when just completed the final frame of the sprite or the sprite is not actively visible*/
+    bool playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite);
 	void playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite);
     void updateAnimation();
 
@@ -443,18 +484,25 @@ public:
     void setStrafeRight(bool value) { _isStrafeRight = value; }
     bool isStrafeLeft() { return _isStrafeLeft; }
     bool isStrafeRight() { return _isStrafeRight; }
-
+#pragma mark animation cancelling handled here:
+    // to add animation cancelling of downward dash landing, simply uncomment { /**&& !_landingDash*/ } in the isDash...Begin(), isJumpBegin(), etc.
     // Jumping
-    bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0; }
+    bool isJumpBegin() const { return _isJumpInput && _jumpCooldownRem <= 0 /**&& !_landingDash*/; }
     int getJumpCDRem() { return _jumpCooldownRem; }
     void setJumpCDRem(int value = _jump_cooldown) { _jumpCooldownRem = value; }
     void setJumpInput(bool value) { _isJumpInput = value; }
 
     // Dashing
-    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset; }
-    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset; }
-    bool isDashBegin() { return isDashLeftBegin() || isDashRightBegin(); }
+
+    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset/**&& !_landingDash*/; }
+    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset /**&& !_landingDash*/; }
+    bool isDashDownBegin() {return _isDashDownInput && _dashCooldownRem <= 0 && _dashReset && !_isGrounded /**&& !_landingDash*/;}
+    bool isDashLRBegin() { return isDashLeftBegin() || isDashRightBegin(); }
+    bool isDashBegin() {return isDashLRBegin() || isDashDownBegin(); }
+    bool isDashLRActive() { return (_dashRem > 0 && _dashType == DashType::LR) || isDashLRBegin(); }
+    bool isDashDownActive() { return (_dashRem > 0 && _dashType == DashType::DOWN) || isDashDownBegin(); }
     bool isDashActive() { return _dashRem > 0 || isDashBegin(); }
+
     int getDashRem() { return _dashRem; }
     void setDashRem(int value = _dash_duration) { _dashRem = value; }
     int getDashCDRem() { return _dashCooldownRem; }
@@ -462,16 +510,21 @@ public:
     bool isDashLeftInput() const { return _isDashLeftInput; }
     bool isDashRightInput() const { return _isDashRightInput; }
     bool isDashInput() const { return isDashRightInput() || isDashLeftInput(); }
-    void setDashInput(bool value) { _isDashLeftInput = value; }
-        
+    
     // Dash
     bool getDashReset() const { return _dashReset; }
     void setDashReset(bool r) { _dashReset = r; }
     void setDashRightInput(bool value) { _isDashRightInput = value; }
     void setDashLeftInput(bool value) { _isDashLeftInput = value; }
+    /** Call this when dash is over */
+    void resetDashType() {_dashType = DashType::NONE;}
 
+
+    // Downward Dash
+    void setDashDownInput(bool value) { _isDashDownInput = value; }
+    
     // Guarding
-    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0; }
+    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0 /**&& !_landingDash*/; }
     bool isGuardActive() { return _guardRem > 0 || isGuardBegin(); }
     int getGuardRem() { return _guardRem; }
     void setGuardRem(int value = _guard_duration) { _guardRem = value; }
@@ -517,7 +570,10 @@ public:
 
     // Debug
 
-
+protected:
+    /*Set all the other sprite nodes to be invisible and this one visible. 
+     If null don't set any visible sprite nodes*/
+    void setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite);
 
     
 };

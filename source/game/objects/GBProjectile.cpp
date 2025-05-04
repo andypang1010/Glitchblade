@@ -71,7 +71,6 @@ ObstacleNodePair Projectile::createProjectileNodePair(const std::shared_ptr<Asse
 
     std::shared_ptr<scene2::SpriteNode> newSprite = scene2::SpriteNode::allocWithSprite(projectile->getSceneNode());
     newSprite->setPosition(projectile->getAnimOffset());
-//    CULog(projectile->getAnimOffset().toString().c_str());
 	newSprite->setFrame(0);
 
     // Set angle for verticle projectiles.

@@ -40,7 +40,9 @@ using namespace cugl::graphics;
 /** The key for dashing right */
 #define RDASH_KEY KeyCode::D
 /** The key for guarding */
-#define GUARD_KEY KeyCode::S
+#define DDASH_KEY KeyCode::S
+/** The key for downward dash */
+#define GUARD_KEY KeyCode::SPACE
 
 /** How close we need to be for a multi touch */
 #define NEAR_TOUCH      100
@@ -92,10 +94,12 @@ _firePressed(false),
 _jumpPressed(false),
 _rdashPressed(false),
 _ldashPressed(false),
+_ddashPressed(false),
 _guardPressed(false),
 _keyGuard(false),
 _keyLdash(false),
 _keyRdash(false),
+_keyDdash(false),
 _leftPressed(false),
 _rightPressed(false),
 _keyJump(false),
@@ -222,6 +226,7 @@ void PlatformInput::update(float dt) {
     _keyRight = keys->keyDown(RIGHT_KEY);
     _keyLdash = keys->keyPressed(LDASH_KEY);
     _keyRdash = keys->keyPressed(RDASH_KEY);
+    _keyDdash = keys->keyPressed(DDASH_KEY);
     _keyGuard = keys->keyPressed(GUARD_KEY);
 #endif
 
@@ -232,10 +237,12 @@ void PlatformInput::update(float dt) {
 	_jumpPressed  = _keyJump;
     _ldashPressed = _keyLdash;
     _rdashPressed = _keyRdash;
+    _ddashPressed = _keyDdash;
     _leftPressed = _keyLeft;
     _rightPressed = _keyRight;
     _guardPressed = _keyGuard;
-    
+
+
 	// Directional controls
 	_horizontal = 0.0f;
 	if (_leftPressed) {
@@ -257,6 +264,7 @@ void PlatformInput::update(float dt) {
     _keyGuard = false;
     _keyLdash = false;
     _keyRdash = false;
+    _keyDdash = false;
         if (_joystick){
         processJoystick();
     }
@@ -276,6 +284,7 @@ void PlatformInput::clear() {
     _rightPressed = false;
     _rdashPressed = false;
     _ldashPressed = false;
+    _ddashPressed = false;
     _guardPressed = false;
     _lastSwipe = SwipeType::NONE;
 }
@@ -422,7 +431,7 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
     bool xpass = absxdiff > thresh;
     bool ypass = absydiff > thresh;
 
-    bool yguardpass = ydiff > GUARD_LENGTH;
+    bool yddashpass = ydiff > GUARD_LENGTH;
 
     // Ensure at least one axis has passed the threshold
     if (xpass || ypass) {
@@ -434,7 +443,7 @@ Vec2 processSwipeVec(const Vec2 start, const Vec2 stop, Timestamp current) {
             _lastSwipe = (ydiff > 0) ? SwipeType::DOWNDASH : SwipeType::JUMP;
         }
     }
-    else if (yguardpass) {
+    else if (yddashpass) {
         _lastSwipe = SwipeType::DOWNDASH;
     }
     else {
@@ -538,10 +547,12 @@ void PlatformInput::touchesMovedCB(const TouchEvent& event, const Vec2& previous
                 _keyRdash = true;
                 break;
             case SwipeType::JUMP:
+                CULog("JUMPING");
                 _keyJump = true;
                 break;
             case SwipeType::DOWNDASH:
-                // no downward dash implemented yet
+                CULog("DOWNDASHING");
+                _keyDdash = true;
                 break;
             case SwipeType::NONE:
                 break;

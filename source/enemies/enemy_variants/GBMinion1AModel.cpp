@@ -2,6 +2,7 @@
 #include <cugl/scene2/CUTexturedNode.h>
 #include <cugl/core/assets/CUAssetManager.h>
 #include "../actionmodel_variants/GBRangedActionModel.h"
+#include "../../core/GBAudio.h"
 #include "GBMinion1AModel.h"
 
 using namespace cugl;
@@ -31,8 +32,7 @@ bool Minion1AModel::init(const std::shared_ptr<AssetManager>& assetRef, const st
 
 
 void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
-    _node = scene2::SceneNode::alloc();
-    setSceneNode(_node);
+    EnemyModel::attachNodes(assetRef);
     // need new idle animation for this minion
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 1);
     _idleSprite->setScale(0.5f);
@@ -157,6 +157,7 @@ void Minion1AModel::nextAction() {
     if (!_isShooting && !_isExploding && _moveDuration <= 0 && !isStunned()) {
         if (isTargetClose()) {
             if (_hp < 25){
+                AudioHelper::playSfx("explode");
                 explode();
             }
             else {
@@ -211,6 +212,7 @@ void Minion1AModel::AIMove() {
 void Minion1AModel::shoot() {
     faceTarget();
     if (_aggression > 8) {
+        AudioHelper::playSfx("projectile");
         _aggression = 0;
         _isShooting = true;
         setMovement(0);

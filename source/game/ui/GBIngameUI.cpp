@@ -123,6 +123,9 @@ void GBIngameUI::setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDispl
             _hpHalfSegments.push_back(half);
         }
     }
+    
+    _comboBarFG = headsUpDisplay->getChildByName<scene2::PolygonNode>("combo_bar");
+    _comboBarBG = headsUpDisplay->getChildByName<scene2::PolygonNode>("hp_bar");
 }
 
 void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
@@ -390,4 +393,15 @@ void GBIngameUI::updateStats(float timeSpent, int parryCount, int spawnedCount, 
         std::string text = std::to_string(spawnedCount) + "/" + std::to_string(totalCount);
         _loseEnemyNum->setText(text);
     }
+}
+
+void GBIngameUI::updateComboBar(float value) {
+    _comboValue = std::max(0.0f, std::min(value, _comboMax));
+
+    float ratio = _comboValue / _comboMax;
+    float barWidth = _comboBarBG->getContentSize().width * ratio;
+    float barHeight = _comboBarBG->getContentSize().height;
+
+    _comboBarFG->setContentSize(Size(barWidth, barHeight));
+    _comboBarFG->setPolygon(Rect(0, 0, barWidth, barHeight));
 }

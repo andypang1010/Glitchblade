@@ -59,26 +59,6 @@ public:
     
 #pragma mark -
 #pragma mark Static Constructors
-    /**
-     * Creates a new Projectile at the given position.
-     *
-     * The projectile is scaled so that 1 pixel = 1 Box2d unit
-     *
-     * The scene graph is completely decoupled from the physics system.
-     * The node does not have to be the same size as the physics body. We
-     * only guarantee that the scene graph node is positioned correctly
-     * according to the drawing scale.
-     *
-     * @param  pos      Initial position in world coordinates
-     * @param  radius   The radius of the Projectile obstacle.
-     *
-     * @return  A newly allocated Projectile at the given position, with the given radius
-     */
-    static std::shared_ptr<Projectile> alloc(const Vec2& pos, Size size, bool isPlayerFired) {
-        std::shared_ptr<Projectile> result = std::make_shared<Projectile>();
-        result->setIsPlayerFired(isPlayerFired);
-        return (result->init(pos, size) ? result : nullptr);
-    }
 
     static std::shared_ptr<Projectile> allocWithProjectile(const Vec2& pos, const std::shared_ptr<Projectile> projectile) {
 		std::shared_ptr<Projectile> result = std::make_shared<Projectile>();

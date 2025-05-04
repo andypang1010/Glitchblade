@@ -171,7 +171,7 @@
             "color": "yellow"
         },
         "lose": {
-            "text": "FAILURE!",
+            "text": "DEFEAT!",
             "color": "red"
         }
     },
@@ -183,9 +183,13 @@
             "volume": 0.7
         },
         "effects": {
-            "pew": "pew",
-            "pop": "pop",
-            "jump": "jump",
+            "jump": 1,
+            "guard": 4,
+            "parry": 6,
+            "player_damage" : 4,
+            "player_dash": 5,
+            "explode" : 3,
+            "projectile" : 9,
             "volume": 0.8
         }
     },
