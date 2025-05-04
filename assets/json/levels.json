@@ -30,36 +30,6 @@
         }
       ],
       "platforms": [
-        {
-          "origin": {
-            "x": 20.0,
-            "y": 6.0
-          },
-          "size": {
-            "width": 8.0,
-            "height": 1
-          }
-        },
-        {
-          "origin": {
-            "x": 40.0,
-            "y": 6.0
-          },
-          "size": {
-            "width": 8.0,
-            "height": 1
-          }
-        },
-        {
-          "origin": {
-            "x": 30.0,
-            "y": 11.0
-          },
-          "size": {
-            "width": 8.0,
-            "height": 1
-          }
-        }
       ],
       "waves": [
         {
@@ -127,7 +97,7 @@
           {
             "origin": {
               "x": 20.0,
-              "y": 6.0
+              "y": 7.1
             },
             "size": {
               "width": 8.0,
@@ -137,7 +107,7 @@
           {
             "origin": {
               "x": 40.0,
-              "y": 6.0
+              "y": 7.1
             },
             "size": {
               "width": 8.0,
@@ -201,7 +171,7 @@
           {
             "origin": {
               "x": 20.0,
-              "y": 6.0
+              "y": 7.1
             },
             "size": {
               "width": 8.0,
@@ -211,17 +181,7 @@
           {
             "origin": {
               "x": 40.0,
-              "y": 6.0
-            },
-            "size": {
-              "width": 8.0,
-              "height": 1
-            }
-          },
-          {
-            "origin": {
-              "x": 30.0,
-              "y": 11.0
+              "y": 7.1
             },
             "size": {
               "width": 8.0,
@@ -229,16 +189,48 @@
             }
           }
         ],
-          "waves": [
-              {
-                  "spawn_intervals": [
-                      3
-                  ],
-                  "enemies": [
-                      "boss_2"
-                  ]
-              }
-          ]
+        "waves": [
+            {
+                "spawn_intervals": [
+                    3,
+                    3,
+                    7,
+                    3,
+                    3,
+                    3
+                ],
+                "enemies": [
+                    "minion_1B",
+                    "minion_1B",
+                    "minion_1A",
+                    "minion_1A",
+                    "minion_2A",
+                    "minion_2A"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3,
+                    3,
+                    3
+                ],
+                "enemies": [
+                    "boss_1",
+                    "minion_1B",
+                    "minion_1A"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3,
+                    3
+                ],
+                "enemies": [
+                    "boss_1",
+                    "boss_2"
+                ]
+            }
+        ]
       }
   ]
 }
