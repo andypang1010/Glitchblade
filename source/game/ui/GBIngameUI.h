@@ -55,11 +55,11 @@ protected:
     std::vector<std::shared_ptr<cugl::scene2::PolygonNode>> _hpHalfSegments;
     
     // Combo meter UI
-    std::shared_ptr<cugl::scene2::PolygonNode> _comboBarBG;  // 背景条（灰色）
-    std::shared_ptr<cugl::scene2::PolygonNode> _comboBarFG;  // 前景条（绿色，随连击值变化）
+    std::shared_ptr<cugl::scene2::PolygonNode> _comboBarBG;
+    std::shared_ptr<cugl::scene2::PolygonNode> _comboBarFG;
 
-    float _comboValue = 0.0f;  // 当前连击值，0~100
-    float _comboMax = 100.0f;  // 最大值（固定为100）
+    float _comboValue = 0.0f;
+    float _comboMax = 100.0f;
    
     // HUD statistics
     std::shared_ptr<cugl::scene2::Label> _hudTimeNum;
