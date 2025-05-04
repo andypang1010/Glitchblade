@@ -379,6 +379,7 @@ void PlayerModel::playAnimation(std::shared_ptr<scene2::SpriteNode> sprite) {
 bool PlayerModel::playAnimationOnce(std::shared_ptr<scene2::SpriteNode> sprite) {
     if (!sprite->isVisible()) {
         sprite->setFrame(0);
+        return true;
     }
     
     else {
@@ -499,15 +500,15 @@ void PlayerModel::updateAnimation()
     }
     
     else if (_landingDash){
+        
         // (if finished last frame of landing animation)
         if (playAnimationOnce(_dashDownEndSprite)){
             _landingDash = false;
-        };
+        }
     }
 
     else if (isJumpBegin()) {
         setOnlyVisible(_jumpUpSprite);
-
         frameCounter = 0;
         _jumpUpSprite->setFrame(0);
     }
