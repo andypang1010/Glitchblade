@@ -86,7 +86,7 @@ void Minion1AModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions
     // TODO: init constants on construction
     _closeDistance = 12.0f;
     _farDistance = 18.0f;
-    _maxSpeed = 7.0f;
+    _maxSpeed = 5.0f;
 }
 #pragma mark -
 #pragma mark Physics Methods

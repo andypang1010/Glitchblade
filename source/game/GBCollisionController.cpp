@@ -162,7 +162,7 @@ void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
         }
 
         else {
-            _player->incrementComboCounter();
+            _player->incrementComboCounterByAttack();
         }
 
         _player->setDashRem(0);
@@ -195,7 +195,7 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
             AudioHelper::playSfx("parry");
             if (!_player->_isNextAttackEnhanced)
             {
-                _player->incrementComboCounter();
+                _player->incrementComboCounterByParry();
             }
 
 			_player->_parryCounter++;
@@ -238,7 +238,7 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
 
                 if (!_player->_isNextAttackEnhanced)
                 {
-                    _player->incrementComboCounter();
+                    _player->incrementComboCounterByParry();
                 }
 
                 _player->_parryCounter++;

@@ -325,8 +325,13 @@ public:
         _overloadVFXSprite->setFrame(0);
         
     }
-    void incrementComboCounter() {
-        _comboMeter = std::min(_comboMeter + 20, 100.0f);
+    void incrementComboCounterByAttack() {
+        _comboMeter = std::min(_comboMeter + 17, 100.0f);
+        _lastComboElapsedTime = 0;
+    }
+
+    void incrementComboCounterByParry() {
+        _comboMeter = std::min(_comboMeter + 34, 100.0f);
         _lastComboElapsedTime = 0;
     }
 
