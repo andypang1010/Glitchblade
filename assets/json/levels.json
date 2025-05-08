@@ -114,11 +114,26 @@
         "waves": [
             {
                 "spawn_intervals": [
-                    3, 3, 7
+                    3
+                ],
+                "enemies": [
+                    "minion_2A"
+                ]
+            },
+            {
+              "spawn_intervals": [
+                    3, 0
                 ],
                 "enemies": [
                     "minion_2A",
-                    "minion_2A",
+                    "minion_2A"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3
+                ],
+                "enemies": [
                     "boss_2"
                 ]
             }

@@ -66,13 +66,13 @@
             "force": 45
         },
         "dash": {
-            "cooldown": 45,
+            "cooldown": 35,
             "duration": 20,
-            "speed": 35
+            "speed": 30
         },
         "knockback": {
-            "force": 15,
-            "duration": 20
+            "force": 25,
+            "duration": 30
         },
         "guard": {
             "cooldown": 30,
