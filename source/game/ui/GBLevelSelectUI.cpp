@@ -98,8 +98,9 @@ void LevelSelectUI::setHighestPlayable(int highestPlayableLevel) {
     std::vector<std::shared_ptr< cugl::scene2::Button>> levelButtons = { _level1Button, _level2Button, _level3Button };
     std::vector<std::function<void()>> levelCallbacks = { _level1Callback, _level2Callback, _level3Callback };
     
-    for (int i = 0; i < highestPlayableLevel; i++) {
+    for (int i = 0; i < highestPlayableLevel && i < levelButtons.size(); i++) {
         if (levelButtons[i]) {
+            levelButtons[i]->setColor(Color4(255, 255, 255, 255));
             levelButtons[i]->addListener([this, levelCallbacks, i](const std::string& name, bool down) {
                 if (down && levelCallbacks[i]) {
                     CULog("Pressed level %d button", i);

@@ -274,6 +274,9 @@ int GlitchbladeApp::loadProgress() {
     std::string saveDir = cugl::Application::getSaveDirectory();
     std::string saveFile = saveDir + "levelProgress.dat";
 
+    CULog(saveDir.c_str());
+    CULog(saveFile.c_str());
+
     int expectedNumOfLevels = 20;
 
     cugl::BinaryReader reader;
