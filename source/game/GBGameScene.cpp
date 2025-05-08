@@ -308,12 +308,13 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
 void GameScene::setComplete(bool value) {
     if (_failed)
         return; // Do not win if lost
+
     bool change = _complete != value;
     _complete = value;
     if (value && change) {
 
         if (_levelCompleteCallback != nullptr) {
-            _levelCompleteCallback();
+            _levelCompleteCallback(); // Let GBApp know to save the progress
         }
 
         float timeSpent = _levelController->getTimeSpentInLevel();
@@ -336,7 +337,7 @@ void GameScene::setComplete(bool value) {
 }
 
 void GameScene::setLevelCompleteCallback(const std::function<void()>& cb) {
-    cb();
+    _levelCompleteCallback = cb;
 }
 
 /**

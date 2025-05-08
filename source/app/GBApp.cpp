@@ -163,7 +163,16 @@ void GlitchbladeApp::initGameScene(int levelNum) {
 }
 
 void GlitchbladeApp::onLevelCompleted(int levelNum) {
+    CULog("On level %d completed; saving progress", levelNum);
 
+    size_t index = static_cast<size_t>(levelNum - 1);
+    if (index < _levelComplete.size()) {
+        _levelComplete[index] = true;
+        saveProgress();
+    }
+    else {
+        CULogError("Invalid levelNum %d in onLevelCompleted", levelNum);
+    }
 }
 
 void GlitchbladeApp::initLevelSelectScene() {
@@ -259,13 +268,9 @@ void GlitchbladeApp::postUpdate(float dt) {
 /**
  * Load existing game save
  */
-
 void GlitchbladeApp::loadProgress() {
     std::string saveDir = cugl::Application::getSaveDirectory();
     std::string saveFile = saveDir + "levelProgress.dat";
-
-    CULog(("saveDir IS: " + saveDir).c_str());
-    CULog(("saveFile IS: " + saveFile).c_str());
 
     int expectedNumOfLevels = 20;
 
@@ -286,7 +291,19 @@ void GlitchbladeApp::loadProgress() {
     else {
         _levelComplete.assign(expectedNumOfLevels, false);
     }
+
+    bool anyDone = false;
+    for (size_t i = 0; i < _levelComplete.size(); ++i) {
+        if (_levelComplete[i]) {
+            // CULog("Level %zu is completed", i + 1);
+            anyDone = true;
+        }
+    }
+    /*if (!anyDone) {
+        CULog("No levels completed yet");
+    }*/
 }
+
 
 void GlitchbladeApp::saveProgress() {
     std::string saveDir = cugl::Application::getSaveDirectory();
