@@ -146,7 +146,7 @@ public:
     /**
      * The method to init the LevelSelectScene.
     */
-    void initLevelSelectScene();
+    void initLevelSelectScene(int highestPlayableLevel);
 
     /**
      * The method called to indicate the start of a deterministic loop.
@@ -221,7 +221,7 @@ public:
     /**
      * Loads progress from the savefile
     */
-    void loadProgress();
+    int loadProgress();
 
     /**
      * Saves progress to the savefile

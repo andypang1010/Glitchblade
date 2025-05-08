@@ -65,33 +65,53 @@ void LevelSelectUI::setupMenu(std::shared_ptr<cugl::scene2::SceneNode>& menu)
     _level2Button = std::dynamic_pointer_cast<cugl::scene2::Button>(menu->getChildByName("selector1_2_1"));
     _level3Button = std::dynamic_pointer_cast<cugl::scene2::Button>(menu->getChildByName("selector1_3_1"));
 
-    // Add listeners TODO: probably make this a loop in the future
+    // Old way of setting up buttons
+    //if (_level1Button) {
+    //    _level1Button->addListener([this](const std::string& name, bool down) {
+    //        if (down && _level1Callback) {
+    //            CULog("Pressed level 1 button");
+    //            _level1Callback();
+    //        }
+    //    });
+    //}
 
-    if (_level1Button) {
-        _level1Button->addListener([this](const std::string& name, bool down) {
-            if (down && _level1Callback) {
-                CULog("Pressed level 1 button");
-                _level1Callback();
-            }
-        });
+    //if (_level2Button) {
+    //    _level2Button->addListener([this](const std::string& name, bool down) {
+    //        if (down && _level2Callback) {
+    //            CULog("Pressed level 2 button");
+    //            _level2Callback();
+    //        }
+    //    });
+    //}
+
+    //if (_level3Button) {
+    //    _level3Button->addListener([this](const std::string& name, bool down) {
+    //        if (down && _level3Callback) {
+    //            CULog("Pressed level 3 button");
+    //            _level3Callback();
+    //        }
+    //    });
+    //}
+}
+
+void LevelSelectUI::setHighestPlayable(int highestPlayableLevel) {
+    std::vector<std::shared_ptr< cugl::scene2::Button>> levelButtons = { _level1Button, _level2Button, _level3Button };
+    std::vector<std::function<void()>> levelCallbacks = { _level1Callback, _level2Callback, _level3Callback };
+    
+    for (int i = 0; i < highestPlayableLevel; i++) {
+        if (levelButtons[i]) {
+            levelButtons[i]->addListener([this, levelCallbacks, i](const std::string& name, bool down) {
+                if (down && levelCallbacks[i]) {
+                    CULog("Pressed level %d button", i);
+                    levelCallbacks[i]();
+                }
+            });
+        }
     }
 
-    if (_level2Button) {
-        _level2Button->addListener([this](const std::string& name, bool down) {
-            if (down && _level2Callback) {
-                CULog("Pressed level 2 button");
-                _level2Callback();
-            }
-        });
-    }
-
-    if (_level3Button) {
-        _level3Button->addListener([this](const std::string& name, bool down) {
-            if (down && _level3Callback) {
-                CULog("Pressed level 3 button");
-                _level3Callback();
-            }
-        });
+    for (int i = highestPlayableLevel; i < levelButtons.size(); i++) {
+        levelButtons[i]->setColor(Color4(80, 80, 80, 255));
+        levelButtons[i]->deactivate();
     }
 }
 

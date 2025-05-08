@@ -9,7 +9,7 @@ void LevelSelectScene::dispose()
 	_ui = nullptr;
 }
 
-bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets)
+bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int highestPlayableLevel)
 {
     if (assets == nullptr) {
         return false;
@@ -43,6 +43,7 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets)
         addChild(_ui);
         _ui->setVisible(true);
         _ui->showMenu(true);
+        _ui->setHighestPlayable(highestPlayableLevel);
     }
 
     return true;

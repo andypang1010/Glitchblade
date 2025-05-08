@@ -145,9 +145,9 @@ void GlitchbladeApp::update(float dt) {
     } else if (!_loaded) {
         _loading.dispose(); // Disables the input listeners in this mode
         _loaded = true;
-        loadProgress();
+        int highestPlayableLevel = loadProgress();
         setDeterministic(true);
-        initLevelSelectScene();
+        initLevelSelectScene(highestPlayableLevel);
     }
 }
 
@@ -175,10 +175,11 @@ void GlitchbladeApp::onLevelCompleted(int levelNum) {
     }
 }
 
-void GlitchbladeApp::initLevelSelectScene() {
+void GlitchbladeApp::initLevelSelectScene(int highestPlayableLevel) {
+    CULog("TRYING TO INIT WITH HIGHEST OF: %d", highestPlayableLevel);
     _gameplay = nullptr;
     _levelSelect = std::make_shared<LevelSelectScene>();
-    _levelSelect->init(_assets);
+    _levelSelect->init(_assets, highestPlayableLevel);
     _levelSelect->setSpriteBatch(_batch);
 }
 
@@ -267,8 +268,9 @@ void GlitchbladeApp::postUpdate(float dt) {
 
 /**
  * Load existing game save
+ * @return  The highest playable level
  */
-void GlitchbladeApp::loadProgress() {
+int GlitchbladeApp::loadProgress() {
     std::string saveDir = cugl::Application::getSaveDirectory();
     std::string saveFile = saveDir + "levelProgress.dat";
 
@@ -292,16 +294,13 @@ void GlitchbladeApp::loadProgress() {
         _levelComplete.assign(expectedNumOfLevels, false);
     }
 
-    bool anyDone = false;
+    int highestPlayable = 1;
     for (size_t i = 0; i < _levelComplete.size(); ++i) {
         if (_levelComplete[i]) {
-            // CULog("Level %zu is completed", i + 1);
-            anyDone = true;
+            highestPlayable = i + 2;
         }
     }
-    /*if (!anyDone) {
-        CULog("No levels completed yet");
-    }*/
+    return highestPlayable;
 }
 
 
@@ -344,7 +343,7 @@ void GlitchbladeApp::draw() {
             _gameplay->render();
 
             if (_gameplay->doQuit()) {
-                initLevelSelectScene();
+                initLevelSelectScene(loadProgress());
             }
             else if (_gameplay->continueNextLevel()) {
                 _currentScene += 1;
@@ -352,7 +351,7 @@ void GlitchbladeApp::draw() {
                     initGameScene(_currentScene);
                 } else {
                     CULog("Did all levels!");
-                    initLevelSelectScene();
+                    initLevelSelectScene(loadProgress());
                 }
             }
         }

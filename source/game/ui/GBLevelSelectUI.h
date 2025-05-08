@@ -48,4 +48,6 @@ public:
     void setLevel3Callback(const std::function<void()>& callback) { _level3Callback = callback; }
 
     void showMenu(bool visible);
+
+    void setHighestPlayable(int highestPlayableLevel);
 };

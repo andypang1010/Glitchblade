@@ -43,7 +43,7 @@ public:
      */
     void dispose();
 
-    bool init(const std::shared_ptr<AssetManager>& assets);
+    bool init(const std::shared_ptr<AssetManager>& assets, int highestPlayableLevel);
 
 #pragma mark -
 #pragma mark State Info

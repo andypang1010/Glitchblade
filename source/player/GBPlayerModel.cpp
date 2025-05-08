@@ -584,7 +584,7 @@ void PlayerModel::setDebug(){
 void PlayerModel::setConstants(){
 
     // Health
-    _maxhp = 1000; // _playerJSON->getInt("max_hp"); // TODO: change this after testing
+    _maxhp = 100;
     // Animation
     _animation_update_frame = _playerJSON->get("animation")->getInt("update_frame");
 
