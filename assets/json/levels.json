@@ -47,24 +47,6 @@
           "enemies": [
             "minion_1B"
           ]
-        },
-        {
-          "spawn_intervals": [
-            3,
-            5
-          ],
-          "enemies": [
-            "minion_1B",
-            "minion_1A"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            3
-          ],
-          "enemies": [
-            "boss_1"
-          ]
         }
       ]
     },
