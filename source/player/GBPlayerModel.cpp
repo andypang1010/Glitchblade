@@ -652,12 +652,12 @@ void PlayerModel::setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite) {
 
 #pragma mark static constants
 int PlayerModel::_animation_update_frame = 4;
-float PlayerModel::_maxspeed = 5.0f;
+float PlayerModel::_maxspeed = 7.0f;
 float PlayerModel::_maxhp = 100.0f;
 int PlayerModel::_jump_cooldown = 5;
 int PlayerModel::_shoot_cooldown = 20;
-int PlayerModel::_guard_cooldown = 30;
-int PlayerModel::_dash_cooldown = 45;
+int PlayerModel::_guard_cooldown = 15;
+int PlayerModel::_dash_cooldown = 15;
 
 int PlayerModel::_guard_duration = 30;
 int PlayerModel::_parry_duration = 5;

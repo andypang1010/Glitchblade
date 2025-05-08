@@ -35,17 +35,17 @@ void Minion2AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     setSceneNode(_node);
     // need new idle animation for this minion
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2A_idle"), 5, 2, 10);
-    _idleSprite->setScale(0.4f);
+    _idleSprite->setScale(0.3f);
     _idleSprite->setPosition(0, -30);
     _idleSprite->setName("idle");
 
     _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2A_shoot"), 2, 3, 6);
-    _shootSprite->setScale(0.4f);
+    _shootSprite->setScale(0.3f);
     _shootSprite->setPosition(0, -30);
 	_shootSprite->setName("shoot");
 
     _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2A_dead"), 10, 3, 30);
-	_deadSprite->setScale(0.4f);
+	_deadSprite->setScale(0.3f);
     _deadSprite->setPosition(0, -30);
 	_deadSprite->setName("dead");
 

@@ -34,24 +34,28 @@
       "waves": [
         {
           "spawn_intervals": [
-            3,
-            7
+            3
           ],
           "enemies": [
-            "minion_1A",
+            "minion_1A"
+          ]
+        },
+        {
+          "spawn_intervals": [
+            3
+          ],
+          "enemies": [
             "minion_1B"
           ]
         },
         {
           "spawn_intervals": [
             3,
-            7,
-            7
+            5
           ],
           "enemies": [
             "minion_1B",
-            "minion_1A",
-            "minion_1B"
+            "minion_1A"
           ]
         },
         {
@@ -171,7 +175,7 @@
           {
             "origin": {
               "x": 20.0,
-              "y": 7.1
+              "y": 4
             },
             "size": {
               "width": 8.0,

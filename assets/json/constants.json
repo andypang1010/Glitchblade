@@ -56,7 +56,7 @@
         },
         "movement": {
             "damp_force": 30,
-            "max_speed": 5
+            "max_speed": 8
         },
         "strafe": {
             "force": 50
@@ -68,7 +68,7 @@
         "dash": {
             "cooldown": 45,
             "duration": 20,
-            "speed": 30
+            "speed": 35
         },
         "knockback": {
             "force": 15,

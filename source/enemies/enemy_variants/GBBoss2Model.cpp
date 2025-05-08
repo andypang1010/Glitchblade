@@ -263,9 +263,15 @@ void Boss2Model::nextAction() {
     AIMove();
     if (_moveDuration <= 0 && !isStunned() && !_isShootingLaser && !_isShortFiring && !_isHeadFiring && !_isTeleportStarting && !_isTeleportEnding) {
         if (isTargetClose()) {
-            if (r % 2 == 0) {
+            if (r % 4 == 0) {
                 shortFire(1);
             }
+			else if (r % 4 == 1) {
+				laser();
+			}
+			else if (r % 4 == 2) {
+				headFire(1);
+			}
             else{
                 teleport();
             }
@@ -275,7 +281,7 @@ void Boss2Model::nextAction() {
                 teleport();
             }
             else if (r % 3 == 1){
-                shortFire(3);
+                laser();
             }
             else {
 				headFire(3);
