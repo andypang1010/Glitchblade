@@ -295,19 +295,11 @@ void LevelController::preUpdate(float dt)
     }
 
 	_playerController->preUpdate(dt);
-	CULog("PLAYER SCENE NODE SIZE: %s", player->getSceneNode()->getContentSize().toString().c_str());
 
     for (auto platform : _platforms) {
         platform.second->setPosition(platform.first->getPosition() * _constantsJSON->get("scene")->getFloat("scale"));
 		platform.second->setScale(1);
 		platform.second->setAnchor(Vec2::ANCHOR_CENTER);
-        //platform.second->getChild(0)->setPosition(Vec2::ZERO);
-        //CULog("PLATFORM OBSTACLE POSITION: %s", platform.first->getPosition().toString().c_str());
-		CULog("PLATFORM SCENE NODE POSITION: %s", platform.second->getPosition().toString().c_str());
-		CULog("PLATFORM SCENE NODE SIZE: %s", platform.second->getContentSize().toString().c_str());
-		//CULog("PLATFORM CHILD NODE POSITION: %s", platform.second->getChild(0)->getPosition().toString().c_str());
-		//CULog("PLATFORM CHILD NODE SIZE: %s", platform.second->getChild(0)->getContentSize().toString().c_str());
-        CULog("");
     }
 }
 
