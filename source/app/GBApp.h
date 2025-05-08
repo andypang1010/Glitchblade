@@ -40,6 +40,9 @@ protected:
     /** Whether or not we have finished loading all assets */
     bool _loaded;
 
+    /** Bool representing completed levels */
+    std::vector<bool> _levelComplete;
+
     /** The current scene being played */
     int _currentScene = 0;
 
@@ -136,7 +139,9 @@ public:
     /**
      * The method to init the GameScene with the given level.
     */
-    void initGameScene(std::string levelName);
+    void initGameScene(int levelNum);
+
+    void onLevelCompleted(int levelNum);
 
     /**
      * The method to init the LevelSelectScene.
@@ -212,6 +217,16 @@ public:
      * @param dt    The amount of time (in seconds) since the last frame
      */
     virtual void postUpdate(float dt) override;
+
+    /**
+     * Loads progress from the savefile
+    */
+    void loadProgress();
+
+    /**
+     * Saves progress to the savefile
+    */
+    void saveProgress();
 
     /**
      * The method called to draw the application to the screen.

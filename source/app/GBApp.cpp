@@ -145,17 +145,25 @@ void GlitchbladeApp::update(float dt) {
     } else if (!_loaded) {
         _loading.dispose(); // Disables the input listeners in this mode
         _loaded = true;
+        loadProgress();
         setDeterministic(true);
         initLevelSelectScene();
     }
 }
 
 // Create and init _gameplay
-void GlitchbladeApp::initGameScene(std::string levelName) {
+void GlitchbladeApp::initGameScene(int levelNum) {
     _levelSelect = nullptr;
     _gameplay = std::make_shared<GameScene>();
-    _gameplay->init(_assets, levelName);
+    _gameplay->init(_assets, levelNum);
+    _gameplay->setLevelCompleteCallback([this, levelNum]() {
+        this->onLevelCompleted(levelNum);
+        });
     _gameplay->setSpriteBatch(_batch);
+}
+
+void GlitchbladeApp::onLevelCompleted(int levelNum) {
+
 }
 
 void GlitchbladeApp::initLevelSelectScene() {
@@ -249,6 +257,59 @@ void GlitchbladeApp::postUpdate(float dt) {
 }
 
 /**
+ * Load existing game save
+ */
+
+void GlitchbladeApp::loadProgress() {
+    std::string saveDir = cugl::Application::getSaveDirectory();
+    std::string saveFile = saveDir + "levelProgress.dat";
+
+    CULog(("saveDir IS: " + saveDir).c_str());
+    CULog(("saveFile IS: " + saveFile).c_str());
+
+    int expectedNumOfLevels = 20;
+
+    cugl::BinaryReader reader;
+    if (reader.init(saveFile)) {
+        if (reader.ready(sizeof(Uint32))) {
+            Uint32 count = reader.readUint32();
+            _levelComplete.assign(count, false);
+            for (Uint32 i = 0; i < count && reader.ready(); ++i) {
+                _levelComplete[i] = (reader.readByte() != 0);
+            }
+        }
+        else {
+            _levelComplete.assign(expectedNumOfLevels, false);
+        }
+        reader.close();
+    }
+    else {
+        _levelComplete.assign(expectedNumOfLevels, false);
+    }
+}
+
+void GlitchbladeApp::saveProgress() {
+    std::string saveDir = cugl::Application::getSaveDirectory();
+    std::string saveFile = saveDir + "levelProgress.dat";
+
+    cugl::BinaryWriter writer;
+    if (!writer.init(saveFile)) {
+        CULogError("Unable to open save file for writing: %s", saveFile.c_str());
+        return;
+    }
+
+    Uint32 count = static_cast<Uint32>(_levelComplete.size());
+    writer.writeUint32(count);
+
+    for (bool done : _levelComplete) {
+        writer.writeUint8(done ? 1 : 0);
+    }
+
+    writer.flush();
+    writer.close();
+}
+
+/**
  * The method called to draw the application to the screen.
  *
  * This is your core loop and should be replaced with your custom implementation.
@@ -271,7 +332,7 @@ void GlitchbladeApp::draw() {
             else if (_gameplay->continueNextLevel()) {
                 _currentScene += 1;
                 if (_currentScene <= MAX_SCENE) {
-                    initGameScene("Level " + std::to_string(_currentScene));
+                    initGameScene(_currentScene);
                 } else {
                     CULog("Did all levels!");
                     initLevelSelectScene();
@@ -283,7 +344,7 @@ void GlitchbladeApp::draw() {
             int scene_num = _levelSelect->sceneToLoad();
             if (scene_num != 0) {
                 _currentScene = scene_num;
-                initGameScene("Level " + std::to_string(scene_num));
+                initGameScene(scene_num);
             }
         }
     }

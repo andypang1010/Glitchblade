@@ -133,6 +133,7 @@ public:
             return it->second;
         }
         else {
+            CULog(("Level NAME IS " + name).c_str());
             throw std::runtime_error("The level specified: " + name + " does not exist!");
         }
     }

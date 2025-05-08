@@ -112,6 +112,12 @@ protected:
     bool _doQuit = false;
     bool _continueNextLevel = false;
 
+    /** The current level number */
+    int _levelNum;
+
+    /** The callback for when a level is completed (tells GBApp to save progress) */
+    std::function<void()> _levelCompleteCallback;
+
 #pragma mark Internal Object Management
     /**
      * Lays out the game geography.
@@ -166,7 +172,7 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<AssetManager>& assets, std::string levelName);
+    bool init(const std::shared_ptr<AssetManager>& assets, int levelNum);
     
     void populateUI(const std::shared_ptr<cugl::AssetManager>& assets);
     
@@ -208,6 +214,11 @@ public:
      * @param value whether the level is completed.
      */
     void setComplete(bool value);
+
+    /**
+     * Sets the callback that tells GBApp to save the progress
+    */
+    void setLevelCompleteCallback(const std::function<void()>& cb);
 
     /**
     * Returns true if the level is failed.

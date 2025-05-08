@@ -81,10 +81,13 @@ _input(nullptr)
  * @param assets    The (loaded) assets for this game mode
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string levelName) {
+bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) {
     if (assets == nullptr) {
         return false;
     }
+
+    _levelNum = levelNum;
+    std::string levelName = "Level " + std::to_string(levelNum);
     _assets = assets;
     // prepare constants
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
@@ -109,9 +112,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
     boundsJ->get("size")->get("width")->set(bounds.size.width);
     boundsJ->get("size")->get("height")->set(bounds.size.height);
-    
-
-    
     
     // Create the world and attach the listeners.
     Rect worldSize = Rect(0, 0, sceneJ->getFloat("world_width"), sceneJ->getFloat("world_height"));
@@ -311,6 +311,11 @@ void GameScene::setComplete(bool value) {
     bool change = _complete != value;
     _complete = value;
     if (value && change) {
+
+        if (_levelCompleteCallback != nullptr) {
+            _levelCompleteCallback();
+        }
+
         float timeSpent = _levelController->getTimeSpentInLevel();
         int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
         int spawnedCount = _levelController->getSpawnedInWave();
@@ -328,6 +333,10 @@ void GameScene::setComplete(bool value) {
         setPaused(false);
         _countdown = -1;
     }
+}
+
+void GameScene::setLevelCompleteCallback(const std::function<void()>& cb) {
+    cb();
 }
 
 /**
