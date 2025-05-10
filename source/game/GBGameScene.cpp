@@ -101,13 +101,18 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     AudioHelper::init(fxJ, assets);
     
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
+    
+    // Uncomment this part to rollback.
 //    if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
 //        return false;
 //    }
-// initWithHint will scale the scene based on height by default, which usually is not correct.
+    // Uncomment this part to rollback. // initWithHint will scale the scene based on height by default, which usually is not correct.
+    
+    // Comment this part to rollback.
     if (!Scene2::init()) {
         return false;
     }
+    // Comment this part to rollback.
     
     _offset = Vec2((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
     Rect bounds = getBounds();
