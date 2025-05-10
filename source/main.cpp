@@ -64,7 +64,7 @@ int main(int argc, char * argv[]) {
     app.setOrganization("Heptabyte");
     app.setHighDPI(true);
 
-    //app.setFullscreen(true);
+    //app.setFullscreen(true); //Things will become REALLY funny!
     //app.setDisplaySize(1248, 576);
     app.setDisplaySize(1366, 824); //Try different ratio
     app.setFPS(60.0f);
