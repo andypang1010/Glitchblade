@@ -54,6 +54,19 @@ bool LevelSelectUI::init(const std::shared_ptr<cugl::AssetManager>& assets)
     setupMenu(menu);
     showMenu(true);
     _screenOffset = getPosition();
+    
+    setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+    setPosition(Vec2::ZERO);
+
+    float scaleX = Application::get()->getDisplaySize().width / 1248.0f;
+    float scaleY = Application::get()->getDisplaySize().height / 576.0f;
+    float scale = std::min(scaleX, scaleY);
+
+    this->setScale(scale);
+    float offsetX = (Application::get()->getDisplaySize().width - 1248 * scale) / 2.0f;
+    float offsetY = (Application::get()->getDisplaySize().height - 576 * scale) / 2.0f;
+    this->setPosition(Vec2(offsetX, offsetY));
+
 
     Application::get()->setClearColor(Color4f::BLACK);
     return true;

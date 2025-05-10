@@ -101,7 +101,11 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     AudioHelper::init(fxJ, assets);
     
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
-    if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
+//    if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
+//        return false;
+//    }
+// initWithHint will scale the scene based on height by default, which usually is not correct.
+    if (!Scene2::init()) {
         return false;
     }
     
@@ -123,7 +127,12 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     // IMPORTANT: SCALING MUST BE UNIFORM
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
-    _scale = _size.width == sceneJ->getInt("width") ? _size.width / screenSize.size.width : _size.height / screenSize.size.height;
+    //_scale = _size.width == sceneJ->getInt("width") ? _size.width / screenSize.size.width : _size.height / screenSize.size.height;
+    // use the smaller scale to ensure the whole scene is in the screen.
+    float scaleX = _size.width / screenSize.size.width;
+    float scaleY = _size.height / screenSize.size.height;
+    _scale = std::min(scaleX, scaleY);
+
 
     _worldPixelWidth = worldSize.size.width * _scale;
     sceneJ->get("scale")->set(_scale);
@@ -143,6 +152,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     _worldnode = scene2::SceneNode::alloc();
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
+//    _worldnode->setScale(_scale); //Cannot run properly with this line added. Therefore, background and phyisics cannot scale properly.
     
     _camera = getCamera();
     _defCamPos = _camera->getPosition();
@@ -511,11 +521,13 @@ void GameScene::fixedUpdate(float step) {
     if (_ui != nullptr && _camera != nullptr) {
         Vec2 camPos = _camera->getPosition();
         Size viewSize = _camera->getViewport().size;
-
+        
+        float offsetX = (viewSize.width - 1248 * _ui->getScaleX()) / 2.0f;
+        float offsetY = (viewSize.height - 576 * _ui->getScaleY()) / 2.0f;
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
+        _ui->setPosition(base + Vec2(offsetX, offsetY));
         _ui->setTime(_levelController->getTimeSpentInLevel());
         _ui->setProgression(_levelController->getSpawnedInWave(),_levelController->getTotalInWave());
-        _ui->setPosition(base + _ui->_screenOffset);
     }
     
     setComplete(_levelController->isLevelWon());

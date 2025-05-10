@@ -25,7 +25,11 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
     }
 
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
-    if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
+//    if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
+//        return false;
+//    }
+// initWithHint will scale the scene based on height by default, which usually is not correct.
+    if (!Scene2::init()) {
         return false;
     }
 
