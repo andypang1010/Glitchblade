@@ -207,13 +207,9 @@ void PlayerController::fixedUpdate(float timestep)
 		_player->_comboMeter = 0;
     }
 
-    //_player->getSceneNode()->setColor(_player->_isNextAttackEnhanced ? Color4::YELLOW : Color4::WHITE);
-
-
-  //  if (_player->_parryCounter == 5) {
-		//_player->_parryCounter = 0;
-  //      _player->setHP(std::min(_player->getHP() + 20.0f, 100.0f));
-  //  }
+    if (_player->isGrounded()) {
+		CULog("Player is grounded");
+    }
 }
 
 #pragma mark postUpdate

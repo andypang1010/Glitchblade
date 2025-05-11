@@ -114,7 +114,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     }
     // Comment this part to rollback.
     
-    _offset = Vec2((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
+    _offset = Vec2((_size.width - Application::get()->getDisplayWidth()) / 2.0f, (_size.height - Application::get()->getDisplayHeight()) / 2.0f);
     Rect bounds = getBounds();
     std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
     boundsJ->get("origin")->get("x")->set(bounds.origin.x);
