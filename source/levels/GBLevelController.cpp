@@ -298,7 +298,7 @@ void LevelController::preUpdate(float dt)
 
     for (auto platform : _platforms) {
         platform.second->setPosition(platform.first->getPosition() * _constantsJSON->get("scene")->getFloat("scale"));
-		platform.second->setScale(1);
+		platform.second->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 		platform.second->setAnchor(Vec2::ANCHOR_CENTER);
     }
 }
