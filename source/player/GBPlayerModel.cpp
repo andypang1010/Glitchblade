@@ -298,6 +298,32 @@ void PlayerModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getGroundSensorName());
     _groundSensorFixture = _body->CreateFixture(&sensorDef);
+    
+    // aoe fixture
+    // adding 0.1 is to prevent bouncing back up and double hitting the enemy
+    b2Vec2 aoe_corners[4];
+    aoe_corners[0].x = - _aoe_radius;
+    aoe_corners[0].y = - getHeight() / 2.0 + 0.1;
+    aoe_corners[1].x = - _aoe_radius;
+    aoe_corners[1].y =  (- getHeight() / 2.0) + 1;
+    aoe_corners[2].x = _aoe_radius;
+    aoe_corners[2].y = - getHeight() / 2.0 + 0.1;
+    aoe_corners[3].x = _aoe_radius;
+    aoe_corners[3].y =  (- getHeight() / 2.0) + 1;
+    b2PolygonShape aoeShape;
+    aoeShape.Set(aoe_corners, 4);
+    
+    b2FixtureDef aoeDef;
+    aoeDef.isSensor = true;
+    aoeDef.shape = &aoeShape;
+    aoeDef.userData.pointer = reinterpret_cast<uintptr_t>(getAoeSensorName());
+    _aoeSensorFixture = _body->CreateFixture(&aoeDef);
+    // turn of collisions for aoe.
+    b2Filter aoeFilter = _aoeSensorFixture->GetFilterData();
+    aoeFilter.maskBits = 0x000;
+    _aoeSensorFixture->SetFilterData(aoeFilter);
+
+    
 }
 
 /**
@@ -327,6 +353,7 @@ void PlayerModel::dispose() {
     _geometry = nullptr;
     _sceneNode = nullptr;
     _groundSensorNode = nullptr;
+    _aoeSensorNode = nullptr;
     _idleSprite = nullptr;
     _guardSprite = nullptr;
     _walkSprite = nullptr;
@@ -492,6 +519,9 @@ void PlayerModel::updateAnimation()
             frameCounter = 0;
             _dashDownEndSprite->setFrame(0);
             setOnlyVisible(_dashDownEndSprite);
+            // activate the aoe
+            activateAoeFixture();
+
         }
 
         else {
@@ -556,12 +586,15 @@ void PlayerModel::resetDebug() {
     BoxObstacle::resetDebug();
     _debug->setRelativeColor(false);
     _debug->setName("player_debug");
-    if (_groundSensorNode == nullptr){
+    if (_groundSensorNode == nullptr || _aoeSensorNode == nullptr){
         setDebug();
     }
+   
     if (_debug->getChildCount() == 0){
         _groundSensorNode->setColor(Color4::RED);
+        _aoeSensorNode->setColor(Color4::RED);
         _debug->addChild(_groundSensorNode);
+        _debug->addChild(_aoeSensorNode);
     }
     
     // necessary during reset, set debug scene node, since BoxObstacle::resetDebug() doesn't handle it correctly.
@@ -579,6 +612,13 @@ void PlayerModel::setDebug(){
     _groundSensorNode = scene2::WireNode::allocWithTraversal(playerPoly, poly2::Traversal::INTERIOR);
     _groundSensorNode->setRelativeColor(false);
     _groundSensorNode->setPosition(Vec2(_debug->getContentSize().width / 2.0f, 0.0f));
+    
+    Poly2 aoePoly(Rect(-_aoe_radius, 0.0, _aoe_radius * 2, 1.0));
+    _aoeSensorNode = scene2::WireNode::allocWithPoly(aoePoly);
+    _aoeSensorNode->setRelativeColor(false);
+    _aoeSensorNode->setAnchor(Vec2(0.5,0));
+    _aoeSensorNode->setPosition(Vec2(_debug->getContentSize().width /2.0f, 0.0f));
+    _aoeSensorNode->setVisible(false);
 }
 
 void PlayerModel::setConstants(){
@@ -615,6 +655,8 @@ void PlayerModel::setConstants(){
     _name = _playerJSON->getString("name");
     _bodyName = _playerJSON->get("fixture_names")->getString("body");
     _groundSensorName = _playerJSON->get("fixture_names")->getString("ground");
+    _aoeSensorName = _playerJSON->get("fixture_names")->getString("aoe");
+    _aoe_radius = _playerJSON->get("fixtures")->get("aoe")->getFloat("radius");
 
 }
 
@@ -625,6 +667,7 @@ void PlayerModel::reset(){
     }
     //setDebugScene(nullptr);
     _scene = nullptr; // set debug scene to nullptr
+    resetAoeFixture();
     resetAttributes();
     resetSpriteFrames();
 }
@@ -649,6 +692,28 @@ void PlayerModel::setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite) {
     }
 }
 
+/**
+ Remove the aoe fixture from collision detection and set its debug node invisible
+ */
+void PlayerModel::resetAoeFixture(){
+    _aoeSensorNode->setVisible(false);
+    b2Filter aoeFilter = _aoeSensorFixture->GetFilterData();
+    aoeFilter.maskBits = 0x000;
+    _aoeSensorFixture->SetFilterData(aoeFilter);
+}
+
+/**
+ Remove the aoe fixture from collision detection and set its debug node invisible
+ */
+void PlayerModel::activateAoeFixture(){
+    setAoeRem(3);
+    _aoeSensorNode->setVisible(true);
+    b2Filter aoeFilter = _aoeSensorFixture->GetFilterData();
+    aoeFilter.maskBits = 0xFFF;
+    _aoeSensorFixture->SetFilterData(aoeFilter);
+}
+
+
 
 #pragma mark static constants
 int PlayerModel::_animation_update_frame = 4;
@@ -669,5 +734,7 @@ float PlayerModel::_jump_force = 45.0f;
 float PlayerModel::_damp_force = 30.0f;
 float PlayerModel::_dash_force = 30.0f;
 float PlayerModel::_knock_force = 15.0f;
+
+float PlayerModel::_aoe_radius = 8.0f;
 
 

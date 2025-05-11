@@ -62,9 +62,16 @@ void CollisionController::beginContact(b2Contact* contact) {
     } else if (o2->getName() == enemy_name && isPlayerBody(o1, fd1)) {
         playerEnemyCollision(o2);
     }
+    
+    // Aoe-Enemy Collision
+    else if (o1->getName() == enemy_name && isPlayerAoe(o2, fd2)) {
+        aoeEnemyCollision(o1);
+    } else if (o2->getName() == enemy_name && isPlayerAoe(o1, fd1)) {
+        aoeEnemyCollision(o2);
+    }
 
     // Test: player-hitbox collision
-    if (o1->getName() == "hitbox" && isPlayerBody(o2, fd2)) {
+    else if (o1->getName() == "hitbox" && isPlayerBody(o2, fd2)) {
         playerHitboxCollision(o1);
     }
     else if (o2->getName() == "hitbox" && isPlayerBody(o1, fd1)) {
@@ -73,7 +80,7 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 
     // Player-Projectile Collision
-    if (isPlayerBody(o1, fd1) && o2->getName() == proj_name) {
+    else if (isPlayerBody(o1, fd1) && o2->getName() == proj_name) {
         playerProjectileCollision(o2);
     }
     else if (isPlayerBody(o2, fd2) && o1->getName() == proj_name) {
@@ -81,7 +88,7 @@ void CollisionController::beginContact(b2Contact* contact) {
     }
 
     // Projectile-Projectile Collision
-    if (o1->getName() == proj_name && o2->getName() == proj_name) {
+    else if (o1->getName() == proj_name && o2->getName() == proj_name) {
 
         // Destroy if one is fired by player and the other is not
         if (
@@ -94,7 +101,7 @@ void CollisionController::beginContact(b2Contact* contact) {
     }
 
     // Projectile-Environment Collision
-    if (o1->getName() == proj_name && (o2->getName() == ground_name || o2->getName() == wall_name)) {
+    else if (o1->getName() == proj_name && (o2->getName() == ground_name || o2->getName() == wall_name)) {
         _removeProjectile((Projectile*)o1);
     }
     else if (o2->getName() == proj_name && (o1->getName() == ground_name || o1->getName() == wall_name)) {
@@ -102,7 +109,7 @@ void CollisionController::beginContact(b2Contact* contact) {
     }
 
     // Enemy-Projectile Collision
-    if (o1->getName() == enemy_name && o2->getName() == proj_name) {
+    else if (o1->getName() == enemy_name && o2->getName() == proj_name) {
         enemyProjectileCollision(o1, o2);
     }
     else if (o2->getName() == enemy_name && o1->getName() == proj_name) {
@@ -111,7 +118,7 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 
     // Player-Ground Collision
-    if ((_player->getGroundSensorName() == fd2 && _player.get() != o1) ||
+    else if ((_player->getGroundSensorName() == fd2 && _player.get() != o1) ||
         (_player->getGroundSensorName() == fd1 && _player.get() != o2)) {
         _player->setGrounded(true);
 
@@ -222,6 +229,25 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
     }
 }
 
+void CollisionController::aoeEnemyCollision(Obstacle *enemyObstacle) {
+    EnemyModel* enemy = (EnemyModel*) enemyObstacle;
+    
+    if (enemy->isKnockbackActive()){
+        // don't want to do double damage
+        return;
+    }
+    enemy->damage(_player->getDamage());
+    _screenShake(_player->_isNextAttackEnhanced ? 30 : 3, 5);
+    if (_player->_isNextAttackEnhanced) {
+        _player->_isNextAttackEnhanced = false;
+    }
+
+    else {
+        _player->incrementComboCounterByAttack();
+    }
+    enemy->setKnocked(true, enemy->getPosition().subtract(_player->getPosition()).normalize());
+}
+
 void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle) {
     Projectile* projectile = (Projectile*)projectileObstacle; // Cast to the proper type
 
@@ -302,7 +328,16 @@ bool CollisionController::isEnemyBody(physics2::Obstacle* b, std::string f ) {
 bool CollisionController::isPlayerBody(physics2::Obstacle* b, const std::string* f ) {
     return (f == _player->getBodyName());
 }
+               
+/**Checks obstacle and fixture to see if it the player aoe fixture.**/
+bool CollisionController::isPlayerAoe(physics2::Obstacle* b, const std::string* f ) {
+   return (f == _player->getAoeSensorName());
+}
+               
+
 
 void CollisionController::reset() {
     _sensorFixtures.clear();
 }
+
+

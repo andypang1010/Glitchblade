@@ -55,7 +55,6 @@ using namespace cugl;
 /** The texture for the character avatar */
 #define ENEMY_TEXTURE   "enemy"
 /** Identifier to allow us to track the Enemy sensor in ContactListener */
-#define ENEMY_BODY_NAME      "enemybody"
 #define ENEMY_SENSOR_NAME     "enemysensor"
 
 #define E_ANIMATION_UPDATE_FRAME 4
@@ -187,7 +186,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a EnemyModel, you must call init().
      */
-    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME), _scale(Application::get()->getDisplayWidth() / 1248.0f) {}
+    EnemyModel() : BoxObstacle(), _sensorName(ENEMY_SENSOR_NAME), _scale(Application::get()->getDisplayWidth() / 1248.0f) {}
 
     /**
      * Destroys this EnemyModel, releasing all resources.

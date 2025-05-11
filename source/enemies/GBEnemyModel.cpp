@@ -167,6 +167,14 @@ void EnemyModel::createFixtures() {
     }
 
     BoxObstacle::createFixtures();
+    
+    // give name to initial body fixture for collision handling
+    b2Fixture* bodyFix = _body->GetFixtureList();
+    if (bodyFix) {
+        bodyFix->GetUserData().pointer = reinterpret_cast<uintptr_t>(getBodyName());
+    }
+
+    
     b2FixtureDef sensorDef;
     sensorDef.density = _density;
     sensorDef.isSensor = true;
@@ -394,6 +402,8 @@ void EnemyModel::setConstants(){
     _drawScale = _enemyJSON->_parent->get("world_info")->getFloat("scale");
     worldLeft = _enemyJSON->_parent->get("world_info")->getFloat("worldLeft");
     worldRight = _enemyJSON->_parent->get("world_info")->getFloat("worldRight");
+    
+    _bodyName = "enemy_body";
     
     _size = Size(_enemyJSON->get("size")->get(0)->asFloat(), _enemyJSON->get("size")->get(1)->asFloat()) / _drawScale;
     _size.width *= _hShrink;
