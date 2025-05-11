@@ -32,6 +32,8 @@ private:
     ScreenShakeCallback _screenShake;
     /** Mark set to handle more sophisticated collision callbacks */
     std::unordered_set<b2Fixture*> _sensorFixtures;
+
+    float _defaultKnockback;
     
 #pragma mark collision case helpers
     void playerEnemyCollision(Obstacle* enemyObstacle);

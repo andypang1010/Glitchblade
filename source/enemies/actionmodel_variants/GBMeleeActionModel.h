@@ -27,6 +27,9 @@ protected:
     /** The damage dealt by the hitbox. */
     float _hitboxDamage;
 
+    /** Knockback force of the hitbox. */
+    float _hitboxKnockBack;
+
     /** Whether the attack can be parried */
     bool _isParriable;
 
@@ -52,6 +55,9 @@ public:
 
     float getHitboxDamage() const;
     void setHitboxDamage(float damage);
+
+	float getHitboxKnockBack() const;
+	void setHitboxKnockBack(float knockback);
 
 	bool getIsParriable() const;
     void setIsParriable(bool parriable);

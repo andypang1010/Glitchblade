@@ -111,7 +111,7 @@ protected:
     bool _isKnocked;
     /** Whether we are knocked-back (sets input cd) */
     int _knockRem;
-    Vec2 _knockDirection;
+    Vec2 _knockForce;
     /** How long until we can shoot again in animation frames*/
     int  _shootCooldownRem;
     /** Whether our feet are on the ground */
@@ -376,8 +376,9 @@ public:
 
 
 
-// Miscellaneous
-Vec2 getKnockDirection() { return _knockDirection; }
+    // Miscellaneous
+    Vec2 getKnockForce() { return _knockForce; }
+
     std::string* getBodyName() { return &_bodyName; }
     /**
      * Returns the name of the ground sensor
@@ -452,7 +453,6 @@ private:
     static float _jump_force;
     static float _damp_force;
     static float _dash_force;
-    static float _knock_force;
 
 public:
     #pragma mark -
@@ -552,7 +552,7 @@ public:
     void setKnockbackRem(int value = _knock_duration) { _knockRem = value; }
     bool isKnocked() const { return _isKnocked; }
     bool isKnockbackActive() { return _knockRem > 0 || isKnocked(); }
-    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
+    void setKnocked(bool value, Vec2 knockForce) { _isKnocked = value; _knockForce = knockForce; }
     void resetKnocked() { _isKnocked = false; }
 
     // Projectile
@@ -567,7 +567,6 @@ public:
     float getStrafeF() const { return _strafe_force; }
     float getJumpF() const { return _jump_force; }
     float getDashF() const { return _dash_force; }
-    float getKnockF() { return _knock_force; }
     float getDampF() const { return _damp_force; }
 
     // Speed

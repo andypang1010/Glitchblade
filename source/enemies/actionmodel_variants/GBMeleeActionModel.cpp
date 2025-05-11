@@ -82,6 +82,20 @@ void MeleeActionModel::setHitboxDamage(float damage) {
 }
 
 /**
+ * Returns the hitbox knockback.
+ */ 
+float MeleeActionModel::getHitboxKnockBack() const {
+	return _hitboxKnockBack;
+}
+
+/**
+ * Sets the hitbox knockback.
+ */
+void MeleeActionModel::setHitboxKnockBack(float knockback) {
+	_hitboxKnockBack = knockback;
+}
+
+/**
  * Returns whether the hitbox can be parried.
  */
 bool MeleeActionModel::getIsParriable() const {

@@ -63,7 +63,7 @@
         },
         "jump": {
             "cooldown": 5,
-            "force": 45
+            "force": 90
         },
         "dash": {
             "cooldown": 35,
@@ -71,8 +71,8 @@
             "speed": 30
         },
         "knockback": {
-            "force": 25,
-            "duration": 30
+            "force": 50,
+            "duration": 15
         },
         "guard": {
             "cooldown": 30,
@@ -96,7 +96,7 @@
                 "radius": 2
             }
         },
-        "density": 1,
+        "density": 2,
         "debug": {
             "color": "yellow",
             "font": "debug",

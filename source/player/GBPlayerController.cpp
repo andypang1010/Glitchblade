@@ -125,10 +125,10 @@ void PlayerController::applyForce() {
 
 #pragma mark knockback force
     if (_player->isKnocked()) {
-        playerBody->SetLinearVelocity(b2Vec2(0, 0));
-        Vec2 knockDirection = _player->getKnockDirection();
-        Vec2 knockForce = knockDirection.subtract(Vec2(0, knockDirection.y)).scale(_player->getKnockF());
-        playerBody->ApplyLinearImpulseToCenter(b2Vec2(knockForce.x, _player->getKnockF()), true);
+        playerBody->SetLinearVelocity(b2Vec2(0, _player->getLinearVelocity().y));
+        //Vec2 knockDirection = _player->getKnockDirection();
+        //Vec2 knockForce = knockDirection.subtract(Vec2(0, knockDirection.y)).scale(_player->getKnockF());
+        playerBody->ApplyLinearImpulseToCenter(b2Vec2(_player->getKnockForce().x, _player->getKnockForce().y), true);
     }
  
     // Velocity too high, clamp it

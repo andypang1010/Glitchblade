@@ -24,7 +24,9 @@ CollisionController::CollisionController(
     _ui(ui),
     _constantsJSON(constantsJSON),
     _removeProjectile(removeProjectile),
-    _screenShake(screenShake){}
+    _screenShake(screenShake),
+    _defaultKnockback(_constantsJSON->get("player")->get("knockback")->getFloat("force"))
+    {}
 
 
 /**
@@ -168,7 +170,9 @@ void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
         _player->setDashRem(0);
 
     }
-    _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
+    int dir = _player->getPosition().subtract(enemy->getPosition()).x > 0 ? 1 : -1;
+    Vec2 knockback = Vec2(dir * _defaultKnockback, _defaultKnockback / 2);
+    _player->setKnocked(true, knockback);
     enemy->setKnocked(true, enemy->getPosition().subtract(_player->getPosition()).normalize());
 }
 
@@ -187,7 +191,9 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
             _player->damage(damage);
             _player->resetCombo();
 
-            _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
+            int dir = _player->getPosition().subtract(enemy->getPosition()).x > 0 ? 1 : -1;
+            Vec2 knockback = Vec2(dir * hitbox->getKnockback(), hitbox->getKnockback()/2);
+            _player->setKnocked(true, knockback);
             _screenShake(damage, 3);
         }
         // If parry is active, stun the enemy.
@@ -266,7 +272,9 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
                 _player->damage(projectile->getDamage());
                 _player->resetCombo();
 
-                _player->setKnocked(true, _player->getPosition().subtract(projectileObstacle->getPosition()).normalize());
+                int dir = _player->getPosition().subtract(projectileObstacle->getPosition()).x > 0 ? 1 : -1;
+                Vec2 knockback = Vec2(dir * _defaultKnockback, _defaultKnockback / 2);
+                _player->setKnocked(true, knockback);
                 _ui->setHP(_player->getHP());
             }
             _player->iframe = 15;

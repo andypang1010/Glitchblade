@@ -603,7 +603,6 @@ void PlayerModel::setConstants(){
     _dash_force = _playerJSON->get("dash")->getFloat("speed");
 
     // Knockback
-    _knock_force = _playerJSON->get("knockback")->getFloat("force");
     _knock_duration = _playerJSON->get("knockback")->getInt("duration");
 
     // Combat
@@ -668,6 +667,5 @@ float PlayerModel::_strafe_force = 50.0f;
 float PlayerModel::_jump_force = 45.0f;
 float PlayerModel::_damp_force = 30.0f;
 float PlayerModel::_dash_force = 30.0f;
-float PlayerModel::_knock_force = 15.0f;
 
 

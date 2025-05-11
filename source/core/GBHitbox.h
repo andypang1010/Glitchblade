@@ -25,6 +25,8 @@ protected:
     float _duration;
     /** The damage of this hitbox */
     int _damage;
+	/** The knockback of this hitbox */
+    float _knockback;
     /** Whether the hitbox attack can be parried to stun the enemy */
 	bool _isParriable;
 
@@ -51,7 +53,7 @@ public:
      */
     void dispose();
 
-    virtual bool init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration, bool parriable);
+    virtual bool init(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float knockback, float duration, bool parriable);
     
 #pragma mark -
 #pragma mark Static Constructors
@@ -70,9 +72,9 @@ public:
      *
      * @return  A newly allocated Projectile at the given position, with the given radius
      */
-    static std::shared_ptr<Hitbox> alloc(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float duration, bool parriable) {
+    static std::shared_ptr<Hitbox> alloc(std::shared_ptr<EnemyModel> enemy, Vec2& pos, const Size& size, float scale, int damage, float knockback, float duration, bool parriable) {
         std::shared_ptr<Hitbox> result = std::make_shared<Hitbox>();
-        return (result->init(enemy, pos, size, scale, damage, duration, parriable) ? result : nullptr);
+        return (result->init(enemy, pos, size, scale, damage, knockback, duration, parriable) ? result : nullptr);
     }
 
 #pragma mark -
@@ -170,6 +172,22 @@ public:
     void setDamage(int value) {
         _damage = value;
     }
+
+    /**
+     * Returns the knockback magnitude of this hitbox.
+     *
+     * @return the knockback of this hitbox.
+     */
+	float getKnockback() const { return _knockback; }
+
+    /**
+     * Sets the knockback of the hitbox
+     *
+     * @param value new knockback
+     */
+	void setKnockback(float value) {
+		_knockback = value;
+	}
 
 	/**
 	 * Returns whether the hitbox can be parried
