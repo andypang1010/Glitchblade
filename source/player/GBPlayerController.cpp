@@ -228,6 +228,13 @@ void PlayerController::updateCooldowns()
         _player->setDamagedRem(_player->getDamagedRem() - 1);
     }
     
+    if (_player->isAoeActive()){
+        _player->setAoeRem(_player->getAoeRem()-1);
+        if (_player->getAoeRem() == 0){
+            _player->resetAoeFixture();
+        }
+    }
+    
 #pragma mark Guard cooldown
     // Update guard release time
     if (_player->getGuardReleaseRem() > 0) {

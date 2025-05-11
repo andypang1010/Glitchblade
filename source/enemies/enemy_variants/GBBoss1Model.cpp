@@ -364,6 +364,9 @@ std::shared_ptr<Projectile> Boss1Model::getProjectile() {
 
 void Boss1Model::updateAnimation()
 {
+    if (isKnockbackActive()){
+        CULog("knockback active for boss 1");
+    }
 
     _stunSprite->setVisible(isStunned());
 

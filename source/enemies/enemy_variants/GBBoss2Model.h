@@ -136,7 +136,7 @@ public:
      * This constructor does not initialize any of the enemy values beyond
      * the defaults.  To use a PlayerModel, you must call init().
      */
-    Boss2Model() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME), _bodyName(ENEMY_BODY_NAME) {}
+    Boss2Model() : EnemyModel(), _sensorName(ENEMY_SENSOR_NAME) {}
 
     /**
      * Destroys this PlayerModel, releasing all resources.

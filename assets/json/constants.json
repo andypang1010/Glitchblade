@@ -49,7 +49,7 @@
         "fixture_names": {
             "body": "player_body_sensor",
             "ground": "player_ground_sensor",
-            "shield": "player_shield_sensor"
+            "aoe": "player_aoe_sensor"
         },
         "animation": {
             "update_frame": 4
@@ -92,8 +92,8 @@
                 "h_shrink": 0.6,
                 "height": 0.1
             },
-            "shield": {
-                "radius": 2
+            "aoe": {
+                "radius": 5.0
             }
         },
         "density": 1,
