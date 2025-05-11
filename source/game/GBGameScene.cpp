@@ -156,8 +156,20 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     // Create the scene graph
     _worldnode = scene2::SceneNode::alloc();
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _worldnode->setPosition(_offset);
-//    _worldnode->setScale(_scale); //Cannot run properly with this line added. Therefore, background and phyisics cannot scale properly.
+//    _worldnode->setPosition(_offset);
+//    _worldnode->setScale(1.1); //Cannot run properly with this line added. Therefore, background and phyisics cannot scale properly.
+
+    // === New: Display-based scale for worldnode ===
+    float displayScaleX = Application::get()->getDisplaySize().width / 1248.0f;
+    float displayScaleY = Application::get()->getDisplaySize().height / 576.0f;
+    float displayScale = std::min(displayScaleX, displayScaleY);
+
+    // Apply to worldnode only
+    _worldnode->setScale(displayScale);
+
+    float offsetX = (Application::get()->getDisplaySize().width - 1248 * displayScale) / 2.0f;
+    float offsetY = (Application::get()->getDisplaySize().height - 576 * displayScale) / 2.0f;
+    _worldnode->setPosition(Vec2(offsetX, offsetY));
     
     _camera = getCamera();
     _defCamPos = _camera->getPosition();
@@ -166,7 +178,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     _debugnode = scene2::SceneNode::alloc();
     _debugnode->setScale(_scale); // Debug node draws in PHYSICS coordinates
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-    _debugnode->setPosition(_offset);
+    _debugnode->setPosition(Vec2(offsetX, offsetY));
     _debugnode->setName("game_debug_node");
     
     _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
@@ -199,6 +211,45 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
         [this](Projectile* p) { this->removeProjectile(p); },  // Callback for projectile removal
         [this](int i, int d) { this->setScreenShake(i, d); }   // Callback for screen shake
     );
+    
+    
+    // Log UI info
+    if (_ui != nullptr) {
+        CULog("=== UI ===");
+        CULog("UI position: (%.2f, %.2f)", _ui->getPosition().x, _ui->getPosition().y);
+        CULog("UI scale: (%.2f, %.2f)", _ui->getScaleX(), _ui->getScaleY());
+    }
+
+    // Log worldnode info
+    if (_worldnode != nullptr) {
+        CULog("=== WorldNode ===");
+        CULog("WorldNode position: (%.2f, %.2f)", _worldnode->getPosition().x, _worldnode->getPosition().y);
+        CULog("WorldNode scale: (%.2f, %.2f)", _worldnode->getScaleX(), _worldnode->getScaleY());
+    }
+
+    // Log debugnode info
+    if (_debugnode != nullptr) {
+        CULog("=== DebugNode ===");
+        CULog("DebugNode position: (%.2f, %.2f)", _debugnode->getPosition().x, _debugnode->getPosition().y);
+        CULog("DebugNode scale: (%.2f, %.2f)", _debugnode->getScaleX(), _debugnode->getScaleY());
+    }
+
+    // Log a few BG children as sample
+    if (_worldnode != nullptr) {
+        auto children = _worldnode->getChildren();
+        int count = 0;
+        for (auto& node : children) {
+            if (std::dynamic_pointer_cast<cugl::scene2::PolygonNode>(node)) {
+                auto pos = node->getPosition();
+                auto scale = node->getScale();
+                auto size = node->getSize();
+                CULog("BG Layer [%d]: pos=(%.2f, %.2f), scale=(%.2f, %.2f), size=(%.2f, %.2f)",
+                      count++, pos.x, pos.y, scale.x, scale.y, size.width, size.height);
+                if (count >= 3) break;  // 只看前几个
+            }
+        }
+    }
+
 
     return true;
 }
@@ -606,12 +657,16 @@ void GameScene::removeProjectile(Projectile* projectile) {
 }
 
 void GameScene::setBG() {
+    float displayScaleX = Application::get()->getDisplaySize().width / 1248.0f;
+    float displayScaleY = Application::get()->getDisplaySize().height / 576.0f;
+    float displayScale = std::min(displayScaleX, displayScaleY);
+    float offsetY = (Application::get()->getDisplaySize().height - 576 * displayScale) / 2.0f;
     for (auto layerPair : _currentLevel->getLayers()) {
         // Left
         std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node->setScale(_currentLevel->getScale());
-        node->setPosition(Vec2(node->getPositionX()-node->getSize().width, node->getPositionY()));
+        node->setPosition(Vec2(node->getPositionX()-node->getSize().width, offsetY));
         node->setTag(layerPair.second);
         _worldnode->addChild(node);
         
@@ -619,6 +674,7 @@ void GameScene::setBG() {
         std::shared_ptr<scene2::SceneNode> node2 = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node2->setScale(_currentLevel->getScale());
+        node2->setPosition(Vec2(0, offsetY));
         node2->setTag(layerPair.second);
         _worldnode->addChild(node2);
         
@@ -626,7 +682,7 @@ void GameScene::setBG() {
         std::shared_ptr<scene2::SceneNode> node3 = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node3->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node3->setScale(_currentLevel->getScale());
-        node3->setPosition(Vec2(node3->getPositionX()+node->getSize().width, node3->getPositionY()));
+        node3->setPosition(Vec2(node3->getPositionX()+node->getSize().width, offsetY));
         node3->setTag(layerPair.second);
         _worldnode->addChild(node3);
         
@@ -634,10 +690,44 @@ void GameScene::setBG() {
         std::shared_ptr<scene2::SceneNode> node4 = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node4->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node4->setScale(_currentLevel->getScale());
-        node4->setPosition(Vec2(node4->getPositionX()+2*node->getSize().width, node4->getPositionY()));
+        node4->setPosition(Vec2(node4->getPositionX()+2*node->getSize().width, offsetY));
         node4->setTag(layerPair.second);
         _worldnode->addChild(node4);
     }
+//    for (auto layerPair : _currentLevel->getLayers()) {
+//        // Left
+//        auto node = scene2::PolygonNode::allocWithTexture(layerPair.first);
+//        node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+//        node->setScale(_currentLevel->getScale());
+//        node->setPosition(Vec2(-node->getSize().width * node->getScaleX(), 0));
+//        node->setTag(layerPair.second);
+//        _worldnode->addChild(node);
+//
+//        // Center
+//        auto node2 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+//        node2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+//        node2->setScale(_currentLevel->getScale());
+//        node2->setPosition(Vec2(0, 0));
+//        node2->setTag(layerPair.second);
+//        _worldnode->addChild(node2);
+//
+//        // Right
+//        auto node3 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+//        node3->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+//        node3->setScale(_currentLevel->getScale());
+//        node3->setPosition(Vec2(node3->getSize().width * node3->getScaleX(), 0));
+//        node3->setTag(layerPair.second);
+//        _worldnode->addChild(node3);
+//
+//        // Right + 1
+//        auto node4 = scene2::PolygonNode::allocWithTexture(layerPair.first);
+//        node4->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+//        node4->setScale(_currentLevel->getScale());
+//        node4->setPosition(Vec2(2 * node4->getSize().width * node4->getScaleX(), 0));
+//        node4->setTag(layerPair.second);
+//        _worldnode->addChild(node4);
+//    }
+
 }
 
 void GameScene::updateLayersLeft() {

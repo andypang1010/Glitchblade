@@ -671,7 +671,7 @@ void LevelController::addObstacle(ObstacleNodePair obstacle_pair) {
     _worldRef->addObstacle(obj);
     obj->setDebugScene(nullptr);
     obj->setDebugScene(_debugNodeRef);
-    node->setPosition(obj->getPosition() * _scale);
+    node->setPosition(obj->getPosition() * _constantsJSON->get("scene")->getFloat("scale"));
     _worldNode->addChild(node);
 }
 
