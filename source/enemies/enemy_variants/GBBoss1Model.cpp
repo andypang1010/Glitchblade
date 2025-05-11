@@ -77,40 +77,49 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     EnemyModel::attachNodes(assetRef);
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_idle"), 1, 5, 5);
-    _idleSprite->setPosition(0, 50);
+    _idleSprite->setPosition(0, 50 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_idleSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_idleSprite->setName("idle");
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_walk"), 1, 7, 7);
-    _walkSprite->setPosition(0, 50);
+    _walkSprite->setPosition(0, 50 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_walkSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_walkSprite->setName("walk");
 
     _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_slam"), 8, 5, 40);
-    _slamSprite->setPosition(0, 50);
+    _slamSprite->setPosition(0, 50 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_slamSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_slamSprite->setName("slam");
 
     _stabSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stab"), 8, 5, 40);
-    _stabSprite->setPosition(0, 50);
+    _stabSprite->setPosition(0, 50 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_stabSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_stabSprite->setName("stab");
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_stun"), 7, 6, 38);
-    _stunSprite->setPosition(0, 50);
+    _stunSprite->setPosition(0, 50 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_stunSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_stunSprite->setName("stun");
     stunFrames = _stunSprite->getCount() * 4;
 
     _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_shoot"), 3, 5, 15);
-    _shootSprite->setPosition(0, 50);
+    _shootSprite->setPosition(0, 50 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_shootSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_shootSprite->setName("shoot");
 
     _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_explode"), 11, 5, 53);
-    _explodeSprite->setPosition(0, 50);
+    _explodeSprite->setPosition(0, 50 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_explodeSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_explodeSprite->setName("explode");
 
 	_explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 28);
 	_explodeVFXSprite->setPosition(0, 0);
+    _explodeVFXSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_explodeVFXSprite->setName("explode_vfx");
 
 	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss1_dead"), 12, 5, 60);
-	_deadSprite->setPosition(0, 50);
+	_deadSprite->setPosition(0, 50 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_deadSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_deadSprite->setName("dead");
 
     getSceneNode()->addChild(_idleSprite);

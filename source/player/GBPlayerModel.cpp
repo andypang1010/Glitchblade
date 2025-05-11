@@ -77,10 +77,10 @@ bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const std:
     float scale = constantsRef->get("scene")->getFloat("scale");
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(_playerJSON->getString("texture"));
-    Size nsize = (image->getSize() / scale);
+    Size nsize = (image->getSize() / scale) * (2 * 0.0004006410 * Application::get()->getDisplayWidth());
     nsize.width *= _playerJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     nsize.height *= _playerJSON->get("fixtures")->get("body")->getFloat("v_shrink");
-    _drawScale = scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth();
+    _drawScale = scale;
 
     if (BoxObstacle::init(pos, nsize)) {
         setDensity(_playerJSON->getFloat("density"));
@@ -101,56 +101,56 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     setSceneNode(_sceneNode);
 
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_idle"), 3, 4, 11);
-    _idleSprite->setPosition(0, -25);
-    _idleSprite->setScale(0.5f);
+    _idleSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _idleSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_walk"), 2, 4, 5);
-    _walkSprite->setPosition(0, -25);
-    _walkSprite->setScale(0.5f);
+    _walkSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _walkSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _jumpUpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpUp"), 2, 4, 5);
-    _jumpUpSprite->setPosition(0, -25);
-    _jumpUpSprite->setScale(0.5f);
+    _jumpUpSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _jumpUpSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _jumpDownSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_jumpDown"), 2, 4, 7);
-    _jumpDownSprite->setPosition(0, -25);
-    _jumpDownSprite->setScale(0.5f);
+    _jumpDownSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _jumpDownSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
     
     _dashDownStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_dashDown_start"), 1, 4, 4);
-    _dashDownStartSprite->setPosition(0, -25);
-    _dashDownStartSprite->setScale(0.5f);
+    _dashDownStartSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _dashDownStartSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _dashDownEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_dashDown_end"), 1, 4, 4);
-    _dashDownEndSprite->setPosition(0, -25);
-    _dashDownEndSprite->setScale(0.5f);
+    _dashDownEndSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _dashDownEndSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 9, 4, 36);
-    _guardSprite->setPosition(0, -25);
-    _guardSprite->setScale(0.5f);
+    _guardSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _guardSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _guardReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard_release"), 2, 4, 5);
-    _guardReleaseSprite->setPosition(0, -25);
-    _guardReleaseSprite->setScale(0.5f);
+    _guardReleaseSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _guardReleaseSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _parryReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_parry_release"), 2, 3, 6);
-    _parryReleaseSprite->setPosition(0, -25);
-    _parryReleaseSprite->setScale(0.5f);
+    _parryReleaseSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _parryReleaseSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _damagedSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_damaged"), 2, 4, 5);
-    _damagedSprite->setPosition(0, -25);
-    _damagedSprite->setScale(0.5f);
+    _damagedSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _damagedSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_attack"), 2, 4, 5);
-    _attackSprite->setPosition(0, -25);
-    _attackSprite->setScale(0.5f);
+    _attackSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _attackSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
 	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_dead"), 4, 4, 16);
-	_deadSprite->setPosition(0, -25);
-	_deadSprite->setScale(0.5f);
+	_deadSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_deadSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
 	_overloadVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("overload"), 1, 4, 4);
-	_overloadVFXSprite->setPosition(0, -25);
-	_overloadVFXSprite->setScale(0.5f);
+	_overloadVFXSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_overloadVFXSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);

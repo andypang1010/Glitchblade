@@ -77,56 +77,56 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     EnemyModel::attachNodes(assetRef);
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_idle"), 3, 5, 15);
-    _idleSprite->setPosition(0, 60);
+    _idleSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_idleSprite->setName("idle");
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_stun_short"), 3, 5, 15);
-    _stunSprite->setPosition(0, 60);
+    _stunSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_stunSprite->setName("stun");
     stunFrames = _stunSprite->getCount() * 4;
 
     _shortFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_start"), 3, 5, 15);
-    _shortFireStartSprite->setPosition(0, 60);
+    _shortFireStartSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _shortFireStartSprite->setName("shortFireStart");
 
     _shortFireAttackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_attack"), 1, 5, 5);
-    _shortFireAttackSprite->setPosition(0, 60);
+    _shortFireAttackSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _shortFireAttackSprite->setName("shortFireAttack");
 
     _shortFireWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_wait"), 1, 5, 5);
-    _shortFireWaitSprite->setPosition(0, 60);
+    _shortFireWaitSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _shortFireWaitSprite->setName("shortFireWait");
 
     _shortFireEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_shortFire_end"), 2, 4, 8);
-    _shortFireEndSprite->setPosition(0, 60);
+    _shortFireEndSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _shortFireEndSprite->setName("shortFireEnd");
 
     _headFireStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_headFire_start"), 3, 5, 15);
-    _headFireStartSprite->setPosition(0, 60);
+    _headFireStartSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _headFireStartSprite->setName("headFireStart");
 
     _headFireAttackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_headFire_attack"), 3, 5, 15);
-    _headFireAttackSprite->setPosition(0, 60);
+    _headFireAttackSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _headFireAttackSprite->setName("headFireAttack");
 
     _headFireWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_headFire_wait"), 2, 5, 10);
-    _headFireWaitSprite->setPosition(0, 60);
+    _headFireWaitSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _headFireWaitSprite->setName("headFireWait");
 
     _headFireEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_headFire_end"), 3, 5, 15);
-    _headFireEndSprite->setPosition(0, 60);
+    _headFireEndSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _headFireEndSprite->setName("headFireEnd");
 
     _teleportStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_teleport_start"), 3, 5, 13);
-    _teleportStartSprite->setPosition(0, 60);
+    _teleportStartSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _teleportStartSprite->setName("teleportStart");
 
     _teleportEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_teleport_end"), 3, 5, 15);
-    _teleportEndSprite->setPosition(0, 60);
+    _teleportEndSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _teleportEndSprite->setName("teleportEnd");
 
     _laserSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_laser"), 15, 4, 60);
-    _laserSprite->setPosition(0, 60);
+    _laserSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _laserSprite->setName("laser");
 
     _laserVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("laser"), 19, 2, 38);
@@ -134,7 +134,7 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _laserVFXSprite->setName("laser_vfx");
 
 	_deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss2_dead"), 15, 4, 58);
-	_deadSprite->setPosition(0, 60);
+	_deadSprite->setPosition(0, 60 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_deadSprite->setName("dead");
 
     getSceneNode()->addChild(_idleSprite);

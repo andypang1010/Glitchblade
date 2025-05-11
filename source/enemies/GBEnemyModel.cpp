@@ -74,7 +74,7 @@ bool EnemyModel::init(const std::shared_ptr<AssetManager>& assetRef, const std::
     setConstants();
     resetAttributes();
     
-    if (BoxObstacle::init(pos, _size)) {
+    if (BoxObstacle::init(pos, _size * 2 * 0.0004006410 * Application::get()->getDisplayWidth())) {
         setDensity(_density);
         setFriction(0.0f);      // HE WILL STICK TO WALLS IF YOU FORGET
         setFixedRotation(true); // OTHERWISE, HE IS A WEEBLE WOBBLE

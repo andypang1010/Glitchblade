@@ -35,31 +35,32 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     EnemyModel::attachNodes(assetRef);
     // need new idle animation for this minion
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 1);
-    _idleSprite->setScale(0.5f);
-    _idleSprite->setPosition(0, 5);
+    _idleSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _idleSprite->setPosition(0, 5 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _idleSprite->setName("idle");
     
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_walk"), 1, 8, 8);
-    _walkSprite->setScale(0.5f);
-    _walkSprite->setPosition(0, 5);
+    _walkSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _walkSprite->setPosition(0, 5 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _walkSprite->setName("walk");
 
     _explodeSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_explode"), 9, 5, 45);
-    _explodeSprite->setScale(0.5f);
-    _explodeSprite->setPosition(0, 5);
+    _explodeSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _explodeSprite->setPosition(0, 5 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _explodeSprite->setName("explode");
 
     _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_shoot"), 1, 8, 8);
-    _shootSprite->setScale(0.5f);
-    _shootSprite->setPosition(0, 5);
+    _shootSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _shootSprite->setPosition(0, 5 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_shootSprite->setName("shoot");
     
     _explodeVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("explode_enemy_1"), 4, 8, 28);
     _explodeVFXSprite->setPosition(0, 0);
+	_explodeVFXSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
     _explodeVFXSprite->setName("explode_vfx");
 
     _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1A_dead"), 3, 5, 15);
-	_deadSprite->setScale(0.5f);
+	_deadSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
     _deadSprite->setPosition(0, 0);
 	_deadSprite->setName("dead");
 
