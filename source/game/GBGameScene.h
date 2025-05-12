@@ -39,6 +39,9 @@
 #include "GBCollisionController.h"
 #include "ui/GBIngameUI.h"
 
+#include "RNBO.h"
+#include <SDL_audio.h>
+
 using namespace cugl;
 
 /**
@@ -49,6 +52,20 @@ using namespace cugl;
  * so that we can have a separate mode for the loading screen.
  */
 class GameScene : public scene2::Scene2 {
+    
+    //GEORGE's PRIVATE VARS
+private:
+    std::unique_ptr<RNBO::CoreObject> _rnbo;    ///< RNBO DSP core
+    SDL_AudioDeviceID                _audioDevice;
+    static void                      audioCallback(void* userdata, Uint8* stream, int len);
+    void                             scheduleInitialNote();
+    Vec2                            getLastEnemyPosition();
+    int  _lastNotifiedWave = -1;  ///< the wave index we last sent a bang for
+    bool _sentBigBang      = false;
+    RNBO::ParameterIndex  _idxBigPan = -1;   ///< cache the RNBO param‑index
+    float                  _maxPanDistance = 20.0f;  ///< how far “full pan” is in world units
+    
+
 protected:
     bool _cameraLocked;
     Vec3 _defCamPos;

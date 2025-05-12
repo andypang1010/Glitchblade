@@ -1,0 +1,173 @@
+{
+  "parameters": [
+    {
+      "type": "ParameterTypeNumber",
+      "index": 0,
+      "name": "startbang",
+      "paramId": "startbang",
+      "minimum": 0,
+      "maximum": 1,
+      "exponent": 1,
+      "steps": 0,
+      "initialValue": 0,
+      "isEnum": false,
+      "enumValues": [],
+      "displayName": "",
+      "unit": "",
+      "order": 0,
+      "debug": false,
+      "visible": true,
+      "signalIndex": null,
+      "ioType": "IOTypeUndefined"
+    },
+    {
+      "type": "ParameterTypeNumber",
+      "index": 1,
+      "name": "littlebang",
+      "paramId": "littlebang",
+      "minimum": 0,
+      "maximum": 1,
+      "exponent": 1,
+      "steps": 0,
+      "initialValue": 0,
+      "isEnum": false,
+      "enumValues": [],
+      "displayName": "",
+      "unit": "",
+      "order": 0,
+      "debug": false,
+      "visible": true,
+      "signalIndex": null,
+      "ioType": "IOTypeUndefined"
+    },
+    {
+      "type": "ParameterTypeNumber",
+      "index": 2,
+      "name": "bigbang",
+      "paramId": "bigbang",
+      "minimum": 0,
+      "maximum": 1,
+      "exponent": 1,
+      "steps": 0,
+      "initialValue": 0,
+      "isEnum": false,
+      "enumValues": [],
+      "displayName": "",
+      "unit": "",
+      "order": 0,
+      "debug": false,
+      "visible": true,
+      "signalIndex": null,
+      "ioType": "IOTypeUndefined"
+    },
+    {
+      "type": "ParameterTypeNumber",
+      "index": 3,
+      "name": "bigpan",
+      "paramId": "bigpan",
+      "minimum": 0,
+      "maximum": 1,
+      "exponent": 1,
+      "steps": 0,
+      "initialValue": 0.5,
+      "isEnum": false,
+      "enumValues": [],
+      "displayName": "",
+      "unit": "",
+      "order": 0,
+      "debug": false,
+      "visible": true,
+      "signalIndex": null,
+      "ioType": "IOTypeUndefined"
+    }
+  ],
+  "numParameters": 4,
+  "numSignalInParameters": 0,
+  "numSignalOutParameters": 0,
+  "numInputChannels": 0,
+  "numOutputChannels": 2,
+  "numMidiInputPorts": 0,
+  "numMidiOutputPorts": 0,
+  "transportUsed": true,
+  "externalDataRefs": [
+    {
+      "id": "background",
+      "file": "/Users/porridge/Games/Glitchblade/assets/sounds/background.wav",
+      "type": "Float32Buffer",
+      "tag": "buffer~"
+    },
+    {
+      "id": "b_hit1_wav",
+      "file": "/Users/porridge/Games/Glitchblade/assets/sounds/hit1.wav",
+      "type": "Float32Buffer",
+      "tag": "buffer~"
+    },
+    {
+      "id": "bigbot",
+      "file": "/Users/porridge/Games/Glitchblade/assets/sounds/bigbot.wav",
+      "type": "Float32Buffer",
+      "tag": "buffer~"
+    },
+    {
+      "id": "littlebot",
+      "file": "/Users/porridge/Games/Glitchblade/assets/sounds/littlebot.wav",
+      "type": "Float32Buffer",
+      "tag": "buffer~"
+    },
+    {
+      "id": "b_hit3_wav",
+      "file": "/Users/porridge/Games/Glitchblade/assets/sounds/hit3.wav",
+      "type": "Float32Buffer",
+      "tag": "buffer~"
+    },
+    {
+      "id": "b_hit2_wav",
+      "file": "/Users/porridge/Games/Glitchblade/assets/sounds/hit2.wav",
+      "type": "Float32Buffer",
+      "tag": "buffer~"
+    },
+    {
+      "id": "b_hit4_wav",
+      "file": "/Users/porridge/Games/Glitchblade/assets/sounds/hit4.wav",
+      "type": "Float32Buffer",
+      "tag": "buffer~"
+    },
+    {
+      "id": "b_hit5_wav",
+      "file": "/Users/porridge/Games/Glitchblade/assets/sounds/hit5.wav",
+      "type": "Float32Buffer",
+      "tag": "buffer~"
+    },
+    {
+      "id": "drumchoice",
+      "type": "Float32MultiBuffer"
+    }
+  ],
+  "patcherSerial": 0,
+  "inports": [],
+  "outports": [],
+  "inlets": [],
+  "outlets": [
+    {
+      "type": "signal",
+      "index": 1,
+      "tag": "out1",
+      "meta": ""
+    },
+    {
+      "type": "signal",
+      "index": 2,
+      "tag": "out2",
+      "meta": ""
+    }
+  ],
+  "presetid": "rnbo",
+  "meta": {
+    "architecture": "x64",
+    "filename": "Untitled1.maxpat",
+    "rnboobjname": "rnbomatic",
+    "maxversion": "9.0.3",
+    "rnboversion": "1.3.3",
+    "name": "untitled"
+  }
+}

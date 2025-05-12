@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_asconf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_auth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_bsd_addr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_callout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_crc32.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_indata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_lock_userspace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_os.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_os_userspace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_output.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_pcb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_peeloff.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_process_lock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_sha1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_sysctl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_uio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_var.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctputil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet6\sctp6_var.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_atomic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_inpcb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_ip_icmp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_ip6_var.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_malloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_mbuf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_recv_thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_route.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_socketvar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\usrsctp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_uma.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_asconf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_auth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_bsd_addr.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_callout.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_cc_functions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_crc32.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_indata.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_input.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_output.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_pcb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_peeloff.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_sha1.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_ss_functions.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_sysctl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_timer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_userspace.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctp_usrreq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet\sctputil.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\netinet6\sctp6_usrreq.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_environment.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_mbuf.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_recv_thread.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib\user_socket.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

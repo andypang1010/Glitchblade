@@ -1,0 +1,539 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 53;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A7326CA30DC47648B35C3A5 /* rdbx.c in Sources */ = {isa = PBXBuildFile; fileRef = F34A3A74368149DB96817735 /* rdbx.c */; };
+		12D96867B027452BB37BB3C6 /* aes_gcm_ossl.c in Sources */ = {isa = PBXBuildFile; fileRef = 44CBC956B24C474BA7E6FB6B /* aes_gcm_ossl.c */; };
+		17F7E40C54324DA2BB648BB6 /* alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = E1259EE7DB9A499593A0FFA1 /* alloc.c */; };
+		2B928C00BC5740FCAAD9A371 /* crypto_kernel.c in Sources */ = {isa = PBXBuildFile; fileRef = F99F9A49BA854A97BA86D13C /* crypto_kernel.c */; };
+		354208913F2B4A29B98E4907 /* auth.c in Sources */ = {isa = PBXBuildFile; fileRef = 26F8C8C849924CBF96A5D3FB /* auth.c */; };
+		41B37CEB6FA8461C82FAAE70 /* aes_icm_ossl.c in Sources */ = {isa = PBXBuildFile; fileRef = 3982EFC1D96548CA9F40D877 /* aes_icm_ossl.c */; };
+		478440667C5F4F8781FE6271 /* auth_test_cases.c in Sources */ = {isa = PBXBuildFile; fileRef = 69DA1CAC31594F3E876121E1 /* auth_test_cases.c */; };
+		9928B058380645139A1DEAC5 /* null_cipher.c in Sources */ = {isa = PBXBuildFile; fileRef = 379618F319F64DECB9DB9C0D /* null_cipher.c */; };
+		9A185B3BB9FD48AD9778DF57 /* hmac_ossl.c in Sources */ = {isa = PBXBuildFile; fileRef = 3A9C0379AB9D47ACAF7EC2C0 /* hmac_ossl.c */; };
+		9DD2AC19362740A38B5E87D5 /* null_auth.c in Sources */ = {isa = PBXBuildFile; fileRef = ABA90BC900284A5D80B624B7 /* null_auth.c */; };
+		B477100ACAD74047912CE6BB /* datatypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 79902C680FD4449CADE47148 /* datatypes.c */; };
+		C1BEEC9907144DF890E7ED77 /* srtp.c in Sources */ = {isa = PBXBuildFile; fileRef = 49AEB39480F6423F9FB621AA /* srtp.c */; };
+		E5F947FE5789411696FAF36A /* cipher_test_cases.c in Sources */ = {isa = PBXBuildFile; fileRef = 37B2C65C711D49D1B2E2C953 /* cipher_test_cases.c */; };
+		E9984E92AFEC4776831CE691 /* err.c in Sources */ = {isa = PBXBuildFile; fileRef = A7A0AB4F3A5449A49BCD1CAB /* err.c */; };
+		EBB27A2484B846438E0F5E2A /* rdb.c in Sources */ = {isa = PBXBuildFile; fileRef = 0A554E6E2AD249DFABC9A8EA /* rdb.c */; };
+		F56CA5D720D748198DEEF465 /* cipher.c in Sources */ = {isa = PBXBuildFile; fileRef = E195639CEC75483DB19EF8C1 /* cipher.c */; };
+		FD1068CCE3394E1E8903C416 /* key.c in Sources */ = {isa = PBXBuildFile; fileRef = 4445B1E6E6DA4FD69EFB1B4F /* key.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0A554E6E2AD249DFABC9A8EA /* rdb.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = rdb.c; path = crypto/replay/rdb.c; sourceTree = "<group>"; };
+		0C1D7AAACF434019BCA98F82 /* crypto_types.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = crypto_types.h; path = crypto/include/crypto_types.h; sourceTree = "<group>"; };
+		177A7C1C60354D6283BB69E8 /* null_auth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = null_auth.h; path = crypto/include/null_auth.h; sourceTree = "<group>"; };
+		184CB1FAE6724D8F9A9BC105 /* err.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = err.h; path = crypto/include/err.h; sourceTree = "<group>"; };
+		26F8C8C849924CBF96A5D3FB /* auth.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = auth.c; path = crypto/hash/auth.c; sourceTree = "<group>"; };
+		2B1156DB470440828CE0B9B8 /* auth_test_cases.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = auth_test_cases.h; path = crypto/hash/auth_test_cases.h; sourceTree = "<group>"; };
+		30CB396089924771B7C33304 /* sha1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sha1.h; path = crypto/include/sha1.h; sourceTree = "<group>"; };
+		379618F319F64DECB9DB9C0D /* null_cipher.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = null_cipher.c; path = crypto/cipher/null_cipher.c; sourceTree = "<group>"; };
+		37B2C65C711D49D1B2E2C953 /* cipher_test_cases.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = cipher_test_cases.c; path = crypto/cipher/cipher_test_cases.c; sourceTree = "<group>"; };
+		3982EFC1D96548CA9F40D877 /* aes_icm_ossl.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = aes_icm_ossl.c; path = crypto/cipher/aes_icm_ossl.c; sourceTree = "<group>"; };
+		3A70081EC9884A70A7811384 /* integers.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integers.h; path = crypto/include/integers.h; sourceTree = "<group>"; };
+		3A9C0379AB9D47ACAF7EC2C0 /* hmac_ossl.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = hmac_ossl.c; path = crypto/hash/hmac_ossl.c; sourceTree = "<group>"; };
+		4445B1E6E6DA4FD69EFB1B4F /* key.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = key.c; path = crypto/kernel/key.c; sourceTree = "<group>"; };
+		44CBC956B24C474BA7E6FB6B /* aes_gcm_ossl.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = aes_gcm_ossl.c; path = crypto/cipher/aes_gcm_ossl.c; sourceTree = "<group>"; };
+		49AEB39480F6423F9FB621AA /* srtp.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = srtp.c; path = srtp/srtp.c; sourceTree = "<group>"; };
+		52DA468B0555454791F56348 /* hmac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = hmac.h; path = crypto/include/hmac.h; sourceTree = "<group>"; };
+		546C0ABCCCE6444BA49C5D10 /* auth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = auth.h; path = crypto/include/auth.h; sourceTree = "<group>"; };
+		69DA1CAC31594F3E876121E1 /* auth_test_cases.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = auth_test_cases.c; path = crypto/hash/auth_test_cases.c; sourceTree = "<group>"; };
+		79902C680FD4449CADE47148 /* datatypes.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = datatypes.c; path = crypto/math/datatypes.c; sourceTree = "<group>"; };
+		7FFACC75E2214F6BA9534DEE /* rdbx.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rdbx.h; path = crypto/include/rdbx.h; sourceTree = "<group>"; };
+		81955E5A78E9438F802CF462 /* null_cipher.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = null_cipher.h; path = crypto/include/null_cipher.h; sourceTree = "<group>"; };
+		8B759B10A42E482D914B42AB /* alloc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = alloc.h; path = crypto/include/alloc.h; sourceTree = "<group>"; };
+		9B190AE85C70458BAFD82F61 /* aes_icm.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = aes_icm.h; path = crypto/include/aes_icm.h; sourceTree = "<group>"; };
+		9F36FA574EC343DEAE91C490 /* datatypes.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = datatypes.h; path = crypto/include/datatypes.h; sourceTree = "<group>"; };
+		A7A0AB4F3A5449A49BCD1CAB /* err.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = err.c; path = crypto/kernel/err.c; sourceTree = "<group>"; };
+		ABA90BC900284A5D80B624B7 /* null_auth.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = null_auth.c; path = crypto/hash/null_auth.c; sourceTree = "<group>"; };
+		AD4E7F8CC30A4273BA8BF6DA /* libsrtp2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libsrtp2.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B681215BE75A4737999EDEAB /* key.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = key.h; path = crypto/include/key.h; sourceTree = "<group>"; };
+		B97BFD52ADC6421E9EA7F6CD /* cipher.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cipher.h; path = crypto/include/cipher.h; sourceTree = "<group>"; };
+		D10A9DA16CD14FDFB60A5CD5 /* srtp_priv.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = srtp_priv.h; path = include/srtp_priv.h; sourceTree = "<group>"; };
+		E1259EE7DB9A499593A0FFA1 /* alloc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = alloc.c; path = crypto/kernel/alloc.c; sourceTree = "<group>"; };
+		E195639CEC75483DB19EF8C1 /* cipher.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = cipher.c; path = crypto/cipher/cipher.c; sourceTree = "<group>"; };
+		E56986F247C246EF91185A22 /* crypto_kernel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = crypto_kernel.h; path = crypto/include/crypto_kernel.h; sourceTree = "<group>"; };
+		E82AF553855345FCB928A127 /* rdb.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = rdb.h; path = crypto/include/rdb.h; sourceTree = "<group>"; };
+		E84DE44D45604BC5AF93824B /* cipher_types.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cipher_types.h; path = crypto/include/cipher_types.h; sourceTree = "<group>"; };
+		EFC62829CC0F47C48E9D116F /* config.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = config.h; path = apple/libsrtp/config.h; sourceTree = SOURCE_ROOT; };
+		F3183BBA307C4C3BAC933C65 /* cipher_test_cases.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = cipher_test_cases.h; path = crypto/cipher/cipher_test_cases.h; sourceTree = "<group>"; };
+		F34A3A74368149DB96817735 /* rdbx.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = rdbx.c; path = crypto/replay/rdbx.c; sourceTree = "<group>"; };
+		F99F9A49BA854A97BA86D13C /* crypto_kernel.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = crypto_kernel.c; path = crypto/kernel/crypto_kernel.c; sourceTree = "<group>"; };
+		FC6F0D2EE662440A9D9B9F1B /* srtp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = srtp.h; path = include/srtp.h; sourceTree = "<group>"; };
+		FFCC80CFD4D54D0AA206DBCF /* aes.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = aes.h; path = crypto/include/aes.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E3DF44729BE74E24A732F230 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		004FE7C526BA40F6AC0980B2 = {
+			isa = PBXGroup;
+			children = (
+				08F57D96F32F4417B5CC3C1F /* srtp2 */,
+				5A382B4E3C2A41F3BC004EF0 /* Products */,
+				D61D7FACF6594132BB2379FA /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		08F57D96F32F4417B5CC3C1F /* srtp2 */ = {
+			isa = PBXGroup;
+			children = (
+				DB85379AF076463D93A06F59 /* src */,
+				27F4B7C106D04C7FA98DA17A /* include */,
+			);
+			name = srtp2;
+			sourceTree = "<group>";
+		};
+		27F4B7C106D04C7FA98DA17A /* include */ = {
+			isa = PBXGroup;
+			children = (
+				EFC62829CC0F47C48E9D116F /* config.h */,
+				FFCC80CFD4D54D0AA206DBCF /* aes.h */,
+				9B190AE85C70458BAFD82F61 /* aes_icm.h */,
+				8B759B10A42E482D914B42AB /* alloc.h */,
+				546C0ABCCCE6444BA49C5D10 /* auth.h */,
+				B97BFD52ADC6421E9EA7F6CD /* cipher.h */,
+				E84DE44D45604BC5AF93824B /* cipher_types.h */,
+				E56986F247C246EF91185A22 /* crypto_kernel.h */,
+				0C1D7AAACF434019BCA98F82 /* crypto_types.h */,
+				9F36FA574EC343DEAE91C490 /* datatypes.h */,
+				184CB1FAE6724D8F9A9BC105 /* err.h */,
+				52DA468B0555454791F56348 /* hmac.h */,
+				3A70081EC9884A70A7811384 /* integers.h */,
+				B681215BE75A4737999EDEAB /* key.h */,
+				177A7C1C60354D6283BB69E8 /* null_auth.h */,
+				81955E5A78E9438F802CF462 /* null_cipher.h */,
+				E82AF553855345FCB928A127 /* rdb.h */,
+				7FFACC75E2214F6BA9534DEE /* rdbx.h */,
+				30CB396089924771B7C33304 /* sha1.h */,
+				FC6F0D2EE662440A9D9B9F1B /* srtp.h */,
+				D10A9DA16CD14FDFB60A5CD5 /* srtp_priv.h */,
+			);
+			name = include;
+			path = ../../../external/libdatachannel/deps/libsrtp;
+			sourceTree = "<group>";
+		};
+		2AC37E7E8D4F4071A9B249B1 /* Kernel */ = {
+			isa = PBXGroup;
+			children = (
+				E1259EE7DB9A499593A0FFA1 /* alloc.c */,
+				F99F9A49BA854A97BA86D13C /* crypto_kernel.c */,
+				A7A0AB4F3A5449A49BCD1CAB /* err.c */,
+				4445B1E6E6DA4FD69EFB1B4F /* key.c */,
+			);
+			name = Kernel;
+			sourceTree = "<group>";
+		};
+		2F3EC3F6CBE44F5CBB2F6DA7 /* Replay */ = {
+			isa = PBXGroup;
+			children = (
+				0A554E6E2AD249DFABC9A8EA /* rdb.c */,
+				F34A3A74368149DB96817735 /* rdbx.c */,
+			);
+			name = Replay;
+			sourceTree = "<group>";
+		};
+		5A382B4E3C2A41F3BC004EF0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AD4E7F8CC30A4273BA8BF6DA /* libsrtp2.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		697E28F6CBC94F0A8E842CA8 /* Ciphers */ = {
+			isa = PBXGroup;
+			children = (
+				44CBC956B24C474BA7E6FB6B /* aes_gcm_ossl.c */,
+				3982EFC1D96548CA9F40D877 /* aes_icm_ossl.c */,
+				E195639CEC75483DB19EF8C1 /* cipher.c */,
+				37B2C65C711D49D1B2E2C953 /* cipher_test_cases.c */,
+				F3183BBA307C4C3BAC933C65 /* cipher_test_cases.h */,
+				379618F319F64DECB9DB9C0D /* null_cipher.c */,
+			);
+			name = Ciphers;
+			sourceTree = "<group>";
+		};
+		79A8FCA01D934CFDAE16C00F /* Math */ = {
+			isa = PBXGroup;
+			children = (
+				79902C680FD4449CADE47148 /* datatypes.c */,
+			);
+			name = Math;
+			sourceTree = "<group>";
+		};
+		BBB0A16CA1BC4584816177A1 /* Hashes */ = {
+			isa = PBXGroup;
+			children = (
+				26F8C8C849924CBF96A5D3FB /* auth.c */,
+				69DA1CAC31594F3E876121E1 /* auth_test_cases.c */,
+				2B1156DB470440828CE0B9B8 /* auth_test_cases.h */,
+				3A9C0379AB9D47ACAF7EC2C0 /* hmac_ossl.c */,
+				ABA90BC900284A5D80B624B7 /* null_auth.c */,
+			);
+			name = Hashes;
+			sourceTree = "<group>";
+		};
+		D61D7FACF6594132BB2379FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DB85379AF076463D93A06F59 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				697E28F6CBC94F0A8E842CA8 /* Ciphers */,
+				BBB0A16CA1BC4584816177A1 /* Hashes */,
+				2AC37E7E8D4F4071A9B249B1 /* Kernel */,
+				79A8FCA01D934CFDAE16C00F /* Math */,
+				2F3EC3F6CBE44F5CBB2F6DA7 /* Replay */,
+				49AEB39480F6423F9FB621AA /* srtp.c */,
+			);
+			name = src;
+			path = ../../../external/libdatachannel/deps/libsrtp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FF87ACC5A0824821AFE31BEF /* srtp2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B23C392B59D647FBB3C34E2D /* Build configuration list for PBXNativeTarget "srtp2" */;
+			buildPhases = (
+				416E5BB70330442BAB22DD7D /* Sources */,
+				E3DF44729BE74E24A732F230 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = srtp2;
+			productName = srtp2;
+			productReference = AD4E7F8CC30A4273BA8BF6DA /* libsrtp2.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FC73361D0E534E2981333284 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = 1586D7A722B0455AAB89388F /* Build configuration list for PBXProject "libsrtp2" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 004FE7C526BA40F6AC0980B2;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FF87ACC5A0824821AFE31BEF /* srtp2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		416E5BB70330442BAB22DD7D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12D96867B027452BB37BB3C6 /* aes_gcm_ossl.c in Sources */,
+				41B37CEB6FA8461C82FAAE70 /* aes_icm_ossl.c in Sources */,
+				F56CA5D720D748198DEEF465 /* cipher.c in Sources */,
+				E5F947FE5789411696FAF36A /* cipher_test_cases.c in Sources */,
+				9928B058380645139A1DEAC5 /* null_cipher.c in Sources */,
+				354208913F2B4A29B98E4907 /* auth.c in Sources */,
+				478440667C5F4F8781FE6271 /* auth_test_cases.c in Sources */,
+				9A185B3BB9FD48AD9778DF57 /* hmac_ossl.c in Sources */,
+				9DD2AC19362740A38B5E87D5 /* null_auth.c in Sources */,
+				17F7E40C54324DA2BB648BB6 /* alloc.c in Sources */,
+				2B928C00BC5740FCAAD9A371 /* crypto_kernel.c in Sources */,
+				E9984E92AFEC4776831CE691 /* err.c in Sources */,
+				FD1068CCE3394E1E8903C416 /* key.c in Sources */,
+				B477100ACAD74047912CE6BB /* datatypes.c in Sources */,
+				EBB27A2484B846438E0F5E2A /* rdb.c in Sources */,
+				0A7326CA30DC47648B35C3A5 /* rdbx.c in Sources */,
+				C1BEEC9907144DF890E7ED77 /* srtp.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		036F980200C645EEB22A79EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				OPENSSL_DIR = "$(SRCROOT)/../../../external/openssl";
+				SDKROOT = "";
+				SRTP2_DIR = "$(SRCROOT)/../../../external/libdatachannel/deps/libsrtp";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Release;
+		};
+		149986A005D640D0B41D9FEE /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					HAVE_CONFIG_H,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/libsrtp",
+					"$(SRCROOT)/openssl/include",
+					"$(SRTP2_DIR)/include",
+					"$(SRTP2_DIR)/crypto/include",
+					"$(OPENSSL_DIR)/include",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-Wno-conversion",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = srtp2;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = MinSizeRel;
+		};
+		39F8DDED10974947AAC42D8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				OPENSSL_DIR = "$(SRCROOT)/../../../external/openssl";
+				SDKROOT = "";
+				SRTP2_DIR = "$(SRCROOT)/../../../external/libdatachannel/deps/libsrtp";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Debug;
+		};
+		3B6E69C06DDD4CBCA2DB6F78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					HAVE_CONFIG_H,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/libsrtp",
+					"$(SRCROOT)/openssl/include",
+					"$(SRTP2_DIR)/include",
+					"$(SRTP2_DIR)/crypto/include",
+					"$(OPENSSL_DIR)/include",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-Wno-conversion",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = srtp2;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Release;
+		};
+		755A934A4F884F56BB79D11B /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				OPENSSL_DIR = "$(SRCROOT)/../../../external/openssl";
+				SDKROOT = "";
+				SRTP2_DIR = "$(SRCROOT)/../../../external/libdatachannel/deps/libsrtp";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = RelWithDebInfo;
+		};
+		A25C808BD1DB4FE5B9B7E705 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					HAVE_CONFIG_H,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/libsrtp",
+					"$(SRCROOT)/openssl/include",
+					"$(SRTP2_DIR)/include",
+					"$(SRTP2_DIR)/crypto/include",
+					"$(OPENSSL_DIR)/include",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = "-Wno-conversion";
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = srtp2;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		BE793CA728274463ADC868CD /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				OPENSSL_DIR = "$(SRCROOT)/../../../external/openssl";
+				SDKROOT = "";
+				SRTP2_DIR = "$(SRCROOT)/../../../external/libdatachannel/deps/libsrtp";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = MinSizeRel;
+		};
+		F8BED7000B9C492DB49D3B8B /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
+					HAVE_CONFIG_H,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/libsrtp",
+					"$(SRCROOT)/openssl/include",
+					"$(SRTP2_DIR)/include",
+					"$(SRTP2_DIR)/crypto/include",
+					"$(OPENSSL_DIR)/include",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-Wno-conversion",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = srtp2;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = RelWithDebInfo;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1586D7A722B0455AAB89388F /* Build configuration list for PBXProject "libsrtp2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				39F8DDED10974947AAC42D8A /* Debug */,
+				036F980200C645EEB22A79EC /* Release */,
+				BE793CA728274463ADC868CD /* MinSizeRel */,
+				755A934A4F884F56BB79D11B /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B23C392B59D647FBB3C34E2D /* Build configuration list for PBXNativeTarget "srtp2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A25C808BD1DB4FE5B9B7E705 /* Debug */,
+				3B6E69C06DDD4CBCA2DB6F78 /* Release */,
+				149986A005D640D0B41D9FEE /* MinSizeRel */,
+				F8BED7000B9C492DB49D3B8B /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FC73361D0E534E2981333284 /* Project object */;
+}

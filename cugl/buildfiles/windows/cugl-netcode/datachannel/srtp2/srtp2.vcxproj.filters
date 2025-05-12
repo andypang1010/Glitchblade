@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files\cipher">
+      <UniqueIdentifier>{e70118c6-f7a4-4b80-802e-d4e0a3d2d875}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hash">
+      <UniqueIdentifier>{f0555abf-4977-44a1-bc13-eee1dbd92883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\kernel">
+      <UniqueIdentifier>{23fb2c09-ef4b-4124-b98f-e824c020f098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{276d1703-7517-467c-905a-995fa89e42c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\replay">
+      <UniqueIdentifier>{eba28735-f5c9-4850-b978-055c7cbd5555}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\aes_gcm_ossl.c">
+      <Filter>Source Files\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\aes_icm_ossl.c">
+      <Filter>Source Files\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\cipher.c">
+      <Filter>Source Files\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\cipher_test_cases.c">
+      <Filter>Source Files\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\null_cipher.c">
+      <Filter>Source Files\cipher</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\auth.c">
+      <Filter>Source Files\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\auth_test_cases.c">
+      <Filter>Source Files\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\hmac_ossl.c">
+      <Filter>Source Files\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\null_auth.c">
+      <Filter>Source Files\hash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\kernel\alloc.c">
+      <Filter>Source Files\kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\kernel\crypto_kernel.c">
+      <Filter>Source Files\kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\kernel\err.c">
+      <Filter>Source Files\kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\kernel\key.c">
+      <Filter>Source Files\kernel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\math\datatypes.c">
+      <Filter>Source Files\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\replay\rdb.c">
+      <Filter>Source Files\replay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\replay\rdbx.c">
+      <Filter>Source Files\replay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\srtp\srtp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\cipher_test_cases.h">
+      <Filter>Source Files\cipher</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\auth_test_cases.h">
+      <Filter>Source Files\hash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\aes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\aes_icm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\alloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\auth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\cipher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\cipher_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\crypto_kernel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\crypto_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\datatypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\err.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\hmac.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\integers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\key.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\null_auth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\null_cipher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\rdb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\rdbx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\sha1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\include\srtp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\include\srtp_priv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

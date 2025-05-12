@@ -1,0 +1,19 @@
+[
+  {
+    "name": "untitled",
+    "preset": {
+      "bigbang": {
+        "value": 0
+      },
+      "bigpan": {
+        "value": 0
+      },
+      "littlebang": {
+        "value": 0
+      },
+      "startbang": {
+        "value": 0
+      }
+    }
+  }
+]

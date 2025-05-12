@@ -1,0 +1,34 @@
+[
+  {
+    "id": "background",
+    "file": "sounds/background.wav"
+  },
+  {
+    "id": "b_hit1_wav",
+    "file": "sounds/hit1.wav"
+  },
+  {
+    "id": "bigbot",
+    "file": "sounds/bigbot.wav"
+  },
+  {
+    "id": "littlebot",
+    "file": "sounds/littlebot.wav"
+  },
+  {
+    "id": "b_hit3_wav",
+    "file": "sounds/hit3.wav"
+  },
+  {
+    "id": "b_hit2_wav",
+    "file": "sounds/hit2.wav"
+  },
+  {
+    "id": "b_hit4_wav",
+    "file": "sounds/hit4.wav"
+  },
+  {
+    "id": "b_hit5_wav",
+    "file": "sounds/hit5.wav"
+  }
+]

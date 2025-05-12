@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <SDL2Dir>$(SolutionDir)__BUILD_2_SDL__</SDL2Dir>
+    <GameDir>$(SolutionDir)__ROOT_DIR__</GameDir>
+    <AssetDir>$(SolutionDir)__ASSET_DIR__</AssetDir>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="SDL2Dir">
+      <Value>$(SDL2Dir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GameDir">
+      <Value>$(GameDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="AssetDir">
+      <Value>$(AssetDir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

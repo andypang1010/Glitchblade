@@ -29,7 +29,13 @@
 #include "../enemies/actionmodel_variants/GBMeleeActionModel.h"
 #include "ui/GBIngameUI.h"
 #include "../core/GBAudio.h"
-
+#include "RNBO.h"              // ← add
+#include <SDL.h>               // ← for SDL_AudioSpec
+#include <iostream>
+#include <memory>
+#include <atomic>
+#include <unistd.h>
+#include <fstream>
 #include <ctime>
 #include <string>
 #include <iostream>
@@ -65,6 +71,41 @@ _complete(false),
 _debug(false),
 _input(nullptr)
 {
+}
+
+static bool loadWavAsFloat(const char* path,
+                           RNBO::CoreObject& rnbo,
+                           const std::string& dataRefId) {
+    SDL_AudioSpec spec;
+    Uint8*  rawBuf = nullptr;
+    Uint32  rawLen = 0;
+    if (!SDL_LoadWAV(path, &spec, &rawBuf, &rawLen)) {
+        std::cerr << "SDL_LoadWAV failed: " << SDL_GetError() << "\n";
+        return false;
+    }
+    // Convert any format → float32
+    SDL_AudioCVT cvt;
+    SDL_BuildAudioCVT(&cvt,
+                      spec.format, spec.channels, spec.freq,
+                      AUDIO_F32SYS, spec.channels, spec.freq);
+    cvt.len = rawLen;
+    cvt.buf = (Uint8*)SDL_malloc(cvt.len * cvt.len_mult);
+    std::memcpy(cvt.buf, rawBuf, rawLen);
+    SDL_ConvertAudio(&cvt);
+    SDL_FreeWAV(rawBuf);
+
+    // Hand off to RNBO
+    float*  floatBuf = (float*)cvt.buf;
+    size_t  byteSize = cvt.len_cvt;
+    RNBO::Float32AudioBuffer bufType(spec.channels, spec.freq);
+    rnbo.setExternalData(
+        dataRefId.c_str(),
+        (char*)floatBuf,
+        byteSize,
+        bufType,
+        /*free-callback*/[](RNBO::ExternalDataId, char* d){ SDL_free(d); }
+    );
+    return true;
 }
 
 /**
@@ -184,6 +225,76 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
         [this](Projectile* p) { this->removeProjectile(p); },  // Callback for projectile removal
         [this](int i, int d) { this->setScreenShake(i, d); }   // Callback for screen shake
     );
+    
+    // George's Code Start
+    //
+    // ——— RNBO SETUP ———
+    //
+    _rnbo = std::make_unique<RNBO::CoreObject>();
+    std::string assetsDir = cugl::Application::get()->getAssetDirectory();
+    std::string deps = assetsDir + "dependencies.json";
+    std::ifstream in(deps);
+    if (!in) {
+      CUAssertLog(false, "Could not open %s", deps.c_str());
+    }
+    std::stringstream buffer;
+    buffer << in.rdbuf();
+    auto jsonText = buffer.str();
+    if (jsonText.empty()) {
+        std::cerr << "ERROR: " << deps << " was empty\n";
+        return false;
+    }
+    // Parse dependencies into a RNBO DataRefList
+    RNBO::DataRefList list(buffer.str());
+    // after you parse DataRefList “list”
+    for (int i = 0; i < list.size(); ++i) {
+        if (list.datarefTypeAtIndex(i) != RNBO::DataRefType::File) continue;
+        std::string idstr = list.datarefIdAtIndex(i);
+        std::string rel   = list.datarefLocationAtIndex(i);
+        // trim whitespace just in case
+        rel = rel.substr(rel.find_first_not_of(" \t\n\r"),
+                         rel.find_last_not_of(" \t\n\r") - rel.find_first_not_of(" \t\n\r") + 1);
+
+        std::string full = assetsDir + rel;
+        std::cout<<"→ loading buffer “"<<idstr<<"” from "<<full<<"\n";
+
+        if (! loadWavAsFloat(full.c_str(), *_rnbo, idstr)) {
+          std::cerr<<"‼ Failed to load “"<<full<<"”\n";
+        }
+    }
+    
+    _rnbo->prepareToProcess(44100.0, 64);
+    _idxBigPan = _rnbo->getParameterIndexForID("bigpan");
+    if (_idxBigPan < 0) {
+        CULog("Couldn't find BIGPAN!");
+    }
+
+    //
+    // ——— SDL AUDIO SETUP ———
+    //
+    SDL_AudioSpec want = {};
+    want.freq     = 44100;
+    want.format   = AUDIO_F32SYS;   // 32‑bit float
+    want.channels = 2;              // stereo
+    want.samples  = 64;             // must match RNBO block size
+    want.callback = GameScene::audioCallback;
+    want.userdata = this;
+
+    SDL_AudioSpec have;
+    _audioDevice = SDL_OpenAudioDevice(nullptr, 0, &want, &have, 0);
+    if (_audioDevice) {
+      SDL_PauseAudioDevice(_audioDevice,0);
+        CULog("Audio Initialized");
+      // now that audio is live, hit RNBO with your test note:
+        scheduleInitialNote();
+    }
+    
+    if (_audioDevice == 0) {
+      CULog("Failed to open SDL audio: %s", SDL_GetError());
+    } else {
+      SDL_PauseAudioDevice(_audioDevice, 0);  // start audio
+    }
+    // George's Code End
 
     return true;
 }
@@ -226,6 +337,17 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
  * Disposes of all (non-static) resources allocated to this mode.
  */
 void GameScene::dispose() {
+    // George's Code
+    if (_audioDevice) {
+      SDL_CloseAudioDevice(_audioDevice);
+      _audioDevice = 0;
+    }
+    // resetting is very buggy now
+    if (_rnbo) {
+        _rnbo -> setPatcher();
+        _rnbo -> prepareToProcess(44100, 64);
+    }
+    // George's Code ends
 
     _world->onEndContact = nullptr;
     _world->onBeginContact = nullptr;
@@ -264,6 +386,11 @@ void GameScene::reset() {
     _camera->setPosition(_defCamPos);
     addChild(_ui);
     _ui->resetUI();
+    
+    if (_rnbo) {
+        _rnbo -> setPatcher();
+        _rnbo -> prepareToProcess(44100, 64);
+    }
 
     Application::get()->setClearColor(Color4f::BLACK);
 }
@@ -468,6 +595,31 @@ void GameScene::fixedUpdate(float step) {
     // Update the level controller
     _levelController->fixedUpdate(step);
     
+    //GEORGE's CODE
+    // wave‑bang logic
+    int waveIndex = _levelController->getCurrentWaveIndex();
+    int numWaves  = _levelController->getNumWaves();
+    
+    auto littlebang = _rnbo->getParameterIndexForID("littlebang");
+    auto bigbang = _rnbo->getParameterIndexForID("bigbang");
+    
+    auto rnbonow = RNBO::RNBOTimeNow;
+    // 1) first wave (index 0)
+    if (waveIndex == 0 && _lastNotifiedWave < 0) {
+        CULog("Setting LITTLEBANG");
+        // send littlebang immediately when wave 0 starts
+        _rnbo->setParameterValue(littlebang, 1.0, rnbonow + 30000);
+        _lastNotifiedWave = 0;
+    }
+
+    // 2) last wave (index numWaves‑1)
+    if (! _sentBigBang && waveIndex == numWaves - 1) {
+        CULog("Setting BIGBANG");
+        _rnbo->setParameterValue(bigbang, 1.0, rnbonow + 2000);
+        _sentBigBang = true;
+    }
+    // GEORGE END
+    
     processScreenShake();
 
     auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
@@ -651,4 +803,85 @@ void GameScene::processScreenShake() {
         _shakeIntensity = 0;
     }
     _worldnode->setPosition(_worldnode->getPosition() + (target - _worldnode->getPosition()) / 2);
+}
+
+#pragma mark George's Tests
+void GameScene::scheduleInitialNote() {
+    using namespace RNBO;
+
+    // debug print all parameter IDs
+    int numParams = _rnbo->getNumParameters();
+    for (int i = 0; i < numParams; ++i) {
+      std::cout<<"param["<<i<<"] id="<<_rnbo->getParameterId(i)<<"\n";
+    }
+    auto idx = _rnbo->getParameterIndexForID("startbang");
+    std::cout<<"indexOf(\"startbang\")="<<idx<<"\n";
+
+    auto now = RNBOTimeNow;
+
+    // 1) send the MIDI note‑on/off as before
+    uint8_t onMsg[3]  = { uint8_t(0x90), 60, 100 };
+    uint8_t offMsg[3] = { uint8_t(0x80), 60,   0 };
+    _rnbo->scheduleEvent(MidiEvent(now,       0, onMsg,  3));
+    _rnbo->scheduleEvent(MidiEvent(now + 500, 0, offMsg, 3));
+
+    // 2) bang the “startbang” param at t = now+500 ms
+    _rnbo->setParameterValue(idx, 1.0, now + 500);
+}
+
+void GameScene::audioCallback(void* userdata, Uint8* stream, int len) {
+    auto self = static_cast<GameScene*>(userdata);
+    float* out = reinterpret_cast<float*>(stream);
+    int frames = len / (sizeof(float) * 2);  // stereo
+
+    // allocate RNBO output buffers
+    RNBO::SampleValue* bufL = new RNBO::SampleValue[frames];
+    RNBO::SampleValue* bufR = new RNBO::SampleValue[frames];
+    RNBO::SampleValue* outputs[2] = { bufL, bufR };
+
+    // create an empty array of the correct type:
+    // pointer itself is const too → matches non‑template exactly
+    const RNBO::SampleValue* const inputs_arr[1] = { nullptr };
+
+    // pass that (numInputs = 0 so it never reads it)
+    self->_rnbo->process(
+        (const RNBO::SampleValue* const*)inputs_arr,   // force non‑template first parameter
+        0,
+        (RNBO::SampleValue* const*)outputs,            // force non‑template third parameter
+        2,
+        frames
+    );
+    
+    // --- compute bigpan 0–1 ---
+    Vec2 playerP = self->_player->getPosition();
+    Vec2 enemyP  = self->getLastEnemyPosition();
+    float dist   = enemyP.x - playerP.x;                   // >0 enemy to right
+    float norm   = (dist + self->_maxPanDistance)
+                   / (2.0f * self->_maxPanDistance);
+    norm = std::clamp(norm, 0.0f, 1.0f);
+
+    // schedule into RNBO
+    self->_rnbo->setParameterValueNormalized(
+        self->_idxBigPan,
+        norm,
+        RNBO::RNBOTimeNow
+    );
+
+    // copy into SDL buffer
+    for (int i = 0; i < frames; ++i) {
+        out[2*i  ] = static_cast<float>(bufL[i]);
+        out[2*i+1] = static_cast<float>(bufR[i]);
+    }
+
+    delete[] bufL;
+    delete[] bufR;
+}
+
+Vec2 GameScene::getLastEnemyPosition() {
+    auto waves = _levelController->getWaves();           // assume you make it public or add a getter
+    int lastWave = (int)waves.size() - 1;
+    if ( lastWave >= 0 && !waves[lastWave].empty() ) {
+      return waves[lastWave].back()->getEnemy()->getPosition();
+    }
+    return _player->getPosition(); // fallback
 }

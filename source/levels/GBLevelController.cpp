@@ -295,7 +295,7 @@ void LevelController::preUpdate(float dt)
     }
 
 	_playerController->preUpdate(dt);
-	CULog("PLAYER SCENE NODE SIZE: %s", player->getSceneNode()->getContentSize().toString().c_str());
+	// CULog("PLAYER SCENE NODE SIZE: %s", player->getSceneNode()->getContentSize().toString().c_str());
 
     for (auto platform : _platforms) {
         platform.second->setPosition(platform.first->getPosition() * _constantsJSON->get("scene")->getFloat("scale"));
@@ -698,3 +698,5 @@ int LevelController::getSpawnedInWave() const {
 std::shared_ptr<PlayerController> LevelController::getPlayerController() const {
     return _playerController;
 }
+
+

@@ -220,6 +220,16 @@ public:
     std::shared_ptr<cugl::scene2::SceneNode> getPlayerNode() { return _playerController->getPlayer()->getSceneNode(); };
     std::shared_ptr<PlatformInput> getInputController() { return _playerController->getInputController(); };
     std::shared_ptr<LevelModel> getCurrentLevel() {if (_currentLevel == nullptr){throw std::runtime_error("current level is null!");}; return _currentLevel;};
+    std::vector<std::vector<std::shared_ptr<EnemyController>>> getWaves() {return _enemyWaves;}
+    
+    // George's two getters
+    /** Returns the index of the wave we’re currently spawning. */
+    int getCurrentWaveIndex() const { return _currentWaveIndex; }
+
+    /** Returns how many waves this level has. */
+    int getNumWaves() const { return (int)_enemyWaves.size(); }
+    
+    
 #pragma mark level obstacle data
     void setStaticPhysics(const std::shared_ptr<physics2::Obstacle>& obj);
     std::vector<std::vector<Vec2>>  calculateWallVertices();
@@ -235,5 +245,7 @@ public:
             enemyCtrlr->getEnemy()->getHP() > 0);
         }
     };
+
+
 
 #endif /* LEVEL_CONTROLLER_H */
