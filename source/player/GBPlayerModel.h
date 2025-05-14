@@ -567,7 +567,7 @@ public:
     int getAoeRem() { return _aoeRem; }
     
     // Guarding
-    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0 /**&& !_landingDash*/; }
+    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0 && !_landingDash; }
     bool isGuardActive() { return _guardRem > 0 || isGuardBegin(); }
     int getGuardRem() { return _guardRem; }
     void setGuardRem(int value = _guard_duration) { _guardRem = value; }
