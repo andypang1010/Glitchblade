@@ -92,17 +92,17 @@ void CollisionController::beginContact(b2Contact* contact) {
     }
 
     // Projectile-Projectile Collision
-    else if (o1->getName() == proj_name && o2->getName() == proj_name) {
+    //else if (o1->getName() == proj_name && o2->getName() == proj_name) {
 
-        // Destroy if one is fired by player and the other is not
-        if (
-            (((Projectile*)o1)->getIsPlayerFired() && !((Projectile*)o2)->getIsPlayerFired()) ||
-            (((Projectile*)o2)->getIsPlayerFired() && !((Projectile*)o1)->getIsPlayerFired())
-            ) {
-            _removeProjectile((Projectile*)o1);
-            _removeProjectile((Projectile*)o2);
-        }
-    }
+    //    // Destroy if one is fired by player and the other is not
+    //    if (
+    //        (((Projectile*)o1)->getIsPlayerFired() && !((Projectile*)o2)->getIsPlayerFired()) ||
+    //        (((Projectile*)o2)->getIsPlayerFired() && !((Projectile*)o1)->getIsPlayerFired())
+    //        ) {
+    //        _removeProjectile((Projectile*)o1);
+    //        _removeProjectile((Projectile*)o2);
+    //    }
+    //}
 
     // Projectile-Environment Collision
     else if (o1->getName() == proj_name && (o2->getName() == ground_name || o2->getName() == wall_name)) {

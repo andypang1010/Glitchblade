@@ -191,13 +191,13 @@ void PlayerModel::damage(float value) {
     else {
         if (isParryActive()) {
             _guardState = 2;
+            _guardCooldownRem = 0;
 		}
         else {
             _guardState = 3;
         }
         _parryRem = 0;
         _guardRem = 0;
-        _guardCooldownRem = 0;
         _guardReleaseRem = PLAYER_HIT_COLOR_DURATION;
     }
 }
@@ -448,6 +448,10 @@ void PlayerModel::updateAnimation()
         setParryRem(0);
         setGuardState(0);
     }
+    if (isDashBegin() && getGuardReleaseRem() > 0) {
+        setGuardReleaseRem(0);
+		setGuardState(0);
+    }
     
 #pragma mark end animation cancelling code
     
@@ -687,8 +691,6 @@ void PlayerModel::reset(){
     _scene = nullptr; // set debug scene to nullptr
     resetAttributes();
     resetSpriteFrames();
-    CULog("aoe name is %s", reinterpret_cast<std::string*>(_aoeSensorFixture->GetUserData().pointer)->c_str());
-    CULog("aoe mask bits are %d", _aoeSensorFixture->GetFilterData().maskBits);
 }
 
 void PlayerModel::setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite) { 

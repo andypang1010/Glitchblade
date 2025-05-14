@@ -157,7 +157,7 @@
             }
         ]
     },
-      {
+    {
         "name": "Level 3",
         "scale": 1,
         "layers": [
@@ -166,20 +166,20 @@
                 "speed": 0
             },
             {
-              "file": "scene3_l4",
-              "speed": 1
+                "file": "scene3_l4",
+                "speed": 1
             },
             {
-              "file": "scene3_l3",
-              "speed": 2
+                "file": "scene3_l3",
+                "speed": 2
             },
             {
-              "file": "scene3_l2",
-              "speed": 3
+                "file": "scene3_l2",
+                "speed": 3
             },
             {
-              "file": "scene3_l1",
-              "speed": 4
+                "file": "scene3_l1",
+                "speed": 4
             },
             {
                 "file": "ground",
@@ -187,37 +187,69 @@
             }
         ],
         "platforms": [
-          {
-            "origin": {
-              "x": 20.0,
-              "y": 5.6
+            {
+                "origin": {
+                    "x": 20.0,
+                    "y": 5.6
+                },
+                "size": {
+                    "width": 8.0,
+                    "height": 1
+                }
             },
-            "size": {
-              "width": 8.0,
-              "height": 1
+            {
+                "origin": {
+                    "x": 40.0,
+                    "y": 9.6
+                },
+                "size": {
+                    "width": 8.0,
+                    "height": 1
+                }
             }
-          },
-          {
-            "origin": {
-              "x": 40.0,
-              "y": 9.6
-            },
-            "size": {
-              "width": 8.0,
-              "height": 1
-            }
-          }
         ],
         "waves": [
             {
                 "spawn_intervals": [
+                    3,
+                    3,
+                    7,
+                    3,
+                    3,
                     3
                 ],
                 "enemies": [
+                    "minion_1B",
+                    "minion_1B",
+                    "minion_1A",
+                    "minion_1A",
+                    "minion_2A",
+                    "minion_2A"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3,
+                    3,
+                    3
+                ],
+                "enemies": [
+                    "boss_1",
+                    "minion_1B",
+                    "minion_1A"
+                ]
+            },
+            {
+                "spawn_intervals": [
+                    3,
+                    3
+                ],
+                "enemies": [
+                    "boss_1",
                     "boss_2"
                 ]
             }
         ]
-      }
+    }
   ]
 }

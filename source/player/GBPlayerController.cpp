@@ -93,36 +93,34 @@ void PlayerController::applyForce() {
         }
     }
 
-    if (!_player->isParryActive()) {
-        // Dash!
+    // Dash!
 #pragma mark L/R dash force
-        if (_player->isDashLeftBegin()) {
-            _player->faceLeft();
-            // b2Vec2 force(-_player->getDashF(),0);
-            // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
-            playerBody->SetLinearVelocity(b2Vec2(-_player->getDashF(), playerBody->GetLinearVelocity().y));
-        }
-        if (_player->isDashRightBegin()) {
-            _player->faceRight();
-            // b2Vec2 force(DASH, 0);
-            // _body->ApplyLinearImpulseToCenter(force, true);
-            CULog("dash force begin applied");
-            playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
-        }
+    if (_player->isDashLeftBegin()) {
+        _player->faceLeft();
+        // b2Vec2 force(-_player->getDashF(),0);
+        // _body->ApplyLinearImpulseToCenter(force, true); // Old method of dashing
+        playerBody->SetLinearVelocity(b2Vec2(-_player->getDashF(), playerBody->GetLinearVelocity().y));
+    }
+    if (_player->isDashRightBegin()) {
+        _player->faceRight();
+        // b2Vec2 force(DASH, 0);
+        // _body->ApplyLinearImpulseToCenter(force, true);
+        CULog("dash force begin applied");
+        playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
+    }
 
-        if (_player->isDashLRActive())
-        {
-            CULog("dash force applied");
-            playerBody->SetLinearVelocity(b2Vec2(_player->getVX(), 0));
-        }
+    if (_player->isDashLRActive())
+    {
+        CULog("dash force applied");
+        playerBody->SetLinearVelocity(b2Vec2(_player->getVX(), 0));
+    }
 
-        if (_player->isDashDownBegin()) {
-            playerBody->SetLinearVelocity(b2Vec2(playerBody->GetLinearVelocity().x, -_player->getDashF()));
-        }
+    if (_player->isDashDownBegin()) {
+        playerBody->SetLinearVelocity(b2Vec2(playerBody->GetLinearVelocity().x, -_player->getDashF()));
+    }
 
-        if (_player->isDashDownActive()) {
-            playerBody->SetLinearVelocity(b2Vec2(0, _player->getVY()));
-        }
+    if (_player->isDashDownActive()) {
+        playerBody->SetLinearVelocity(b2Vec2(0, _player->getVY()));
     }
 
 #pragma mark knockback force
