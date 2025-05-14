@@ -481,6 +481,9 @@ private:
     
     /** The radius of the aoe attack */
     static float _aoe_radius;
+    
+    static b2Filter inactive_filter;
+    static b2Filter active_filter;
 
 public:
     #pragma mark -

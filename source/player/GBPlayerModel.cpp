@@ -622,7 +622,7 @@ void PlayerModel::setDebug(){
 }
 
 void PlayerModel::setConstants(){
-
+    inactive_filter.maskBits = 0x0;
     // Health
     _maxhp = 1000;
     // Animation
@@ -696,9 +696,7 @@ void PlayerModel::setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite) {
  */
 void PlayerModel::resetAoeFixture(){
     _aoeSensorNode->setVisible(false);
-    b2Filter aoeFilter = _aoeSensorFixture->GetFilterData();
-    aoeFilter.maskBits = 0x000;
-    _aoeSensorFixture->SetFilterData(aoeFilter);
+    _aoeSensorFixture->SetFilterData(inactive_filter);
 }
 
 /**
@@ -707,9 +705,7 @@ void PlayerModel::resetAoeFixture(){
 void PlayerModel::activateAoeFixture(){
     setAoeRem(3);
     _aoeSensorNode->setVisible(true);
-    b2Filter aoeFilter = _aoeSensorFixture->GetFilterData();
-    aoeFilter.maskBits = 0xFFF;
-    _aoeSensorFixture->SetFilterData(aoeFilter);
+    _aoeSensorFixture->SetFilterData(active_filter);
 }
 
 
@@ -734,5 +730,8 @@ float PlayerModel::_damp_force = 30.0f;
 float PlayerModel::_dash_force = 30.0f;
 
 float PlayerModel::_aoe_radius = 8.0f;
+
+b2Filter PlayerModel::inactive_filter = b2Filter();
+b2Filter PlayerModel::active_filter = b2Filter();
 
 
