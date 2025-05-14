@@ -65,12 +65,14 @@ ObstacleNodePair Projectile::createProjectileNodePair(const std::shared_ptr<Asse
     newProjectile->setSensor(true);
     newProjectile->setLinearVelocity(projectile->getLinearVelocity() * Vec2(isFacingRight ? 1 : -1, 1));
     newProjectile->setAnimOffset(projectile->getAnimOffset());
-	
+
+	newProjectile->setSize(projectile->getSize() * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 
 	newProjectile->setDamage(projectile->getDamage());
 
     std::shared_ptr<scene2::SpriteNode> newSprite = scene2::SpriteNode::allocWithSprite(projectile->getSceneNode());
     newSprite->setPosition(projectile->getAnimOffset());
+    newSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	newSprite->setFrame(0);
 
     // Set angle for verticle projectiles.

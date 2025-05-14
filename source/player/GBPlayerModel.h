@@ -74,21 +74,21 @@ protected:
     /** Which direction is the character facing */
     bool _faceRight;
     /** How long until we can jump again in animation frames */
-    int  _jumpCooldownRem;
+    int  _jumpCooldownRem = 0;
     /** How long until we can dash again in frames*/
-    int  _dashCooldownRem;
+    int  _dashCooldownRem = 0;
     /** How many frames remaining in the dash animation (affects friciton)*/
-    int  _dashRem;
+    int  _dashRem = 0;
     /** How long until we can guard again in frames */
     int  _guardCooldownRem = 0;
     /** How many frames remaining in the guard release animation */
     int  _guardReleaseRem = 0;
     /** How many frames remaining in the guard (0 when guard is not active) */
-    int  _guardRem;
+    int  _guardRem = 0;
     /** The state of the guard: 1 = is guarding, 2 = parry release, 3 = normal release, 0 = not guarding */
     int  _guardState = 0;
     /** How many frames remaining in the parry (0 when parry is not active) */
-    int  _parryRem;
+    int  _parryRem = 0;
     /** Whether we are actively inputting jumping */
     bool _isJumpInput;
     /** Whether we are actively inputting strafe left*/
@@ -107,11 +107,16 @@ protected:
     bool _hasProjectile;
     /** Whether we are actively inputting shoot */
     bool _isShootInput;
+
     /** Whether we are knocked-back (sets input cd) */
     bool _isKnocked;
     /** Whether we are knocked-back (sets input cd) */
     int _knockRem;
+    /** A buffer value for how many frames have passed after the knock back have started */
+    int _knockStartBuffer;
+    /** Force of the knockback */
     Vec2 _knockForce;
+
     /** How long until we can shoot again in animation frames*/
     int  _shootCooldownRem;
     /** Whether our feet are on the ground */
@@ -120,7 +125,7 @@ protected:
     bool _dashReset = true;
     /** Whether the player is in the dash down end animation (which should block other actions) */
     bool _landingDash;
-    
+    int _aoeRem = 0;
     int _lastDamagedFrame;
     /** Remaining time for damaged animation */
     int _damageRem;
@@ -143,6 +148,14 @@ protected:
     std::shared_ptr<scene2::WireNode> _groundSensorNode;
     /** The player scene node**/
     std::shared_ptr<scene2::SceneNode> _sceneNode;
+#pragma mark AOE sensor
+    b2Fixture*  _aoeSensorFixture;
+    /** Reference to the aoe name */
+    std::string _aoeSensorName;
+    /** The node for debugging the aoe sensor */
+    std::shared_ptr<scene2::WireNode> _aoeSensorNode;
+
+    
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
     float _drawScale;
     int frameCounter = 0;
@@ -283,11 +296,14 @@ public:
         _dashCooldownRem = 0;
         _dashRem = 0;
         _guardCooldownRem = 0;
+        _aoeRem = 0;
         _guardRem = 0;
         _guardState = 0;
         _parryRem = 0;
         _damageRem = 0;
         _damage = 10;// default player dmg
+        _knockRem = 0;
+        _knockStartBuffer = 0;
         
         _parryCounter = 0;
 		_comboMeter = 0;
@@ -379,6 +395,13 @@ public:
     // Miscellaneous
     Vec2 getKnockForce() { return _knockForce; }
 
+    /**
+     * Whether the knock back effect had just started(less than 5 frames)
+     * 
+	 * @return true if the knock back effect had just started
+     */
+    bool isKnockbackStarting() { return _knockStartBuffer <= 5; }
+
     std::string* getBodyName() { return &_bodyName; }
     /**
      * Returns the name of the ground sensor
@@ -388,6 +411,8 @@ public:
      * @return the name of the ground sensor
      */
     std::string* getGroundSensorName() { return &_groundSensorName; }
+    
+    std::string* getAoeSensorName() { return &_aoeSensorName; }
 
     /**
      * Returns true if this character is facing right
@@ -453,6 +478,9 @@ private:
     static float _jump_force;
     static float _damp_force;
     static float _dash_force;
+    
+    /** The radius of the aoe attack */
+    static float _aoe_radius;
 
 public:
     #pragma mark -
@@ -528,6 +556,13 @@ public:
     // Downward Dash
     void setDashDownInput(bool value) { _isDashDownInput = value; }
     
+    // aoe attack
+    bool isAoeActive() const {return _aoeRem > 0;}
+    void resetAoeFixture();
+    void activateAoeFixture();
+    void setAoeRem(int value) { _aoeRem = value; }
+    int getAoeRem() { return _aoeRem; }
+    
     // Guarding
     bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0 /**&& !_landingDash*/; }
     bool isGuardActive() { return _guardRem > 0 || isGuardBegin(); }
@@ -554,6 +589,10 @@ public:
     bool isKnockbackActive() { return _knockRem > 0 || isKnocked(); }
     void setKnocked(bool value, Vec2 knockForce) { _isKnocked = value; _knockForce = knockForce; }
     void resetKnocked() { _isKnocked = false; }
+
+    int getKnockStartBuffer() { return _knockStartBuffer; }
+	void setKnockStartBuffer(int value) { _knockStartBuffer = value; }
+	
 
     // Projectile
     bool hasProjectile() { return _hasProjectile; }

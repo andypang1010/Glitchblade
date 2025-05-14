@@ -109,7 +109,7 @@
                 "hitboxStartFrame": 26,
                 "hitboxEndFrame": 37,
                 "hitboxDamage": 40,
-                "hitboxKnockBack": 20,
+                "hitboxKnockBack": 100,
                 "parriable": false
             },
             {

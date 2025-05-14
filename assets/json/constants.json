@@ -29,6 +29,7 @@
         "name": "platform"
     },
     "ground": {
+        "name": "ground",
         "vertex_count": 8,
         "thickness": 2.2
     },
@@ -49,7 +50,7 @@
         "fixture_names": {
             "body": "player_body_sensor",
             "ground": "player_ground_sensor",
-            "shield": "player_shield_sensor"
+            "aoe": "player_aoe_sensor"
         },
         "animation": {
             "update_frame": 4
@@ -66,20 +67,21 @@
             "force": 90
         },
         "dash": {
-            "cooldown": 35,
+            "cooldown": 40,
             "duration": 20,
-            "speed": 30
+            "speed": 40
         },
         "knockback": {
-            "force": 50,
-            "duration": 15
+            "force": 65,
+            "v_force": 50,
+            "duration": 120
         },
         "guard": {
             "cooldown": 30,
             "duration": 60
         },
         "parry": {
-            "duration": 18
+            "duration": 24
         },
         "shoot_cooldown": 20,
         "fixtures": {
@@ -92,8 +94,8 @@
                 "h_shrink": 0.6,
                 "height": 0.1
             },
-            "shield": {
-                "radius": 2
+            "aoe": {
+                "radius": 5.0
             }
         },
         "density": 2,

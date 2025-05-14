@@ -34,10 +34,12 @@ private:
     std::unordered_set<b2Fixture*> _sensorFixtures;
 
     float _defaultKnockback;
+    float _defaultVerticalKnockback;
     
 #pragma mark collision case helpers
     void playerEnemyCollision(Obstacle* enemyObstacle);
     void playerHitboxCollision(Obstacle* hitboxObstacle);
+    void aoeEnemyCollision(Obstacle* enemyObstacle);
     void playerProjectileCollision(Obstacle* projectileObstacle);
     void enemyProjectileCollision(Obstacle* enemyObstacle, Obstacle* projectileObstacle);
 #pragma mark collision helpers
@@ -61,6 +63,8 @@ private:
      * @return True if the fixture and body correspond to the player body, false otherwise.
      */
     bool isPlayerBody(physics2::Obstacle* b,const std::string* f);
+    
+    bool isPlayerAoe(physics2::Obstacle* b,const std::string* f);
     /**
      * @brief Checks if a projectile is hitting the player's shield.
      *

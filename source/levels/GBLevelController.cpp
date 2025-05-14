@@ -217,7 +217,7 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     triangulator.clear();
 
     groundObj = physics2::PolygonObstacle::allocWithAnchor(ground, Vec2::ANCHOR_CENTER);
-    groundObj->setName("GROUND OBJECT");
+    groundObj->setName("ground");
 
     setStaticPhysics(groundObj);
     ground *= scale;
@@ -298,7 +298,7 @@ void LevelController::preUpdate(float dt)
 
     for (auto platform : _platforms) {
         platform.second->setPosition(platform.first->getPosition() * _constantsJSON->get("scene")->getFloat("scale"));
-		platform.second->setScale(1);
+		platform.second->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 		platform.second->setAnchor(Vec2::ANCHOR_CENTER);
     }
 }
@@ -562,7 +562,7 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 	CULog("%s", json->toString().c_str());
 
 	level->setLevelName(json->getString("name"));
-    level->setScale(json->getFloat("scale"));
+    level->setScale(0.0004006410 * Application::get()->getDisplayWidth());
     auto bg = assetRef->get<graphics::Texture>(json->getString("background"));
     level->setBackground(bg);
     auto gr = Texture::allocWithFile(json->getString("ground"));

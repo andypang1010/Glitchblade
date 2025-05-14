@@ -2,7 +2,7 @@
   "levels": [
     {
       "name": "Level 1",
-      "scale": 0.5,
+      "scale": 1,
       "layers": [
         {
           "file": "scene1_bg",
@@ -70,7 +70,7 @@
     },
     {
         "name": "Level 2",
-        "scale": 0.5,
+        "scale": 1,
         "layers": [
             {
           "file": "scene2_bg",
@@ -101,7 +101,7 @@
           {
             "origin": {
               "x": 20.0,
-              "y": 7.1
+              "y": 5.6
             },
             "size": {
               "width": 8.0,
@@ -111,7 +111,7 @@
           {
             "origin": {
               "x": 40.0,
-              "y": 7.1
+              "y": 5.6
             },
             "size": {
               "width": 8.0,
@@ -121,7 +121,7 @@
           {
             "origin": {
               "x": 30.0,
-              "y": 11.0
+              "y": 9.6
             },
             "size": {
               "width": 8.0,
@@ -159,7 +159,7 @@
     },
       {
         "name": "Level 3",
-        "scale": 0.5,
+        "scale": 1,
         "layers": [
             {
                 "file": "scene3_bg",
@@ -190,7 +190,7 @@
           {
             "origin": {
               "x": 20.0,
-              "y": 4
+              "y": 5.6
             },
             "size": {
               "width": 8.0,
@@ -200,7 +200,7 @@
           {
             "origin": {
               "x": 40.0,
-              "y": 7.1
+              "y": 9.6
             },
             "size": {
               "width": 8.0,
@@ -211,41 +211,9 @@
         "waves": [
             {
                 "spawn_intervals": [
-                    3,
-                    3,
-                    7,
-                    3,
-                    3,
                     3
                 ],
                 "enemies": [
-                    "minion_1B",
-                    "minion_1B",
-                    "minion_1A",
-                    "minion_1A",
-                    "minion_2A",
-                    "minion_2A"
-                ]
-            },
-            {
-                "spawn_intervals": [
-                    3,
-                    3,
-                    3
-                ],
-                "enemies": [
-                    "boss_1",
-                    "minion_1B",
-                    "minion_1A"
-                ]
-            },
-            {
-                "spawn_intervals": [
-                    3,
-                    3
-                ],
-                "enemies": [
-                    "boss_1",
                     "boss_2"
                 ]
             }

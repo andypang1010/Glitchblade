@@ -34,39 +34,39 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     EnemyModel::attachNodes(assetRef);
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_idle"), 5, 2, 10);
-	_idleSprite->setScale(0.5f);
-    _idleSprite->setPosition(0, 10);
+	_idleSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _idleSprite->setPosition(0, 10 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_idleSprite->setName("idle");
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_walk"), 5, 2, 10);
-    _walkSprite->setScale(0.5f);
-    _walkSprite->setPosition(0, 10);
+    _walkSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _walkSprite->setPosition(0, 10 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_walkSprite->setName("walk");
 
     _punchSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_punch"), 8, 4, 30);
-    _punchSprite->setScale(0.5f);
-    _punchSprite->setPosition(0, 10);
+    _punchSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _punchSprite->setPosition(0, 10 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_punchSprite->setName("punch");
 
     _slamSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_slam"), 8, 4, 32);
-    _slamSprite->setScale(0.5f);
-    _slamSprite->setPosition(0, 10);
+    _slamSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _slamSprite->setPosition(0, 10 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_slamSprite->setName("slam");
 
 	_slamVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("wave_enemy_1"), 1, 8, 8);
-	_slamVFXSprite->setScale(0.4f);
-	_slamVFXSprite->setPosition(150, -5);
+	_slamVFXSprite->setScale(0.4f * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_slamVFXSprite->setPosition(150 * 2 * 0.0004006410 * Application::get()->getDisplayWidth(), -5 * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_slamVFXSprite->setName("slam_vfx");
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_stun"), 5, 4, 20);
-    _stunSprite->setScale(0.5f);
-    _stunSprite->setPosition(0, 10);
+    _stunSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _stunSprite->setPosition(0, 10 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _stunSprite->setName("stun");
 	stunFrames = _stunSprite->getCount() * 4;
 
     _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion1B_dead"), 5, 3, 15);
-    _deadSprite->setScale(0.5f);
-    _deadSprite->setPosition(0, 10);
+    _deadSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _deadSprite->setPosition(0, 10 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_deadSprite->setName("dead");
 
     getSceneNode()->addChild(_idleSprite);
