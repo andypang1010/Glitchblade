@@ -530,9 +530,9 @@ public:
 
     // Dashing
 
-    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset/**&& !_landingDash*/; }
-    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset /**&& !_landingDash*/; }
-    bool isDashDownBegin() {return _isDashDownInput && _dashCooldownRem <= 0 && _dashReset && !_isGrounded /**&& !_landingDash*/;}
+    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset && !isParryActive() && !_landingDash; }
+    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset && !isParryActive() && !_landingDash; }
+    bool isDashDownBegin() {return _isDashDownInput && _dashCooldownRem <= 0 && _dashReset && !_isGrounded && !isParryActive() && !_landingDash;}
     bool isDashLRBegin() { return isDashLeftBegin() || isDashRightBegin(); }
     bool isDashBegin() {return isDashLRBegin() || isDashDownBegin(); }
     bool isDashLRActive() { return (_dashRem > 0 && _dashType == DashType::LR) || isDashLRBegin(); }

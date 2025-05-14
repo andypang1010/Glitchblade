@@ -437,6 +437,22 @@ void PlayerModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite
 
 void PlayerModel::updateAnimation()
 {
+    
+#pragma mark begin animation cancelling code
+    if (isGuardBegin() && isDashActive()){
+        setDashRem(0);
+        resetDashType();
+    }
+    if (isDashBegin() && isGuardActive()){
+        setGuardRem(0);
+        setParryRem(0);
+        setGuardState(0);
+    }
+    
+#pragma mark end animation cancelling code
+    
+    
+
     _sceneNode->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
 
     if (_hp <= 0) {
@@ -504,7 +520,7 @@ void PlayerModel::updateAnimation()
 
         playAnimationOnce(_attackSprite);
     }
-    
+#pragma mark dash down
     else if (isDashDownActive()) {
         setOnlyVisible(_dashDownStartSprite);
         if (isDashDownBegin()) {
@@ -528,6 +544,7 @@ void PlayerModel::updateAnimation()
             playAnimationOnce(_dashDownStartSprite);
         }
     }
+#pragma mark landing dash animation
     
     else if (_landingDash){
         
@@ -589,6 +606,8 @@ void PlayerModel::resetDebug() {
     if (_groundSensorNode == nullptr || _aoeSensorNode == nullptr){
         setDebug();
     }
+    
+    _aoeSensorNode->setVisible(false);
    
     if (_debug->getChildCount() == 0){
         _groundSensorNode->setColor(Color4::RED);
@@ -666,9 +685,10 @@ void PlayerModel::reset(){
     }
     //setDebugScene(nullptr);
     _scene = nullptr; // set debug scene to nullptr
-    resetAoeFixture();
     resetAttributes();
     resetSpriteFrames();
+    CULog("aoe name is %s", reinterpret_cast<std::string*>(_aoeSensorFixture->GetUserData().pointer)->c_str());
+    CULog("aoe mask bits are %d", _aoeSensorFixture->GetFilterData().maskBits);
 }
 
 void PlayerModel::setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite) { 
@@ -703,7 +723,7 @@ void PlayerModel::resetAoeFixture(){
  Remove the aoe fixture from collision detection and set its debug node invisible
  */
 void PlayerModel::activateAoeFixture(){
-    setAoeRem(3);
+    setAoeRem(5);
     _aoeSensorNode->setVisible(true);
     _aoeSensorFixture->SetFilterData(active_filter);
 }

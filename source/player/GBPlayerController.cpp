@@ -106,6 +106,7 @@ void PlayerController::applyForce() {
             _player->faceRight();
             // b2Vec2 force(DASH, 0);
             // _body->ApplyLinearImpulseToCenter(force, true);
+            CULog("dash force begin applied");
             playerBody->SetLinearVelocity(b2Vec2(_player->getDashF(), playerBody->GetLinearVelocity().y));
         }
 
@@ -184,6 +185,7 @@ void PlayerController::preUpdate(float dt)
 #pragma mark fixedUpdate
 void PlayerController::fixedUpdate(float timestep)
 {
+
     _player->updateAnimation();
     
     if (_player->getHP() <= 0) {
@@ -214,7 +216,6 @@ void PlayerController::fixedUpdate(float timestep)
     }
 
     if (_player->isGrounded()) {
-		CULog("Player is grounded");
     }
 }
 
@@ -314,7 +315,7 @@ void PlayerController::updateCooldowns()
 
     // Reset the dash if ready (requires user to stop holding dash key(s) for at least one frame)
     if (!_player->getDashReset() && _player->getDashCDRem() <= 0 && !(_player->isDashInput())) {
-        CULog("resetting dash");
+//        CULog("resetting dash");
         _player->resetDashType();
         _player->setDashReset(true); // ready to dash again
     }
