@@ -371,7 +371,7 @@
             "type": "sample",
             "file": "sounds/balatro.ogg",
             "stream": true,
-            "volume": 0.5
+            "volume": 0.1125
         },
         "win": {
             "type": "sample",
@@ -388,7 +388,7 @@
         "jump": {
             "type": "sample",
             "file": "sounds/jump.wav",
-            "volume": 0.5
+            "volume": 0.1125
         },
         "pew": {
             "type": "sample",

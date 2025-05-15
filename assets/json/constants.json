@@ -23,7 +23,7 @@
         "vertex_count": 8,
         "wall_count": 2,
         "thickness": 0.0125,
-        "name": "wall",
+        "name" : "wall",
         "level_bounds": [0.0, 3.65625]
     },
     "ground": {
