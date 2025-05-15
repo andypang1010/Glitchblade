@@ -62,7 +62,9 @@ protected:
    
     // HUD statistics
     std::shared_ptr<cugl::scene2::Label> _hudTimeNum;
-    std::shared_ptr<cugl::scene2::Label> _hudEnemyNum;
+    std::shared_ptr<cugl::scene2::Label> _hudWaveNum;
+    std::shared_ptr<cugl::scene2::PolygonNode> _progressBar;
+    float _progressBarOriginalWidth = 0;
 
     // Win page statistics
     std::shared_ptr<cugl::scene2::Label> _winTimeNum;
@@ -136,7 +138,7 @@ public:
     void setHP(int hp);
     
     void setTime(float timeSpent);
-    void setProgression(int spawnedCount, int totalCount);
+    void setProgression(int spawnedCount, int totalCount, int waveIndex);
     
     void resetUI();
 

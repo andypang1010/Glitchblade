@@ -679,12 +679,19 @@ float LevelController::getTimeSpentInLevel() const {
     return _timeSpentInLevel;
 }
 
-int LevelController::getTotalInWave() const {
+int LevelController::getTotalEnemyCount() const {
     return _totalEnemyCount;
 }
 
-int LevelController::getSpawnedInWave() const {
+int LevelController::getSpawnedEnemyCount() const {
     return _spawnedEnemyCount;
+}
+
+int LevelController::getCurrentWaveIndex() const {
+    if (_currentWaveIndex >= _enemyWaves.size() - 1) {
+        return -1;  // Final boss wave
+    }
+    return _currentWaveIndex;
 }
 
 std::shared_ptr<PlayerController> LevelController::getPlayerController() const {

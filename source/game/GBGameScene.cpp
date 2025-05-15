@@ -334,8 +334,8 @@ void GameScene::setComplete(bool value) {
 
         float timeSpent = _levelController->getTimeSpentInLevel();
         int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
-        int spawnedCount = _levelController->getSpawnedInWave();
-        int totalCount = _levelController->getTotalInWave();
+        int spawnedCount = _levelController->getSpawnedEnemyCount();
+        int totalCount = _levelController->getTotalEnemyCount();
         _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
@@ -375,8 +375,8 @@ void GameScene::setFailure(bool value) {
         if (_ui) {
             float timeSpent = _levelController->getTimeSpentInLevel();
             int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
-            int spawnedCount = _levelController->getSpawnedInWave();
-            int totalCount = _levelController->getTotalInWave();
+            int spawnedCount = _levelController->getSpawnedEnemyCount();
+            int totalCount = _levelController->getTotalEnemyCount();
             _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
             _ui->showHeadsUpDisplay(false, false);
             _ui->showLosePage(true);
@@ -532,7 +532,7 @@ void GameScene::fixedUpdate(float step) {
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setPosition(base + Vec2(offsetX, offsetY));
         _ui->setTime(_levelController->getTimeSpentInLevel());
-        _ui->setProgression(_levelController->getSpawnedInWave(),_levelController->getTotalInWave());
+        _ui->setProgression(_levelController->getSpawnedEnemyCount(),_levelController->getTotalEnemyCount(), _levelController->getCurrentWaveIndex());
     }
     
     setComplete(_levelController->isLevelWon());

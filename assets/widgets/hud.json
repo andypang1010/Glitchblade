@@ -254,7 +254,7 @@
                     "visible": true
                 }
             },
-            "emeny_num": {
+            "wave_num": {
                 "type": "Label",
                 "data": {
                     "anchor": [
@@ -262,11 +262,11 @@
                         0
                     ],
                     "size": [
-                        150,
+                        360,
                         40
                     ],
                     "position": [
-                        549,
+                        444,
                         501
                     ],
                     "angle": 0,

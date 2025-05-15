@@ -46,7 +46,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     }
 
     _hudTimeNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("time_num"));
-    _hudEnemyNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("enemy_num"));
+    _hudWaveNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("wave_num"));
     _winTimeNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("time_num"));
     _winParryNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("parry_num"));
     _winHpNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("hp_num"));
@@ -137,9 +137,10 @@ void GBIngameUI::setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDispl
             _hpHalfSegments.push_back(half);
         }
     }
-    
+    _progressBar = headsUpDisplay->getChildByName<scene2::PolygonNode>("progress_ind");
     _comboBar = headsUpDisplay->getChildByName<scene2::PolygonNode>("combo_bar");
     _comboBarOriginalWidth = _comboBar->getContentSize().width;
+    _progressBarOriginalWidth = _progressBar->getContentSize().width;
 }
 
 void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
@@ -302,10 +303,23 @@ void GBIngameUI::setTime(float timeSpent) {
     }
 }
 
-void GBIngameUI::setProgression(int spawnedCount, int totalCount) {
-    if (_hudEnemyNum) {
-        std::string text = "Enemy " + std::to_string(spawnedCount) + "/" + std::to_string(totalCount);
-        _hudEnemyNum->setText(text);
+void GBIngameUI::setProgression(int spawnedCount, int totalCount, int waveIndex) {
+    if (!_progressBar) return;
+    
+    float ratio = (totalCount > 0.0f) ? ((float)spawnedCount) / totalCount : 0.0f;
+    float barWidth = _progressBarOriginalWidth * ratio;
+    float barHeight = _progressBar->getContentSize().height;
+
+    _progressBar->setContentSize(Size(barWidth, barHeight));
+    _progressBar->setPolygon(Rect(0, 0, barWidth, barHeight));
+    
+    if (_hudWaveNum) {
+        
+        if (waveIndex == -1) {
+            _hudWaveNum->setText("Final Wave");
+        } else {
+            _hudWaveNum->setText("Wave " + std::to_string(waveIndex + 1));
+        }
     }
 }
 

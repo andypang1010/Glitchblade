@@ -67,8 +67,9 @@ public:
     
 #pragma mark send statistics
     float getTimeSpentInLevel() const;
-    int getTotalInWave() const;
-    int getSpawnedInWave() const;
+    int getTotalEnemyCount() const;
+    int getSpawnedEnemyCount() const;
+    int getCurrentWaveIndex() const;
     std::shared_ptr<PlayerController> getPlayerController() const;
 
 
