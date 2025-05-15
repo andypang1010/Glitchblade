@@ -68,6 +68,9 @@ private:
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
+    bool _zoneUpdate;
+    float _nextTrigger;
+    bool _playerInNextZone;
     
 public:
     
@@ -219,15 +222,22 @@ public:
     std::shared_ptr<WallZone>  createWall(float xPos, bool isLeft);
     void removeWall(std::shared_ptr<WallZone> wallZone);
 
-    void setLeftWall(std::shared_ptr<WallZone> wall) {
-        _leftWallZone = wall;
-    }
-    void setRightWall(std::shared_ptr<WallZone> wall) {
-        _rightWallZone = wall;
-    }
+//    void setLeftWall(std::shared_ptr<WallZone> wall) {
+//        _leftWallZone = wall;
+//    }
+//    void setRightWall(std::shared_ptr<WallZone> wall) {
+//        _rightWallZone = wall;
+//    }
 
     std::shared_ptr<WallZone> getLeftWall() const { return _leftWallZone; }
     std::shared_ptr<WallZone> getRightWall() const { return _rightWallZone; }
+    void setInNextZone(bool next){ _playerInNextZone = next; }
+    bool getInNextZone(){ return _playerInNextZone; }
+    bool getZoneUpdate(){ return _zoneUpdate; }
+    float getNextTrigger(){ return _nextTrigger; }
+
+    void updateLeftZone(int wallsIndex);
+    void updateRightZone(int wallsIndex);
     
 
 #pragma mark Getters

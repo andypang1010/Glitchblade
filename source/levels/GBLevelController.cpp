@@ -105,7 +105,8 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     // Setup player controller
     _playerController = std::make_shared<PlayerController>();
     _playerController->init(_assets, _constantsJSON);
-
+    _playerInNextZone = true;
+    _zoneUpdate = false;
     return true;
 }
 
@@ -120,10 +121,15 @@ void LevelController::updateLevel() {
 	}
 
     if (waveComplete()) {
-        _lastSpawnedTime = 0;
-        _numEnemiesActive = 0;
-		_currentEnemyIndex = 0;
-        _currentWaveIndex++;
+        if (!_zoneUpdate) {
+            updateRightZone(_currentWaveIndex + 1);
+        }
+        if (_playerInNextZone) {
+            updateLeftZone(++_currentWaveIndex);
+            _lastSpawnedTime = 0;
+            _numEnemiesActive = 0;
+            _currentEnemyIndex = 0;
+        }
 		//_spawnedEnemyCount = 0;
     }
 
@@ -166,6 +172,7 @@ void LevelController::spawnLevel() {
         }
 
         _enemyWaves.push_back(enemyControllers);
+        _playerInNextZone = false;
     }
 }
 
@@ -581,10 +588,10 @@ std::shared_ptr<LevelController::WallZone> LevelController::createWall(float xPo
     _worldNode->addChild(sprite);
     auto wallZone = std::make_shared<WallZone>(WallZone{wallObj, sprite, xPos*32*32});
     if (isLeft) {
-        setLeftWall(wallZone);
+        _leftWallZone = wallZone;
     }
     else {
-        setRightWall(wallZone);
+        _rightWallZone  = wallZone;
     }
     return wallZone;
 }
@@ -598,6 +605,20 @@ void LevelController::removeWall(std::shared_ptr<WallZone> wallZone) {
     obj->markRemoved(true);
 
     wallZone->sceneWall->removeFromParent();
+}
+
+void LevelController::updateRightZone(int index) {
+    removeWall(_rightWallZone);
+    createWall(_currentLevel->getWalls()[index].second, false);
+    _zoneUpdate = true;
+    _nextTrigger = _currentLevel->getWalls()[index].first*1024;
+}
+
+void LevelController::updateLeftZone(int index) {
+    removeWall(_leftWallZone);
+    createWall(_currentLevel->getWalls()[index].first, true);
+    _zoneUpdate = false;
+    _playerInNextZone = false;
 }
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
