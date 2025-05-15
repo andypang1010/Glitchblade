@@ -1,0 +1,383 @@
+{
+    "variables": {},
+    "contents": {
+        "type": "Node",
+        "format": {
+            "type": "Anchored"
+        },
+        "data": {
+            "anchor": [
+                0,
+                0
+            ],
+            "size": [
+                1248,
+                576
+            ],
+            "angle": 0,
+            "position": [
+                0,
+                0
+            ],
+            "visible": true
+        },
+        "children": {
+            "levelselect_bg_1": {
+                "type": "Image",
+                "data": {
+                    "texture": "levelselect_bg_1",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        1248,
+                        468
+                    ],
+                    "angle": 0,
+                    "position": [
+                        0,
+                        108
+                    ],
+                    "visible": true
+                }
+            },
+            "selector1_2_1": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        400,
+                        400
+                    ],
+                    "angle": 0,
+                    "position": [
+                        692,
+                        89
+                    ],
+                    "visible": true,
+                    "upnode": "selector1_2_1"
+                },
+                "children": {
+                    "selector1_2_1": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "selector1_2_1",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                400,
+                                400
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "selector1_1_1": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        400,
+                        400
+                    ],
+                    "angle": 0,
+                    "position": [
+                        223,
+                        89
+                    ],
+                    "visible": true,
+                    "upnode": "selector1_1_1"
+                },
+                "children": {
+                    "selector1_1_1": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "selector1_1_1",
+                            "anchor": [
+                                0,
+                                1
+                            ],
+                            "size": [
+                                400,
+                                400
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "top",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "lssetting": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        56,
+                        56
+                    ],
+                    "angle": 0,
+                    "position": [
+                        1161,
+                        484
+                    ],
+                    "visible": true,
+                    "upnode": "button_setting"
+                },
+                "children": {
+                    "button_setting": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_setting",
+                            "anchor": [
+                                0,
+                                0.5
+                            ],
+                            "size": [
+                                53.2,
+                                56
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "This is tutorial 2!": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        251,
+                        40
+                    ],
+                    "position": [
+                        766,
+                        38
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold32",
+                    "text": "This is tutorial 2!",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "This is tutorial 1!": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        251,
+                        40
+                    ],
+                    "position": [
+                        297,
+                        38
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold32",
+                    "text": "This is tutorial 1!",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "Tutorial 1": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        180,
+                        50
+                    ],
+                    "position": [
+                        333,
+                        89
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Tutorial 1",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "Tutorial 2": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        180,
+                        50
+                    ],
+                    "position": [
+                        802,
+                        89
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Tutorial 2",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "lshome": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        56,
+                        56
+                    ],
+                    "angle": 0,
+                    "position": [
+                        36,
+                        484
+                    ],
+                    "visible": true,
+                    "upnode": "button_home"
+                },
+                "children": {
+                    "button_home": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_home",
+                            "anchor": [
+                                0.5,
+                                0.5
+                            ],
+                            "size": [
+                                56,
+                                56
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "center",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
