@@ -227,13 +227,6 @@ public:
     std::shared_ptr<WallZone>  createWall(float xPos, bool isLeft);
     void removeWall(std::shared_ptr<WallZone> wallZone);
 
-//    void setLeftWall(std::shared_ptr<WallZone> wall) {
-//        _leftWallZone = wall;
-//    }
-//    void setRightWall(std::shared_ptr<WallZone> wall) {
-//        _rightWallZone = wall;
-//    }
-
     std::shared_ptr<WallZone> getLeftWall() const { return _leftWallZone; }
     std::shared_ptr<WallZone> getRightWall() const { return _rightWallZone; }
     void setInNextZone(bool next){ _playerInNextZone = next; }
