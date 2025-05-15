@@ -234,7 +234,6 @@
         "hp_full_segment": {
             "file": "textures/ingameui/hp_full_segment.png"
         },
-        
         "button_back": {
             "file": "textures/ingameui/button_back.png"
         },
@@ -244,7 +243,6 @@
         "button_off": {
             "file": "textures/ingameui/button_off.png"
         },
-                
         "menu_shadow": {
             "file": "textures/ingameui/menu_shadow.png"
         },
@@ -326,7 +324,19 @@
         "win_continue": {
             "file": "textures/ingameui/win_continue.png"
         },
-
+        
+        "home_bg": {
+            "file": "textures/levelselect/home_bg.png"
+        },
+        "title": {
+            "file": "textures/levelselect/title.png"
+        },
+        "button_info": {
+            "file": "textures/levelselect/button_info.png"
+        },
+        "button_start": {
+            "file": "textures/levelselect/button_start.png"
+        },
 
         "levelselect_bg_1": {
             "file": "textures/levelselect/levelselect_bg_1.png"
@@ -597,9 +607,14 @@
         "oxaniumSemibold60": {
             "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 60
+        },
+        "oxaniumRegular48": {
+            "file": "fonts/Oxanium.ttf",
+            "size": 48
         }
     },
     "widgets": {
+        "home": "widgets/home.json",
         "hud": "widgets/hud.json",
         "pausemenu": "widgets/pausemenu.json",
         "settingmenu": "widgets/settingmenu.json",
@@ -610,6 +625,16 @@
         "levelselect1": "widgets/levelselect1.json"
     },
     "scene2s": {
+        "home": {
+            "type": "Widget",
+            "comment": "This is the root node of heads-up displays",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "home"
+            }
+        },
         "hud": {
             "type": "Widget",
             "comment": "This is the root node of heads-up displays",
