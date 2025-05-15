@@ -508,18 +508,18 @@ void GameScene::fixedUpdate(float step) {
     auto currPlayerVel = _levelController->getPlayerModel()->getVX();
     auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
     auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
-    CULog("PlayerPos: %f", currPlayerPosX);
-    for (auto child : _world->getObstacles()) {
-        
-    }
-    if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
+    float leftBound = _levelController->getLeftWall()->xPosition;
+    float rightBound = _levelController->getRightWall()->xPosition;
+//    CULog("PlayerPos: %f", currPlayerPosX);
+
+    if (cameraPosLX <= leftBound || cameraPosRX >= rightBound) {
         _cameraLocked = true;
-        if (cameraPosLX <= 0) {
+        if (cameraPosLX <= leftBound) {
             if (currPlayerPosX > getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         } else {
-            if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
+            if (currPlayerPosX < rightBound - getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         }
@@ -550,7 +550,7 @@ void GameScene::fixedUpdate(float step) {
     setFailure(_levelController->isLevelLost());
 
     // Record failure if necessary.
-    if (!_failed && _player->getY() < 0) {
+    if (!_failed && _player->getHP() <= 0) {
         setFailure(true);
     }
 }

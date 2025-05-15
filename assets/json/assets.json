@@ -435,7 +435,7 @@
             "type": "sample",
             "file": "sounds/GB_MAIN.ogg",
             "stream": true,
-            "volume": 0.5
+            "volume": 0.1125
         },
         "win": {
             "type": "sample",
@@ -452,7 +452,7 @@
         "jump": {
             "type": "sample",
             "file": "sounds/jump.wav",
-            "volume": 0.5
+            "volume": 0.1125
         },
         "guard_1": {
             "type":     "sample",

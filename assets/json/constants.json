@@ -3,7 +3,7 @@
         "width": 1248,
         "height": 576,
         "aspect": 0.4615,
-        "world_width": 117,
+        "world_width": 200,
         "world_height": 18,
         "gravity": -28.9,
         "texture": "background",
@@ -23,7 +23,7 @@
         "vertex_count": 8,
         "wall_count": 2,
         "thickness": 0.0125,
-        "name": "wall",
+        "name" : "wall",
         "level_bounds": [0.0, 3.65625]
     },
     "platforms": {

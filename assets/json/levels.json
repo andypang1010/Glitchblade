@@ -67,6 +67,20 @@
             "boss_1"
           ]
         }
+      ],
+      "walls": [
+          {
+           "left" : 0,
+           "right" : 2
+          },
+          {
+           "left" : 2,
+           "right" : 4
+          },
+          {
+           "left" : 4,
+           "right" : 6.25
+          }
       ]
     },
     {
@@ -156,6 +170,20 @@
                 "enemies": [
                     "boss_2"
                 ]
+            }
+        ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 2
+            },
+            {
+             "left" : 2,
+             "right" : 4
+            },
+            {
+             "left" : 4,
+             "right" : 6.25
             }
         ]
     },
@@ -259,6 +287,20 @@
                     "boss_1",
                     "boss_2"
                 ]
+            }
+          ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 2
+            },
+            {
+             "left" : 2,
+             "right" : 4
+            },
+            {
+             "left" : 4,
+             "right" : 6.25
             }
         ]
       }

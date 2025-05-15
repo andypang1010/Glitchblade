@@ -26,6 +26,7 @@ private:
     std::vector<std::pair<std::shared_ptr<Texture>, unsigned int>> _layers;
 	std::vector<Rect> _platforms;
     std::vector<std::shared_ptr<WaveModel>> _waves;
+    std::vector<std::pair<float, float>> _walls;
 
 public:
     /**
@@ -71,10 +72,13 @@ public:
     std::vector<std::shared_ptr<WaveModel>> getWaves() const { return _waves; }
     void setWaves(const std::vector<std::shared_ptr<WaveModel>>& waves) { _waves = waves; }
     
+    // Getter and Setter for _wallZones
+    std::vector<std::pair<float, float>> getWalls() const { return _walls; }
+    void setWalls(const std::vector<std::pair<float, float>>& walls) { _walls = walls; }
+    
     // Getter and Setter for width of level (in terms of BG "tiles")
     int getBGN() { return _tiles; }
     void setBGN(int tiles) { _tiles = tiles; }
-    
 };
 
 #endif /* __GB_LEVEL_MODEL_H__ */
