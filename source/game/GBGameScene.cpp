@@ -224,8 +224,8 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
             CULog("Want to loseQuit from gamescene!");
             _doQuit = true;
         });
-        _ui->setSettingsCallback([this]() {
-            CULog("Want to settings from gamescene!");
+        _ui->setSettingCallback([this]() {
+            _shouldSetting = true;
         });
         _ui->setWinContinueCallback([this]() {
             _continueNextLevel = true;
@@ -437,13 +437,22 @@ void GameScene::preUpdate(float dt) {
     if (_shouldPause) {
         _shouldPause = false;
         _ui->showPauseMenu(true);
+        _ui->showSettingMenu(false);
         _ui->showHeadsUpDisplay(true, false);
+        setPaused(true);
+    }
+    
+    if (_shouldSetting) {
+        _shouldSetting = false;
+        _ui->showPauseMenu(false);
+        _ui->showSettingMenu(true);
         setPaused(true);
     }
     
     if (_shouldResume) {
         _shouldResume = false;
         _ui->showPauseMenu(false);
+        _ui->showSettingMenu(false);
         _ui->showHeadsUpDisplay(true, true);
         setPaused(false);
     }

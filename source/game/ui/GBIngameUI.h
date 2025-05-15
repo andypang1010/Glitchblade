@@ -30,6 +30,12 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _quitButton;
     std::shared_ptr<cugl::scene2::Button> _settingButton;
     
+    /** The setting menu buttons */
+    std::shared_ptr<cugl::scene2::Button> _settingResumeButton;
+    std::shared_ptr<cugl::scene2::Button> _musicButton;
+    std::shared_ptr<cugl::scene2::Button> _soundButton;
+    std::shared_ptr<cugl::scene2::Button> _backButton;
+    
     /** The lose page buttons */
     std::shared_ptr<cugl::scene2::Button> _loseRetryButton;
     std::shared_ptr<cugl::scene2::Button> _loseQuitButton;
@@ -47,7 +53,10 @@ protected:
     std::function<void()> _continueCallback;
     std::function<void()> _loseQuitCallback;
     std::function<void()> _quitCallback;
-    std::function<void()> _settingsCallback;
+    std::function<void()> _settingCallback;
+    std::function<void()> _musicCallback;
+    std::function<void()> _soundCallback;
+    std::function<void()> _backCallback;
     std::function<void()> _winContinueCallback;
 
     /** HP segments */
@@ -118,6 +127,8 @@ public:
     void setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage);
 
     void setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu);
+    
+    void setupSetting(std::shared_ptr<cugl::scene2::SceneNode>& settingMenu);
 
     void setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDisplay);
     
@@ -150,12 +161,15 @@ public:
     void setContinueCallback(const std::function<void()>& callback) { _continueCallback = callback; }
     void setLoseQuitCallback(const std::function<void()>& callback) { _loseQuitCallback = callback; }
     void setQuitCallback(const std::function<void()>& callback) { _quitCallback = callback; }
-    void setSettingsCallback(const std::function<void()>& callback) { _settingsCallback = callback; }
+    void setSettingCallback(const std::function<void()>& callback) { _settingCallback = callback; }
+    void setMusicCallback(const std::function<void()>& callback) { _musicCallback = callback; }
+    void setSoundCallback(const std::function<void()>& callback) { _soundCallback = callback; }
+    void setBackCallback(const std::function<void()>& callback) { _backCallback = callback; }
     void setWinContinueCallback(const std::function<void()>& callback) { _winContinueCallback = callback; }
 
     void showHeadsUpDisplay(bool visible, bool active);
     void showPauseMenu(bool visible);
-//    void showSettingMenu(bool visible);
+    void showSettingMenu(bool visible);
     void showWinPage1(bool visible);
     void showWinPage(bool visible);
     void showLosePage(bool visible);

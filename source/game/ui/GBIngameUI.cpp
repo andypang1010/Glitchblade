@@ -40,6 +40,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     auto losePage = assets->get<scene2::SceneNode>("lose");
     auto winPage1 = assets->get<scene2::SceneNode>("win1");
     auto winPage = assets->get<scene2::SceneNode>("win");
+    auto settingMenu = assets->get<scene2::SceneNode>("settingmenu");
 
     if (headsUpDisplay == nullptr || pauseMenu == nullptr|| losePage == nullptr || winPage1 == nullptr || winPage == nullptr) {
         return false;
@@ -63,6 +64,11 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     pauseMenu->setVisible(false);
     addChild(pauseMenu);
     
+    settingMenu->setContentSize(Size(1248, 576));
+    settingMenu->doLayout();
+    settingMenu->setVisible(false);
+    addChild(settingMenu);
+    
     losePage->setContentSize(Size(1248, 576));
     losePage->doLayout();
     losePage->setVisible(false);
@@ -80,12 +86,14 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
 
     setupHUD(headsUpDisplay);
     setupPause(pauseMenu);
+    setupSetting(settingMenu);
     setupLose(losePage);
     setupWin1(winPage1);
     setupWin(winPage);
     
     showHeadsUpDisplay(true, true);
     showPauseMenu(false);
+    showSettingMenu(false);
     showLosePage(false);
     showWinPage1(false);
     showWinPage(false);
@@ -179,9 +187,53 @@ void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
 
     if (_settingButton) {
         _settingButton->addListener([this](const std::string& name, bool down) {
-            if (down && _settingsCallback) {
+            if (down && _settingCallback) {
                 CULog("Setting pressed");
-                _settingsCallback();
+                _settingCallback();
+            }
+        });
+    }
+}
+
+void GBIngameUI::setupSetting(std::shared_ptr<cugl::scene2::SceneNode>& settingMenu)
+{
+    _settingResumeButton = std::dynamic_pointer_cast<scene2::Button>(settingMenu->getChildByName("resume"));
+    _musicButton = std::dynamic_pointer_cast<scene2::Button>(settingMenu->getChildByName("music"));
+    _soundButton = std::dynamic_pointer_cast<scene2::Button>(settingMenu->getChildByName("sound"));
+    _backButton = std::dynamic_pointer_cast<scene2::Button>(settingMenu->getChildByName("back"));
+
+    if (_settingResumeButton) {
+        _settingResumeButton->addListener([this](const std::string& name, bool down) {
+            if (down && _resumeCallback) {
+                CULog("Setting Resume pressed");
+                _resumeCallback();
+            }
+        });
+    }
+
+    if (_musicButton) {
+        _musicButton->addListener([this](const std::string& name, bool down) {
+            if (down && _musicCallback) {
+                CULog("Music pressed");
+                _musicCallback();
+            }
+        });
+    }
+
+    if (_soundButton) {
+        _soundButton->addListener([this](const std::string& name, bool down) {
+            if (down && _soundCallback) {
+                CULog("Sound pressed");
+                _soundCallback();
+            }
+        });
+    }
+
+    if (_backButton) {
+        _backButton->addListener([this](const std::string& name, bool down) {
+            if (down && _pauseCallback) {
+                CULog("Back pressed");
+                _pauseCallback();
             }
         });
     }
@@ -257,6 +309,10 @@ void GBIngameUI::dispose() {
     _retryButton->clearListeners();
     _quitButton->clearListeners();
     _settingButton->clearListeners();
+    _settingResumeButton->clearListeners();
+    _musicButton->clearListeners();
+    _soundButton->clearListeners();
+    _backButton->clearListeners();
     _loseRetryButton->clearListeners();
     _loseQuitButton->clearListeners();
     _continueButton->clearListeners();
@@ -268,6 +324,10 @@ void GBIngameUI::dispose() {
     _retryButton = nullptr;
     _quitButton = nullptr;
     _settingButton = nullptr;
+    _settingResumeButton = nullptr;
+    _musicButton = nullptr;
+    _soundButton = nullptr;
+    _backButton = nullptr;
     _loseRetryButton = nullptr;
     _loseQuitButton = nullptr;
     _continueButton = nullptr;
@@ -328,6 +388,7 @@ void GBIngameUI::resetUI() {
     setHP(_currentHP);
     showHeadsUpDisplay(true, true);
     showPauseMenu(false);
+    showSettingMenu(false);
     showLosePage(false);
     showWinPage1(false);
     showWinPage(false);
@@ -350,6 +411,14 @@ void GBIngameUI::setButtonsActive(std::shared_ptr<scene2::SceneNode> layer, bool
 
 void GBIngameUI::showPauseMenu(bool visible) {
     auto layer = getChildByName("pausemenu");
+    if (layer) {
+        layer->setVisible(visible);
+        setButtonsActive(layer, visible);
+    }
+}
+
+void GBIngameUI::showSettingMenu(bool visible) {
+    auto layer = getChildByName("settingmenu");
     if (layer) {
         layer->setVisible(visible);
         setButtonsActive(layer, visible);
