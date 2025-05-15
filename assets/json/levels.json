@@ -66,15 +66,15 @@
       "walls": [
           {
            "left" : 0,
-           "right" : 1
-          },
-          {
-           "left" : 1,
            "right" : 2
           },
           {
            "left" : 2,
-           "right" : 3.65625
+           "right" : 4
+          },
+          {
+           "left" : 4,
+           "right" : 6.25
           }
       ]
     },
