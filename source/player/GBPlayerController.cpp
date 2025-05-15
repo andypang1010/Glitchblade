@@ -303,6 +303,9 @@ void PlayerController::updateCooldowns()
             _player->setDashRem();
             _player->setDashCDRem();
             _player->setDashReset(false); //only needed (and is it really needed?) for keyboard
+            _player->resetKnocked();
+            _player->setKnockbackRem(0);
+
     }
     else if (_player->getDashCDRem() > 0) {
         int dashRem = _player->getDashRem();

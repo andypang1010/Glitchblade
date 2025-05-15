@@ -647,7 +647,7 @@ void PlayerModel::setDebug(){
 void PlayerModel::setConstants(){
     inactive_filter.maskBits = 0x0;
     // Health
-    _maxhp = 1000;
+    _maxhp = 100;
     // Animation
     _animation_update_frame = _playerJSON->get("animation")->getInt("update_frame");
 
