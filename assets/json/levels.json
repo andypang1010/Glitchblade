@@ -62,6 +62,20 @@
             "boss_1"
           ]
         }
+      ],
+      "walls": [
+          {
+           "left" : 0,
+           "right" : 1
+          },
+          {
+           "left" : 1,
+           "right" : 2
+          },
+          {
+           "left" : 2,
+           "right" : 3.65625
+          }
       ]
     },
     {
@@ -103,6 +117,12 @@
                 "enemies": [
                     "boss_2"
                 ]
+            }
+        ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 1
             }
         ]
     },
@@ -162,7 +182,17 @@
                       "minion_1A"
                   ]
               }
-          ]
+          ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 1
+            },
+            {
+             "left" : 1,
+             "right" : 3
+            }
+        ]
       }
   ]
 }

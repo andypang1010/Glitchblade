@@ -136,11 +136,6 @@ void LevelController::updateWave() {
         return;
 	}
     
-    for (auto child : _worldNode->getChildren()) {
-        if (child->getName() == "wall") {
-            child->dispose();
-        }
-    }
     float spawnInterval = _currentLevel->getWaves()[_currentWaveIndex]->getSpawnIntervals()[_currentEnemyIndex];
 
     if (_lastSpawnedTime >= spawnInterval && _numEnemiesActive < MAX_NUM_ENEMIES) {
@@ -228,10 +223,8 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     // All walls and platforms share the same texture
     std::shared_ptr<JsonValue> wallsJ = _constantsJSON->get("walls");
     auto default_walls = wallsJ->get("level_bounds")->asFloatArray();
-    for (float wallPos : default_walls) {
-        auto wall_pair = createWall(wallPos);
-        obstacle_pairs.push_back(wall_pair); // Add wall obj
-    }
+    createWall(default_walls[0], true);
+    createWall(default_walls[1], false);
     
     for (const auto& pair : obstacle_pairs) {
         // add obstacle and set node position
@@ -536,13 +529,22 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 		waves.push_back(waveModel);
     }
+    level->setWaves(waves);
+    
+    // Parse Walls
+    std::vector<std::pair<float, float>> walls;
 
-	level->setWaves(waves);
+    for (std::shared_ptr<JsonValue> wall : json->get("walls")->children()) {
+        auto wallLR = std::make_pair(wall->get("left")->asFloat(), wall->get("right")->asFloat());
+        walls.push_back(wallLR);
+    }
+
+	level->setWalls(walls);
 	return level;
 }
 
 
-ObstacleNodePair LevelController::createWall(float xPos) {
+std::shared_ptr<LevelController::WallZone> LevelController::createWall(float xPos, bool isLeft) {
     std::shared_ptr<JsonValue> wallsJ = _constantsJSON->get("walls");
     float scale = _constantsJSON->get("scene")->getFloat("scale");
     float height =  _constantsJSON->get("scene")->getFloat("world_height");
@@ -572,9 +574,30 @@ ObstacleNodePair LevelController::createWall(float xPos) {
     std::shared_ptr<scene2::PolygonNode> sprite;
     image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
     sprite = scene2::PolygonNode::allocWithTexture(image, wall);
-    ObstacleNodePair wall_pair = std::make_pair(wallObj, sprite);
+    
+    _worldRef->addObstacle(wallObj);
+    wallObj->setDebugScene(_debugNodeRef);
+    sprite->setPosition(wallObj->getPosition() * _scale);
+    _worldNode->addChild(sprite);
+    auto wallZone = std::make_shared<WallZone>(WallZone{wallObj, sprite, xPos*32*32});
+    if (isLeft) {
+        setLeftWall(wallZone);
+    }
+    else {
+        setRightWall(wallZone);
+    }
+    return wallZone;
+}
 
-    return wall_pair;
+void LevelController::removeWall(std::shared_ptr<WallZone> wallZone) {
+    if (!wallZone) return;
+
+    auto obj = wallZone->physicsWall;
+    obj->getDebugNode()->removeFromParent();
+    obj->deactivatePhysics(*_worldRef->getWorld());
+    obj->markRemoved(true);
+
+    wallZone->sceneWall->removeFromParent();
 }
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {

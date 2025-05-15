@@ -25,6 +25,14 @@ using namespace cugl;
  */
 class LevelController {
 private:
+    struct WallZone {
+        std::shared_ptr<physics2::PolygonObstacle> physicsWall;
+        std::shared_ptr<scene2::PolygonNode> sceneWall;
+        float xPosition;
+    };
+    std::shared_ptr<WallZone> _leftWallZone;
+    std::shared_ptr<WallZone> _rightWallZone;
+    
     /** A reference to the level model */
     std::shared_ptr<LevelModel> _currentLevel;
 
@@ -62,6 +70,7 @@ private:
     std::shared_ptr<PlayerController> _playerController;
     
 public:
+    
 	float timeElapsed = 0.0f;
     
 #pragma mark send statistics
@@ -207,7 +216,19 @@ public:
     static std::unordered_map<std::string, std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef);
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef);
-    ObstacleNodePair createWall(float xPos);
+    std::shared_ptr<WallZone>  createWall(float xPos, bool isLeft);
+    void removeWall(std::shared_ptr<WallZone> wallZone);
+
+    void setLeftWall(std::shared_ptr<WallZone> wall) {
+        _leftWallZone = wall;
+    }
+    void setRightWall(std::shared_ptr<WallZone> wall) {
+        _rightWallZone = wall;
+    }
+
+    std::shared_ptr<WallZone> getLeftWall() const { return _leftWallZone; }
+    std::shared_ptr<WallZone> getRightWall() const { return _rightWallZone; }
+    
 
 #pragma mark Getters
     // this is a test method because we will need to access all enemies in the level not just one
