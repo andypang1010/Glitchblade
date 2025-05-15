@@ -22,70 +22,6 @@
             "visible": true
         },
         "children": {
-            "time_num": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        120,
-                        40
-                    ],
-                    "position": [
-                        1024,
-                        490
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "0:00",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "middle",
-                    "halign": "right"
-                },
-                "children": {}
-            },
-            "enemy_num": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        320,
-                        40
-                    ],
-                    "position": [
-                        464,
-                        490
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Enemy 5/10",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "middle",
-                    "halign": "center"
-                },
-                "children": {}
-            },
             "hp_bar": {
                 "type": "Image",
                 "data": {
@@ -95,233 +31,13 @@
                         0
                     ],
                     "size": [
-                        222,
-                        64
+                        234,
+                        70
                     ],
                     "angle": 0,
                     "position": [
                         32,
-                        480
-                    ],
-                    "visible": true
-                }
-            },
-            "combo_bar": {
-                "type": "Image",
-                "data": {
-                    "texture": "combo_bar",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        222,
-                        64
-                    ],
-                    "angle": 0,
-                    "position": [
-                        32,
-                        480
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_full_segment_5": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_full_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        33,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        201.63,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_full_segment_4": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_full_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        33,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        162.93,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_full_segment_3": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_full_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        33,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        122.81,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_full_segment_2": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_full_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        33,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        83.41,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_full_segment_1": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_full_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        33,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        44,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_5": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        24,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        201.63,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_4": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        24,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        162.93,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_3": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        24,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        122.81,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_2": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        24,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        83.41,
-                        492
-                    ],
-                    "visible": true
-                }
-            },
-            "hp_half_segment_1": {
-                "type": "Image",
-                "data": {
-                    "texture": "hp_half_segment",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        24,
-                        40
-                    ],
-                    "angle": 0,
-                    "position": [
-                        44,
-                        492
+                        474
                     ],
                     "visible": true
                 }
@@ -376,6 +92,330 @@
                             "y_offset": 0
                         }
                     }
+                }
+            },
+            "combo_bar": {
+                "type": "Image",
+                "data": {
+                    "texture": "combo_bar",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        228,
+                        64
+                    ],
+                    "angle": 0,
+                    "position": [
+                        35,
+                        477
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_1": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        22
+                    ],
+                    "angle": 0,
+                    "position": [
+                        47,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_2": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        22
+                    ],
+                    "angle": 0,
+                    "position": [
+                        85,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_3": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        22
+                    ],
+                    "angle": 0,
+                    "position": [
+                        125,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_4": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        22
+                    ],
+                    "angle": 0,
+                    "position": [
+                        165,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_half_segment_5": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_half_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        22
+                    ],
+                    "angle": 0,
+                    "position": [
+                        204,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "progress_bar": {
+                "type": "Image",
+                "data": {
+                    "texture": "progress_bar",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        360,
+                        15
+                    ],
+                    "angle": 0,
+                    "position": [
+                        444,
+                        481
+                    ],
+                    "visible": true
+                }
+            },
+            "progress_ind": {
+                "type": "Image",
+                "data": {
+                    "texture": "progress_ind",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        354,
+                        9
+                    ],
+                    "angle": 0,
+                    "position": [
+                        447,
+                        484
+                    ],
+                    "visible": true
+                }
+            },
+            "emeny_num": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        150,
+                        40
+                    ],
+                    "position": [
+                        549,
+                        501
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Wave 1",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "middle",
+                    "halign": "center"
+                },
+                "children": {}
+            },
+            "time_num": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        240,
+                        60
+                    ],
+                    "position": [
+                        885,
+                        478
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold60",
+                    "text": "0:00",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "middle",
+                    "halign": "right"
+                },
+                "children": {}
+            },
+            "hp_full_segment_5": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        204,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_4": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        165,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_3": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        125,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_2": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        85,
+                        489
+                    ],
+                    "visible": true
+                }
+            },
+            "hp_full_segment_1": {
+                "type": "Image",
+                "data": {
+                    "texture": "hp_full_segment",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        33,
+                        40
+                    ],
+                    "angle": 0,
+                    "position": [
+                        47,
+                        489
+                    ],
+                    "visible": true
                 }
             }
         }

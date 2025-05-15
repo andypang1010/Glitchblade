@@ -237,6 +237,14 @@
         "menu_shadow": {
             "file": "textures/ingameui/menu_shadow.png"
         },
+        
+        "progress_bar": {
+            "file": "textures/ingameui/progress_bar.png"
+        },
+        "progress_ind": {
+            "file": "textures/ingameui/progress_ind.png"
+        },
+        
         "level_select_menu_shadow": {
             "file": "textures/ingameui/level_select_menu_shadow.png"
         },
@@ -245,15 +253,6 @@
         },
         "level_select_menu": {
             "file": "textures/ingameui/level_select_menu.png"
-        },
-        "progress_bar": {
-            "file": "textures/ingameui/progress_bar.png"
-        },
-        "progress_half_segment": {
-            "file": "textures/ingameui/progress_half_segment.png"
-        },
-        "progress_full_segment": {
-            "file": "textures/ingameui/progress_full_segment.png"
         },
         "menu_player": {
             "file": "textures/ingameui/menu_player.png"
@@ -585,6 +584,10 @@
         "oxaniumSemibold144": {
             "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 144
+        },
+        "oxaniumSemibold60": {
+            "file": "fonts/Oxanium-SemiBold.ttf",
+            "size": 60
         }
     },
     "widgets": {

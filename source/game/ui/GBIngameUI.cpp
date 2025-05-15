@@ -138,8 +138,8 @@ void GBIngameUI::setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDispl
         }
     }
     
-    _comboBarFG = headsUpDisplay->getChildByName<scene2::PolygonNode>("combo_bar");
-    _comboBarBG = headsUpDisplay->getChildByName<scene2::PolygonNode>("hp_bar");
+    _comboBar = headsUpDisplay->getChildByName<scene2::PolygonNode>("combo_bar");
+    _comboBarOriginalWidth = _comboBar->getContentSize().width;
 }
 
 void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
@@ -413,9 +413,9 @@ void GBIngameUI::updateComboBar(float value) {
     _comboValue = std::max(0.0f, std::min(value, _comboMax));
 
     float ratio = _comboValue / _comboMax;
-    float barWidth = _comboBarBG->getContentSize().width * ratio;
-    float barHeight = _comboBarBG->getContentSize().height;
+    float barWidth = _comboBarOriginalWidth * ratio;
+    float barHeight = _comboBar->getContentSize().height;
 
-    _comboBarFG->setContentSize(Size(barWidth, barHeight));
-    _comboBarFG->setPolygon(Rect(0, 0, barWidth, barHeight));
+    _comboBar->setContentSize(Size(barWidth, barHeight));
+    _comboBar->setPolygon(Rect(0, 0, barWidth, barHeight));
 }
