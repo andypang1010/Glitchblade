@@ -301,6 +301,8 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
     setBG();
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
+    _levelController->updateRightZone(0);
+    _levelController->updateLeftZone(0);
     _player = _levelController->getPlayerModel();
     
 //    Play the background music on a loop.
@@ -510,12 +512,26 @@ void GameScene::fixedUpdate(float step) {
     auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
     float leftBound = _levelController->getLeftWall()->xPosition;
     float rightBound = _levelController->getRightWall()->xPosition;
+    
+    if (_levelController->getZoneUpdate()) {
+        _cameraLocked = false;
+        if (cameraPosLX >= _levelController->getNextTrigger()) {
+            _levelController->setInNextZone(true);
+        }
+    }
+    
 //    CULog("PlayerPos: %f", currPlayerPosX);
+    CULog("leftBound: %f", leftBound);
+    CULog("rightBound: %f", rightBound);
+    CULog("CamPos: %f", cameraPosLX);
+    if (_levelController->getZoneUpdate()) {
+        CULog("NextTriggerPos: %f", _levelController->getNextTrigger());
+    }
 
     if (cameraPosLX <= leftBound || cameraPosRX >= rightBound) {
         _cameraLocked = true;
         if (cameraPosLX <= leftBound) {
-            if (currPlayerPosX > getBounds().size.width*.66) {
+            if (currPlayerPosX > leftBound + getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         } else {
