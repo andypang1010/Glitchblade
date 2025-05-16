@@ -3,6 +3,7 @@
     {
       "name": "Level 1",
       "scale": 1,
+      "width" : 8,
       "layers": [
         {
           "file": "scene1_bg",
@@ -45,7 +46,6 @@
             3
           ],
           "enemies": [
-            "minion_1B"
           ]
         },
         {
@@ -54,8 +54,6 @@
             5
           ],
           "enemies": [
-            "minion_1B",
-            "minion_1A"
           ]
         },
         {
@@ -63,14 +61,32 @@
             3
           ],
           "enemies": [
-            "boss_1"
           ]
         }
+      ],
+      "walls": [
+          {
+           "left" : 0,
+           "right" : 1.5
+          },
+          {
+           "left" : 1.5,
+           "right" : 3
+          },
+          {
+           "left" : 1.5,
+           "right" : 3
+          },
+          {
+           "left" : 4,
+           "right" : 6.25
+          }
       ]
     },
     {
         "name": "Level 2",
         "scale": 1,
+        "width": 8,
         "layers": [
             {
           "file": "scene2_bg",
@@ -155,35 +171,58 @@
                     "boss_2"
                 ]
             }
+        ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 2
+            },
+            {
+             "left" : 2,
+             "right" : 4
+            },
+            {
+             "left" : 4,
+             "right" : 6.25
+            }
         ]
     },
     {
         "name": "Level 3",
         "scale": 1,
+        "width": 8,
         "layers": [
             {
-                "file": "scene3_bg",
-                "speed": 0
+              "file": "scene3_bg",
+              "speed": 0
             },
             {
-                "file": "scene3_l4",
-                "speed": 1
+              "file": "scene3_l6",
+              "speed": 1
             },
             {
-                "file": "scene3_l3",
-                "speed": 2
+              "file": "scene3_l5",
+              "speed": 2
             },
             {
-                "file": "scene3_l2",
-                "speed": 3
+              "file": "scene3_l4",
+              "speed": 3
             },
             {
-                "file": "scene3_l1",
-                "speed": 4
+              "file": "scene3_l3",
+              "speed": 4
             },
             {
-                "file": "ground",
-                "speed": 0
+              "file": "scene3_l2",
+              "speed": 4
+            },
+            {
+              "file": "scene3_l1",
+              "speed": 0
+            },
+            {
+              "file": "ground",
+              "speed": 0
             }
         ],
         "platforms": [
@@ -248,6 +287,20 @@
                     "boss_1",
                     "boss_2"
                 ]
+            }
+          ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 2
+            },
+            {
+             "left" : 2,
+             "right" : 4
+            },
+            {
+             "left" : 4,
+             "right" : 6.25
             }
         ]
     }

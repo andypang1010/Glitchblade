@@ -3,6 +3,9 @@
         "ground": {
             "file": "textures/ground.png"
         },
+        "scene1_a": {
+            "file": "textures/Scene_1_Arena.png"
+        },
         "scene1_bg": {
             "file": "textures/Scene_1_background.png"
         },
@@ -17,6 +20,9 @@
         },
         "scene1_l4": {
             "file": "textures/Scene_1_layer_4.png"
+        },
+        "scene2_a": {
+            "file": "textures/Scene_2_Arena.png"
         },
         "scene2_bg": {
             "file": "textures/Scene_2_background.png"
@@ -36,17 +42,26 @@
         "scene3_bg": {
             "file": "textures/Scene_3_background.png"
         },
+        "scene3_a": {
+            "file": "textures/Scene_3_Arena.png"
+        },
         "scene3_l1": {
-            "file": "textures/Scene_1_layer_1.png"
+            "file": "textures/Scene_3_layer_1.png"
         },
         "scene3_l2": {
-            "file": "textures/Scene_1_layer_2.png"
+            "file": "textures/Scene_3_layer_2.png"
         },
         "scene3_l3": {
-            "file": "textures/Scene_1_layer_3.png"
+            "file": "textures/Scene_3_layer_3.png"
         },
         "scene3_l4": {
-            "file": "textures/Scene_1_layer_4.png"
+            "file": "textures/Scene_3_layer_4.png"
+        },
+        "scene3_l5": {
+            "file": "textures/Scene_3_layer_5.png"
+        },
+        "scene3_l6": {
+            "file": "textures/Scene_3_layer_6.png"
         },
         "platform":  {
             "file": "textures/platform.png"
@@ -234,8 +249,23 @@
         "hp_full_segment": {
             "file": "textures/ingameui/hp_full_segment.png"
         },
+        "button_back": {
+            "file": "textures/ingameui/button_back.png"
+        },
+        "button_on": {
+            "file": "textures/ingameui/button_on.png"
+        },
+        "button_off": {
+            "file": "textures/ingameui/button_off.png"
+        },
         "menu_shadow": {
             "file": "textures/ingameui/menu_shadow.png"
+        },
+        "progress_bar": {
+            "file": "textures/ingameui/progress_bar.png"
+        },
+        "progress_ind": {
+            "file": "textures/ingameui/progress_ind.png"
         },
         "level_select_menu_shadow": {
             "file": "textures/ingameui/level_select_menu_shadow.png"
@@ -245,15 +275,6 @@
         },
         "level_select_menu": {
             "file": "textures/ingameui/level_select_menu.png"
-        },
-        "progress_bar": {
-            "file": "textures/ingameui/progress_bar.png"
-        },
-        "progress_half_segment": {
-            "file": "textures/ingameui/progress_half_segment.png"
-        },
-        "progress_full_segment": {
-            "file": "textures/ingameui/progress_full_segment.png"
         },
         "menu_player": {
             "file": "textures/ingameui/menu_player.png"
@@ -318,8 +339,42 @@
         "win_continue": {
             "file": "textures/ingameui/win_continue.png"
         },
-
-
+        "button_win_continue": {
+            "file": "textures/ingameui/button_win_continue.png"
+        },
+        "button_win_quit": {
+            "file": "textures/ingameui/button_win_quit.png"
+        },
+        "victory": {
+            "file": "textures/ingameui/victory.png"
+        },
+        
+        "defeat": {
+            "file": "textures/ingameui/defeat.png"
+        },
+        "button_lose_retry": {
+            "file": "textures/ingameui/button_lose_retry.png"
+        },
+        "button_lose_quit": {
+            "file": "textures/ingameui/button_lose_quit.png"
+        },
+        
+        "home_bg": {
+            "file": "textures/levelselect/home_bg.png"
+        },
+        "title": {
+            "file": "textures/levelselect/title.png"
+        },
+        "button_info": {
+            "file": "textures/levelselect/button_info.png"
+        },
+        "button_start": {
+            "file": "textures/levelselect/button_start.png"
+        },
+        "button_home": {
+            "file": "textures/levelselect/button_home.png"
+        },
+        
         "levelselect_bg_1": {
             "file": "textures/levelselect/levelselect_bg_1.png"
         },
@@ -332,6 +387,28 @@
         "selector1_1_1": {
             "file": "textures/levelselect/selector1_1_1.png"
         },
+        
+        "levelselect_bg_2": {
+            "file": "textures/levelselect/levelselect_bg_2.png"
+        },
+        "button_selector2_1_1": {
+            "file": "textures/levelselect/button_selector2_1_1.png"
+        },
+        
+        "levelselect_bg_3": {
+            "file": "textures/levelselect/levelselect_bg_4.png"
+        },
+        "button_selector3_1_1": {
+            "file": "textures/levelselect/button_selector3_1_1.png"
+        },
+        
+        "levelselect_bg_4": {
+            "file": "textures/levelselect/levelselect_bg_4.png"
+        },
+        "button_selector4_1_1": {
+            "file": "textures/levelselect/button_selector4_1_1.png"
+        },
+        
         "button_lshome": {
             "file": "textures/levelselect/button_lshome.png"
         },
@@ -375,9 +452,9 @@
     "sounds": {
         "game": {
             "type": "sample",
-            "file": "sounds/DD_Main.ogg",
+            "file": "sounds/GB_MAIN.ogg",
             "stream": true,
-            "volume": 0.5
+            "volume": 0.1125
         },
         "win": {
             "type": "sample",
@@ -394,7 +471,7 @@
         "jump": {
             "type": "sample",
             "file": "sounds/jump.wav",
-            "volume": 0.5
+            "volume": 0.1125
         },
         "guard_1": {
             "type":     "sample",
@@ -578,6 +655,10 @@
             "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 144
         },
+        "oxaniumSemibold32": {
+            "file": "fonts/Oxanium-SemiBold.ttf",
+            "size": 32
+        },
         "oxaniumSemibold40": {
             "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 40
@@ -585,18 +666,83 @@
         "oxaniumSemibold144": {
             "file": "fonts/Oxanium-SemiBold.ttf",
             "size": 144
+        },
+        "oxaniumSemibold60": {
+            "file": "fonts/Oxanium-SemiBold.ttf",
+            "size": 60
+        },
+        "oxaniumRegular48": {
+            "file": "fonts/Oxanium.ttf",
+            "size": 48
         }
+        
     },
     "widgets": {
+        "home": "widgets/home.json",
         "hud": "widgets/hud.json",
         "pausemenu": "widgets/pausemenu.json",
+        "settingmenu": "widgets/settingmenu.json",
         "levelselectmenu": "widgets/levelselectmenu.json",
         "lose": "widgets/lose.json",
         "win1": "widgets/win1.json",
         "win": "widgets/win.json",
-        "levelselect1": "widgets/levelselect1.json"
+        "levelselect1": "widgets/levelselect1.json",
+        "levelselection1": "widgets/levelselection1.json",
+        "levelselection2": "widgets/levelselection2.json",
+        "levelselection3": "widgets/levelselection3.json",
+        "levelselection4": "widgets/levelselection4.json"
     },
     "scene2s": {
+        "home": {
+            "type": "Widget",
+            "comment": "This is the root node of home page",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "home"
+            }
+        },
+        "levelselection1": {
+            "type": "Widget",
+            "comment": "This is the root node of level selection 1",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "levelselection1"
+            }
+        },
+        "levelselection2": {
+            "type": "Widget",
+            "comment": "This is the root node of level selection 2",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "levelselection2"
+            }
+        },
+        "levelselection3": {
+            "type": "Widget",
+            "comment": "This is the root node of level selection 3",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "levelselection3"
+            }
+        },
+        "levelselection4": {
+            "type": "Widget",
+            "comment": "This is the root node of level selection 4",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "levelselection4"
+            }
+        },
         "hud": {
             "type": "Widget",
             "comment": "This is the root node of heads-up displays",
@@ -615,6 +761,16 @@
             },
             "data": {
                 "key": "pausemenu"
+            }
+        },
+        "settingmenu": {
+            "type": "Widget",
+            "comment": "This is the root node of setting menu",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "settingmenu"
             }
         },
         "levelselectmenu": {

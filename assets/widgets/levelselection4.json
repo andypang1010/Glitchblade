@@ -22,59 +22,79 @@
             "visible": true
         },
         "children": {
-            "cover_shadow": {
+            "levelselect_bg_4": {
                 "type": "Image",
                 "data": {
-                    "texture": "cover_shadow",
+                    "texture": "levelselect_bg_4",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
                         1248,
-                        576
+                        468
                     ],
                     "angle": 0,
                     "position": [
                         0,
-                        0
+                        108
                     ],
                     "visible": true
                 }
             },
-            "enemy_ind": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        179,
-                        50
-                    ],
-                    "position": [
-                        437,
-                        243
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Progress: ",
-                    "foreground": "#ff8e8eff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
+            "lssetting": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
                 },
-                "children": {}
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        56,
+                        56
+                    ],
+                    "angle": 0,
+                    "position": [
+                        1161,
+                        484
+                    ],
+                    "visible": true,
+                    "upnode": "button_setting"
+                },
+                "children": {
+                    "button_setting": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_setting",
+                            "anchor": [
+                                0,
+                                0.5
+                            ],
+                            "size": [
+                                53.2,
+                                56
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
             },
-            "enemy_num": {
+            "This is level 5!": {
                 "type": "Label",
                 "data": {
                     "anchor": [
@@ -82,17 +102,17 @@
                         0
                     ],
                     "size": [
-                        120,
-                        50
+                        212,
+                        40
                     ],
                     "position": [
-                        616,
-                        243
+                        518,
+                        38
                     ],
                     "angle": 0,
                     "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "30%",
+                    "font": "oxaniumSemibold32",
+                    "text": "This is level 5!",
                     "foreground": "#ffffffff",
                     "background": "#00000000",
                     "padding": [
@@ -106,47 +126,7 @@
                 },
                 "children": {}
             },
-            "defeat": {
-                "type": "Image",
-                "data": {
-                    "texture": "defeat",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        330,
-                        64
-                    ],
-                    "angle": 0,
-                    "position": [
-                        447,
-                        303
-                    ],
-                    "visible": true
-                }
-            },
-            "lose": {
-                "type": "Image",
-                "data": {
-                    "texture": "lose",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        460,
-                        460
-                    ],
-                    "angle": 0,
-                    "position": [
-                        71,
-                        19
-                    ],
-                    "visible": true
-                }
-            },
-            "lose_retry": {
+            "lshome": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -157,29 +137,81 @@
                         0
                     ],
                     "size": [
-                        428,
-                        100
+                        56,
+                        56
                     ],
                     "angle": 0,
                     "position": [
-                        820,
-                        267
+                        36,
+                        484
                     ],
                     "visible": true,
-                    "upnode": "button_lose_retry"
+                    "upnode": "button_home"
                 },
                 "children": {
-                    "button_lose_retry": {
+                    "button_home": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_lose_retry",
+                            "texture": "button_home",
+                            "anchor": [
+                                0.5,
+                                0.5
+                            ],
+                            "size": [
+                                56,
+                                56
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "center",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "selector4_1_1": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        400,
+                        400
+                    ],
+                    "angle": 0,
+                    "position": [
+                        424,
+                        89
+                    ],
+                    "visible": true,
+                    "upnode": "button_selector4_1_1"
+                },
+                "children": {
+                    "button_selector4_1_1": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_selector4_1_1",
                             "anchor": [
                                 0,
                                 1
                             ],
                             "size": [
-                                428,
-                                100
+                                400,
+                                400
                             ],
                             "angle": 0,
                             "position": [
@@ -198,57 +230,37 @@
                     }
                 }
             },
-            "lose_quit": {
-                "type": "Button",
-                "format": {
-                    "type": "Anchored"
-                },
+            "Level 5": {
+                "type": "Label",
                 "data": {
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
-                        347,
-                        100
+                        135,
+                        50
+                    ],
+                    "position": [
+                        557,
+                        89
                     ],
                     "angle": 0,
-                    "position": [
-                        901,
-                        130
-                    ],
                     "visible": true,
-                    "upnode": "button_lose_quit"
+                    "font": "oxaniumSemibold40",
+                    "text": "Level 5",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
                 },
-                "children": {
-                    "button_lose_quit": {
-                        "type": "Image",
-                        "data": {
-                            "texture": "button_lose_quit",
-                            "anchor": [
-                                0,
-                                1
-                            ],
-                            "size": [
-                                347,
-                                100
-                            ],
-                            "angle": 0,
-                            "position": [
-                                0,
-                                0
-                            ],
-                            "visible": true
-                        },
-                        "layout": {
-                            "x_anchor": "left",
-                            "y_anchor": "top",
-                            "absolute": false,
-                            "x_offset": 0,
-                            "y_offset": 0
-                        }
-                    }
-                }
+                "children": {}
             }
         }
     }

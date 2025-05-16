@@ -25,6 +25,14 @@ using namespace cugl;
  */
 class LevelController {
 private:
+    struct WallZone {
+        std::shared_ptr<physics2::PolygonObstacle> physicsWall;
+        std::shared_ptr<scene2::PolygonNode> sceneWall;
+        float xPosition;
+    };
+    std::shared_ptr<WallZone> _leftWallZone;
+    std::shared_ptr<WallZone> _rightWallZone;
+    
     /** A reference to the level model */
     std::shared_ptr<LevelModel> _currentLevel;
 
@@ -61,14 +69,19 @@ private:
 
     /** The player controller for this level controller */
     std::shared_ptr<PlayerController> _playerController;
+    bool _zoneUpdate;
+    float _nextTrigger;
+    bool _playerInNextZone;
     
 public:
+    
 	float timeElapsed = 0.0f;
     
 #pragma mark send statistics
     float getTimeSpentInLevel() const;
-    int getTotalInWave() const;
-    int getSpawnedInWave() const;
+    int getTotalEnemyCount() const;
+    int getSpawnedEnemyCount() const;
+    int getCurrentWaveIndex() const;
     std::shared_ptr<PlayerController> getPlayerController() const;
 
 
@@ -211,6 +224,18 @@ public:
     static std::unordered_map<std::string, std::shared_ptr<LevelModel>> parseLevels(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef);
     /** Parses the JSON file and returns a vector of parsed actions. */
     static std::shared_ptr<LevelModel> parseLevel(const std::shared_ptr<JsonValue>& json, const std::shared_ptr<AssetManager>& assetRef);
+    std::shared_ptr<WallZone>  createWall(float xPos, bool isLeft);
+    void removeWall(std::shared_ptr<WallZone> wallZone);
+
+    std::shared_ptr<WallZone> getLeftWall() const { return _leftWallZone; }
+    std::shared_ptr<WallZone> getRightWall() const { return _rightWallZone; }
+    void setInNextZone(bool next){ _playerInNextZone = next; }
+    bool getInNextZone(){ return _playerInNextZone; }
+    bool getZoneUpdate(){ return _zoneUpdate; }
+    float getNextTrigger(){ return _nextTrigger; }
+
+    void updateLeftZone(int wallsIndex);
+    void updateRightZone(int wallsIndex);
 
 #pragma mark Getters
     // this is a test method because we will need to access all enemies in the level not just one

@@ -22,59 +22,79 @@
             "visible": true
         },
         "children": {
-            "cover_shadow": {
+            "levelselect_bg_2": {
                 "type": "Image",
                 "data": {
-                    "texture": "cover_shadow",
+                    "texture": "levelselect_bg_2",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
                         1248,
-                        576
+                        468
                     ],
                     "angle": 0,
                     "position": [
                         0,
-                        0
+                        108
                     ],
                     "visible": true
                 }
             },
-            "enemy_ind": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        179,
-                        50
-                    ],
-                    "position": [
-                        437,
-                        243
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Progress: ",
-                    "foreground": "#ff8e8eff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
+            "lssetting": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
                 },
-                "children": {}
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        56,
+                        56
+                    ],
+                    "angle": 0,
+                    "position": [
+                        1161,
+                        484
+                    ],
+                    "visible": true,
+                    "upnode": "button_setting"
+                },
+                "children": {
+                    "button_setting": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_setting",
+                            "anchor": [
+                                0,
+                                0.5
+                            ],
+                            "size": [
+                                53.2,
+                                56
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
             },
-            "enemy_num": {
+            "This is level 3!": {
                 "type": "Label",
                 "data": {
                     "anchor": [
@@ -82,17 +102,17 @@
                         0
                     ],
                     "size": [
-                        120,
-                        50
+                        212,
+                        40
                     ],
                     "position": [
-                        616,
-                        243
+                        518,
+                        38
                     ],
                     "angle": 0,
                     "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "30%",
+                    "font": "oxaniumSemibold32",
+                    "text": "This is level 3!",
                     "foreground": "#ffffffff",
                     "background": "#00000000",
                     "padding": [
@@ -106,47 +126,39 @@
                 },
                 "children": {}
             },
-            "defeat": {
-                "type": "Image",
+            "Level 3": {
+                "type": "Label",
                 "data": {
-                    "texture": "defeat",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
-                        330,
-                        64
+                        135,
+                        50
+                    ],
+                    "position": [
+                        557,
+                        89
                     ],
                     "angle": 0,
-                    "position": [
-                        447,
-                        303
-                    ],
-                    "visible": true
-                }
-            },
-            "lose": {
-                "type": "Image",
-                "data": {
-                    "texture": "lose",
-                    "anchor": [
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Level 3",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
                         0,
                         0
                     ],
-                    "size": [
-                        460,
-                        460
-                    ],
-                    "angle": 0,
-                    "position": [
-                        71,
-                        19
-                    ],
-                    "visible": true
-                }
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
             },
-            "lose_retry": {
+            "lshome": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -157,29 +169,29 @@
                         0
                     ],
                     "size": [
-                        428,
-                        100
+                        56,
+                        56
                     ],
                     "angle": 0,
                     "position": [
-                        820,
-                        267
+                        36,
+                        484
                     ],
                     "visible": true,
-                    "upnode": "button_lose_retry"
+                    "upnode": "button_home"
                 },
                 "children": {
-                    "button_lose_retry": {
+                    "button_home": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_lose_retry",
+                            "texture": "button_home",
                             "anchor": [
-                                0,
-                                1
+                                0.5,
+                                0.5
                             ],
                             "size": [
-                                428,
-                                100
+                                56,
+                                56
                             ],
                             "angle": 0,
                             "position": [
@@ -189,8 +201,8 @@
                             "visible": true
                         },
                         "layout": {
-                            "x_anchor": "left",
-                            "y_anchor": "top",
+                            "x_anchor": "center",
+                            "y_anchor": "middle",
                             "absolute": false,
                             "x_offset": 0,
                             "y_offset": 0
@@ -198,7 +210,7 @@
                     }
                 }
             },
-            "lose_quit": {
+            "selector2_1_1": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -209,29 +221,29 @@
                         0
                     ],
                     "size": [
-                        347,
-                        100
+                        400,
+                        400
                     ],
                     "angle": 0,
                     "position": [
-                        901,
-                        130
+                        424,
+                        89
                     ],
                     "visible": true,
-                    "upnode": "button_lose_quit"
+                    "upnode": "button_selector2_1_1"
                 },
                 "children": {
-                    "button_lose_quit": {
+                    "button_selector2_1_1": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_lose_quit",
+                            "texture": "button_selector2_1_1",
                             "anchor": [
-                                0,
+                                0.5,
                                 1
                             ],
                             "size": [
-                                347,
-                                100
+                                400,
+                                400
                             ],
                             "angle": 0,
                             "position": [
@@ -241,7 +253,7 @@
                             "visible": true
                         },
                         "layout": {
-                            "x_anchor": "left",
+                            "x_anchor": "center",
                             "y_anchor": "top",
                             "absolute": false,
                             "x_offset": 0,
