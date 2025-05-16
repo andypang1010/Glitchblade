@@ -255,9 +255,9 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
     
     if (_loseQuitButton) {
         _loseQuitButton->addListener([this](const std::string& name, bool down) {
-            if (down && _loseQuitCallback) {
+            if (down && _quitCallback) {
                 CULog("Lose Quit pressed");
-                _loseQuitCallback();
+                _quitCallback();
             }
         });
     }
@@ -280,7 +280,7 @@ void GBIngameUI::setupWin1(std::shared_ptr<cugl::scene2::SceneNode>& winPage1)
 void GBIngameUI::setupWin(std::shared_ptr<cugl::scene2::SceneNode>& winPage)
 {
     _winContinueButton = std::dynamic_pointer_cast<scene2::Button>(winPage->getChildByName("win_continue"));
-    _winRetryButton = std::dynamic_pointer_cast<scene2::Button>(winPage->getChildByName("win_retry"));
+    _winQuitButton = std::dynamic_pointer_cast<scene2::Button>(winPage->getChildByName("win_quit"));
     if (_winContinueButton) {
         _winContinueButton->addListener([this](const std::string& name, bool down) {
             if (down) {
@@ -290,11 +290,11 @@ void GBIngameUI::setupWin(std::shared_ptr<cugl::scene2::SceneNode>& winPage)
         });
     }
     
-    if (_winRetryButton) {
-        _winRetryButton->addListener([this](const std::string& name, bool down) {
-            if (down && _retryCallback) {
-                CULog("Win Retry pressed");
-                _retryCallback();
+    if (_winQuitButton) {
+        _winQuitButton->addListener([this](const std::string& name, bool down) {
+            if (down && _quitCallback) {
+                CULog("Win Quit pressed");
+                _quitCallback();
             }
         });
     }
@@ -317,7 +317,7 @@ void GBIngameUI::dispose() {
     _loseQuitButton->clearListeners();
     _continueButton->clearListeners();
     _winContinueButton->clearListeners();
-    _winRetryButton->clearListeners();
+    _winQuitButton->clearListeners();
 
     _pauseButton = nullptr;
     _resumeButton = nullptr;
@@ -332,7 +332,7 @@ void GBIngameUI::dispose() {
     _loseQuitButton = nullptr;
     _continueButton = nullptr;
     _winContinueButton = nullptr;
-    _winRetryButton = nullptr;
+    _winQuitButton = nullptr;
 
     _assets = nullptr;
 

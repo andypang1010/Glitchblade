@@ -45,13 +45,12 @@ protected:
     
     /** The win page 2 buttons */
     std::shared_ptr<cugl::scene2::Button> _winContinueButton;
-    std::shared_ptr<cugl::scene2::Button> _winRetryButton;
+    std::shared_ptr<cugl::scene2::Button> _winQuitButton;
     
     std::function<void()> _pauseCallback;
     std::function<void()> _resumeCallback;
     std::function<void()> _retryCallback;
     std::function<void()> _continueCallback;
-    std::function<void()> _loseQuitCallback;
     std::function<void()> _quitCallback;
     std::function<void()> _settingCallback;
     std::function<void()> _musicCallback;
@@ -159,7 +158,6 @@ public:
     void setResumeCallback(const std::function<void()>& callback) { _resumeCallback = callback; }
     void setRetryCallback(const std::function<void()>& callback) { _retryCallback = callback; }
     void setContinueCallback(const std::function<void()>& callback) { _continueCallback = callback; }
-    void setLoseQuitCallback(const std::function<void()>& callback) { _loseQuitCallback = callback; }
     void setQuitCallback(const std::function<void()>& callback) { _quitCallback = callback; }
     void setSettingCallback(const std::function<void()>& callback) { _settingCallback = callback; }
     void setMusicCallback(const std::function<void()>& callback) { _musicCallback = callback; }

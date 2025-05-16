@@ -339,6 +339,25 @@
         "win_continue": {
             "file": "textures/ingameui/win_continue.png"
         },
+        "button_win_continue": {
+            "file": "textures/ingameui/button_win_continue.png"
+        },
+        "button_win_quit": {
+            "file": "textures/ingameui/button_win_quit.png"
+        },
+        "victory": {
+            "file": "textures/ingameui/victory.png"
+        },
+        
+        "defeat": {
+            "file": "textures/ingameui/defeat.png"
+        },
+        "button_lose_retry": {
+            "file": "textures/ingameui/button_lose_retry.png"
+        },
+        "button_lose_quit": {
+            "file": "textures/ingameui/button_lose_quit.png"
+        },
         
         "home_bg": {
             "file": "textures/levelselect/home_bg.png"
