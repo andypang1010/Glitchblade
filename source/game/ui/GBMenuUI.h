@@ -65,11 +65,11 @@ public:
     ~GBMenuUI() { dispose(); }
 
     virtual void dispose() override;
-    bool init(const std::shared_ptr<cugl::AssetManager>& assets);
+    bool init(const std::shared_ptr<cugl::AssetManager>& assets, bool firsttime);
 
-    static std::shared_ptr<GBMenuUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets) {
+    static std::shared_ptr<GBMenuUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets, bool firsttime) {
         std::shared_ptr<GBMenuUI> result = std::make_shared<GBMenuUI>();
-        return (result->init(assets) ? result : nullptr);
+        return (result->init(assets, firsttime) ? result : nullptr);
     }
 
     // Setup methods for each UI section

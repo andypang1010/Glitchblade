@@ -146,7 +146,7 @@ public:
     /**
      * The method to init the LevelSelectScene.
     */
-    void initLevelSelectScene(int highestPlayableLevel);
+    void initLevelSelectScene(int highestPlayableLevel, bool firsttime);
 
     /**
      * The method called to indicate the start of a deterministic loop.
