@@ -377,8 +377,8 @@ void LevelController::createPlatform(Rect rect)
     enemyWallFilter.categoryBits = 0x0001;
     enemyWallFilter.maskBits = 0x0002;
     std::shared_ptr<physics2::BoxObstacle> platform = physics2::BoxObstacle::alloc(rect.origin, rect.size);
-    std::shared_ptr<physics2::BoxObstacle> leftWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x - rect.size.width / 2 - 0.05, rect.origin.y + rect.size.height - 0.9), Size(0.1, rect.size.height + 0.2));
-    std::shared_ptr<physics2::BoxObstacle> rightWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x + rect.size.width / 2 + 0.05, rect.origin.y + rect.size.height - 0.9), Size(0.1, rect.size.height + 0.2));
+    std::shared_ptr<physics2::BoxObstacle> leftWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x - rect.size.width / 2 - 0.05, rect.origin.y + rect.size.height / 2 + 0.1), Size(0.1, 0.2));
+    std::shared_ptr<physics2::BoxObstacle> rightWall = physics2::BoxObstacle::alloc(Vec2(rect.origin.x + rect.size.width / 2 + 0.05, rect.origin.y + rect.size.height / 2 + 0.1), Size(0.1, 0.2));
 
     // You cannot add constant "".  Must stringify
     platform->setName(std::string(_constantsJSON->get("platforms")->getString("name")));
