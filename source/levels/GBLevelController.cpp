@@ -113,7 +113,8 @@ bool LevelController::init(const std::shared_ptr<AssetManager>& assetRef, const 
     // Setup player controller
     _playerController = std::make_shared<PlayerController>();
     _playerController->init(_assets, _constantsJSON);
-
+    _playerInNextZone = true;
+    _zoneUpdate = false;
     return true;
 }
 
@@ -128,10 +129,15 @@ void LevelController::updateLevel() {
 	}
 
     if (waveComplete()) {
-        _lastSpawnedTime = 0;
-        _numEnemiesActive = 0;
-		_currentEnemyIndex = 0;
-        _currentWaveIndex++;
+        if (!_zoneUpdate) {
+            updateRightZone(_currentWaveIndex + 1);
+        }
+        if (_playerInNextZone) {
+            updateLeftZone(++_currentWaveIndex);
+            _lastSpawnedTime = 0;
+            _numEnemiesActive = 0;
+            _currentEnemyIndex = 0;
+        }
 		//_spawnedEnemyCount = 0;
     }
 
@@ -143,7 +149,7 @@ void LevelController::updateWave() {
 	if (_currentWaveIndex >= _enemyWaves.size() || _currentEnemyIndex >= _enemyWaves[_currentWaveIndex].size()) {
         return;
 	}
-
+    
     float spawnInterval = _currentLevel->getWaves()[_currentWaveIndex]->getSpawnIntervals()[_currentEnemyIndex];
 
     if (_lastSpawnedTime >= spawnInterval && _numEnemiesActive < MAX_NUM_ENEMIES) {
@@ -174,6 +180,7 @@ void LevelController::spawnLevel() {
         }
 
         _enemyWaves.push_back(enemyControllers);
+        _playerInNextZone = false;
     }
 }
 
@@ -233,28 +240,9 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
 #pragma mark : Walls
     // All walls and platforms share the same texture
     std::shared_ptr<JsonValue> wallsJ = _constantsJSON->get("walls");
-
-    std::vector<std::vector<Vec2>> walls = calculateWallVertices();
-    for (auto wallVector : walls) {
-
-        std::shared_ptr<physics2::PolygonObstacle> wallObj;
-        Poly2 wall(wallVector);
-
-        triangulator.set(wall.vertices);
-        triangulator.calculate();
-        wall.setIndices(triangulator.getTriangulation());
-        triangulator.clear();
-
-        wallObj = physics2::PolygonObstacle::allocWithAnchor(wall, Vec2::ANCHOR_CENTER);
-        wallObj->setName(std::string(wallsJ->getString("name")));
-
-        setStaticPhysics(wallObj);
-        wall *= scale;
-        sprite = scene2::PolygonNode::allocWithTexture(image, wall);
-        
-        ObstacleNodePair wall_pair = std::make_pair(wallObj, sprite);
-        obstacle_pairs.push_back(wall_pair); // Add wall obj
-    }
+    auto default_walls = wallsJ->get("level_bounds")->asFloatArray();
+    createWall(default_walls[0], true);
+    createWall(default_walls[1], false);
     
     for (const auto& pair : obstacle_pairs) {
         // add obstacle and set node position
@@ -570,6 +558,7 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 	level->setLevelName(json->getString("name"));
     level->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    level->setBGN(json->getInt("width"));
     auto bg = assetRef->get<graphics::Texture>(json->getString("background"));
     level->setBackground(bg);
     auto gr = Texture::allocWithFile(json->getString("ground"));
@@ -608,12 +597,90 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 		waves.push_back(waveModel);
     }
+    level->setWaves(waves);
+    
+    // Parse Walls
+    std::vector<std::pair<float, float>> walls;
 
-	level->setWaves(waves);
+    for (std::shared_ptr<JsonValue> wall : json->get("walls")->children()) {
+        auto wallLR = std::make_pair(wall->get("left")->asFloat(), wall->get("right")->asFloat());
+        walls.push_back(wallLR);
+    }
+
+	level->setWalls(walls);
 	return level;
 }
 
 
+std::shared_ptr<LevelController::WallZone> LevelController::createWall(float xPos, bool isLeft) {
+    std::shared_ptr<JsonValue> wallsJ = _constantsJSON->get("walls");
+    float scale = _constantsJSON->get("scene")->getFloat("scale");
+    float height =  _constantsJSON->get("scene")->getFloat("world_height");
+    float thickness = _constantsJSON->get("walls")->getFloat("thickness");
+    
+    std::vector<Vec2> wallVerts = {
+        Vec2(xPos, height),
+        Vec2(xPos, 0.0f),
+        Vec2(xPos + thickness, 0.0f),
+        Vec2(xPos + thickness, height)
+    };
+
+    Poly2 wall(wallVerts);
+
+    EarclipTriangulator triangulator;
+    triangulator.set(wall.vertices);
+    triangulator.calculate();
+    wall.setIndices(triangulator.getTriangulation());
+    triangulator.clear();
+
+    wall *= scale;
+
+    auto wallObj = physics2::PolygonObstacle::allocWithAnchor(wall, Vec2::ANCHOR_BOTTOM_LEFT);
+    wallObj->setName(std::string(wallsJ->getString("name")));
+    setStaticPhysics(wallObj);
+    std::shared_ptr<Texture> image;
+    std::shared_ptr<scene2::PolygonNode> sprite;
+    image = Texture::alloc(1, 1, Texture::PixelFormat::RGBA);
+    sprite = scene2::PolygonNode::allocWithTexture(image, wall);
+    
+    _worldRef->addObstacle(wallObj);
+    wallObj->setDebugScene(_debugNodeRef);
+    sprite->setPosition(wallObj->getPosition() * _scale);
+    _worldNode->addChild(sprite);
+    auto wallZone = std::make_shared<WallZone>(WallZone{wallObj, sprite, xPos*32*32});
+    if (isLeft) {
+        _leftWallZone = wallZone;
+    }
+    else {
+        _rightWallZone  = wallZone;
+    }
+    return wallZone;
+}
+
+void LevelController::removeWall(std::shared_ptr<WallZone> wallZone) {
+    if (!wallZone) return;
+
+    auto obj = wallZone->physicsWall;
+    obj->getDebugNode()->removeFromParent();
+    obj->deactivatePhysics(*_worldRef->getWorld());
+    obj->markRemoved(true);
+
+    wallZone->sceneWall->removeFromParent();
+}
+
+void LevelController::updateRightZone(int index) {
+    removeWall(_rightWallZone);
+    createWall(_currentLevel->getWalls()[index].second, false);
+    _zoneUpdate = true;
+    _nextTrigger = _currentLevel->getWalls()[index].first*1024;
+}
+
+void LevelController::updateLeftZone(int index) {
+    removeWall(_leftWallZone);
+    createWall(_currentLevel->getWalls()[index].first, true);
+    _zoneUpdate = false;
+    _playerInNextZone = false;
+}
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {
     float worldWidth =  _constantsJSON->get("scene")->getFloat("world_width");
@@ -687,12 +754,19 @@ float LevelController::getTimeSpentInLevel() const {
     return _timeSpentInLevel;
 }
 
-int LevelController::getTotalInWave() const {
+int LevelController::getTotalEnemyCount() const {
     return _totalEnemyCount;
 }
 
-int LevelController::getSpawnedInWave() const {
+int LevelController::getSpawnedEnemyCount() const {
     return _spawnedEnemyCount;
+}
+
+int LevelController::getCurrentWaveIndex() const {
+    if (_currentWaveIndex >= _enemyWaves.size() - 1) {
+        return -1;  // Final boss wave
+    }
+    return _currentWaveIndex;
 }
 
 std::shared_ptr<PlayerController> LevelController::getPlayerController() const {

@@ -343,6 +343,7 @@ public:
     bool _shouldResume = false;
     bool _shouldRetry = false;
     bool _shouldContinue = false;
+    bool _shouldSetting = false;
     
     
     void setPaused(bool paused) {

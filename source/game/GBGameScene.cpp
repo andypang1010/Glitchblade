@@ -99,7 +99,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     
     std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
     AudioHelper::init(fxJ, assets);
-    
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     
     // Uncomment this part to rollback.
@@ -125,7 +124,7 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     // Create the world and attach the listeners.
     Rect worldSize = Rect(0, 0, sceneJ->getFloat("world_width"), sceneJ->getFloat("world_height"));
     Rect screenSize = worldSize;
-    screenSize.size.width /= 3;
+    screenSize.size.width /= 3*(worldSize.size.width/117);
     Vec2 gravity = Vec2(0.0,-28.9);
     
     
@@ -220,12 +219,8 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
             CULog("Want to quit from gamescene!");
             _doQuit = true;
         });
-        _ui->setLoseQuitCallback([this]() {
-            CULog("Want to loseQuit from gamescene!");
-            _doQuit = true;
-        });
-        _ui->setSettingsCallback([this]() {
-            CULog("Want to settings from gamescene!");
+        _ui->setSettingCallback([this]() {
+            _shouldSetting = true;
         });
         _ui->setWinContinueCallback([this]() {
             _continueNextLevel = true;
@@ -295,18 +290,19 @@ void GameScene::reset() {
  * with your serialization loader, which would process a level file.
  */
 void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
+    _currentLevel = level;
     addChild(_worldnode);
     addChild(_debugnode);
     setBG();
 
     _levelController->populateLevel(level); // Sets the level we want to populate here
+    _levelController->updateRightZone(0);
+    _levelController->updateLeftZone(0);
     _player = _levelController->getPlayerModel();
-
-    // Add UI elements
-
-	// Play the background music on a loop.
+    
+//    Play the background music on a loop.
 //    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-//	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
+//    std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
 //    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
     
     _active = true;
@@ -334,8 +330,8 @@ void GameScene::setComplete(bool value) {
 
         float timeSpent = _levelController->getTimeSpentInLevel();
         int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
-        int spawnedCount = _levelController->getSpawnedInWave();
-        int totalCount = _levelController->getTotalInWave();
+        int spawnedCount = _levelController->getSpawnedEnemyCount();
+        int totalCount = _levelController->getTotalEnemyCount();
         _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
@@ -375,8 +371,8 @@ void GameScene::setFailure(bool value) {
         if (_ui) {
             float timeSpent = _levelController->getTimeSpentInLevel();
             int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
-            int spawnedCount = _levelController->getSpawnedInWave();
-            int totalCount = _levelController->getTotalInWave();
+            int spawnedCount = _levelController->getSpawnedEnemyCount();
+            int totalCount = _levelController->getTotalEnemyCount();
             _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
             _ui->showHeadsUpDisplay(false, false);
             _ui->showLosePage(true);
@@ -428,7 +424,7 @@ void GameScene::preUpdate(float dt) {
         Application::get()->quit();
     }
     
-	_ui->setHP(_player->getHP());
+	_ui->updateHP(_player->getHP());
     _ui->updateComboBar(_player->_comboMeter);
 
     // Call preUpdate on the LevelController
@@ -437,13 +433,22 @@ void GameScene::preUpdate(float dt) {
     if (_shouldPause) {
         _shouldPause = false;
         _ui->showPauseMenu(true);
+        _ui->showSettingMenu(false);
         _ui->showHeadsUpDisplay(true, false);
+        setPaused(true);
+    }
+    
+    if (_shouldSetting) {
+        _shouldSetting = false;
+        _ui->showPauseMenu(false);
+        _ui->showSettingMenu(true);
         setPaused(true);
     }
     
     if (_shouldResume) {
         _shouldResume = false;
         _ui->showPauseMenu(false);
+        _ui->showSettingMenu(false);
         _ui->showHeadsUpDisplay(true, true);
         setPaused(false);
     }
@@ -500,15 +505,32 @@ void GameScene::fixedUpdate(float step) {
     auto currPlayerVel = _levelController->getPlayerModel()->getVX();
     auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
     auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
+    float leftBound = _levelController->getLeftWall()->xPosition;
+    float rightBound = _levelController->getRightWall()->xPosition;
     
-    if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
+    if (_levelController->getZoneUpdate()) {
+        _cameraLocked = false;
+        if (cameraPosLX >= _levelController->getNextTrigger()) {
+            _levelController->setInNextZone(true);
+        }
+    }
+    
+//    CULog("PlayerPos: %f", currPlayerPosX);
+    CULog("leftBound: %f", leftBound);
+    CULog("rightBound: %f", rightBound);
+    CULog("CamPos: %f", cameraPosLX);
+    if (_levelController->getZoneUpdate()) {
+        CULog("NextTriggerPos: %f", _levelController->getNextTrigger());
+    }
+
+    if (cameraPosLX <= leftBound || cameraPosRX >= rightBound) {
         _cameraLocked = true;
-        if (cameraPosLX <= 0) {
-            if (currPlayerPosX > getBounds().size.width*.66) {
+        if (cameraPosLX <= leftBound) {
+            if (currPlayerPosX > leftBound + getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         } else {
-            if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
+            if (currPlayerPosX < rightBound - getBounds().size.width*.66) {
                 _cameraLocked = false;
             }
         }
@@ -531,16 +553,16 @@ void GameScene::fixedUpdate(float step) {
         float offsetY = (viewSize.height - 576 * _ui->getScaleY()) / 2.0f;
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setPosition(base + Vec2(offsetX, offsetY));
-        _ui->setTime(_levelController->getTimeSpentInLevel());
-        _ui->setProgression(_levelController->getSpawnedInWave(),_levelController->getTotalInWave());
+        _ui->updateTime(_levelController->getTimeSpentInLevel());
+        _ui->updateProgression(_levelController->getSpawnedEnemyCount(),_levelController->getTotalEnemyCount(), _levelController->getCurrentWaveIndex());
     }
     
     setComplete(_levelController->isLevelWon());
     setFailure(_levelController->isLevelLost());
 
     // Record failure if necessary.
-    if (!_failed && _player->getY() < 0) {
-        setFailure(true);
+    if (!_failed && _player->getHP() <= 0) {
+        setFailure(_levelController->isLevelLost());
     }
 }
 
@@ -606,44 +628,29 @@ void GameScene::removeProjectile(Projectile* projectile) {
 }
 
 void GameScene::setBG() {
-    for (auto layerPair : _currentLevel->getLayers()) {
-        // Left
-        std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
-        node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        node->setScale(_currentLevel->getScale());
-        node->setPosition(Vec2(node->getPositionX()-node->getSize().width, node->getPositionY()));
-        node->setTag(layerPair.second);
-        _worldnode->addChild(node);
-        
-        // Centered
-        std::shared_ptr<scene2::SceneNode> node2 = scene2::PolygonNode::allocWithTexture(layerPair.first);
-        node2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        node2->setScale(_currentLevel->getScale());
-        node2->setTag(layerPair.second);
-        _worldnode->addChild(node2);
-        
-        // Right
-        std::shared_ptr<scene2::SceneNode> node3 = scene2::PolygonNode::allocWithTexture(layerPair.first);
-        node3->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        node3->setScale(_currentLevel->getScale());
-        node3->setPosition(Vec2(node3->getPositionX()+node->getSize().width, node3->getPositionY()));
-        node3->setTag(layerPair.second);
-        _worldnode->addChild(node3);
-        
-        // Right + 1
-        std::shared_ptr<scene2::SceneNode> node4 = scene2::PolygonNode::allocWithTexture(layerPair.first);
-        node4->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
-        node4->setScale(_currentLevel->getScale());
-        node4->setPosition(Vec2(node4->getPositionX()+2*node->getSize().width, node4->getPositionY()));
-        node4->setTag(layerPair.second);
-        _worldnode->addChild(node4);
+    int bgCount = _currentLevel->getBGN();
+    float scale = _currentLevel->getScale();
+    for (const auto& layerPair : _currentLevel->getLayers()) {
+        for (int i = 0; i < bgCount; ++i) {
+            std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
+            node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
+            node->setScale(scale);
+            float textureWidth = node->getSize().width;
+
+            // Position nodes starting from -1 * textureWidth (to provide buffer for parallax)
+            float xPos = (i - 1) * textureWidth;
+            node->setPosition(Vec2(xPos, 0));
+            
+            node->setTag(layerPair.second);
+            _worldnode->addChild(node);
+        }
     }
 }
 
 void GameScene::updateLayersLeft() {
     for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
         if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/3, node->getPositionY()));
+            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/4, node->getPositionY()));
         }
     }
 }
@@ -651,7 +658,7 @@ void GameScene::updateLayersLeft() {
 void GameScene::updateLayersRight() {
     for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
         if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/3, node->getPositionY()));
+            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/4, node->getPositionY()));
         }
     }
 }

@@ -22,10 +22,10 @@
             "visible": true
         },
         "children": {
-            "cover_shadow": {
+            "home_bg": {
                 "type": "Image",
                 "data": {
-                    "texture": "cover_shadow",
+                    "texture": "home_bg",
                     "anchor": [
                         0,
                         0
@@ -42,39 +42,27 @@
                     "visible": true
                 }
             },
-            "enemy_ind": {
-                "type": "Label",
+            "title": {
+                "type": "Image",
                 "data": {
+                    "texture": "title",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
-                        179,
-                        50
-                    ],
-                    "position": [
-                        437,
-                        243
+                        952,
+                        104
                     ],
                     "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Progress: ",
-                    "foreground": "#ff8e8eff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
+                    "position": [
+                        148,
+                        378
                     ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
+                    "visible": true
+                }
             },
-            "enemy_num": {
+            "start_ind": {
                 "type": "Label",
                 "data": {
                     "anchor": [
@@ -82,17 +70,17 @@
                         0
                     ],
                     "size": [
-                        120,
-                        50
+                        315,
+                        60
                     ],
                     "position": [
-                        616,
-                        243
+                        467,
+                        81
                     ],
                     "angle": 0,
                     "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "30%",
+                    "font": "oxaniumRegular48",
+                    "text": "TAP TO START",
                     "foreground": "#ffffffff",
                     "background": "#00000000",
                     "padding": [
@@ -106,47 +94,7 @@
                 },
                 "children": {}
             },
-            "defeat": {
-                "type": "Image",
-                "data": {
-                    "texture": "defeat",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        330,
-                        64
-                    ],
-                    "angle": 0,
-                    "position": [
-                        447,
-                        303
-                    ],
-                    "visible": true
-                }
-            },
-            "lose": {
-                "type": "Image",
-                "data": {
-                    "texture": "lose",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        460,
-                        460
-                    ],
-                    "angle": 0,
-                    "position": [
-                        71,
-                        19
-                    ],
-                    "visible": true
-                }
-            },
-            "lose_retry": {
+            "setting": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -157,29 +105,81 @@
                         0
                     ],
                     "size": [
-                        428,
-                        100
+                        59,
+                        59
                     ],
                     "angle": 0,
                     "position": [
-                        820,
-                        267
+                        1164,
+                        19
                     ],
                     "visible": true,
-                    "upnode": "button_lose_retry"
+                    "upnode": "button_setting"
                 },
                 "children": {
-                    "button_lose_retry": {
+                    "button_setting": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_lose_retry",
+                            "texture": "button_setting",
+                            "anchor": [
+                                0,
+                                0.5
+                            ],
+                            "size": [
+                                56.05,
+                                59
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                -0.5
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": -0.01
+                        }
+                    }
+                }
+            },
+            "info": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        59,
+                        59
+                    ],
+                    "angle": 0,
+                    "position": [
+                        1078,
+                        19
+                    ],
+                    "visible": true,
+                    "upnode": "button_info"
+                },
+                "children": {
+                    "button_info": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_info",
                             "anchor": [
                                 0,
                                 1
                             ],
                             "size": [
-                                428,
-                                100
+                                59,
+                                59
                             ],
                             "angle": 0,
                             "position": [
@@ -198,7 +198,7 @@
                     }
                 }
             },
-            "lose_quit": {
+            "start": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -209,29 +209,29 @@
                         0
                     ],
                     "size": [
-                        347,
-                        100
+                        851,
+                        576
                     ],
                     "angle": 0,
                     "position": [
-                        901,
-                        130
+                        199,
+                        0
                     ],
                     "visible": true,
-                    "upnode": "button_lose_quit"
+                    "upnode": "button_start"
                 },
                 "children": {
-                    "button_lose_quit": {
+                    "button_start": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_lose_quit",
+                            "texture": "button_start",
                             "anchor": [
-                                0,
+                                0.5,
                                 1
                             ],
                             "size": [
-                                347,
-                                100
+                                851,
+                                576
                             ],
                             "angle": 0,
                             "position": [
@@ -241,7 +241,7 @@
                             "visible": true
                         },
                         "layout": {
-                            "x_anchor": "left",
+                            "x_anchor": "center",
                             "y_anchor": "top",
                             "absolute": false,
                             "x_offset": 0,

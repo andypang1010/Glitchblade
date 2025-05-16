@@ -22,239 +22,27 @@
             "visible": true
         },
         "children": {
-            "menu_shadow": {
+            "levelselect_bg_1": {
                 "type": "Image",
                 "data": {
-                    "texture": "menu_shadow",
+                    "texture": "levelselect_bg_1",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
                         1248,
-                        576
+                        468
                     ],
                     "angle": 0,
                     "position": [
                         0,
-                        0
+                        108
                     ],
                     "visible": true
                 }
             },
-            "win": {
-                "type": "Image",
-                "data": {
-                    "texture": "win",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        460,
-                        438
-                    ],
-                    "angle": 0,
-                    "position": [
-                        30,
-                        0
-                    ],
-                    "visible": true
-                }
-            },
-            "time_ind": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        105,
-                        50
-                    ],
-                    "position": [
-                        501,
-                        272
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Time: ",
-                    "foreground": "#9dffe9ff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "time_num": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        120,
-                        50
-                    ],
-                    "position": [
-                        606,
-                        272
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "3:00",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "parry_ind": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        111,
-                        50
-                    ],
-                    "position": [
-                        495,
-                        112
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Parry:",
-                    "foreground": "#9dffe9ff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "hp_ind": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        65,
-                        50
-                    ],
-                    "position": [
-                        541,
-                        192
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "HP:",
-                    "foreground": "#9dffe9ff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "parry_num": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        120,
-                        50
-                    ],
-                    "position": [
-                        606,
-                        112
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "10",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "hp_num": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        120,
-                        50
-                    ],
-                    "position": [
-                        606,
-                        192
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "100",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "win_continue": {
+            "selector1_2_1": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -265,29 +53,29 @@
                         0
                     ],
                     "size": [
-                        428,
-                        100
+                        400,
+                        400
                     ],
                     "angle": 0,
                     "position": [
-                        820,
-                        235
+                        692,
+                        89
                     ],
                     "visible": true,
-                    "upnode": "button_win_continue"
+                    "upnode": "selector1_2_1"
                 },
                 "children": {
-                    "button_win_continue": {
+                    "selector1_2_1": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_win_continue",
+                            "texture": "selector1_2_1",
                             "anchor": [
                                 0,
                                 1
                             ],
                             "size": [
-                                428,
-                                100
+                                400,
+                                400
                             ],
                             "angle": 0,
                             "position": [
@@ -306,7 +94,7 @@
                     }
                 }
             },
-            "win_quit": {
+            "selector1_1_1": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -317,29 +105,29 @@
                         0
                     ],
                     "size": [
-                        347,
-                        100
+                        400,
+                        400
                     ],
                     "angle": 0,
                     "position": [
-                        901,
-                        98
+                        223,
+                        89
                     ],
                     "visible": true,
-                    "upnode": "button_win_quit"
+                    "upnode": "selector1_1_1"
                 },
                 "children": {
-                    "button_win_quit": {
+                    "selector1_1_1": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_win_quit",
+                            "texture": "selector1_1_1",
                             "anchor": [
                                 0,
                                 1
                             ],
                             "size": [
-                                347,
-                                100
+                                400,
+                                400
                             ],
                             "angle": 0,
                             "position": [
@@ -358,24 +146,236 @@
                     }
                 }
             },
-            "victory": {
-                "type": "Image",
+            "lssetting": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
                 "data": {
-                    "texture": "victory",
                     "anchor": [
                         0,
                         0
                     ],
                     "size": [
-                        734,
-                        150
+                        56,
+                        56
                     ],
                     "angle": 0,
                     "position": [
-                        249,
-                        372
+                        1161,
+                        484
                     ],
-                    "visible": true
+                    "visible": true,
+                    "upnode": "button_setting"
+                },
+                "children": {
+                    "button_setting": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_setting",
+                            "anchor": [
+                                0,
+                                0.5
+                            ],
+                            "size": [
+                                53.2,
+                                56
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "left",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            },
+            "This is tutorial 2!": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        251,
+                        40
+                    ],
+                    "position": [
+                        766,
+                        38
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold32",
+                    "text": "This is tutorial 2!",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "This is tutorial 1!": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        251,
+                        40
+                    ],
+                    "position": [
+                        297,
+                        38
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold32",
+                    "text": "This is tutorial 1!",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "Tutorial 1": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        180,
+                        50
+                    ],
+                    "position": [
+                        333,
+                        89
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Tutorial 1",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "Tutorial 2": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        180,
+                        50
+                    ],
+                    "position": [
+                        802,
+                        89
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "Tutorial 2",
+                    "foreground": "#ffffffff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "lshome": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        56,
+                        56
+                    ],
+                    "angle": 0,
+                    "position": [
+                        36,
+                        484
+                    ],
+                    "visible": true,
+                    "upnode": "button_home"
+                },
+                "children": {
+                    "button_home": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_home",
+                            "anchor": [
+                                0.5,
+                                0.5
+                            ],
+                            "size": [
+                                56,
+                                56
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "center",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
                 }
             }
         }
