@@ -46,6 +46,7 @@
             3
           ],
           "enemies": [
+            "minion_1B"
           ]
         },
         {
@@ -54,6 +55,8 @@
             5
           ],
           "enemies": [
+            "minion_1B",
+            "minion_1A"
           ]
         },
         {
@@ -61,6 +64,7 @@
             3
           ],
           "enemies": [
+            "boss_1"
           ]
         }
       ],
