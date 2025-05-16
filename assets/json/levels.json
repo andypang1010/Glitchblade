@@ -26,6 +26,10 @@
           "speed": 4
         },
         {
+          "file": "scene1_l0",
+          "speed": 0
+        },
+        {
           "file": "ground",
           "speed": 0
         }
@@ -139,6 +143,10 @@
             {
           "file": "scene2_l1",
                 "speed": 4
+            },
+            {
+              "file": "scene2_l0",
+              "speed": 0
             },
             {
                 "file": "ground",
