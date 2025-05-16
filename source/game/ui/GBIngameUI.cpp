@@ -112,7 +112,7 @@ void GBIngameUI::setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDispl
     // Add pause button listener to trigger pause callback
     if (_pauseButton) {
         _pauseButton->addListener([this](const std::string& name, bool down) {
-            if (down && _pauseCallback) {
+            if (!down && _pauseCallback) {
                 CULog("Pause!");
                 _pauseCallback();
             }
@@ -154,7 +154,7 @@ void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
 
     if (_resumeButton) {
         _resumeButton->addListener([this](const std::string& name, bool down) {
-            if (down && _resumeCallback) {
+            if (!down && _resumeCallback) {
                 CULog("Resume pressed");
                 _resumeCallback();
             }
@@ -163,7 +163,7 @@ void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
 
     if (_retryButton) {
         _retryButton->addListener([this](const std::string& name, bool down) {
-            if (down && _retryCallback) {
+            if (!down && _retryCallback) {
                 CULog("Retry pressed");
                 _retryCallback();
             }
@@ -172,7 +172,7 @@ void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
 
     if (_quitButton) {
         _quitButton->addListener([this](const std::string& name, bool down) {
-            if (down && _quitCallback) {
+            if (!down && _quitCallback) {
                 CULog("Quit pressed");
                 _quitCallback();
             }
@@ -181,7 +181,7 @@ void GBIngameUI::setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu)
 
     if (_settingButton) {
         _settingButton->addListener([this](const std::string& name, bool down) {
-            if (down && _settingCallback) {
+            if (!down && _settingCallback) {
                 CULog("Setting pressed");
                 _settingCallback();
             }
@@ -201,7 +201,7 @@ void GBIngameUI::setupSetting(std::shared_ptr<cugl::scene2::SceneNode>& settingM
 
     if (_settingResumeButton) {
         _settingResumeButton->addListener([this](const std::string& name, bool down) {
-            if (down && _resumeCallback) {
+            if (!down && _resumeCallback) {
                 CULog("Setting Resume pressed");
                 _resumeCallback();
             }
@@ -210,7 +210,7 @@ void GBIngameUI::setupSetting(std::shared_ptr<cugl::scene2::SceneNode>& settingM
 
     if (_musicButton) {
         _musicButton->addListener([this](const std::string& name, bool down) {
-            if (down && _musicCallback) {
+            if (!down && _musicCallback) {
                 CULog("Music pressed");
                 _musicCallback();
             }
@@ -219,7 +219,7 @@ void GBIngameUI::setupSetting(std::shared_ptr<cugl::scene2::SceneNode>& settingM
 
     if (_soundButton) {
         _soundButton->addListener([this](const std::string& name, bool down) {
-            if (down && _soundCallback) {
+            if (!down && _soundCallback) {
                 CULog("Sound pressed");
                 _soundCallback();
             }
@@ -228,7 +228,7 @@ void GBIngameUI::setupSetting(std::shared_ptr<cugl::scene2::SceneNode>& settingM
 
     if (_backButton) {
         _backButton->addListener([this](const std::string& name, bool down) {
-            if (down && _pauseCallback) {
+            if (!down && _pauseCallback) {
                 CULog("Back pressed");
                 _pauseCallback();
             }
@@ -246,7 +246,7 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
     
     if (_loseRetryButton) {
         _loseRetryButton->addListener([this](const std::string& name, bool down) {
-            if (down && _retryCallback) {
+            if (!down && _retryCallback) {
                 CULog("Lose Retry pressed");
                 _retryCallback();
             }
@@ -255,7 +255,7 @@ void GBIngameUI::setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage)
     
     if (_loseQuitButton) {
         _loseQuitButton->addListener([this](const std::string& name, bool down) {
-            if (down && _quitCallback) {
+            if (!down && _quitCallback) {
                 CULog("Lose Quit pressed");
                 _quitCallback();
             }
@@ -272,7 +272,7 @@ void GBIngameUI::setupWin(std::shared_ptr<cugl::scene2::SceneNode>& winPage)
     _winQuitButton = std::dynamic_pointer_cast<scene2::Button>(winPage->getChildByName("win_quit"));
     if (_winContinueButton) {
         _winContinueButton->addListener([this](const std::string& name, bool down) {
-            if (down) {
+            if (!down) {
                 CULog("Win Continue pressed");
                 _winContinueCallback();
             }
@@ -281,7 +281,7 @@ void GBIngameUI::setupWin(std::shared_ptr<cugl::scene2::SceneNode>& winPage)
     
     if (_winQuitButton) {
         _winQuitButton->addListener([this](const std::string& name, bool down) {
-            if (down && _quitCallback) {
+            if (!down && _quitCallback) {
                 CULog("Win Quit pressed");
                 _quitCallback();
             }

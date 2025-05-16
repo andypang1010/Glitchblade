@@ -116,7 +116,7 @@ void GBMenuUI::setHighestPlayable(int highestPlayableLevel) {
         if (levelButtons[i]) {
             levelButtons[i]->setColor(Color4(255, 255, 255, 255));
             levelButtons[i]->addListener([this, levelCallbacks, i](const std::string& name, bool down) {
-                if (down && levelCallbacks[i]) {
+                if (!down && levelCallbacks[i]) {
                     CULog("Pressed level %d button", i);
                     levelCallbacks[i]();
                 }
@@ -203,19 +203,19 @@ void GBMenuUI::setupHome(std::shared_ptr<scene2::SceneNode>& home) {
 
     if (_startButton) {
         _startButton->addListener([this](const std::string& name, bool down) {
-            if (down && _startCallback) _startCallback();
+            if (!down && _startCallback) _startCallback();
         });
     }
 
     if (_infoButton) {
         _infoButton->addListener([this](const std::string& name, bool down) {
-            if (down && _infoCallback) _infoCallback();
+            if (!down && _infoCallback) _infoCallback();
         });
     }
 
     if (_homeSettingButton) {
         _homeSettingButton->addListener([this](const std::string& name, bool down) {
-            if (down && _homeSettingCallback) _homeSettingCallback();
+            if (!down && _homeSettingCallback) _homeSettingCallback();
         });
     }
 }
@@ -226,13 +226,13 @@ void GBMenuUI::setupLevelSelectionHead(std::shared_ptr<scene2::SceneNode>& head)
 
     if (_homeButton) {
         _homeButton->addListener([this](const std::string& name, bool down) {
-            if (down && _homeCallback) _homeCallback();
+            if (!down && _homeCallback) _homeCallback();
         });
     }
 
     if (_levelSettingButton) {
         _levelSettingButton->addListener([this](const std::string& name, bool down) {
-            if (down && _homeSettingCallback) _homeSettingCallback();
+            if (!down && _homeSettingCallback) _homeSettingCallback();
         });
     }
 }
