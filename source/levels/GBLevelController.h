@@ -202,7 +202,7 @@ public:
     /**
     * Adds a new hitbox to the world.
     */
-    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float knockback, float duration, bool parriable);
+    void createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, float rotation, int damage, float knockback, float duration, bool parriable);
     void createPlatform(Rect rect);
 
     /** Parses the JSON file and returns a vector of parsed actions. */

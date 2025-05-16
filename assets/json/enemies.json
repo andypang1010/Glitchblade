@@ -335,6 +335,98 @@
             }
         ]
     },
+
+    "boss_3": {
+        "health": 500,
+        "size": [ 180, 180 ],
+        "actions": [
+            {
+                "type": "melee",
+                "name": "uppercut",
+                "hitboxPos": [ 3, 0 ],
+                "hitboxSize": [ 2, 6 ],
+                "hitboxStartFrame": 8,
+                "hitboxEndFrame": 10,
+                "hitboxDamage": 20,
+                "hitboxKnockBack": 150,
+                "parriable": true
+            },
+            {
+                "type": "melee",
+                "name": "slam",
+                "hitboxPos": [ 3, 0 ],
+                "hitboxSize": [ 3.5, 7 ],
+                "hitboxStartFrame": 9,
+                "hitboxEndFrame": 11,
+                "hitboxDamage": 20,
+                "hitboxKnockBack": 100,
+                "parriable": true
+            },
+            {
+                "type": "melee",
+                "name": "jump",
+                "hitboxPos": [ 0, -3 ],
+                "hitboxSize": [ 5, 3 ],
+                "hitboxStartFrame": 11,
+                "hitboxEndFrame": 16,
+                "hitboxDamage": 20,
+                "hitboxKnockBack": 50,
+                "parriable": true
+            },
+            {
+                "type": "melee",
+                "name": "dash",
+                "hitboxPos": [ 2, 0 ],
+                "hitboxSize": [ 2, 4 ],
+                "hitboxStartFrame": 15,
+                "hitboxEndFrame": 45,
+                "hitboxDamage": 20,
+                "hitboxKnockBack": 100,
+                "parriable": true
+            },
+            {
+                "type": "ranged",
+                "name": "shoot",
+                "projectiles": [
+                    {
+                        "projectileSpawnPosition": {
+                            "x": 1,
+                            "y": 0
+                        },
+                        "projectileSize": {
+                            "width": 3,
+                            "height": 2
+                        },
+                        "projectileSpawnFrame": 1,
+                        "projectileAnimation": "textures/projectile_enemy_1.png",
+                        "projectile_animation_row": 1,
+                        "projectile_animation_col": 6,
+                        "projectile_animation_size": 6,
+                        "projectile_animation_offset": {
+                            "x": 0,
+                            "y": 10
+                        },
+                        "projectileVelocity": {
+                            "x": 12,
+                            "y": -12
+                        },
+                        "projectileDamage": 20
+                    }
+                ]
+            },
+            {
+                "type": "melee",
+                "name": "laser",
+                "hitboxPos": [ 9, -6 ],
+                "hitboxSize": [ 20, 3 ],
+                "hitboxStartFrame": 14,
+                "hitboxEndFrame": 33,
+                "hitboxDamage": 20,
+                "hitboxKnockBack": 100,
+                "parriable": false
+            }
+        ]
+    },
     "world_info": {
         "scale": null,
         "worldLeft": null,
