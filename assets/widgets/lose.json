@@ -42,27 +42,7 @@
                     "visible": true
                 }
             },
-            "lose": {
-                "type": "Image",
-                "data": {
-                    "texture": "lose",
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        576,
-                        576
-                    ],
-                    "angle": 0,
-                    "position": [
-                        42,
-                        0
-                    ],
-                    "visible": true
-                }
-            },
-            "lose_text": {
+            "enemy_ind": {
                 "type": "Label",
                 "data": {
                     "anchor": [
@@ -70,17 +50,49 @@
                         0
                     ],
                     "size": [
-                        754,
-                        180
+                        179,
+                        50
                     ],
                     "position": [
-                        535,
-                        335
+                        437,
+                        243
                     ],
                     "angle": 0,
                     "visible": true,
-                    "font": "oxaniumSemibold144",
-                    "text": "Defeat...",
+                    "font": "oxaniumSemibold40",
+                    "text": "Progress: ",
+                    "foreground": "#ff8e8eff",
+                    "background": "#00000000",
+                    "padding": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "valign": "top",
+                    "halign": "left"
+                },
+                "children": {}
+            },
+            "enemy_num": {
+                "type": "Label",
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        120,
+                        50
+                    ],
+                    "position": [
+                        616,
+                        243
+                    ],
+                    "angle": 0,
+                    "visible": true,
+                    "font": "oxaniumSemibold40",
+                    "text": "30%",
                     "foreground": "#ffffffff",
                     "background": "#00000000",
                     "padding": [
@@ -94,6 +106,46 @@
                 },
                 "children": {}
             },
+            "defeat": {
+                "type": "Image",
+                "data": {
+                    "texture": "defeat",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        330,
+                        64
+                    ],
+                    "angle": 0,
+                    "position": [
+                        447,
+                        303
+                    ],
+                    "visible": true
+                }
+            },
+            "lose": {
+                "type": "Image",
+                "data": {
+                    "texture": "lose",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        460,
+                        460
+                    ],
+                    "angle": 0,
+                    "position": [
+                        71,
+                        19
+                    ],
+                    "visible": true
+                }
+            },
             "lose_retry": {
                 "type": "Button",
                 "format": {
@@ -105,68 +157,29 @@
                         0
                     ],
                     "size": [
-                        241,
-                        96
+                        428,
+                        100
                     ],
                     "angle": 0,
                     "position": [
-                        926,
-                        220
+                        820,
+                        267
                     ],
                     "visible": true,
-                    "upnode": "RETRY"
+                    "upnode": "button_lose_retry"
                 },
                 "children": {
-                    "RETRY": {
-                        "type": "Label",
-                        "data": {
-                            "anchor": [
-                                0.5,
-                                1
-                            ],
-                            "size": [
-                                124,
-                                50
-                            ],
-                            "position": [
-                                117,
-                                21
-                            ],
-                            "angle": 0,
-                            "visible": true,
-                            "font": "oxaniumSemibold40",
-                            "text": "RETRY",
-                            "foreground": "#ffffffff",
-                            "background": "#00000000",
-                            "padding": [
-                                0,
-                                0,
-                                0,
-                                0
-                            ],
-                            "valign": "top",
-                            "halign": "left"
-                        },
-                        "children": {},
-                        "layout": {
-                            "x_anchor": "center",
-                            "y_anchor": "top",
-                            "absolute": false,
-                            "x_offset": 0.24,
-                            "y_offset": -0.26
-                        }
-                    },
-                    "button_retry": {
+                    "button_lose_retry": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_retry",
+                            "texture": "button_lose_retry",
                             "anchor": [
                                 0,
                                 1
                             ],
                             "size": [
-                                96,
-                                96
+                                428,
+                                100
                             ],
                             "angle": 0,
                             "position": [
@@ -196,68 +209,29 @@
                         0
                     ],
                     "size": [
-                        241,
-                        96
+                        347,
+                        100
                     ],
                     "angle": 0,
                     "position": [
-                        926,
-                        92
+                        901,
+                        130
                     ],
                     "visible": true,
-                    "upnode": "QUIT"
+                    "upnode": "button_lose_quit"
                 },
                 "children": {
-                    "QUIT": {
-                        "type": "Label",
+                    "button_lose_quit": {
+                        "type": "Image",
                         "data": {
+                            "texture": "button_lose_quit",
                             "anchor": [
-                                0.5,
+                                0,
                                 1
                             ],
                             "size": [
-                                92,
-                                50
-                            ],
-                            "position": [
-                                133,
-                                21
-                            ],
-                            "angle": 0,
-                            "visible": true,
-                            "font": "oxaniumSemibold40",
-                            "text": "QUIT",
-                            "foreground": "#ffffffff",
-                            "background": "#00000000",
-                            "padding": [
-                                0,
-                                0,
-                                0,
-                                0
-                            ],
-                            "valign": "top",
-                            "halign": "left"
-                        },
-                        "children": {},
-                        "layout": {
-                            "x_anchor": "center",
-                            "y_anchor": "top",
-                            "absolute": false,
-                            "x_offset": 0.24,
-                            "y_offset": -0.26
-                        }
-                    },
-                    "button_quit": {
-                        "type": "Image",
-                        "data": {
-                            "texture": "button_quit",
-                            "anchor": [
-                                0,
-                                0.5
-                            ],
-                            "size": [
-                                96,
-                                96
+                                347,
+                                100
                             ],
                             "angle": 0,
                             "position": [
@@ -268,205 +242,13 @@
                         },
                         "layout": {
                             "x_anchor": "left",
-                            "y_anchor": "middle",
+                            "y_anchor": "top",
                             "absolute": false,
                             "x_offset": 0,
                             "y_offset": 0
                         }
                     }
                 }
-            },
-            "time_ind": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        105,
-                        50
-                    ],
-                    "position": [
-                        600,
-                        268
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Time: ",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "time_num": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        120,
-                        50
-                    ],
-                    "position": [
-                        782,
-                        268
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "3:00",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "right"
-                },
-                "children": {}
-            },
-            "parry_ind": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        111,
-                        50
-                    ],
-                    "position": [
-                        600,
-                        175
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Parry:",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "enemy_ind": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        186,
-                        50
-                    ],
-                    "position": [
-                        600,
-                        82
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Defeated:",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "parry_num": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        120,
-                        50
-                    ],
-                    "position": [
-                        782,
-                        175
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": " 10",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "right"
-                },
-                "children": {}
-            },
-            "enemy_num": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        120,
-                        50
-                    ],
-                    "position": [
-                        782,
-                        82
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": " 5/10",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "right"
-                },
-                "children": {}
             }
         }
     }

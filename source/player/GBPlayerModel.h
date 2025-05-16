@@ -107,11 +107,16 @@ protected:
     bool _hasProjectile;
     /** Whether we are actively inputting shoot */
     bool _isShootInput;
+
     /** Whether we are knocked-back (sets input cd) */
     bool _isKnocked;
     /** Whether we are knocked-back (sets input cd) */
     int _knockRem;
-    Vec2 _knockDirection;
+    /** A buffer value for how many frames have passed after the knock back have started */
+    int _knockStartBuffer;
+    /** Force of the knockback */
+    Vec2 _knockForce;
+
     /** How long until we can shoot again in animation frames*/
     int  _shootCooldownRem;
     /** Whether our feet are on the ground */
@@ -297,6 +302,8 @@ public:
         _parryRem = 0;
         _damageRem = 0;
         _damage = 10;// default player dmg
+        _knockRem = 0;
+        _knockStartBuffer = 0;
         
         _parryCounter = 0;
 		_comboMeter = 0;
@@ -385,8 +392,16 @@ public:
 
 
 
-// Miscellaneous
-Vec2 getKnockDirection() { return _knockDirection; }
+    // Miscellaneous
+    Vec2 getKnockForce() { return _knockForce; }
+
+    /**
+     * Whether the knock back effect had just started(less than 5 frames)
+     * 
+	 * @return true if the knock back effect had just started
+     */
+    bool isKnockbackStarting() { return _knockStartBuffer <= 5; }
+
     std::string* getBodyName() { return &_bodyName; }
     /**
      * Returns the name of the ground sensor
@@ -463,10 +478,12 @@ private:
     static float _jump_force;
     static float _damp_force;
     static float _dash_force;
-    static float _knock_force;
     
     /** The radius of the aoe attack */
     static float _aoe_radius;
+    
+    static b2Filter inactive_filter;
+    static b2Filter active_filter;
 
 public:
     #pragma mark -
@@ -513,9 +530,9 @@ public:
 
     // Dashing
 
-    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset/**&& !_landingDash*/; }
-    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset /**&& !_landingDash*/; }
-    bool isDashDownBegin() {return _isDashDownInput && _dashCooldownRem <= 0 && _dashReset && !_isGrounded /**&& !_landingDash*/;}
+    bool isDashLeftBegin() { return _isDashLeftInput && _dashCooldownRem <= 0 && _dashReset && !isParryActive() && !_landingDash; }
+    bool isDashRightBegin() { return _isDashRightInput && _dashCooldownRem <= 0 && _dashReset && !isParryActive() && !_landingDash; }
+    bool isDashDownBegin() {return _isDashDownInput && _dashCooldownRem <= 0 && _dashReset && !_isGrounded && !isParryActive() && !_landingDash;}
     bool isDashLRBegin() { return isDashLeftBegin() || isDashRightBegin(); }
     bool isDashBegin() {return isDashLRBegin() || isDashDownBegin(); }
     bool isDashLRActive() { return (_dashRem > 0 && _dashType == DashType::LR) || isDashLRBegin(); }
@@ -550,7 +567,7 @@ public:
     int getAoeRem() { return _aoeRem; }
     
     // Guarding
-    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0 /**&& !_landingDash*/; }
+    bool isGuardBegin() { return _isGuardInput && _guardCooldownRem == 0 && !_landingDash; }
     bool isGuardActive() { return _guardRem > 0 || isGuardBegin(); }
     int getGuardRem() { return _guardRem; }
     void setGuardRem(int value = _guard_duration) { _guardRem = value; }
@@ -573,8 +590,12 @@ public:
     void setKnockbackRem(int value = _knock_duration) { _knockRem = value; }
     bool isKnocked() const { return _isKnocked; }
     bool isKnockbackActive() { return _knockRem > 0 || isKnocked(); }
-    void setKnocked(bool value, Vec2 knockDirection) { _isKnocked = value; _knockDirection = knockDirection; }
+    void setKnocked(bool value, Vec2 knockForce) { _isKnocked = value; _knockForce = knockForce; }
     void resetKnocked() { _isKnocked = false; }
+
+    int getKnockStartBuffer() { return _knockStartBuffer; }
+	void setKnockStartBuffer(int value) { _knockStartBuffer = value; }
+	
 
     // Projectile
     bool hasProjectile() { return _hasProjectile; }
@@ -588,7 +609,6 @@ public:
     float getStrafeF() const { return _strafe_force; }
     float getJumpF() const { return _jump_force; }
     float getDashF() const { return _dash_force; }
-    float getKnockF() { return _knock_force; }
     float getDampF() const { return _damp_force; }
 
     // Speed

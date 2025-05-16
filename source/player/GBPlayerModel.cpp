@@ -191,13 +191,13 @@ void PlayerModel::damage(float value) {
     else {
         if (isParryActive()) {
             _guardState = 2;
+            _guardCooldownRem = 0;
 		}
         else {
             _guardState = 3;
         }
         _parryRem = 0;
         _guardRem = 0;
-        _guardCooldownRem = 0;
         _guardReleaseRem = PLAYER_HIT_COLOR_DURATION;
     }
 }
@@ -437,6 +437,26 @@ void PlayerModel::playVFXAnimation(std::shared_ptr<scene2::SpriteNode> vfxSprite
 
 void PlayerModel::updateAnimation()
 {
+    
+#pragma mark begin animation cancelling code
+    if (isGuardBegin() && isDashActive()){
+        setDashRem(0);
+        resetDashType();
+    }
+    if (isDashBegin() && isGuardActive()){
+        setGuardRem(0);
+        setParryRem(0);
+        setGuardState(0);
+    }
+    if (isDashBegin() && getGuardReleaseRem() > 0) {
+        setGuardReleaseRem(0);
+		setGuardState(0);
+    }
+    
+#pragma mark end animation cancelling code
+    
+    
+
     _sceneNode->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
 
     if (_hp <= 0) {
@@ -504,7 +524,7 @@ void PlayerModel::updateAnimation()
 
         playAnimationOnce(_attackSprite);
     }
-    
+#pragma mark dash down
     else if (isDashDownActive()) {
         setOnlyVisible(_dashDownStartSprite);
         if (isDashDownBegin()) {
@@ -528,6 +548,7 @@ void PlayerModel::updateAnimation()
             playAnimationOnce(_dashDownStartSprite);
         }
     }
+#pragma mark landing dash animation
     
     else if (_landingDash){
         
@@ -589,6 +610,8 @@ void PlayerModel::resetDebug() {
     if (_groundSensorNode == nullptr || _aoeSensorNode == nullptr){
         setDebug();
     }
+    
+    _aoeSensorNode->setVisible(false);
    
     if (_debug->getChildCount() == 0){
         _groundSensorNode->setColor(Color4::RED);
@@ -622,7 +645,7 @@ void PlayerModel::setDebug(){
 }
 
 void PlayerModel::setConstants(){
-
+    inactive_filter.maskBits = 0x0;
     // Health
     _maxhp = 100;
     // Animation
@@ -643,7 +666,6 @@ void PlayerModel::setConstants(){
     _dash_force = _playerJSON->get("dash")->getFloat("speed");
 
     // Knockback
-    _knock_force = _playerJSON->get("knockback")->getFloat("force");
     _knock_duration = _playerJSON->get("knockback")->getInt("duration");
 
     // Combat
@@ -667,7 +689,6 @@ void PlayerModel::reset(){
     }
     //setDebugScene(nullptr);
     _scene = nullptr; // set debug scene to nullptr
-    resetAoeFixture();
     resetAttributes();
     resetSpriteFrames();
 }
@@ -697,20 +718,16 @@ void PlayerModel::setOnlyVisible(std::shared_ptr<scene2::SpriteNode> sprite) {
  */
 void PlayerModel::resetAoeFixture(){
     _aoeSensorNode->setVisible(false);
-    b2Filter aoeFilter = _aoeSensorFixture->GetFilterData();
-    aoeFilter.maskBits = 0x000;
-    _aoeSensorFixture->SetFilterData(aoeFilter);
+    _aoeSensorFixture->SetFilterData(inactive_filter);
 }
 
 /**
  Remove the aoe fixture from collision detection and set its debug node invisible
  */
 void PlayerModel::activateAoeFixture(){
-    setAoeRem(3);
+    setAoeRem(5);
     _aoeSensorNode->setVisible(true);
-    b2Filter aoeFilter = _aoeSensorFixture->GetFilterData();
-    aoeFilter.maskBits = 0xFFF;
-    _aoeSensorFixture->SetFilterData(aoeFilter);
+    _aoeSensorFixture->SetFilterData(active_filter);
 }
 
 
@@ -733,8 +750,10 @@ float PlayerModel::_strafe_force = 50.0f;
 float PlayerModel::_jump_force = 45.0f;
 float PlayerModel::_damp_force = 30.0f;
 float PlayerModel::_dash_force = 30.0f;
-float PlayerModel::_knock_force = 15.0f;
 
 float PlayerModel::_aoe_radius = 8.0f;
+
+b2Filter PlayerModel::inactive_filter = b2Filter();
+b2Filter PlayerModel::active_filter = b2Filter();
 
 

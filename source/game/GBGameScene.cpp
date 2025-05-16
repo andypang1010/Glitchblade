@@ -219,10 +219,6 @@ void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
             CULog("Want to quit from gamescene!");
             _doQuit = true;
         });
-        _ui->setLoseQuitCallback([this]() {
-            CULog("Want to loseQuit from gamescene!");
-            _doQuit = true;
-        });
         _ui->setSettingCallback([this]() {
             _shouldSetting = true;
         });
@@ -428,7 +424,7 @@ void GameScene::preUpdate(float dt) {
         Application::get()->quit();
     }
     
-	_ui->setHP(_player->getHP());
+	_ui->updateHP(_player->getHP());
     _ui->updateComboBar(_player->_comboMeter);
 
     // Call preUpdate on the LevelController
@@ -557,8 +553,8 @@ void GameScene::fixedUpdate(float step) {
         float offsetY = (viewSize.height - 576 * _ui->getScaleY()) / 2.0f;
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setPosition(base + Vec2(offsetX, offsetY));
-        _ui->setTime(_levelController->getTimeSpentInLevel());
-        _ui->setProgression(_levelController->getSpawnedEnemyCount(),_levelController->getTotalEnemyCount(), _levelController->getCurrentWaveIndex());
+        _ui->updateTime(_levelController->getTimeSpentInLevel());
+        _ui->updateProgression(_levelController->getSpawnedEnemyCount(),_levelController->getTotalEnemyCount(), _levelController->getCurrentWaveIndex());
     }
     
     setComplete(_levelController->isLevelWon());
@@ -566,7 +562,7 @@ void GameScene::fixedUpdate(float step) {
 
     // Record failure if necessary.
     if (!_failed && _player->getHP() <= 0) {
-        setFailure(true);
+        setFailure(_levelController->isLevelLost());
     }
 }
 

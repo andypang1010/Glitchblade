@@ -12,6 +12,7 @@
                 "hitboxStartFrame": 33,
                 "hitboxEndFrame": 40,
                 "hitboxDamage": 20,
+                "hitboxKnockBack": 100,
                 "parriable": false
             },
             {
@@ -58,6 +59,7 @@
                 "hitboxStartFrame": 20,
                 "hitboxEndFrame": 25,
                 "hitboxDamage": 20,
+                "hitboxKnockBack": 50,
                 "parriable": true
             },
             {
@@ -68,6 +70,7 @@
                 "hitboxStartFrame": 19,
                 "hitboxEndFrame": 23,
                 "hitboxDamage": 20,
+                "hitboxKnockBack": 50,
                 "parriable": true
             }
         ]
@@ -84,6 +87,7 @@
                 "hitboxStartFrame": 27,
                 "hitboxEndFrame": 36,
                 "hitboxDamage": 20,
+                "hitboxKnockBack": 75,
                 "parriable": true
             },
             {
@@ -94,6 +98,7 @@
                 "hitboxStartFrame": 25,
                 "hitboxEndFrame": 31,
                 "hitboxDamage": 20,
+                "hitboxKnockBack": 75,
                 "parriable": true
             },
             {
@@ -104,6 +109,7 @@
                 "hitboxStartFrame": 26,
                 "hitboxEndFrame": 37,
                 "hitboxDamage": 40,
+                "hitboxKnockBack": 100,
                 "parriable": false
             },
             {
@@ -288,6 +294,7 @@
                 "hitboxStartFrame": 32,
                 "hitboxEndFrame": 50,
                 "hitboxDamage": 20,
+                "hitboxKnockBack": 200,
                 "parriable": false
             }
         ]

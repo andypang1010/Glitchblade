@@ -224,7 +224,7 @@ void LevelController::createStaticObstacles(const std::shared_ptr<LevelModel>& l
     triangulator.clear();
 
     groundObj = physics2::PolygonObstacle::allocWithAnchor(ground, Vec2::ANCHOR_CENTER);
-    groundObj->setName("GROUND OBJECT");
+    groundObj->setName("ground");
 
     setStaticPhysics(groundObj);
     ground *= scale;
@@ -309,7 +309,7 @@ void LevelController::fixedUpdate(float timestep)
                 auto enemyProjectile = enemyCtrlr->getEnemy()->getProjectile();
 
                 if (damagingAction) {
-                    createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1), damagingAction->getIsParriable());
+                    createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxKnockBack(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1), damagingAction->getIsParriable());
                 }
 
                 if (enemyProjectile) {
@@ -356,11 +356,11 @@ void LevelController::postUpdate(float dt)
 /**
  * Add a new projectile to the world and send it in the right direction.
  */
-void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float duration, bool parriable) {
+void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float knockback, float duration, bool parriable) {
     std::shared_ptr<Texture> image = Texture::alloc(1, 1);
 
     // Change last parameter to test player-fired or regular projectile
-    auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, duration, parriable);
+    auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, knockback, duration, parriable);
     hitbox->setDebugColor(Color4::RED);
 
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
@@ -449,6 +449,7 @@ std::vector<std::shared_ptr<ActionModel>> LevelController::parseActions(const st
             //CULog("PARSING: %i", action->getInt("hitboxStartFrame"));
             meleeAction->setHitboxEndFrame(action->getInt("hitboxEndFrame"));
             meleeAction->setHitboxDamage(action->getInt("hitboxDamage"));
+            meleeAction->setHitboxKnockBack(action->getFloat("hitboxKnockBack"));
 			meleeAction->setIsParriable(action->getBool("parriable"));
 
             actions.push_back(meleeAction);

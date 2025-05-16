@@ -24,7 +24,10 @@ CollisionController::CollisionController(
     _ui(ui),
     _constantsJSON(constantsJSON),
     _removeProjectile(removeProjectile),
-    _screenShake(screenShake){}
+    _screenShake(screenShake),
+    _defaultKnockback(_constantsJSON->get("player")->get("knockback")->getFloat("force")),
+    _defaultVerticalKnockback(_constantsJSON->get("player")->get("knockback")->getFloat("v_force"))
+    {}
 
 
 /**
@@ -40,6 +43,7 @@ void CollisionController::beginContact(b2Contact* contact) {
     std::string proj_name = _constantsJSON->get("projectile")->getString("name");
     std::string enemy_name = _constantsJSON->get("enemy")->getString("name");
     std::string ground_name = _constantsJSON->get("ground")->getString("name");
+    std::string platform_name = _constantsJSON->get("platforms")->getString("name");
     std::string wall_name = _constantsJSON->get("walls")->getString("name");
     b2Fixture* fix1 = contact->GetFixtureA();
     b2Fixture* fix2 = contact->GetFixtureB();
@@ -88,17 +92,17 @@ void CollisionController::beginContact(b2Contact* contact) {
     }
 
     // Projectile-Projectile Collision
-    else if (o1->getName() == proj_name && o2->getName() == proj_name) {
+    //else if (o1->getName() == proj_name && o2->getName() == proj_name) {
 
-        // Destroy if one is fired by player and the other is not
-        if (
-            (((Projectile*)o1)->getIsPlayerFired() && !((Projectile*)o2)->getIsPlayerFired()) ||
-            (((Projectile*)o2)->getIsPlayerFired() && !((Projectile*)o1)->getIsPlayerFired())
-            ) {
-            _removeProjectile((Projectile*)o1);
-            _removeProjectile((Projectile*)o2);
-        }
-    }
+    //    // Destroy if one is fired by player and the other is not
+    //    if (
+    //        (((Projectile*)o1)->getIsPlayerFired() && !((Projectile*)o2)->getIsPlayerFired()) ||
+    //        (((Projectile*)o2)->getIsPlayerFired() && !((Projectile*)o1)->getIsPlayerFired())
+    //        ) {
+    //        _removeProjectile((Projectile*)o1);
+    //        _removeProjectile((Projectile*)o2);
+    //    }
+    //}
 
     // Projectile-Environment Collision
     else if (o1->getName() == proj_name && (o2->getName() == ground_name || o2->getName() == wall_name)) {
@@ -118,8 +122,8 @@ void CollisionController::beginContact(b2Contact* contact) {
 
 
     // Player-Ground Collision
-    else if ((_player->getGroundSensorName() == fd2 && _player.get() != o1) ||
-        (_player->getGroundSensorName() == fd1 && _player.get() != o2)) {
+    else if ((_player->getGroundSensorName() == fd2 && (o1->getName() == ground_name || o1->getName() == platform_name)) ||
+        (_player->getGroundSensorName() == fd1 && (o2->getName() == ground_name || o2->getName() == platform_name))) {
         _player->setGrounded(true);
 
         // Could have more than one ground
@@ -175,7 +179,9 @@ void CollisionController::playerEnemyCollision(Obstacle* enemyObstacle) {
         _player->setDashRem(0);
 
     }
-    _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
+    int dir = _player->getPosition().subtract(enemy->getPosition()).x > 0 ? 1 : -1;
+    Vec2 knockback = Vec2(dir * _defaultKnockback, _defaultVerticalKnockback);
+    _player->setKnocked(true, knockback);
     enemy->setKnocked(true, enemy->getPosition().subtract(_player->getPosition()).normalize());
 }
 
@@ -194,7 +200,9 @@ void CollisionController::playerHitboxCollision(Obstacle* hitboxObstacle) {
             _player->damage(damage);
             _player->resetCombo();
 
-            _player->setKnocked(true, _player->getPosition().subtract(enemy->getPosition()).normalize());
+            int dir = _player->getPosition().subtract(enemy->getPosition()).x > 0 ? 1 : -1;
+            Vec2 knockback = Vec2(dir * hitbox->getKnockback(), _defaultVerticalKnockback);
+            _player->setKnocked(true, knockback);
             _screenShake(damage, 3);
         }
         // If parry is active, stun the enemy.
@@ -286,20 +294,22 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
             }
             else if (_player->isGuardActive()) {
                 _player->damage(projectile->getDamage() / 2);
-                _ui->setHP(_player->getHP());
+                _ui->updateHP(_player->getHP());
             }
             else {
                 _player->damage(projectile->getDamage());
                 _player->resetCombo();
 
-                _player->setKnocked(true, _player->getPosition().subtract(projectileObstacle->getPosition()).normalize());
-                _ui->setHP(_player->getHP());
+                int dir = _player->getPosition().subtract(projectileObstacle->getPosition()).x > 0 ? 1 : -1;
+                Vec2 knockback = Vec2(dir * _defaultKnockback, _defaultVerticalKnockback);
+                _player->setKnocked(true, knockback);
+                _ui->updateHP(_player->getHP());
             }
             _player->iframe = 15;
         }
         // Remove the projectile and update the UI and pause menu with the current HP.
         if (!deflected) _removeProjectile(projectile);
-        _ui->setHP(_player->getHP());
+        _ui->updateHP(_player->getHP());
     }
 }
 

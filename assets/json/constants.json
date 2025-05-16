@@ -30,6 +30,7 @@
         "name": "platform"
     },
     "ground": {
+        "name": "ground",
         "vertex_count": 8,
         "thickness": 2.2
     },
@@ -64,23 +65,24 @@
         },
         "jump": {
             "cooldown": 5,
-            "force": 45
+            "force": 90
         },
         "dash": {
             "cooldown": 40,
             "duration": 20,
-            "speed": 30
+            "speed": 40
         },
         "knockback": {
-            "force": 25,
-            "duration": 45
+            "force": 65,
+            "v_force": 50,
+            "duration": 120
         },
         "guard": {
             "cooldown": 30,
             "duration": 60
         },
         "parry": {
-            "duration": 18
+            "duration": 24
         },
         "shoot_cooldown": 20,
         "fixtures": {
@@ -97,7 +99,7 @@
                 "radius": 5.0
             }
         },
-        "density": 1,
+        "density": 2,
         "debug": {
             "color": "yellow",
             "font": "debug",
