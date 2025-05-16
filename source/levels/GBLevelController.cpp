@@ -59,7 +59,6 @@ std::shared_ptr<EnemyController> LevelController::createEnemy(std::string enemyT
 }
 
 void LevelController::addEnemy(const std::shared_ptr<EnemyController>& enemy_controller) {
-    enemy_controller->setSpawnPosition(getPlayerPosition());
     addObstacle(std::pair(enemy_controller->getEnemy(), enemy_controller->getEnemy()->getSceneNode()));
     enemy_controller->getEnemy()->getSceneNode()->setVisible(true);
     enemy_controller->inWorld = true;
@@ -147,8 +146,10 @@ void LevelController::updateWave() {
 	}
     
     float spawnInterval = _currentLevel->getWaves()[_currentWaveIndex]->getSpawnIntervals()[_currentEnemyIndex];
-
+    Vec2 spawnPosition = _currentLevel->getWaves()[_currentWaveIndex]->getSpawnPositions()[_currentEnemyIndex];
     if (_lastSpawnedTime >= spawnInterval && _numEnemiesActive < MAX_NUM_ENEMIES) {
+
+		_enemyWaves[_currentWaveIndex][_currentEnemyIndex]->spawnAt(spawnPosition);
 		addEnemy(_enemyWaves[_currentWaveIndex][_currentEnemyIndex]);
 		_numEnemiesActive++;
 		_currentEnemyIndex++;
@@ -167,7 +168,6 @@ void LevelController::spawnLevel() {
     
     for (auto wave : waves) {
         std::vector<std::string> enemiesString = wave->getEnemies();
-        std::vector<float> spawnIntervals = wave->getSpawnIntervals();
 		std::vector<std::shared_ptr<EnemyController>> enemyControllers;
 
         for (auto enemyType : enemiesString) {
@@ -585,6 +585,16 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
     for (std::shared_ptr<JsonValue> wave : json->get("waves")->children()) {
         std::shared_ptr<WaveModel> waveModel = std::make_shared<WaveModel>();
 		waveModel->setSpawnIntervals(wave->get("spawn_intervals")->asFloatArray());
+
+		std::vector<Vec2> spawnPositions;
+        std::shared_ptr<JsonValue> positions = wave->get("spawn_positions");
+		CULog(positions->toString().c_str());
+
+        for (std::shared_ptr<JsonValue> position : wave->get("spawn_positions")->children()) {
+			spawnPositions.push_back(Vec2(position->get("x")->asFloat(), position->get("y")->asFloat()));
+        }
+		waveModel->setSpawnPositions(spawnPositions);
+
 		waveModel->setEnemies(wave->get("enemies")->asStringArray());
 
 		waves.push_back(waveModel);

@@ -24,9 +24,8 @@ void EnemyController::init(const std::shared_ptr<AssetManager>& assetRef, const 
 }
 
 void EnemyController::reset() {
-    _spawnPosition = ENEMY_DEFAULT_INIT_POS; // default
     _enemy->resetAttributes();
-    _enemy->setPosition(_spawnPosition);
+	_enemy->setPosition(ENEMY_DEFAULT_INIT_POS);
 }
 
 void EnemyController::dispose() {
@@ -41,27 +40,19 @@ void EnemyController::dispose() {
 }
 
 /**Based on the @param player's position, use the enemy's spawn ring to set the enemy spawn position**/
-void EnemyController::setSpawnPosition(Vec2 player_pos){
+void EnemyController::spawnAt(Vec2 spawnPosition) {
     if (inWorld){
         CULog("Cannot set spawn position for enemy that is already in the physics world");
         return;
     }
-    CULog("setting enemy spawn, Player pos is (%f, %f)", player_pos.x, player_pos.y);
-    Vec2 spawn_pos = player_pos;
-    float distance = rand() % 2? SPAWN_RING.x : SPAWN_RING.y;//x is closer, y is farther
-    // place enemy on the side of the player with mroe space
-    // approximate middle of world with _enemy->worldRight / 2
-    int direction = player_pos.x < _enemy->worldRight / 2? 1: -1;
-    spawn_pos.x += direction * distance;
-    spawn_pos.y = 5.0;
-    if (spawn_pos.x > _enemy->worldLeft && spawn_pos.x < _enemy->worldRight){
-        CULog("Setting enemy spawn to (%f, %f)", spawn_pos.x, spawn_pos.y);
-        _enemy->setPosition(spawn_pos);
-        }
+
+	spawnPosition /= 32;
+
+	if (spawnPosition.x > _enemy->worldLeft && spawnPosition.x < _enemy->worldRight) {
+        _enemy->setPosition(spawnPosition);
+    }
     else {
         CULog("bad spawn position generated in EnemyController::setSpawnPosition, defaulting to safe position.");
         _enemy->setPosition(ENEMY_DEFAULT_INIT_POS);
     }
- 
-   
 }

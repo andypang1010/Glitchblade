@@ -18,6 +18,7 @@ class WaveModel {
 private:
     std::vector<std::string> _enemies;
     std::vector<float> _spawnIntervals;
+    std::vector<Vec2> _spawnPositions;
 
 public:
     /**
@@ -43,6 +44,10 @@ public:
     // Getter and Setter for _spawnIntervals
     std::vector<float> getSpawnIntervals() const { return _spawnIntervals; }
     void setSpawnIntervals(const std::vector<float>& spawnIntervals) { _spawnIntervals = spawnIntervals; }
+
+	// Getter and Setter for _spawnPositions
+	std::vector<Vec2> getSpawnPositions() const { return _spawnPositions; }
+	void setSpawnPositions(const std::vector<Vec2>& spawnPositions) { _spawnPositions = spawnPositions; }
 };
 
 
