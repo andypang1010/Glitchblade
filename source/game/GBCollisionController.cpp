@@ -286,20 +286,20 @@ void CollisionController::playerProjectileCollision(Obstacle* projectileObstacle
             }
             else if (_player->isGuardActive()) {
                 _player->damage(projectile->getDamage() / 2);
-                _ui->setHP(_player->getHP());
+                _ui->updateHP(_player->getHP());
             }
             else {
                 _player->damage(projectile->getDamage());
                 _player->resetCombo();
 
                 _player->setKnocked(true, _player->getPosition().subtract(projectileObstacle->getPosition()).normalize());
-                _ui->setHP(_player->getHP());
+                _ui->updateHP(_player->getHP());
             }
             _player->iframe = 15;
         }
         // Remove the projectile and update the UI and pause menu with the current HP.
         if (!deflected) _removeProjectile(projectile);
-        _ui->setHP(_player->getHP());
+        _ui->updateHP(_player->getHP());
     }
 }
 
