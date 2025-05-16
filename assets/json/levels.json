@@ -71,11 +71,15 @@
       "walls": [
           {
            "left" : 0,
-           "right" : 2
+           "right" : 1.5
           },
           {
-           "left" : 2,
-           "right" : 4
+           "left" : 1.5,
+           "right" : 3
+          },
+          {
+           "left" : 1.5,
+           "right" : 3
           },
           {
            "left" : 4,
