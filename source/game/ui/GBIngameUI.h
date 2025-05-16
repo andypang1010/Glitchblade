@@ -21,7 +21,7 @@ protected:
     /** The asset manager for this game mode. */
     std::shared_ptr<cugl::AssetManager> _assets;
 
-    /** The pause button in top-right corner. */
+    /** The HUD button */
     std::shared_ptr<cugl::scene2::Button> _pauseButton;
     
     /** The pause menu buttons */
@@ -44,6 +44,7 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _winContinueButton;
     std::shared_ptr<cugl::scene2::Button> _winQuitButton;
     
+    /** Button callbacks for interactivity */
     std::function<void()> _pauseCallback;
     std::function<void()> _resumeCallback;
     std::function<void()> _retryCallback;
@@ -67,23 +68,26 @@ protected:
     std::shared_ptr<cugl::scene2::PolygonNode> _progressBar;
     float _progressBarOriginalWidth = 0;
     
-    // HUD statistics
+    /** HUD info labels (time & wave number) */
     std::shared_ptr<cugl::scene2::Label> _hudTimeNum;
     std::shared_ptr<cugl::scene2::Label> _hudWaveNum;
 
-    // Win page statistics
+    /** Win screen labels */
     std::shared_ptr<cugl::scene2::Label> _winTimeNum;
     std::shared_ptr<cugl::scene2::Label> _winParryNum;
     std::shared_ptr<cugl::scene2::Label> _winHpNum;
 
-    // Lose page statistics
+    /** Lose screen label */
     std::shared_ptr<cugl::scene2::Label> _loseEnemyNum;
 
     int _maxHP = 100;
     int _currentHP = 100;
-
-    bool _active;
     
+    /**
+     * Enables or disables all buttons within a UI layer.
+     *
+     * Used when showing/hiding menus.
+     */
     void setButtonsActive(std::shared_ptr<cugl::scene2::SceneNode> layer, bool active);
     
 public:
@@ -105,26 +109,18 @@ public:
     virtual void dispose() override;
     
     /**
-     * Initializes the controller contents, and starts the game
-     *
-     * The constructor does not allocate any objects or memory.  This allows
-     * us to have a non-pointer reference to this controller, reducing our
-     * memory allocation.  Instead, allocation happens in this method.
-     *
-     * @param assets    The (loaded) assets for this game mode
-     *
-     * @return true if the controller is initialized properly, false otherwise.
+     * Initializes the in-game UI system with all necessary elements,
+     * including HUD, pause menu, win/lose pages, and settings.
      */
     bool init(const std::shared_ptr<cugl::AssetManager>& assets);
 
+    /**
+     * Initializes and lays out each page.
+     */
     void setupLose(std::shared_ptr<cugl::scene2::SceneNode>& losePage);
-
     void setupPause(std::shared_ptr<cugl::scene2::SceneNode>& pauseMenu);
-    
     void setupSetting(std::shared_ptr<cugl::scene2::SceneNode>& settingMenu);
-
     void setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDisplay);
-    
     void setupWin(std::shared_ptr<cugl::scene2::SceneNode>& winPage);
     
     static std::shared_ptr<GBIngameUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets) {
@@ -133,9 +129,7 @@ public:
     }
     
     /**
-     * Updates the visible HP bar segments to match current HP.
-     *
-     * @param hp  The current HP value (must be <= _maxHP)
+     * Updates each UI segments.
      */
     void updateHP(int hp);
     void updateTime(float timeSpent);
@@ -143,10 +137,14 @@ public:
     void updateStats(float timeSpent, int parryCount, int spawnedCount, int totalCount);
     void updateComboBar(float value);
     
+    /**
+     * Resets UI state for a new game session.
+     */
     void resetUI();
-
-    bool isActive() const { return _active;}
     
+    /**
+     * Set button callbacks.
+     */
     void setPauseCallback(const std::function<void()>& callback) { _pauseCallback = callback; }
     void setResumeCallback(const std::function<void()>& callback) { _resumeCallback = callback; }
     void setRetryCallback(const std::function<void()>& callback) { _retryCallback = callback; }
@@ -156,12 +154,14 @@ public:
     void setSoundCallback(const std::function<void()>& callback) { _soundCallback = callback; }
     void setWinContinueCallback(const std::function<void()>& callback) { _winContinueCallback = callback; }
 
+    /**
+     * Shows or hides each page.
+     */
     void showHeadsUpDisplay(bool visible, bool active);
     void showPauseMenu(bool visible);
     void showSettingMenu(bool visible);
     void showWinPage(bool visible);
     void showLosePage(bool visible);
-    
 };
 
 #endif /* __GB_INGAME_UI_H__ */
