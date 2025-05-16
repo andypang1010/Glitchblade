@@ -99,7 +99,6 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
     
     std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
     AudioHelper::init(fxJ, assets);
-    
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
     
     // Uncomment this part to rollback.
