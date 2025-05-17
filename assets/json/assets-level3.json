@@ -51,8 +51,20 @@
         "boss3_air_shoot_laser": {
             "file": "textures/boss3_air_shoot_laser.png"
         },
-        "boss3_ground_jump": {
-            "file": "textures/boss3_ground_jump.png"
+        "boss3_ground_jump_start": {
+            "file": "textures/boss3_ground_jump_start.png"
+        },
+        "boss3_ground_jump_wait": {
+            "file": "textures/boss3_ground_jump_wait.png"
+        },
+        "boss3_ground_jump_end": {
+            "file": "textures/boss3_ground_jump_end.png"
+        },
+        "boss3_ground_transform": {
+            "file": "textures/boss3_ground_transform.png"
+        },
+        "boss3_air_transform": {
+            "file": "textures/boss3_air_transform.png"
         },
         "boss3_ground_stun": {
             "file": "textures/boss3_ground_stun.png"

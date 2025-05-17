@@ -36,6 +36,9 @@
         "player_parry_release": {
             "file": "textures/player_parry_release.png"
         },
+        "player_cancel": {
+            "file": "textures/player_cancel.png"
+        },
         "player_damaged": {
             "file": "textures/player_damaged.png"
         },
@@ -56,6 +59,15 @@
         },
         "player_projectile": {
             "file": "textures/player_projectile.png"
+        },
+        "minion_damaged": {
+            "file": "textures/minion_damaged.png"
+        },
+        "boss_damaged": {
+            "file": "textures/boss_damaged.png"
+        },
+        "enemy_dash": {
+            "file": "textures/enemy_dash.png"
         }
     },
     "sounds": {

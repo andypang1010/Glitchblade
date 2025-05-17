@@ -32,7 +32,7 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
     _ui = GBMenuUI::alloc(_assets, firsttime);
     if (_ui != nullptr) {
         _ui->setLevel1Callback([this]() { _scene_to_load = 1; });
-        _ui->setLevel2Callback([this]() { _scene_to_load = 2; });
+        _ui->setLevel2Callback([this]() { _scene_to_load = 3; });
         _ui->setLevel3Callback([this]() { _scene_to_load = 3; });
         _ui->setLevel4Callback([this]() { _scene_to_load = 3; });
         _ui->setLevel5Callback([this]() { _scene_to_load = 3; });
