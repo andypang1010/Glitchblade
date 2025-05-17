@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\aes_gcm_ossl.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\aes_icm_ossl.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\cipher.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\cipher_test_cases.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\null_cipher.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\auth.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\auth_test_cases.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\hmac_ossl.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\null_auth.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\kernel\alloc.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\kernel\crypto_kernel.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\kernel\err.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\kernel\key.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\math\datatypes.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\replay\rdb.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\replay\rdbx.c" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\srtp\srtp.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\cipher\cipher_test_cases.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\hash\auth_test_cases.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\aes.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\aes_icm.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\alloc.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\auth.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\cipher.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\cipher_types.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\crypto_kernel.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\crypto_types.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\datatypes.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\err.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\hmac.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\integers.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\key.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\null_auth.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\null_cipher.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\rdb.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\rdbx.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include\sha1.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\include\srtp.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\deps\libsrtp\include\srtp_priv.h" />
+    <ClInclude Include="include\config.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{1748028f-f5cc-4159-a0eb-c5d1df08346e}</ProjectGuid>
+    <RootNamespace>srtp2</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\srtp2\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\srtp2\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)objs\srtp2\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)objs\srtp2\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level2</WarningLevel>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;PACKAGE_VERSION="2.4.2";_CRT_SECURE_NO_WARNINGS;WIN32_LEAN_AND_MEAN;NOMINMAX;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\ssl\include;$(ProjectDir)..\..\..\..\..\external\openssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <UseFullPaths>false</UseFullPaths>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level2</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;PACKAGE_VERSION="2.4.2";_CRT_SECURE_NO_WARNINGS;WIN32_LEAN_AND_MEAN;NOMINMAX;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\ssl\include;$(ProjectDir)..\..\..\..\..\external\openssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level2</WarningLevel>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;PACKAGE_VERSION="2.4.2";_CRT_SECURE_NO_WARNINGS;WIN32_LEAN_AND_MEAN;NOMINMAX;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\ssl\include;$(ProjectDir)..\..\..\..\..\external\openssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level2</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;PACKAGE_VERSION="2.4.2";_CRT_SECURE_NO_WARNINGS;WIN32_LEAN_AND_MEAN;NOMINMAX;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\ssl\include;$(ProjectDir)..\..\..\..\..\external\openssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\loaders">
+      <UniqueIdentifier>{f8751feb-5a5e-48d5-8446-9885e0d22aa6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\loaders">
+      <UniqueIdentifier>{e94e0745-9d92-41a1-8d3c-ffade2b1ff4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shaders">
+      <UniqueIdentifier>{308c66db-f38c-415b-8a95-ae5a428e5f44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\cugl\graphics\cu_graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUGlyphRun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUGradient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUGraphicsBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUInstanceBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUMeshExtruder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUParticleShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUParticleSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CURenderTarget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUScissor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUSpriteBatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUSpriteMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUSpriteSheet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUSpriteVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUStencilEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUTextAlignment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUTextLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUTextureRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUUniformBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUVertexBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\cu_graphics_loaders.h">
+      <Filter>Header Files\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUFontLoader.h">
+      <Filter>Header Files\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUParticleLoader.h">
+      <Filter>Header Files\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUSpriteMeshLoader.h">
+      <Filter>Header Files\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUTextureLoader.h">
+      <Filter>Header Files\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUGradientLoader.h">
+      <Filter>Header Files\loaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\graphics\CUFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUGradient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUGraphicsBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUInstanceBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUMeshExtruder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUParticleShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUParticleSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CURenderTarget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUScissor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUSpriteBatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUSpriteMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUSpriteSheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUSpriteVertex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUStencilEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUTextLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUTextureRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUUniformBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\CUVertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUFontLoader.cpp">
+      <Filter>Source Files\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUParticleLoader.cpp">
+      <Filter>Source Files\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUSpriteMeshLoader.cpp">
+      <Filter>Source Files\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUTextureLoader.cpp">
+      <Filter>Source Files\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUGradientLoader.cpp">
+      <Filter>Source Files\loaders</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\source\graphics\shaders\ColorTexture.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="..\..\..\source\graphics\shaders\ColorTexture.vert">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="..\..\..\source\graphics\shaders\FSQShader.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="..\..\..\source\graphics\shaders\FSQShader.vert">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="..\..\..\source\graphics\shaders\ParticleShader.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="..\..\..\source\graphics\shaders\ParticleShader.vert">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="..\..\..\source\graphics\shaders\SpriteShader.frag">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="..\..\..\source\graphics\shaders\SpriteShader.vert">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

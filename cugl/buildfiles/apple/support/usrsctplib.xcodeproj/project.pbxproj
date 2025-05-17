@@ -1,0 +1,981 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		166DF41379E6486280A653BC /* sctp_asconf.c in Sources */ = {isa = PBXBuildFile; fileRef = DB28441EE8ED49CB856E17A1 /* sctp_asconf.c */; };
+		2568EE18355943D8840380C2 /* sctp_peeloff.c in Sources */ = {isa = PBXBuildFile; fileRef = 43687BC91B4446CA918BBAF3 /* sctp_peeloff.c */; };
+		3F6D6BA049664D34929D9249 /* sctp_crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 479BD3F8E9A5425A8D517805 /* sctp_crc32.c */; };
+		43954113C5BB47A2925AD04E /* sctp_ss_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = A66B03CDB09549558E013E82 /* sctp_ss_functions.c */; };
+		4DA9765AC18C468EBC49A576 /* user_environment.c in Sources */ = {isa = PBXBuildFile; fileRef = 89B09689ADF4479FA0951266 /* user_environment.c */; };
+		52D68DE47C714EC788631DAE /* sctp_usrreq.c in Sources */ = {isa = PBXBuildFile; fileRef = F07BC845AD7440BFA5D0B71D /* sctp_usrreq.c */; };
+		7780EE75C5AC4E4C870469C9 /* user_socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 756C4AB00D6E4EA6ADC6CCEF /* user_socket.c */; };
+		AFB637A1AC4B4A4B9D763AB3 /* sctp6_usrreq.c in Sources */ = {isa = PBXBuildFile; fileRef = 95888F39ED9F481DAEB3FCC7 /* sctp6_usrreq.c */; };
+		BC454B39FEA24DADBCCEDE54 /* sctp_userspace.c in Sources */ = {isa = PBXBuildFile; fileRef = F391C0AC6A904C48892B8F5D /* sctp_userspace.c */; };
+		BD1AE69529F54B05A84E4FE5 /* sctp_pcb.c in Sources */ = {isa = PBXBuildFile; fileRef = 855D0A35465A40549A853D52 /* sctp_pcb.c */; };
+		BFD685D391C84FAC8E99E523 /* sctputil.c in Sources */ = {isa = PBXBuildFile; fileRef = 857CDA5C5201497EB1581898 /* sctputil.c */; };
+		C656C325117B42809EDCE5F0 /* user_recv_thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 261B47BC5ACA4C8A8DD38D8A /* user_recv_thread.c */; };
+		CA8075A8E9A94EFAAFF2555B /* sctp_output.c in Sources */ = {isa = PBXBuildFile; fileRef = 863B4AFAE68941EB8F95F511 /* sctp_output.c */; };
+		CD5067DE9FBB40D0B6102AE0 /* user_mbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = E52FCA93EB084B09BF4629AA /* user_mbuf.c */; };
+		DC84FC2F8C3B4D26A2923D40 /* sctp_sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 48BEE613BFA2418EA3B24008 /* sctp_sha1.c */; };
+		DE19B0650BFE48CF8F28B112 /* sctp_sysctl.c in Sources */ = {isa = PBXBuildFile; fileRef = B8904F529E3A48F8ADBF6059 /* sctp_sysctl.c */; };
+		E607882207AA487FABD6C58A /* sctp_callout.c in Sources */ = {isa = PBXBuildFile; fileRef = 56D77309243E49EEBF1E9872 /* sctp_callout.c */; };
+		E63CFDAE3BE844C587585D30 /* sctp_timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 58422A8FE87245B8A63E9CB6 /* sctp_timer.c */; };
+		EB98C7412962017C00DFB8F9 /* sctp_asconf.c in Sources */ = {isa = PBXBuildFile; fileRef = DB28441EE8ED49CB856E17A1 /* sctp_asconf.c */; };
+		EB98C7422962017C00DFB8F9 /* sctp_auth.c in Sources */ = {isa = PBXBuildFile; fileRef = F73F3FC7B6954408AEC2155C /* sctp_auth.c */; };
+		EB98C7432962017C00DFB8F9 /* sctp_bsd_addr.c in Sources */ = {isa = PBXBuildFile; fileRef = 9F17DC8D57F64DBDA3B43FCC /* sctp_bsd_addr.c */; };
+		EB98C7442962017C00DFB8F9 /* sctp_callout.c in Sources */ = {isa = PBXBuildFile; fileRef = 56D77309243E49EEBF1E9872 /* sctp_callout.c */; };
+		EB98C7452962017C00DFB8F9 /* sctp_cc_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = 61E993032E2E4C2A81A59D8B /* sctp_cc_functions.c */; };
+		EB98C7462962017C00DFB8F9 /* sctp_crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 479BD3F8E9A5425A8D517805 /* sctp_crc32.c */; };
+		EB98C7472962017C00DFB8F9 /* sctp_indata.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A284B4AC224223AB4BDF3F /* sctp_indata.c */; };
+		EB98C7482962017C00DFB8F9 /* sctp_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 24E5B36E37494100A0BE2108 /* sctp_input.c */; };
+		EB98C7492962017C00DFB8F9 /* sctp_output.c in Sources */ = {isa = PBXBuildFile; fileRef = 863B4AFAE68941EB8F95F511 /* sctp_output.c */; };
+		EB98C74A2962017C00DFB8F9 /* sctp_pcb.c in Sources */ = {isa = PBXBuildFile; fileRef = 855D0A35465A40549A853D52 /* sctp_pcb.c */; };
+		EB98C74B2962017C00DFB8F9 /* sctp_peeloff.c in Sources */ = {isa = PBXBuildFile; fileRef = 43687BC91B4446CA918BBAF3 /* sctp_peeloff.c */; };
+		EB98C74C2962017C00DFB8F9 /* sctp_sha1.c in Sources */ = {isa = PBXBuildFile; fileRef = 48BEE613BFA2418EA3B24008 /* sctp_sha1.c */; };
+		EB98C74D2962017C00DFB8F9 /* sctp_ss_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = A66B03CDB09549558E013E82 /* sctp_ss_functions.c */; };
+		EB98C74E2962017C00DFB8F9 /* sctp_sysctl.c in Sources */ = {isa = PBXBuildFile; fileRef = B8904F529E3A48F8ADBF6059 /* sctp_sysctl.c */; };
+		EB98C74F2962017C00DFB8F9 /* sctp_timer.c in Sources */ = {isa = PBXBuildFile; fileRef = 58422A8FE87245B8A63E9CB6 /* sctp_timer.c */; };
+		EB98C7502962017C00DFB8F9 /* sctp_userspace.c in Sources */ = {isa = PBXBuildFile; fileRef = F391C0AC6A904C48892B8F5D /* sctp_userspace.c */; };
+		EB98C7512962017C00DFB8F9 /* sctp_usrreq.c in Sources */ = {isa = PBXBuildFile; fileRef = F07BC845AD7440BFA5D0B71D /* sctp_usrreq.c */; };
+		EB98C7522962017C00DFB8F9 /* sctputil.c in Sources */ = {isa = PBXBuildFile; fileRef = 857CDA5C5201497EB1581898 /* sctputil.c */; };
+		EB98C7532962017C00DFB8F9 /* sctp6_usrreq.c in Sources */ = {isa = PBXBuildFile; fileRef = 95888F39ED9F481DAEB3FCC7 /* sctp6_usrreq.c */; };
+		EB98C7542962017C00DFB8F9 /* user_environment.c in Sources */ = {isa = PBXBuildFile; fileRef = 89B09689ADF4479FA0951266 /* user_environment.c */; };
+		EB98C7552962017C00DFB8F9 /* user_mbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = E52FCA93EB084B09BF4629AA /* user_mbuf.c */; };
+		EB98C7562962017C00DFB8F9 /* user_recv_thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 261B47BC5ACA4C8A8DD38D8A /* user_recv_thread.c */; };
+		EB98C7572962017C00DFB8F9 /* user_socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 756C4AB00D6E4EA6ADC6CCEF /* user_socket.c */; };
+		EDDA66020989434FB27555A1 /* sctp_auth.c in Sources */ = {isa = PBXBuildFile; fileRef = F73F3FC7B6954408AEC2155C /* sctp_auth.c */; };
+		F15A16C2070E47A391332EC8 /* sctp_indata.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A284B4AC224223AB4BDF3F /* sctp_indata.c */; };
+		F36FF9C17CED4B9B8FDB4384 /* sctp_bsd_addr.c in Sources */ = {isa = PBXBuildFile; fileRef = 9F17DC8D57F64DBDA3B43FCC /* sctp_bsd_addr.c */; };
+		F3EAE404D42E4573BC193F6C /* sctp_cc_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = 61E993032E2E4C2A81A59D8B /* sctp_cc_functions.c */; };
+		FBDE2446AE0444DB8FA0875B /* sctp_input.c in Sources */ = {isa = PBXBuildFile; fileRef = 24E5B36E37494100A0BE2108 /* sctp_input.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EB98C67F2961679D00DFB8F9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0AA3D4635D62424AA17BFFF7 /* user_socketvar.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_socketvar.h; path = usrsctplib/user_socketvar.h; sourceTree = "<group>"; };
+		0B12BAD536A848AA9E1CC2B4 /* user_ip_icmp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_ip_icmp.h; path = usrsctplib/user_ip_icmp.h; sourceTree = "<group>"; };
+		10217FDF2BFD44E4ADB06740 /* sctp_lock_userspace.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_lock_userspace.h; path = usrsctplib/netinet/sctp_lock_userspace.h; sourceTree = "<group>"; };
+		111CC6C3CEFE4BF49BC567D3 /* sctp_timer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_timer.h; path = usrsctplib/netinet/sctp_timer.h; sourceTree = "<group>"; };
+		12661C149E1B489391DDAF2E /* sctp_output.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_output.h; path = usrsctplib/netinet/sctp_output.h; sourceTree = "<group>"; };
+		20B8238C58884162B3F8E177 /* user_route.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_route.h; path = usrsctplib/user_route.h; sourceTree = "<group>"; };
+		24E5B36E37494100A0BE2108 /* sctp_input.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_input.c; path = usrsctplib/netinet/sctp_input.c; sourceTree = "<group>"; };
+		261B47BC5ACA4C8A8DD38D8A /* user_recv_thread.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = user_recv_thread.c; path = usrsctplib/user_recv_thread.c; sourceTree = "<group>"; };
+		2743B50810DB42B2B1610BE8 /* user_queue.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_queue.h; path = usrsctplib/user_queue.h; sourceTree = "<group>"; };
+		27C2C918E5C142168379DBD9 /* sctp6_var.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp6_var.h; path = usrsctplib/netinet6/sctp6_var.h; sourceTree = "<group>"; };
+		2B6B57C460BB4FCF8833F921 /* user_inpcb.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_inpcb.h; path = usrsctplib/user_inpcb.h; sourceTree = "<group>"; };
+		3D24B10055B54ACAB3F39F02 /* user_environment.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_environment.h; path = usrsctplib/user_environment.h; sourceTree = "<group>"; };
+		42C47D4A16B8477B8A912778 /* sctp_header.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_header.h; path = usrsctplib/netinet/sctp_header.h; sourceTree = "<group>"; };
+		42EA00B4A0F04EE189368E37 /* sctp_bsd_addr.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_bsd_addr.h; path = usrsctplib/netinet/sctp_bsd_addr.h; sourceTree = "<group>"; };
+		43687BC91B4446CA918BBAF3 /* sctp_peeloff.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_peeloff.c; path = usrsctplib/netinet/sctp_peeloff.c; sourceTree = "<group>"; };
+		479BD3F8E9A5425A8D517805 /* sctp_crc32.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_crc32.c; path = usrsctplib/netinet/sctp_crc32.c; sourceTree = "<group>"; };
+		48BEE613BFA2418EA3B24008 /* sctp_sha1.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_sha1.c; path = usrsctplib/netinet/sctp_sha1.c; sourceTree = "<group>"; };
+		56D77309243E49EEBF1E9872 /* sctp_callout.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_callout.c; path = usrsctplib/netinet/sctp_callout.c; sourceTree = "<group>"; };
+		58422A8FE87245B8A63E9CB6 /* sctp_timer.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_timer.c; path = usrsctplib/netinet/sctp_timer.c; sourceTree = "<group>"; };
+		61E993032E2E4C2A81A59D8B /* sctp_cc_functions.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_cc_functions.c; path = usrsctplib/netinet/sctp_cc_functions.c; sourceTree = "<group>"; };
+		62A886E0644E4EFC90081245 /* user_uma.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_uma.h; path = usrsctplib/user_uma.h; sourceTree = "<group>"; };
+		62EB5F0A45C746FAB20CA56A /* usrsctp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = usrsctp.h; path = usrsctplib/usrsctp.h; sourceTree = "<group>"; };
+		63B133D5772A486F8B898F26 /* sctp_input.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_input.h; path = usrsctplib/netinet/sctp_input.h; sourceTree = "<group>"; };
+		65271164FBD546B998317269 /* user_atomic.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_atomic.h; path = usrsctplib/user_atomic.h; sourceTree = "<group>"; };
+		6A62C50A9D0C4B42A42EC2E1 /* sctp_pcb.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_pcb.h; path = usrsctplib/netinet/sctp_pcb.h; sourceTree = "<group>"; };
+		7369977C57264017B9861FF5 /* sctp_sysctl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_sysctl.h; path = usrsctplib/netinet/sctp_sysctl.h; sourceTree = "<group>"; };
+		7394000590A144A682DA5D9A /* user_recv_thread.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_recv_thread.h; path = usrsctplib/user_recv_thread.h; sourceTree = "<group>"; };
+		756C4AB00D6E4EA6ADC6CCEF /* user_socket.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = user_socket.c; path = usrsctplib/user_socket.c; sourceTree = "<group>"; };
+		7BC725C85AE74D1BB7666F99 /* sctp_uio.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_uio.h; path = usrsctplib/netinet/sctp_uio.h; sourceTree = "<group>"; };
+		7CB77A74F3A945FAB4009AC5 /* sctp_constants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_constants.h; path = usrsctplib/netinet/sctp_constants.h; sourceTree = "<group>"; };
+		83A284B4AC224223AB4BDF3F /* sctp_indata.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_indata.c; path = usrsctplib/netinet/sctp_indata.c; sourceTree = "<group>"; };
+		83ACA1C9F6F64ADB9CDE37BD /* sctp_callout.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_callout.h; path = usrsctplib/netinet/sctp_callout.h; sourceTree = "<group>"; };
+		855D0A35465A40549A853D52 /* sctp_pcb.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_pcb.c; path = usrsctplib/netinet/sctp_pcb.c; sourceTree = "<group>"; };
+		857CDA5C5201497EB1581898 /* sctputil.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctputil.c; path = usrsctplib/netinet/sctputil.c; sourceTree = "<group>"; };
+		863B4AFAE68941EB8F95F511 /* sctp_output.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_output.c; path = usrsctplib/netinet/sctp_output.c; sourceTree = "<group>"; };
+		86E961B6CE3C4B24B0D826FB /* sctp_crc32.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_crc32.h; path = usrsctplib/netinet/sctp_crc32.h; sourceTree = "<group>"; };
+		89B09689ADF4479FA0951266 /* user_environment.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = user_environment.c; path = usrsctplib/user_environment.c; sourceTree = "<group>"; };
+		95888F39ED9F481DAEB3FCC7 /* sctp6_usrreq.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp6_usrreq.c; path = usrsctplib/netinet6/sctp6_usrreq.c; sourceTree = "<group>"; };
+		9F17DC8D57F64DBDA3B43FCC /* sctp_bsd_addr.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_bsd_addr.c; path = usrsctplib/netinet/sctp_bsd_addr.c; sourceTree = "<group>"; };
+		A22CA808EEEB42B0B9DBBFEA /* sctp_peeloff.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_peeloff.h; path = usrsctplib/netinet/sctp_peeloff.h; sourceTree = "<group>"; };
+		A43157D2B55A42F192FAA7CB /* user_mbuf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_mbuf.h; path = usrsctplib/user_mbuf.h; sourceTree = "<group>"; };
+		A66B03CDB09549558E013E82 /* sctp_ss_functions.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_ss_functions.c; path = usrsctplib/netinet/sctp_ss_functions.c; sourceTree = "<group>"; };
+		A7A9B49FB3F64E41A5845BD6 /* sctp_asconf.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_asconf.h; path = usrsctplib/netinet/sctp_asconf.h; sourceTree = "<group>"; };
+		ADDFFECB5821452FA05F17DC /* sctp_os.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_os.h; path = usrsctplib/netinet/sctp_os.h; sourceTree = "<group>"; };
+		B8904F529E3A48F8ADBF6059 /* sctp_sysctl.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_sysctl.c; path = usrsctplib/netinet/sctp_sysctl.c; sourceTree = "<group>"; };
+		B92C3304A57A4834BFCC5F73 /* user_malloc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_malloc.h; path = usrsctplib/user_malloc.h; sourceTree = "<group>"; };
+		C5C33597EFA84D68A7B590BA /* sctp_var.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_var.h; path = usrsctplib/netinet/sctp_var.h; sourceTree = "<group>"; };
+		C847FC4D348349419D8562E3 /* libusrsctp-mac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libusrsctp-mac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D07013A673414F3EA1189E10 /* sctp_sha1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_sha1.h; path = usrsctplib/netinet/sctp_sha1.h; sourceTree = "<group>"; };
+		DB28441EE8ED49CB856E17A1 /* sctp_asconf.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_asconf.c; path = usrsctplib/netinet/sctp_asconf.c; sourceTree = "<group>"; };
+		DE209284BC5347A58CBF4C47 /* sctputil.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctputil.h; path = usrsctplib/netinet/sctputil.h; sourceTree = "<group>"; };
+		E52FCA93EB084B09BF4629AA /* user_mbuf.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = user_mbuf.c; path = usrsctplib/user_mbuf.c; sourceTree = "<group>"; };
+		EB405CAFDE5741BB91B25900 /* sctp_os_userspace.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_os_userspace.h; path = usrsctplib/netinet/sctp_os_userspace.h; sourceTree = "<group>"; };
+		EB80967CCBB94E2D89448740 /* sctp_auth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_auth.h; path = usrsctplib/netinet/sctp_auth.h; sourceTree = "<group>"; };
+		EB98C6812961679D00DFB8F9 /* libusrsctp-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libusrsctp-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC92B1C29EF7415CA9B07B4C /* sctp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp.h; path = usrsctplib/netinet/sctp.h; sourceTree = "<group>"; };
+		ECC0EEDF178E4DAA8EF55E72 /* sctp_indata.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_indata.h; path = usrsctplib/netinet/sctp_indata.h; sourceTree = "<group>"; };
+		F028E4CD13214FF78AE26757 /* sctp_process_lock.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_process_lock.h; path = usrsctplib/netinet/sctp_process_lock.h; sourceTree = "<group>"; };
+		F07BC845AD7440BFA5D0B71D /* sctp_usrreq.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_usrreq.c; path = usrsctplib/netinet/sctp_usrreq.c; sourceTree = "<group>"; };
+		F391C0AC6A904C48892B8F5D /* sctp_userspace.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_userspace.c; path = usrsctplib/netinet/sctp_userspace.c; sourceTree = "<group>"; };
+		F58C802435EA42859655B464 /* user_ip6_var.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = user_ip6_var.h; path = usrsctplib/user_ip6_var.h; sourceTree = "<group>"; };
+		F73F3FC7B6954408AEC2155C /* sctp_auth.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = sctp_auth.c; path = usrsctplib/netinet/sctp_auth.c; sourceTree = "<group>"; };
+		FEFD20CCF6724493B5A55F2E /* sctp_structs.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = sctp_structs.h; path = usrsctplib/netinet/sctp_structs.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E272A0C51F974472A6779972 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB98C67E2961679D00DFB8F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0E01AB2A5FB449AFAE4CFF02 /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				EC92B1C29EF7415CA9B07B4C /* sctp.h */,
+				A7A9B49FB3F64E41A5845BD6 /* sctp_asconf.h */,
+				EB80967CCBB94E2D89448740 /* sctp_auth.h */,
+				42EA00B4A0F04EE189368E37 /* sctp_bsd_addr.h */,
+				83ACA1C9F6F64ADB9CDE37BD /* sctp_callout.h */,
+				7CB77A74F3A945FAB4009AC5 /* sctp_constants.h */,
+				86E961B6CE3C4B24B0D826FB /* sctp_crc32.h */,
+				42C47D4A16B8477B8A912778 /* sctp_header.h */,
+				ECC0EEDF178E4DAA8EF55E72 /* sctp_indata.h */,
+				63B133D5772A486F8B898F26 /* sctp_input.h */,
+				10217FDF2BFD44E4ADB06740 /* sctp_lock_userspace.h */,
+				ADDFFECB5821452FA05F17DC /* sctp_os.h */,
+				EB405CAFDE5741BB91B25900 /* sctp_os_userspace.h */,
+				12661C149E1B489391DDAF2E /* sctp_output.h */,
+				6A62C50A9D0C4B42A42EC2E1 /* sctp_pcb.h */,
+				A22CA808EEEB42B0B9DBBFEA /* sctp_peeloff.h */,
+				F028E4CD13214FF78AE26757 /* sctp_process_lock.h */,
+				D07013A673414F3EA1189E10 /* sctp_sha1.h */,
+				FEFD20CCF6724493B5A55F2E /* sctp_structs.h */,
+				7369977C57264017B9861FF5 /* sctp_sysctl.h */,
+				111CC6C3CEFE4BF49BC567D3 /* sctp_timer.h */,
+				7BC725C85AE74D1BB7666F99 /* sctp_uio.h */,
+				C5C33597EFA84D68A7B590BA /* sctp_var.h */,
+				DE209284BC5347A58CBF4C47 /* sctputil.h */,
+				27C2C918E5C142168379DBD9 /* sctp6_var.h */,
+				65271164FBD546B998317269 /* user_atomic.h */,
+				3D24B10055B54ACAB3F39F02 /* user_environment.h */,
+				2B6B57C460BB4FCF8833F921 /* user_inpcb.h */,
+				F58C802435EA42859655B464 /* user_ip6_var.h */,
+				0B12BAD536A848AA9E1CC2B4 /* user_ip_icmp.h */,
+				B92C3304A57A4834BFCC5F73 /* user_malloc.h */,
+				A43157D2B55A42F192FAA7CB /* user_mbuf.h */,
+				2743B50810DB42B2B1610BE8 /* user_queue.h */,
+				7394000590A144A682DA5D9A /* user_recv_thread.h */,
+				20B8238C58884162B3F8E177 /* user_route.h */,
+				0AA3D4635D62424AA17BFFF7 /* user_socketvar.h */,
+				62A886E0644E4EFC90081245 /* user_uma.h */,
+				62EB5F0A45C746FAB20CA56A /* usrsctp.h */,
+			);
+			name = "Header Files";
+			path = ../../../external/libdatachannel/deps/usrsctp;
+			sourceTree = "<group>";
+		};
+		555A3C2D5ECB4C0DB539BDF1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C847FC4D348349419D8562E3 /* libusrsctp-mac.a */,
+				EB98C6812961679D00DFB8F9 /* libusrsctp-ios.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6F9D7E055ECB493C8EB4B64F /* usrsctp */ = {
+			isa = PBXGroup;
+			children = (
+				B3F72512754941B39D923D61 /* Source Files */,
+				0E01AB2A5FB449AFAE4CFF02 /* Header Files */,
+			);
+			name = usrsctp;
+			sourceTree = "<group>";
+		};
+		7B4B88C4DAE6476BBED00F7B = {
+			isa = PBXGroup;
+			children = (
+				6F9D7E055ECB493C8EB4B64F /* usrsctp */,
+				555A3C2D5ECB4C0DB539BDF1 /* Products */,
+				D7711B329D2E4B57ACFF4739 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B3F72512754941B39D923D61 /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				DB28441EE8ED49CB856E17A1 /* sctp_asconf.c */,
+				F73F3FC7B6954408AEC2155C /* sctp_auth.c */,
+				9F17DC8D57F64DBDA3B43FCC /* sctp_bsd_addr.c */,
+				56D77309243E49EEBF1E9872 /* sctp_callout.c */,
+				61E993032E2E4C2A81A59D8B /* sctp_cc_functions.c */,
+				479BD3F8E9A5425A8D517805 /* sctp_crc32.c */,
+				83A284B4AC224223AB4BDF3F /* sctp_indata.c */,
+				24E5B36E37494100A0BE2108 /* sctp_input.c */,
+				863B4AFAE68941EB8F95F511 /* sctp_output.c */,
+				855D0A35465A40549A853D52 /* sctp_pcb.c */,
+				43687BC91B4446CA918BBAF3 /* sctp_peeloff.c */,
+				48BEE613BFA2418EA3B24008 /* sctp_sha1.c */,
+				A66B03CDB09549558E013E82 /* sctp_ss_functions.c */,
+				B8904F529E3A48F8ADBF6059 /* sctp_sysctl.c */,
+				58422A8FE87245B8A63E9CB6 /* sctp_timer.c */,
+				F391C0AC6A904C48892B8F5D /* sctp_userspace.c */,
+				F07BC845AD7440BFA5D0B71D /* sctp_usrreq.c */,
+				857CDA5C5201497EB1581898 /* sctputil.c */,
+				95888F39ED9F481DAEB3FCC7 /* sctp6_usrreq.c */,
+				89B09689ADF4479FA0951266 /* user_environment.c */,
+				E52FCA93EB084B09BF4629AA /* user_mbuf.c */,
+				261B47BC5ACA4C8A8DD38D8A /* user_recv_thread.c */,
+				756C4AB00D6E4EA6ADC6CCEF /* user_socket.c */,
+			);
+			name = "Source Files";
+			path = ../../../external/libdatachannel/deps/usrsctp;
+			sourceTree = "<group>";
+		};
+		D7711B329D2E4B57ACFF4739 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1CC94083DFE440EAB6A644B0 /* usrsctp-mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E15655044C0A4776ABE74588 /* Build configuration list for PBXNativeTarget "usrsctp-mac" */;
+			buildPhases = (
+				E2E98B8DF764497BBA4480D6 /* Sources */,
+				E272A0C51F974472A6779972 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "usrsctp-mac";
+			productName = usrsctp;
+			productReference = C847FC4D348349419D8562E3 /* libusrsctp-mac.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		EB98C6802961679D00DFB8F9 /* usrsctp-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB98C68B2961679D00DFB8F9 /* Build configuration list for PBXNativeTarget "usrsctp-ios" */;
+			buildPhases = (
+				EB98C67D2961679D00DFB8F9 /* Sources */,
+				EB98C67E2961679D00DFB8F9 /* Frameworks */,
+				EB98C67F2961679D00DFB8F9 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "usrsctp-ios";
+			productName = "usrsct-ios";
+			productReference = EB98C6812961679D00DFB8F9 /* libusrsctp-ios.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A2A41C1B9FEC40AB98C3ED35 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				DefaultBuildSystemTypeForWorkspace = Latest;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					EB98C6802961679D00DFB8F9 = {
+						CreatedOnToolsVersion = 13.4.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 649634A5634C4B93B214735A /* Build configuration list for PBXProject "usrsctplib" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7B4B88C4DAE6476BBED00F7B;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1CC94083DFE440EAB6A644B0 /* usrsctp-mac */,
+				EB98C6802961679D00DFB8F9 /* usrsctp-ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E2E98B8DF764497BBA4480D6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				166DF41379E6486280A653BC /* sctp_asconf.c in Sources */,
+				EDDA66020989434FB27555A1 /* sctp_auth.c in Sources */,
+				F36FF9C17CED4B9B8FDB4384 /* sctp_bsd_addr.c in Sources */,
+				E607882207AA487FABD6C58A /* sctp_callout.c in Sources */,
+				F3EAE404D42E4573BC193F6C /* sctp_cc_functions.c in Sources */,
+				3F6D6BA049664D34929D9249 /* sctp_crc32.c in Sources */,
+				F15A16C2070E47A391332EC8 /* sctp_indata.c in Sources */,
+				FBDE2446AE0444DB8FA0875B /* sctp_input.c in Sources */,
+				CA8075A8E9A94EFAAFF2555B /* sctp_output.c in Sources */,
+				BD1AE69529F54B05A84E4FE5 /* sctp_pcb.c in Sources */,
+				2568EE18355943D8840380C2 /* sctp_peeloff.c in Sources */,
+				DC84FC2F8C3B4D26A2923D40 /* sctp_sha1.c in Sources */,
+				43954113C5BB47A2925AD04E /* sctp_ss_functions.c in Sources */,
+				DE19B0650BFE48CF8F28B112 /* sctp_sysctl.c in Sources */,
+				E63CFDAE3BE844C587585D30 /* sctp_timer.c in Sources */,
+				BC454B39FEA24DADBCCEDE54 /* sctp_userspace.c in Sources */,
+				52D68DE47C714EC788631DAE /* sctp_usrreq.c in Sources */,
+				BFD685D391C84FAC8E99E523 /* sctputil.c in Sources */,
+				AFB637A1AC4B4A4B9D763AB3 /* sctp6_usrreq.c in Sources */,
+				4DA9765AC18C468EBC49A576 /* user_environment.c in Sources */,
+				CD5067DE9FBB40D0B6102AE0 /* user_mbuf.c in Sources */,
+				C656C325117B42809EDCE5F0 /* user_recv_thread.c in Sources */,
+				7780EE75C5AC4E4C870469C9 /* user_socket.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB98C67D2961679D00DFB8F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB98C7412962017C00DFB8F9 /* sctp_asconf.c in Sources */,
+				EB98C7422962017C00DFB8F9 /* sctp_auth.c in Sources */,
+				EB98C7432962017C00DFB8F9 /* sctp_bsd_addr.c in Sources */,
+				EB98C7442962017C00DFB8F9 /* sctp_callout.c in Sources */,
+				EB98C7452962017C00DFB8F9 /* sctp_cc_functions.c in Sources */,
+				EB98C7462962017C00DFB8F9 /* sctp_crc32.c in Sources */,
+				EB98C7472962017C00DFB8F9 /* sctp_indata.c in Sources */,
+				EB98C7482962017C00DFB8F9 /* sctp_input.c in Sources */,
+				EB98C7492962017C00DFB8F9 /* sctp_output.c in Sources */,
+				EB98C74A2962017C00DFB8F9 /* sctp_pcb.c in Sources */,
+				EB98C74B2962017C00DFB8F9 /* sctp_peeloff.c in Sources */,
+				EB98C74C2962017C00DFB8F9 /* sctp_sha1.c in Sources */,
+				EB98C74D2962017C00DFB8F9 /* sctp_ss_functions.c in Sources */,
+				EB98C74E2962017C00DFB8F9 /* sctp_sysctl.c in Sources */,
+				EB98C74F2962017C00DFB8F9 /* sctp_timer.c in Sources */,
+				EB98C7502962017C00DFB8F9 /* sctp_userspace.c in Sources */,
+				EB98C7512962017C00DFB8F9 /* sctp_usrreq.c in Sources */,
+				EB98C7522962017C00DFB8F9 /* sctputil.c in Sources */,
+				EB98C7532962017C00DFB8F9 /* sctp6_usrreq.c in Sources */,
+				EB98C7542962017C00DFB8F9 /* user_environment.c in Sources */,
+				EB98C7552962017C00DFB8F9 /* user_mbuf.c in Sources */,
+				EB98C7562962017C00DFB8F9 /* user_recv_thread.c in Sources */,
+				EB98C7572962017C00DFB8F9 /* user_socket.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1A753E19E1444841A5C5F873 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_NET_ROUTE_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					SCTP_SIMPLE_ALLOCATOR,
+					__Userspace__,
+					SCTP_PROCESS_LEVEL_LOCKS,
+					__APPLE_USE_RFC_2292,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-std=c99",
+					"-pedantic",
+					"-Wfloat-equal",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Winit-self",
+					"-Wno-unused-function",
+					"-Wno-unused-parameter",
+					"-Wno-unreachable-code",
+					"-Wno-address-of-packed-member",
+					"-Wno-deprecated-declarations",
+					"-Wno-strict-prototypes",
+					"-Werror",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "usrsctp-mac";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = MinSizeRel;
+		};
+		25A1BE0EA0744DE682FAD1F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_NET_ROUTE_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					SCTP_SIMPLE_ALLOCATOR,
+					__Userspace__,
+					SCTP_PROCESS_LEVEL_LOCKS,
+					__APPLE_USE_RFC_2292,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-std=c99",
+					"-pedantic",
+					"-Wfloat-equal",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Winit-self",
+					"-Wno-unused-function",
+					"-Wno-unused-parameter",
+					"-Wno-unreachable-code",
+					"-Wno-address-of-packed-member",
+					"-Wno-deprecated-declarations",
+					"-Wno-strict-prototypes",
+					"-Werror",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "usrsctp-mac";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Release;
+		};
+		52AF27DB37D94F39A9CB6AA3 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					__APPLE_USE_RFC_2292,
+					__Userspace__,
+					SCTP_SIMPLE_ALLOCATOR,
+					SCTP_PROCESS_LEVEL_LOCKS,
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../external/libdatachannel/deps/usrsctp/usrsctplib";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-std=c99",
+					"-pedantic",
+					"-Wall",
+					"-Wextra",
+					"-Wfloat-equal",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Winit-self",
+					"-Wno-unused-function",
+					"-Wno-unused-parameter",
+					"-Wno-unreachable-code",
+					"-Wno-address-of-packed-member",
+					"-Wno-deprecated-declarations",
+					"-Wstrict-prototypes",
+					"-Werror",
+				);
+				SDKROOT = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = MinSizeRel;
+		};
+		54A935C6141F4906A967864C /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_NET_ROUTE_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					SCTP_SIMPLE_ALLOCATOR,
+					__Userspace__,
+					SCTP_PROCESS_LEVEL_LOCKS,
+					__APPLE_USE_RFC_2292,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-std=c99",
+					"-pedantic",
+					"-Wfloat-equal",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Winit-self",
+					"-Wno-unused-function",
+					"-Wno-unused-parameter",
+					"-Wno-unreachable-code",
+					"-Wno-address-of-packed-member",
+					"-Wno-deprecated-declarations",
+					"-Wno-strict-prototypes",
+					"-Werror",
+					"-DNDEBUG",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "usrsctp-mac";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = RelWithDebInfo;
+		};
+		93C71C5F0B5F4C3EB4E6F105 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					__APPLE_USE_RFC_2292,
+					__Userspace__,
+					SCTP_SIMPLE_ALLOCATOR,
+					SCTP_PROCESS_LEVEL_LOCKS,
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../external/libdatachannel/deps/usrsctp/usrsctplib";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-std=c99",
+					"-pedantic",
+					"-Wall",
+					"-Wextra",
+					"-Wfloat-equal",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Winit-self",
+					"-Wno-unused-function",
+					"-Wno-unused-parameter",
+					"-Wno-unreachable-code",
+					"-Wno-address-of-packed-member",
+					"-Wno-deprecated-declarations",
+					"-Wstrict-prototypes",
+					"-Werror",
+				);
+				SDKROOT = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = RelWithDebInfo;
+		};
+		95DF38F3F064472FBE099B15 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					__APPLE_USE_RFC_2292,
+					__Userspace__,
+					SCTP_SIMPLE_ALLOCATOR,
+					SCTP_PROCESS_LEVEL_LOCKS,
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../external/libdatachannel/deps/usrsctp/usrsctplib";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-std=c99",
+					"-pedantic",
+					"-Wall",
+					"-Wextra",
+					"-Wfloat-equal",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Winit-self",
+					"-Wno-unused-function",
+					"-Wno-unused-parameter",
+					"-Wno-unreachable-code",
+					"-Wno-address-of-packed-member",
+					"-Wno-deprecated-declarations",
+					"-Wstrict-prototypes",
+					"-Werror",
+				);
+				SDKROOT = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Debug;
+		};
+		C273D378D8DB4F1A924B3B38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_NET_ROUTE_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					SCTP_SIMPLE_ALLOCATOR,
+					__Userspace__,
+					SCTP_PROCESS_LEVEL_LOCKS,
+					__APPLE_USE_RFC_2292,
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-std=c99",
+					"-pedantic",
+					"-Wfloat-equal",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Winit-self",
+					"-Wno-unused-function",
+					"-Wno-unused-parameter",
+					"-Wno-unreachable-code",
+					"-Wno-address-of-packed-member",
+					"-Wno-deprecated-declarations",
+					"-Wno-strict-prototypes",
+					"-Werror",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "usrsctp-mac";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		CB2CD047B51440669D589D67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					__APPLE_USE_RFC_2292,
+					__Userspace__,
+					SCTP_SIMPLE_ALLOCATOR,
+					SCTP_PROCESS_LEVEL_LOCKS,
+				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../../external/libdatachannel/deps/usrsctp/usrsctplib";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = (
+					"-std=c99",
+					"-pedantic",
+					"-Wall",
+					"-Wextra",
+					"-Wfloat-equal",
+					"-Wshadow",
+					"-Wpointer-arith",
+					"-Winit-self",
+					"-Wno-unused-function",
+					"-Wno-unused-parameter",
+					"-Wno-unreachable-code",
+					"-Wno-address-of-packed-member",
+					"-Wno-deprecated-declarations",
+					"-Wstrict-prototypes",
+					"-Werror",
+				);
+				SDKROOT = "";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Release;
+		};
+		EB98C6872961679D00DFB8F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					__Userspace__,
+					SCTP_SIMPLE_ALLOCATOR,
+					SCTP_PROCESS_LEVEL_LOCKS,
+					__APPLE_USE_RFC_2292,
+				);
+				LIBRARY_STYLE = STATIC;
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EB98C6882961679D00DFB8F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_SUFFIX = .a;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					__Userspace__,
+					SCTP_SIMPLE_ALLOCATOR,
+					SCTP_PROCESS_LEVEL_LOCKS,
+					__APPLE_USE_RFC_2292,
+				);
+				LIBRARY_STYLE = STATIC;
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EB98C6892961679D00DFB8F9 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_SUFFIX = .a;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					__Userspace__,
+					SCTP_SIMPLE_ALLOCATOR,
+					SCTP_PROCESS_LEVEL_LOCKS,
+					__APPLE_USE_RFC_2292,
+				);
+				LIBRARY_STYLE = STATIC;
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = MinSizeRel;
+		};
+		EB98C68A2961679D00DFB8F9 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				EXECUTABLE_SUFFIX = .a;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SCTP_DEBUG,
+					INET,
+					INET6,
+					HAVE_SYS_QUEUE_H,
+					HAVE_NETINET_IP_ICMP_H,
+					HAVE_STDATOMIC_H,
+					HAVE_SA_LEN,
+					HAVE_SIN_LEN,
+					HAVE_SIN6_LEN,
+					HAVE_SCONN_LEN,
+					__Userspace__,
+					SCTP_SIMPLE_ALLOCATOR,
+					SCTP_PROCESS_LEVEL_LOCKS,
+					__APPLE_USE_RFC_2292,
+				);
+				LIBRARY_STYLE = STATIC;
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = RelWithDebInfo;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		649634A5634C4B93B214735A /* Build configuration list for PBXProject "usrsctplib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95DF38F3F064472FBE099B15 /* Debug */,
+				CB2CD047B51440669D589D67 /* Release */,
+				52AF27DB37D94F39A9CB6AA3 /* MinSizeRel */,
+				93C71C5F0B5F4C3EB4E6F105 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E15655044C0A4776ABE74588 /* Build configuration list for PBXNativeTarget "usrsctp-mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C273D378D8DB4F1A924B3B38 /* Debug */,
+				25A1BE0EA0744DE682FAD1F1 /* Release */,
+				1A753E19E1444841A5C5F873 /* MinSizeRel */,
+				54A935C6141F4906A967864C /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EB98C68B2961679D00DFB8F9 /* Build configuration list for PBXNativeTarget "usrsctp-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB98C6872961679D00DFB8F9 /* Debug */,
+				EB98C6882961679D00DFB8F9 /* Release */,
+				EB98C6892961679D00DFB8F9 /* MinSizeRel */,
+				EB98C68A2961679D00DFB8F9 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A2A41C1B9FEC40AB98C3ED35 /* Project object */;
+}

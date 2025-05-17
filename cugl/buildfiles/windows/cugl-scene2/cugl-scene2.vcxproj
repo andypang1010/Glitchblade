@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUButton.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUButtonGroup.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUCanvasNode.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CULabel.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CULoadingScene.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUMeshNode.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUNinePatch.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUOrderedNode.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUPathNode.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUPolygonNode.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUProgressBar.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUScene2.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUScene2Loader.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUScene2Texture.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUSceneNode2.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUScrollPane.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUSlider.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUSpriteNode.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUTextField.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUTexturedNode.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUTransformAction2.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\CUWireNode.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\cu_scene2.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\layout\CUAnchoredLayout.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\layout\CUFloatLayout.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\layout\CUGridLayout.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\layout\CULayout.h" />
+    <ClInclude Include="..\..\..\include\cugl\scene2\layout\cu_layout.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\scene2\CUButton.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUButtonGroup.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUCanvasNode.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CULabel.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CULoadingScene.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUMeshNode.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUNinePatch.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUOrderedNode.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUPathNode.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUPolygonNode.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUProgressBar.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUScene2.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUScene2Loader.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUScene2Texture.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUSceneNode2.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUScrollPane.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUSlider.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUSpriteNode.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUTextField.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUTexturedNode.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUTransformAction2.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\CUWireNode.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\layout\CUAnchoredLayout.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\layout\CUFloatLayout.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\layout\CUGridLayout.cpp" />
+    <ClCompile Include="..\..\..\source\scene2\layout\CULayout.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{de320596-02ab-43d4-a9d4-c7d7c4bf9749}</ProjectGuid>
+    <RootNamespace>cuglscene2</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\cugl\scene2\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\cugl\scene2\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)objs\cugl\scene2\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)objs\cugl\scene2\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_LIB;P2T_STATIC_EXPORTS;UUID_SYSTEM_GENERATOR;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\sdlapp\include;$(ProjectDir)..\..\..\external\box2d\include;$(ProjectDir)..\..\..\external\poly2tri;$(ProjectDir)..\..\..\external\libdatachannel\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4267;4244;4305;4800;4996;6001;26812;26439;26495;26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;_LIB;P2T_STATIC_EXPORTS;UUID_SYSTEM_GENERATOR;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\sdlapp\include;$(ProjectDir)..\..\..\external\box2d\include;$(ProjectDir)..\..\..\external\poly2tri;$(ProjectDir)..\..\..\external\libdatachannel\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4267;4244;4305;4800;4996;6001;26812;26439;26495;26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_LIB;P2T_STATIC_EXPORTS;UUID_SYSTEM_GENERATOR;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\sdlapp\include;$(ProjectDir)..\..\..\external\box2d\include;$(ProjectDir)..\..\..\external\poly2tri;$(ProjectDir)..\..\..\external\libdatachannel\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4267;4244;4305;4800;4996;6001;26812;26439;26495;26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;_LIB;P2T_STATIC_EXPORTS;UUID_SYSTEM_GENERATOR;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\sdlapp\include;$(ProjectDir)..\..\..\external\box2d\include;$(ProjectDir)..\..\..\external\poly2tri;$(ProjectDir)..\..\..\external\libdatachannel\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4267;4244;4305;4800;4996;6001;26812;26439;26495;26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

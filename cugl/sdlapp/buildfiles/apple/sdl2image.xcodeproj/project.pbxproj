@@ -1,0 +1,476 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EB233780293D50BC000129A4 /* IMG_avif.c in Sources */ = {isa = PBXBuildFile; fileRef = EB23377B293D50BB000129A4 /* IMG_avif.c */; };
+		EB233781293D50BC000129A4 /* IMG_jxl.c in Sources */ = {isa = PBXBuildFile; fileRef = EB23377C293D50BB000129A4 /* IMG_jxl.c */; };
+		EB233782293D50BC000129A4 /* IMG_stb.c in Sources */ = {isa = PBXBuildFile; fileRef = EB23377D293D50BB000129A4 /* IMG_stb.c */; };
+		EB233784293D50BC000129A4 /* IMG_qoi.c in Sources */ = {isa = PBXBuildFile; fileRef = EB23377F293D50BC000129A4 /* IMG_qoi.c */; };
+		EB514FDE2C2FA51F00DA7B09 /* IMG_WIC.c in Sources */ = {isa = PBXBuildFile; fileRef = EB514FDD2C2FA51F00DA7B09 /* IMG_WIC.c */; };
+		EB90342C20123FAB00944178 /* IMG_svg.c in Sources */ = {isa = PBXBuildFile; fileRef = EB90342820123F9B00944178 /* IMG_svg.c */; };
+		EB9941F71D352C6000314460 /* IMG.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6E11CFC9A9C00E047D2 /* IMG.c */; };
+		EB9941F81D352C6000314460 /* IMG_ImageIO.m in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D31CFC9A9C00E047D2 /* IMG_ImageIO.m */; };
+		EB9941F91D352C6000314460 /* IMG_bmp.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D11CFC9A9C00E047D2 /* IMG_bmp.c */; };
+		EB9941FA1D352C6000314460 /* IMG_gif.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D21CFC9A9C00E047D2 /* IMG_gif.c */; };
+		EB9941FB1D352C6000314460 /* IMG_jpg.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D41CFC9A9C00E047D2 /* IMG_jpg.c */; };
+		EB9941FC1D352C6000314460 /* IMG_lbm.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D51CFC9A9C00E047D2 /* IMG_lbm.c */; };
+		EB9941FD1D352C6000314460 /* IMG_pcx.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D61CFC9A9C00E047D2 /* IMG_pcx.c */; };
+		EB9941FE1D352C6000314460 /* IMG_png.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D71CFC9A9C00E047D2 /* IMG_png.c */; };
+		EB9941FF1D352C6000314460 /* IMG_pnm.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D81CFC9A9C00E047D2 /* IMG_pnm.c */; };
+		EB9942001D352C6000314460 /* IMG_tga.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6D91CFC9A9C00E047D2 /* IMG_tga.c */; };
+		EB9942011D352C6000314460 /* IMG_tif.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6DA1CFC9A9C00E047D2 /* IMG_tif.c */; };
+		EB9942021D352C6000314460 /* IMG_webp.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6DC1CFC9A9C00E047D2 /* IMG_webp.c */; };
+		EB9942031D352C6000314460 /* IMG_xcf.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6DD1CFC9A9C00E047D2 /* IMG_xcf.c */; };
+		EB9942041D352C6000314460 /* IMG_xpm.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6DE1CFC9A9C00E047D2 /* IMG_xpm.c */; };
+		EB9942051D352C6000314460 /* IMG_xv.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6DF1CFC9A9C00E047D2 /* IMG_xv.c */; };
+		EB9942061D352C6000314460 /* IMG_xxx.c in Sources */ = {isa = PBXBuildFile; fileRef = EBFFD6E01CFC9A9C00E047D2 /* IMG_xxx.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		EB23377B293D50BB000129A4 /* IMG_avif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_avif.c; sourceTree = "<group>"; };
+		EB23377C293D50BB000129A4 /* IMG_jxl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_jxl.c; sourceTree = "<group>"; };
+		EB23377D293D50BB000129A4 /* IMG_stb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_stb.c; sourceTree = "<group>"; };
+		EB23377F293D50BC000129A4 /* IMG_qoi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_qoi.c; sourceTree = "<group>"; };
+		EB514FDD2C2FA51F00DA7B09 /* IMG_WIC.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_WIC.c; sourceTree = "<group>"; };
+		EB5150A32C32239B00DA7B09 /* tiny_jpeg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiny_jpeg.h; sourceTree = "<group>"; };
+		EB5150A42C32239B00DA7B09 /* nanosvg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nanosvg.h; sourceTree = "<group>"; };
+		EB5150A52C32239B00DA7B09 /* miniz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = miniz.h; sourceTree = "<group>"; };
+		EB5150A62C32239B00DA7B09 /* nanosvgrast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = nanosvgrast.h; sourceTree = "<group>"; };
+		EB5150A72C32239B00DA7B09 /* qoi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qoi.h; sourceTree = "<group>"; };
+		EB90342820123F9B00944178 /* IMG_svg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_svg.c; sourceTree = "<group>"; };
+		EB9941EE1D352B2600314460 /* libsdl2image.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libsdl2image.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBFFD6D11CFC9A9C00E047D2 /* IMG_bmp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_bmp.c; sourceTree = "<group>"; };
+		EBFFD6D21CFC9A9C00E047D2 /* IMG_gif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_gif.c; sourceTree = "<group>"; };
+		EBFFD6D31CFC9A9C00E047D2 /* IMG_ImageIO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IMG_ImageIO.m; sourceTree = "<group>"; };
+		EBFFD6D41CFC9A9C00E047D2 /* IMG_jpg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_jpg.c; sourceTree = "<group>"; };
+		EBFFD6D51CFC9A9C00E047D2 /* IMG_lbm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_lbm.c; sourceTree = "<group>"; };
+		EBFFD6D61CFC9A9C00E047D2 /* IMG_pcx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_pcx.c; sourceTree = "<group>"; };
+		EBFFD6D71CFC9A9C00E047D2 /* IMG_png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_png.c; sourceTree = "<group>"; };
+		EBFFD6D81CFC9A9C00E047D2 /* IMG_pnm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_pnm.c; sourceTree = "<group>"; };
+		EBFFD6D91CFC9A9C00E047D2 /* IMG_tga.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_tga.c; sourceTree = "<group>"; };
+		EBFFD6DA1CFC9A9C00E047D2 /* IMG_tif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_tif.c; sourceTree = "<group>"; };
+		EBFFD6DC1CFC9A9C00E047D2 /* IMG_webp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_webp.c; sourceTree = "<group>"; };
+		EBFFD6DD1CFC9A9C00E047D2 /* IMG_xcf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_xcf.c; sourceTree = "<group>"; };
+		EBFFD6DE1CFC9A9C00E047D2 /* IMG_xpm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_xpm.c; sourceTree = "<group>"; };
+		EBFFD6DF1CFC9A9C00E047D2 /* IMG_xv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_xv.c; sourceTree = "<group>"; };
+		EBFFD6E01CFC9A9C00E047D2 /* IMG_xxx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG_xxx.c; sourceTree = "<group>"; };
+		EBFFD6E11CFC9A9C00E047D2 /* IMG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IMG.c; sourceTree = "<group>"; };
+		EBFFD6F41CFC9C2E00E047D2 /* SDL_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDL_image.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EB9941EB1D352B2600314460 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EB9E56392B2D25E90074B480 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EBFFD6BC1CFC992300E047D2 = {
+			isa = PBXGroup;
+			children = (
+				EBFFD6F31CFC9B9200E047D2 /* include */,
+				EBFFD6C81CFC992300E047D2 /* source */,
+				EBFFD6C71CFC992300E047D2 /* Products */,
+				EB9E56392B2D25E90074B480 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		EBFFD6C71CFC992300E047D2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EB9941EE1D352B2600314460 /* libsdl2image.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EBFFD6C81CFC992300E047D2 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				EB5150A52C32239B00DA7B09 /* miniz.h */,
+				EB5150A42C32239B00DA7B09 /* nanosvg.h */,
+				EB5150A62C32239B00DA7B09 /* nanosvgrast.h */,
+				EB5150A72C32239B00DA7B09 /* qoi.h */,
+				EB5150A32C32239B00DA7B09 /* tiny_jpeg.h */,
+				EBFFD6E11CFC9A9C00E047D2 /* IMG.c */,
+				EBFFD6D31CFC9A9C00E047D2 /* IMG_ImageIO.m */,
+				EB23377B293D50BB000129A4 /* IMG_avif.c */,
+				EBFFD6D11CFC9A9C00E047D2 /* IMG_bmp.c */,
+				EBFFD6D21CFC9A9C00E047D2 /* IMG_gif.c */,
+				EBFFD6D41CFC9A9C00E047D2 /* IMG_jpg.c */,
+				EB23377C293D50BB000129A4 /* IMG_jxl.c */,
+				EBFFD6D51CFC9A9C00E047D2 /* IMG_lbm.c */,
+				EBFFD6D61CFC9A9C00E047D2 /* IMG_pcx.c */,
+				EBFFD6D71CFC9A9C00E047D2 /* IMG_png.c */,
+				EBFFD6D81CFC9A9C00E047D2 /* IMG_pnm.c */,
+				EB23377F293D50BC000129A4 /* IMG_qoi.c */,
+				EB23377D293D50BB000129A4 /* IMG_stb.c */,
+				EB90342820123F9B00944178 /* IMG_svg.c */,
+				EBFFD6D91CFC9A9C00E047D2 /* IMG_tga.c */,
+				EBFFD6DA1CFC9A9C00E047D2 /* IMG_tif.c */,
+				EBFFD6DC1CFC9A9C00E047D2 /* IMG_webp.c */,
+				EB514FDD2C2FA51F00DA7B09 /* IMG_WIC.c */,
+				EBFFD6DD1CFC9A9C00E047D2 /* IMG_xcf.c */,
+				EBFFD6DE1CFC9A9C00E047D2 /* IMG_xpm.c */,
+				EBFFD6DF1CFC9A9C00E047D2 /* IMG_xv.c */,
+				EBFFD6E01CFC9A9C00E047D2 /* IMG_xxx.c */,
+			);
+			name = source;
+			path = ../../src/image;
+			sourceTree = "<group>";
+		};
+		EBFFD6F31CFC9B9200E047D2 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				EBFFD6F41CFC9C2E00E047D2 /* SDL_image.h */,
+			);
+			name = include;
+			path = ../../include;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EB9941ED1D352B2600314460 /* sdl2image */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB9941F41D352B2600314460 /* Build configuration list for PBXNativeTarget "sdl2image" */;
+			buildPhases = (
+				EB9941EA1D352B2600314460 /* Sources */,
+				EB9941EB1D352B2600314460 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = sdl2image;
+			productName = "SDL_image-mac";
+			productReference = EB9941EE1D352B2600314460 /* libsdl2image.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EBFFD6BD1CFC992300E047D2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				ORGANIZATIONNAME = "Simple DirectMedia Layer";
+				TargetAttributes = {
+					EB9941ED1D352B2600314460 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = EBFFD6C01CFC992300E047D2 /* Build configuration list for PBXProject "sdl2image" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EBFFD6BC1CFC992300E047D2;
+			productRefGroup = EBFFD6C71CFC992300E047D2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EB9941ED1D352B2600314460 /* sdl2image */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EB9941EA1D352B2600314460 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB233781293D50BC000129A4 /* IMG_jxl.c in Sources */,
+				EB9941F91D352C6000314460 /* IMG_bmp.c in Sources */,
+				EB9941FA1D352C6000314460 /* IMG_gif.c in Sources */,
+				EB9941FB1D352C6000314460 /* IMG_jpg.c in Sources */,
+				EB9941FC1D352C6000314460 /* IMG_lbm.c in Sources */,
+				EB9941FD1D352C6000314460 /* IMG_pcx.c in Sources */,
+				EB9941FE1D352C6000314460 /* IMG_png.c in Sources */,
+				EB9941FF1D352C6000314460 /* IMG_pnm.c in Sources */,
+				EB9942011D352C6000314460 /* IMG_tif.c in Sources */,
+				EB9942001D352C6000314460 /* IMG_tga.c in Sources */,
+				EB233780293D50BC000129A4 /* IMG_avif.c in Sources */,
+				EB9942021D352C6000314460 /* IMG_webp.c in Sources */,
+				EB9942031D352C6000314460 /* IMG_xcf.c in Sources */,
+				EB9942041D352C6000314460 /* IMG_xpm.c in Sources */,
+				EB9942051D352C6000314460 /* IMG_xv.c in Sources */,
+				EB514FDE2C2FA51F00DA7B09 /* IMG_WIC.c in Sources */,
+				EB233782293D50BC000129A4 /* IMG_stb.c in Sources */,
+				EB233784293D50BC000129A4 /* IMG_qoi.c in Sources */,
+				EB9942061D352C6000314460 /* IMG_xxx.c in Sources */,
+				EB9941F81D352C6000314460 /* IMG_ImageIO.m in Sources */,
+				EB9941F71D352C6000314460 /* IMG.c in Sources */,
+				EB90342C20123FAB00944178 /* IMG_svg.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		EB9941F51D352B2600314460 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_STBIMAGE,
+					LOAD_BMP,
+					LOAD_GIF,
+					LOAD_JPG,
+					LOAD_LBM,
+					LOAD_PCX,
+					LOAD_PNG,
+					LOAD_PNM,
+					LOAD_QOI,
+					LOAD_SVG,
+					LOAD_TGA,
+					LOAD_TIF,
+					LOAD_XCF,
+					LOAD_XPM,
+					LOAD_XV,
+					"$(CONFIG_PREPROCESSOR_DEFINITIONS)",
+				);
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDL_INCLUDES)",
+					"$(LIBWEBP_DIR)/src",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EB9941F61D352B2600314460 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_STBIMAGE,
+					LOAD_BMP,
+					LOAD_GIF,
+					LOAD_JPG,
+					LOAD_LBM,
+					LOAD_PCX,
+					LOAD_PNG,
+					LOAD_PNM,
+					LOAD_QOI,
+					LOAD_SVG,
+					LOAD_TGA,
+					LOAD_TIF,
+					LOAD_XCF,
+					LOAD_XPM,
+					LOAD_XV,
+					"$(CONFIG_PREPROCESSOR_DEFINITIONS)",
+				);
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SDL_INCLUDES)",
+					"$(LIBWEBP_DIR)/src",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		EBFFD6CC1CFC992300E047D2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = NO;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DYLIB_COMPATIBILITY_VERSION = 2.0;
+				DYLIB_CURRENT_VERSION = 2.6.2;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					LOAD_GIF,
+					LOAD_BMP,
+					LOAD_JPG,
+					LOAD_LBM,
+					LOAD_PCX,
+					LOAD_PNG,
+					LOAD_PNM,
+					LOAD_TGA,
+					LOAD_TIF,
+					LOAD_XPM,
+					LOAD_XV,
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = "$(SDL_INCLUDES)";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				LIBTIFF_DIR = "$(SRCROOT)/../../external/libtiff";
+				LIBWEBP_DIR = "$(SRCROOT)/../../external/libwebp";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "";
+				SDL_INCLUDES = "\"$(SRCROOT)/../../include\"";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Debug;
+		};
+		EBFFD6CD1CFC992300E047D2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = NO;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 2.0;
+				DYLIB_CURRENT_VERSION = 2.6.2;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					LOAD_GIF,
+					LOAD_BMP,
+					LOAD_JPG,
+					LOAD_LBM,
+					LOAD_PCX,
+					LOAD_PNG,
+					LOAD_PNM,
+					LOAD_TGA,
+					LOAD_TIF,
+					LOAD_XPM,
+					LOAD_XV,
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = "$(SDL_INCLUDES)";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				LIBTIFF_DIR = "$(SRCROOT)/../../external/libtiff";
+				LIBWEBP_DIR = "$(SRCROOT)/../../external/libwebp";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "";
+				SDL_INCLUDES = "\"$(SRCROOT)/../../include\"";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EB9941F41D352B2600314460 /* Build configuration list for PBXNativeTarget "sdl2image" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB9941F51D352B2600314460 /* Debug */,
+				EB9941F61D352B2600314460 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EBFFD6C01CFC992300E047D2 /* Build configuration list for PBXProject "sdl2image" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EBFFD6CC1CFC992300E047D2 /* Debug */,
+				EBFFD6CD1CFC992300E047D2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EBFFD6BD1CFC992300E047D2 /* Project object */;
+}

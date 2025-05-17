@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{2055c252-bba1-4bc7-a00a-1787c84ee48f}</ProjectGuid>
+    <RootNamespace>datachannel</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\datachannel\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\datachannel\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)objs\datachannel\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)objs\datachannel\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;RTC_EXPORTS;RTC_STATIC;RTC_ENABLE_WEBSOCKET=1;USE_GNUTLS=0;RTC_ENABLE_MEDIA=1;RTC_SYSTEM_SRTP=0;USE_NICE=0;RTC_SYSTEM_JUICE=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;PACKAGE_VERSION="2.4.2";JUICE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\include\rtc;$(ProjectDir)..\..\..\..\..\external\libdatachannel\src;$(ProjectDir)..\..\..\..\..\external\openssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\plog\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libjuice\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;RTC_EXPORTS;RTC_STATIC;RTC_ENABLE_WEBSOCKET=1;USE_GNUTLS=0;RTC_ENABLE_MEDIA=1;RTC_SYSTEM_SRTP=0;USE_NICE=0;RTC_SYSTEM_JUICE=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;PACKAGE_VERSION="2.4.2";JUICE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\include\rtc;$(ProjectDir)..\..\..\..\..\external\libdatachannel\src;$(ProjectDir)..\..\..\..\..\external\openssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\plog\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libjuice\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <UseFullPaths>true</UseFullPaths>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WINDOWS;RTC_EXPORTS;RTC_STATIC;RTC_ENABLE_WEBSOCKET=1;USE_GNUTLS=0;RTC_ENABLE_MEDIA=1;RTC_SYSTEM_SRTP=0;USE_NICE=0;RTC_SYSTEM_JUICE=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;PACKAGE_VERSION="2.4.2";JUICE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\include\rtc;$(ProjectDir)..\..\..\..\..\external\libdatachannel\src;$(ProjectDir)..\..\..\..\..\external\openssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\plog\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libjuice\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <SubSystem>
+      </SubSystem>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WINDOWS;RTC_EXPORTS;RTC_STATIC;RTC_ENABLE_WEBSOCKET=1;USE_GNUTLS=0;RTC_ENABLE_MEDIA=1;RTC_SYSTEM_SRTP=0;USE_NICE=0;RTC_SYSTEM_JUICE=0;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;PACKAGE_VERSION="2.4.2";JUICE_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\include\rtc;$(ProjectDir)..\..\..\..\..\external\libdatachannel\src;$(ProjectDir)..\..\..\..\..\external\openssl\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\plog\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\usrsctp\usrsctplib;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libsrtp\crypto\include;$(ProjectDir)..\..\..\..\..\external\libdatachannel\deps\libjuice\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\crypto\crypto.vcxproj">
+      <Project>{d98acec5-2ab7-4e6f-84a6-8f3f94020bf6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\juice\juice.vcxproj">
+      <Project>{a4f96796-b98b-4863-8cba-b026c8a6b4d8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\srtp2\srtp2.vcxproj">
+      <Project>{1748028f-f5cc-4159-a0eb-c5d1df08346e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ssl\ssl.vcxproj">
+      <Project>{49a05978-e401-4926-a385-767f594075e3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\usrsctp\usrsctp.vcxproj">
+      <Project>{e8a8d857-421e-4a57-a2a5-4eaa9b863c5b}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\av1rtppacketizer.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\candidate.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\capi.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\channel.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\configuration.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\datachannel.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\description.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\global.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\h264rtpdepacketizer.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\h264rtppacketizer.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\h265nalunit.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\h265rtppacketizer.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\certificate.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\channel.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\datachannel.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\dtlssrtptransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\dtlstransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\http.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\httpproxytransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\icetransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\init.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\logcounter.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\peerconnection.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\pollinterrupter.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\pollservice.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\processor.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\sctptransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\sha.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\tcpserver.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\tcptransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\threadpool.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\tls.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\tlstransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\track.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\transport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\utils.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\verifiedtlstransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\websocket.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\websocketserver.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\wshandshake.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\impl\wstransport.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\mediahandler.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\message.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\nalunit.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\pacinghandler.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\peerconnection.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\plihandler.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\rembhandler.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\rtcpnackresponder.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\rtcpreceivingsession.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\rtcpsrreporter.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\rtp.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\rtpdepacketizer.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\rtppacketizationconfig.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\rtppacketizer.cpp" />
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\track.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\websocket.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\external\libdatachannel\src\websocketserver.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\av1rtppacketizer.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\candidate.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\channel.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\common.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\configuration.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\datachannel.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\description.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\global.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\h264rtppacketizer.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\h265nalunit.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\h265rtppacketizer.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\mediahandler.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\message.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\nalunit.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\peerconnection.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\plihandler.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\reliability.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\rtc.h" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\rtc.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\rtcpnackresponder.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\rtcpreceivingsession.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\rtcpsrreporter.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\rtp.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\rtppacketizationconfig.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\rtppacketizer.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\track.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\utils.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\websocket.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\include\rtc\websocketserver.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\certificate.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\channel.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\datachannel.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\dtlssrtptransport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\dtlstransport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\http.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\httpproxytransport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\icetransport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\init.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\internals.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\logcounter.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\peerconnection.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\pollinterrupter.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\pollservice.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\processor.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\queue.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\sctptransport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\sha.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\socket.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\tcpserver.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\tcptransport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\threadpool.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\tls.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\tlstransport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\track.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\transport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\utils.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\verifiedtlstransport.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\websocket.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\websocketserver.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\wshandshake.hpp" />
+    <ClInclude Include="..\..\..\..\..\external\libdatachannel\src\impl\wstransport.hpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
