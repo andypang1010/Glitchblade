@@ -319,7 +319,7 @@ void LevelController::fixedUpdate(float timestep)
 
                 if (damagingAction) {
                     // CULog("Action name: %s", damagingAction->getActionName().c_str());
-                    float rot = damagingAction->getActionName() == "laser" ? M_PI / 4 : 0;
+                    float rot = damagingAction->getActionName() == "laser_diag" ? M_PI / 4 : 0;
                     createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), rot, damagingAction->getHitboxDamage(), damagingAction->getHitboxKnockBack(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1), damagingAction->getIsParriable());
                 }
 
@@ -707,7 +707,8 @@ void LevelController::updateRightZone(int index) {
     removeWall(_rightWallZone);
     createWall(_currentLevel->getWalls()[index].second / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), false);
     _zoneUpdate = true;
-    _nextTrigger = _currentLevel->getWalls()[index].first * 1024;
+    _nextTrigger = _currentLevel->getWalls()[index].first*1024;
+    _enemiesJSON->get("world_info")->get("worldRight")->set(_rightWallZone->xPosition);
 }
 
 void LevelController::updateLeftZone(int index) {
@@ -715,6 +716,7 @@ void LevelController::updateLeftZone(int index) {
     createWall(_currentLevel->getWalls()[index].first / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), true);
     _zoneUpdate = false;
     _playerInNextZone = false;
+    _enemiesJSON->get("world_info")->get("worldLeft")->set(_leftWallZone->xPosition);
 }
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {

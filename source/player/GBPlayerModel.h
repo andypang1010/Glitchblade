@@ -68,7 +68,7 @@ protected:
     /** This character's remaining health */
     float _hp;
     /** how much damage player deals*/
-    int _damage = 100;
+    int _damage = 10;
     /** The current horizontal movement of the character */
     float _movement;
     /** Which direction is the character facing */

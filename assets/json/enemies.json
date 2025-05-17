@@ -443,7 +443,7 @@
             },
             {
                 "type": "melee",
-                "name": "laser",
+                "name": "laser_diag",
                 "hitboxPos": [ 9, -6 ],
                 "hitboxSize": [ 20, 3 ],
                 "hitboxStartFrame": 14,

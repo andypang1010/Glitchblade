@@ -49,12 +49,18 @@ void Minion2AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _deadSprite->setPosition(0, -30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_deadSprite->setName("dead");
 
+    _spawnSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("enemy_spawn"), 4, 7, 28);
+    _spawnSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _spawnSprite->setScale(0.5 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _spawnSprite->setName("spawn");
+
     stunFrames = 0;
 
     setName(std::string(ENEMY_NAME));
 
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_shootSprite);
+	getSceneNode()->addChild(_spawnSprite);
 }
 
 void Minion2AModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
@@ -116,21 +122,7 @@ void Minion2AModel::damage(float value) {
  * @param delta Number of seconds since last animation frame
  */
 void Minion2AModel::update(float dt) {
-    if (isRemoved()) return;
-
-    BoxObstacle::update(dt);
-    if (_node != nullptr) {
-        _node->setPosition(getPosition() * _drawScale);
-        _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
-    }
+    EnemyModel::update(dt);
 }
 
 #pragma mark -
@@ -231,9 +223,12 @@ void Minion2AModel::updateAnimation()
     _idleSprite->setVisible(!isStunned() && !_isShooting);
 
     _shootSprite->setVisible(!isStunned() && _isShooting);
+
+	_spawnSprite->setVisible(isSpawning);
     
     playAnimation(_idleSprite);
     playAnimationOnce(_shootSprite);
+	playAnimationOnce(_spawnSprite);
    
     _node->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
