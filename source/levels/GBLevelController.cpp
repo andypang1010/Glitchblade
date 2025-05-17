@@ -425,7 +425,7 @@ void LevelController::createPlatform(Rect rect)
     std::shared_ptr<PolygonNode> rightWallSprite = scene2::PolygonNode::alloc();
     
     std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(Texture::getBlank());
-    platformSprite->setContentSize(rect.size * _constantsJSON->get("scene")->getFloat("scale"));
+    platformSprite->setContentSize(rect.size * 32);
     platformSprite->setVisible(true);
     platformSprite->setColor(Color4(40,40,40));
     
