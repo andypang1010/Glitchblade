@@ -1,8 +1,5 @@
 {
     "textures": {
-        "ground": {
-            "file": "textures/ground.png"
-        },
         "scene1_a": {
             "file": "textures/Scene_1_Arena.png"
         },
@@ -85,6 +82,7 @@
             "file": "textures/minion1A_dead.png"
         }
     },
+    
     "sounds": {
         "menu": {
             "type": "sample",
