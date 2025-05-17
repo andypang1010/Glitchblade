@@ -35,17 +35,17 @@ void Minion2AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     setSceneNode(_node);
     // need new idle animation for this minion
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2A_idle"), 5, 2, 10);
-    _idleSprite->setScale(0.3f * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _idleSprite->setScale(1.44 * 0.3f * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _idleSprite->setPosition(0, -30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _idleSprite->setName("idle");
 
     _shootSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2A_shoot"), 2, 3, 6);
-    _shootSprite->setScale(0.3f * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _shootSprite->setScale(1.44 * 0.3f * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _shootSprite->setPosition(0, -30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_shootSprite->setName("shoot");
 
     _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2A_dead"), 10, 3, 30);
-	_deadSprite->setScale(0.3f * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_deadSprite->setScale(1.44 * 0.3f * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _deadSprite->setPosition(0, -30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_deadSprite->setName("dead");
 
@@ -235,9 +235,9 @@ void Minion2AModel::updateAnimation()
     playAnimation(_idleSprite);
     playAnimationOnce(_shootSprite);
    
-    _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-    _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-    _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+    _node->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
+    _node->getChild(_node->getChildCount() - 2)->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
+    _node->getChild(_node->getChildCount() - 1)->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
 }
 
 #pragma mark -
