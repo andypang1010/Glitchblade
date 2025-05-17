@@ -393,9 +393,9 @@
                 "type": "melee",
                 "name": "jump",
                 "hitboxPos": [ 0, -3 ],
-                "hitboxSize": [ 5, 3 ],
-                "hitboxStartFrame": 11,
-                "hitboxEndFrame": 16,
+                "hitboxSize": [ 4, 1 ],
+                "hitboxStartFrame": 3,
+                "hitboxEndFrame": 9,
                 "hitboxDamage": 20,
                 "hitboxKnockBack": 50,
                 "parriable": true

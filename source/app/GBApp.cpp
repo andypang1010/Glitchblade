@@ -19,7 +19,7 @@ using namespace cugl::scene2;
 using namespace cugl::audio;
 
 #define MAX_SCENE 3
-#define ASYNC_LOADS 9
+
 #pragma mark -
 #pragma mark Application State
 /**
@@ -59,11 +59,6 @@ void GlitchbladeApp::onStartup() {
     setClearColor(Color4f::BLACK);
 
     // Queue up the other assets
-    _assets->loadDirectoryAsync("json/assets-menu.json", [this](const std::string& key, bool success){
-        if (success) {
-            auto _ = _assets->progress();
-        }
-    });
     _assets->loadDirectoryAsync("json/assets-level1.json", [this](const std::string& key, bool success){
         if (success) {
             auto _ = _assets->progress();
@@ -85,6 +80,11 @@ void GlitchbladeApp::onStartup() {
         }
     });
     _assets->loadDirectoryAsync("json/assets-level5.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-menu.json", [this](const std::string& key, bool success){
         if (success) {
             auto _ = _assets->progress();
         }
@@ -192,7 +192,7 @@ void GlitchbladeApp::update(float dt) {
         _loaded = true;
         int highestPlayableLevel = loadProgress();
         setDeterministic(true);
-        initLevelSelectScene(highestPlayableLevel, true);
+        initLevelSelectScene(highestPlayableLevel, 0);
     }
 }
 
@@ -224,11 +224,11 @@ void GlitchbladeApp::onLevelCompleted(int levelNum) {
     }
 }
 
-void GlitchbladeApp::initLevelSelectScene(int highestPlayableLevel, bool firsttime) {
+void GlitchbladeApp::initLevelSelectScene(int highestPlayableLevel, int scene) {
     CULog("TRYING TO INIT WITH HIGHEST OF: %d", highestPlayableLevel);
     _gameplay = nullptr;
     _levelSelect = std::make_shared<LevelSelectScene>();
-    _levelSelect->init(_assets, highestPlayableLevel, firsttime);
+    _levelSelect->init(_assets, highestPlayableLevel, scene);
     _levelSelect->setSpriteBatch(_batch);
 }
 
@@ -399,7 +399,7 @@ void GlitchbladeApp::draw() {
             _gameplay->render();
 
             if (_gameplay->doQuit()) {
-                initLevelSelectScene(loadProgress(), false);
+                initLevelSelectScene(loadProgress(), std::max(loadProgress() - 1, 1));
             }
             else if (_gameplay->continueNextLevel()) {
                 _currentScene += 1;
@@ -407,7 +407,7 @@ void GlitchbladeApp::draw() {
                     initGameScene(_currentScene);
                 } else {
                     CULog("Did all levels!");
-                    initLevelSelectScene(loadProgress(), false);
+                    initLevelSelectScene(loadProgress(), std::max(loadProgress() - 1, 1));
                 }
             }
         }

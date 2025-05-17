@@ -36,7 +36,6 @@ protected:
 
     /** The controllers for the loading screen */
     cugl::scene2::LoadingScene _loading;
-    int _finishedLoads;
 
 
 
@@ -153,7 +152,7 @@ public:
     /**
      * The method to init the LevelSelectScene.
     */
-    void initLevelSelectScene(int highestPlayableLevel, bool firsttime);
+    void initLevelSelectScene(int highestPlayableLevel, int scene);
 
     /**
      * The method called to indicate the start of a deterministic loop.

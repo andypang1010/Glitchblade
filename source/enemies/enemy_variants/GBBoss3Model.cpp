@@ -68,10 +68,20 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _slamSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
     _slamSprite->setName("slam");
 
-    _jumpSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_jump"), 4, 5, 17);
-    _jumpSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _jumpSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
-    _jumpSprite->setName("jump");
+    _jumpStartSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_jump_start"), 3, 3, 9);
+    _jumpStartSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _jumpStartSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _jumpStartSprite->setName("jumpStart");
+
+    _jumpWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_jump_wait"), 3, 3, 9);
+    _jumpWaitSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _jumpWaitSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _jumpWaitSprite->setName("jumpWait");
+
+    _jumpEndSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_jump_end"), 3, 3, 9);
+    _jumpEndSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _jumpEndSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _jumpEndSprite->setName("jumpEnd");
 
     _dashSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_dash"), 5, 9, 45);
     _dashSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
@@ -116,6 +126,16 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _airDeadSprite->setName("airDead");
 	_airDeadSprite->setVisible(false);
 
+	_groundTransformSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_transform"), 4, 4, 16);
+	_groundTransformSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_groundTransformSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_groundTransformSprite->setName("groundTransform");
+
+	_airTransformSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_transform"), 4, 4, 16);
+	_airTransformSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_airTransformSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_airTransformSprite->setName("airTransform");
+
 	getSceneNode()->addChild(_groundIdleSprite);
 	getSceneNode()->addChild(_airIdleSprite);
 	getSceneNode()->addChild(_groundStunSprite);
@@ -123,8 +143,14 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 	getSceneNode()->addChild(_uppercutSprite);
 	getSceneNode()->addChild(_slamSprite);
-	getSceneNode()->addChild(_jumpSprite);
 	getSceneNode()->addChild(_dashSprite);
+
+	getSceneNode()->addChild(_groundTransformSprite);
+	getSceneNode()->addChild(_airTransformSprite);
+
+    getSceneNode()->addChild(_jumpStartSprite);
+	getSceneNode()->addChild(_jumpWaitSprite);
+	getSceneNode()->addChild(_jumpEndSprite);
 
 	getSceneNode()->addChild(_shootStartSprite);
 	getSceneNode()->addChild(_shootAttackSprite);
@@ -206,7 +232,9 @@ void Boss3Model::dispose() {
 	_airStunSprite = nullptr;
 	_uppercutSprite = nullptr;
 	_slamSprite = nullptr;
-	_jumpSprite = nullptr;
+	_jumpStartSprite = nullptr;
+	_jumpWaitSprite = nullptr;
+	_jumpEndSprite = nullptr;
 	_dashSprite = nullptr;
 	_shootStartSprite = nullptr;
 	_shootAttackSprite = nullptr;
@@ -214,6 +242,8 @@ void Boss3Model::dispose() {
 	_shootWaitSprite = nullptr;
 	_groundDeadSprite = nullptr;
 	_airDeadSprite = nullptr;
+	_groundTransformSprite = nullptr;
+	_airTransformSprite = nullptr;
 }
 
 void Boss3Model::damage(float value) {
@@ -268,7 +298,7 @@ void Boss3Model::update(float dt) {
 void Boss3Model::nextAction() {
     int r = rand();
     AIMove();
-    if (!isStunned() && !_isUppercutting && !_isSlamming && !_isJumping && !_isDashing
+	if (!isStunned() && !_isUppercutting && !_isSlamming && !getIsJumping() && !_isDashing && !_isGroundDashStarting && !_isGroundDashEnding
         && !_isShootStarting && !_isShootAttacking && !_isLaserAttacking && !_isShootWaiting) {
         if (_isGroundForm) {
             handleGroundAction(r);
@@ -281,8 +311,12 @@ void Boss3Model::nextAction() {
         if (isStunned()) {
             _isUppercutting = false;
 			_isSlamming = false;
-			_isJumping = false;
+			_isJumpStarting = false;
+			_isJumpWaiting = false;
+			_isJumpEnding = false;
 			_isDashing = false;
+			_isGroundDashStarting = false;
+			_isGroundDashEnding = false;
 			_isShootStarting = false;
 			_isShootAttacking = false;
 			_isLaserAttacking = false;
@@ -303,14 +337,20 @@ void Boss3Model::nextAction() {
 			_isSlamming = false;
 			setMovement(0);
 		}
-        if (_isJumping && _jumpSprite->getFrame() >= _jumpSprite->getCount() - 1) {
-            _isJumping = false;
-            setMovement(0);
+        if (_isJumpStarting || _isJumpWaiting || _isJumpEnding) {
+            handleJump();
         }
-		if (_isDashing && _dashSprite->getFrame() >= _dashSprite->getCount() - 1) {
-			_isDashing = false;
-			setMovement(0);
-		}
+        if (_isDashing || _isGroundDashStarting || _isGroundDashEnding) {
+            if (_isGroundForm) {
+                handleGroundDash();
+            }
+            else {
+                if (_isDashing && _dashSprite->getFrame() >= _dashSprite->getCount() - 1) {
+                    _isDashing = false;
+                    setMovement(0);
+                }
+            }
+        }
         if (_isShootStarting || _isShootAttacking || _isLaserAttacking || _isShootWaiting) {
 			handleShoot();
         }
@@ -369,7 +409,7 @@ void Boss3Model::AIMove() {
     int face = _faceRight ? 1 : -1;
 
     if (_isGroundForm) {
-        if (!_isJumping && !_isDashing) {
+        if (!getIsJumping() && !_isDashing) {
             setVerticalMovement(0);
             if (_moveDuration == 0) {
                 setMovement(0);
@@ -381,9 +421,9 @@ void Boss3Model::AIMove() {
                 _moveDuration--;
             }
         }
-        else if (_isJumping && isJumpingUp()) {
-            setMovement(dir_val * getForce() * 3);
-            setVerticalMovement(getForce() * 3);
+        else if (getIsJumping() && isJumpingUp()) {
+            setMovement(dir_val * getForce() * 2);
+            setVerticalMovement(getForce() * 2);
         }
         else if (_isDashing && _dashSprite->getFrame() >= _dash->getHitboxStartFrame() - 1) {
             setMovement(face * 15000);
@@ -438,20 +478,55 @@ void Boss3Model::slam() {
 void Boss3Model::jump() {
     if (getPosition().y < 4.2) {
         faceTarget();
-        _isJumping = true;
+        _isJumpStarting = true;
         setMovement(0);
     }
 }
 
+void Boss3Model::handleJump() {
+    if (_isJumpStarting && _jumpStartSprite->getFrame() >= _jumpStartSprite->getCount() - 1) {
+        _isJumpStarting = false;
+        _isJumpWaiting = true;
+    }
+    else if (_isJumpWaiting && getPosition().y < 4.6 && getLinearVelocity().y < 0) {
+        _isJumpWaiting = false;
+        _isJumpEnding = true;
+    }
+    else if (_isJumpEnding && _jumpEndSprite->getFrame() >= _jumpEndSprite->getCount() - 1) {
+        _isJumpEnding = false;
+		setMovement(0);
+    }
+}
+
 bool Boss3Model::isJumpingUp() {
-    return _jumpSprite->getFrame() == 8;
+	return _isJumpStarting && _jumpStartSprite->getFrame() >= 6;
 }
 
 void Boss3Model::dash() {
 	faceTarget();
-	_isDashing = true;
-	setMovement(0);
-    if (!_isGroundForm) { setVerticalMovement(0); }
+    if (_isGroundForm) {
+		_isGroundDashStarting = true;
+    }
+    else {
+        _isDashing = true;
+        setMovement(0);
+        setVerticalMovement(0);
+    }
+}
+
+void Boss3Model::handleGroundDash() {
+	if (_isGroundDashStarting && _groundTransformSprite->getFrame() >= _groundTransformSprite->getCount() - 1) {
+		_isGroundDashStarting = false;
+		_isDashing = true;
+	}
+	else if (_isDashing && _dashSprite->getFrame() >= _dashSprite->getCount() - 1) {
+		_isDashing = false;
+		_isGroundDashEnding = true;
+    }
+    else if (_isGroundDashEnding && _airTransformSprite->getFrame() >= _airTransformSprite->getCount() - 1) {
+		_isGroundDashEnding = false;
+        setMovement(0);
+    }
 }
 
 void Boss3Model::shoot(int repeat) {
@@ -505,7 +580,7 @@ std::shared_ptr<MeleeActionModel> Boss3Model::getDamagingAction() {
     else if (_isSlamming && _slamSprite->getFrame() == _slam->getHitboxStartFrame() - 1) {
         return _slam;
 	}
-	else if (_isJumping && _jumpSprite->getFrame() == _jump->getHitboxStartFrame() - 1) {
+	else if (_isJumpWaiting && _jumpWaitSprite->getFrame() == _jump->getHitboxStartFrame() - 1) {
 		return _jump;
 	}
 	else if (_isDashing && _dashSprite->getFrame() == _dash->getHitboxStartFrame() - 1) {
@@ -539,8 +614,14 @@ void Boss3Model::updateAnimation()
 
 	_uppercutSprite->setVisible(!isStunned() && _isUppercutting);
 	_slamSprite->setVisible(!isStunned() && _isSlamming);
-	_jumpSprite->setVisible(!isStunned() && _isJumping);
 	_dashSprite->setVisible(!isStunned() && _isDashing);
+
+	_groundTransformSprite->setVisible(!isStunned() && _isGroundDashStarting);
+	_airTransformSprite->setVisible(!isStunned() && _isGroundDashEnding);
+
+    _jumpStartSprite->setVisible(!isStunned() && _isJumpStarting);
+	_jumpWaitSprite->setVisible(!isStunned() && _isJumpWaiting);
+	_jumpEndSprite->setVisible(!isStunned() && _isJumpEnding);
 
 	_shootStartSprite->setVisible(!isStunned() && _isShootStarting);
 	_shootAttackSprite->setVisible(!isStunned() && _isShootAttacking);
@@ -549,7 +630,7 @@ void Boss3Model::updateAnimation()
 
     _laserVFXSprite->setVisible(_shootLaserSprite->isVisible() && _shootLaserSprite->getFrame() >= 1 && _shootLaserSprite->getFrame() <= 36);
 
-    _groundIdleSprite->setVisible(!isStunned() && _isGroundForm && !_isUppercutting && !_isSlamming && !_isJumping && !_isDashing);
+    _groundIdleSprite->setVisible(!isStunned() && _isGroundForm && !_isUppercutting && !_isSlamming && !getIsJumping() && !_isDashing && !_isGroundDashStarting && !_isGroundDashEnding);
 	_airIdleSprite->setVisible(!isStunned() && !_isGroundForm && !_isShootStarting && !_isShootAttacking && !_isLaserAttacking && !_isShootWaiting && !_isDashing);
 
     playAnimation(_groundIdleSprite);
@@ -559,8 +640,14 @@ void Boss3Model::updateAnimation()
 
     playAnimation(_uppercutSprite);
 	playAnimation(_slamSprite);
-	playAnimation(_jumpSprite);
 	playAnimation(_dashSprite);
+
+	playAnimation(_groundTransformSprite);
+	playAnimation(_airTransformSprite);
+
+	playAnimation(_jumpStartSprite);
+	playAnimation(_jumpWaitSprite);
+	playAnimation(_jumpEndSprite);
 
 	playAnimation(_shootStartSprite);
 	playAnimation(_shootAttackSprite);

@@ -45,8 +45,14 @@ protected:
 
     bool _isUppercutting;
     bool _isSlamming;
-	bool _isJumping;
+
+    bool _isGroundDashStarting;
 	bool _isDashing;
+    bool _isGroundDashEnding;
+
+    bool _isJumpStarting;
+    bool _isJumpWaiting;
+    bool _isJumpEnding;
 
     // Ground form actions
     std::shared_ptr<MeleeActionModel> _uppercut;
@@ -84,11 +90,14 @@ public:
 
     std::shared_ptr<scene2::SpriteNode> _uppercutSprite;
     std::shared_ptr<scene2::SpriteNode> _slamSprite;
-    std::shared_ptr<scene2::SpriteNode> _jumpSprite;
     std::shared_ptr<scene2::SpriteNode> _dashSprite;
 
-    std::shared_ptr<scene2::SpriteNode> _groundToAirSprite;
-	std::shared_ptr<scene2::SpriteNode> _airToGroundSprite;
+    std::shared_ptr<scene2::SpriteNode> _jumpStartSprite;
+    std::shared_ptr<scene2::SpriteNode> _jumpWaitSprite;
+    std::shared_ptr<scene2::SpriteNode> _jumpEndSprite;
+
+    std::shared_ptr<scene2::SpriteNode> _airTransformSprite;
+    std::shared_ptr<scene2::SpriteNode> _groundTransformSprite;
 
     std::shared_ptr<scene2::SpriteNode> _laserVFXSprite;
 
@@ -172,7 +181,7 @@ public:
 	}
 
 	bool getIsJumping() {
-		return _isJumping;
+		return _isJumpStarting || _isJumpWaiting || _isJumpEnding;
 	}
 
 	bool getIsDashing() {
@@ -201,7 +210,11 @@ public:
 		_isShootWaiting = false;
 		_isUppercutting = false;
 		_isSlamming = false;
-		_isJumping = false;
+		_isJumpStarting = false;
+		_isJumpWaiting = false;
+		_isJumpEnding = false;
+		_isGroundDashStarting = false;
+		_isGroundDashEnding = false;
 		_isDashing = false;
 		_shootCount = 0;
 
@@ -222,7 +235,9 @@ public:
     void uppercut();
     void slam();
     void jump();
+    void handleJump();
     void dash();
+	void handleGroundDash();
 
     void formChange();
 

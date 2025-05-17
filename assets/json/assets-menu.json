@@ -180,6 +180,15 @@
         },
         "button_lssetting": {
             "file": "textures/levelselect/button_lssetting.png"
+        },
+        "button_nextscene": {
+            "file": "textures/levelselect/button_nextscene.png"
+        },
+        "button_previousscene": {
+            "file": "textures/levelselect/button_previousscene.png"
+        },
+        "info_bg": {
+            "file": "textures/levelselect/info_bg.png"
         }
     },
     "sounds": {

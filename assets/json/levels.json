@@ -231,7 +231,7 @@
     {
         "name": "Level 2",
         "scale": 1,
-        "width": 8,
+        "width": 6.25,
         "layers": [
             {
           "file": "scene2_bg",
@@ -408,16 +408,11 @@
             "spawn_positions": [
                 {
                     "x": 200,
-                    "y": 50
-                },
-                {
-                    "x": 100,
-                    "y": 50
+                    "y": 100
                 }
             ],
             "enemies": [
-                "minion_1A",
-                "minion_2B"
+                "boss_3"
             ]
           }
           ],

@@ -36,6 +36,9 @@
         "player_parry_release": {
             "file": "textures/player_parry_release.png"
         },
+        "player_cancel": {
+            "file": "textures/player_cancel.png"
+        },
         "player_damaged": {
             "file": "textures/player_damaged.png"
         },
@@ -56,6 +59,15 @@
         },
         "player_projectile": {
             "file": "textures/player_projectile.png"
+        },
+        "minion_damaged": {
+            "file": "textures/minion_damaged.png"
+        },
+        "boss_damaged": {
+            "file": "textures/boss_damaged.png"
+        },
+        "enemy_dash": {
+            "file": "textures/enemy_dash.png"
         }
     },
     "sounds": {
@@ -169,6 +181,8 @@
     },
     "widgets": {
         "home": "widgets/home.json",
+        "homesetting": "widgets/homesetting.json",
+        "info": "widgets/info.json",
         "hud": "widgets/hud.json",
         "pausemenu": "widgets/pausemenu.json",
         "settingmenu": "widgets/settingmenu.json",
@@ -177,6 +191,7 @@
         "win1": "widgets/win1.json",
         "win": "widgets/win.json",
         "levelselect1": "widgets/levelselect1.json",
+        "levelselectionhead": "widgets/levelselectionhead.json",
         "levelselection1": "widgets/levelselection1.json",
         "levelselection2": "widgets/levelselection2.json",
         "levelselection3": "widgets/levelselection3.json",
@@ -191,6 +206,36 @@
             },
             "data": {
                 "key": "home"
+            }
+        },
+        "homesetting": {
+            "type": "Widget",
+            "comment": "This is the root node of home setting page",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "homesetting"
+            }
+        },
+        "info": {
+            "type": "Widget",
+            "comment": "This is the root node of info page",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "info"
+            }
+        },
+        "levelselectionhead": {
+            "type": "Widget",
+            "comment": "This is the root node of level selection hud",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "levelselectionhead"
             }
         },
         "levelselection1": {
