@@ -97,6 +97,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
         return false;
     }
     
+	_cameraLocked = false;
+
     std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
     AudioHelper::init(fxJ, assets);
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
@@ -329,9 +331,10 @@ void GameScene::setComplete(bool value) {
         int spawnedCount = _levelController->getSpawnedEnemyCount();
         int totalCount = _levelController->getTotalEnemyCount();
         _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
-        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
-        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
+        // play win music
+//        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+//        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+//        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         _ui->showHeadsUpDisplay(false, false);
         _ui->showWinPage(true);
         setPaused(true);
@@ -360,9 +363,10 @@ void GameScene::setFailure(bool value) {
     bool change = _complete != value;
     _failed = value;
     if (value && change) {
-        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
-        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
+        // play lose music
+//        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+//        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+//        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         
         if (_ui) {
             float timeSpent = _levelController->getTimeSpentInLevel();
@@ -419,6 +423,8 @@ void GameScene::preUpdate(float dt) {
     if (_input->didExit()) {
         Application::get()->quit();
     }
+
+    setDebug(true);
     
 	_ui->updateHP(_player->getHP());
     _ui->updateComboBar(_player->_comboMeter);
@@ -515,6 +521,9 @@ void GameScene::fixedUpdate(float step) {
     CULog("CamLPos: %f", cameraPosLX);
     CULog("CamLPos: %f", cameraPosRX);
     CULog("CamLocked?: %d", _cameraLocked);
+	CULog("LeftBound: %f", leftBound);
+	CULog("RightBound: %f", rightBound);
+    CULog("");
     for (auto obs : _world->getObstacles()) {
         
     }
@@ -525,17 +534,17 @@ void GameScene::fixedUpdate(float step) {
     if (cameraPosLX < leftBound || cameraPosRX >= rightBound) {
         _cameraLocked = true;
         if (cameraPosLX <= leftBound) {
-            if (currPlayerPosX > leftBound + _camera->getViewport().size.width*.66) {
+            if (currPlayerPosX > (leftBound + _camera->getViewport().size.width * 0.66) * (2 * 0.0004006410 * Application::get()->getDisplayWidth())) {
                 _cameraLocked = false;
             }
         } else {
-            if (currPlayerPosX < rightBound - _camera->getViewport().size.width*.66) {
+            if (currPlayerPosX < (rightBound - _camera->getViewport().size.width * 0.66) * (2 * 0.0004006410 * Application::get()->getDisplayWidth())) {
                 _cameraLocked = false;
             }
         }
     }
     if (!_cameraLocked) {
-        _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
+        _camera->translate(Vec2((currPlayerPosX -_camera->getPosition().x)* 0.05, 0) * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
         _camera->update();
         if (currPlayerVel > 0 && !isKnocked) {
             updateLayersLeft();

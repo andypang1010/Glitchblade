@@ -68,11 +68,11 @@
         {
           "origin": {
             "x": 50,
-            "y": 14.5
+            "y": 13
           },
           "size": {
             "width": 20.0,
-            "height": 7.0
+            "height": 10.0
           }
         },
         {
@@ -82,7 +82,7 @@
           },
           "size": {
             "width": 20.0,
-            "height": 8.0
+            "height": 5.0
           }
         },
         {
@@ -98,7 +98,7 @@
         {
           "origin": {
             "x": 64,
-            "y": 11.5
+            "y": 9.5
           },
           "size": {
             "width": 8.0,
@@ -107,12 +107,42 @@
         },
         {
           "origin": {
-            "x": 80,
-            "y": 14
+            "x": 77,
+            "y": 12.5
           },
           "size": {
             "width": 4.0,
             "height": 1.0
+          }
+        },
+        {
+          "origin": {
+            "x": 95,
+            "y": 8
+          },
+          "size": {
+            "width": 15.0,
+            "height": 12.0
+          }
+        },
+        {
+          "origin": {
+            "x": 105,
+            "y": 10.5
+          },
+          "size": {
+            "width": 5.0,
+            "height": 7
+          }
+        },
+        {
+          "origin": {
+            "x": 125,
+            "y": 12.5
+          },
+          "size": {
+            "width": 30.0,
+            "height": 15.0
           }
         }
       ],
@@ -123,7 +153,7 @@
           ],
           "spawn_positions": [
             {
-              "x": 1300,
+              "x": 1100,
               "y": 100
             }
           ],
@@ -152,32 +182,26 @@
         },
         {
           "spawn_intervals": [
-            0,
             0
           ],
           "spawn_positions": [
             {
-              "x": 4000,
-              "y": 150
-            },
-            {
-              "x": 5000,
-              "y": 150
+              "x": 4100,
+              "y": 100
             }
           ],
           "enemies": [
-            "minion_1B",
-            "minion_1A"
+            "minion_1B"
           ]
         },
         {
           "spawn_intervals": [
-            3
+            0
           ],
           "spawn_positions": [
             {
-              "x": 200,
-              "y": 50
+              "x": 5500,
+              "y": 100
             }
           ],
           "enemies": [
@@ -188,19 +212,19 @@
       "walls": [
           {
            "left" : 0,
-           "right" : 0.7328244275
-          },
-          {
-           "left" : 0.7328244275,
-           "right" : 3
+           "right" : 1.5
           },
           {
            "left" : 1.5,
            "right" : 3
           },
           {
-           "left" : 4,
-           "right" : 6.25
+           "left" : 3,
+           "right" : 4.5
+          },
+          {
+           "left" : 4.5,
+           "right" : 6
           }
       ]
     },
