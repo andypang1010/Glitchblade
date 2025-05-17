@@ -36,33 +36,33 @@ void Minion2BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     float YOffset = 20;
     //move this to new function
     _idleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2B_idle"), 3, 4, 10);
-	_idleSprite->setScale(scale * 0.0004006410 * Application::get()->getDisplayWidth());
+	_idleSprite->setScale(1.44 * scale * 0.0004006410 * Application::get()->getDisplayWidth());
     _idleSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_idleSprite->setName("idle");
 
     _walkSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2B_walk"), 3, 4, 10);
-    _walkSprite->setScale(scale * 0.0004006410 * Application::get()->getDisplayWidth());
+    _walkSprite->setScale(1.44 * scale * 0.0004006410 * Application::get()->getDisplayWidth());
     _walkSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_walkSprite->setName("walk");
 
     _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2B_guard"), 1, 3, 3);
-    _guardSprite->setScale(scale * 0.0004006410 * Application::get()->getDisplayWidth());
+    _guardSprite->setScale(1.44 * scale * 0.0004006410 * Application::get()->getDisplayWidth());
     _guardSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _guardSprite->setName("guard");
 
     _attackSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2B_attack"), 1, 5, 5);
-    _attackSprite->setScale(scale * 0.0004006410 * Application::get()->getDisplayWidth());
+    _attackSprite->setScale(1.44 * scale * 0.0004006410 * Application::get()->getDisplayWidth());
     _attackSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _attackSprite->setName("attack");
 
     _stunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2B_stun"), 5, 4, 20);
-    _stunSprite->setScale(scale * 0.0004006410 * Application::get()->getDisplayWidth());
+    _stunSprite->setScale(1.44 * scale * 0.0004006410 * Application::get()->getDisplayWidth());
     _stunSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _stunSprite->setName("stun");
 	stunFrames = _stunSprite->getCount() * 4;
 
     _deadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion2B_dead"), 4, 4, 14);
-    _deadSprite->setScale(scale * 0.0004006410 * Application::get()->getDisplayWidth());
+    _deadSprite->setScale(1.44 * scale * 0.0004006410 * Application::get()->getDisplayWidth());
     _deadSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_deadSprite->setName("dead");
 
@@ -272,9 +272,9 @@ void Minion2BModel::updateAnimation()
     playAnimation(_attackSprite);
     playAnimationOnce(_stunSprite);
 
-    _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-    _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
-    _node->getChild(_node->getChildCount() - 1)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
+    _node->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
+    _node->getChild(_node->getChildCount() - 2)->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
+    _node->getChild(_node->getChildCount() - 1)->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
 }
 
 #pragma mark -
