@@ -707,6 +707,7 @@ void LevelController::updateRightZone(int index) {
     createWall(_currentLevel->getWalls()[index].second / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), false);
     _zoneUpdate = true;
     _nextTrigger = _currentLevel->getWalls()[index].first*1024;
+    CULog("!!!!! Right Wall Position: %f", _rightWallZone->xPosition);
     _enemiesJSON->get("world_info")->get("worldRight")->set(_rightWallZone->xPosition);
 }
 

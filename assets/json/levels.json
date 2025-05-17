@@ -496,35 +496,59 @@
                 {
                     "spawn_intervals": [
                         3,
+                        3,
+                        3,
                         3
                     ],
                     "spawn_positions": [
                         {
-                            "x": 200,
+                            "x": 500,
                             "y": 100
                         },
                         {
-                            "x": 300,
+                            "x": 600,
+                            "y": 100
+                        },
+                        {
+                            "x": 500,
+                            "y": 100
+                        },
+                        {
+                            "x": 600,
                             "y": 100
                         }
                     ],
                     "enemies": [
-                        "boss_1",
-                        "boss_2"
+                        "minion_2B",
+                        "minion_2A",
+                        "minion_2B",
+                        "minion_1A"
                     ]
                 },
                 {
                     "spawn_intervals": [
-                        3
+                        3,
+                        2,
+                        1
                     ],
                     "spawn_positions": [
                         {
-                            "x": 1500,
+                            "x": 2700,
+                            "y": 100
+                        },
+                        {
+                            "x": 3000,
+                            "y": 100
+                        },
+                        {
+                            "x": 2700,
                             "y": 100
                         }
                     ],
                     "enemies": [
-                        "boss_3"
+                        "minion_2B",
+                        "boss_2",
+                        "minion_2B"
                     ]
                 }
             ],

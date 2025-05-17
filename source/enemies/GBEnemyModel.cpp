@@ -201,6 +201,9 @@ void EnemyModel::createFixtures() {
     sensorDef.shape = &sensorShape;
     sensorDef.userData.pointer = reinterpret_cast<uintptr_t>(getSensorName());
     _sensorFixture = _body->CreateFixture(&sensorDef);
+
+    worldLeft = _enemyJSON->_parent->get("world_info")->getFloat("worldLeft");
+    worldRight = _enemyJSON->_parent->get("world_info")->getFloat("worldRight");
 }
 
 /**
