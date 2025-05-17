@@ -1,0 +1,111 @@
+{
+    "textures": {
+        "scene2_a": {
+            "file": "textures/Scene_2_Arena.png"
+        },
+        "scene2_bg": {
+            "file": "textures/Scene_2_background.png"
+        },
+        "scene2_l0": {
+            "file": "textures/Scene_2_layer_0.png"
+        },
+        "scene2_l1": {
+            "file": "textures/Scene_2_Layer_1.png"
+        },
+        "scene2_l2": {
+            "file": "textures/Scene_2_Layer_2.png"
+        },
+        "scene2_l3": {
+            "file": "textures/Scene_2_Layer_3.png"
+        },
+        "scene2_l4": {
+            "file": "textures/Scene_2_Layer_4.png"
+        },
+        "boss2_dead": {
+            "file": "textures/boss2_dead.png"
+        },
+        "boss2_headFire_attack": {
+            "file": "textures/boss2_headFire_attack.png"
+        },
+        "boss2_headFire_start": {
+            "file": "textures/boss2_headFire_start.png"
+        },
+        "boss2_headFire_end": {
+            "file": "textures/boss2_headFire_end.png"
+        },
+        "boss2_headFire_wait": {
+            "file": "textures/boss2_headFire_wait.png"
+        },
+        "boss2_idle": {
+            "file": "textures/boss2_idle.png"
+        },
+        "boss2_laser": {
+            "file": "textures/boss2_laser.png"
+        },
+        "boss2_shortFire_attack": {
+            "file": "textures/boss2_shortFire_attack.png"
+        },
+        "boss2_shortFire_start": {
+            "file": "textures/boss2_shortFire_start.png"
+        },
+        "boss2_shortFire_end": {
+            "file": "textures/boss2_shortFire_end.png"
+        },
+        "boss2_shortFire_wait": {
+            "file": "textures/boss2_shortFire_wait.png"
+        },
+        "boss2_stun_long": {
+            "file": "textures/boss2_stun_long.png"
+        },
+        "boss2_stun_short": {
+            "file": "textures/boss2_stun_short.png"
+        },
+        "boss2_teleport_start": {
+            "file": "textures/boss2_teleport_start.png"
+        },
+        "boss2_teleport_end": {
+            "file": "textures/boss2_teleport_end.png"
+        },
+        "laser": {
+            "file": "textures/enemy_laser_column.png"
+        },
+        "player_projectile": {
+            "file": "textures/player_projectile.png"
+        },
+        "minion2A_shoot": {
+            "file": "textures/minion2A_shoot.png"
+        },
+        "minion2A_idle": {
+            "file": "textures/minion2A_idle.png"
+        },
+        "minion2A_dead": {
+            "file": "textures/minion2A_dead.png"
+        },
+        "minion2B_idle": {
+            "file": "textures/minion2B_idle.png"
+        },
+        "minion2B_guard": {
+            "file": "textures/minion2B_guard.png"
+        },
+        "minion2B_walk": {
+            "file": "textures/minion2B_walk.png"
+        },
+        "minion2B_attack": {
+            "file": "textures/minion2B_attack.png"
+        },
+        "minion2B_stun": {
+            "file": "textures/minion2B_stun.png"
+        },
+        "minion2B_dead": {
+            "file": "textures/minion2B_dead.png"
+        }
+    },
+    "sounds": {
+        "level2": {
+            "type": "sample",
+            "file": "sounds/GBLevel1_051622.ogg",
+            "stream": true,
+            "volume": 0.4
+        }
+    }
+}

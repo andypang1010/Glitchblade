@@ -1,0 +1,12 @@
+{
+    "textures": {
+    },
+    "sounds": {
+        "level5": {
+            "type": "sample",
+            "file": "sounds/GBLevel3.ogg",
+            "stream": true,
+            "volume": 0.4
+        }
+    }
+}

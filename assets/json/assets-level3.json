@@ -1,0 +1,78 @@
+{
+    "textures": {
+        "scene3_bg": {
+            "file": "textures/Scene_3_background.png"
+        },
+        "scene3_a": {
+            "file": "textures/Scene_3_Arena.png"
+        },
+        "scene3_l1": {
+            "file": "textures/Scene_3_layer_1.png"
+        },
+        "scene3_l2": {
+            "file": "textures/Scene_3_layer_2.png"
+        },
+        "scene3_l3": {
+            "file": "textures/Scene_3_layer_3.png"
+        },
+        "scene3_l4": {
+            "file": "textures/Scene_3_layer_4.png"
+        },
+        "scene3_l5": {
+            "file": "textures/Scene_3_layer_5.png"
+        },
+        "scene3_l6": {
+            "file": "textures/Scene_3_layer_6.png"
+        },
+        "boss3_ground_idle": {
+            "file": "textures/boss3_ground_idle.png"
+        },
+        "boss3_air_idle": {
+            "file": "textures/boss3_air_idle.png"
+        },
+        "boss3_ground_uppercut": {
+            "file": "textures/boss3_ground_uppercut.png"
+        },
+        "boss3_ground_slam": {
+            "file": "textures/boss3_ground_slam.png"
+        },
+        "boss3_dash": {
+            "file": "textures/boss3_dash.png"
+        },
+        "boss3_air_shoot_start": {
+            "file": "textures/boss3_air_shoot_start.png"
+        },
+        "boss3_air_shoot_wait": {
+            "file": "textures/boss3_air_shoot_wait.png"
+        },
+        "boss3_air_shoot_attack": {
+            "file": "textures/boss3_air_shoot_attack.png"
+        },
+        "boss3_air_shoot_laser": {
+            "file": "textures/boss3_air_shoot_laser.png"
+        },
+        "boss3_ground_jump": {
+            "file": "textures/boss3_ground_jump.png"
+        },
+        "boss3_ground_stun": {
+            "file": "textures/boss3_ground_stun.png"
+        },
+        "boss3_air_stun": {
+            "file": "textures/boss3_air_stun.png"
+        },
+        "boss3_ground_dead": {
+            "file": "textures/boss3_ground_dead.png"
+        },
+        "boss3_air_dead": {
+            "file": "textures/boss3_air_dead.png"
+        }
+    },
+    "sounds": {
+        "level3": {
+            "type": "sample",
+            "file": "sounds/GBLevel2_v1.ogg",
+            "stream": true,
+            "volume": 0.4
+        }
+    }
+}
