@@ -42,143 +42,7 @@
                     "visible": true
                 }
             },
-            "lssetting": {
-                "type": "Button",
-                "format": {
-                    "type": "Anchored"
-                },
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        56,
-                        56
-                    ],
-                    "angle": 0,
-                    "position": [
-                        1161,
-                        484
-                    ],
-                    "visible": true,
-                    "upnode": "button_setting"
-                },
-                "children": {
-                    "button_setting": {
-                        "type": "Image",
-                        "data": {
-                            "texture": "button_setting",
-                            "anchor": [
-                                0,
-                                0.5
-                            ],
-                            "size": [
-                                53.2,
-                                56
-                            ],
-                            "angle": 0,
-                            "position": [
-                                0,
-                                0
-                            ],
-                            "visible": true
-                        },
-                        "layout": {
-                            "x_anchor": "left",
-                            "y_anchor": "middle",
-                            "absolute": false,
-                            "x_offset": 0,
-                            "y_offset": 0
-                        }
-                    }
-                }
-            },
-            "This is level 4!": {
-                "type": "Label",
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        212,
-                        40
-                    ],
-                    "position": [
-                        518,
-                        38
-                    ],
-                    "angle": 0,
-                    "visible": true,
-                    "font": "oxaniumSemibold32",
-                    "text": "This is level 4!",
-                    "foreground": "#ffffffff",
-                    "background": "#00000000",
-                    "padding": [
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "valign": "top",
-                    "halign": "left"
-                },
-                "children": {}
-            },
-            "lshome": {
-                "type": "Button",
-                "format": {
-                    "type": "Anchored"
-                },
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        56,
-                        56
-                    ],
-                    "angle": 0,
-                    "position": [
-                        36,
-                        484
-                    ],
-                    "visible": true,
-                    "upnode": "button_home"
-                },
-                "children": {
-                    "button_home": {
-                        "type": "Image",
-                        "data": {
-                            "texture": "button_home",
-                            "anchor": [
-                                0.5,
-                                0.5
-                            ],
-                            "size": [
-                                56,
-                                56
-                            ],
-                            "angle": 0,
-                            "position": [
-                                0,
-                                0
-                            ],
-                            "visible": true
-                        },
-                        "layout": {
-                            "x_anchor": "center",
-                            "y_anchor": "middle",
-                            "absolute": false,
-                            "x_offset": 0,
-                            "y_offset": 0
-                        }
-                    }
-                }
-            },
-            "selector3_1_1": {
+            "selector3": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -198,15 +62,15 @@
                         89
                     ],
                     "visible": true,
-                    "upnode": "button_selector3_1_1"
+                    "upnode": "button_selector3"
                 },
                 "children": {
-                    "button_selector3_1_1": {
+                    "button_selector3": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_selector3_1_1",
+                            "texture": "button_selector3",
                             "anchor": [
-                                0.5,
+                                0,
                                 1
                             ],
                             "size": [
@@ -221,7 +85,7 @@
                             "visible": true
                         },
                         "layout": {
-                            "x_anchor": "center",
+                            "x_anchor": "left",
                             "y_anchor": "top",
                             "absolute": false,
                             "x_offset": 0,
@@ -230,7 +94,7 @@
                     }
                 }
             },
-            "Level 4": {
+            "Level 3": {
                 "type": "Label",
                 "data": {
                     "anchor": [
@@ -238,17 +102,17 @@
                         0
                     ],
                     "size": [
-                        135,
-                        50
+                        202,
+                        75
                     ],
                     "position": [
-                        557,
-                        89
+                        523,
+                        33
                     ],
                     "angle": 0,
                     "visible": true,
-                    "font": "oxaniumSemibold40",
-                    "text": "Level 4",
+                    "font": "oxaniumSemibold60",
+                    "text": "Level 3",
                     "foreground": "#ffffffff",
                     "background": "#00000000",
                     "padding": [

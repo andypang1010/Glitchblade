@@ -29,6 +29,7 @@ protected:
     std::shared_ptr<cugl::scene2::SceneNode> _levelSelection2;
     std::shared_ptr<cugl::scene2::SceneNode> _levelSelection3;
     std::shared_ptr<cugl::scene2::SceneNode> _levelSelection4;
+    std::shared_ptr<cugl::scene2::SceneNode> _levelSelection5;
     std::shared_ptr<cugl::scene2::SceneNode> _homeSetting;
     std::shared_ptr<cugl::scene2::SceneNode> _info;
 
@@ -94,6 +95,7 @@ public:
     void setupLevelSelection2(std::shared_ptr<cugl::scene2::SceneNode>& levelSelection2);
     void setupLevelSelection3(std::shared_ptr<cugl::scene2::SceneNode>& levelSelection3);
     void setupLevelSelection4(std::shared_ptr<cugl::scene2::SceneNode>& levelSelection4);
+    void setupLevelSelection5(std::shared_ptr<cugl::scene2::SceneNode>& levelSelection5);
     void setupHomeSetting(std::shared_ptr<cugl::scene2::SceneNode>& homeSetting);
     void setupInfo(std::shared_ptr<cugl::scene2::SceneNode>& info);
 
@@ -104,6 +106,7 @@ public:
     void showLevelSelection2(bool visible);
     void showLevelSelection3(bool visible);
     void showLevelSelection4(bool visible);
+    void showLevelSelection5(bool visible);
     void showHomeSetting(bool visible);
     void showInfo(bool visible);
 

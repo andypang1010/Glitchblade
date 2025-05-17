@@ -195,7 +195,8 @@
         "levelselection1": "widgets/levelselection1.json",
         "levelselection2": "widgets/levelselection2.json",
         "levelselection3": "widgets/levelselection3.json",
-        "levelselection4": "widgets/levelselection4.json"
+        "levelselection4": "widgets/levelselection4.json",
+        "levelselection5": "widgets/levelselection5.json"
     },
     "scene2s": {
         "home": {
@@ -276,6 +277,16 @@
             },
             "data": {
                 "key": "levelselection4"
+            }
+        },
+        "levelselection5": {
+            "type": "Widget",
+            "comment": "This is the root node of level selection 5",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "levelselection5"
             }
         },
         "hud": {

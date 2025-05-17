@@ -39,7 +39,7 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
         _ui->setLevel4Callback([this]() { _scene_to_load = 4; });
         _ui->setLevel5Callback([this]() { _scene_to_load = 5; });
 
-        _ui->setStartCallback([this, highestPlayableLevel]() { _ui_switch = std::max(highestPlayableLevel - 1, 1); CULog("Start pressed");});
+        _ui->setStartCallback([this, highestPlayableLevel]() { _ui_switch = std::max(highestPlayableLevel, 1); CULog("Start pressed");});
         _ui->setHomeCallback([this]() { _ui_switch = 0; CULog("Home pressed");});
         _ui->setInfoCallback([this]() { _ui_switch = -1; CULog("Info pressed");});
         _ui->setHomeSettingCallback([this]() { _setting = true;; CULog("Home Setting pressed");});
@@ -65,6 +65,7 @@ void LevelSelectScene::update(float dt) {
         _ui->showLevelSelection2(false);
         _ui->showLevelSelection3(false);
         _ui->showLevelSelection4(false);
+        _ui->showLevelSelection5(false);
         _ui->showInfo(false);
         _ui->showHome(false);
     } else {
@@ -91,21 +92,28 @@ void LevelSelectScene::update(float dt) {
         }
         else if (_ui_switch == 4) {
             _ui->showHome(false);
-            _ui->showLevelSelectionHead(true, true, false);
+            _ui->showLevelSelectionHead(true);
             _ui->showLevelSelection3(false);
             _ui->showLevelSelection4(true);
-    //        _ui->showLevelSelection5(false);
+            _ui->showLevelSelection5(false);
+        }
+        else if (_ui_switch == 5) {
+            _ui->showHome(false);
+            _ui->showLevelSelectionHead(true, true, false);
+            _ui->showLevelSelection4(false);
+            _ui->showLevelSelection5(true);
         }
         else if (_ui_switch == -1) {
             _ui->showHome(false);
             _ui->showInfo(true);
         }
-        else if (_ui_switch == 0 || _ui_switch == 5) {
+        else if (_ui_switch == 0) {
             _ui->showLevelSelectionHead(false);
             _ui->showLevelSelection1(false);
             _ui->showLevelSelection2(false);
             _ui->showLevelSelection3(false);
             _ui->showLevelSelection4(false);
+            _ui->showLevelSelection5(false);
             _ui->showInfo(false);
             _ui->showHomeSetting(false);
             _ui->showHome(true);

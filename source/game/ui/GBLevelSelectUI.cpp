@@ -21,6 +21,7 @@ void LevelSelectUI::dispose() {
     _level2Button->clearListeners();
     _level3Button->clearListeners();
 
+
     _level1Button = nullptr;
     _level2Button = nullptr;
     _level3Button = nullptr;
@@ -74,9 +75,9 @@ bool LevelSelectUI::init(const std::shared_ptr<cugl::AssetManager>& assets)
 
 void LevelSelectUI::setupMenu(std::shared_ptr<cugl::scene2::SceneNode>& menu)
 {
-    _level1Button = std::dynamic_pointer_cast<cugl::scene2::Button>(menu->getChildByName("selector1_1_1"));
-    _level2Button = std::dynamic_pointer_cast<cugl::scene2::Button>(menu->getChildByName("selector1_2_1"));
-    _level3Button = std::dynamic_pointer_cast<cugl::scene2::Button>(menu->getChildByName("selector1_3_1"));
+    _level1Button = std::dynamic_pointer_cast<cugl::scene2::Button>(menu->getChildByName("selector1"));
+    _level2Button = std::dynamic_pointer_cast<cugl::scene2::Button>(menu->getChildByName("selector2"));
+    _level3Button = std::dynamic_pointer_cast<cugl::scene2::Button>(menu->getChildByName("selector3"));
 
     // Old way of setting up buttons
     //if (_level1Button) {

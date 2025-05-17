@@ -22,10 +22,10 @@
             "visible": true
         },
         "children": {
-            "levelselect_bg_2": {
+            "levelselect_bg_5": {
                 "type": "Image",
                 "data": {
-                    "texture": "levelselect_bg_2",
+                    "texture": "levelselect_bg_5",
                     "anchor": [
                         0,
                         0
@@ -42,7 +42,7 @@
                     "visible": true
                 }
             },
-            "selector2": {
+            "selector5": {
                 "type": "Button",
                 "format": {
                     "type": "Anchored"
@@ -62,13 +62,13 @@
                         89
                     ],
                     "visible": true,
-                    "upnode": "button_selector2"
+                    "upnode": "button_selector5"
                 },
                 "children": {
-                    "button_selector2": {
+                    "button_selector5": {
                         "type": "Image",
                         "data": {
-                            "texture": "button_selector2",
+                            "texture": "button_selector5",
                             "anchor": [
                                 0,
                                 1
@@ -94,7 +94,7 @@
                     }
                 }
             },
-            "Level 2": {
+            "Level 5": {
                 "type": "Label",
                 "data": {
                     "anchor": [
@@ -112,7 +112,7 @@
                     "angle": 0,
                     "visible": true,
                     "font": "oxaniumSemibold60",
-                    "text": "Level 2",
+                    "text": "Level 5",
                     "foreground": "#ffffffff",
                     "background": "#00000000",
                     "padding": [
