@@ -59,6 +59,21 @@ void GlitchbladeApp::onStartup() {
     setClearColor(Color4f::BLACK);
 
     // Queue up the other assets
+    _assets->loadDirectoryAsync("json/assets-projectile-sounds.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-parry-sounds.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-menu.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
     _assets->loadDirectoryAsync("json/assets-level1.json", [this](const std::string& key, bool success){
         if (success) {
             auto _ = _assets->progress();
@@ -84,22 +99,7 @@ void GlitchbladeApp::onStartup() {
             auto _ = _assets->progress();
         }
     });
-    _assets->loadDirectoryAsync("json/assets-menu.json", [this](const std::string& key, bool success){
-        if (success) {
-            auto _ = _assets->progress();
-        }
-    });
     _assets->loadDirectoryAsync("json/assets-guard-sounds.json", [this](const std::string& key, bool success){
-        if (success) {
-            auto _ = _assets->progress();
-        }
-    });
-    _assets->loadDirectoryAsync("json/assets-parry-sounds.json", [this](const std::string& key, bool success){
-        if (success) {
-            auto _ = _assets->progress();
-        }
-    });
-    _assets->loadDirectoryAsync("json/assets-projectile-sounds.json", [this](const std::string& key, bool success){
         if (success) {
             auto _ = _assets->progress();
         }
