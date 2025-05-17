@@ -1,5 +1,29 @@
 {
     "textures": {
+        "scene5_bg": {
+            "file": "textures/Scene_4_background.png"
+        },
+        "scene5_l1": {
+            "file": "textures/Scene_4_Layer_1.png"
+        },
+        "scene5_l2": {
+            "file": "textures/Scene_4_Layer_2.png"
+        },
+        "scene5_l3": {
+            "file": "textures/Scene_4_Layer_3.png"
+        },
+        "scene5_l4": {
+            "file": "textures/Scene_4_Layer_4.png"
+        },
+        "scene5_l5": {
+            "file": "textures/Scene_4_Layer_5.png"
+        },
+        "scene5_l6": {
+            "file": "textures/Scene_4_Layer_6.png"
+        },
+        "scene5_l7": {
+            "file": "textures/Scene_4_Layer_7.png"
+        }
     },
     "sounds": {
         "level5": {

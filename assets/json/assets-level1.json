@@ -1,85 +1,22 @@
 {
     "textures": {
-        "scene1_a": {
-            "file": "textures/Scene_1_Arena.png"
-        },
         "scene1_bg": {
-            "file": "textures/Scene_1_background.png"
+            "file": "textures/Tutorial_bg_1.png"
         },
         "scene1_l0": {
-            "file": "textures/Scene_1_layer_0.png"
+            "file": "textures/Tutorial_Layer_0.png"
         },
         "scene1_l1": {
-            "file": "textures/Scene_1_layer_1.png"
+            "file": "textures/Tutorial_Layer_1.png"
         },
         "scene1_l2": {
-            "file": "textures/Scene_1_layer_2.png"
+            "file": "textures/Tutorial_Layer_2.png"
         },
         "scene1_l3": {
-            "file": "textures/Scene_1_layer_3.png"
+            "file": "textures/Tutorial_Layer_3.png"
         },
         "scene1_l4": {
-            "file": "textures/Scene_1_layer_4.png"
-        },
-        "boss1_idle": {
-            "file": "textures/boss1_idle.png"
-        },
-        "boss1_walk": {
-            "file": "textures/boss1_walk.png"
-        },
-        "boss1_slam": {
-            "file": "textures/boss1_slam.png"
-        },
-        "boss1_stab": {
-            "file": "textures/boss1_stab.png"
-        },
-        "boss1_stun": {
-            "file": "textures/boss1_stun.png"
-        },
-        "boss1_shoot": {
-            "file": "textures/boss1_shoot.png"
-        },
-        "boss1_explode": {
-            "file": "textures/boss1_explode.png"
-        },
-        "boss1_dead": {
-            "file": "textures/boss1_dead.png"
-        },
-        "explode_enemy_1": {
-            "file": "textures/explode_enemy_1.png"
-        },
-        "minion1B_idle": {
-            "file": "textures/minion1B_idle.png"
-        },
-        "minion1B_punch": {
-            "file": "textures/minion1B_punch.png"
-        },
-        "minion1B_slam": {
-            "file": "textures/minion1B_slam.png"
-        },
-        "minion1B_walk": {
-            "file": "textures/minion1B_walk.png"
-        },
-        "minion1B_stun": {
-            "file": "textures/minion1B_stun.png"
-        },
-        "minion1B_dead": {
-            "file": "textures/minion1B_dead.png"
-        },
-        "wave_enemy_1": {
-            "file": "textures/wave_enemy_1.png"
-        },
-        "minion1A_explode": {
-            "file": "textures/minion1A_explode.png"
-        },
-        "minion1A_shoot": {
-            "file": "textures/minion1A_shoot.png"
-        },
-        "minion1A_walk": {
-            "file": "textures/minion1A_walk.png"
-        },
-        "minion1A_dead": {
-            "file": "textures/minion1A_dead.png"
+            "file": "textures/Tutorial_Layer_4.png"
         }
     },
     
