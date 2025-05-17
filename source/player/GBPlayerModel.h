@@ -301,7 +301,7 @@ public:
         _guardState = 0;
         _parryRem = 0;
         _damageRem = 0;
-        _damage = 100;// default player dmg
+        _damage = 10;// default player dmg
         _knockRem = 0;
         _knockStartBuffer = 0;
         
