@@ -363,25 +363,21 @@ void LevelController::postUpdate(float dt)
         }
     }
     
-    // change platform colors
-    for (auto& pair : _platforms) {
-        NodePtr node = pair.second;
-
-        float pulseFactor = cugl::EasingFactory::sineInOut(cugl::Application::get()->getEllapsedMicros() / 1800000.0f);
-
-        int startR = 184, startG = 39, startB = 101;   // Original pinkish color
-        int endR   = 80, endG = 80, endB = 80;      // Grayish tone
-
-        // Ensure colors stay within the valid range
-//        int newRed   = std::max(startR, std::min(endR, static_cast<int>(startR + (endR - startR) * pulseFactor)));
-//        int newGreen = std::max(startG, std::min(endG, static_cast<int>(startG + (endG - startG) * pulseFactor)));
-//        int newBlue  = std::max(startB, std::min(endB, static_cast<int>(startB + (endB - startB) * pulseFactor)));
-        int newRed   = static_cast<int>(startR + (endR - startR) * pulseFactor);
-        int newGreen = static_cast<int>(startG + (endG - startG) * pulseFactor);
-        int newBlue  = static_cast<int>(startB + (endB - startB) * pulseFactor);
-
-        node->setColor(cugl::Color4(newRed, newGreen, newBlue, 255));
-    }
+//    // change platform colors
+//    for (auto& pair : _platforms) {
+//        NodePtr node = pair.second;
+//
+//        float pulseFactor = cugl::EasingFactory::sineInOut(cugl::Application::get()->getEllapsedMicros() / 3000000.0f);
+//
+//        int startR = 115, startG = 42, startB = 86;   // Original pinkish color
+//        int endR   = 40, endG = 40, endB = 40;      // Grayish tone
+//
+//        int newRed   = static_cast<int>(startR + (endR - startR) * pulseFactor);
+//        int newGreen = static_cast<int>(startG + (endG - startG) * pulseFactor);
+//        int newBlue  = static_cast<int>(startB + (endB - startB) * pulseFactor);
+//
+//        node->setColor(cugl::Color4(newRed, newGreen, newBlue, 255));
+//    }
 }
 
 /**
@@ -431,7 +427,7 @@ void LevelController::createPlatform(Rect rect)
     std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(Texture::getBlank());
     platformSprite->setContentSize(rect.size * _constantsJSON->get("scene")->getFloat("scale"));
     platformSprite->setVisible(true);
-    platformSprite->setColor(Color4(235,54,119));
+    platformSprite->setColor(Color4(40,40,40));
     
 	//platformSprite->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
 	//platformSceneNode->addChild(platformSprite);
