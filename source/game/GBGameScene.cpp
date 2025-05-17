@@ -97,6 +97,8 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, int levelNum) 
         return false;
     }
     
+	_cameraLocked = false;
+
     std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
     AudioHelper::init(fxJ, assets);
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
@@ -424,6 +426,8 @@ void GameScene::preUpdate(float dt) {
     if (_input->didExit()) {
         Application::get()->quit();
     }
+
+    setDebug(true);
     
 	_ui->updateHP(_player->getHP());
     _ui->updateComboBar(_player->_comboMeter);
@@ -520,6 +524,9 @@ void GameScene::fixedUpdate(float step) {
     CULog("CamLPos: %f", cameraPosLX);
     CULog("CamLPos: %f", cameraPosRX);
     CULog("CamLocked?: %d", _cameraLocked);
+	CULog("LeftBound: %f", leftBound);
+	CULog("RightBound: %f", rightBound);
+    CULog("");
     for (auto obs : _world->getObstacles()) {
         
     }
@@ -530,11 +537,11 @@ void GameScene::fixedUpdate(float step) {
     if (cameraPosLX < leftBound || cameraPosRX >= rightBound) {
         _cameraLocked = true;
         if (cameraPosLX <= leftBound) {
-            if (currPlayerPosX > leftBound + _camera->getViewport().size.width*.66) {
+            if (currPlayerPosX > leftBound + _camera->getViewport().size.width * 0.66) {
                 _cameraLocked = false;
             }
         } else {
-            if (currPlayerPosX < rightBound - _camera->getViewport().size.width*.66) {
+            if (currPlayerPosX < rightBound - _camera->getViewport().size.width * 0.66) {
                 _cameraLocked = false;
             }
         }

@@ -600,7 +600,7 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 
 		std::vector<Vec2> spawnPositions;
         std::shared_ptr<JsonValue> positions = wave->get("spawn_positions");
-		CULog(positions->toString().c_str());
+//		CULog(positions->toString().c_str());
 
         for (std::shared_ptr<JsonValue> position : wave->get("spawn_positions")->children()) {
 			spawnPositions.push_back(Vec2(position->get("x")->asFloat(), position->get("y")->asFloat()));
@@ -661,7 +661,7 @@ std::shared_ptr<LevelController::WallZone> LevelController::createWall(float xPo
     wallObj->setDebugScene(_debugNodeRef);
     sprite->setPosition(wallObj->getPosition() * _scale);
     _worldNode->addChild(sprite);
-    float pixel_pos = xPos*4290.25;
+    float pixel_pos = xPos * 1024;
     auto wallZone = std::make_shared<WallZone>(WallZone{wallObj, sprite, pixel_pos});
     if (isLeft) {
         _leftWallZone = wallZone;
@@ -687,7 +687,7 @@ void LevelController::updateRightZone(int index) {
     removeWall(_rightWallZone);
     createWall(_currentLevel->getWalls()[index].second, false);
     _zoneUpdate = true;
-    _nextTrigger = _currentLevel->getWalls()[index].first*4290.25;
+    _nextTrigger = _currentLevel->getWalls()[index].first*1024;
 }
 
 void LevelController::updateLeftZone(int index) {
