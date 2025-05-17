@@ -331,9 +331,9 @@ void GameScene::setComplete(bool value) {
         int spawnedCount = _levelController->getSpawnedEnemyCount();
         int totalCount = _levelController->getTotalEnemyCount();
         _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
-        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
-        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
+//        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+//        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+//        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         _ui->showHeadsUpDisplay(false, false);
         _ui->showWinPage(true);
         setPaused(true);
@@ -514,17 +514,16 @@ void GameScene::fixedUpdate(float step) {
             _levelController->setInNextZone(true);
         }
     }
-    
+    CULog("Magic Numba: %f", 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    CULog("Magic Numba Pow: %f", 1024 * std::pow(2 * 0.0004006410 * Application::get()->getDisplayWidth(), 2));
     CULog("PlayerPos: %f", currPlayerPosX);
     CULog("CamLPos: %f", cameraPosLX);
     CULog("CamRPos: %f", cameraPosRX);
     CULog("CamLocked?: %s", _cameraLocked ? "True" : "False");
 	CULog("LeftBound: %f", leftBound);
 	CULog("RightBound: %f", rightBound);
-    CULog("");
-    for (auto obs : _world->getObstacles()) {
-        
-    }
+    
+    
     if (_levelController->getZoneUpdate()) {
         CULog("NextTriggerPos: %f", _levelController->getNextTrigger());
     }
