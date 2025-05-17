@@ -1136,31 +1136,31 @@
       "width": 8,
       "layers": [
         {
-          "file": "scene3_bg",
+          "file": "scene5_bg",
           "speed": 0
         },
         {
-          "file": "scene3_l6",
+          "file": "scene5_l6",
           "speed": 1
         },
         {
-          "file": "scene3_l5",
+          "file": "scene5_l5",
           "speed": 2
         },
         {
-          "file": "scene3_l4",
+          "file": "scene5_l4",
           "speed": 3
         },
         {
-          "file": "scene3_l3",
+          "file": "scene5_l3",
           "speed": 4
         },
         {
-          "file": "scene3_l2",
+          "file": "scene5_l2",
           "speed": 4
         },
         {
-          "file": "scene3_l1",
+          "file": "scene5_l1",
           "speed": 0
         },
         {
@@ -1212,12 +1212,8 @@
           "right": 2
         },
         {
-          "left": 2,
+          "left": 1,
           "right": 4
-        },
-        {
-          "left": 4,
-          "right": 6.25
         }
       ]
     }
