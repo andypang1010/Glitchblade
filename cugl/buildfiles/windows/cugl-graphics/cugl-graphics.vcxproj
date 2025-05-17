@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUFont.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUGlyphRun.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUGradient.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUGraphicsBase.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUInstanceBuffer.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUMesh.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUMeshExtruder.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUParticleShader.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUParticleSystem.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CURenderTarget.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUScissor.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUShader.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUSpriteBatch.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUSpriteMesh.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUSpriteSheet.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUSpriteVertex.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUStencilEffect.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUTextAlignment.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUTextLayout.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUTexture.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUTextureRenderer.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUUniformBuffer.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\CUVertexBuffer.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\cu_graphics.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUFontLoader.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUGradientLoader.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUParticleLoader.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUSpriteMeshLoader.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\CUTextureLoader.h" />
+    <ClInclude Include="..\..\..\include\cugl\graphics\loaders\cu_graphics_loaders.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\graphics\CUFont.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUGradient.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUGraphicsBase.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUInstanceBuffer.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUMeshExtruder.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUParticleShader.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUParticleSystem.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CURenderTarget.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUScissor.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUShader.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUSpriteBatch.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUSpriteMesh.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUSpriteSheet.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUSpriteVertex.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUStencilEffect.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUTextLayout.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUTexture.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUTextureRenderer.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUUniformBuffer.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\CUVertexBuffer.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUFontLoader.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUGradientLoader.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUParticleLoader.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUSpriteMeshLoader.cpp" />
+    <ClCompile Include="..\..\..\source\graphics\loaders\CUTextureLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\source\graphics\shaders\ColorTexture.frag" />
+    <None Include="..\..\..\source\graphics\shaders\ColorTexture.vert" />
+    <None Include="..\..\..\source\graphics\shaders\FSQShader.frag" />
+    <None Include="..\..\..\source\graphics\shaders\FSQShader.vert" />
+    <None Include="..\..\..\source\graphics\shaders\ParticleShader.frag" />
+    <None Include="..\..\..\source\graphics\shaders\ParticleShader.vert" />
+    <None Include="..\..\..\source\graphics\shaders\SpriteShader.frag" />
+    <None Include="..\..\..\source\graphics\shaders\SpriteShader.vert" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{b6b90309-0f84-4720-8c57-b4f07d0148e1}</ProjectGuid>
+    <RootNamespace>cuglgraphics</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\cugl\graphics\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\cugl\graphics\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)objs\cugl\graphics\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)objs\cugl\graphics\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_LIB;P2T_STATIC_EXPORTS;UUID_SYSTEM_GENERATOR;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\sdlapp\include;$(ProjectDir)..\..\..\external\box2d\include;$(ProjectDir)..\..\..\external\poly2tri;$(ProjectDir)..\..\..\external\libdatachannel\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4267;4244;4305;4800;4996;6001;26812;26439;26495;26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;_LIB;P2T_STATIC_EXPORTS;UUID_SYSTEM_GENERATOR;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\sdlapp\include;$(ProjectDir)..\..\..\external\box2d\include;$(ProjectDir)..\..\..\external\poly2tri;$(ProjectDir)..\..\..\external\libdatachannel\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4267;4244;4305;4800;4996;6001;26812;26439;26495;26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;_LIB;P2T_STATIC_EXPORTS;UUID_SYSTEM_GENERATOR;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN64;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\sdlapp\include;$(ProjectDir)..\..\..\external\box2d\include;$(ProjectDir)..\..\..\external\poly2tri;$(ProjectDir)..\..\..\external\libdatachannel\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4267;4244;4305;4800;4996;6001;26812;26439;26495;26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_WINDOWS;_LIB;P2T_STATIC_EXPORTS;UUID_SYSTEM_GENERATOR;_CRT_SECURE_NO_WARNINGS;_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING;WIN64;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\include;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\sdlapp\include;$(ProjectDir)..\..\..\external\box2d\include;$(ProjectDir)..\..\..\external\poly2tri;$(ProjectDir)..\..\..\external\libdatachannel\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4068;4018;4267;4244;4305;4800;4996;6001;26812;26439;26495;26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4006,4221 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

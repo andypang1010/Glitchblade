@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Public Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Sources\minimp3">
+      <UniqueIdentifier>{b02d87a7-2868-4b4a-aa73-92b533a1dc0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\ogg">
+      <UniqueIdentifier>{86f2f6c1-3f55-4e9b-82dc-84c31e60b684}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\vorbis">
+      <UniqueIdentifier>{165693df-0e54-4948-aede-5cd1df22087c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\flac">
+      <UniqueIdentifier>{d9f45f71-60a2-4e8b-8d9c-541c9b95c261}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\vorbis\headers">
+      <UniqueIdentifier>{8da6db55-33bf-4157-8abb-02b85827c85f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\vorbis\source">
+      <UniqueIdentifier>{f7cb5186-6bb7-4dac-a909-e30b64250b5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\kissfft">
+      <UniqueIdentifier>{e7387f62-305a-4b8e-a8c9-6bb3f021d5c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\source">
+      <UniqueIdentifier>{4af57742-6532-45ff-bbdb-2ff4e1032fcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\source\audio">
+      <UniqueIdentifier>{d62f30d0-cefc-4419-bd67-03af92866891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\source\codec">
+      <UniqueIdentifier>{346a47e1-74be-4d1c-a07b-0b1b21639d74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\source\dsp">
+      <UniqueIdentifier>{d3ca291d-56be-4720-899b-b5ebf9567f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\source\file">
+      <UniqueIdentifier>{7c803a58-f62f-4640-a422-a076cdd79c58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\source\math">
+      <UniqueIdentifier>{f99942ff-dfc8-49bf-93e5-e17772a87896}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\source\rand">
+      <UniqueIdentifier>{202f3b3d-664e-419a-b21d-f75bd90f666b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\external\minimp3\minimp3.h">
+      <Filter>Sources\minimp3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\minimp3\minimp3_ex.h">
+      <Filter>Sources\minimp3</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\flac\include\share\win_utf8_io.h">
+      <Filter>Sources\flac</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\backends.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\bitrate.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\codebook.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\codec_internal.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\envelope.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\highlevel.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\lookup.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\lookup_data.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\lpc.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\lsp.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\masking.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\mdct.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\misc.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\os.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\psy.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\registry.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\scales.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\smallft.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\vorbis\lib\window.h">
+      <Filter>Sources\vorbis\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\SDL_atk.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\kissfft\kfc.h">
+      <Filter>Sources\kissfft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fft.h">
+      <Filter>Sources\kissfft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fft_log.h">
+      <Filter>Sources\kissfft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fftnd.h">
+      <Filter>Sources\kissfft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fftndr.h">
+      <Filter>Sources\kissfft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fftr.h">
+      <Filter>Sources\kissfft</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\atk\audio\ATK_Redistribute.h">
+      <Filter>Sources\source\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\atk\audio\ATK_Reformat.h">
+      <Filter>Sources\source\audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\atk\codec\ATK_Codec_c.h">
+      <Filter>Sources\source\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\atk\codec\ATK_CodecWav_c.h">
+      <Filter>Sources\source\codec</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\atk\file\ATK_file_c.h">
+      <Filter>Sources\source\file</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\external\ogg\src\bitwise.c">
+      <Filter>Sources\ogg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\ogg\src\framing.c">
+      <Filter>Sources\ogg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\bitmath.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\bitreader.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\bitwriter.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\cpu.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\crc.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed_intrin_sse2.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed_intrin_ssse3.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\float.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\format.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_avx2.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_fma.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_neon.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_sse2.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_sse41.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\md5.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\memory.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\metadata_iterators.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\metadata_object.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\ogg_decoder_aspect.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\ogg_encoder_aspect.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\ogg_helper.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\ogg_mapping.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_decoder.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder_framing.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder_intrin_avx2.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder_intrin_sse2.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder_intrin_ssse3.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\window.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\share\win_utf8_io\win_utf8_io.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\analysis.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\bitrate.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\block.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\codebook.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\envelope.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\floor0.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\floor1.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\info.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\lookup.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\lpc.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\lsp.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\mapping0.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\mdct.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\registry.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\res0.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\sharedbook.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\smallft.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\synthesis.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\vorbisenc.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\vorbisfile.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\window.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\psy.c">
+      <Filter>Sources\vorbis\source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\kissfft\kfc.c">
+      <Filter>Sources\kissfft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\kissfft\kiss_fft.c">
+      <Filter>Sources\kissfft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\kissfft\kiss_fftnd.c">
+      <Filter>Sources\kissfft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\kissfft\kiss_fftndr.c">
+      <Filter>Sources\kissfft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\kissfft\kiss_fftr.c">
+      <Filter>Sources\kissfft</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed_intrin_avx2.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed_intrin_sse42.c">
+      <Filter>Sources\flac</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\audio\ATK_AlgoReverb.c">
+      <Filter>Sources\source\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\audio\ATK_AudioCVT.c">
+      <Filter>Sources\source\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\audio\ATK_LatencyAdapter.c">
+      <Filter>Sources\source\audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_Codec.c">
+      <Filter>Sources\source\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_CodecFLAC.c">
+      <Filter>Sources\source\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_CodecMP3.c">
+      <Filter>Sources\source\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_CodecVorbis.c">
+      <Filter>Sources\source\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_CodecWAV.c">
+      <Filter>Sources\source\codec</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\dsp\ATK_DSPConvolve.c">
+      <Filter>Sources\source\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\dsp\ATK_DSPFilter.c">
+      <Filter>Sources\source\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\dsp\ATK_DSPTransform.c">
+      <Filter>Sources\source\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\dsp\ATK_DSPWaveform.c">
+      <Filter>Sources\source\dsp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\file\ATK_file.c">
+      <Filter>Sources\source\file</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\math\ATK_MathComplex.c">
+      <Filter>Sources\source\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\math\ATK_MathPoly.c">
+      <Filter>Sources\source\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\math\ATK_MathVec.c">
+      <Filter>Sources\source\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\rand\ATK_Rand.c">
+      <Filter>Sources\source\rand</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="version.rc">
+      <Filter>Sources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

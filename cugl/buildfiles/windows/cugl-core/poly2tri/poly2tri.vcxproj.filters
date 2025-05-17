@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files\poly2tri">
+      <UniqueIdentifier>{edd2b47d-0d8c-4338-917c-8daeafdff4c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polyt2tri">
+      <UniqueIdentifier>{a4dadd33-4974-4f20-80f6-fffc811e1f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\poly2tri\common">
+      <UniqueIdentifier>{9ed30da6-8add-4340-9df9-ab14aa494cf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\poly2tri\sweep">
+      <UniqueIdentifier>{4182f718-d2f5-441d-930e-3b90df3c16f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polyt2tri\common">
+      <UniqueIdentifier>{cb00517a-eeb8-448b-b0f3-d00f26a44cca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\polyt2tri\sweep">
+      <UniqueIdentifier>{f31c52ec-fbf6-4f0c-a9f0-199bee3d381d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\external\poly2tri\poly2tri\common\shapes.cc">
+      <Filter>Source Files\poly2tri\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external\poly2tri\poly2tri\sweep\advancing_front.cc">
+      <Filter>Source Files\poly2tri\sweep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external\poly2tri\poly2tri\sweep\cdt.cc">
+      <Filter>Source Files\poly2tri\sweep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external\poly2tri\poly2tri\sweep\sweep.cc">
+      <Filter>Source Files\poly2tri\sweep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external\poly2tri\poly2tri\sweep\sweep_context.cc">
+      <Filter>Source Files\poly2tri\sweep</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\external\poly2tri\poly2tri\sweep\advancing_front.h">
+      <Filter>Header Files\polyt2tri\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\external\poly2tri\poly2tri\sweep\cdt.h">
+      <Filter>Header Files\polyt2tri\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\external\poly2tri\poly2tri\common\dll_symbol.h">
+      <Filter>Header Files\polyt2tri\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\external\poly2tri\poly2tri\poly2tri.h">
+      <Filter>Header Files\polyt2tri</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\external\poly2tri\poly2tri\common\shapes.h">
+      <Filter>Header Files\polyt2tri\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\external\poly2tri\poly2tri\sweep\sweep.h">
+      <Filter>Header Files\polyt2tri\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\external\poly2tri\poly2tri\sweep\sweep_context.h">
+      <Filter>Header Files\polyt2tri\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\external\poly2tri\poly2tri\common\utils.h">
+      <Filter>Header Files\polyt2tri\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

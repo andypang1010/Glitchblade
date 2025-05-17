@@ -1,0 +1,471 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 53;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		000F0D4693564DC7942E5151 /* turn.c in Sources */ = {isa = PBXBuildFile; fileRef = 8718C53AE6B3400C8E475D8F /* turn.c */; };
+		00AD9C2C8449485C8F5A6C35 /* log.c in Sources */ = {isa = PBXBuildFile; fileRef = 473A8538DEAB4F9C9F80C5B0 /* log.c */; };
+		01762AF4B6EB4778A0F0FAE7 /* hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 6A042F9DB1F84E129E7EDE8C /* hash.c */; };
+		064C0A4159C1457FA21C6354 /* conn.c in Sources */ = {isa = PBXBuildFile; fileRef = F3F6DE74E4C244F6B9216C06 /* conn.c */; };
+		0796DFF76D0C49D3B241B2C6 /* conn_poll.c in Sources */ = {isa = PBXBuildFile; fileRef = 511DCEAFFE4F46DEA875E732 /* conn_poll.c */; };
+		0B364F6D79BF4B369E14A43A /* random.c in Sources */ = {isa = PBXBuildFile; fileRef = 58917816C3434C7EBD4E9D59 /* random.c */; };
+		10311D953C2D4E3995AB81A2 /* juice.c in Sources */ = {isa = PBXBuildFile; fileRef = 16617C727EBB48FFAB50304F /* juice.c */; };
+		28F98FDD6B3E4B11AA845F5A /* conn_mux.c in Sources */ = {isa = PBXBuildFile; fileRef = 7CB82FA4686447BF960F7826 /* conn_mux.c */; };
+		6BDC4E0D46104E5986F699E9 /* stun.c in Sources */ = {isa = PBXBuildFile; fileRef = 33A4C9F045C04A4ABDA4EDAD /* stun.c */; };
+		83CDAD8FFB6649AEA37C7BD7 /* server.c in Sources */ = {isa = PBXBuildFile; fileRef = 6EF747EE7AD843B99756924C /* server.c */; };
+		92DA558831A6445B9D6D0151 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 84C8CE0BCB59419997DB60AB /* base64.c */; };
+		A24788E2585E4AA58C9B2265 /* conn_thread.c in Sources */ = {isa = PBXBuildFile; fileRef = 0DC2FCFBD7F443FC96D993F1 /* conn_thread.c */; };
+		A46D41CB23604398B02D7A3E /* hmac.c in Sources */ = {isa = PBXBuildFile; fileRef = 810B5294A83140F39BEC2206 /* hmac.c */; };
+		BDF8132C4705442895D5CFEF /* timestamp.c in Sources */ = {isa = PBXBuildFile; fileRef = B39313CD219B4042A7D2C436 /* timestamp.c */; };
+		C0BB917FBF8341A09D8FA9C3 /* crc32.c in Sources */ = {isa = PBXBuildFile; fileRef = 941813F1852444E88209B96A /* crc32.c */; };
+		D456CC1F575B479C97C06ABA /* udp.c in Sources */ = {isa = PBXBuildFile; fileRef = EFFB1FACD09140C290877916 /* udp.c */; };
+		DAE42EA04C754F3FB703ECCB /* addr.c in Sources */ = {isa = PBXBuildFile; fileRef = 6A495E45FD0A4EEB918671B7 /* addr.c */; };
+		E79C1603507C49A4A3F2208A /* ice.c in Sources */ = {isa = PBXBuildFile; fileRef = 1EE0B0B742794CB199A6B591 /* ice.c */; };
+		EE3460EFC4D84043AE8E87C6 /* const_time.c in Sources */ = {isa = PBXBuildFile; fileRef = 026AFD7BBBD94DA2A86A1B88 /* const_time.c */; };
+		F30F4EF084D640D1B57A4B17 /* agent.c in Sources */ = {isa = PBXBuildFile; fileRef = 729063AF17FF4B059D0875F5 /* agent.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		026AFD7BBBD94DA2A86A1B88 /* const_time.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = const_time.c; path = src/const_time.c; sourceTree = "<group>"; };
+		0DC2FCFBD7F443FC96D993F1 /* conn_thread.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = conn_thread.c; path = src/conn_thread.c; sourceTree = "<group>"; };
+		16617C727EBB48FFAB50304F /* juice.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = juice.c; path = src/juice.c; sourceTree = "<group>"; };
+		1EE0B0B742794CB199A6B591 /* ice.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = ice.c; path = src/ice.c; sourceTree = "<group>"; };
+		33A4C9F045C04A4ABDA4EDAD /* stun.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = stun.c; path = src/stun.c; sourceTree = "<group>"; };
+		473A8538DEAB4F9C9F80C5B0 /* log.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = log.c; path = src/log.c; sourceTree = "<group>"; };
+		511DCEAFFE4F46DEA875E732 /* conn_poll.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = conn_poll.c; path = src/conn_poll.c; sourceTree = "<group>"; };
+		58917816C3434C7EBD4E9D59 /* random.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = random.c; path = src/random.c; sourceTree = "<group>"; };
+		6A042F9DB1F84E129E7EDE8C /* hash.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = hash.c; path = src/hash.c; sourceTree = "<group>"; };
+		6A495E45FD0A4EEB918671B7 /* addr.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = addr.c; path = src/addr.c; sourceTree = "<group>"; };
+		6EF747EE7AD843B99756924C /* server.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = server.c; path = src/server.c; sourceTree = "<group>"; };
+		729063AF17FF4B059D0875F5 /* agent.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = agent.c; path = src/agent.c; sourceTree = "<group>"; };
+		7CB82FA4686447BF960F7826 /* conn_mux.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = conn_mux.c; path = src/conn_mux.c; sourceTree = "<group>"; };
+		810B5294A83140F39BEC2206 /* hmac.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = hmac.c; path = src/hmac.c; sourceTree = "<group>"; };
+		84C8CE0BCB59419997DB60AB /* base64.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = base64.c; path = src/base64.c; sourceTree = "<group>"; };
+		8718C53AE6B3400C8E475D8F /* turn.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = turn.c; path = src/turn.c; sourceTree = "<group>"; };
+		941813F1852444E88209B96A /* crc32.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = crc32.c; path = src/crc32.c; sourceTree = "<group>"; };
+		B39313CD219B4042A7D2C436 /* timestamp.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = timestamp.c; path = src/timestamp.c; sourceTree = "<group>"; };
+		DFA47AD8701249D5BB607C97 /* libjuice.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libjuice.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFFB1FACD09140C290877916 /* udp.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = udp.c; path = src/udp.c; sourceTree = "<group>"; };
+		F3F6DE74E4C244F6B9216C06 /* conn.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 4; name = conn.c; path = src/conn.c; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6B2C60B4CB1D46289B0458FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2EA93007B94F456CB728E663 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6E60AD31533A46A489D24A1C /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				6A495E45FD0A4EEB918671B7 /* addr.c */,
+				729063AF17FF4B059D0875F5 /* agent.c */,
+				84C8CE0BCB59419997DB60AB /* base64.c */,
+				F3F6DE74E4C244F6B9216C06 /* conn.c */,
+				7CB82FA4686447BF960F7826 /* conn_mux.c */,
+				511DCEAFFE4F46DEA875E732 /* conn_poll.c */,
+				0DC2FCFBD7F443FC96D993F1 /* conn_thread.c */,
+				026AFD7BBBD94DA2A86A1B88 /* const_time.c */,
+				941813F1852444E88209B96A /* crc32.c */,
+				6A042F9DB1F84E129E7EDE8C /* hash.c */,
+				810B5294A83140F39BEC2206 /* hmac.c */,
+				1EE0B0B742794CB199A6B591 /* ice.c */,
+				16617C727EBB48FFAB50304F /* juice.c */,
+				473A8538DEAB4F9C9F80C5B0 /* log.c */,
+				58917816C3434C7EBD4E9D59 /* random.c */,
+				6EF747EE7AD843B99756924C /* server.c */,
+				33A4C9F045C04A4ABDA4EDAD /* stun.c */,
+				B39313CD219B4042A7D2C436 /* timestamp.c */,
+				8718C53AE6B3400C8E475D8F /* turn.c */,
+				EFFB1FACD09140C290877916 /* udp.c */,
+			);
+			name = "Source Files";
+			path = ../../../external/libdatachannel/deps/libjuice;
+			sourceTree = "<group>";
+		};
+		6F53EA10AD7549E99C132AF5 = {
+			isa = PBXGroup;
+			children = (
+				B129110626EE40D9BA299A00 /* juice */,
+				B9FE4939F0594A538052C505 /* Products */,
+				2EA93007B94F456CB728E663 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B129110626EE40D9BA299A00 /* juice */ = {
+			isa = PBXGroup;
+			children = (
+				6E60AD31533A46A489D24A1C /* Source Files */,
+			);
+			name = juice;
+			sourceTree = "<group>";
+		};
+		B9FE4939F0594A538052C505 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DFA47AD8701249D5BB607C97 /* libjuice.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0F27448A5DE94281BDB1D16C /* juice */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DDD53F26BCBA499BA126B0AF /* Build configuration list for PBXNativeTarget "juice" */;
+			buildPhases = (
+				046FDAD6C64C49F0A3D70E5B /* Sources */,
+				6B2C60B4CB1D46289B0458FD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = juice;
+			productName = "juice-static";
+			productReference = DFA47AD8701249D5BB607C97 /* libjuice.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		36834EB237BE484E9B4B59B0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = 5CF84B62A7DF4751AD9B267B /* Build configuration list for PBXProject "libjuice" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6F53EA10AD7549E99C132AF5;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0F27448A5DE94281BDB1D16C /* juice */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		046FDAD6C64C49F0A3D70E5B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAE42EA04C754F3FB703ECCB /* addr.c in Sources */,
+				F30F4EF084D640D1B57A4B17 /* agent.c in Sources */,
+				92DA558831A6445B9D6D0151 /* base64.c in Sources */,
+				064C0A4159C1457FA21C6354 /* conn.c in Sources */,
+				28F98FDD6B3E4B11AA845F5A /* conn_mux.c in Sources */,
+				0796DFF76D0C49D3B241B2C6 /* conn_poll.c in Sources */,
+				A24788E2585E4AA58C9B2265 /* conn_thread.c in Sources */,
+				EE3460EFC4D84043AE8E87C6 /* const_time.c in Sources */,
+				C0BB917FBF8341A09D8FA9C3 /* crc32.c in Sources */,
+				01762AF4B6EB4778A0F0FAE7 /* hash.c in Sources */,
+				A46D41CB23604398B02D7A3E /* hmac.c in Sources */,
+				E79C1603507C49A4A3F2208A /* ice.c in Sources */,
+				10311D953C2D4E3995AB81A2 /* juice.c in Sources */,
+				00AD9C2C8449485C8F5A6C35 /* log.c in Sources */,
+				0B364F6D79BF4B369E14A43A /* random.c in Sources */,
+				83CDAD8FFB6649AEA37C7BD7 /* server.c in Sources */,
+				6BDC4E0D46104E5986F699E9 /* stun.c in Sources */,
+				BDF8132C4705442895D5CFEF /* timestamp.c in Sources */,
+				000F0D4693564DC7942E5151 /* turn.c in Sources */,
+				D456CC1F575B479C97C06ABA /* udp.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4D2DAC0E37C541839B10CDF2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					JUICE_STATIC,
+					"'USE_NETTLE=0'",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/libjuice",
+					"$(JUICE_DIR)/include",
+					"$(JUICE_DIR)/include/juice",
+					"$(JUICE_DIR)/src",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-fPIC",
+					"-Wall",
+					"-Wextra",
+					"-Wno-conversion",
+					"-Wno-deprecated-pragma",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = juice;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		51B37A188E584A3381FD6543 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					JUICE_STATIC,
+					"'USE_NETTLE=0'",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/libjuice",
+					"$(JUICE_DIR)/include",
+					"$(JUICE_DIR)/include/juice",
+					"$(JUICE_DIR)/src",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"-fPIC",
+					"-Wall",
+					"-Wextra",
+					"-Wno-conversion",
+					"-Wno-deprecated-pragma",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = juice;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = RelWithDebInfo;
+		};
+		56C6224FFB3B42A8BC0EABA3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"'RELEASE=1'",
+					JUICE_STATIC,
+					"'USE_NETTLE=0'",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/libjuice",
+					"$(JUICE_DIR)/include",
+					"$(JUICE_DIR)/include/juice",
+					"$(JUICE_DIR)/src",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"-fPIC",
+					"-Wall",
+					"-Wextra",
+					"-Wno-conversion",
+					"-Wno-deprecated-pragma",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = juice;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Release;
+		};
+		576A165E4ACF411F9F7FDFE5 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					JUICE_STATIC,
+					"'USE_NETTLE=0'",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/libjuice",
+					"$(JUICE_DIR)/include",
+					"$(JUICE_DIR)/include/juice",
+					"$(JUICE_DIR)/src",
+				);
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"-fPIC",
+					"-Wall",
+					"-Wextra",
+					"-Wno-conversion",
+					"-Wno-deprecated-pragma",
+				);
+				OTHER_LIBTOOLFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = juice;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = MinSizeRel;
+		};
+		7B83C8577AC14CF4A6A3A81E /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				JUICE_DIR = "$(SRCROOT)/../../../external/libdatachannel/deps/libjuice";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = RelWithDebInfo;
+		};
+		D02D87FF1C2F4DAAA99066AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				JUICE_DIR = "$(SRCROOT)/../../../external/libdatachannel/deps/libjuice";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Release;
+		};
+		D772216C9036479F8548A9E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				JUICE_DIR = "$(SRCROOT)/../../../external/libdatachannel/deps/libjuice";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = Debug;
+		};
+		D89F679C1559468BA3D75F20 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALLOW_TARGET_PLATFORM_SPECIALIZATION = YES;
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEAD_CODE_STRIPPING = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				JUICE_DIR = "$(SRCROOT)/../../../external/libdatachannel/deps/libjuice";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = "watchsimulator watchos macosx iphonesimulator iphoneos driverkit appletvsimulator appletvos";
+				SUPPORTS_MACCATALYST = YES;
+				TVOS_DEPLOYMENT_TARGET = 12.1;
+				USE_HEADERMAP = NO;
+				WATCHOS_DEPLOYMENT_TARGET = 6.1;
+			};
+			name = MinSizeRel;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5CF84B62A7DF4751AD9B267B /* Build configuration list for PBXProject "libjuice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D772216C9036479F8548A9E6 /* Debug */,
+				D02D87FF1C2F4DAAA99066AF /* Release */,
+				D89F679C1559468BA3D75F20 /* MinSizeRel */,
+				7B83C8577AC14CF4A6A3A81E /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DDD53F26BCBA499BA126B0AF /* Build configuration list for PBXNativeTarget "juice" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4D2DAC0E37C541839B10CDF2 /* Debug */,
+				56C6224FFB3B42A8BC0EABA3 /* Release */,
+				576A165E4ACF411F9F7FDFE5 /* MinSizeRel */,
+				51B37A188E584A3381FD6543 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 36834EB237BE484E9B4B59B0 /* Project object */;
+}

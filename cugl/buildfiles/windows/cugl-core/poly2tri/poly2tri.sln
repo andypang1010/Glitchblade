@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "poly2tri", "poly2tri.vcxproj", "{88095B91-162E-4F58-9D8A-F3BF3F9B1213}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88095B91-162E-4F58-9D8A-F3BF3F9B1213}.Debug|x64.ActiveCfg = Debug|x64
+		{88095B91-162E-4F58-9D8A-F3BF3F9B1213}.Debug|x64.Build.0 = Debug|x64
+		{88095B91-162E-4F58-9D8A-F3BF3F9B1213}.Debug|x86.ActiveCfg = Debug|Win32
+		{88095B91-162E-4F58-9D8A-F3BF3F9B1213}.Debug|x86.Build.0 = Debug|Win32
+		{88095B91-162E-4F58-9D8A-F3BF3F9B1213}.Release|x64.ActiveCfg = Release|x64
+		{88095B91-162E-4F58-9D8A-F3BF3F9B1213}.Release|x64.Build.0 = Release|x64
+		{88095B91-162E-4F58-9D8A-F3BF3F9B1213}.Release|x86.ActiveCfg = Release|Win32
+		{88095B91-162E-4F58-9D8A-F3BF3F9B1213}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7537B126-E4C2-4DAD-9348-D68A9E042735}
+	EndGlobalSection
+EndGlobal

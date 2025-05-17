@@ -1,0 +1,917 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		EB0F3CB827FB9FD40037CC66 /* Mac.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB0F3CB327FB9FD40037CC66 /* Mac.xcassets */; };
+		EB0F3CD527FBA2190037CC66 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CC727FBA2180037CC66 /* ForceFeedback.framework */; };
+		EB0F3CD627FBA2190037CC66 /* CoreHaptics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CC827FBA2180037CC66 /* CoreHaptics.framework */; };
+		EB0F3CD727FBA2190037CC66 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CC927FBA2180037CC66 /* CoreFoundation.framework */; };
+		EB0F3CD827FBA2190037CC66 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CCA27FBA2180037CC66 /* Cocoa.framework */; };
+		EB0F3CD927FBA2190037CC66 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CCB27FBA2180037CC66 /* AudioToolbox.framework */; };
+		EB0F3CDA27FBA2190037CC66 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CCC27FBA2180037CC66 /* CoreGraphics.framework */; };
+		EB0F3CDB27FBA2190037CC66 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CCD27FBA2180037CC66 /* CoreAudio.framework */; };
+		EB0F3CDC27FBA2190037CC66 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CCE27FBA2180037CC66 /* CoreVideo.framework */; };
+		EB0F3CDD27FBA2190037CC66 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CCF27FBA2180037CC66 /* OpenGL.framework */; };
+		EB0F3CDE27FBA2190037CC66 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CD027FBA2180037CC66 /* Carbon.framework */; };
+		EB0F3CDF27FBA2190037CC66 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CD127FBA2190037CC66 /* GameController.framework */; };
+		EB0F3CE027FBA2190037CC66 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CD227FBA2190037CC66 /* AVFoundation.framework */; };
+		EB0F3CE127FBA2190037CC66 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CD327FBA2190037CC66 /* IOKit.framework */; };
+		EB0F3CE227FBA2190037CC66 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F3CD427FBA2190037CC66 /* Metal.framework */; };
+		EB6E0E60298C1A3300704E87 /* licenses in Resources */ = {isa = PBXBuildFile; fileRef = EB6E0E5D298C1A3300704E87 /* licenses */; };
+		EB6E0E61298C1A3E00704E87 /* licenses in Resources */ = {isa = PBXBuildFile; fileRef = EB6E0E5D298C1A3300704E87 /* licenses */; };
+		EBAD58462C3CAC2700B77A34 /* libcugl-audio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58392C3CAC1700B77A34 /* libcugl-audio.a */; };
+		EBAD58472C3CAC2700B77A34 /* libcugl-core-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58332C3CAC1700B77A34 /* libcugl-core-mac.a */; };
+		EBAD58482C3CAC2700B77A34 /* libcugl-distrib-physics2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58452C3CAC1700B77A34 /* libcugl-distrib-physics2.a */; };
+		EBAD58492C3CAC2700B77A34 /* libcugl-graphics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58372C3CAC1700B77A34 /* libcugl-graphics.a */; };
+		EBAD584A2C3CAC2700B77A34 /* libcugl-netcode-mac.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58412C3CAC1700B77A34 /* libcugl-netcode-mac.a */; };
+		EBAD584B2C3CAC2700B77A34 /* libcugl-physics2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD583F2C3CAC1700B77A34 /* libcugl-physics2.a */; };
+		EBAD584C2C3CAC2700B77A34 /* libcugl-scene2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD583B2C3CAC1700B77A34 /* libcugl-scene2.a */; };
+		EBAD584D2C3CAC2700B77A34 /* libcugl-scene3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD583D2C3CAC1700B77A34 /* libcugl-scene3.a */; };
+		EBAD584E2C3CAC5000B77A34 /* libcugl-audio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58392C3CAC1700B77A34 /* libcugl-audio.a */; };
+		EBAD584F2C3CAC5000B77A34 /* libcugl-core-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58352C3CAC1700B77A34 /* libcugl-core-ios.a */; };
+		EBAD58502C3CAC5000B77A34 /* libcugl-distrib-physics2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58452C3CAC1700B77A34 /* libcugl-distrib-physics2.a */; };
+		EBAD58512C3CAC5000B77A34 /* libcugl-graphics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58372C3CAC1700B77A34 /* libcugl-graphics.a */; };
+		EBAD58522C3CAC5000B77A34 /* libcugl-netcode-ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD58432C3CAC1700B77A34 /* libcugl-netcode-ios.a */; };
+		EBAD58532C3CAC5000B77A34 /* libcugl-physics2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD583F2C3CAC1700B77A34 /* libcugl-physics2.a */; };
+		EBAD58542C3CAC5000B77A34 /* libcugl-scene2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD583B2C3CAC1700B77A34 /* libcugl-scene2.a */; };
+		EBAD58552C3CAC5000B77A34 /* libcugl-scene3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EBAD583D2C3CAC1700B77A34 /* libcugl-scene3.a */; };
+		EBC7AEDC27FBBD7B001F1467 /* iOS.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB0F3CB127FB9FD40037CC66 /* iOS.xcassets */; };
+		EBC7AEDD27FBBD7B001F1467 /* Landscape.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0F3CB027FB9FD40037CC66 /* Landscape.storyboard */; };
+		EBC7AEDE27FBBD7B001F1467 /* Portrait.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0F3CB527FB9FD40037CC66 /* Portrait.storyboard */; };
+		EBDD8145293CE9F9000BED3C /* CoreHaptics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8138293CE9F8000BED3C /* CoreHaptics.framework */; };
+		EBDD8146293CE9F9000BED3C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8139293CE9F8000BED3C /* CoreGraphics.framework */; };
+		EBDD8147293CE9F9000BED3C /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD813A293CE9F8000BED3C /* CoreServices.framework */; };
+		EBDD8148293CE9F9000BED3C /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD813B293CE9F8000BED3C /* OpenGLES.framework */; };
+		EBDD8149293CE9F9000BED3C /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD813C293CE9F8000BED3C /* Metal.framework */; };
+		EBDD814A293CE9F9000BED3C /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD813D293CE9F8000BED3C /* CoreBluetooth.framework */; };
+		EBDD814B293CE9F9000BED3C /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD813E293CE9F8000BED3C /* CoreAudio.framework */; };
+		EBDD814C293CE9F9000BED3C /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD813F293CE9F8000BED3C /* CoreVideo.framework */; };
+		EBDD814D293CE9F9000BED3C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8140293CE9F9000BED3C /* UIKit.framework */; };
+		EBDD814E293CE9F9000BED3C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8141293CE9F9000BED3C /* QuartzCore.framework */; };
+		EBDD814F293CE9F9000BED3C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8142293CE9F9000BED3C /* Foundation.framework */; };
+		EBDD8150293CE9F9000BED3C /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8143293CE9F9000BED3C /* GameController.framework */; };
+		EBDD8151293CE9F9000BED3C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8144293CE9F9000BED3C /* CoreMotion.framework */; };
+		EBDD8154293CEA45000BED3C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8152293CEA45000BED3C /* AudioToolbox.framework */; };
+		EBDD8155293CEA45000BED3C /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDD8153293CEA45000BED3C /* AVFoundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EBAD58322C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD55E72C3B8E2700B77A34;
+			remoteInfo = "cugl-core-mac";
+		};
+		EBAD58342C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD55FA2C3B8E3600B77A34;
+			remoteInfo = "cugl-core-ios";
+		};
+		EBAD58362C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD56072C3B8E4200B77A34;
+			remoteInfo = "cugl-graphics";
+		};
+		EBAD58382C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD56142C3B8E5100B77A34;
+			remoteInfo = "cugl-audio";
+		};
+		EBAD583A2C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD56212C3B8E5F00B77A34;
+			remoteInfo = "cugl-scene2";
+		};
+		EBAD583C2C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD562E2C3B8E6E00B77A34;
+			remoteInfo = "cugl-scene3";
+		};
+		EBAD583E2C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD563B2C3B8E7C00B77A34;
+			remoteInfo = "cugl-physics2";
+		};
+		EBAD58402C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD56482C3B8E8600B77A34;
+			remoteInfo = "cugl-netcode-mac";
+		};
+		EBAD58422C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD56552C3B8E9100B77A34;
+			remoteInfo = "cugl-netcode-ios";
+		};
+		EBAD58442C3CAC1700B77A34 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = EBAD56622C3B8E9D00B77A34;
+			remoteInfo = "cugl-distrib-physics2";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		EB0F3C9627FB9DCB0037CC66 /* __DISPLAY_NAME__.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "__DISPLAY_NAME__.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB0F3CB027FB9FD40037CC66 /* Landscape.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Landscape.storyboard; sourceTree = "<group>"; };
+		EB0F3CB127FB9FD40037CC66 /* iOS.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iOS.xcassets; sourceTree = "<group>"; };
+		EB0F3CB227FB9FD40037CC66 /* macos.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = macos.entitlements; sourceTree = "<group>"; };
+		EB0F3CB327FB9FD40037CC66 /* Mac.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Mac.xcassets; sourceTree = "<group>"; };
+		EB0F3CB527FB9FD40037CC66 /* Portrait.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Portrait.storyboard; sourceTree = "<group>"; };
+		EB0F3CC727FBA2180037CC66 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
+		EB0F3CC827FBA2180037CC66 /* CoreHaptics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreHaptics.framework; path = System/Library/Frameworks/CoreHaptics.framework; sourceTree = SDKROOT; };
+		EB0F3CC927FBA2180037CC66 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		EB0F3CCA27FBA2180037CC66 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		EB0F3CCB27FBA2180037CC66 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		EB0F3CCC27FBA2180037CC66 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		EB0F3CCD27FBA2180037CC66 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		EB0F3CCE27FBA2180037CC66 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		EB0F3CCF27FBA2180037CC66 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		EB0F3CD027FBA2180037CC66 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		EB0F3CD127FBA2190037CC66 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		EB0F3CD227FBA2190037CC66 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		EB0F3CD327FBA2190037CC66 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		EB0F3CD427FBA2190037CC66 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		EB163904295693D90090F7D4 /* cugl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cugl.xcodeproj; path = ../../buildfiles/apple/cugl.xcodeproj; sourceTree = "<group>"; };
+		EB6E0E5D298C1A3300704E87 /* licenses */ = {isa = PBXFileReference; lastKnownFileType = folder; name = licenses; path = __LICENSES__; sourceTree = "<group>"; };
+		EBC7AEC227FBB41F001F1467 /* __DISPLAY_NAME__.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "__DISPLAY_NAME__.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBC7AEF027FBBEF5001F1467 /* ios.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ios.plist; sourceTree = "<group>"; };
+		EBDD8138293CE9F8000BED3C /* CoreHaptics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreHaptics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreHaptics.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD8139293CE9F8000BED3C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD813A293CE9F8000BED3C /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD813B293CE9F8000BED3C /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD813C293CE9F8000BED3C /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD813D293CE9F8000BED3C /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreBluetooth.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD813E293CE9F8000BED3C /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreAudio.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD813F293CE9F8000BED3C /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD8140293CE9F9000BED3C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD8141293CE9F9000BED3C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD8142293CE9F9000BED3C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD8143293CE9F9000BED3C /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD8144293CE9F9000BED3C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD8152293CEA45000BED3C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
+		EBDD8153293CEA45000BED3C /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		EBE2E0132B794B930091FF11 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/AudioUnit.framework; sourceTree = DEVELOPER_DIR; };
+		EBE2E0172B794BED0091FF11 /* CoreAudioTypes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioTypes.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreAudioTypes.framework; sourceTree = DEVELOPER_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		EB0F3C9327FB9DCB0037CC66 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBAD58472C3CAC2700B77A34 /* libcugl-core-mac.a in Frameworks */,
+				EBAD58462C3CAC2700B77A34 /* libcugl-audio.a in Frameworks */,
+				EBAD58492C3CAC2700B77A34 /* libcugl-graphics.a in Frameworks */,
+				EBAD584C2C3CAC2700B77A34 /* libcugl-scene2.a in Frameworks */,
+				EBAD584D2C3CAC2700B77A34 /* libcugl-scene3.a in Frameworks */,
+				EBAD584B2C3CAC2700B77A34 /* libcugl-physics2.a in Frameworks */,
+				EBAD584A2C3CAC2700B77A34 /* libcugl-netcode-mac.a in Frameworks */,
+				EBAD58482C3CAC2700B77A34 /* libcugl-distrib-physics2.a in Frameworks */,
+				EB0F3CD527FBA2190037CC66 /* ForceFeedback.framework in Frameworks */,
+				EB0F3CD627FBA2190037CC66 /* CoreHaptics.framework in Frameworks */,
+				EB0F3CD727FBA2190037CC66 /* CoreFoundation.framework in Frameworks */,
+				EB0F3CD827FBA2190037CC66 /* Cocoa.framework in Frameworks */,
+				EB0F3CD927FBA2190037CC66 /* AudioToolbox.framework in Frameworks */,
+				EB0F3CDA27FBA2190037CC66 /* CoreGraphics.framework in Frameworks */,
+				EB0F3CDB27FBA2190037CC66 /* CoreAudio.framework in Frameworks */,
+				EB0F3CDC27FBA2190037CC66 /* CoreVideo.framework in Frameworks */,
+				EB0F3CDD27FBA2190037CC66 /* OpenGL.framework in Frameworks */,
+				EB0F3CDE27FBA2190037CC66 /* Carbon.framework in Frameworks */,
+				EB0F3CDF27FBA2190037CC66 /* GameController.framework in Frameworks */,
+				EB0F3CE027FBA2190037CC66 /* AVFoundation.framework in Frameworks */,
+				EB0F3CE127FBA2190037CC66 /* IOKit.framework in Frameworks */,
+				EB0F3CE227FBA2190037CC66 /* Metal.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EBC7AEBF27FBB41F001F1467 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBAD584F2C3CAC5000B77A34 /* libcugl-core-ios.a in Frameworks */,
+				EBAD584E2C3CAC5000B77A34 /* libcugl-audio.a in Frameworks */,
+				EBAD58512C3CAC5000B77A34 /* libcugl-graphics.a in Frameworks */,
+				EBAD58542C3CAC5000B77A34 /* libcugl-scene2.a in Frameworks */,
+				EBAD58552C3CAC5000B77A34 /* libcugl-scene3.a in Frameworks */,
+				EBAD58532C3CAC5000B77A34 /* libcugl-physics2.a in Frameworks */,
+				EBAD58522C3CAC5000B77A34 /* libcugl-netcode-ios.a in Frameworks */,
+				EBAD58502C3CAC5000B77A34 /* libcugl-distrib-physics2.a in Frameworks */,
+				EBDD8154293CEA45000BED3C /* AudioToolbox.framework in Frameworks */,
+				EBDD8155293CEA45000BED3C /* AVFoundation.framework in Frameworks */,
+				EBDD814B293CE9F9000BED3C /* CoreAudio.framework in Frameworks */,
+				EBDD814A293CE9F9000BED3C /* CoreBluetooth.framework in Frameworks */,
+				EBDD8146293CE9F9000BED3C /* CoreGraphics.framework in Frameworks */,
+				EBDD8145293CE9F9000BED3C /* CoreHaptics.framework in Frameworks */,
+				EBDD8151293CE9F9000BED3C /* CoreMotion.framework in Frameworks */,
+				EBDD8147293CE9F9000BED3C /* CoreServices.framework in Frameworks */,
+				EBDD814C293CE9F9000BED3C /* CoreVideo.framework in Frameworks */,
+				EBDD814F293CE9F9000BED3C /* Foundation.framework in Frameworks */,
+				EBDD8150293CE9F9000BED3C /* GameController.framework in Frameworks */,
+				EBDD8149293CE9F9000BED3C /* Metal.framework in Frameworks */,
+				EBDD8148293CE9F9000BED3C /* OpenGLES.framework in Frameworks */,
+				EBDD814E293CE9F9000BED3C /* QuartzCore.framework in Frameworks */,
+				EBDD814D293CE9F9000BED3C /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		EB0F3C8D27FB9DCB0037CC66 = {
+			isa = PBXGroup;
+			children = (
+				EB0F3C9827FB9DCB0037CC66 /* Source */,
+				EB23B0F828BFF70E001EA958 /* Assets */,
+				EB0F3CAE27FB9F700037CC66 /* Resources */,
+				EB0F3C9727FB9DCB0037CC66 /* Products */,
+				EB0F3CC427FBA1D90037CC66 /* Frameworks */,
+				EB163904295693D90090F7D4 /* cugl.xcodeproj */,
+			);
+			sourceTree = "<group>";
+		};
+		EB0F3C9727FB9DCB0037CC66 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EB0F3C9627FB9DCB0037CC66 /* __DISPLAY_NAME__.app */,
+				EBC7AEC227FBB41F001F1467 /* __DISPLAY_NAME__.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EB0F3C9827FB9DCB0037CC66 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Source;
+			path = __SOURCE_DIR__;
+			sourceTree = "<group>";
+		};
+		EB0F3CAE27FB9F700037CC66 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EB6E0E5D298C1A3300704E87 /* licenses */,
+				EBC7AEF027FBBEF5001F1467 /* ios.plist */,
+				EB0F3CB227FB9FD40037CC66 /* macos.entitlements */,
+				EB0F3CB127FB9FD40037CC66 /* iOS.xcassets */,
+				EB0F3CB027FB9FD40037CC66 /* Landscape.storyboard */,
+				EB0F3CB327FB9FD40037CC66 /* Mac.xcassets */,
+				EB0F3CB527FB9FD40037CC66 /* Portrait.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		EB0F3CC427FBA1D90037CC66 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EBC7AEB927FBB280001F1467 /* ios */,
+				EB0F3D1027FBAD990037CC66 /* macos */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EB0F3D1027FBAD990037CC66 /* macos */ = {
+			isa = PBXGroup;
+			children = (
+				EB0F3CCB27FBA2180037CC66 /* AudioToolbox.framework */,
+				EB0F3CD227FBA2190037CC66 /* AVFoundation.framework */,
+				EB0F3CD027FBA2180037CC66 /* Carbon.framework */,
+				EB0F3CCA27FBA2180037CC66 /* Cocoa.framework */,
+				EB0F3CCD27FBA2180037CC66 /* CoreAudio.framework */,
+				EB0F3CC927FBA2180037CC66 /* CoreFoundation.framework */,
+				EB0F3CCC27FBA2180037CC66 /* CoreGraphics.framework */,
+				EB0F3CC827FBA2180037CC66 /* CoreHaptics.framework */,
+				EB0F3CCE27FBA2180037CC66 /* CoreVideo.framework */,
+				EB0F3CC727FBA2180037CC66 /* ForceFeedback.framework */,
+				EB0F3CD127FBA2190037CC66 /* GameController.framework */,
+				EB0F3CD327FBA2190037CC66 /* IOKit.framework */,
+				EB0F3CD427FBA2190037CC66 /* Metal.framework */,
+				EB0F3CCF27FBA2180037CC66 /* OpenGL.framework */,
+			);
+			name = macos;
+			sourceTree = "<group>";
+		};
+		EB163905295693D90090F7D4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				EBAD58332C3CAC1700B77A34 /* libcugl-core-mac.a */,
+				EBAD58352C3CAC1700B77A34 /* libcugl-core-ios.a */,
+				EBAD58372C3CAC1700B77A34 /* libcugl-graphics.a */,
+				EBAD58392C3CAC1700B77A34 /* libcugl-audio.a */,
+				EBAD583B2C3CAC1700B77A34 /* libcugl-scene2.a */,
+				EBAD583D2C3CAC1700B77A34 /* libcugl-scene3.a */,
+				EBAD583F2C3CAC1700B77A34 /* libcugl-physics2.a */,
+				EBAD58412C3CAC1700B77A34 /* libcugl-netcode-mac.a */,
+				EBAD58432C3CAC1700B77A34 /* libcugl-netcode-ios.a */,
+				EBAD58452C3CAC1700B77A34 /* libcugl-distrib-physics2.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		EB23B0F828BFF70E001EA958 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Assets;
+			path = __ASSET_DIR__;
+			sourceTree = "<group>";
+		};
+		EBC7AEB927FBB280001F1467 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				EBE2E0132B794B930091FF11 /* AudioUnit.framework */,
+				EBDD8152293CEA45000BED3C /* AudioToolbox.framework */,
+				EBDD8153293CEA45000BED3C /* AVFoundation.framework */,
+				EBDD813E293CE9F8000BED3C /* CoreAudio.framework */,
+				EBE2E0172B794BED0091FF11 /* CoreAudioTypes.framework */,
+				EBDD813D293CE9F8000BED3C /* CoreBluetooth.framework */,
+				EBDD8139293CE9F8000BED3C /* CoreGraphics.framework */,
+				EBDD8138293CE9F8000BED3C /* CoreHaptics.framework */,
+				EBDD8144293CE9F9000BED3C /* CoreMotion.framework */,
+				EBDD813A293CE9F8000BED3C /* CoreServices.framework */,
+				EBDD813F293CE9F8000BED3C /* CoreVideo.framework */,
+				EBDD8142293CE9F9000BED3C /* Foundation.framework */,
+				EBDD8143293CE9F9000BED3C /* GameController.framework */,
+				EBDD813C293CE9F8000BED3C /* Metal.framework */,
+				EBDD813B293CE9F8000BED3C /* OpenGLES.framework */,
+				EBDD8141293CE9F9000BED3C /* QuartzCore.framework */,
+				EBDD8140293CE9F9000BED3C /* UIKit.framework */,
+			);
+			name = ios;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EB0F3C9527FB9DCB0037CC66 /* app-mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB0F3CA927FB9DCC0037CC66 /* Build configuration list for PBXNativeTarget "app-mac" */;
+			buildPhases = (
+				EB0F3C9227FB9DCB0037CC66 /* Sources */,
+				EB0F3C9327FB9DCB0037CC66 /* Frameworks */,
+				EB0F3C9427FB9DCB0037CC66 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "app-mac";
+			productName = app;
+			productReference = EB0F3C9627FB9DCB0037CC66 /* __DISPLAY_NAME__.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EBC7AEC127FBB41F001F1467 /* app-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EBC7AED827FBB420001F1467 /* Build configuration list for PBXNativeTarget "app-ios" */;
+			buildPhases = (
+				EBC7AEBE27FBB41F001F1467 /* Sources */,
+				EBC7AEBF27FBB41F001F1467 /* Frameworks */,
+				EBC7AEC027FBB41F001F1467 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "app-ios";
+			productName = "app-ios";
+			productReference = EBC7AEC227FBB41F001F1467 /* __DISPLAY_NAME__.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		EB0F3C8E27FB9DCB0037CC66 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1330;
+				TargetAttributes = {
+					EB0F3C9527FB9DCB0037CC66 = {
+						CreatedOnToolsVersion = 13.3;
+					};
+					EBC7AEC127FBB41F001F1467 = {
+						CreatedOnToolsVersion = 13.3;
+					};
+				};
+			};
+			buildConfigurationList = EB0F3C9127FB9DCB0037CC66 /* Build configuration list for PBXProject "app" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = EB0F3C8D27FB9DCB0037CC66;
+			productRefGroup = EB0F3C9727FB9DCB0037CC66 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = EB163905295693D90090F7D4 /* Products */;
+					ProjectRef = EB163904295693D90090F7D4 /* cugl.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				EB0F3C9527FB9DCB0037CC66 /* app-mac */,
+				EBC7AEC127FBB41F001F1467 /* app-ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		EBAD58332C3CAC1700B77A34 /* libcugl-core-mac.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-core-mac.a";
+			remoteRef = EBAD58322C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD58352C3CAC1700B77A34 /* libcugl-core-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-core-ios.a";
+			remoteRef = EBAD58342C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD58372C3CAC1700B77A34 /* libcugl-graphics.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-graphics.a";
+			remoteRef = EBAD58362C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD58392C3CAC1700B77A34 /* libcugl-audio.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-audio.a";
+			remoteRef = EBAD58382C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD583B2C3CAC1700B77A34 /* libcugl-scene2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-scene2.a";
+			remoteRef = EBAD583A2C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD583D2C3CAC1700B77A34 /* libcugl-scene3.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-scene3.a";
+			remoteRef = EBAD583C2C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD583F2C3CAC1700B77A34 /* libcugl-physics2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-physics2.a";
+			remoteRef = EBAD583E2C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD58412C3CAC1700B77A34 /* libcugl-netcode-mac.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-netcode-mac.a";
+			remoteRef = EBAD58402C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD58432C3CAC1700B77A34 /* libcugl-netcode-ios.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-netcode-ios.a";
+			remoteRef = EBAD58422C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		EBAD58452C3CAC1700B77A34 /* libcugl-distrib-physics2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcugl-distrib-physics2.a";
+			remoteRef = EBAD58442C3CAC1700B77A34 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EB0F3C9427FB9DCB0037CC66 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB6E0E61298C1A3E00704E87 /* licenses in Resources */,
+				EB0F3CB827FB9FD40037CC66 /* Mac.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EBC7AEC027FBB41F001F1467 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB6E0E60298C1A3300704E87 /* licenses in Resources */,
+				EBC7AEDC27FBBD7B001F1467 /* iOS.xcassets in Resources */,
+				EBC7AEDD27FBBD7B001F1467 /* Landscape.storyboard in Resources */,
+				EBC7AEDE27FBBD7B001F1467 /* Portrait.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		EB0F3C9227FB9DCB0037CC66 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EBC7AEBE27FBB41F001F1467 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		EB0F3CA727FB9DCC0037CC66 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BOX2D_INCLUDES = __BOX2D_INCLUDE__;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CUGL_INCLUDES = __CUGL_INCLUDE__;
+				DATACH_INCLUDES = __DATACH_INCLUDE__;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					__EXTRA_DEFINES__,
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SDL_INCLUDES)",
+					"$(POLY2_INCLUDES)",
+					"$(CUGL_INCLUDES)",
+					"$(BOX2D_INCLUDES)",
+					"$(DATACH_INCLUDES)",
+					__APPLE_INCLUDE__,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				POLY2_INCLUDES = __POLY2_INCLUDE__;
+				SDKROOT = macosx;
+				SDL_INCLUDES = __SDL_INCLUDE__;
+				VALIDATE_WORKSPACE_SKIPPED_SDK_FRAMEWORKS = "OpenGL OpenGLES";
+			};
+			name = Debug;
+		};
+		EB0F3CA827FB9DCC0037CC66 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BOX2D_INCLUDES = __BOX2D_INCLUDE__;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CUGL_INCLUDES = __CUGL_INCLUDE__;
+				DATACH_INCLUDES = __DATACH_INCLUDE__;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					__EXTRA_DEFINES__,
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(SDL_INCLUDES)",
+					"$(POLY2_INCLUDES)",
+					"$(CUGL_INCLUDES)",
+					"$(BOX2D_INCLUDES)",
+					"$(DATACH_INCLUDES)",
+					__APPLE_INCLUDE__,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				POLY2_INCLUDES = __POLY2_INCLUDE__;
+				SDKROOT = macosx;
+				SDL_INCLUDES = __SDL_INCLUDE__;
+				VALIDATE_WORKSPACE_SKIPPED_SDK_FRAMEWORKS = "OpenGL OpenGLES";
+			};
+			name = Release;
+		};
+		EB0F3CAA27FB9DCC0037CC66 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/resources/macos.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"GL_SILENCE_DEPRECATION=1",
+					__EXTRA_DEFINES__,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SDL_INCLUDES)",
+					"$(CUGL_INCLUDES)",
+					"$(POLY2_INCLUDES)",
+					"$(BOX2D_INCLUDES)",
+					"$(DATACH_INCLUDES)",
+					__APPLE_INCLUDE__,
+					__MACOS_INCLUDE__,
+				);
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = __MAC_APP_ID__;
+				PRODUCT_NAME = "__DISPLAY_NAME__";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		EB0F3CAB27FB9DCC0037CC66 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/resources/macos.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"GL_SILENCE_DEPRECATION=1",
+					__EXTRA_DEFINES__,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SDL_INCLUDES)",
+					"$(CUGL_INCLUDES)",
+					"$(POLY2_INCLUDES)",
+					"$(BOX2D_INCLUDES)",
+					"$(DATACH_INCLUDES)",
+					__APPLE_INCLUDE__,
+					__MACOS_INCLUDE__,
+				);
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = __MAC_APP_ID__;
+				PRODUCT_NAME = "__DISPLAY_NAME__";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		EBC7AED927FBB420001F1467 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 69848UR4YF;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"GLES_SILENCE_DEPRECATION=1",
+					__EXTRA_DEFINES__,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SDL_INCLUDES)",
+					"$(CUGL_INCLUDES)",
+					"$(POLY2_INCLUDES)",
+					"$(BOX2D_INCLUDES)",
+					"$(DATACH_INCLUDES)",
+					__APPLE_INCLUDE__,
+					__IOS_INCLUDE__,
+				);
+				INFOPLIST_FILE = Resources/ios.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = Landscape;
+				INFOPLIST_KEY_UIMainStoryboardFile = Landscape;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationLandscapeRight;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = __IOS_APP_ID__;
+				PRODUCT_NAME = "__DISPLAY_NAME__";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EBC7AEDA27FBB420001F1467 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 69848UR4YF;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"GLES_SILENCE_DEPRECATION=1",
+					__EXTRA_DEFINES__,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(SDL_INCLUDES)",
+					"$(CUGL_INCLUDES)",
+					"$(POLY2_INCLUDES)",
+					"$(BOX2D_INCLUDES)",
+					"$(DATACH_INCLUDES)",
+					__APPLE_INCLUDE__,
+					__IOS_INCLUDE__,
+				);
+				INFOPLIST_FILE = Resources/ios.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = Landscape;
+				INFOPLIST_KEY_UIMainStoryboardFile = Landscape;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationLandscapeRight;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationLandscapeRight;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = __IOS_APP_ID__;
+				PRODUCT_NAME = "__DISPLAY_NAME__";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		EB0F3C9127FB9DCB0037CC66 /* Build configuration list for PBXProject "app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB0F3CA727FB9DCC0037CC66 /* Debug */,
+				EB0F3CA827FB9DCC0037CC66 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB0F3CA927FB9DCC0037CC66 /* Build configuration list for PBXNativeTarget "app-mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB0F3CAA27FB9DCC0037CC66 /* Debug */,
+				EB0F3CAB27FB9DCC0037CC66 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EBC7AED827FBB420001F1467 /* Build configuration list for PBXNativeTarget "app-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EBC7AED927FBB420001F1467 /* Debug */,
+				EBC7AEDA27FBB420001F1467 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = EB0F3C8E27FB9DCB0037CC66 /* Project object */;
+}
+

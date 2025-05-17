@@ -1,0 +1,37 @@
+app-id: __APP_ID__
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+command: flatpak-run.sh
+finish-args:
+  # we want access to joysticks
+  - --device=all
+  # X11 + XShm access
+  - --share=ipc
+  - --socket=x11
+  # Wayland access
+  - --socket=wayland
+  # Needs to talk to the network:
+  - --share=network
+  # Needs sound
+  - --socket=pulseaudio
+  # Needs to save files locally
+  - --filesystem=xdg-documents
+modules:
+  - glew.json
+  - glu-9.json
+  - name: __SHORT__
+    buildsystem: simple
+    build-commands:
+    - echo $FLATPAK_BUILDER_BUILDDIR
+    - ls -a $FLATPAK_BUILDER_BUILDDIR
+    - echo $FLATPAK_DEST
+    - ls -a $FLATPAK_DEST
+    - install -D flatpak-run.sh /app/bin/flatpak-run.sh
+    - mkdir /app/data
+    - cp -r * /app/data/
+    sources:
+    - type: dir
+      path: ../cmake/install/
+    - type: file
+      path: flatpak-run.sh

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\external\flac\include\share\win_utf8_io.h" />
+    <ClInclude Include="..\..\..\external\kissfft\kfc.h" />
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fft.h" />
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fftnd.h" />
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fftndr.h" />
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fftr.h" />
+    <ClInclude Include="..\..\..\external\kissfft\kiss_fft_log.h" />
+    <ClInclude Include="..\..\..\external\minimp3\minimp3.h" />
+    <ClInclude Include="..\..\..\external\minimp3\minimp3_ex.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\backends.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\bitrate.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\codebook.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\codec_internal.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\envelope.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\highlevel.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\lookup.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\lookup_data.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\lpc.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\lsp.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\masking.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\mdct.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\misc.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\os.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\psy.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\registry.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\scales.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\smallft.h" />
+    <ClInclude Include="..\..\..\external\vorbis\lib\window.h" />
+    <ClInclude Include="..\..\..\include\SDL_atk.h" />
+    <ClInclude Include="..\..\..\src\atk\audio\ATK_Redistribute.h" />
+    <ClInclude Include="..\..\..\src\atk\audio\ATK_Reformat.h" />
+    <ClInclude Include="..\..\..\src\atk\codec\ATK_CodecWav_c.h" />
+    <ClInclude Include="..\..\..\src\atk\codec\ATK_Codec_c.h" />
+    <ClInclude Include="..\..\..\src\atk\file\ATK_file_c.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\bitmath.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\bitreader.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\bitwriter.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\cpu.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\crc.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed_intrin_avx2.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed_intrin_sse2.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed_intrin_sse42.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\fixed_intrin_ssse3.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\float.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\format.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_avx2.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_fma.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_neon.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_sse2.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\lpc_intrin_sse41.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\md5.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\memory.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\metadata_iterators.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\metadata_object.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\ogg_decoder_aspect.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\ogg_encoder_aspect.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\ogg_helper.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\ogg_mapping.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_decoder.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder_framing.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder_intrin_avx2.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder_intrin_sse2.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\stream_encoder_intrin_ssse3.c" />
+    <ClCompile Include="..\..\..\external\flac\src\libFLAC\window.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\flac\src\share\win_utf8_io\win_utf8_io.c" />
+    <ClCompile Include="..\..\..\external\kissfft\kfc.c" />
+    <ClCompile Include="..\..\..\external\kissfft\kiss_fft.c" />
+    <ClCompile Include="..\..\..\external\kissfft\kiss_fftnd.c" />
+    <ClCompile Include="..\..\..\external\kissfft\kiss_fftndr.c" />
+    <ClCompile Include="..\..\..\external\kissfft\kiss_fftr.c" />
+    <ClCompile Include="..\..\..\external\ogg\src\bitwise.c" />
+    <ClCompile Include="..\..\..\external\ogg\src\framing.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\analysis.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\bitrate.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\block.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\codebook.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\envelope.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\floor0.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\floor1.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\info.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\lookup.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\lpc.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\external\vorbis\lib\lsp.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\mapping0.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\mdct.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\psy.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\registry.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\res0.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\sharedbook.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\smallft.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\synthesis.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\vorbisenc.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\vorbisfile.c" />
+    <ClCompile Include="..\..\..\external\vorbis\lib\window.c">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\atk\audio\ATK_AlgoReverb.c" />
+    <ClCompile Include="..\..\..\src\atk\audio\ATK_AudioCVT.c" />
+    <ClCompile Include="..\..\..\src\atk\audio\ATK_LatencyAdapter.c" />
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_Codec.c" />
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_CodecFLAC.c" />
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_CodecMP3.c" />
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_CodecVorbis.c" />
+    <ClCompile Include="..\..\..\src\atk\codec\ATK_CodecWAV.c" />
+    <ClCompile Include="..\..\..\src\atk\dsp\ATK_DSPConvolve.c" />
+    <ClCompile Include="..\..\..\src\atk\dsp\ATK_DSPFilter.c" />
+    <ClCompile Include="..\..\..\src\atk\dsp\ATK_DSPTransform.c" />
+    <ClCompile Include="..\..\..\src\atk\dsp\ATK_DSPWaveform.c" />
+    <ClCompile Include="..\..\..\src\atk\file\ATK_file.c" />
+    <ClCompile Include="..\..\..\src\atk\math\ATK_MathComplex.c" />
+    <ClCompile Include="..\..\..\src\atk\math\ATK_MathPoly.c" />
+    <ClCompile Include="..\..\..\src\atk\math\ATK_MathVec.c" />
+    <ClCompile Include="..\..\..\src\atk\rand\ATK_Rand.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="version.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{531302a4-1972-4dd5-a0cd-24ee1d93d2fb}</ProjectGuid>
+    <RootNamespace>sdl2atk</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\sdl2atk\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)x86\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)objs\sdl2atk\x86\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(SolutionDir)objs\sdl2atk\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)objs\sdl2atk\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;FLAC__NO_DLL;_POSIX_PTHREAD_SEMANTICS;__STDC_WANT_IEC_60559_BFP_EXT__;__STDC_WANT_IEC_60559_DFP_EXT__;__STDC_WANT_IEC_60559_FUNCS_EXT__;__STDC_WANT_IEC_60559_TYPES_EXT__;__STDC_WANT_LIB_EXT2__;__STDC_WANT_MATH_SPEC_FUNCS__;_TANDEM_SOURCE;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_USE_MATH_DEFINES;kiss_fft_scalar=float;LOAD_FLAC;LOAD_MP3;LOAD_VORB;LOAD_WAV;SAVE_FLAC;SAVE_VORB;SAVE_WAV;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\flac;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\external\kissfft;$(ProjectDir)..\..\..\external\flac\include;$(ProjectDir)..\..\..\external\flac\src\libFLAC\include;$(ProjectDir)..\..\..\external\minimp3;$(ProjectDir)..\..\..\external\ogg\include;$(ProjectDir)..\..\..\external\vorbis\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4005;4068;4267;4244;4305;4312;4334;4996;6001;6255;6262;6297;6308;6385;6386;6387;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <UseFullPaths>true</UseFullPaths>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>/IGNORE:4042 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;FLAC__NO_DLL;_POSIX_PTHREAD_SEMANTICS;__STDC_WANT_IEC_60559_BFP_EXT__;__STDC_WANT_IEC_60559_DFP_EXT__;__STDC_WANT_IEC_60559_FUNCS_EXT__;__STDC_WANT_IEC_60559_TYPES_EXT__;__STDC_WANT_LIB_EXT2__;__STDC_WANT_MATH_SPEC_FUNCS__;_TANDEM_SOURCE;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_USE_MATH_DEFINES;kiss_fft_scalar=float;LOAD_FLAC;LOAD_MP3;LOAD_VORB;LOAD_WAV;SAVE_FLAC;SAVE_VORB;SAVE_WAV;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\flac;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\external\kissfft;$(ProjectDir)..\..\..\external\flac\include;$(ProjectDir)..\..\..\external\flac\src\libFLAC\include;$(ProjectDir)..\..\..\external\minimp3;$(ProjectDir)..\..\..\external\ogg\include;$(ProjectDir)..\..\..\external\vorbis\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4005;4068;4267;4244;4305;4312;4334;4996;6001;6255;6262;6297;6308;6385;6386;6387;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>/IGNORE:4042 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;FLAC__NO_DLL;_POSIX_PTHREAD_SEMANTICS;__STDC_WANT_IEC_60559_BFP_EXT__;__STDC_WANT_IEC_60559_DFP_EXT__;__STDC_WANT_IEC_60559_FUNCS_EXT__;__STDC_WANT_IEC_60559_TYPES_EXT__;__STDC_WANT_LIB_EXT2__;__STDC_WANT_MATH_SPEC_FUNCS__;_TANDEM_SOURCE;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_USE_MATH_DEFINES;kiss_fft_scalar=float;LOAD_FLAC;LOAD_MP3;LOAD_VORB;LOAD_WAV;SAVE_FLAC;SAVE_VORB;SAVE_WAV;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>Default</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\flac;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\external\kissfft;$(ProjectDir)..\..\..\external\flac\include;$(ProjectDir)..\..\..\external\flac\src\libFLAC\include;$(ProjectDir)..\..\..\external\minimp3;$(ProjectDir)..\..\..\external\ogg\include;$(ProjectDir)..\..\..\external\vorbis\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4005;4068;4267;4244;4305;4312;4334;4996;6001;6255;6262;6297;6308;6385;6386;6387;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SupportJustMyCode>false</SupportJustMyCode>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <UseFullPaths>true</UseFullPaths>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>/IGNORE:4042 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;FLAC__NO_DLL;_POSIX_PTHREAD_SEMANTICS;__STDC_WANT_IEC_60559_BFP_EXT__;__STDC_WANT_IEC_60559_DFP_EXT__;__STDC_WANT_IEC_60559_FUNCS_EXT__;__STDC_WANT_IEC_60559_TYPES_EXT__;__STDC_WANT_LIB_EXT2__;__STDC_WANT_MATH_SPEC_FUNCS__;_TANDEM_SOURCE;HAVE_CONFIG_H;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_USE_MATH_DEFINES;kiss_fft_scalar=float;LOAD_FLAC;LOAD_MP3;LOAD_VORB;LOAD_WAV;SAVE_FLAC;SAVE_VORB;SAVE_WAV;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(ProjectDir)include\flac;$(ProjectDir)..\..\..\include;$(ProjectDir)..\..\..\external\kissfft;$(ProjectDir)..\..\..\external\flac\include;$(ProjectDir)..\..\..\external\flac\src\libFLAC\include;$(ProjectDir)..\..\..\external\minimp3;$(ProjectDir)..\..\..\external\ogg\include;$(ProjectDir)..\..\..\external\vorbis\include;$(ProjectDir)..\..\..\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4005;4068;4267;4244;4305;4312;4334;4996;6001;6255;6262;6297;6308;6385;6386;6387;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalOptions>/IGNORE:4042 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

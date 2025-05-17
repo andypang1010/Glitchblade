@@ -1,0 +1,63 @@
+# sdl2_atk cmake project-config input for CMakeLists.txt script
+
+include(FeatureSummary)
+set_package_properties(SDL2_atk PROPERTIES
+    URL "https://gdiac.cs.cornell.edu"
+    DESCRIPTION "SDL_atk is an audio toolkit library"
+)
+
+set(SDL2_atk_FOUND ON)
+
+set(SDL2ATK_FLAC  @LOAD_FLAC@)
+set(SDL2ATK_VORB  @LOAD_VORB@)
+set(SDL2ATK_MP3   @LOAD_MP3@)
+set(SDL2ATK_WAV   @LOAD_WAV@)
+
+set(SDL2ATK_WAV_SAVE @SDL2ATK_WAV_SAVE@)
+
+set(SDL2ATK_VENDORED  ON)
+
+set(SDL2ATK_SDL2_REQUIRED_VERSION  @SDL_REQUIRED_VERSION@)
+
+if(NOT SDL2ATK_VENDORED)
+    set(_sdl_cmake_module_path "${CMAKE_MODULE_PATH}")
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+endif()
+
+include(CMakeFindDependencyMacro)
+
+if(SDL2ATK_FLAC AND NOT SDL2ATK_VENDORED AND NOT TARGET FLAC)
+    find_dependency(libFLAC @LIBAVIF_MINIMUM_VERSION@)
+endif()
+
+if(SDL2ATK_VORB AND NOT SDL2ATK_VENDORED)
+ if (NOT TARGET vorbis)
+    find_dependency(libvorbis @LIBVORBIS_MINIMUM_VERSION@)
+ endif()
+ if (NOT TARGET vorbisenc)
+    find_dependency(libvorbisenc @LIBVORBIS_MINIMUM_VERSION@)
+ endif()
+ if (NOT TARGET vorbisfile)
+    find_dependency(libvorbisfile @LIBVORBIS_MINIMUM_VERSION@)
+ endif()
+endif()
+
+
+#FIXME: can't add SDL2ATK_SDL2_REQUIRED_VERSION since not all SDL2 installs ship SDL2ConfigVersion.cmake
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SDL2_atk-shared-targets.cmake")
+    include("${CMAKE_CURRENT_LIST_DIR}/SDL2_atk-shared-targets.cmake")
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SDL2_atk-static-targets.cmake")
+    include(CheckLanguage)
+    check_language(CXX)
+    if(SDL2ATK_VENDORED AND NOT CMAKE_CXX_COMPILER AND NOT _sdl2atk_nowarning)
+        message(WARNING "CXX language not enabled. Linking to SDL2_atk::SDL2_atk-static might fail.")
+    endif()
+    include("${CMAKE_CURRENT_LIST_DIR}/SDL2_atk-static-targets.cmake")
+endif()
+
+if(NOT SDL2ATK_VENDORED)
+    set(CMAKE_MODULE_PATH "${_sdl_cmake_module_path}")
+    unset(_sdl_cmake_module_path)
+endif()
