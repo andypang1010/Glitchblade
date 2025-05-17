@@ -1,0 +1,24 @@
+{
+    "sounds": {
+        "guard_1": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v03.wav",
+            "volume":   0.5
+        },
+        "guard_2": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v05.wav",
+            "volume":   0.5
+        },
+        "guard_3": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v04.wav",
+            "volume":   0.5
+        },
+        "guard_4": {
+            "type":     "sample",
+            "file":     "sounds/player/guard/guard_unid_v08.wav",
+            "volume":   0.5
+        }
+    }
+}
