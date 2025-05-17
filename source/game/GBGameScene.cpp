@@ -500,11 +500,11 @@ void GameScene::fixedUpdate(float step) {
     
     processScreenShake();
 
-    auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
+    auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX() / (2 * 0.0004006410 * Application::get()->getDisplayWidth());
     bool isKnocked = _levelController->getPlayerModel()->isKnockbackActive();
     auto currPlayerVel = _levelController->getPlayerModel()->getVX();
-    auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
-    auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
+    auto cameraPosLX = (_camera->getPosition().x - _camera->getViewport().size.width / 2) / (2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    auto cameraPosRX = (_camera->getPosition().x + _camera->getViewport().size.width / 2) / (2 * 0.0004006410 * Application::get()->getDisplayWidth());
     float leftBound = _levelController->getLeftWall()->xPosition;
     float rightBound = _levelController->getRightWall()->xPosition;
     
@@ -517,8 +517,8 @@ void GameScene::fixedUpdate(float step) {
     
     CULog("PlayerPos: %f", currPlayerPosX);
     CULog("CamLPos: %f", cameraPosLX);
-    CULog("CamLPos: %f", cameraPosRX);
-    CULog("CamLocked?: %d", _cameraLocked);
+    CULog("CamRPos: %f", cameraPosRX);
+    CULog("CamLocked?: %s", _cameraLocked ? "True" : "False");
 	CULog("LeftBound: %f", leftBound);
 	CULog("RightBound: %f", rightBound);
     CULog("");
@@ -532,17 +532,17 @@ void GameScene::fixedUpdate(float step) {
     if (cameraPosLX < leftBound || cameraPosRX >= rightBound) {
         _cameraLocked = true;
         if (cameraPosLX <= leftBound) {
-            if (currPlayerPosX > leftBound + _camera->getViewport().size.width * 0.66) {
+            if (currPlayerPosX > leftBound + _camera->getViewport().size.width / (2 * 0.0004006410 * Application::get()->getDisplayWidth()) * 0.66) {
                 _cameraLocked = false;
             }
         } else {
-            if (currPlayerPosX < rightBound - _camera->getViewport().size.width * 0.66) {
+            if (currPlayerPosX < rightBound - _camera->getViewport().size.width / (2 * 0.0004006410 * Application::get()->getDisplayWidth()) * 0.66) {
                 _cameraLocked = false;
             }
         }
     }
     if (!_cameraLocked) {
-        _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
+        _camera->translate(Vec2((currPlayerPosX - _camera->getPosition().x / (2 * 0.0004006410 * Application::get()->getDisplayWidth())) * .05, 0));
         _camera->update();
         if (currPlayerVel > 0 && !isKnocked) {
             updateLayersLeft();
