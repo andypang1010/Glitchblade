@@ -36,12 +36,6 @@ protected:
 
     /** The controllers for the loading screen */
     cugl::scene2::LoadingScene _loading;
-    cugl::scene2::LoadingScene _loading1;
-    cugl::scene2::LoadingScene _loading2;
-    cugl::scene2::LoadingScene _loading3;
-    cugl::scene2::LoadingScene _loading4;
-    cugl::scene2::LoadingScene _loading5;
-    cugl::scene2::LoadingScene _loadingM;
 
 
 

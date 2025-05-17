@@ -20,6 +20,7 @@ protected:
 
     int _scene_to_load = 0;
     int _ui_switch;
+    bool _setting = false;
 
 public:
 #pragma mark -

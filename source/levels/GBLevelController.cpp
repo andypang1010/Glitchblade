@@ -425,7 +425,7 @@ void LevelController::createPlatform(Rect rect)
     std::shared_ptr<PolygonNode> rightWallSprite = scene2::PolygonNode::alloc();
     
     std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(Texture::getBlank());
-    platformSprite->setContentSize(rect.size * _constantsJSON->get("scene")->getFloat("scale"));
+    platformSprite->setContentSize(rect.size * 32);
     platformSprite->setVisible(true);
     platformSprite->setColor(Color4(40,40,40));
     
@@ -680,7 +680,7 @@ std::shared_ptr<LevelController::WallZone> LevelController::createWall(float xPo
     wallObj->setDebugScene(_debugNodeRef);
     sprite->setPosition(wallObj->getPosition() * _scale);
     _worldNode->addChild(sprite);
-    float pixel_pos = xPos * 1024;
+    float pixel_pos = xPos * 1024 * 2 * 0.0004006410 * Application::get()->getDisplayWidth();
     auto wallZone = std::make_shared<WallZone>(WallZone{wallObj, sprite, pixel_pos});
     if (isLeft) {
         _leftWallZone = wallZone;
@@ -704,7 +704,7 @@ void LevelController::removeWall(std::shared_ptr<WallZone> wallZone) {
 
 void LevelController::updateRightZone(int index) {
     removeWall(_rightWallZone);
-    createWall(_currentLevel->getWalls()[index].second, false);
+    createWall(_currentLevel->getWalls()[index].second / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), false);
     _zoneUpdate = true;
     _nextTrigger = _currentLevel->getWalls()[index].first*1024;
     _enemiesJSON->get("world_info")->get("worldRight")->set(_rightWallZone->xPosition);
@@ -712,7 +712,7 @@ void LevelController::updateRightZone(int index) {
 
 void LevelController::updateLeftZone(int index) {
     removeWall(_leftWallZone);
-    createWall(_currentLevel->getWalls()[index].first, true);
+    createWall(_currentLevel->getWalls()[index].first / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), true);
     _zoneUpdate = false;
     _playerInNextZone = false;
     _enemiesJSON->get("world_info")->get("worldLeft")->set(_leftWallZone->xPosition);

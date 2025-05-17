@@ -39,23 +39,23 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     //move this to new function
     _groundIdleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_idle"), 3, 5, 15);
     _groundIdleSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _groundIdleSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _groundIdleSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _groundIdleSprite->setName("groundIdle");
 
     _airIdleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_idle"), 3, 5, 15);
     _airIdleSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _airIdleSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _airIdleSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _airIdleSprite->setName("airIdle");
 
     _groundStunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_stun"), 6, 9, 53);
     _groundStunSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _groundStunSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _groundStunSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _groundStunSprite->setName("groundStun");
     stunFrames = 20;
 
     _airStunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_stun"), 6, 9, 53);
     _airStunSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _airStunSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _airStunSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _airStunSprite->setName("airStun");
 
     _uppercutSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_uppercut"), 3, 4, 12);
@@ -100,7 +100,7 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
     _shootLaserSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_shoot_laser"), 5, 9, 38);
     _shootLaserSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _shootLaserSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _shootLaserSprite->setScale(scale * 4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _shootLaserSprite->setName("shootLaser");
 
     _shootWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_shoot_wait"), 2, 4, 7);
@@ -116,24 +116,24 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 	_groundDeadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_dead"), 5, 9, 45);
     _groundDeadSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _groundDeadSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _groundDeadSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _groundDeadSprite->setName("groundDead");
     _groundDeadSprite->setVisible(false);
 
     _airDeadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_dead"), 5, 9, 45);
     _airDeadSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _airDeadSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _airDeadSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _airDeadSprite->setName("airDead");
 	_airDeadSprite->setVisible(false);
 
 	_groundTransformSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_transform"), 4, 4, 16);
 	_groundTransformSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-	_groundTransformSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_groundTransformSprite->setScale(scale * 4 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_groundTransformSprite->setName("groundTransform");
 
 	_airTransformSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_transform"), 4, 4, 16);
 	_airTransformSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-	_airTransformSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_airTransformSprite->setScale(scale * 4 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_airTransformSprite->setName("airTransform");
 
     _spawnSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("enemy_spawn"), 4, 7, 28);
@@ -429,8 +429,8 @@ void Boss3Model::AIMove() {
     }
     else {
         if (_moveDuration > 0) {
-            if (_worldTop - getPosition().y <= 4) { // near top, quickly move down
-                setVerticalMovement(-getForce()*8);
+            if (_worldTop - getPosition().y <= 6) { // near top, quickly move down
+                setVerticalMovement(-getForce()*3);
             }
             else {
                 if (getPosition().y <= 10) {
