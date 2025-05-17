@@ -331,9 +331,10 @@ void GameScene::setComplete(bool value) {
         int spawnedCount = _levelController->getSpawnedEnemyCount();
         int totalCount = _levelController->getTotalEnemyCount();
         _ui->updateStats(timeSpent, parryCount, spawnedCount, totalCount);
-        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
-        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
+        // play win music
+//        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+//        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+//        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         _ui->showHeadsUpDisplay(false, false);
         _ui->showWinPage(true);
         setPaused(true);
@@ -362,9 +363,10 @@ void GameScene::setFailure(bool value) {
     bool change = _complete != value;
     _failed = value;
     if (value && change) {
-        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
-        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
+        // play lose music
+//        std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+//        std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
+//        AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
         
         if (_ui) {
             float timeSpent = _levelController->getTimeSpentInLevel();
