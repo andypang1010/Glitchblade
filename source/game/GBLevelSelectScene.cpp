@@ -2,14 +2,14 @@
 
 using namespace cugl::audio;
 
-LevelSelectScene::LevelSelectScene() : _ui(nullptr), _scene_to_load(0), _ui_switch("") {}
+LevelSelectScene::LevelSelectScene() : _ui(nullptr), _scene_to_load(0), _ui_switch(7) {}
 
 void LevelSelectScene::dispose()
 {
 	_ui = nullptr;
 }
 
-bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int highestPlayableLevel, bool firsttime)
+bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int highestPlayableLevel, int scene)
 {
     if (assets == nullptr) {
         return false;
@@ -29,7 +29,7 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
         return false;
     }
 
-    _ui = GBMenuUI::alloc(_assets, firsttime);
+    _ui = GBMenuUI::alloc(_assets, scene);
     if (_ui != nullptr) {
         _ui->setLevel1Callback([this]() { _scene_to_load = 1; });
         _ui->setLevel2Callback([this]() { _scene_to_load = 2; });
@@ -37,10 +37,12 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
         _ui->setLevel4Callback([this]() { _scene_to_load = 3; });
         _ui->setLevel5Callback([this]() { _scene_to_load = 3; });
 
-        _ui->setStartCallback([this]() { _ui_switch = "levelselect"; CULog("Start pressed");});
-        _ui->setInfoCallback([this]() { _ui_switch = "info"; CULog("Info pressed");});
-        _ui->setHomeSettingCallback([this]() { _ui_switch = "setting"; CULog("Home Setting pressed");});
-        _ui->setHomeCallback([this]() { _ui_switch = "home"; CULog("Home pressed");});
+        _ui->setStartCallback([this, highestPlayableLevel]() { _ui_switch = std::max(highestPlayableLevel - 1, 1); CULog("Start pressed");});
+        _ui->setHomeCallback([this]() { _ui_switch = 0; CULog("Home pressed");});
+        _ui->setInfoCallback([this]() { _ui_switch = -1; CULog("Info pressed");});
+        _ui->setHomeSettingCallback([this]() { _ui_switch = -2; CULog("Home Setting pressed");});
+        _ui->setPreviousSceneCallback([this]() { _ui_switch -= 1; CULog("Previous Scene pressed");});
+        _ui->setNextSceneCallback([this]() { _ui_switch += 1; CULog("Next Scene pressed");});
         addChild(_ui);
         _ui->setHighestPlayable(highestPlayableLevel);
     }
@@ -53,32 +55,53 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
 }
 
 void LevelSelectScene::update(float dt) {
-    if (_ui_switch == "levelselect") {
+    if (_ui_switch == 1) {
         _ui->showHome(false);
-//        _ui->showLevelSelectionHead(true);
+        _ui->showLevelSelectionHead(true);
         _ui->showLevelSelection1(true);
+        _ui->showLevelSelection2(false);
     }
-    else if (_ui_switch == "info") {
+    else if (_ui_switch == 2) {
         _ui->showHome(false);
-//        _ui->showInfo(true);
+        _ui->showLevelSelectionHead(true);
+        _ui->showLevelSelection1(false);
+        _ui->showLevelSelection2(true);
+        _ui->showLevelSelection3(false);
     }
-    else if (_ui_switch == "setting") {
+    else if (_ui_switch == 3) {
+        _ui->showHome(false);
+        _ui->showLevelSelectionHead(true);
+        _ui->showLevelSelection2(false);
+        _ui->showLevelSelection3(true);
+        _ui->showLevelSelection4(false);
+    }
+    else if (_ui_switch == 4) {
+        _ui->showHome(false);
+        _ui->showLevelSelectionHead(true);
+        _ui->showLevelSelection3(false);
+        _ui->showLevelSelection4(true);
+//        _ui->showLevelSelection5(false);
+    }
+    else if (_ui_switch == -1) {
+        _ui->showHome(false);
+        _ui->showInfo(true);
+    }
+    else if (_ui_switch == -2) {
         _ui->showHome(false);
 //        _ui->showHomeSetting(true);
     }
-    else if (_ui_switch == "home") {
-//        _ui->showLevelSelectionHead(false);
+    else if (_ui_switch == 0 || _ui_switch == 5) {
+        _ui->showLevelSelectionHead(false);
         _ui->showLevelSelection1(false);
         _ui->showLevelSelection2(false);
         _ui->showLevelSelection3(false);
         _ui->showLevelSelection4(false);
-//        _ui->showInfo(false);
+        _ui->showInfo(false);
 //        _ui->showHomeSetting(false);
         _ui->showHome(true);
     }
 
     // Reset label after acting
-    _ui_switch = "";
 }
 
 int LevelSelectScene::sceneToLoad()

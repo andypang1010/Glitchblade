@@ -147,7 +147,7 @@ void GlitchbladeApp::update(float dt) {
         _loaded = true;
         int highestPlayableLevel = loadProgress();
         setDeterministic(true);
-        initLevelSelectScene(highestPlayableLevel, true);
+        initLevelSelectScene(highestPlayableLevel, 0);
     }
 }
 
@@ -179,11 +179,11 @@ void GlitchbladeApp::onLevelCompleted(int levelNum) {
     }
 }
 
-void GlitchbladeApp::initLevelSelectScene(int highestPlayableLevel, bool firsttime) {
+void GlitchbladeApp::initLevelSelectScene(int highestPlayableLevel, int scene) {
     CULog("TRYING TO INIT WITH HIGHEST OF: %d", highestPlayableLevel);
     _gameplay = nullptr;
     _levelSelect = std::make_shared<LevelSelectScene>();
-    _levelSelect->init(_assets, highestPlayableLevel, firsttime);
+    _levelSelect->init(_assets, highestPlayableLevel, scene);
     _levelSelect->setSpriteBatch(_batch);
 }
 
@@ -354,7 +354,7 @@ void GlitchbladeApp::draw() {
             _gameplay->render();
 
             if (_gameplay->doQuit()) {
-                initLevelSelectScene(loadProgress(), false);
+                initLevelSelectScene(loadProgress(), std::max(loadProgress() - 1, 1));
             }
             else if (_gameplay->continueNextLevel()) {
                 _currentScene += 1;
@@ -362,7 +362,7 @@ void GlitchbladeApp::draw() {
                     initGameScene(_currentScene);
                 } else {
                     CULog("Did all levels!");
-                    initLevelSelectScene(loadProgress(), false);
+                    initLevelSelectScene(loadProgress(), std::max(loadProgress() - 1, 1));
                 }
             }
         }

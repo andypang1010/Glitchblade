@@ -35,6 +35,8 @@ protected:
     // Level Selection Head buttons
     std::shared_ptr<cugl::scene2::Button> _homeButton;
     std::shared_ptr<cugl::scene2::Button> _levelSettingButton;
+    std::shared_ptr<cugl::scene2::Button> _previousSceneButton;
+    std::shared_ptr<cugl::scene2::Button> _nextSceneButton;
     
     // Level buttons
     std::shared_ptr<cugl::scene2::Button> _level1Button;
@@ -47,12 +49,17 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _startButton;
     std::shared_ptr<cugl::scene2::Button> _infoButton;
     std::shared_ptr<cugl::scene2::Button> _homeSettingButton;
+    
+    // Info button
+    std::shared_ptr<cugl::scene2::Button> _infoHomeButton;
 
     // Callback handlers
     std::function<void()> _startCallback;
     std::function<void()> _infoCallback;
     std::function<void()> _homeSettingCallback;
     std::function<void()> _homeCallback;
+    std::function<void()> _previousSceneCallback;
+    std::function<void()> _nextSceneCallback;
     std::function<void()> _level1Callback;
     std::function<void()> _level2Callback;
     std::function<void()> _level3Callback;
@@ -65,11 +72,11 @@ public:
     ~GBMenuUI() { dispose(); }
 
     virtual void dispose() override;
-    bool init(const std::shared_ptr<cugl::AssetManager>& assets, bool firsttime);
+    bool init(const std::shared_ptr<cugl::AssetManager>& assets, int scene);
 
-    static std::shared_ptr<GBMenuUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets, bool firsttime) {
+    static std::shared_ptr<GBMenuUI> alloc(const std::shared_ptr<cugl::AssetManager>& assets, int scene) {
         std::shared_ptr<GBMenuUI> result = std::make_shared<GBMenuUI>();
-        return (result->init(assets, firsttime) ? result : nullptr);
+        return (result->init(assets, scene) ? result : nullptr);
     }
 
     // Setup methods for each UI section
@@ -100,6 +107,8 @@ public:
     void setInfoCallback(const std::function<void()>& callback) { _infoCallback = callback; }
     void setHomeSettingCallback(const std::function<void()>& callback) { _homeSettingCallback = callback; }
     void setHomeCallback(const std::function<void()>& callback) { _homeCallback = callback; }
+    void setPreviousSceneCallback(const std::function<void()>& callback) { _previousSceneCallback = callback; }
+    void setNextSceneCallback(const std::function<void()>& callback) { _nextSceneCallback = callback; }
     void setLevel1Callback(const std::function<void()>& callback) { _level1Callback = callback; }
     void setLevel2Callback(const std::function<void()>& callback) { _level2Callback = callback; }
     void setLevel3Callback(const std::function<void()>& callback) { _level3Callback = callback; }
