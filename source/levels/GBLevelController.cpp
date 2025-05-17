@@ -707,6 +707,7 @@ void LevelController::updateRightZone(int index) {
     createWall(_currentLevel->getWalls()[index].second, false);
     _zoneUpdate = true;
     _nextTrigger = _currentLevel->getWalls()[index].first*1024;
+    _enemiesJSON->get("world_info")->get("worldRight")->set(_rightWallZone->xPosition);
 }
 
 void LevelController::updateLeftZone(int index) {
@@ -714,6 +715,7 @@ void LevelController::updateLeftZone(int index) {
     createWall(_currentLevel->getWalls()[index].first, true);
     _zoneUpdate = false;
     _playerInNextZone = false;
+    _enemiesJSON->get("world_info")->get("worldLeft")->set(_leftWallZone->xPosition);
 }
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {

@@ -403,28 +403,16 @@
         "waves": [
           {
             "spawn_intervals": [
-                3,
-                3,
                 3
             ],
             "spawn_positions": [
                 {
                     "x": 200,
                     "y": 100
-                },
-                {
-                    "x": 300,
-                    "y": 100
-                },
-                {
-                    "x": 200,
-                    "y": 100
                 }
             ],
             "enemies": [
-                "boss_1",
-                "boss_2",
-                "boss_3"
+                "boss_2"
             ]
           }
           ],
