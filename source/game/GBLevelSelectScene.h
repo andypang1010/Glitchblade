@@ -3,6 +3,7 @@
 #include <cugl/cugl.h>
 #include "../core/GBInput.h"
 #include "ui/GBLevelSelectUI.h"
+#include "ui/GBMenuUI.h"
 
 using namespace cugl;
 
@@ -14,10 +15,11 @@ protected:
 
     // UI
     /** Ingame UI */
-    std::shared_ptr<LevelSelectUI> _ui;
+    std::shared_ptr<GBMenuUI> _ui;
     bool _isPaused = false;
 
     int _scene_to_load = 0;
+    std::string _ui_switch;
 
 public:
 #pragma mark -
@@ -43,7 +45,8 @@ public:
      */
     void dispose();
 
-    bool init(const std::shared_ptr<AssetManager>& assets, int highestPlayableLevel);
+    bool init(const std::shared_ptr<AssetManager>& assets, int highestPlayableLevel, bool firsttime);
+    void update(float dt);
 
 #pragma mark -
 #pragma mark State Info

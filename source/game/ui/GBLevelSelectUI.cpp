@@ -115,7 +115,7 @@ void LevelSelectUI::setHighestPlayable(int highestPlayableLevel) {
         if (levelButtons[i]) {
             levelButtons[i]->setColor(Color4(255, 255, 255, 255));
             levelButtons[i]->addListener([this, levelCallbacks, i](const std::string& name, bool down) {
-                if (down && levelCallbacks[i]) {
+                if (!down && levelCallbacks[i]) {
                     CULog("Pressed level %d button", i);
                     levelCallbacks[i]();
                 }

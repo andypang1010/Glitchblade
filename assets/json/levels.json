@@ -26,24 +26,106 @@
           "speed": 4
         },
         {
+          "file": "scene1_l0",
+          "speed": 0
+        },
+        {
           "file": "ground",
           "speed": 0
         }
       ],
       "platforms": [
+        {
+          "origin": {
+            "x": 5,
+            "y": 15
+          },
+          "size": {
+            "width": 10.0,
+            "height": 10.0
+          }
+        },
+        {
+          "origin": {
+            "x": 25,
+            "y": 17
+          },
+          "size": {
+            "width": 30.0,
+            "height": 5.0
+          }
+        },
+        {
+          "origin": {
+            "x": 23,
+            "y": 6.4
+          },
+          "size": {
+            "width": 8.0,
+            "height": 1.0
+          }
+        },
+        {
+          "origin": {
+            "x": 50,
+            "y": 14.5
+          },
+          "size": {
+            "width": 20.0,
+            "height": 7.0
+          }
+        },
+        {
+          "origin": {
+            "x": 50,
+            "y": 2
+          },
+          "size": {
+            "width": 20.0,
+            "height": 8.0
+          }
+        },
+        {
+          "origin": {
+            "x": 80,
+            "y": 6
+          },
+          "size": {
+            "width": 8.0,
+            "height": 1.0
+          }
+        },
+        {
+          "origin": {
+            "x": 64,
+            "y": 11.5
+          },
+          "size": {
+            "width": 8.0,
+            "height": 1.0
+          }
+        },
+        {
+          "origin": {
+            "x": 80,
+            "y": 14
+          },
+          "size": {
+            "width": 4.0,
+            "height": 1.0
+          }
+        }
       ],
       "waves": [
         {
           "spawn_intervals": [
-            3
+            0
           ],
-          "enemies": [
-            "minion_1A"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            3
+          "spawn_positions": [
+            {
+              "x": 1300,
+              "y": 100
+            }
           ],
           "enemies": [
             "minion_1B"
@@ -51,8 +133,37 @@
         },
         {
           "spawn_intervals": [
-            3,
-            5
+            0, 0
+          ],
+          "spawn_positions": [
+            {
+              "x": 2000,
+              "y": 400
+            },
+            {
+              "x": 2500,
+              "y": 100
+            }
+          ],
+          "enemies": [
+            "minion_1A",
+            "minion_1A"
+          ]
+        },
+        {
+          "spawn_intervals": [
+            0,
+            0
+          ],
+          "spawn_positions": [
+            {
+              "x": 4000,
+              "y": 150
+            },
+            {
+              "x": 5000,
+              "y": 150
+            }
           ],
           "enemies": [
             "minion_1B",
@@ -62,6 +173,12 @@
         {
           "spawn_intervals": [
             3
+          ],
+          "spawn_positions": [
+            {
+              "x": 200,
+              "y": 50
+            }
           ],
           "enemies": [
             "boss_1"
@@ -113,6 +230,10 @@
                 "speed": 4
             },
             {
+              "file": "scene2_l0",
+              "speed": 0
+            },
+            {
                 "file": "ground",
                 "speed": 0
             }
@@ -151,30 +272,54 @@
         ],
         "waves": [
             {
-                "spawn_intervals": [
-                    3
-                ],
+              "spawn_intervals": [
+                3
+              ],
+              "spawn_positions": [
+                {
+                  "x": 200,
+                  "y": 50
+                }
+              ],
+
                 "enemies": [
                     "minion_2A"
                 ]
             },
             {
               "spawn_intervals": [
-                    3, 0
-                ],
+                3,
+                3
+              ],
+              "spawn_positions": [
+                {
+                  "x": 200,
+                  "y": 50
+                },
+                {
+                  "x": 400,
+                  "y": 50
+                }
+              ],
                 "enemies": [
                     "minion_2A",
                     "minion_2A"
                 ]
             },
-            {
-                "spawn_intervals": [
-                    3
-                ],
-                "enemies": [
-                    "boss_2"
-                ]
-            }
+          {
+            "spawn_intervals": [
+              3
+            ],
+            "spawn_positions": [
+              {
+                "x": 200,
+                "y": 50
+              }
+            ],
+            "enemies": [
+              "boss_2"
+            ]
+          }
         ],
         "walls": [
             {
@@ -232,16 +377,25 @@
         "platforms": [
         ],
         "waves": [
-            {
-                "spawn_intervals": [
-                    3,
-                    3
-                ],
-                "enemies": [
-                    "boss_1",
-                    "minion_2B"
-                ]
-            }
+          {
+            "spawn_intervals": [
+              3
+            ],
+            "spawn_positions": [
+                {
+                    "x": 200,
+                    "y": 50
+                },
+                {
+                    "x": 100,
+                    "y": 50
+                }
+            ],
+            "enemies": [
+                "minion_1A",
+                "minion_2B"
+            ]
+          }
           ],
         "walls": [
             {

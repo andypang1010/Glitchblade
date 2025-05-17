@@ -9,6 +9,9 @@
         "scene1_bg": {
             "file": "textures/Scene_1_background.png"
         },
+        "scene1_l0": {
+            "file": "textures/Scene_1_layer_0.png"
+        },
         "scene1_l1": {
             "file": "textures/Scene_1_layer_1.png"
         },
@@ -26,6 +29,9 @@
         },
         "scene2_bg": {
             "file": "textures/Scene_2_background.png"
+        },
+        "scene2_l0": {
+            "file": "textures/Scene_2_layer_0.png"
         },
         "scene2_l1": {
             "file": "textures/Scene_2_Layer_1.png"

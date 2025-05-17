@@ -19,7 +19,6 @@ protected:
     std::shared_ptr<JsonValue> _enemyJSON;
     std::shared_ptr<scene2::Label> _hpNode;
     std::shared_ptr<scene2::Label> _stunNode;
-    Vec2 _spawnPosition = ENEMY_DEFAULT_INIT_POS;
     float worldLeft;
     float worldRight;
 public:
@@ -38,7 +37,7 @@ public:
     virtual void preUpdate(float dt) = 0;
     virtual void postUpdate(float dt) = 0;
     
-    virtual void setSpawnPosition(Vec2 player_pos);
+    void spawnAt(Vec2 spawnPosition);
     std::shared_ptr<EnemyModel> getEnemy() const { return _enemy; }
     bool inWorld = false;
 };
