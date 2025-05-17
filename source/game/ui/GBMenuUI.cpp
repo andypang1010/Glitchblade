@@ -61,7 +61,7 @@ bool GBMenuUI::init(const std::shared_ptr<AssetManager>& assets, int scene) {
     if (scene == 0) {
         showHome(true);
     } else if (scene == 1) {
-        showLevelSelectionHead(true);
+        showLevelSelectionHead(true, false, true);
         showLevelSelection1(true);
     } else if (scene == 2) {
         showLevelSelectionHead(true);
@@ -70,7 +70,7 @@ bool GBMenuUI::init(const std::shared_ptr<AssetManager>& assets, int scene) {
         showLevelSelectionHead(true);
         showLevelSelection3(true);
     } else if (scene == 4) {
-        showLevelSelectionHead(true);
+        showLevelSelectionHead(true, true, false);
         showLevelSelection4(true);
     }
 
@@ -161,10 +161,21 @@ void GBMenuUI::showHome(bool visible) {
     }
 }
 
-void GBMenuUI::showLevelSelectionHead(bool visible) {
+void GBMenuUI::showLevelSelectionHead(bool visible, std::optional<bool> showPrev, std::optional<bool> showNext) {
     if (_levelSelectionHead) {
         _levelSelectionHead->setVisible(visible);
         setButtonsActive(_levelSelectionHead, visible);
+
+        bool prevVisible = showPrev.value_or(visible);
+        bool nextVisible = showNext.value_or(visible);
+        
+        auto prevScene = std::dynamic_pointer_cast<scene2::Button>(_levelSelectionHead->getChildByName("previousscene"));
+        auto nextScene = std::dynamic_pointer_cast<scene2::Button>(_levelSelectionHead->getChildByName("nextscene"));
+
+        if (prevScene) prevScene->setVisible(prevVisible);
+        prevVisible ? prevScene->activate() : prevScene->deactivate();
+        if (nextScene) nextScene->setVisible(nextVisible);
+        nextVisible ? nextScene->activate() : nextScene->deactivate();
     }
 }
 

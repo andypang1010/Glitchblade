@@ -91,7 +91,7 @@ public:
 
     // UI control
     void showHome(bool visible);
-    void showLevelSelectionHead(bool visible);
+    void showLevelSelectionHead(bool visible, std::optional<bool> showPrev = std::nullopt, std::optional<bool> showNext = std::nullopt);
     void showLevelSelection1(bool visible);
     void showLevelSelection2(bool visible);
     void showLevelSelection3(bool visible);

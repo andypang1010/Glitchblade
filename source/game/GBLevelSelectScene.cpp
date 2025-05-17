@@ -57,7 +57,7 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
 void LevelSelectScene::update(float dt) {
     if (_ui_switch == 1) {
         _ui->showHome(false);
-        _ui->showLevelSelectionHead(true);
+        _ui->showLevelSelectionHead(true, false, true);
         _ui->showLevelSelection1(true);
         _ui->showLevelSelection2(false);
     }
@@ -77,7 +77,7 @@ void LevelSelectScene::update(float dt) {
     }
     else if (_ui_switch == 4) {
         _ui->showHome(false);
-        _ui->showLevelSelectionHead(true);
+        _ui->showLevelSelectionHead(true, true, false);
         _ui->showLevelSelection3(false);
         _ui->showLevelSelection4(true);
 //        _ui->showLevelSelection5(false);
