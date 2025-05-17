@@ -54,7 +54,7 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	_slamSprite->setName("slam");
 
 	_slamVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("wave_enemy_1"), 1, 8, 8);
-	_slamVFXSprite->setScale(0.4f * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_slamVFXSprite->setScale(0.4f / 1.44 * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_slamVFXSprite->setPosition(150 * 2 * 0.0004006410 * Application::get()->getDisplayWidth(), -5 * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_slamVFXSprite->setName("slam_vfx");
 

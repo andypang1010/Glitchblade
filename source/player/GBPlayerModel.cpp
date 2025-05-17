@@ -150,7 +150,7 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 	_overloadVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("overload"), 1, 4, 4);
 	_overloadVFXSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-	_overloadVFXSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_overloadVFXSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
 
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
