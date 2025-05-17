@@ -59,7 +59,7 @@ void GlitchbladeApp::onStartup() {
     setClearColor(Color4f::BLACK);
 
     // Queue up the other assets
-    _assets->loadDirectory("json/assets-level1.json");
+    _assets->loadDirectoryAsync("json/assets-level1.json", NULL);
     _assets->loadDirectory("json/assets-level2.json");
     _assets->loadDirectory("json/assets-level3.json");
     _assets->loadDirectory("json/assets-level4.json");
