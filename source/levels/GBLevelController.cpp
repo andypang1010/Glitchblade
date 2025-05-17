@@ -687,7 +687,7 @@ void LevelController::updateRightZone(int index) {
     removeWall(_rightWallZone);
     createWall(_currentLevel->getWalls()[index].second, false);
     _zoneUpdate = true;
-    _nextTrigger = _currentLevel->getWalls()[index].first * 1024 * (2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _nextTrigger = _currentLevel->getWalls()[index].first * 1024;
 }
 
 void LevelController::updateLeftZone(int index) {
