@@ -320,7 +320,7 @@ void CollisionController::enemyProjectileCollision(Obstacle* enemyObstacle, Obst
     
     // Process collision only if the projectile was fired by the player.
     if (projectile->getIsPlayerFired()) {
-        enemy->damage(10);
+        enemy->damage(20);
         _removeProjectile(projectile);
         _screenShake(10, 3);
     }

@@ -69,7 +69,7 @@
         "scene3_l6": {
             "file": "textures/Scene_3_layer_6.png"
         },
-        "platform":  {
+        "platform": {
             "file": "textures/platform.png"
         },
         "player": {
@@ -186,6 +186,48 @@
         "boss2_teleport_end": {
             "file": "textures/boss2_teleport_end.png"
         },
+        "boss3_ground_idle": {
+            "file": "textures/boss3_ground_idle.png"
+        },
+        "boss3_air_idle": {
+            "file": "textures/boss3_air_idle.png"
+        },
+        "boss3_ground_uppercut": {
+            "file": "textures/boss3_ground_uppercut.png"
+        },
+        "boss3_ground_slam": {
+            "file": "textures/boss3_ground_slam.png"
+        },
+        "boss3_dash": {
+            "file": "textures/boss3_dash.png"
+        },
+        "boss3_air_shoot_start": {
+            "file": "textures/boss3_air_shoot_start.png"
+        },
+        "boss3_air_shoot_wait": {
+            "file": "textures/boss3_air_shoot_wait.png"
+        },
+        "boss3_air_shoot_attack": {
+            "file": "textures/boss3_air_shoot_attack.png"
+        },
+        "boss3_air_shoot_laser": {
+            "file": "textures/boss3_air_shoot_laser.png"
+        },
+        "boss3_ground_jump": {
+            "file": "textures/boss3_ground_jump.png"
+        },
+        "boss3_ground_stun": {
+            "file": "textures/boss3_ground_stun.png"
+        },
+        "boss3_air_stun": {
+            "file": "textures/boss3_air_stun.png"
+        },
+        "boss3_ground_dead": {
+            "file": "textures/boss3_ground_dead.png"
+        },
+        "boss3_air_dead": {
+            "file": "textures/boss3_air_dead.png"
+        },
         "projectile": {
             "file": "textures/projectile.png"
         },
@@ -239,6 +281,24 @@
         },
         "minion2A_dead": {
             "file": "textures/minion2A_dead.png"
+        },
+        "minion2B_idle": {
+            "file": "textures/minion2B_idle.png"
+        },
+        "minion2B_guard": {
+            "file": "textures/minion2B_guard.png"
+        },
+        "minion2B_walk": {
+            "file": "textures/minion2B_walk.png"
+        },
+        "minion2B_attack": {
+            "file": "textures/minion2B_attack.png"
+        },
+        "minion2B_stun": {
+            "file": "textures/minion2B_stun.png"
+        },
+        "minion2B_dead": {
+            "file": "textures/minion2B_dead.png"
         },
         "button_pause": {
             "file": "textures/ingameui/button_pause.png"
@@ -354,7 +414,7 @@
         "victory": {
             "file": "textures/ingameui/victory.png"
         },
-        
+
         "defeat": {
             "file": "textures/ingameui/defeat.png"
         },
@@ -364,7 +424,7 @@
         "button_lose_quit": {
             "file": "textures/ingameui/button_lose_quit.png"
         },
-        
+
         "home_bg": {
             "file": "textures/levelselect/home_bg.png"
         },
@@ -380,7 +440,7 @@
         "button_home": {
             "file": "textures/levelselect/button_home.png"
         },
-        
+
         "levelselect_bg_1": {
             "file": "textures/levelselect/levelselect_bg_1.png"
         },
@@ -393,28 +453,28 @@
         "selector1_1_1": {
             "file": "textures/levelselect/selector1_1_1.png"
         },
-        
+
         "levelselect_bg_2": {
             "file": "textures/levelselect/levelselect_bg_2.png"
         },
         "button_selector2_1_1": {
             "file": "textures/levelselect/button_selector2_1_1.png"
         },
-        
+
         "levelselect_bg_3": {
             "file": "textures/levelselect/levelselect_bg_4.png"
         },
         "button_selector3_1_1": {
             "file": "textures/levelselect/button_selector3_1_1.png"
         },
-        
+
         "levelselect_bg_4": {
             "file": "textures/levelselect/levelselect_bg_4.png"
         },
         "button_selector4_1_1": {
             "file": "textures/levelselect/button_selector4_1_1.png"
         },
-        
+
         "button_lshome": {
             "file": "textures/levelselect/button_lshome.png"
         },

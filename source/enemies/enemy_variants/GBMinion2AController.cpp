@@ -30,10 +30,8 @@ void Minion2AController::applyForce() {
     }
 
     if (!_enemy->isStunned()) {
-        b2Vec2 force(_enemy->getMovement(), 0);
-		b2Vec2 verticalForce(0, std::dynamic_pointer_cast<Minion2AModel>(_enemy)->getVerticalMovement());
+        b2Vec2 force(_enemy->getMovement(), std::dynamic_pointer_cast<Minion2AModel>(_enemy)->getVerticalMovement());
         enemyBody->ApplyForceToCenter(force, true);
-        enemyBody->ApplyForceToCenter(verticalForce, true);
 
 //        float d_force = _enemyJSON->get("physics")->get("dash")->getFloat("force");
 //        // Dash force fetched but unused ?this is where you'd apply it if needed

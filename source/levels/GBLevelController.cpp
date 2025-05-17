@@ -1,9 +1,11 @@
 #include "GBLevelController.h"
 #include "../enemies/enemy_variants/GBBoss1Controller.h"
 #include "../enemies/enemy_variants/GBBoss2Controller.h"
+#include "../enemies/enemy_variants/GBBoss3Controller.h"
 #include "../enemies/enemy_variants/GBMinion1AController.h"
 #include "../enemies/enemy_variants/GBMinion1BController.h"
 #include "../enemies/enemy_variants/GBMinion2AController.h"
+#include "../enemies/enemy_variants/GBMinion2BController.h"
 #include "../core/GBTypes.h"
 
 using namespace cugl::graphics;
@@ -27,7 +29,13 @@ std::unordered_map<std::string, std::function<std::shared_ptr<EnemyController>()
     } }, // Should return a Boss2Controller
     { "minion_2A", []() {
         return std::make_shared<Minion2AController>();
-    } } // Should return a Minion2AController
+    } }, // Should return a Minion2AController
+    { "minion_2B", []() {
+        return std::make_shared<Minion2BController>();
+    } }, // Should return a Minion2BController
+    { "boss_3", []() {
+      return std::make_shared<Boss3Controller>();
+    } }, // Should return a Boss3Controller
     // Add more as desired here
 };
 
@@ -309,7 +317,9 @@ void LevelController::fixedUpdate(float timestep)
                 auto enemyProjectile = enemyCtrlr->getEnemy()->getProjectile();
 
                 if (damagingAction) {
-                    createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), damagingAction->getHitboxDamage(), damagingAction->getHitboxKnockBack(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1), damagingAction->getIsParriable());
+                    // CULog("Action name: %s", damagingAction->getActionName().c_str());
+                    float rot = damagingAction->getActionName() == "laser" ? M_PI / 4 : 0;
+                    createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), rot, damagingAction->getHitboxDamage(), damagingAction->getHitboxKnockBack(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1), damagingAction->getIsParriable());
                 }
 
                 if (enemyProjectile) {
@@ -356,12 +366,13 @@ void LevelController::postUpdate(float dt)
 /**
  * Add a new projectile to the world and send it in the right direction.
  */
-void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, int damage, float knockback, float duration, bool parriable) {
+void LevelController::createHitbox(std::shared_ptr<EnemyModel> enemy, Vec2 pos, Size size, float rotation, int damage, float knockback, float duration, bool parriable) {
     std::shared_ptr<Texture> image = Texture::alloc(1, 1);
 
     // Change last parameter to test player-fired or regular projectile
     auto hitbox = Hitbox::alloc(enemy, pos, size, _scale, damage, knockback, duration, parriable);
     hitbox->setDebugColor(Color4::RED);
+	hitbox->setAngle(enemy->isFacingRight() ? -rotation : rotation);
 
     std::shared_ptr<scene2::PolygonNode> sprite = scene2::PolygonNode::allocWithTexture(image);
     sprite->setAnchor(Vec2::ANCHOR_CENTER);

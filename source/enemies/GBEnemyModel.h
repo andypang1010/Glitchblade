@@ -541,7 +541,7 @@ public:
      */
     virtual std::shared_ptr<Projectile> getProjectile();
 
-    void die(std::shared_ptr<scene2::SceneNode> world);
+    virtual void die(std::shared_ptr<scene2::SceneNode> world);
 
 #pragma mark -
 #pragma mark Animation Methods

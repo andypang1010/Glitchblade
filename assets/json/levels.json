@@ -278,7 +278,7 @@
               "spawn_positions": [
                 {
                   "x": 200,
-                  "y": 50
+                  "y": 200
                 }
               ],
 
@@ -293,17 +293,17 @@
               ],
               "spawn_positions": [
                 {
-                  "x": 200,
-                  "y": 50
+                  "x": 2300,
+                  "y": 200
                 },
                 {
-                  "x": 400,
-                  "y": 50
+                  "x": 2400,
+                  "y": 200
                 }
               ],
                 "enemies": [
                     "minion_2A",
-                    "minion_2A"
+                    "minion_2B"
                 ]
             },
           {
@@ -312,12 +312,12 @@
             ],
             "spawn_positions": [
               {
-                "x": 200,
-                "y": 50
+                "x": 4400,
+                "y": 100
               }
             ],
             "enemies": [
-              "boss_2"
+              "boss_3"
             ]
           }
         ],
@@ -375,26 +375,6 @@
             }
         ],
         "platforms": [
-            {
-                "origin": {
-                    "x": 20.0,
-                    "y": 5.6
-                },
-                "size": {
-                    "width": 8.0,
-                    "height": 1
-                }
-            },
-            {
-                "origin": {
-                    "x": 40.0,
-                    "y": 9.6
-                },
-                "size": {
-                    "width": 8.0,
-                    "height": 1
-                }
-            }
         ],
         "waves": [
           {
@@ -402,13 +382,18 @@
               3
             ],
             "spawn_positions": [
-              {
-                "x": 200,
-                "y": 50
-              }
+                {
+                    "x": 200,
+                    "y": 50
+                },
+                {
+                    "x": 100,
+                    "y": 50
+                }
             ],
             "enemies": [
-              "minion_1B"
+                "minion_1A",
+                "minion_2B"
             ]
           }
           ],
