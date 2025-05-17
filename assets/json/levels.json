@@ -97,6 +97,21 @@
         }
       ],
       "waves": [
+          {
+            "spawn_intervals": [
+              0
+            ],
+            "spawn_positions": [
+              {
+                "x": 4900,
+                "y": 100
+              }
+            ],
+
+            "enemies": [
+              "minion_1A"
+            ]
+          }
       ],
       "walls": [
         {
@@ -348,7 +363,7 @@
           "right": 3
         },
         {
-          "left": 3,
+          "left": 2.3,
           "right": 4.5
         }
       ]
