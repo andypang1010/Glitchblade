@@ -1,233 +1,110 @@
 {
   "levels": [
-    {
-      "name": "Level 1",
-      "scale": 1,
-      "width" : 8,
-      "layers": [
-        {
-          "file": "scene1_bg",
-          "speed": 0
-        },
-        {
-          "file": "scene1_l4",
-          "speed": 1
-        },
-        {
-          "file": "scene1_l3",
-          "speed": 2
-        },
-        {
-          "file": "scene1_l2",
-          "speed": 3
-        },
-        {
-          "file": "scene1_l1",
-          "speed": 4
-        },
-        {
-          "file": "scene1_l0",
-          "speed": 0
-        },
-        {
-          "file": "ground",
-          "speed": 0
-        }
-      ],
-      "platforms": [
-        {
-          "origin": {
-            "x": 5,
-            "y": 15
+      {
+        "name": "Level 1",
+        "scale": 1,
+        "width" : 6,
+        "layers": [
+          {
+            "file": "scene1_bg",
+            "speed": 0
           },
-          "size": {
-            "width": 10.0,
-            "height": 10.0
-          }
-        },
-        {
-          "origin": {
-            "x": 25,
-            "y": 17
+          {
+            "file": "scene1_l4",
+            "speed": 1
           },
-          "size": {
-            "width": 30.0,
-            "height": 5.0
-          }
-        },
-        {
-          "origin": {
-            "x": 23,
-            "y": 6.4
+          {
+            "file": "scene1_l3",
+            "speed": 2
           },
-          "size": {
-            "width": 8.0,
-            "height": 1.0
-          }
-        },
-        {
-          "origin": {
-            "x": 50,
-            "y": 13
+          {
+            "file": "scene1_l2",
+            "speed": 3
           },
-          "size": {
-            "width": 20.0,
-            "height": 10.0
-          }
-        },
-        {
-          "origin": {
-            "x": 50,
-            "y": 2
+          {
+            "file": "scene1_l1",
+            "speed": 4
           },
-          "size": {
-            "width": 20.0,
-            "height": 5.0
-          }
-        },
-        {
-          "origin": {
-            "x": 80,
-            "y": 6
+          {
+            "file": "scene1_l0",
+            "speed": 0
           },
-          "size": {
-            "width": 8.0,
-            "height": 1.0
+          {
+            "file": "ground",
+            "speed": 0
           }
-        },
-        {
-          "origin": {
-            "x": 64,
-            "y": 9.5
-          },
-          "size": {
-            "width": 8.0,
-            "height": 1.0
-          }
-        },
-        {
-          "origin": {
-            "x": 77,
-            "y": 12.5
-          },
-          "size": {
-            "width": 4.0,
-            "height": 1.0
-          }
-        },
-        {
-          "origin": {
-            "x": 95,
-            "y": 8
-          },
-          "size": {
-            "width": 15.0,
-            "height": 12.0
-          }
-        },
-        {
-          "origin": {
-            "x": 105,
-            "y": 10.5
-          },
-          "size": {
-            "width": 5.0,
-            "height": 7
-          }
-        },
-        {
-          "origin": {
-            "x": 125,
-            "y": 12.5
-          },
-          "size": {
-            "width": 30.0,
-            "height": 15.0
-          }
-        }
-      ],
-      "waves": [
-        {
-          "spawn_intervals": [
-            0
-          ],
-          "spawn_positions": [
-            {
-              "x": 1100,
-              "y": 100
-            }
-          ],
-          "enemies": [
-            "minion_1B"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            0, 0
-          ],
-          "spawn_positions": [
-            {
-              "x": 2000,
-              "y": 400
+        ],
+        "platforms": [
+          {
+            "origin": {
+              "x": 80,
+              "y": 2.2
             },
-            {
-              "x": 2500,
-              "y": 100
+            "size": {
+              "width": 30.0,
+              "height": 5.0
             }
-          ],
-          "enemies": [
-            "minion_1A",
-            "minion_1A"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            0
-          ],
-          "spawn_positions": [
-            {
-              "x": 4100,
-              "y": 100
-            }
-          ],
-          "enemies": [
-            "minion_1B"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            0
-          ],
-          "spawn_positions": [
-            {
-              "x": 5500,
-              "y": 100
-            }
-          ],
-          "enemies": [
-            "boss_1"
-          ]
-        }
-      ],
-      "walls": [
-          {
-           "left" : 0,
-           "right" : 1.5
           },
           {
-           "left" : 1.5,
-           "right" : 3
+            "origin": {
+              "x": 85,
+              "y": 2.2
+            },
+            "size": {
+              "width": 10.0,
+              "height": 10.0
+            }
           },
           {
-           "left" : 3,
-           "right" : 4.5
+            "origin": {
+              "x": 100,
+              "y": 8
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1.0
+            }
           },
           {
-           "left" : 4.5,
-           "right" : 6
+            "origin": {
+              "x": 113,
+              "y": 10
+            },
+            "size": {
+              "width": 6.0,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 123,
+              "y": 12
+            },
+            "size": {
+              "width": 4.0,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 148,
+              "y": 2.2
+            },
+            "size": {
+              "width": 20.0,
+              "height": 20.0
+            }
           }
-      ]
-    },
+        ],
+        "waves": [
+        ],
+        "walls": [
+            {
+              "left" : 0,
+              "right" : 6
+            }
+        ]
+      },
     {
         "name": "Level 2",
         "scale": 1,
@@ -263,41 +140,163 @@
             }
         ],
         "platforms": [
-          {
-            "origin": {
-              "x": 20.0,
-              "y": 5.6
+            {
+              "origin": {
+                "x": 100,
+                "y": 20
+              },
+              "size": {
+                "width": 200.0,
+                "height": 8.0
+              }
             },
-            "size": {
-              "width": 8.0,
-              "height": 1
-            }
-          },
-          {
-            "origin": {
-              "x": 40.0,
-              "y": 5.6
-            },
-            "size": {
-              "width": 8.0,
-              "height": 1
-            }
-          },
           {
             "origin": {
               "x": 30.0,
-              "y": 9.6
+              "y": 3.7
             },
             "size": {
-              "width": 8.0,
-              "height": 1
+              "width": 6.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 31.5,
+              "y": 6.7
+            },
+            "size": {
+              "width": 3.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 34.5,
+              "y": 2.95
+            },
+            "size": {
+              "width": 3.0,
+              "height": 1.5
+            }
+          },
+          
+          {
+            "origin": {
+              "x": 67.0,
+              "y": 3.7
+            },
+            "size": {
+              "width": 6.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 68.5,
+              "y": 6.7
+            },
+            "size": {
+              "width": 3.0,
+              "height": 3.0
+            }
+          },
+    
+          {
+            "origin": {
+              "x": 75.0,
+              "y": 12.0
+            },
+            "size": {
+              "width": 5.0,
+              "height": 14.0
+            }
+          },
+          {
+            "origin": {
+              "x": 95.0,
+              "y": 3.7
+            },
+            "size": {
+              "width": 15.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 95.0,
+              "y": 6.7
+            },
+            "size": {
+              "width": 11.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 95.0,
+              "y": 9.7
+            },
+            "size": {
+              "width": 7.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 104.0,
+              "y": 10.0
+            },
+            "size": {
+              "width": 3.0,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 118.1,
+              "y": 11.3
+            },
+            "size": {
+              "width": 0.2,
+              "height": 0.2
+            }
+          },
+          {
+            "origin": {
+              "x": 119.5,
+              "y": 6.7
+            },
+            "size": {
+              "width": 3.0,
+              "height": 9.0
+            }
+          },
+          {
+            "origin": {
+              "x": 124.0,
+              "y": 8.7
+            },
+            "size": {
+              "width": 6.0,
+              "height": 13.0
+            }
+          },
+          {
+            "origin": {
+              "x": 119.0,
+              "y": 16.7
+            },
+            "size": {
+              "width": 16.0,
+              "height": 3.0
             }
           }
         ],
         "waves": [
             {
               "spawn_intervals": [
-                3
+                0
               ],
               "spawn_positions": [
                 {
@@ -312,8 +311,8 @@
             },
             {
               "spawn_intervals": [
-                3,
-                3
+                0,
+                0
               ],
               "spawn_positions": [
                 {
@@ -321,7 +320,7 @@
                   "y": 200
                 },
                 {
-                  "x": 2400,
+                  "x": 2500,
                   "y": 200
                 }
               ],
@@ -332,19 +331,95 @@
             },
           {
             "spawn_intervals": [
-              3
+              0
             ],
             "spawn_positions": [
               {
-                "x": 4400,
-                "y": 100
+                "x": 3835.0,
+                "y": 470.0
               }
             ],
             "enemies": [
-              "boss_3"
+              "minion_1A"
             ]
           }
         ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 1.5
+            },
+            {
+             "left" : 1.5,
+             "right" : 3
+            },
+            {
+             "left" : 3,
+             "right" : 4.5
+            }
+        ]
+    },
+    {
+        "name": "Level 3",
+        "scale": 1,
+        "width": 8,
+        "layers": [
+            {
+              "file": "scene3_bg",
+              "speed": 0
+            },
+            {
+              "file": "scene3_l6",
+              "speed": 1
+            },
+            {
+              "file": "scene3_l5",
+              "speed": 2
+            },
+            {
+              "file": "scene3_l4",
+              "speed": 3
+            },
+            {
+              "file": "scene3_l3",
+              "speed": 4
+            },
+            {
+              "file": "scene3_l2",
+              "speed": 4
+            },
+            {
+              "file": "scene3_l1",
+              "speed": 0
+            },
+            {
+              "file": "ground",
+              "speed": 0
+            }
+        ],
+        "platforms": [
+        ],
+        "waves": [
+          {
+            "spawn_intervals": [
+              3
+            ],
+            "spawn_positions": [
+                {
+                    "x": 200,
+                    "y": 50
+                },
+                {
+                    "x": 100,
+                    "y": 50
+                }
+            ],
+            "enemies": [
+                "minion_1A",
+                "minion_2B"
+            ]
+          }
+          ],
         "walls": [
             {
              "left" : 0,
@@ -428,6 +503,258 @@
             {
              "left" : 4,
              "right" : 6.25
+            }
+        ]
+    },
+    {
+        "name": "Level 4",
+        "scale": 1,
+        "width": 8,
+        "layers": [
+            {
+          "file": "scene2_bg",
+                "speed": 0
+            },
+            {
+          "file": "scene2_l4",
+                "speed": 1
+            },
+            {
+          "file": "scene2_l3",
+                "speed": 2
+            },
+            {
+          "file": "scene2_l2",
+                "speed": 3
+            },
+            {
+          "file": "scene2_l1",
+                "speed": 4
+            },
+            {
+              "file": "scene2_l0",
+              "speed": 0
+            },
+            {
+                "file": "ground",
+                "speed": 0
+            }
+        ],
+        "platforms": [
+          {
+            "origin": {
+              "x": 20.0,
+              "y": 5.6
+            },
+            "size": {
+              "width": 12.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 40.0,
+              "y": 5.6
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 30.0,
+              "y": 9.6
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 60.0,
+              "y": 18.5
+            },
+            "size": {
+              "width": 7.0,
+              "height": 15
+            }
+          },
+          {
+            "origin": {
+              "x": 72.0,
+              "y": 14.0
+            },
+            "size": {
+              "width": 6.0,
+              "height": 15
+            }
+          },
+          {
+            "origin": {
+              "x": 88,
+              "y": 11.0
+            },
+            "size": {
+              "width": 2.5,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 84,
+              "y": 7.0
+            },
+            "size": {
+              "width": 2.5,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 92.0,
+              "y": 7.0
+            },
+            "size": {
+              "width": 2.5,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 84,
+              "y": 14.5
+            },
+            "size": {
+              "width": 2.5,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 92.0,
+              "y": 14.5
+            },
+            "size": {
+              "width": 2.5,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 120.0,
+              "y": 12.5
+            },
+            "size": {
+              "width": 30.0,
+              "height": 15
+            }
+          }
+        ],
+        "waves": [
+            {
+              "spawn_intervals": [
+                0
+              ],
+              "spawn_positions": [
+                {
+                  "x": 800,
+                  "y": 500
+                }
+              ],
+
+                "enemies": [
+                    "minion_2A"
+                ]
+            },
+            {
+              "spawn_intervals": [
+                0
+              ],
+              "spawn_positions": [
+                {
+                  "x": 2350,
+                  "y": 200
+                }
+              ],
+                "enemies": [
+                    "minion_2B"
+                ]
+            },
+          {
+            "spawn_intervals": [
+              0, 0
+            ],
+            "spawn_positions": [
+              {
+                "x": 2450,
+                "y": 350
+              },
+              {
+                "x": 2650,
+                "y": 400
+              }
+            ],
+            "enemies": [
+              "minion_2A",
+              "minion_2A"
+            ]
+          },
+          {
+            "spawn_intervals": [
+              0, 0
+            ],
+            "spawn_positions": [
+              {
+                "x": 4200,
+                "y": 300
+              },
+              {
+                "x": 4250,
+                "y": 400
+              }
+            ],
+            "enemies": [
+              "minion_2B",
+              "minion_1A"
+            ]
+          },
+          {
+            "spawn_intervals": [
+              0
+            ],
+            "spawn_positions": [
+              {
+                  "x": 5000,
+                  "y": 700
+              }
+            ],
+            "enemies": [
+                "boss_2"
+            ]
+          }
+        ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 1.7
+            },
+            {
+             "left" : 1.5,
+             "right" : 2.8
+            },
+            {
+             "left" : 2.0,
+             "right" : 3.5
+            },
+            {
+             "left" : 3.2,
+             "right" : 4.8
+            },
+            {
+             "left" : 3.8,
+             "right" : 6.0
             }
         ]
     }
