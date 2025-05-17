@@ -231,7 +231,7 @@
     {
         "name": "Level 2",
         "scale": 1,
-        "width": 8,
+        "width": 6.25,
         "layers": [
             {
           "file": "scene2_bg",
