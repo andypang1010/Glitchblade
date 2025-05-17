@@ -238,7 +238,8 @@
                     3
                 ],
                 "enemies": [
-                    "boss_3"
+                    "boss_1",
+                    "minion_2B"
                 ]
             }
           ],

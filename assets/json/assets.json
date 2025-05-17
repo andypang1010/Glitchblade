@@ -276,6 +276,24 @@
         "minion2A_dead": {
             "file": "textures/minion2A_dead.png"
         },
+        "minion2B_idle": {
+            "file": "textures/minion2B_idle.png"
+        },
+        "minion2B_guard": {
+            "file": "textures/minion2B_guard.png"
+        },
+        "minion2B_walk": {
+            "file": "textures/minion2B_walk.png"
+        },
+        "minion2B_attack": {
+            "file": "textures/minion2B_attack.png"
+        },
+        "minion2B_stun": {
+            "file": "textures/minion2B_stun.png"
+        },
+        "minion2B_dead": {
+            "file": "textures/minion2B_dead.png"
+        },
         "button_pause": {
             "file": "textures/ingameui/button_pause.png"
         },
@@ -390,7 +408,7 @@
         "victory": {
             "file": "textures/ingameui/victory.png"
         },
-        
+
         "defeat": {
             "file": "textures/ingameui/defeat.png"
         },
@@ -400,7 +418,7 @@
         "button_lose_quit": {
             "file": "textures/ingameui/button_lose_quit.png"
         },
-        
+
         "home_bg": {
             "file": "textures/levelselect/home_bg.png"
         },
@@ -416,7 +434,7 @@
         "button_home": {
             "file": "textures/levelselect/button_home.png"
         },
-        
+
         "levelselect_bg_1": {
             "file": "textures/levelselect/levelselect_bg_1.png"
         },
@@ -429,28 +447,28 @@
         "selector1_1_1": {
             "file": "textures/levelselect/selector1_1_1.png"
         },
-        
+
         "levelselect_bg_2": {
             "file": "textures/levelselect/levelselect_bg_2.png"
         },
         "button_selector2_1_1": {
             "file": "textures/levelselect/button_selector2_1_1.png"
         },
-        
+
         "levelselect_bg_3": {
             "file": "textures/levelselect/levelselect_bg_4.png"
         },
         "button_selector3_1_1": {
             "file": "textures/levelselect/button_selector3_1_1.png"
         },
-        
+
         "levelselect_bg_4": {
             "file": "textures/levelselect/levelselect_bg_4.png"
         },
         "button_selector4_1_1": {
             "file": "textures/levelselect/button_selector4_1_1.png"
         },
-        
+
         "button_lshome": {
             "file": "textures/levelselect/button_lshome.png"
         },
