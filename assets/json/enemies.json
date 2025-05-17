@@ -145,7 +145,7 @@
         ]
     },
     "boss_2": {
-        "health": 200,
+        "health": 300,
         "size": [ 180, 180 ],
         "actions": [
             {
