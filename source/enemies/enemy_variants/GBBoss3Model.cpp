@@ -136,6 +136,11 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	_airTransformSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_airTransformSprite->setName("airTransform");
 
+    _spawnSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("enemy_spawn"), 4, 7, 28);
+    _spawnSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _spawnSprite->setScale(0.75 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _spawnSprite->setName("spawn");
+
 	getSceneNode()->addChild(_groundIdleSprite);
 	getSceneNode()->addChild(_airIdleSprite);
 	getSceneNode()->addChild(_groundStunSprite);
@@ -161,6 +166,8 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
     getSceneNode()->addChild(_laserVFXSprite);
     getSceneNode()->addChild(_shootLaserSprite);
+
+	getSceneNode()->addChild(_spawnSprite);
 }
 
 void Boss3Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
@@ -180,7 +187,7 @@ void Boss3Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
 		else if (act->getActionName() == "shoot") {
 			_shoot = std::dynamic_pointer_cast<RangedActionModel>(act);
 		}
-        else if (act->getActionName() == "laser") {
+        else if (act->getActionName() == "laser_diag") {
             _laser = std::dynamic_pointer_cast<MeleeActionModel>(act);
         }
     }
@@ -276,21 +283,7 @@ void Boss3Model::setStun(int value) {
  * @param delta Number of seconds since last animation frame
  */
 void Boss3Model::update(float dt) {
-    if (isRemoved()) return;
-
-    BoxObstacle::update(dt);
-    if (_node != nullptr) {
-        _node->setPosition(getPosition() * _drawScale);
-        _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
-    }
+    EnemyModel::update(dt);
 }
 
 #pragma mark -
@@ -633,6 +626,8 @@ void Boss3Model::updateAnimation()
     _groundIdleSprite->setVisible(!isStunned() && _isGroundForm && !_isUppercutting && !_isSlamming && !getIsJumping() && !_isDashing && !_isGroundDashStarting && !_isGroundDashEnding);
 	_airIdleSprite->setVisible(!isStunned() && !_isGroundForm && !_isShootStarting && !_isShootAttacking && !_isLaserAttacking && !_isShootWaiting && !_isDashing);
 
+	_spawnSprite->setVisible(isSpawning);
+
     playAnimation(_groundIdleSprite);
     playAnimation(_airIdleSprite);
     playAnimation(_groundStunSprite);
@@ -655,6 +650,8 @@ void Boss3Model::updateAnimation()
 	playAnimation(_shootWaitSprite);
 
     playVFXAnimation(_shootLaserSprite, _laserVFXSprite, 1);
+
+    playAnimationOnce(_spawnSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

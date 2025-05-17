@@ -318,7 +318,7 @@ void LevelController::fixedUpdate(float timestep)
 
                 if (damagingAction) {
                     // CULog("Action name: %s", damagingAction->getActionName().c_str());
-                    float rot = damagingAction->getActionName() == "laser" ? M_PI / 4 : 0;
+                    float rot = damagingAction->getActionName() == "laser_diag" ? M_PI / 4 : 0;
                     createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), rot, damagingAction->getHitboxDamage(), damagingAction->getHitboxKnockBack(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1), damagingAction->getIsParriable());
                 }
 

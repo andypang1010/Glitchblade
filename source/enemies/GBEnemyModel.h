@@ -171,13 +171,15 @@ public:
     float worldLeft;
     float worldRight;
 
+    bool isSpawning = true;
+
     std::shared_ptr<scene2::SpriteNode> _currentSpriteNode;
 
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
     std::shared_ptr<scene2::SpriteNode> _stunSprite;
     std::shared_ptr<scene2::SpriteNode> _deadSprite;
-
+	std::shared_ptr<scene2::SpriteNode> _spawnSprite;
 public:
 #pragma mark Hidden Constructors
     /**

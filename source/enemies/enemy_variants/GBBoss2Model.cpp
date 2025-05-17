@@ -152,6 +152,12 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	_deadSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_deadSprite->setName("dead");
 
+	_spawnSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("enemy_spawn"), 4, 7, 28);
+	_spawnSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_spawnSprite->setScale(0.75 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_spawnSprite->setName("spawn");
+	_spawnSprite->setVisible(false);
+
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_stunSprite);
 	getSceneNode()->addChild(_shortFireStartSprite);
@@ -167,6 +173,8 @@ void Boss2Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
     getSceneNode()->addChild(_laserVFXSprite);
 	getSceneNode()->addChild(_laserSprite);
+
+	getSceneNode()->addChild(_spawnSprite);
 }
 
 void Boss2Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
@@ -254,21 +262,7 @@ void Boss2Model::damage(float value) {
  * @param delta Number of seconds since last animation frame
  */
 void Boss2Model::update(float dt) {
-    if (isRemoved()) return;
-
-    BoxObstacle::update(dt);
-    if (_node != nullptr) {
-        _node->setPosition(getPosition() * _drawScale);
-        _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
-    }
+    EnemyModel::update(dt);
 }
 
 #pragma mark -
@@ -552,6 +546,8 @@ void Boss2Model::updateAnimation()
         && !_isHeadFireStarting && !_isHeadFireAttacking && !_isHeadFireWaiting && !_isHeadFireEnding
         && !(isMoveLeft() || isMoveRight()));
 
+	_spawnSprite->setVisible(isSpawning);
+
     playAnimation(_idleSprite);
     playAnimation(_stunSprite);
 
@@ -570,6 +566,8 @@ void Boss2Model::updateAnimation()
 
 	playAnimation(_teleportStartSprite);
 	playAnimation(_teleportEndSprite);
+
+	playAnimationOnce(_spawnSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

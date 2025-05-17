@@ -68,6 +68,9 @@
         },
         "enemy_dash": {
             "file": "textures/enemy_dash.png"
+        },
+        "enemy_spawn": {
+            "file": "textures/enemy_spawn.png"
         }
     },
     "sounds": {

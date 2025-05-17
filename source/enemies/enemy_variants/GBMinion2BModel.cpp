@@ -66,11 +66,17 @@ void Minion2BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _deadSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
 	_deadSprite->setName("dead");
 
+    _spawnSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("enemy_spawn"), 4, 7, 28);
+    _spawnSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _spawnSprite->setScale(0.5 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _spawnSprite->setName("spawn");
+
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_guardSprite);
     getSceneNode()->addChild(_attackSprite);
     getSceneNode()->addChild(_stunSprite);
+	getSceneNode()->addChild(_spawnSprite);
 }
 
 void Minion2BModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
@@ -153,22 +159,7 @@ void Minion2BModel::damage(float value) {
  * @param delta Number of seconds since last animation frame
  */
 void Minion2BModel::update(float dt) {
-    if (isRemoved()) return;
-
-
-    BoxObstacle::update(dt);
-    if (_node != nullptr) {
-        _node->setPosition(getPosition() * _drawScale);
-        _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
-    }
+    EnemyModel::update(dt);
 }
 
 #pragma mark -
@@ -266,11 +257,14 @@ void Minion2BModel::updateAnimation()
 
     _idleSprite->setVisible(!isStunned() && !_isGuarding && !_isAttacking && _moveDuration <= 0);
 
+	_spawnSprite->setVisible(isSpawning);
+
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
     playAnimationOnce(_guardSprite);
     playAnimation(_attackSprite);
     playAnimationOnce(_stunSprite);
+	playAnimationOnce(_spawnSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
