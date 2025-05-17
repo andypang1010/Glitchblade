@@ -2,7 +2,7 @@
 
 using namespace cugl::audio;
 
-LevelSelectScene::LevelSelectScene() : _ui(nullptr), _scene_to_load(0), _ui_switch(7) {}
+LevelSelectScene::LevelSelectScene() : _ui(nullptr), _scene_to_load(0) {}
 
 void LevelSelectScene::dispose()
 {
@@ -15,6 +15,7 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
         return false;
     }
     _assets = assets;
+    _ui_switch = scene;
 
     // prepare constants
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
@@ -34,15 +35,16 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
         _ui->setLevel1Callback([this]() { _scene_to_load = 1; });
         _ui->setLevel2Callback([this]() { _scene_to_load = 2; });
         _ui->setLevel3Callback([this]() { _scene_to_load = 3; });
-        _ui->setLevel4Callback([this]() { _scene_to_load = 3; });
-        _ui->setLevel5Callback([this]() { _scene_to_load = 3; });
+        _ui->setLevel4Callback([this]() { _scene_to_load = 4; });
+        _ui->setLevel5Callback([this]() { _scene_to_load = 5; });
 
         _ui->setStartCallback([this, highestPlayableLevel]() { _ui_switch = std::max(highestPlayableLevel - 1, 1); CULog("Start pressed");});
         _ui->setHomeCallback([this]() { _ui_switch = 0; CULog("Home pressed");});
         _ui->setInfoCallback([this]() { _ui_switch = -1; CULog("Info pressed");});
         _ui->setHomeSettingCallback([this]() { _ui_switch = -2; CULog("Home Setting pressed");});
-        _ui->setPreviousSceneCallback([this]() { _ui_switch -= 1; CULog("Previous Scene pressed");});
-        _ui->setNextSceneCallback([this]() { _ui_switch += 1; CULog("Next Scene pressed");});
+        _ui->setBackCallback([this]() { _ui_switch = -3; CULog("Setting back pressed");});
+        _ui->setPreviousSceneCallback([this]() { _ui_switch -= 1; CULog("Previous Scene pressed %d", _ui_switch);});
+        _ui->setNextSceneCallback([this]() { _ui_switch += 1; CULog("Next Scene pressed %d", _ui_switch);});
         addChild(_ui);
         _ui->setHighestPlayable(highestPlayableLevel);
     }
@@ -87,8 +89,10 @@ void LevelSelectScene::update(float dt) {
         _ui->showInfo(true);
     }
     else if (_ui_switch == -2) {
-        _ui->showHome(false);
 //        _ui->showHomeSetting(true);
+    }
+    else if (_ui_switch == -3) {
+//        _ui->showHomeSetting(false);
     }
     else if (_ui_switch == 0 || _ui_switch == 5) {
         _ui->showLevelSelectionHead(false);
@@ -97,7 +101,7 @@ void LevelSelectScene::update(float dt) {
         _ui->showLevelSelection3(false);
         _ui->showLevelSelection4(false);
         _ui->showInfo(false);
-//        _ui->showHomeSetting(false);
+        _ui->showHomeSetting(false);
         _ui->showHome(true);
     }
 

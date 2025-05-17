@@ -50,6 +50,11 @@ protected:
     std::shared_ptr<cugl::scene2::Button> _infoButton;
     std::shared_ptr<cugl::scene2::Button> _homeSettingButton;
     
+    // Home Setting buttons
+    std::shared_ptr<cugl::scene2::Button> _musicButton;
+    std::shared_ptr<cugl::scene2::Button> _soundButton;
+    std::shared_ptr<cugl::scene2::Button> _backButton;
+    
     // Info button
     std::shared_ptr<cugl::scene2::Button> _infoHomeButton;
 
@@ -60,6 +65,9 @@ protected:
     std::function<void()> _homeCallback;
     std::function<void()> _previousSceneCallback;
     std::function<void()> _nextSceneCallback;
+    std::function<void()> _musicCallback;
+    std::function<void()> _soundCallback;
+    std::function<void()> _backCallback;
     std::function<void()> _level1Callback;
     std::function<void()> _level2Callback;
     std::function<void()> _level3Callback;
@@ -109,6 +117,9 @@ public:
     void setHomeCallback(const std::function<void()>& callback) { _homeCallback = callback; }
     void setPreviousSceneCallback(const std::function<void()>& callback) { _previousSceneCallback = callback; }
     void setNextSceneCallback(const std::function<void()>& callback) { _nextSceneCallback = callback; }
+    void setMusicCallback(const std::function<void()>& callback) { _musicCallback = callback; }
+    void setSoundCallback(const std::function<void()>& callback) { _soundCallback = callback; }
+    void setBackCallback(const std::function<void()>& callback) { _backCallback = callback; }
     void setLevel1Callback(const std::function<void()>& callback) { _level1Callback = callback; }
     void setLevel2Callback(const std::function<void()>& callback) { _level2Callback = callback; }
     void setLevel3Callback(const std::function<void()>& callback) { _level3Callback = callback; }

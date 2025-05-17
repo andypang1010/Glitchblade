@@ -42,58 +42,6 @@
                     "visible": true
                 }
             },
-            "resume": {
-                "type": "Button",
-                "format": {
-                    "type": "Anchored"
-                },
-                "data": {
-                    "anchor": [
-                        0,
-                        0
-                    ],
-                    "size": [
-                        56,
-                        56
-                    ],
-                    "angle": 0,
-                    "position": [
-                        1161,
-                        484
-                    ],
-                    "visible": true,
-                    "upnode": "button_resume"
-                },
-                "children": {
-                    "button_resume": {
-                        "type": "Image",
-                        "data": {
-                            "texture": "button_resume",
-                            "anchor": [
-                                0,
-                                0.5
-                            ],
-                            "size": [
-                                53.2,
-                                56
-                            ],
-                            "angle": 0,
-                            "position": [
-                                0,
-                                0
-                            ],
-                            "visible": true
-                        },
-                        "layout": {
-                            "x_anchor": "left",
-                            "y_anchor": "middle",
-                            "absolute": false,
-                            "x_offset": 0,
-                            "y_offset": 0
-                        }
-                    }
-                }
-            },
             "back": {
                 "type": "Button",
                 "format": {
@@ -111,7 +59,7 @@
                     "angle": 0,
                     "position": [
                         1158,
-                        392
+                        484
                     ],
                     "visible": true,
                     "upnode": "button_back"

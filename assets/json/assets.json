@@ -181,6 +181,7 @@
     },
     "widgets": {
         "home": "widgets/home.json",
+        "homesetting": "widgets/homesetting.json",
         "info": "widgets/info.json",
         "hud": "widgets/hud.json",
         "pausemenu": "widgets/pausemenu.json",
@@ -205,6 +206,16 @@
             },
             "data": {
                 "key": "home"
+            }
+        },
+        "homesetting": {
+            "type": "Widget",
+            "comment": "This is the root node of home setting page",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "homesetting"
             }
         },
         "info": {

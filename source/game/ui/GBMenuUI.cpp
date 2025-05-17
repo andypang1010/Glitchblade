@@ -33,14 +33,14 @@ bool GBMenuUI::init(const std::shared_ptr<AssetManager>& assets, int scene) {
     _levelSelection2 = assets->get<scene2::SceneNode>("levelselection2");
     _levelSelection3 = assets->get<scene2::SceneNode>("levelselection3");
     _levelSelection4 = assets->get<scene2::SceneNode>("levelselection4");
-//    _homeSetting = assets->get<scene2::SceneNode>("settingmenu");
+    _homeSetting = assets->get<scene2::SceneNode>("homesetting");
     _info = assets->get<scene2::SceneNode>("info");
 
-//    if (!_home || !_levelSelectionHead || !_levelSelection1 || !_levelSelection2 || !_levelSelection3 || !_levelSelection4 || !_homeSetting || !_info)
-//        return false;
+    if (!_home || !_homeSetting || !_info || !_levelSelectionHead || !_levelSelection1 || !_levelSelection2 || !_levelSelection3 || !_levelSelection4)
+        return false;
 
     // Add and layout all pages
-    for (auto& page : {_home, _info, _levelSelectionHead, _levelSelection1, _levelSelection2, _levelSelection3, _levelSelection4}) {
+    for (auto& page : {_home,  _info, _levelSelectionHead, _levelSelection1, _levelSelection2, _levelSelection3, _levelSelection4, _homeSetting}) {
         page->setContentSize(getContentSize());
         page->doLayout();
         page->setVisible(false);
@@ -54,7 +54,7 @@ bool GBMenuUI::init(const std::shared_ptr<AssetManager>& assets, int scene) {
     setupLevelSelection2(_levelSelection2);
     setupLevelSelection3(_levelSelection3);
     setupLevelSelection4(_levelSelection4);
-//    setupHomeSetting(_homeSetting);
+    setupHomeSetting(_homeSetting);
     setupInfo(_info);
 
     // Start with homepage visible
@@ -90,6 +90,8 @@ void GBMenuUI::dispose() {
     // Level Selection Head buttons
     _homeButton->clearListeners();
     _levelSettingButton->clearListeners();
+    _previousSceneButton->clearListeners();
+    _nextSceneButton->clearListeners();
     
     // Level buttons
     _level1Button->clearListeners();
@@ -106,6 +108,8 @@ void GBMenuUI::dispose() {
     // Level Selection Head buttons
     _homeButton = nullptr;
     _levelSettingButton = nullptr;
+    _previousSceneButton = nullptr;
+    _nextSceneButton = nullptr;
     
     // Level buttons
     _level1Button = nullptr;
@@ -138,10 +142,10 @@ void GBMenuUI::setHighestPlayable(int highestPlayableLevel) {
         }
     }
 
-    for (int i = highestPlayableLevel; i < levelButtons.size(); i++) {
-        levelButtons[i]->setColor(Color4(80, 80, 80, 255));
-        levelButtons[i]->deactivate();
-    }
+//    for (int i = highestPlayableLevel; i < levelButtons.size(); i++) {
+//        levelButtons[i]->setColor(Color4(80, 80, 80, 255));
+//        levelButtons[i]->deactivate();
+//    }
 }
 
 void GBMenuUI::setButtonsActive(std::shared_ptr<scene2::SceneNode> layer, bool active) {
@@ -293,8 +297,38 @@ void GBMenuUI::setupLevelSelection4(std::shared_ptr<scene2::SceneNode>& page) {
     _level5Button = std::dynamic_pointer_cast<scene2::Button>(page->getChildByName("selector4_1_1"));
 }
 
-void GBMenuUI::setupHomeSetting(std::shared_ptr<scene2::SceneNode>& setting) {
+void GBMenuUI::setupHomeSetting(std::shared_ptr<cugl::scene2::SceneNode>& homeSetting)
+{
+    _musicButton = std::dynamic_pointer_cast<scene2::Button>(homeSetting->getChildByName("music"));
+    _soundButton = std::dynamic_pointer_cast<scene2::Button>(homeSetting->getChildByName("sound"));
+    _backButton = std::dynamic_pointer_cast<scene2::Button>(homeSetting->getChildByName("back"));
 
+    if (_musicButton) {
+        _musicButton->addListener([this](const std::string& name, bool down) {
+            if (!down && _musicCallback) {
+                CULog("Music pressed");
+                _musicCallback();
+            }
+        });
+    }
+
+    if (_soundButton) {
+        _soundButton->addListener([this](const std::string& name, bool down) {
+            if (!down && _soundCallback) {
+                CULog("Sound pressed");
+                _soundCallback();
+            }
+        });
+    }
+
+    if (_backButton) {
+        _backButton->addListener([this](const std::string& name, bool down) {
+            if (!down && _backCallback) {
+                CULog("Back pressed");
+                _backCallback();
+            }
+        });
+    }
 }
 
 void GBMenuUI::setupInfo(std::shared_ptr<scene2::SceneNode>& info) {
