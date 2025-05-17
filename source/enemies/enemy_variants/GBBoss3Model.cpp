@@ -352,17 +352,22 @@ void Boss3Model::nextAction() {
 
 void Boss3Model::handleGroundAction(int r) {
     if (isTargetClose()) {
-        if (r % 4 == 0) { // Uppercut
+        if (r % 3 == 0) { // Uppercut
             uppercut();
         }
-        else if (r % 4 == 1) { // Slam
+        else if (r % 3 == 1) { // Slam
             slam();
         }
-        else if (r % 4 == 2) { // Jump
+        else { // Jump
             jump();
         }
-        else if (r % 4 == 3) { // Dash
+    }
+    else {
+        if (r % 3 == 0) {
             dash();
+        }
+        else {
+            jump();
         }
     }
 }
