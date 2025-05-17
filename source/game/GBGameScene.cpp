@@ -644,6 +644,9 @@ void GameScene::setBG() {
 
             // Position nodes starting from -1 * textureWidth (to provide buffer for parallax)
             float xPos = (i - 1) * textureWidth;
+            if (i != 0){
+                xPos = xPos - 2*i;
+            }
             node->setPosition(Vec2(xPos, 0));
             
             node->setTag(layerPair.second);

@@ -581,7 +581,7 @@ std::shared_ptr<LevelModel> LevelController::parseLevel(const std::shared_ptr<Js
 	CULog("%s", json->toString().c_str());
 
 	level->setLevelName(json->getString("name"));
-    level->setScale(1.1 * 0.0004006410 * Application::get()->getDisplayWidth());
+    level->setScale(0.0004006410 * Application::get()->getDisplayWidth());
     level->setBGN(json->getInt("width"));
     auto bg = assetRef->get<graphics::Texture>(json->getString("background"));
     level->setBackground(bg);
