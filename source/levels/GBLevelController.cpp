@@ -348,6 +348,7 @@ void LevelController::fixedUpdate(float timestep)
 
 void LevelController::postUpdate(float dt)
 {
+    
     std::shared_ptr<PlayerModel> player = _playerController->getPlayer();
 	_playerController->postUpdate(dt);
 
@@ -404,15 +405,17 @@ void LevelController::createPlatform(Rect rect)
 	leftWall->setFilterData(enemyWallFilter);
 	rightWall->setFilterData(enemyWallFilter);
 
-    std::shared_ptr<SceneNode> platformSceneNode = scene2::SceneNode::alloc();
     std::shared_ptr<PolygonNode> leftWallSprite = scene2::PolygonNode::alloc();
     std::shared_ptr<PolygonNode> rightWallSprite = scene2::PolygonNode::alloc();
     
-    std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>("platform"));
+    std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(Texture::getBlank());
+    platformSprite->setContentSize(rect.size * _constantsJSON->get("scene")->getFloat("scale"));
+    platformSprite->setVisible(true);
+    platformSprite->setColor(Color4::BLUE);
+    
 	//platformSprite->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
 	//platformSceneNode->addChild(platformSprite);
-
-    //platformNewSprite->setVisible(true);
+    
     addObstacle(std::make_pair(platform, platformSprite));
 	addObstacle(std::make_pair(leftWall, leftWallSprite));
     addObstacle(std::make_pair(rightWall, rightWallSprite));
