@@ -1,0 +1,99 @@
+{
+    "variables": {},
+    "contents": {
+        "type": "Node",
+        "format": {
+            "type": "Anchored"
+        },
+        "data": {
+            "anchor": [
+                0,
+                0
+            ],
+            "size": [
+                1248,
+                576
+            ],
+            "angle": 0,
+            "position": [
+                0,
+                0
+            ],
+            "visible": true
+        },
+        "children": {
+            "info_bg": {
+                "type": "Image",
+                "data": {
+                    "texture": "info_bg",
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        1248,
+                        576
+                    ],
+                    "angle": 0,
+                    "position": [
+                        0,
+                        0
+                    ],
+                    "visible": true
+                }
+            },
+            "lshome": {
+                "type": "Button",
+                "format": {
+                    "type": "Anchored"
+                },
+                "data": {
+                    "anchor": [
+                        0,
+                        0
+                    ],
+                    "size": [
+                        56,
+                        56
+                    ],
+                    "angle": 0,
+                    "position": [
+                        1164,
+                        22
+                    ],
+                    "visible": true,
+                    "upnode": "button_home"
+                },
+                "children": {
+                    "button_home": {
+                        "type": "Image",
+                        "data": {
+                            "texture": "button_home",
+                            "anchor": [
+                                0.5,
+                                0.5
+                            ],
+                            "size": [
+                                56,
+                                56
+                            ],
+                            "angle": 0,
+                            "position": [
+                                0,
+                                0
+                            ],
+                            "visible": true
+                        },
+                        "layout": {
+                            "x_anchor": "center",
+                            "y_anchor": "middle",
+                            "absolute": false,
+                            "x_offset": 0,
+                            "y_offset": 0
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

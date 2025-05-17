@@ -19,7 +19,7 @@ protected:
     bool _isPaused = false;
 
     int _scene_to_load = 0;
-    std::string _ui_switch;
+    int _ui_switch;
 
 public:
 #pragma mark -
@@ -45,7 +45,7 @@ public:
      */
     void dispose();
 
-    bool init(const std::shared_ptr<AssetManager>& assets, int highestPlayableLevel, bool firsttime);
+    bool init(const std::shared_ptr<AssetManager>& assets, int highestPlayableLevel, int scene);
     void update(float dt);
 
 #pragma mark -

@@ -181,6 +181,7 @@
     },
     "widgets": {
         "home": "widgets/home.json",
+        "info": "widgets/info.json",
         "hud": "widgets/hud.json",
         "pausemenu": "widgets/pausemenu.json",
         "settingmenu": "widgets/settingmenu.json",
@@ -189,6 +190,7 @@
         "win1": "widgets/win1.json",
         "win": "widgets/win.json",
         "levelselect1": "widgets/levelselect1.json",
+        "levelselectionhead": "widgets/levelselectionhead.json",
         "levelselection1": "widgets/levelselection1.json",
         "levelselection2": "widgets/levelselection2.json",
         "levelselection3": "widgets/levelselection3.json",
@@ -203,6 +205,26 @@
             },
             "data": {
                 "key": "home"
+            }
+        },
+        "info": {
+            "type": "Widget",
+            "comment": "This is the root node of info page",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "info"
+            }
+        },
+        "levelselectionhead": {
+            "type": "Widget",
+            "comment": "This is the root node of level selection hud",
+            "format": {
+                "type": "Anchored"
+            },
+            "data": {
+                "key": "levelselectionhead"
             }
         },
         "levelselection1": {
