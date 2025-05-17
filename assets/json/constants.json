@@ -24,7 +24,7 @@
         "wall_count": 2,
         "thickness": 0.0125,
         "name" : "wall",
-        "level_bounds": [0.0, 3.65625]
+        "level_bounds": [0.0, 3.0534351145]
     },
     "platforms": {
         "name": "platform"

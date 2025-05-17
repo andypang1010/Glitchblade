@@ -271,6 +271,7 @@ void GameScene::reset() {
     setComplete(false);
     _levelController->reset();
     populate(_levelController->getCurrentLevel());
+    _cameraLocked = false;
     _camera->setPosition(_defCamPos);
     addChild(_ui);
     _ui->resetUI();
@@ -515,22 +516,25 @@ void GameScene::fixedUpdate(float step) {
         }
     }
     
-//    CULog("PlayerPos: %f", currPlayerPosX);
-    CULog("leftBound: %f", leftBound);
-    CULog("rightBound: %f", rightBound);
-    CULog("CamPos: %f", cameraPosLX);
+    CULog("PlayerPos: %f", currPlayerPosX);
+    CULog("CamLPos: %f", cameraPosLX);
+    CULog("CamLPos: %f", cameraPosRX);
+    CULog("CamLocked?: %d", _cameraLocked);
+    for (auto obs : _world->getObstacles()) {
+        
+    }
     if (_levelController->getZoneUpdate()) {
         CULog("NextTriggerPos: %f", _levelController->getNextTrigger());
     }
 
-    if (cameraPosLX <= leftBound || cameraPosRX >= rightBound) {
+    if (cameraPosLX < leftBound || cameraPosRX >= rightBound) {
         _cameraLocked = true;
         if (cameraPosLX <= leftBound) {
-            if (currPlayerPosX > leftBound + getBounds().size.width*.66) {
+            if (currPlayerPosX > leftBound + _camera->getViewport().size.width*.66) {
                 _cameraLocked = false;
             }
         } else {
-            if (currPlayerPosX < rightBound - getBounds().size.width*.66) {
+            if (currPlayerPosX < rightBound - _camera->getViewport().size.width*.66) {
                 _cameraLocked = false;
             }
         }
