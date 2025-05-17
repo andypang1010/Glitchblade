@@ -18,7 +18,7 @@ using namespace cugl::graphics;
 using namespace cugl::scene2;
 using namespace cugl::audio;
 
-#define MAX_SCENE 3
+#define MAX_SCENE 4
 
 #pragma mark -
 #pragma mark Application State

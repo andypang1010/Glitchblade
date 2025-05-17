@@ -435,6 +435,138 @@
              "right" : 6.25
             }
         ]
+    },
+    {
+        "name": "Level 4",
+        "scale": 1,
+        "width": 8,
+        "layers": [
+            {
+          "file": "scene2_bg",
+                "speed": 0
+            },
+            {
+          "file": "scene2_l4",
+                "speed": 1
+            },
+            {
+          "file": "scene2_l3",
+                "speed": 2
+            },
+            {
+          "file": "scene2_l2",
+                "speed": 3
+            },
+            {
+          "file": "scene2_l1",
+                "speed": 4
+            },
+            {
+              "file": "scene2_l0",
+              "speed": 0
+            },
+            {
+                "file": "ground",
+                "speed": 0
+            }
+        ],
+        "platforms": [
+          {
+            "origin": {
+              "x": 20.0,
+              "y": 5.6
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 40.0,
+              "y": 5.6
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          },
+          {
+            "origin": {
+              "x": 30.0,
+              "y": 9.6
+            },
+            "size": {
+              "width": 8.0,
+              "height": 1
+            }
+          }
+        ],
+        "waves": [
+            {
+              "spawn_intervals": [
+                3
+              ],
+              "spawn_positions": [
+                {
+                  "x": 200,
+                  "y": 200
+                }
+              ],
+
+                "enemies": [
+                    "minion_2A"
+                ]
+            },
+            {
+              "spawn_intervals": [
+                3,
+                3
+              ],
+              "spawn_positions": [
+                {
+                  "x": 2300,
+                  "y": 200
+                },
+                {
+                  "x": 2400,
+                  "y": 200
+                }
+              ],
+                "enemies": [
+                    "minion_2A",
+                    "minion_2B"
+                ]
+            },
+          {
+            "spawn_intervals": [
+              3
+            ],
+            "spawn_positions": [
+              {
+                "x": 4400,
+                "y": 100
+              }
+            ],
+            "enemies": [
+              "boss_3"
+            ]
+          }
+        ],
+        "walls": [
+            {
+             "left" : 0,
+             "right" : 2
+            },
+            {
+             "left" : 2,
+             "right" : 4
+            },
+            {
+             "left" : 4,
+             "right" : 6.25
+            }
+        ]
     }
   ]
 }
