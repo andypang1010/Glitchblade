@@ -19,7 +19,7 @@ using namespace cugl::scene2;
 using namespace cugl::audio;
 
 #define MAX_SCENE 3
-
+#define ASYNC_LOADS 9
 #pragma mark -
 #pragma mark Application State
 /**
@@ -59,15 +59,51 @@ void GlitchbladeApp::onStartup() {
     setClearColor(Color4f::BLACK);
 
     // Queue up the other assets
-    _assets->loadDirectoryAsync("json/assets-menu.json", NULL);
-    _assets->loadDirectoryAsync("json/assets-level1.json", NULL);
-    _assets->loadDirectoryAsync("json/assets-level2.json", NULL);
-    _assets->loadDirectoryAsync("json/assets-level3.json", NULL);
-    _assets->loadDirectoryAsync("json/assets-level4.json", NULL);
-    _assets->loadDirectoryAsync("json/assets-level5.json", NULL);
-    _assets->loadDirectoryAsync("json/assets-guard-sounds.json", NULL);
-    _assets->loadDirectoryAsync("json/assets-parry-sounds.json", NULL);
-    _assets->loadDirectoryAsync("json/assets-projectile-sounds.json", NULL);
+    _assets->loadDirectoryAsync("json/assets-menu.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-level1.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-level2.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-level3.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-level4.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-level5.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-guard-sounds.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-parry-sounds.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
+    _assets->loadDirectoryAsync("json/assets-projectile-sounds.json", [this](const std::string& key, bool success){
+        if (success) {
+            auto _ = _assets->progress();
+        }
+    });
     _loading.start();
     AudioEngine::start();
     Application::onStartup(); // YOU MUST END with call to parent
