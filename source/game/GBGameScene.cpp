@@ -424,7 +424,7 @@ void GameScene::preUpdate(float dt) {
         Application::get()->quit();
     }
 
-    setDebug(true);
+//    setDebug(true);
     
 	_ui->updateHP(_player->getHP());
     _ui->updateComboBar(_player->_comboMeter);
