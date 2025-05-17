@@ -680,7 +680,7 @@ std::shared_ptr<LevelController::WallZone> LevelController::createWall(float xPo
     wallObj->setDebugScene(_debugNodeRef);
     sprite->setPosition(wallObj->getPosition() * _scale);
     _worldNode->addChild(sprite);
-    float pixel_pos = xPos * 1024;
+    float pixel_pos = xPos * 1024 * 2 * 0.0004006410 * Application::get()->getDisplayWidth();
     auto wallZone = std::make_shared<WallZone>(WallZone{wallObj, sprite, pixel_pos});
     if (isLeft) {
         _leftWallZone = wallZone;
@@ -704,14 +704,14 @@ void LevelController::removeWall(std::shared_ptr<WallZone> wallZone) {
 
 void LevelController::updateRightZone(int index) {
     removeWall(_rightWallZone);
-    createWall(_currentLevel->getWalls()[index].second, false);
+    createWall(_currentLevel->getWalls()[index].second / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), false);
     _zoneUpdate = true;
-    _nextTrigger = _currentLevel->getWalls()[index].first*1024;
+    _nextTrigger = _currentLevel->getWalls()[index].first * 1024;
 }
 
 void LevelController::updateLeftZone(int index) {
     removeWall(_leftWallZone);
-    createWall(_currentLevel->getWalls()[index].first, true);
+    createWall(_currentLevel->getWalls()[index].first / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), true);
     _zoneUpdate = false;
     _playerInNextZone = false;
 }
