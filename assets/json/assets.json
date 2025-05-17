@@ -516,28 +516,41 @@
         }
     },
     "sounds": {
-        "game": {
+        "menu": {
             "type": "sample",
-            "file": "sounds/GB_MAIN.ogg",
+            "file": "sounds/GBMenu_051623.ogg",
             "stream": true,
-            "volume": 0.1125
+            "volume": 0.4
         },
-        "win": {
+        "level1": {
             "type": "sample",
-            "file": "sounds/DD_Victory.ogg",
+            "file": "sounds/GBMenu_051623.ogg",
             "stream": true,
-            "volume": 0.5
+            "volume": 0.4
         },
-        "lose": {
+        "level2": {
             "type": "sample",
-            "file": "sounds/DD_Failure.ogg",
+            "file": "sounds/GBLevel1_051622.ogg",
             "stream": true,
-            "volume": 0.5
+            "volume": 0.4
         },
-        "jump": {
+        "level3": {
             "type": "sample",
-            "file": "sounds/jump.wav",
-            "volume": 0.1125
+            "file": "sounds/GBLevel2_v1.ogg",
+            "stream": true,
+            "volume": 0.4
+        },
+        "level4": {
+            "type": "sample",
+            "file": "sounds/GBLevel3.ogg",
+            "stream": true,
+            "volume": 0.4
+        },
+        "level5": {
+            "type": "sample",
+            "file": "sounds/GBLevel3.ogg",
+            "stream": true,
+            "volume": 0.4
         },
         "guard_1": {
             "type":     "sample",

@@ -182,12 +182,6 @@
         }
     },
     "audio": {
-        "music": {
-            "game": "game",
-            "win": "win",
-            "lose": "lose",
-            "volume": 0.7
-        },
         "effects": {
             "jump": 1,
             "guard": 4,
