@@ -232,7 +232,7 @@ public:
     void setInNextZone(bool next){ _playerInNextZone = next; }
     bool getInNextZone(){ return _playerInNextZone; }
     bool getZoneUpdate(){ return _zoneUpdate; }
-    float getNextTrigger(){ return _nextTrigger; }
+    float getNextTrigger(){ return _nextTrigger * (2 * 0.0004006410 * Application::get()->getDisplayWidth()); }
 
     void updateLeftZone(int wallsIndex);
     void updateRightZone(int wallsIndex);

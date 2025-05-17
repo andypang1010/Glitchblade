@@ -518,15 +518,13 @@ void GameScene::fixedUpdate(float step) {
     }
     
     CULog("PlayerPos: %f", currPlayerPosX);
-    CULog("CamLPos: %f", cameraPosLX);
-    CULog("CamLPos: %f", cameraPosRX);
+    CULog("CamLeftPos: %f", cameraPosLX);
+    CULog("CamRightPos: %f", cameraPosRX);
     CULog("CamLocked?: %d", _cameraLocked);
 	CULog("LeftBound: %f", leftBound);
 	CULog("RightBound: %f", rightBound);
     CULog("");
-    for (auto obs : _world->getObstacles()) {
-        
-    }
+
     if (_levelController->getZoneUpdate()) {
         CULog("NextTriggerPos: %f", _levelController->getNextTrigger());
     }
