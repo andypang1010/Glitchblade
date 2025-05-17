@@ -163,7 +163,7 @@ void GlitchbladeApp::initGameScene(int levelNum) {
     
     // play level music
     std::shared_ptr<Sound> source = _assets->get<Sound>("level" + std::to_string(levelNum));
-    AudioEngine::get()->getMusicQueue()->play(source, true, 1.0);
+    AudioEngine::get()->getMusicQueue()->play(source, true, 0.2);
 }
 
 void GlitchbladeApp::onLevelCompleted(int levelNum) {

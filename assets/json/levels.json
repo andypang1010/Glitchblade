@@ -263,41 +263,163 @@
             }
         ],
         "platforms": [
-          {
-            "origin": {
-              "x": 20.0,
-              "y": 5.6
+            {
+              "origin": {
+                "x": 100,
+                "y": 20
+              },
+              "size": {
+                "width": 200.0,
+                "height": 8.0
+              }
             },
-            "size": {
-              "width": 8.0,
-              "height": 1
-            }
-          },
-          {
-            "origin": {
-              "x": 40.0,
-              "y": 5.6
-            },
-            "size": {
-              "width": 8.0,
-              "height": 1
-            }
-          },
           {
             "origin": {
               "x": 30.0,
-              "y": 9.6
+              "y": 3.7
             },
             "size": {
-              "width": 8.0,
-              "height": 1
+              "width": 6.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 31.5,
+              "y": 6.7
+            },
+            "size": {
+              "width": 3.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 34.5,
+              "y": 2.95
+            },
+            "size": {
+              "width": 3.0,
+              "height": 1.5
+            }
+          },
+          
+          {
+            "origin": {
+              "x": 67.0,
+              "y": 3.7
+            },
+            "size": {
+              "width": 6.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 68.5,
+              "y": 6.7
+            },
+            "size": {
+              "width": 3.0,
+              "height": 3.0
+            }
+          },
+    
+          {
+            "origin": {
+              "x": 75.0,
+              "y": 12.0
+            },
+            "size": {
+              "width": 5.0,
+              "height": 14.0
+            }
+          },
+          {
+            "origin": {
+              "x": 95.0,
+              "y": 3.7
+            },
+            "size": {
+              "width": 15.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 95.0,
+              "y": 6.7
+            },
+            "size": {
+              "width": 11.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 95.0,
+              "y": 9.7
+            },
+            "size": {
+              "width": 7.0,
+              "height": 3.0
+            }
+          },
+          {
+            "origin": {
+              "x": 104.0,
+              "y": 10.0
+            },
+            "size": {
+              "width": 3.0,
+              "height": 1.0
+            }
+          },
+          {
+            "origin": {
+              "x": 118.1,
+              "y": 11.3
+            },
+            "size": {
+              "width": 0.2,
+              "height": 0.2
+            }
+          },
+          {
+            "origin": {
+              "x": 119.5,
+              "y": 6.7
+            },
+            "size": {
+              "width": 3.0,
+              "height": 9.0
+            }
+          },
+          {
+            "origin": {
+              "x": 124.0,
+              "y": 8.7
+            },
+            "size": {
+              "width": 6.0,
+              "height": 13.0
+            }
+          },
+          {
+            "origin": {
+              "x": 119.0,
+              "y": 16.7
+            },
+            "size": {
+              "width": 16.0,
+              "height": 3.0
             }
           }
         ],
         "waves": [
             {
               "spawn_intervals": [
-                3
+                0
               ],
               "spawn_positions": [
                 {
@@ -312,8 +434,8 @@
             },
             {
               "spawn_intervals": [
-                3,
-                3
+                0,
+                0
               ],
               "spawn_positions": [
                 {
@@ -321,7 +443,7 @@
                   "y": 200
                 },
                 {
-                  "x": 2400,
+                  "x": 2500,
                   "y": 200
                 }
               ],
@@ -332,31 +454,31 @@
             },
           {
             "spawn_intervals": [
-              3
+              0
             ],
             "spawn_positions": [
               {
-                "x": 4400,
-                "y": 100
+                "x": 3835.0,
+                "y": 470.0
               }
             ],
             "enemies": [
-              "boss_3"
+              "minion_1A"
             ]
           }
         ],
         "walls": [
             {
              "left" : 0,
-             "right" : 2
+             "right" : 1.5
             },
             {
-             "left" : 2,
-             "right" : 4
+             "left" : 1.5,
+             "right" : 3
             },
             {
-             "left" : 4,
-             "right" : 6.25
+             "left" : 3,
+             "right" : 4.5
             }
         ]
     },

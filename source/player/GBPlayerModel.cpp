@@ -387,6 +387,9 @@ void PlayerModel::update(float dt) {
     if (_lastDamagedFrame == PLAYER_HIT_COLOR_DURATION) {
         _sceneNode->setColor(Color4::WHITE);
     }
+    if ((int) getX () % 5 == 0){
+        CULog("Player position is %f", getX());
+    }
 }
 
 #pragma mark -
