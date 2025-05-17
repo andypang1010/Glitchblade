@@ -104,6 +104,11 @@ void GBMenuUI::dispose() {
     _startButton->clearListeners();
     _infoButton->clearListeners();
     _homeSettingButton->clearListeners();
+    
+    // Setting buttons
+    _musicButton->clearListeners();
+    _soundButton->clearListeners();
+    _backButton->clearListeners();
 
     // Level Selection Head buttons
     _homeButton = nullptr;
@@ -122,13 +127,18 @@ void GBMenuUI::dispose() {
     _startButton = nullptr;
     _infoButton = nullptr;
     _homeSettingButton = nullptr;
+    
+    // Setting buttons
+    _musicButton = nullptr;
+    _soundButton = nullptr;
+    _backButton = nullptr;
 
     removeAllChildren();
 }
 
 void GBMenuUI::setHighestPlayable(int highestPlayableLevel) {
     std::vector<std::shared_ptr< cugl::scene2::Button>> levelButtons = { _level1Button, _level2Button, _level3Button, _level4Button, _level5Button};
-    std::vector<std::function<void()>> levelCallbacks = { _level1Callback, _level2Callback, _level3Callback, _level3Callback, _level3Callback };
+    std::vector<std::function<void()>> levelCallbacks = { _level1Callback, _level2Callback, _level3Callback, _level4Callback, _level5Callback };
     
     for (int i = 0; i < highestPlayableLevel && i < levelButtons.size(); i++) {
         if (levelButtons[i]) {
