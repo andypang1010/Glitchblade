@@ -532,17 +532,17 @@ void GameScene::fixedUpdate(float step) {
     if (cameraPosLX < leftBound || cameraPosRX >= rightBound) {
         _cameraLocked = true;
         if (cameraPosLX <= leftBound) {
-            if (currPlayerPosX > (leftBound + _camera->getViewport().size.width * 0.66) * (2 * 0.0004006410 * Application::get()->getDisplayWidth())) {
+            if (currPlayerPosX > leftBound + _camera->getViewport().size.width * 0.66) {
                 _cameraLocked = false;
             }
         } else {
-            if (currPlayerPosX < (rightBound - _camera->getViewport().size.width * 0.66) * (2 * 0.0004006410 * Application::get()->getDisplayWidth())) {
+            if (currPlayerPosX < rightBound - _camera->getViewport().size.width * 0.66) {
                 _cameraLocked = false;
             }
         }
     }
     if (!_cameraLocked) {
-        _camera->translate(Vec2((currPlayerPosX -_camera->getPosition().x)* 0.05, 0) * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+        _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
         _camera->update();
         if (currPlayerVel > 0 && !isKnocked) {
             updateLayersLeft();
