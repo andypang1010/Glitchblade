@@ -59,12 +59,15 @@ void GlitchbladeApp::onStartup() {
     setClearColor(Color4f::BLACK);
 
     // Queue up the other assets
-    _assets->loadDirectoryAsync("json/assets-level1.json", NULL);
+    _assets->loadDirectory("json/assets-level1.json");
     _assets->loadDirectory("json/assets-level2.json");
     _assets->loadDirectory("json/assets-level3.json");
     _assets->loadDirectory("json/assets-level4.json");
     _assets->loadDirectory("json/assets-level5.json");
     _assets->loadDirectory("json/assets-menu.json");
+    _assets->loadDirectory("json/assets-guard-sounds.json");
+    _assets->loadDirectory("json/assets-parry-sounds.json");
+    _assets->loadDirectory("json/assets-projectile-sounds.json");
     _loading.start();
     AudioEngine::start();
     Application::onStartup(); // YOU MUST END with call to parent
