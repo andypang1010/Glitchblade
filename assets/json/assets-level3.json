@@ -82,7 +82,7 @@
     "sounds": {
         "level3": {
             "type": "sample",
-            "file": "sounds/GBLevel2_v1.ogg",
+            "file": "sounds/GBLevel1_051622.ogg",
             "stream": true,
             "volume": 0.4
         }

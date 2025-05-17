@@ -103,7 +103,7 @@
     "sounds": {
         "level2": {
             "type": "sample",
-            "file": "sounds/GBLevel1_051622.ogg",
+            "file": "sounds/GBTutorial.ogg",
             "stream": true,
             "volume": 0.4
         }

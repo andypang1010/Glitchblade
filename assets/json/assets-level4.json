@@ -4,7 +4,7 @@
     "sounds": {
         "level4": {
             "type": "sample",
-            "file": "sounds/GBLevel3.ogg",
+            "file": "sounds/GBLevel2_v1.ogg",
             "stream": true,
             "volume": 0.4
         }
