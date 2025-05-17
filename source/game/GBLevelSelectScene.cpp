@@ -1,5 +1,7 @@
 #include "GBLevelSelectScene.h"
 
+using namespace cugl::audio;
+
 LevelSelectScene::LevelSelectScene() : _ui(nullptr), _scene_to_load(0), _ui_switch("") {}
 
 void LevelSelectScene::dispose()
@@ -42,6 +44,11 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
         addChild(_ui);
         _ui->setHighestPlayable(highestPlayableLevel);
     }
+    
+    //play menu music
+    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+    std::shared_ptr<Sound> source = _assets->get<Sound>("menu");
+    AudioEngine::get()->getMusicQueue()->play(source, true, 1.0);
     return true;
 }
 
