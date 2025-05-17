@@ -662,7 +662,7 @@ std::shared_ptr<LevelController::WallZone> LevelController::createWall(float xPo
     sprite->setPosition(wallObj->getPosition() * _scale);
     _worldNode->addChild(sprite);
     float pixel_pos = xPos * 1024;
-    auto wallZone = std::make_shared<WallZone>(WallZone{wallObj, sprite, pixel_pos});
+    auto wallZone = std::make_shared<WallZone>(WallZone{wallObj, sprite, pixel_pos * float(2 * 0.0004006410 * Application::get()->getDisplayWidth()) });
     if (isLeft) {
         _leftWallZone = wallZone;
     }
