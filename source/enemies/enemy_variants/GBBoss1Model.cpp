@@ -122,6 +122,11 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	_deadSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_deadSprite->setName("dead");
 
+    _spawnSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("enemy_spawn"), 4, 7, 28);
+    _spawnSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _spawnSprite->setScale(0.75 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _spawnSprite->setName("spawn");
+
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_slamSprite);
@@ -132,6 +137,7 @@ void Boss1Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	getSceneNode()->addChild(_explodeSprite);
     getSceneNode()->addChild(_explodeVFXSprite);
 
+	getSceneNode()->addChild(_spawnSprite);
 }
 
 void Boss1Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
@@ -202,21 +208,7 @@ void Boss1Model::dispose() {
  * @param delta Number of seconds since last animation frame
  */
 void Boss1Model::update(float dt) {
-    if (isRemoved()) return;
-
-    BoxObstacle::update(dt);
-    if (_node != nullptr) {
-        _node->setPosition(getPosition() * _drawScale);
-        _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
-    }
+    EnemyModel::update(dt);
 }
 
 #pragma mark -
@@ -393,6 +385,8 @@ void Boss1Model::updateAnimation()
 
     _idleSprite->setVisible(!isStunned() && !_isStabbing && !_isSlamming && !_isShooting && !_isExploding && !(isMoveLeft() || isMoveRight()));
 
+	_spawnSprite->setVisible(isSpawning);
+
     playAnimation(_walkSprite);
     playAnimation(_idleSprite);
     playAnimationOnce(_slamSprite);
@@ -400,6 +394,7 @@ void Boss1Model::updateAnimation()
     playAnimationOnce(_stunSprite);
 	playAnimationOnce(_shootSprite);
 	playAnimationOnce(_explodeSprite);
+	playAnimationOnce(_spawnSprite);
 
     playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartFrame() - 1);
 

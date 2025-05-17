@@ -253,6 +253,18 @@ void EnemyModel::update(float dt) {
         _node->setPosition(getPosition() * _drawScale);
         _node->setAngle(getAngle());
     }
+
+    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
+        _lastDamagedFrame++;
+    }
+
+    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
+        _node->setColor(Color4::WHITE);
+    }
+
+    if (_spawnSprite->getFrame() >= _spawnSprite->getCount() - 1) {
+        isSpawning = false;
+    }
 }
 
 #pragma mark -

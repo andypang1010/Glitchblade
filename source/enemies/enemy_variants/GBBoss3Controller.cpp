@@ -19,15 +19,9 @@ void Boss3Controller::applyForce() {
     std::shared_ptr<Boss3Model> boss3 = std::dynamic_pointer_cast<Boss3Model>(_enemy);
 
     if (_enemy->getMovement() == 0.0f) {
-        if (_enemy->isGrounded()) {
-            b2Vec2 vel = enemyBody->GetLinearVelocity();
-            vel.x = 0;
-            enemyBody->SetLinearVelocity(vel);
-        }
-        else {
-            b2Vec2 dampForce(-_enemy->getDamping() * _enemy->getVX(), -_enemy->getDamping() * _enemy->getVY());
-            enemyBody->ApplyForceToCenter(dampForce, true);
-        }
+        b2Vec2 vel = enemyBody->GetLinearVelocity();
+        vel.x = vel.x * 0.5;
+        enemyBody->SetLinearVelocity(vel);
     }
 
     if (!_enemy->isStunned()) {

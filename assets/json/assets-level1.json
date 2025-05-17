@@ -92,7 +92,7 @@
         },
         "level1": {
             "type": "sample",
-            "file": "sounds/GBMenu_051623.ogg",
+            "file": "sounds/GBTutorial.ogg",
             "stream": true,
             "volume": 0.4
         }

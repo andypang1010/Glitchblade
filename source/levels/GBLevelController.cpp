@@ -319,7 +319,7 @@ void LevelController::fixedUpdate(float timestep)
 
                 if (damagingAction) {
                     // CULog("Action name: %s", damagingAction->getActionName().c_str());
-                    float rot = damagingAction->getActionName() == "laser" ? M_PI / 4 : 0;
+                    float rot = damagingAction->getActionName() == "laser_diag" ? M_PI / 4 : 0;
                     createHitbox(enemyCtrlr->getEnemy(), damagingAction->getHitboxPos(), Size(damagingAction->getHitboxSize()), rot, damagingAction->getHitboxDamage(), damagingAction->getHitboxKnockBack(), 4 * (damagingAction->getHitboxEndFrame() - damagingAction->getHitboxStartFrame() + 1), damagingAction->getIsParriable());
                 }
 
@@ -364,21 +364,21 @@ void LevelController::postUpdate(float dt)
         }
     }
     
-//    // change platform colors
-//    for (auto& pair : _platforms) {
-//        NodePtr node = pair.second;
-//
-//        float pulseFactor = cugl::EasingFactory::sineInOut(cugl::Application::get()->getEllapsedMicros() / 3000000.0f);
-//
-//        int startR = 115, startG = 42, startB = 86;   // Original pinkish color
-//        int endR   = 40, endG = 40, endB = 40;      // Grayish tone
-//
-//        int newRed   = static_cast<int>(startR + (endR - startR) * pulseFactor);
-//        int newGreen = static_cast<int>(startG + (endG - startG) * pulseFactor);
-//        int newBlue  = static_cast<int>(startB + (endB - startB) * pulseFactor);
-//
-//        node->setColor(cugl::Color4(newRed, newGreen, newBlue, 255));
-//    }
+    // change platform colors
+    for (auto& pair : _platforms) {
+        NodePtr node = pair.second;
+
+        float pulseFactor = cugl::EasingFactory::sineInOut(cugl::Application::get()->getEllapsedMicros() / 3000000.0f);
+
+        int startR = 115, startG = 42, startB = 86;   // Original pinkish color
+        int endR   = 40, endG = 40, endB = 40;      // Grayish tone
+
+        int newRed   = static_cast<int>(startR + (endR - startR) * pulseFactor);
+        int newGreen = static_cast<int>(startG + (endG - startG) * pulseFactor);
+        int newBlue  = static_cast<int>(startB + (endB - startB) * pulseFactor);
+
+        node->setColor(cugl::Color4(newRed, newGreen, newBlue, 255));
+    }
 }
 
 /**
@@ -428,7 +428,7 @@ void LevelController::createPlatform(Rect rect)
     std::shared_ptr<PolygonNode> platformSprite = scene2::PolygonNode::allocWithTexture(Texture::getBlank());
     platformSprite->setContentSize(rect.size * 32);
     platformSprite->setVisible(true);
-    platformSprite->setColor(Color4(40,40,40));
+    platformSprite->setColor(Color4(115,42,86));
     
 	//platformSprite->setAnchor(Vec2::ANCHOR_TOP_RIGHT);
 	//platformSceneNode->addChild(platformSprite);
@@ -707,7 +707,8 @@ void LevelController::updateRightZone(int index) {
     removeWall(_rightWallZone);
     createWall(_currentLevel->getWalls()[index].second / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), false);
     _zoneUpdate = true;
-    _nextTrigger = _currentLevel->getWalls()[index].first * 1024;
+    _nextTrigger = _currentLevel->getWalls()[index].first*1024;
+    _enemiesJSON->get("world_info")->get("worldRight")->set(_rightWallZone->xPosition);
 }
 
 void LevelController::updateLeftZone(int index) {
@@ -715,6 +716,7 @@ void LevelController::updateLeftZone(int index) {
     createWall(_currentLevel->getWalls()[index].first / (2 * 0.0004006410 * Application::get()->getDisplayWidth()), true);
     _zoneUpdate = false;
     _playerInNextZone = false;
+    _enemiesJSON->get("world_info")->get("worldLeft")->set(_leftWallZone->xPosition);
 }
 
 std::vector<std::vector<Vec2>> LevelController::calculateWallVertices() {

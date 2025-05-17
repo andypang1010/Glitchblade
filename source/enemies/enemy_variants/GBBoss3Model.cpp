@@ -39,23 +39,23 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     //move this to new function
     _groundIdleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_idle"), 3, 5, 15);
     _groundIdleSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _groundIdleSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _groundIdleSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _groundIdleSprite->setName("groundIdle");
 
     _airIdleSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_idle"), 3, 5, 15);
     _airIdleSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _airIdleSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _airIdleSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _airIdleSprite->setName("airIdle");
 
     _groundStunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_stun"), 6, 9, 53);
     _groundStunSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _groundStunSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _groundStunSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _groundStunSprite->setName("groundStun");
     stunFrames = 20;
 
     _airStunSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_stun"), 6, 9, 53);
     _airStunSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _airStunSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _airStunSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _airStunSprite->setName("airStun");
 
     _uppercutSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_uppercut"), 3, 4, 12);
@@ -100,7 +100,7 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
     _shootLaserSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_shoot_laser"), 5, 9, 38);
     _shootLaserSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _shootLaserSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _shootLaserSprite->setScale(scale * 4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _shootLaserSprite->setName("shootLaser");
 
     _shootWaitSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_shoot_wait"), 2, 4, 7);
@@ -116,25 +116,30 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
 	_groundDeadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_dead"), 5, 9, 45);
     _groundDeadSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _groundDeadSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _groundDeadSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _groundDeadSprite->setName("groundDead");
     _groundDeadSprite->setVisible(false);
 
     _airDeadSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_dead"), 5, 9, 45);
     _airDeadSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _airDeadSprite->setScale(scale*2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _airDeadSprite->setScale(scale*4 * 0.0004006410 * Application::get()->getDisplayWidth());
     _airDeadSprite->setName("airDead");
 	_airDeadSprite->setVisible(false);
 
 	_groundTransformSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_ground_transform"), 4, 4, 16);
 	_groundTransformSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-	_groundTransformSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_groundTransformSprite->setScale(scale * 4 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_groundTransformSprite->setName("groundTransform");
 
 	_airTransformSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss3_air_transform"), 4, 4, 16);
 	_airTransformSprite->setPosition(0, YOffset * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-	_airTransformSprite->setScale(scale * 2 * 0.0004006410 * Application::get()->getDisplayWidth());
+	_airTransformSprite->setScale(scale * 4 * 0.0004006410 * Application::get()->getDisplayWidth());
 	_airTransformSprite->setName("airTransform");
+
+    _spawnSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("enemy_spawn"), 4, 7, 28);
+    _spawnSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _spawnSprite->setScale(0.75 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _spawnSprite->setName("spawn");
 
 	getSceneNode()->addChild(_groundIdleSprite);
 	getSceneNode()->addChild(_airIdleSprite);
@@ -161,6 +166,8 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
     getSceneNode()->addChild(_laserVFXSprite);
     getSceneNode()->addChild(_shootLaserSprite);
+
+	getSceneNode()->addChild(_spawnSprite);
 }
 
 void Boss3Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
@@ -180,7 +187,7 @@ void Boss3Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
 		else if (act->getActionName() == "shoot") {
 			_shoot = std::dynamic_pointer_cast<RangedActionModel>(act);
 		}
-        else if (act->getActionName() == "laser") {
+        else if (act->getActionName() == "laser_diag") {
             _laser = std::dynamic_pointer_cast<MeleeActionModel>(act);
         }
     }
@@ -276,21 +283,7 @@ void Boss3Model::setStun(int value) {
  * @param delta Number of seconds since last animation frame
  */
 void Boss3Model::update(float dt) {
-    if (isRemoved()) return;
-
-    BoxObstacle::update(dt);
-    if (_node != nullptr) {
-        _node->setPosition(getPosition() * _drawScale);
-        _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
-    }
+    EnemyModel::update(dt);
 }
 
 #pragma mark -
@@ -359,17 +352,22 @@ void Boss3Model::nextAction() {
 
 void Boss3Model::handleGroundAction(int r) {
     if (isTargetClose()) {
-        if (r % 4 == 0) { // Uppercut
+        if (r % 3 == 0) { // Uppercut
             uppercut();
         }
-        else if (r % 4 == 1) { // Slam
+        else if (r % 3 == 1) { // Slam
             slam();
         }
-        else if (r % 4 == 2) { // Jump
+        else { // Jump
             jump();
         }
-        else if (r % 4 == 3) { // Dash
+    }
+    else {
+        if (r % 3 == 0) {
             dash();
+        }
+        else {
+            jump();
         }
     }
 }
@@ -431,8 +429,8 @@ void Boss3Model::AIMove() {
     }
     else {
         if (_moveDuration > 0) {
-            if (_worldTop - getPosition().y <= 4) { // near top, quickly move down
-                setVerticalMovement(-getForce()*8);
+            if (_worldTop - getPosition().y <= 6) { // near top, quickly move down
+                setVerticalMovement(-getForce()*3);
             }
             else {
                 if (getPosition().y <= 10) {
@@ -633,6 +631,8 @@ void Boss3Model::updateAnimation()
     _groundIdleSprite->setVisible(!isStunned() && _isGroundForm && !_isUppercutting && !_isSlamming && !getIsJumping() && !_isDashing && !_isGroundDashStarting && !_isGroundDashEnding);
 	_airIdleSprite->setVisible(!isStunned() && !_isGroundForm && !_isShootStarting && !_isShootAttacking && !_isLaserAttacking && !_isShootWaiting && !_isDashing);
 
+	_spawnSprite->setVisible(isSpawning);
+
     playAnimation(_groundIdleSprite);
     playAnimation(_airIdleSprite);
     playAnimation(_groundStunSprite);
@@ -655,6 +655,8 @@ void Boss3Model::updateAnimation()
 	playAnimation(_shootWaitSprite);
 
     playVFXAnimation(_shootLaserSprite, _laserVFXSprite, 1);
+
+    playAnimationOnce(_spawnSprite);
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

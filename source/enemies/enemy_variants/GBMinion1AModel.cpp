@@ -64,6 +64,11 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _deadSprite->setPosition(0, 0);
 	_deadSprite->setName("dead");
 
+    _spawnSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("enemy_spawn"), 4, 7, 28);
+    _spawnSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _spawnSprite->setScale(0.5 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _spawnSprite->setName("spawn");
+
     stunFrames = 0;
 
     setName(std::string(ENEMY_NAME));
@@ -73,6 +78,8 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_explodeSprite);
     getSceneNode()->addChild(_shootSprite);
     getSceneNode()->addChild(_explodeVFXSprite);
+
+	getSceneNode()->addChild(_spawnSprite);
 }
 
 void Minion1AModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
@@ -135,21 +142,7 @@ void Minion1AModel::dispose() {
  * @param delta Number of seconds since last animation frame
  */
 void Minion1AModel::update(float dt) {
-    if (isRemoved()) return;
-
-    BoxObstacle::update(dt);
-    if (_node != nullptr) {
-        _node->setPosition(getPosition() * _drawScale);
-        _node->setAngle(getAngle());
-    }
-
-    if (_lastDamagedFrame < ENEMY_HIT_COLOR_DURATION) {
-		_lastDamagedFrame++;
-    }
-
-    if (_lastDamagedFrame == ENEMY_HIT_COLOR_DURATION) {
-        _node->setColor(Color4::WHITE);
-    }
+	EnemyModel::update(dt);
 }
 
 #pragma mark -
@@ -274,11 +267,13 @@ void Minion1AModel::updateAnimation()
     
     _explodeVFXSprite->setVisible(_isExploding && _explodeSprite->getFrame() >= _explode->getHitboxStartFrame() - 1);
     
+	_spawnSprite->setVisible(isSpawning);
     
     playAnimation(_idleSprite);
     playAnimation(_walkSprite);
     playAnimationOnce(_shootSprite);
     playAnimationOnce(_explodeSprite);
+	playAnimationOnce(_spawnSprite);
     playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartFrame() - 1);
    
     if (framenum > 0){
