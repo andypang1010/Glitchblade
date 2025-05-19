@@ -77,7 +77,8 @@ bool PlayerModel::init(const std::shared_ptr<AssetManager>& assetRef, const std:
     float scale = constantsRef->get("scene")->getFloat("scale");
     std::shared_ptr<graphics::Texture> image;
     image = assetRef->get<graphics::Texture>(_playerJSON->getString("texture"));
-    Size nsize = (image->getSize() / 32) * (2 * 0.0004006410 * Application::get()->getDisplayWidth());
+    Size nsize = (image->getSize() / 16);
+	CULog("player size is (%f,%f)", nsize.width, nsize.height);
     nsize.width *= _playerJSON->get("fixtures")->get("body")->getFloat("h_shrink");
     nsize.height *= _playerJSON->get("fixtures")->get("body")->getFloat("v_shrink");
     _drawScale = scale;
