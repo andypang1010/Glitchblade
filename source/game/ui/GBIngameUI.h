@@ -65,12 +65,12 @@ protected:
     float _comboBarOriginalWidth = 0;
    
     /** Progress Bar segments */
-    std::shared_ptr<cugl::scene2::PolygonNode> _progressBar;
-    float _progressBarOriginalWidth = 0;
+    //std::shared_ptr<cugl::scene2::PolygonNode> _progressBar;
+    //float _progressBarOriginalWidth = 0;
     
     /** HUD info labels (time & wave number) */
     std::shared_ptr<cugl::scene2::Label> _hudTimeNum;
-    std::shared_ptr<cugl::scene2::Label> _hudWaveNum;
+    //std::shared_ptr<cugl::scene2::Label> _hudWaveNum;
 
     /** Win screen labels */
     std::shared_ptr<cugl::scene2::Label> _winTimeNum;

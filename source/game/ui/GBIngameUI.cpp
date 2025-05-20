@@ -41,7 +41,7 @@ bool GBIngameUI::init(const std::shared_ptr<AssetManager>& assets) {
     
     // Get references to specific UI elements (labels) for later update
     _hudTimeNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("time_num"));
-    _hudWaveNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("wave_num"));
+    //_hudWaveNum = std::dynamic_pointer_cast<scene2::Label>(headsUpDisplay->getChildByName("wave_num"));
     _winTimeNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("time_num"));
     _winParryNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("parry_num"));
     _winHpNum = std::dynamic_pointer_cast<scene2::Label>(winPage->getChildByName("hp_num"));
@@ -134,12 +134,12 @@ void GBIngameUI::setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDispl
             _hpHalfSegments.push_back(half);
         }
     }
-    _progressBar = headsUpDisplay->getChildByName<scene2::PolygonNode>("progress_ind");
+    //_progressBar = headsUpDisplay->getChildByName<scene2::PolygonNode>("progress_ind");
     _comboBar = headsUpDisplay->getChildByName<scene2::PolygonNode>("combo_bar");
     
     // Store original width of bars for later resizing
     _comboBarOriginalWidth = _comboBar->getContentSize().width;
-    _progressBarOriginalWidth = _progressBar->getContentSize().width;
+    //_progressBarOriginalWidth = _progressBar->getContentSize().width;
 }
 
 /**
@@ -360,24 +360,24 @@ void GBIngameUI::updateTime(float timeSpent) {
  * Update progression bar and wave label on the HUD
  */
 void GBIngameUI::updateProgression(int spawnedCount, int totalCount, int waveIndex) {
-    if (!_progressBar) return;
-    
-    // Resize progress bar proportionally to spawned enemy ratio
-    float ratio = (totalCount > 0.0f) ? ((float)spawnedCount) / totalCount : 0.0f;
-    float barWidth = _progressBarOriginalWidth * ratio;
-    float barHeight = _progressBar->getContentSize().height;
+    //if (!_progressBar) return;
+    //
+    //// Resize progress bar proportionally to spawned enemy ratio
+    //float ratio = (totalCount > 0.0f) ? ((float)spawnedCount) / totalCount : 0.0f;
+    //float barWidth = _progressBarOriginalWidth * ratio;
+    //float barHeight = _progressBar->getContentSize().height;
 
-    _progressBar->setContentSize(Size(barWidth, barHeight));
-    _progressBar->setPolygon(Rect(0, 0, barWidth, barHeight));
-    
-    // Display wave number or "Final Wave" on HUD
-    if (_hudWaveNum) {
-        if (waveIndex == -1) {
-            _hudWaveNum->setText("Final Wave");
-        } else {
-            _hudWaveNum->setText("Wave " + std::to_string(waveIndex + 1));
-        }
-    }
+    //_progressBar->setContentSize(Size(barWidth, barHeight));
+    //_progressBar->setPolygon(Rect(0, 0, barWidth, barHeight));
+    //
+    //// Display wave number or "Final Wave" on HUD
+    //if (_hudWaveNum) {
+    //    if (waveIndex == -1) {
+    //        _hudWaveNum->setText("Final Wave");
+    //    } else {
+    //        _hudWaveNum->setText("Wave " + std::to_string(waveIndex + 1));
+    //    }
+    //}
 }
 
 /**
