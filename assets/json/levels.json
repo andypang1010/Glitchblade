@@ -387,6 +387,10 @@
           "speed": 0
         },
         {
+          "file": "scene3_tutorial",
+          "speed": 0
+        },
+        {
           "file": "ground",
           "speed": 0
         }
@@ -767,7 +771,7 @@
           "spawn_positions": [
             {
               "x": 2350,
-              "y": 200
+              "y": 100
             }
           ],
           "enemies": [
@@ -785,7 +789,7 @@
               "y": 350
             },
             {
-              "x": 2650,
+              "x": 3050,
               "y": 400
             }
           ],
@@ -802,11 +806,11 @@
           "spawn_positions": [
             {
               "x": 4200,
-              "y": 300
+              "y": 100
             },
             {
               "x": 4250,
-              "y": 400
+              "y": 100
             }
           ],
           "enemies": [
@@ -821,273 +825,7 @@
           "spawn_positions": [
             {
               "x": 5000,
-              "y": 700
-            }
-          ],
-          "enemies": [
-            "boss_2"
-          ]
-        }
-      ],
-      "walls": [
-        {
-          "left": 0,
-          "right": 1.7
-        },
-        {
-          "left": 1.5,
-          "right": 2.8
-        },
-        {
-          "left": 2.8,
-          "right": 3.5
-        },
-        {
-          "left": 3.2,
-          "right": 4.8
-        },
-        {
-          "left": 4.8,
-          "right": 6.0
-        }
-      ]
-    },
-    {
-      "name": "Level 5",
-      "scale": 1,
-      "width": 8,
-      "layers": [
-        {
-          "file": "scene5_bg",
-          "speed": 0
-        },
-        {
-          "file": "scene5_l7",
-          "speed": 1
-        },
-        {
-          "file": "scene5_l6",
-          "speed": 1.5
-        },
-        {
-          "file": "scene5_l5",
-          "speed": 2
-        },
-        {
-          "file": "scene5_l4",
-          "speed": 2.5
-        },
-        {
-          "file": "scene5_l3",
-          "speed": 3
-        },
-        {
-          "file": "scene5_l2",
-          "speed": 3.5
-        },
-        {
-          "file": "scene5_l1",
-          "speed": 4
-        },
-        {
-          "file": "scene5_l0",
-          "speed": 0
-        },
-        {
-          "file": "ground",
-          "speed": 0
-        }
-      ],
-      "platforms": [
-        {
-          "origin": {
-            "x": 20.0,
-            "y": 5.6
-          },
-          "size": {
-            "width": 12.0,
-            "height": 1
-          }
-        },
-        {
-          "origin": {
-            "x": 40.0,
-            "y": 5.6
-          },
-          "size": {
-            "width": 8.0,
-            "height": 1
-          }
-        },
-        {
-          "origin": {
-            "x": 30.0,
-            "y": 9.6
-          },
-          "size": {
-            "width": 8.0,
-            "height": 1
-          }
-        },
-        {
-          "origin": {
-            "x": 60.0,
-            "y": 18.5
-          },
-          "size": {
-            "width": 7.0,
-            "height": 15
-          }
-        },
-        {
-          "origin": {
-            "x": 72.0,
-            "y": 14.0
-          },
-          "size": {
-            "width": 6.0,
-            "height": 15
-          }
-        },
-        {
-          "origin": {
-            "x": 88,
-            "y": 11.0
-          },
-          "size": {
-            "width": 2.5,
-            "height": 1.0
-          }
-        },
-        {
-          "origin": {
-            "x": 84,
-            "y": 7.0
-          },
-          "size": {
-            "width": 2.5,
-            "height": 1.0
-          }
-        },
-        {
-          "origin": {
-            "x": 92.0,
-            "y": 7.0
-          },
-          "size": {
-            "width": 2.5,
-            "height": 1.0
-          }
-        },
-        {
-          "origin": {
-            "x": 84,
-            "y": 14.5
-          },
-          "size": {
-            "width": 2.5,
-            "height": 1.0
-          }
-        },
-        {
-          "origin": {
-            "x": 92.0,
-            "y": 14.5
-          },
-          "size": {
-            "width": 2.5,
-            "height": 1.0
-          }
-        },
-        {
-          "origin": {
-            "x": 120.0,
-            "y": 12.5
-          },
-          "size": {
-            "width": 30.0,
-            "height": 15
-          }
-        }
-      ],
-      "waves": [
-        {
-          "spawn_intervals": [
-            0
-          ],
-          "spawn_positions": [
-            {
-              "x": 800,
-              "y": 500
-            }
-          ],
-
-          "enemies": [
-            "minion_2A"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            0
-          ],
-          "spawn_positions": [
-            {
-              "x": 2350,
               "y": 200
-            }
-          ],
-          "enemies": [
-            "minion_2B"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            0,
-            0
-          ],
-          "spawn_positions": [
-            {
-              "x": 2450,
-              "y": 350
-            },
-            {
-              "x": 2650,
-              "y": 400
-            }
-          ],
-          "enemies": [
-            "minion_2A",
-            "minion_2A"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            0,
-            0
-          ],
-          "spawn_positions": [
-            {
-              "x": 4000,
-              "y": 100
-            },
-            {
-              "x": 4250,
-              "y": 100
-            }
-          ],
-          "enemies": [
-            "minion_2B",
-            "minion_1A"
-          ]
-        },
-        {
-          "spawn_intervals": [
-            0
-          ],
-          "spawn_positions": [
-            {
-              "x": 5000,
-              "y": 700
             }
           ],
           "enemies": [
@@ -1113,7 +851,7 @@
           "right": 4.8
         },
         {
-          "left": 3.8,
+          "left": 4.0,
           "right": 6.0
         }
       ]
@@ -1194,7 +932,7 @@
           "spawn_positions": [
             {
               "x": 3500,
-              "y": 100
+              "y": 150
             }
           ],
           "enemies": [

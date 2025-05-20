@@ -21,6 +21,9 @@
         "scene3_l4": {
             "file": "textures/Scene_2_Layer_4.png"
         },
+        "scene3_tutorial": {
+            "file": "textures/tutorial_3.png"
+        },
         "boss2_dead": {
             "file": "textures/boss2_dead.png"
         },

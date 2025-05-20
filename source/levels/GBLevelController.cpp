@@ -368,16 +368,17 @@ void LevelController::postUpdate(float dt)
     for (auto& pair : _platforms) {
         NodePtr node = pair.second;
 
-        float pulseFactor = cugl::EasingFactory::sineInOut(cugl::Application::get()->getEllapsedMicros() / 3000000.0f);
+        //float pulseFactor = cugl::EasingFactory::sineInOut(cugl::Application::get()->getEllapsedMicros() / 3000000.0f);
 
-        int startR = 115, startG = 42, startB = 86;   // Original pinkish color
-        int endR   = 40, endG = 40, endB = 40;      // Grayish tone
+        //int startR = 115, startG = 42, startB = 86;   // Original pinkish color
+        //int endR   = 40, endG = 40, endB = 40;      // Grayish tone
 
-        int newRed   = static_cast<int>(startR + (endR - startR) * pulseFactor);
-        int newGreen = static_cast<int>(startG + (endG - startG) * pulseFactor);
-        int newBlue  = static_cast<int>(startB + (endB - startB) * pulseFactor);
+        //int newRed   = static_cast<int>(startR + (endR - startR) * pulseFactor);
+        //int newGreen = static_cast<int>(startG + (endG - startG) * pulseFactor);
+        //int newBlue  = static_cast<int>(startB + (endB - startB) * pulseFactor);
 
-        node->setColor(cugl::Color4(newRed, newGreen, newBlue, 255));
+        //node->setColor(cugl::Color4(newRed, newGreen, newBlue, 255));
+        node->setColor(Color4::BLACK);
     }
 }
 
