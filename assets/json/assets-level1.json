@@ -17,6 +17,9 @@
         },
         "scene1_l4": {
             "file": "textures/Tutorial_Layer_4.png"
+        },
+        "scene1_tutorial": {
+            "file": "textures/tutorial_1.png"
         }
     },
     

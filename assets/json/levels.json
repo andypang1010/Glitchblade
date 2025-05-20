@@ -30,6 +30,10 @@
           "speed": 0
         },
         {
+          "file": "scene1_tutorial",
+          "speed": 0
+        },
+        {
           "file": "ground",
           "speed": 0
         }
@@ -123,7 +127,7 @@
     {
       "name": "Level 2",
       "scale": 1,
-      "width": 6.25,
+      "width": 4.5,
       "layers": [
         {
           "file": "scene2_bg",
@@ -150,21 +154,16 @@
           "speed": 0
         },
         {
+          "file": "scene2_tutorial",
+          "speed": 0
+        },
+        {
           "file": "ground",
           "speed": 0
         }
       ],
       "platforms": [
-        {
-          "origin": {
-            "x": 100,
-            "y": 20
-          },
-          "size": {
-            "width": 200.0,
-            "height": 8.0
-          }
-        },
+        
         {
           "origin": {
             "x": 30.0,
@@ -364,14 +363,13 @@
         },
         {
           "left": 2.3,
-          "right": 4.5
+          "right": 3.8
         }
       ]
     },
     {
       "name": "Level 3",
       "scale": 1,
-      "width": 8,
       "width": 8,
       "layers": [
         {
@@ -410,7 +408,7 @@
             "y": 15
           },
           "size": {
-            "width": 10.0,
+            "width": 13.0,
             "height": 10.0
           }
         },
@@ -851,7 +849,7 @@
           "right": 2.8
         },
         {
-          "left": 2.0,
+          "left": 2.8,
           "right": 3.5
         },
         {
@@ -859,7 +857,7 @@
           "right": 4.8
         },
         {
-          "left": 3.8,
+          "left": 4.8,
           "right": 6.0
         }
       ]

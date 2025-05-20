@@ -131,7 +131,7 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 
     _guardReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard_release"), 2, 4, 5);
     _guardReleaseSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
-    _guardReleaseSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+    _guardReleaseSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 
     _parryReleaseSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_parry_release"), 2, 3, 6);
     _parryReleaseSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
