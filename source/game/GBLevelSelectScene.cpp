@@ -39,7 +39,7 @@ bool LevelSelectScene::init(const std::shared_ptr<AssetManager>& assets, int hig
         _ui->setLevel4Callback([this]() { _scene_to_load = 4; });
         _ui->setLevel5Callback([this]() { _scene_to_load = 5; });
 
-        _ui->setStartCallback([this, highestPlayableLevel]() { _ui_switch = std::max(highestPlayableLevel, 1); CULog("Start pressed");});
+        _ui->setStartCallback([this, highestPlayableLevel]() { _ui_switch = highestPlayableLevel; CULog("Start pressed");});
         _ui->setHomeCallback([this]() { _ui_switch = 0; CULog("Home pressed");});
         _ui->setInfoCallback([this]() { _ui_switch = -1; CULog("Info pressed");});
         _ui->setHomeSettingCallback([this]() { _setting = true;; CULog("Home Setting pressed");});

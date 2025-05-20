@@ -114,6 +114,9 @@ void GBMenuUI::dispose() {
     _musicButton->clearListeners();
     _soundButton->clearListeners();
     _backButton->clearListeners();
+    
+    // Info button
+    _infoHomeButton->clearListeners();
 
     // Level Selection Head buttons
     _homeButton = nullptr;
@@ -137,6 +140,9 @@ void GBMenuUI::dispose() {
     _musicButton = nullptr;
     _soundButton = nullptr;
     _backButton = nullptr;
+    
+    // Info button
+    _infoHomeButton = nullptr;
 
     removeAllChildren();
 }

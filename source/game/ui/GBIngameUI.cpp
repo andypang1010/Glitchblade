@@ -138,7 +138,7 @@ void GBIngameUI::setupHUD(std::shared_ptr<cugl::scene2::SceneNode>& headsUpDispl
     _comboBar = headsUpDisplay->getChildByName<scene2::PolygonNode>("combo_bar");
     
     // Store original width of bars for later resizing
-    _comboBarOriginalWidth = _comboBar->getContentSize().width;
+    _comboBarOriginalWidth = 228.0f;
     //_progressBarOriginalWidth = _progressBar->getContentSize().width;
 }
 
