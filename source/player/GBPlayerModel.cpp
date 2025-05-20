@@ -125,6 +125,11 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _dashDownEndSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _dashDownEndSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
 
+	_dashDownVFXSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_dashDown_VFX"), 2, 2, 4);
+	_dashDownVFXSprite->setPosition(0, -40 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+	_dashDownVFXSprite->setScale(0.0004006410 * Application::get()->getDisplayWidth());
+	_dashDownVFXSprite->setVisible(false);
+
     _guardSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("player_guard"), 9, 4, 36);
     _guardSprite->setPosition(0, -25 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
     _guardSprite->setScale(2 * 0.0004006410 * Application::get()->getDisplayWidth());
@@ -158,7 +163,10 @@ void PlayerModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_jumpUpSprite);
     getSceneNode()->addChild(_jumpDownSprite);
     getSceneNode()->addChild(_dashDownStartSprite);
+    
     getSceneNode()->addChild(_dashDownEndSprite);
+	getSceneNode()->addChild(_dashDownVFXSprite);
+
     getSceneNode()->addChild(_guardSprite);
     getSceneNode()->addChild(_guardReleaseSprite);
 	getSceneNode()->addChild(_parryReleaseSprite);
@@ -539,10 +547,12 @@ void PlayerModel::updateAnimation()
             _landingDash = true;
             frameCounter = 0;
             _dashDownEndSprite->setFrame(0);
+			_dashDownVFXSprite->setFrame(0);
             setOnlyVisible(_dashDownEndSprite);
+            _dashDownVFXSprite->setVisible(true);
+			playAnimationOnce(_dashDownVFXSprite);
             // activate the aoe
             activateAoeFixture();
-
         }
 
         else {
@@ -556,6 +566,7 @@ void PlayerModel::updateAnimation()
         // (if finished last frame of landing animation)
         if (playAnimationOnce(_dashDownEndSprite)){
             _landingDash = false;
+			_dashDownVFXSprite->setVisible(false);
         }
     }
 

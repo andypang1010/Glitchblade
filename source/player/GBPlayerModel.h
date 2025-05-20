@@ -191,6 +191,7 @@ public:
     std::shared_ptr<scene2::SpriteNode> _jumpDownSprite;
     std::shared_ptr<scene2::SpriteNode> _dashDownStartSprite;
     std::shared_ptr<scene2::SpriteNode> _dashDownEndSprite;
+	std::shared_ptr<scene2::SpriteNode> _dashDownVFXSprite;
 
     std::shared_ptr<scene2::SpriteNode> _attackSprite;
     std::shared_ptr<scene2::SpriteNode> _damagedSprite;
@@ -329,6 +330,7 @@ public:
         _jumpDownSprite->setFrame(0);
         _dashDownStartSprite->setFrame(0);
         _dashDownEndSprite->setFrame(0);
+		_dashDownVFXSprite->setFrame(0);
 
         _attackSprite->setFrame(0);
         _damagedSprite->setFrame(0);
@@ -347,7 +349,7 @@ public:
     }
 
     void incrementComboCounterByParry() {
-        _comboMeter = std::min(_comboMeter + 34, 100.0f);
+        _comboMeter = std::min(_comboMeter + 50, 100.0f);
         _lastComboElapsedTime = 0;
     }
 

@@ -27,6 +27,9 @@
         "player_dashDown_end": {
             "file": "textures/player_dashDown_end.png"
         },
+        "player_dashDown_VFX": {
+            "file": "textures/player_dashDown_VFX.png"
+        },
         "player_guard": {
             "file": "textures/player_guard.png"
         },
