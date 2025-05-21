@@ -29,8 +29,8 @@
 #include "../enemies/actionmodel_variants/GBMeleeActionModel.h"
 #include "ui/GBIngameUI.h"
 #include "../core/GBAudio.h"
-#include "RNBO.h"              // ← add
-#include <SDL.h>               // ← for SDL_AudioSpec
+#include "RNBO.h" // ← add
+#include <SDL.h>  // ← for SDL_AudioSpec
 #include <iostream>
 #include <memory>
 #include <atomic>
@@ -47,13 +47,11 @@ using namespace cugl::graphics;
 using namespace cugl::physics2;
 using namespace cugl::audio;
 
-
-
 #define directions
-Vec2 LEFT = { -1.0f, 0.0f };
-Vec2 RIGHT = { 1.0f, 0.0f };
-Vec2 UP = { 0.0f, 1.0f };
-Vec2 DOWN = { 0.0f, -1.0f };
+Vec2 LEFT = {-1.0f, 0.0f};
+Vec2 RIGHT = {1.0f, 0.0f};
+Vec2 UP = {0.0f, 1.0f};
+Vec2 DOWN = {0.0f, -1.0f};
 #pragma mark -
 #pragma mark Constructors
 /**
@@ -63,23 +61,26 @@ Vec2 DOWN = { 0.0f, -1.0f };
  * This allows us to use a controller without a heap pointer.
  */
 GameScene::GameScene() : Scene2(),
-_worldnode(nullptr),
-_debugnode(nullptr),
-_world(nullptr),
-_levelController(nullptr),
-_complete(false),
-_debug(false),
-_input(nullptr)
+                         _worldnode(nullptr),
+                         _debugnode(nullptr),
+                         _world(nullptr),
+                         _levelController(nullptr),
+                         _complete(false),
+                         _debug(false),
+                         _input(nullptr)
 {
 }
 
-static bool loadWavAsFloat(const char* path,
-                           RNBO::CoreObject& rnbo,
-                           const std::string& dataRefId) {
+// George's Code Start
+static bool loadWavAsFloat(const char *path,
+                           RNBO::CoreObject &rnbo,
+                           const std::string &dataRefId)
+{
     SDL_AudioSpec spec;
-    Uint8*  rawBuf = nullptr;
-    Uint32  rawLen = 0;
-    if (!SDL_LoadWAV(path, &spec, &rawBuf, &rawLen)) {
+    Uint8 *rawBuf = nullptr;
+    Uint32 rawLen = 0;
+    if (!SDL_LoadWAV(path, &spec, &rawBuf, &rawLen))
+    {
         std::cerr << "SDL_LoadWAV failed: " << SDL_GetError() << "\n";
         return false;
     }
@@ -89,24 +90,25 @@ static bool loadWavAsFloat(const char* path,
                       spec.format, spec.channels, spec.freq,
                       AUDIO_F32SYS, spec.channels, spec.freq);
     cvt.len = rawLen;
-    cvt.buf = (Uint8*)SDL_malloc(cvt.len * cvt.len_mult);
+    cvt.buf = (Uint8 *)SDL_malloc(cvt.len * cvt.len_mult);
     std::memcpy(cvt.buf, rawBuf, rawLen);
     SDL_ConvertAudio(&cvt);
     SDL_FreeWAV(rawBuf);
 
     // Hand off to RNBO
-    float*  floatBuf = (float*)cvt.buf;
-    size_t  byteSize = cvt.len_cvt;
+    float *floatBuf = (float *)cvt.buf;
+    size_t byteSize = cvt.len_cvt;
     RNBO::Float32AudioBuffer bufType(spec.channels, spec.freq);
     rnbo.setExternalData(
         dataRefId.c_str(),
-        (char*)floatBuf,
+        (char *)floatBuf,
         byteSize,
         bufType,
-        /*free-callback*/[](RNBO::ExternalDataId, char* d){ SDL_free(d); }
-    );
+        /*free-callback*/ [](RNBO::ExternalDataId, char *d)
+        { SDL_free(d); });
     return true;
 }
+// George's Code End
 
 /**
  * Initializes the controller contents, and starts the game
@@ -122,27 +124,31 @@ static bool loadWavAsFloat(const char* path,
  * @param assets    The (loaded) assets for this game mode
  * @return  true if the controller is initialized properly, false otherwise.
  */
-bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string levelName) {
-    if (assets == nullptr) {
+bool GameScene::init(const std::shared_ptr<AssetManager> &assets, std::string levelName)
+{
+    if (assets == nullptr)
+    {
         return false;
     }
     _assets = assets;
     // prepare constants
     std::shared_ptr<JsonReader> constants_reader = JsonReader::allocWithAsset("json/constants.json");
     _constantsJSON = constants_reader->readJson();
-    if (_constantsJSON == nullptr) {
+    if (_constantsJSON == nullptr)
+    {
         CULog("Failed to load constants.json");
         return false;
     }
-    
+
     std::shared_ptr<JsonValue> fxJ = _constantsJSON->get("audio")->get("effects");
     AudioHelper::init(fxJ, assets);
-    
+
     std::shared_ptr<JsonValue> sceneJ = _constantsJSON->get("scene");
-    if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height")))) {
+    if (!Scene2::initWithHint(Size(sceneJ->getInt("width"), sceneJ->getInt("height"))))
+    {
         return false;
     }
-    
+
     _offset = Vec2((_size.width - sceneJ->getInt("width")) / 2.0f, (_size.height - sceneJ->getInt("height")) / 2.0f);
     Rect bounds = getBounds();
     std::shared_ptr<JsonValue> boundsJ = sceneJ->get("bounds");
@@ -150,17 +156,13 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     boundsJ->get("origin")->get("y")->set(bounds.origin.y);
     boundsJ->get("size")->get("width")->set(bounds.size.width);
     boundsJ->get("size")->get("height")->set(bounds.size.height);
-    
 
-    
-    
     // Create the world and attach the listeners.
     Rect worldSize = Rect(0, 0, sceneJ->getFloat("world_width"), sceneJ->getFloat("world_height"));
     Rect screenSize = worldSize;
     screenSize.size.width /= 3;
-    Vec2 gravity = Vec2(0.0,-28.9);
-    
-    
+    Vec2 gravity = Vec2(0.0, -28.9);
+
     // IMPORTANT: SCALING MUST BE UNIFORM
     // This means that we cannot change the aspect ratio of the physics world
     // Shift to center if a bad fit
@@ -168,23 +170,23 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
 
     _worldPixelWidth = worldSize.size.width * _scale;
     sceneJ->get("scale")->set(_scale);
-    
-    
+
     _world = physics2::ObstacleWorld::alloc(worldSize, gravity);
     _world->activateCollisionCallbacks(true);
-    _world->onBeginContact = [this](b2Contact* contact) {
+    _world->onBeginContact = [this](b2Contact *contact)
+    {
         _collisionController->beginContact(contact);
-        };
-    _world->onEndContact = [this](b2Contact* contact) {
+    };
+    _world->onEndContact = [this](b2Contact *contact)
+    {
         _collisionController->endContact(contact);
-        };
-    
-    
+    };
+
     // Create the scene graph
     _worldnode = scene2::SceneNode::alloc();
     _worldnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _worldnode->setPosition(_offset);
-    
+
     _camera = getCamera();
     _defCamPos = _camera->getPosition();
 
@@ -194,38 +196,40 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     _debugnode->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
     _debugnode->setPosition(_offset);
     _debugnode->setName("game_debug_node");
-    
-    _levelController->init(_assets,_constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
+
+    _levelController->init(_assets, _constantsJSON, _world, _debugnode, _worldnode); // Initialize the LevelController
     _currentLevel = _levelController->getLevelByName(levelName);
 
     std::shared_ptr<JsonValue> messagesJ = _constantsJSON->get("messages");
     setComplete(false);
     setFailure(false);
-    
-    #pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
-    _input =  _levelController->getInputController();
-    #pragma mark : Player
-        _player = _levelController->getPlayerModel();
-    
+
+#pragma mark : Input (can delete and remove the code using _input in preupdate- only for easier setting of debugging node)
+    _input = _levelController->getInputController();
+#pragma mark : Player
+    _player = _levelController->getPlayerModel();
+
     populate(_levelController->getLevelByName(levelName));
 
     // === Initialize in-game UI ===
     populateUI(assets);
-    
+
     _active = true;
     _complete = false;
     setDebug(false); // Debug on by default
 
     Application::get()->setClearColor(Color4f::BLACK);
-    
+
     _collisionController = std::make_unique<CollisionController>(
         _player,
         _ui,
         _constantsJSON,
-        [this](Projectile* p) { this->removeProjectile(p); },  // Callback for projectile removal
-        [this](int i, int d) { this->setScreenShake(i, d); }   // Callback for screen shake
+        [this](Projectile *p)
+        { this->removeProjectile(p); }, // Callback for projectile removal
+        [this](int i, int d)
+        { this->setScreenShake(i, d); } // Callback for screen shake
     );
-    
+
     // George's Code Start
     //
     // ——— RNBO SETUP ———
@@ -234,38 +238,44 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     std::string assetsDir = cugl::Application::get()->getAssetDirectory();
     std::string deps = assetsDir + "dependencies.json";
     std::ifstream in(deps);
-    if (!in) {
-      CUAssertLog(false, "Could not open %s", deps.c_str());
+    if (!in)
+    {
+        CUAssertLog(false, "Could not open %s", deps.c_str());
     }
     std::stringstream buffer;
     buffer << in.rdbuf();
     auto jsonText = buffer.str();
-    if (jsonText.empty()) {
+    if (jsonText.empty())
+    {
         std::cerr << "ERROR: " << deps << " was empty\n";
         return false;
     }
     // Parse dependencies into a RNBO DataRefList
     RNBO::DataRefList list(buffer.str());
     // after you parse DataRefList “list”
-    for (int i = 0; i < list.size(); ++i) {
-        if (list.datarefTypeAtIndex(i) != RNBO::DataRefType::File) continue;
+    for (int i = 0; i < list.size(); ++i)
+    {
+        if (list.datarefTypeAtIndex(i) != RNBO::DataRefType::File)
+            continue;
         std::string idstr = list.datarefIdAtIndex(i);
-        std::string rel   = list.datarefLocationAtIndex(i);
+        std::string rel = list.datarefLocationAtIndex(i);
         // trim whitespace just in case
         rel = rel.substr(rel.find_first_not_of(" \t\n\r"),
                          rel.find_last_not_of(" \t\n\r") - rel.find_first_not_of(" \t\n\r") + 1);
 
         std::string full = assetsDir + rel;
-        std::cout<<"→ loading buffer “"<<idstr<<"” from "<<full<<"\n";
+        std::cout << "→ loading buffer “" << idstr << "” from " << full << "\n";
 
-        if (! loadWavAsFloat(full.c_str(), *_rnbo, idstr)) {
-          std::cerr<<"‼ Failed to load “"<<full<<"”\n";
+        if (!loadWavAsFloat(full.c_str(), *_rnbo, idstr))
+        {
+            std::cerr << "‼ Failed to load “" << full << "”\n";
         }
     }
-    
+
     _rnbo->prepareToProcess(44100.0, 64);
     _idxBigPan = _rnbo->getParameterIndexForID("bigpan");
-    if (_idxBigPan < 0) {
+    if (_idxBigPan < 0)
+    {
         CULog("Couldn't find BIGPAN!");
     }
 
@@ -273,79 +283,82 @@ bool GameScene::init(const std::shared_ptr<AssetManager>& assets, std::string le
     // ——— SDL AUDIO SETUP ———
     //
     SDL_AudioSpec want = {};
-    want.freq     = 44100;
-    want.format   = AUDIO_F32SYS;   // 32‑bit float
-    want.channels = 2;              // stereo
-    want.samples  = 64;             // must match RNBO block size
+    want.freq = 44100;
+    want.format = AUDIO_F32SYS; // 32‑bit float
+    want.channels = 2;          // stereo
+    want.samples = 64;          // must match RNBO block size
     want.callback = GameScene::audioCallback;
     want.userdata = this;
 
     SDL_AudioSpec have;
     _audioDevice = SDL_OpenAudioDevice(nullptr, 0, &want, &have, 0);
-    if (_audioDevice) {
-      SDL_PauseAudioDevice(_audioDevice,0);
+    if (_audioDevice)
+    {
+        SDL_PauseAudioDevice(_audioDevice, 0);
         CULog("Audio Initialized");
-      // now that audio is live, hit RNBO with your test note:
-        scheduleInitialNote();
+        // now that audio is live, hit RNBO with your test note:
+        scheduleRNBOEvents();
     }
-    
-    if (_audioDevice == 0) {
-      CULog("Failed to open SDL audio: %s", SDL_GetError());
-    } else {
-      SDL_PauseAudioDevice(_audioDevice, 0);  // start audio
+
+    if (_audioDevice == 0)
+    {
+        CULog("Failed to open SDL audio: %s", SDL_GetError());
+    }
+    else
+    {
+        SDL_PauseAudioDevice(_audioDevice, 0); // start audio
     }
     // George's Code End
 
     return true;
 }
 
-void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager>& assets)
+void GameScene::populateUI(const std::shared_ptr<cugl::AssetManager> &assets)
 {
     _ui = GBIngameUI::alloc(_assets);
-    if (_ui != nullptr) {
-        _ui->setPauseCallback([this]() {
-            _shouldPause = true;
-        });
-        _ui->setResumeCallback([this]() {
-            _shouldResume = true;
-        });
-        _ui->setRetryCallback([this]() {
-            _shouldRetry = true;
-        });
-        _ui->setQuitCallback([this]() {
+    if (_ui != nullptr)
+    {
+        _ui->setPauseCallback([this]()
+                              { _shouldPause = true; });
+        _ui->setResumeCallback([this]()
+                               { _shouldResume = true; });
+        _ui->setRetryCallback([this]()
+                              { _shouldRetry = true; });
+        _ui->setQuitCallback([this]()
+                             {
             CULog("Want to quit from gamescene!");
-            _doQuit = true;
-        });
-        _ui->setLoseQuitCallback([this]() {
+            _doQuit = true; });
+        _ui->setLoseQuitCallback([this]()
+                                 {
             CULog("Want to loseQuit from gamescene!");
-            _doQuit = true;
-        });
-        _ui->setSettingsCallback([this]() {
-            CULog("Want to settings from gamescene!");
-        });
-        _ui->setWinContinueCallback([this]() {
+            _doQuit = true; });
+        _ui->setSettingsCallback([this]()
+                                 { CULog("Want to settings from gamescene!"); });
+        _ui->setWinContinueCallback([this]()
+                                    {
             _continueNextLevel = true;
-            CULog("Want to winContinue from gamescene!");
-        });
+            CULog("Want to winContinue from gamescene!"); });
 
         addChild(_ui);
     }
-    
 }
 
 /**
  * Disposes of all (non-static) resources allocated to this mode.
  */
-void GameScene::dispose() {
+void GameScene::dispose()
+{
     // George's Code
-    if (_audioDevice) {
-      SDL_CloseAudioDevice(_audioDevice);
-      _audioDevice = 0;
+    if (_audioDevice)
+    {
+        SDL_CloseAudioDevice(_audioDevice);
+        _audioDevice = 0;
     }
     // resetting is very buggy now
-    if (_rnbo) {
-        _rnbo -> setPatcher();
-        _rnbo -> prepareToProcess(44100, 64);
+    if (_rnbo)
+    {
+        _rnbo->setPatcher();
+        _rnbo->prepareToProcess(44100, 64);
     }
     // George's Code ends
 
@@ -356,17 +369,17 @@ void GameScene::dispose() {
     _input->clearListeners();
 
     removeAllChildren();
-    if (_active) {
+    if (_active)
+    {
         _world = nullptr;
         _worldnode = nullptr;
         _debugnode = nullptr;
         _complete = false;
         _debug = false;
-		_ui = nullptr;
+        _ui = nullptr;
         Scene2::dispose();
     }
 }
-
 
 #pragma mark -
 #pragma mark Level Layout
@@ -374,8 +387,9 @@ void GameScene::dispose() {
 /**
  * Resets the status of the game by resetting player and enemy positions so that we can play again.
  */
-void GameScene::reset() {
-	removeAllChildren();
+void GameScene::reset()
+{
+    removeAllChildren();
     _world->clear();
     _worldnode->removeAllChildren();
     _debugnode->removeAllChildren();
@@ -386,10 +400,11 @@ void GameScene::reset() {
     _camera->setPosition(_defCamPos);
     addChild(_ui);
     _ui->resetUI();
-    
-    if (_rnbo) {
-        _rnbo -> setPatcher();
-        _rnbo -> prepareToProcess(44100, 64);
+
+    if (_rnbo)
+    {
+        _rnbo->setPatcher();
+        _rnbo->prepareToProcess(44100, 64);
     }
 
     Application::get()->setClearColor(Color4f::BLACK);
@@ -406,7 +421,8 @@ void GameScene::reset() {
  * This method is really, really long.  In practice, you would replace this
  * with your serialization loader, which would process a level file.
  */
-void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
+void GameScene::populate(const std::shared_ptr<LevelModel> &level)
+{
     addChild(_worldnode);
     addChild(_debugnode);
     setBG();
@@ -416,28 +432,30 @@ void GameScene::populate(const std::shared_ptr<LevelModel>& level) {
 
     // Add UI elements
 
-	// Play the background music on a loop.
-//    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
-//	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
-//    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
-    
+    // Play the background music on a loop.
+    //    std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
+    //	std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("game"));
+    //    AudioEngine::get()->getMusicQueue()->play(source, true, musicJ->getFloat("volume"));
+
     _active = true;
     _complete = false;
 }
 
 /**
-* Sets whether the level is completed.
-*
-* If true, the level will advance after a countdown
-*
-* @param value whether the level is completed.
-*/
-void GameScene::setComplete(bool value) {
+ * Sets whether the level is completed.
+ *
+ * If true, the level will advance after a countdown
+ *
+ * @param value whether the level is completed.
+ */
+void GameScene::setComplete(bool value)
+{
     if (_failed)
         return; // Do not win if lost
     bool change = _complete != value;
     _complete = value;
-    if (value && change) {
+    if (value && change)
+    {
         float timeSpent = _levelController->getTimeSpentInLevel();
         int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
         int spawnedCount = _levelController->getSpawnedInWave();
@@ -451,7 +469,8 @@ void GameScene::setComplete(bool value) {
         setPaused(true);
         _countdown = _constantsJSON->getInt("exit_count");
     }
-    else if (!value) {
+    else if (!value)
+    {
         setPaused(false);
         _countdown = -1;
     }
@@ -464,17 +483,20 @@ void GameScene::setComplete(bool value) {
  *
  * @param value whether the level is failed.
  */
-void GameScene::setFailure(bool value) {
+void GameScene::setFailure(bool value)
+{
     if (_complete)
         return; // Do not fail if won
     bool change = _complete != value;
     _failed = value;
-    if (value && change) {
+    if (value && change)
+    {
         std::shared_ptr<JsonValue> musicJ = _constantsJSON->get("audio")->get("music");
         std::shared_ptr<Sound> source = _assets->get<Sound>(musicJ->getString("win"));
         AudioEngine::get()->getMusicQueue()->play(source, false, musicJ->getFloat("volume"));
-        
-        if (_ui) {
+
+        if (_ui)
+        {
             float timeSpent = _levelController->getTimeSpentInLevel();
             int parryCount = _levelController->getPlayerController()->getPlayer()->_parryCounter;
             int spawnedCount = _levelController->getSpawnedInWave();
@@ -484,11 +506,13 @@ void GameScene::setFailure(bool value) {
             _ui->showLosePage(true);
             setPaused(true);
         }
-        
+
         _countdown = _constantsJSON->getInt("exit_count");
     }
-    else {
-        if (_ui) {
+    else
+    {
+        if (_ui)
+        {
             _ui->showHeadsUpDisplay(true, true);
             _ui->showLosePage(false);
             setPaused(false);
@@ -496,7 +520,6 @@ void GameScene::setFailure(bool value) {
         _countdown = -1;
     }
 }
-
 
 #pragma mark -
 #pragma mark Physics Handling
@@ -520,44 +543,54 @@ void GameScene::setFailure(bool value) {
  *
  * @param dt    The amount of time (in seconds) since the last frame
  */
-void GameScene::preUpdate(float dt) {
-//    if (_isPaused) return;
-    
+void GameScene::preUpdate(float dt)
+{
+    //    if (_isPaused) return;
+
     // Process the toggled key commands
-    if (_input->didDebug()) { setDebug(!isDebug()); }
-    if (_input->didReset()) { reset(); }
-    if (_input->didExit()) {
+    if (_input->didDebug())
+    {
+        setDebug(!isDebug());
+    }
+    if (_input->didReset())
+    {
+        reset();
+    }
+    if (_input->didExit())
+    {
         Application::get()->quit();
     }
-    
-	_ui->setHP(_player->getHP());
+
+    _ui->setHP(_player->getHP());
     _ui->updateComboBar(_player->_comboMeter);
 
     // Call preUpdate on the LevelController
     _levelController->preUpdate(dt);
-    
-    if (_shouldPause) {
+
+    if (_shouldPause)
+    {
         _shouldPause = false;
         _ui->showPauseMenu(true);
         _ui->showHeadsUpDisplay(true, false);
         setPaused(true);
     }
-    
-    if (_shouldResume) {
+
+    if (_shouldResume)
+    {
         _shouldResume = false;
         _ui->showPauseMenu(false);
         _ui->showHeadsUpDisplay(true, true);
         setPaused(false);
     }
-    
-    if (_shouldRetry) {
+
+    if (_shouldRetry)
+    {
         _shouldRetry = false;
         _ui->showPauseMenu(false);
         _ui->showHeadsUpDisplay(true, true);
         setPaused(false);
         reset();
     }
-    
 }
 /**
  * The method called to provide a deterministic application loop.
@@ -585,27 +618,30 @@ void GameScene::preUpdate(float dt) {
  *
  * @param step  The number of fixed seconds for this step
  */
-void GameScene::fixedUpdate(float step) {
-    
-    if (_isPaused) return;
-    
+void GameScene::fixedUpdate(float step)
+{
+
+    if (_isPaused)
+        return;
+
     // Turn the physics engine crank.
     _world->update(step);
 
     // Update the level controller
     _levelController->fixedUpdate(step);
-    
-    //GEORGE's CODE
-    // wave‑bang logic
+
+    // GEORGE's CODE
+    //  wave‑bang logic
     int waveIndex = _levelController->getCurrentWaveIndex();
-    int numWaves  = _levelController->getNumWaves();
-    
+    int numWaves = _levelController->getNumWaves();
+
     auto littlebang = _rnbo->getParameterIndexForID("littlebang");
     auto bigbang = _rnbo->getParameterIndexForID("bigbang");
-    
+
     auto rnbonow = RNBO::RNBOTimeNow;
     // 1) first wave (index 0)
-    if (waveIndex == 0 && _lastNotifiedWave < 0) {
+    if (waveIndex == 0 && _lastNotifiedWave < 0)
+    {
         CULog("Setting LITTLEBANG");
         // send littlebang immediately when wave 0 starts
         _rnbo->setParameterValue(littlebang, 1.0, rnbonow + 30000);
@@ -613,58 +649,71 @@ void GameScene::fixedUpdate(float step) {
     }
 
     // 2) last wave (index numWaves‑1)
-    if (! _sentBigBang && waveIndex == numWaves - 1) {
+    if (!_sentBigBang && waveIndex == numWaves - 1)
+    {
         CULog("Setting BIGBANG");
         _rnbo->setParameterValue(bigbang, 1.0, rnbonow + 2000);
         _sentBigBang = true;
     }
-    // GEORGE END
-    
+    // George's Code END
+
     processScreenShake();
 
     auto currPlayerPosX = _levelController->getPlayerNode()->getPositionX();
     bool isKnocked = _levelController->getPlayerModel()->isKnockbackActive();
     auto currPlayerVel = _levelController->getPlayerModel()->getVX();
-    auto cameraPosLX = _camera->getPosition().x-_camera->getViewport().size.width / 2;
+    auto cameraPosLX = _camera->getPosition().x - _camera->getViewport().size.width / 2;
     auto cameraPosRX = _camera->getPosition().x + _camera->getViewport().size.width / 2;
-    
-    if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth) {
+
+    if (cameraPosLX <= 0 || cameraPosRX >= _worldPixelWidth)
+    {
         _cameraLocked = true;
-        if (cameraPosLX <= 0) {
-            if (currPlayerPosX > getBounds().size.width*.66) {
+        if (cameraPosLX <= 0)
+        {
+            if (currPlayerPosX > getBounds().size.width * .66)
+            {
                 _cameraLocked = false;
             }
-        } else {
-            if (currPlayerPosX < _worldPixelWidth - getBounds().size.width*.66) {
+        }
+        else
+        {
+            if (currPlayerPosX < _worldPixelWidth - getBounds().size.width * .66)
+            {
                 _cameraLocked = false;
             }
         }
     }
-    if (!_cameraLocked) {
-        _camera->translate(Vec2((currPlayerPosX-_camera->getPosition().x)*.05,0));
+    if (!_cameraLocked)
+    {
+        _camera->translate(Vec2((currPlayerPosX - _camera->getPosition().x) * .05, 0));
         _camera->update();
-        if (currPlayerVel > 0 && !isKnocked) {
+        if (currPlayerVel > 0 && !isKnocked)
+        {
             updateLayersLeft();
-        }   else if (currPlayerVel < 0 && !isKnocked) {
+        }
+        else if (currPlayerVel < 0 && !isKnocked)
+        {
             updateLayersRight();
         }
     }
 
-    if (_ui != nullptr && _camera != nullptr) {
+    if (_ui != nullptr && _camera != nullptr)
+    {
         Vec2 camPos = _camera->getPosition();
         Size viewSize = _camera->getViewport().size;
 
         Vec2 base = camPos - Vec2(viewSize.width / 2, viewSize.height / 2);
         _ui->setTime(_levelController->getTimeSpentInLevel());
-        _ui->setProgression(_levelController->getSpawnedInWave(),_levelController->getTotalInWave());
+        _ui->setProgression(_levelController->getSpawnedInWave(), _levelController->getTotalInWave());
         _ui->setPosition(base + _ui->_screenOffset);
     }
-    
+
     setComplete(_levelController->isLevelWon());
     setFailure(_levelController->isLevelLost());
 
     // Record failure if necessary.
-    if (!_failed && _player->getY() < 0) {
+    if (!_failed && _player->getY() < 0)
+    {
         setFailure(true);
     }
 }
@@ -691,10 +740,12 @@ void GameScene::fixedUpdate(float step) {
  *
  * @param remain    The amount of time (in seconds) last fixedUpdate
  */
-void GameScene::postUpdate(float remain) {
-    
-    if (_isPaused) return;
-    
+void GameScene::postUpdate(float remain)
+{
+
+    if (_isPaused)
+        return;
+
     // Since items may be deleted, garbage collect
     _world->garbageCollect();
     _levelController->postUpdate(remain);
@@ -702,10 +753,12 @@ void GameScene::postUpdate(float remain) {
     // Otherwise, it looks like bullet appears far away
 
     // Reset the game if we win or lose.
-    if (_countdown > 0) {
+    if (_countdown > 0)
+    {
         _countdown--;
     }
-    else if (_countdown == 0) {
+    else if (_countdown == 0)
+    {
         reset();
     }
 
@@ -713,16 +766,17 @@ void GameScene::postUpdate(float remain) {
     _levelController->postUpdate(remain);
 }
 
-
 #pragma mark collision helpers
 /**
  * Removes a new projectile from the world.
  *
  * @param  projectile   the projectile to remove
  */
-void GameScene::removeProjectile(Projectile* projectile) {
+void GameScene::removeProjectile(Projectile *projectile)
+{
     // do not attempt to remove a projectile that has already been removed
-    if (projectile->isRemoved()) {
+    if (projectile->isRemoved())
+    {
         return;
     }
     _worldnode->removeChild(projectile->getSceneNode());
@@ -730,158 +784,172 @@ void GameScene::removeProjectile(Projectile* projectile) {
     projectile->markRemoved(true);
 }
 
-void GameScene::setBG() {
-    for (auto layerPair : _currentLevel->getLayers()) {
+void GameScene::setBG()
+{
+    for (auto layerPair : _currentLevel->getLayers())
+    {
         // Left
         std::shared_ptr<scene2::SceneNode> node = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node->setScale(_currentLevel->getScale());
-        node->setPosition(Vec2(node->getPositionX()-node->getSize().width, node->getPositionY()));
+        node->setPosition(Vec2(node->getPositionX() - node->getSize().width, node->getPositionY()));
         node->setTag(layerPair.second);
         _worldnode->addChild(node);
-        
+
         // Centered
         std::shared_ptr<scene2::SceneNode> node2 = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node2->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node2->setScale(_currentLevel->getScale());
         node2->setTag(layerPair.second);
         _worldnode->addChild(node2);
-        
+
         // Right
         std::shared_ptr<scene2::SceneNode> node3 = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node3->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node3->setScale(_currentLevel->getScale());
-        node3->setPosition(Vec2(node3->getPositionX()+node->getSize().width, node3->getPositionY()));
+        node3->setPosition(Vec2(node3->getPositionX() + node->getSize().width, node3->getPositionY()));
         node3->setTag(layerPair.second);
         _worldnode->addChild(node3);
-        
+
         // Right + 1
         std::shared_ptr<scene2::SceneNode> node4 = scene2::PolygonNode::allocWithTexture(layerPair.first);
         node4->setAnchor(Vec2::ANCHOR_BOTTOM_LEFT);
         node4->setScale(_currentLevel->getScale());
-        node4->setPosition(Vec2(node4->getPositionX()+2*node->getSize().width, node4->getPositionY()));
+        node4->setPosition(Vec2(node4->getPositionX() + 2 * node->getSize().width, node4->getPositionY()));
         node4->setTag(layerPair.second);
         _worldnode->addChild(node4);
     }
 }
 
-void GameScene::updateLayersLeft() {
-    for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
-        if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()-static_cast<float>(node->getTag())/3, node->getPositionY()));
+void GameScene::updateLayersLeft()
+{
+    for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren())
+    {
+        if (node->getTag() > 0)
+        {
+            node->setPosition(Vec2(node->getPositionX() - static_cast<float>(node->getTag()) / 3, node->getPositionY()));
         }
     }
 }
 
-void GameScene::updateLayersRight() {
-    for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren()) {
-        if (node->getTag() > 0) {
-            node->setPosition(Vec2(node->getPositionX()+static_cast<float>(node->getTag())/3, node->getPositionY()));
+void GameScene::updateLayersRight()
+{
+    for (std::shared_ptr<scene2::SceneNode> node : _worldnode->getChildren())
+    {
+        if (node->getTag() > 0)
+        {
+            node->setPosition(Vec2(node->getPositionX() + static_cast<float>(node->getTag()) / 3, node->getPositionY()));
         }
     }
 }
 
-
-
-void GameScene::setScreenShake(float intensity, int duration) {
-    if (_shakeIntensity > intensity) {
+void GameScene::setScreenShake(float intensity, int duration)
+{
+    if (_shakeIntensity > intensity)
+    {
         return;
     }
     _shakeIntensity = intensity;
     _shakeDuration = duration;
 }
 
-void GameScene::processScreenShake() {
+void GameScene::processScreenShake()
+{
     Vec2 target = Vec2::ZERO;
-    if (_shakeDuration > 0) {
+    if (_shakeDuration > 0)
+    {
         _shakeDuration--;
         int shakeX = rand() % 2 ? _shakeIntensity : -_shakeIntensity;
         int shakeY = rand() % 2 ? _shakeIntensity : -_shakeIntensity;
         target = Vec2(shakeX, shakeY);
     }
-    else {
+    else
+    {
         _shakeIntensity = 0;
     }
     _worldnode->setPosition(_worldnode->getPosition() + (target - _worldnode->getPosition()) / 2);
 }
 
-#pragma mark George's Tests
-void GameScene::scheduleInitialNote() {
+#pragma mark George's Helper Functions
+void GameScene::scheduleRNBOEvents()
+{
     using namespace RNBO;
 
     // debug print all parameter IDs
     int numParams = _rnbo->getNumParameters();
-    for (int i = 0; i < numParams; ++i) {
-      std::cout<<"param["<<i<<"] id="<<_rnbo->getParameterId(i)<<"\n";
+    for (int i = 0; i < numParams; ++i)
+    {
+        std::cout << "param[" << i << "] id=" << _rnbo->getParameterId(i) << "\n";
     }
     auto idx = _rnbo->getParameterIndexForID("startbang");
-    std::cout<<"indexOf(\"startbang\")="<<idx<<"\n";
+    std::cout << "indexOf(\"startbang\")=" << idx << "\n";
 
     auto now = RNBOTimeNow;
 
     // 1) send the MIDI note‑on/off as before
-    uint8_t onMsg[3]  = { uint8_t(0x90), 60, 100 };
-    uint8_t offMsg[3] = { uint8_t(0x80), 60,   0 };
-    _rnbo->scheduleEvent(MidiEvent(now,       0, onMsg,  3));
+    uint8_t onMsg[3] = {uint8_t(0x90), 60, 100};
+    uint8_t offMsg[3] = {uint8_t(0x80), 60, 0};
+    _rnbo->scheduleEvent(MidiEvent(now, 0, onMsg, 3));
     _rnbo->scheduleEvent(MidiEvent(now + 500, 0, offMsg, 3));
 
     // 2) bang the “startbang” param at t = now+500 ms
     _rnbo->setParameterValue(idx, 1.0, now + 500);
 }
 
-void GameScene::audioCallback(void* userdata, Uint8* stream, int len) {
-    auto self = static_cast<GameScene*>(userdata);
-    float* out = reinterpret_cast<float*>(stream);
-    int frames = len / (sizeof(float) * 2);  // stereo
+void GameScene::audioCallback(void *userdata, Uint8 *stream, int len)
+{
+    auto self = static_cast<GameScene *>(userdata);
+    float *out = reinterpret_cast<float *>(stream);
+    int frames = len / (sizeof(float) * 2); // stereo
 
     // allocate RNBO output buffers
-    RNBO::SampleValue* bufL = new RNBO::SampleValue[frames];
-    RNBO::SampleValue* bufR = new RNBO::SampleValue[frames];
-    RNBO::SampleValue* outputs[2] = { bufL, bufR };
+    RNBO::SampleValue *bufL = new RNBO::SampleValue[frames];
+    RNBO::SampleValue *bufR = new RNBO::SampleValue[frames];
+    RNBO::SampleValue *outputs[2] = {bufL, bufR};
 
     // create an empty array of the correct type:
     // pointer itself is const too → matches non‑template exactly
-    const RNBO::SampleValue* const inputs_arr[1] = { nullptr };
+    const RNBO::SampleValue *const inputs_arr[1] = {nullptr};
 
     // pass that (numInputs = 0 so it never reads it)
     self->_rnbo->process(
-        (const RNBO::SampleValue* const*)inputs_arr,   // force non‑template first parameter
+        (const RNBO::SampleValue *const *)inputs_arr, // force non‑template first parameter
         0,
-        (RNBO::SampleValue* const*)outputs,            // force non‑template third parameter
+        (RNBO::SampleValue *const *)outputs, // force non‑template third parameter
         2,
-        frames
-    );
-    
+        frames);
+
     // --- compute bigpan 0–1 ---
     Vec2 playerP = self->_player->getPosition();
-    Vec2 enemyP  = self->getLastEnemyPosition();
-    float dist   = enemyP.x - playerP.x;                   // >0 enemy to right
-    float norm   = (dist + self->_maxPanDistance)
-                   / (2.0f * self->_maxPanDistance);
+    Vec2 enemyP = self->getLastEnemyPosition();
+    float dist = enemyP.x - playerP.x; // >0 enemy to right
+    float norm = (dist + self->_maxPanDistance) / (2.0f * self->_maxPanDistance);
     norm = std::clamp(norm, 0.0f, 1.0f);
 
     // schedule into RNBO
     self->_rnbo->setParameterValueNormalized(
         self->_idxBigPan,
         norm,
-        RNBO::RNBOTimeNow
-    );
+        RNBO::RNBOTimeNow);
 
     // copy into SDL buffer
-    for (int i = 0; i < frames; ++i) {
-        out[2*i  ] = static_cast<float>(bufL[i]);
-        out[2*i+1] = static_cast<float>(bufR[i]);
+    for (int i = 0; i < frames; ++i)
+    {
+        out[2 * i] = static_cast<float>(bufL[i]);
+        out[2 * i + 1] = static_cast<float>(bufR[i]);
     }
 
     delete[] bufL;
     delete[] bufR;
 }
 
-Vec2 GameScene::getLastEnemyPosition() {
-    auto waves = _levelController->getWaves();           // assume you make it public or add a getter
+Vec2 GameScene::getLastEnemyPosition()
+{
+    auto waves = _levelController->getWaves(); // assume you make it public or add a getter
     int lastWave = (int)waves.size() - 1;
-    if ( lastWave >= 0 && !waves[lastWave].empty() ) {
-      return waves[lastWave].back()->getEnemy()->getPosition();
+    if (lastWave >= 0 && !waves[lastWave].empty())
+    {
+        return waves[lastWave].back()->getEnemy()->getPosition();
     }
     return _player->getPosition(); // fallback
 }

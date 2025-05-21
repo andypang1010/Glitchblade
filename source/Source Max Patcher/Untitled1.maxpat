@@ -14,79 +14,12 @@
 		"gridsize" : [ 15.0, 15.0 ],
 		"boxes" : [ 			{
 				"box" : 				{
-					"basictuning" : 440,
-					"data" : 					{
-						"clips" : [ 							{
-								"absolutepath" : "FemVoice.aif",
-								"filename" : "FemVoice.aif",
-								"filekind" : "audiofile",
-								"id" : "u147011197",
-								"loop" : 0,
-								"content_state" : 								{
-
-								}
-
-							}
- ]
-					}
-,
-					"followglobaltempo" : 0,
-					"formantcorrection" : 0,
-					"id" : "obj-7",
-					"maxclass" : "playlist~",
-					"mode" : "basic",
-					"numinlets" : 1,
-					"numoutlets" : 5,
-					"originallength" : [ 0.0, "ticks" ],
-					"originaltempo" : 120.0,
-					"outlettype" : [ "signal", "signal", "signal", "", "dictionary" ],
-					"parameter_enable" : 0,
-					"patching_rect" : [ 242.0, 288.0, 150.0, 30.0 ],
-					"pitchcorrection" : 0,
-					"quality" : "basic",
-					"saved_attribute_attributes" : 					{
-						"candicane2" : 						{
-							"expression" : ""
-						}
-,
-						"candicane3" : 						{
-							"expression" : ""
-						}
-,
-						"candicane4" : 						{
-							"expression" : ""
-						}
-,
-						"candicane5" : 						{
-							"expression" : ""
-						}
-,
-						"candicane6" : 						{
-							"expression" : ""
-						}
-,
-						"candicane7" : 						{
-							"expression" : ""
-						}
-,
-						"candicane8" : 						{
-							"expression" : ""
-						}
-
-					}
-,
-					"timestretch" : [ 0 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-4",
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 740.0, 392.0, 65.0, 22.0 ],
+					"patching_rect" : [ 350.0, 331.0, 65.0, 22.0 ],
 					"text" : "set -10000"
 				}
 
@@ -100,7 +33,7 @@
 					"numoutlets" : 4,
 					"outlettype" : [ "multichannelsignal", "", "float", "list" ],
 					"parameter_enable" : 1,
-					"patching_rect" : [ 643.5, 449.0, 48.0, 136.0 ],
+					"patching_rect" : [ 254.0, 388.0, 48.0, 136.0 ],
 					"saved_attribute_attributes" : 					{
 						"valueof" : 						{
 							"parameter_longname" : "mc.live.gain~[1]",
@@ -128,7 +61,7 @@
 					"numoutlets" : 4,
 					"outlettype" : [ "multichannelsignal", "", "float", "list" ],
 					"parameter_enable" : 1,
-					"patching_rect" : [ 545.0, 460.0, 48.0, 136.0 ],
+					"patching_rect" : [ 155.0, 399.0, 48.0, 136.0 ],
 					"saved_attribute_attributes" : 					{
 						"valueof" : 						{
 							"parameter_longname" : "mc.live.gain~",
@@ -149,25 +82,13 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-6",
-					"maxclass" : "newobj",
-					"numinlets" : 3,
-					"numoutlets" : 2,
-					"outlettype" : [ "", "bang" ],
-					"patching_rect" : [ 248.0, 563.0, 40.0, 22.0 ],
-					"text" : "line"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"hidden" : 1,
 					"id" : "obj-19",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 678.0, 656.125, 127.0, 22.0 ],
+					"patching_rect" : [ 288.0, 595.0, 127.0, 22.0 ],
 					"text" : "loadmess startwindow"
 				}
 
@@ -179,141 +100,7 @@
 					"maxclass" : "ezdac~",
 					"numinlets" : 2,
 					"numoutlets" : 0,
-					"patching_rect" : [ 562.0, 643.0, 48.25, 48.25 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"basictuning" : 440,
-					"data" : 					{
-						"clips" : [ 							{
-								"absolutepath" : "FemVoice.aif",
-								"filename" : "FemVoice.aif",
-								"filekind" : "audiofile",
-								"id" : "u568003823",
-								"loop" : 0,
-								"content_state" : 								{
-
-								}
-
-							}
- ]
-					}
-,
-					"followglobaltempo" : 0,
-					"formantcorrection" : 0,
-					"id" : "obj-5",
-					"maxclass" : "playlist~",
-					"mode" : "basic",
-					"numinlets" : 1,
-					"numoutlets" : 5,
-					"originallength" : [ 0.0, "ticks" ],
-					"originaltempo" : 120.0,
-					"outlettype" : [ "signal", "signal", "signal", "", "dictionary" ],
-					"parameter_enable" : 0,
-					"patching_rect" : [ 242.0, 366.0, 150.0, 30.0 ],
-					"pitchcorrection" : 0,
-					"quality" : "basic",
-					"saved_attribute_attributes" : 					{
-						"candicane2" : 						{
-							"expression" : ""
-						}
-,
-						"candicane3" : 						{
-							"expression" : ""
-						}
-,
-						"candicane4" : 						{
-							"expression" : ""
-						}
-,
-						"candicane5" : 						{
-							"expression" : ""
-						}
-,
-						"candicane6" : 						{
-							"expression" : ""
-						}
-,
-						"candicane7" : 						{
-							"expression" : ""
-						}
-,
-						"candicane8" : 						{
-							"expression" : ""
-						}
-
-					}
-,
-					"timestretch" : [ 0 ]
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"basictuning" : 440,
-					"data" : 					{
-						"clips" : [ 							{
-								"absolutepath" : "ahkey.aiff",
-								"filename" : "ahkey.aiff",
-								"filekind" : "audiofile",
-								"id" : "u650004031",
-								"loop" : 0,
-								"content_state" : 								{
-
-								}
-
-							}
- ]
-					}
-,
-					"followglobaltempo" : 0,
-					"formantcorrection" : 0,
-					"id" : "obj-3",
-					"maxclass" : "playlist~",
-					"mode" : "basic",
-					"numinlets" : 1,
-					"numoutlets" : 5,
-					"originallength" : [ 0.0, "ticks" ],
-					"originaltempo" : 120.0,
-					"outlettype" : [ "signal", "signal", "signal", "", "dictionary" ],
-					"parameter_enable" : 0,
-					"patching_rect" : [ 204.0, 211.0, 150.0, 30.0 ],
-					"pitchcorrection" : 0,
-					"quality" : "basic",
-					"saved_attribute_attributes" : 					{
-						"candicane2" : 						{
-							"expression" : ""
-						}
-,
-						"candicane3" : 						{
-							"expression" : ""
-						}
-,
-						"candicane4" : 						{
-							"expression" : ""
-						}
-,
-						"candicane5" : 						{
-							"expression" : ""
-						}
-,
-						"candicane6" : 						{
-							"expression" : ""
-						}
-,
-						"candicane7" : 						{
-							"expression" : ""
-						}
-,
-						"candicane8" : 						{
-							"expression" : ""
-						}
-
-					}
-,
-					"timestretch" : [ 0 ]
+					"patching_rect" : [ 172.0, 582.0, 48.25, 48.25 ]
 				}
 
 			}
@@ -356,34 +143,11 @@
 						}
 ,
 						"classnamespace" : "rnbo",
-						"rect" : [ 34.0, 94.0, 1421.0, 854.0 ],
+						"rect" : [ 34.0, 94.0, 1042.0, 854.0 ],
 						"default_fontname" : "Lato",
 						"gridsize" : [ 15.0, 15.0 ],
 						"title" : "untitled",
 						"boxes" : [ 							{
-								"box" : 								{
-									"id" : "obj-238",
-									"linecount" : 2,
-									"maxclass" : "comment",
-									"numinlets" : 1,
-									"numoutlets" : 0,
-									"patching_rect" : [ 219.0, 411.0, 150.0, 35.0 ],
-									"text" : "should be param loadbang 0"
-								}
-
-							}
-, 							{
-								"box" : 								{
-									"id" : "obj-231",
-									"maxclass" : "comment",
-									"numinlets" : 1,
-									"numoutlets" : 0,
-									"patching_rect" : [ 19.0, 376.0, 150.0, 21.0 ],
-									"text" : "should be loadbang"
-								}
-
-							}
-, 							{
 								"box" : 								{
 									"id" : "obj-234",
 									"maxclass" : "comment",
@@ -419,21 +183,21 @@
 									"patching_rect" : [ 1118.0, 3131.0, 99.0, 23.0 ],
 									"rnbo_classname" : "param",
 									"rnbo_extra_attributes" : 									{
-										"enum" : "",
+										"fromnormalized" : "",
+										"order" : "0",
+										"minimum" : 0.0,
 										"exponent" : 1.0,
+										"maximum" : 1.0,
+										"displayname" : "",
+										"tonormalized" : "",
+										"preset" : 1,
+										"displayorder" : "-",
+										"meta" : "",
+										"enum" : "",
+										"steps" : 0.0,
 										"ctlin" : 0.0,
 										"sendinit" : 1,
-										"unit" : "",
-										"meta" : "",
-										"fromnormalized" : "",
-										"maximum" : 1.0,
-										"order" : "0",
-										"displayorder" : "-",
-										"steps" : 0.0,
-										"tonormalized" : "",
-										"displayname" : "",
-										"minimum" : 0.0,
-										"preset" : 1
+										"unit" : ""
 									}
 ,
 									"rnbo_serial" : 1,
@@ -840,8 +604,8 @@
 									"patching_rect" : [ 1179.0, 3187.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -863,10 +627,10 @@
 									"rnbo_classname" : "pan~",
 									"rnbo_extra_attributes" : 									{
 										"boundmode" : "ignore",
+										"outputs" : 2.0,
 										"fademode" : "eqpower",
 										"inputs" : 1.0,
-										"positionmode" : "phase",
-										"outputs" : 2.0
+										"positionmode" : "phase"
 									}
 ,
 									"rnbo_serial" : 1,
@@ -1090,8 +854,8 @@
 									"patching_rect" : [ 599.0, 2342.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -1113,10 +877,10 @@
 									"rnbo_classname" : "pan~",
 									"rnbo_extra_attributes" : 									{
 										"boundmode" : "ignore",
+										"outputs" : 2.0,
 										"fademode" : "eqpower",
 										"inputs" : 1.0,
-										"positionmode" : "phase",
-										"outputs" : 2.0
+										"positionmode" : "phase"
 									}
 ,
 									"rnbo_serial" : 2,
@@ -1349,9 +1113,9 @@
 									"patching_rect" : [ 959.5, 3332.0, 22.0, 140.0 ],
 									"rnbo_classname" : "gain~",
 									"rnbo_extra_attributes" : 									{
-										"scale" : 7.943,
 										"size" : 158.0,
 										"inc" : 1.072,
+										"scale" : 7.943,
 										"order" : "",
 										"preset" : 0
 									}
@@ -1377,9 +1141,9 @@
 									"patching_rect" : [ 899.5, 3332.0, 22.0, 140.0 ],
 									"rnbo_classname" : "gain~",
 									"rnbo_extra_attributes" : 									{
-										"scale" : 7.943,
 										"size" : 158.0,
 										"inc" : 1.072,
+										"scale" : 7.943,
 										"order" : "",
 										"preset" : 0
 									}
@@ -1834,9 +1598,9 @@
 									"patching_rect" : [ 54.0, 3204.0, 106.0, 109.0 ],
 									"rnbo_classname" : "buffer~",
 									"rnbo_extra_attributes" : 									{
+										"type" : "",
 										"samplerate" : 0.0,
-										"fill" : "",
-										"type" : ""
+										"fill" : ""
 									}
 ,
 									"rnbo_serial" : 1,
@@ -2295,21 +2059,21 @@
 									"patching_rect" : [ 1093.0, 2793.0, 96.0, 23.0 ],
 									"rnbo_classname" : "param",
 									"rnbo_extra_attributes" : 									{
-										"enum" : "",
+										"fromnormalized" : "",
+										"order" : "0",
+										"minimum" : 0.0,
 										"exponent" : 1.0,
+										"maximum" : 1.0,
+										"displayname" : "",
+										"tonormalized" : "",
+										"preset" : 1,
+										"displayorder" : "-",
+										"meta" : "",
+										"enum" : "",
+										"steps" : 0.0,
 										"ctlin" : 0.0,
 										"sendinit" : 1,
-										"unit" : "",
-										"meta" : "",
-										"fromnormalized" : "",
-										"maximum" : 1.0,
-										"order" : "0",
-										"displayorder" : "-",
-										"steps" : 0.0,
-										"tonormalized" : "",
-										"displayname" : "",
-										"minimum" : 0.0,
-										"preset" : 1
+										"unit" : ""
 									}
 ,
 									"rnbo_serial" : 2,
@@ -2903,21 +2667,21 @@
 									"patching_rect" : [ 759.0, 2752.0, 104.0, 23.0 ],
 									"rnbo_classname" : "param",
 									"rnbo_extra_attributes" : 									{
-										"enum" : "",
+										"fromnormalized" : "",
+										"order" : "0",
+										"minimum" : 0.0,
 										"exponent" : 1.0,
+										"maximum" : 1.0,
+										"displayname" : "",
+										"tonormalized" : "",
+										"preset" : 1,
+										"displayorder" : "-",
+										"meta" : "",
+										"enum" : "",
+										"steps" : 0.0,
 										"ctlin" : 0.0,
 										"sendinit" : 1,
-										"unit" : "",
-										"meta" : "",
-										"fromnormalized" : "",
-										"maximum" : 1.0,
-										"order" : "0",
-										"displayorder" : "-",
-										"steps" : 0.0,
-										"tonormalized" : "",
-										"displayname" : "",
-										"minimum" : 0.0,
-										"preset" : 1
+										"unit" : ""
 									}
 ,
 									"rnbo_serial" : 3,
@@ -3361,9 +3125,9 @@
 									"patching_rect" : [ 595.0, 2958.0, 22.0, 140.0 ],
 									"rnbo_classname" : "gain~",
 									"rnbo_extra_attributes" : 									{
-										"scale" : 7.943,
 										"size" : 158.0,
 										"inc" : 1.072,
+										"scale" : 7.943,
 										"order" : "",
 										"preset" : 0
 									}
@@ -3389,9 +3153,9 @@
 									"patching_rect" : [ 535.0, 2958.0, 22.0, 140.0 ],
 									"rnbo_classname" : "gain~",
 									"rnbo_extra_attributes" : 									{
-										"scale" : 7.943,
 										"size" : 158.0,
 										"inc" : 1.072,
+										"scale" : 7.943,
 										"order" : "",
 										"preset" : 0
 									}
@@ -3643,9 +3407,9 @@
 									"patching_rect" : [ 249.0, 672.5, 22.0, 140.0 ],
 									"rnbo_classname" : "gain~",
 									"rnbo_extra_attributes" : 									{
-										"scale" : 7.943,
 										"size" : 158.0,
 										"inc" : 1.072,
+										"scale" : 7.943,
 										"order" : "",
 										"preset" : 0
 									}
@@ -3671,9 +3435,9 @@
 									"patching_rect" : [ 198.0, 672.5, 22.0, 140.0 ],
 									"rnbo_classname" : "gain~",
 									"rnbo_extra_attributes" : 									{
-										"scale" : 7.943,
 										"size" : 158.0,
 										"inc" : 1.072,
+										"scale" : 7.943,
 										"order" : "",
 										"preset" : 0
 									}
@@ -3972,9 +3736,9 @@
 									"patching_rect" : [ 61.0, 2884.0, 114.0, 95.0 ],
 									"rnbo_classname" : "buffer~",
 									"rnbo_extra_attributes" : 									{
+										"type" : "",
 										"samplerate" : 0.0,
-										"fill" : "",
-										"type" : ""
+										"fill" : ""
 									}
 ,
 									"rnbo_serial" : 2,
@@ -4342,17 +4106,17 @@
 , 							{
 								"box" : 								{
 									"id" : "obj-107",
-									"linecount" : 7,
+									"linecount" : 4,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "", "" ],
-									"patching_rect" : [ 149.0, 2187.0, 101.0, 109.0 ],
+									"patching_rect" : [ 148.623840808868408, 2187.0, 128.440356254577637, 66.0 ],
 									"rnbo_classname" : "buffer~",
 									"rnbo_extra_attributes" : 									{
+										"type" : "",
 										"samplerate" : 0.0,
-										"fill" : "",
-										"type" : ""
+										"fill" : ""
 									}
 ,
 									"rnbo_serial" : 3,
@@ -4636,24 +4400,24 @@
 										"changesPatcherIO" : 0
 									}
 ,
-									"text" : "buffer~ b_hit5_wav @file /Users/porridge/Games/Glitchblade/assets/sounds/hit5.wav @channels 2"
+									"text" : "buffer~ b_hit5_wav @file ../../assets/sounds/hit5.wav @channels 2"
 								}
 
 							}
 , 							{
 								"box" : 								{
 									"id" : "obj-105",
-									"linecount" : 7,
+									"linecount" : 4,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "", "" ],
-									"patching_rect" : [ 124.0, 2162.0, 101.0, 109.0 ],
+									"patching_rect" : [ 123.853200674057007, 2162.0, 128.440356254577637, 66.0 ],
 									"rnbo_classname" : "buffer~",
 									"rnbo_extra_attributes" : 									{
+										"type" : "",
 										"samplerate" : 0.0,
-										"fill" : "",
-										"type" : ""
+										"fill" : ""
 									}
 ,
 									"rnbo_serial" : 4,
@@ -4937,24 +4701,24 @@
 										"changesPatcherIO" : 0
 									}
 ,
-									"text" : "buffer~ b_hit4_wav @file /Users/porridge/Games/Glitchblade/assets/sounds/hit4.wav @channels 2"
+									"text" : "buffer~ b_hit4_wav @file ../../assets/sounds/hit4.wav @channels 2"
 								}
 
 							}
 , 							{
 								"box" : 								{
 									"id" : "obj-102",
-									"linecount" : 7,
+									"linecount" : 4,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "", "" ],
-									"patching_rect" : [ 99.0, 2137.0, 101.0, 109.0 ],
+									"patching_rect" : [ 99.082560539245605, 2137.0, 128.440356254577637, 66.0 ],
 									"rnbo_classname" : "buffer~",
 									"rnbo_extra_attributes" : 									{
+										"type" : "",
 										"samplerate" : 0.0,
-										"fill" : "",
-										"type" : ""
+										"fill" : ""
 									}
 ,
 									"rnbo_serial" : 5,
@@ -5238,24 +5002,24 @@
 										"changesPatcherIO" : 0
 									}
 ,
-									"text" : "buffer~ b_hit2_wav @file /Users/porridge/Games/Glitchblade/assets/sounds/hit2.wav @channels 2"
+									"text" : "buffer~ b_hit2_wav @file ../../assets/sounds/hit2.wav @channels 2"
 								}
 
 							}
 , 							{
 								"box" : 								{
 									"id" : "obj-99",
-									"linecount" : 7,
+									"linecount" : 4,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "", "" ],
-									"patching_rect" : [ 74.0, 2112.0, 101.0, 109.0 ],
+									"patching_rect" : [ 74.311920404434204, 2112.0, 128.440356254577637, 66.0 ],
 									"rnbo_classname" : "buffer~",
 									"rnbo_extra_attributes" : 									{
+										"type" : "",
 										"samplerate" : 0.0,
-										"fill" : "",
-										"type" : ""
+										"fill" : ""
 									}
 ,
 									"rnbo_serial" : 6,
@@ -5539,24 +5303,24 @@
 										"changesPatcherIO" : 0
 									}
 ,
-									"text" : "buffer~ b_hit3_wav @file /Users/porridge/Games/Glitchblade/assets/sounds/hit3.wav @channels 2"
+									"text" : "buffer~ b_hit3_wav @file ../../assets/sounds/hit3.wav @channels 2"
 								}
 
 							}
 , 							{
 								"box" : 								{
 									"id" : "obj-97",
-									"linecount" : 7,
+									"linecount" : 4,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "", "" ],
-									"patching_rect" : [ 49.0, 2087.0, 101.0, 109.0 ],
+									"patching_rect" : [ 48.623849153518677, 2087.0, 128.440356254577637, 66.0 ],
 									"rnbo_classname" : "buffer~",
 									"rnbo_extra_attributes" : 									{
+										"type" : "",
 										"samplerate" : 0.0,
-										"fill" : "",
-										"type" : ""
+										"fill" : ""
 									}
 ,
 									"rnbo_serial" : 7,
@@ -5840,7 +5604,7 @@
 										"changesPatcherIO" : 0
 									}
 ,
-									"text" : "buffer~ b_hit1_wav @file /Users/porridge/Games/Glitchblade/assets/sounds/hit1.wav @channels 2"
+									"text" : "buffer~ b_hit1_wav @file ../../assets/sounds/hit1.wav @channels 2"
 								}
 
 							}
@@ -5851,7 +5615,11 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 19.0, 401.0, 56.0, 23.0 ]
+									"patching_rect" : [ 19.0, 401.0, 56.0, 23.0 ],
+									"rnbo_classname" : "loadbang",
+									"rnbo_serial" : 3,
+									"rnbo_uniqueid" : "loadbang_obj-104",
+									"text" : "loadbang"
 								}
 
 							}
@@ -6311,17 +6079,17 @@
 , 							{
 								"box" : 								{
 									"id" : "obj-1",
-									"linecount" : 9,
+									"linecount" : 7,
 									"maxclass" : "newobj",
 									"numinlets" : 1,
 									"numoutlets" : 3,
 									"outlettype" : [ "", "", "" ],
-									"patching_rect" : [ 37.0, 557.0, 92.0, 138.0 ],
+									"patching_rect" : [ 37.0, 557.0, 75.0, 109.0 ],
 									"rnbo_classname" : "buffer~",
 									"rnbo_extra_attributes" : 									{
+										"type" : "",
 										"samplerate" : 0.0,
-										"fill" : "",
-										"type" : ""
+										"fill" : ""
 									}
 ,
 									"rnbo_serial" : 8,
@@ -6605,7 +6373,7 @@
 										"changesPatcherIO" : 0
 									}
 ,
-									"text" : "buffer~ background @file /Users/porridge/Games/Glitchblade/assets/sounds/background.wav @channels 2"
+									"text" : "buffer~ background @file ../../assets/sounds/background.wav @channels 2"
 								}
 
 							}
@@ -6613,11 +6381,419 @@
 								"box" : 								{
 									"id" : "obj-101",
 									"maxclass" : "newobj",
-									"numinlets" : 1,
-									"numoutlets" : 1,
-									"outlettype" : [ "" ],
-									"patching_rect" : [ 110.0, 422.0, 104.0, 23.0 ],
-									"varname" : "startbang"
+									"numinlets" : 2,
+									"numoutlets" : 2,
+									"outlettype" : [ "", "" ],
+									"patching_rect" : [ 110.0, 422.0, 102.0, 23.0 ],
+									"rnbo_classname" : "param",
+									"rnbo_extra_attributes" : 									{
+										"fromnormalized" : "",
+										"order" : "0",
+										"minimum" : 0.0,
+										"exponent" : 1.0,
+										"maximum" : 1.0,
+										"displayname" : "",
+										"tonormalized" : "",
+										"preset" : 1,
+										"displayorder" : "-",
+										"meta" : "",
+										"enum" : "",
+										"steps" : 0.0,
+										"ctlin" : 0.0,
+										"sendinit" : 1,
+										"unit" : ""
+									}
+,
+									"rnbo_serial" : 4,
+									"rnbo_uniqueid" : "loadbang",
+									"rnboinfo" : 									{
+										"needsInstanceInfo" : 1,
+										"argnames" : 										{
+											"value" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Set initial value",
+												"defaultarg" : 2,
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "number",
+												"defaultValue" : "0",
+												"label" : "Initial Value",
+												"displayorder" : 3
+											}
+,
+											"normalizedvalue" : 											{
+												"attrOrProp" : 1,
+												"digest" : "Set value normalized. ",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"inlet" : 1,
+												"type" : "number"
+											}
+,
+											"reset" : 											{
+												"attrOrProp" : 1,
+												"digest" : "Reset param to initial value",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"attachable" : 1,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "bang"
+											}
+,
+											"normalized" : 											{
+												"attrOrProp" : 1,
+												"digest" : "Normalized parameter value.",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"outlet" : 1,
+												"type" : "number"
+											}
+,
+											"name" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Name of the parameter",
+												"defaultarg" : 1,
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "symbol",
+												"label" : "Parameter Name",
+												"mandatory" : 1
+											}
+,
+											"enum" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Use an enumerated output",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "list",
+												"label" : "Enum Values",
+												"displayorder" : 6
+											}
+,
+											"minimum" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Minimum value",
+												"isalias" : 0,
+												"aliases" : [ "min" ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "number",
+												"defaultValue" : "0",
+												"label" : "Minimum",
+												"displayorder" : 1
+											}
+,
+											"min" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Minimum value",
+												"isalias" : 1,
+												"aliasOf" : "minimum",
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "number",
+												"defaultValue" : "0",
+												"label" : "Minimum",
+												"displayorder" : 1
+											}
+,
+											"maximum" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Maximum value",
+												"isalias" : 0,
+												"aliases" : [ "max" ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "number",
+												"defaultValue" : "1",
+												"label" : "Maximum",
+												"displayorder" : 2
+											}
+,
+											"max" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Maximum value",
+												"isalias" : 1,
+												"aliasOf" : "maximum",
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "number",
+												"defaultValue" : "1",
+												"label" : "Maximum",
+												"displayorder" : 2
+											}
+,
+											"exponent" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Scale values exponentially",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "number",
+												"defaultValue" : "1",
+												"label" : "Exponent",
+												"displayorder" : 7
+											}
+,
+											"steps" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Divide the output into a number of discrete steps",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "number",
+												"defaultValue" : "0",
+												"label" : "Steps",
+												"displayorder" : 8
+											}
+,
+											"displayName" : 											{
+												"attrOrProp" : 2,
+												"digest" : "DEPRECATED: Use the lower case 'displayname' instead",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 1,
+												"type" : "symbol",
+												"label" : "Display Name"
+											}
+,
+											"displayname" : 											{
+												"attrOrProp" : 2,
+												"digest" : "A more readable name for the parameter in an external RNBO target",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "symbol",
+												"defaultValue" : "",
+												"label" : "Display Name",
+												"displayorder" : 14
+											}
+,
+											"unit" : 											{
+												"attrOrProp" : 2,
+												"digest" : "A symbol to describe the unit of the parameter in an external RNBO target",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "symbol",
+												"defaultValue" : "",
+												"label" : "Unit",
+												"displayorder" : 15
+											}
+,
+											"tonormalized" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Converts a real parameter value to its normalized form.",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "symbol",
+												"label" : "To Normalized Expression",
+												"displayorder" : 10
+											}
+,
+											"fromnormalized" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Converts a normalized parameter into its actual parameter value.",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "symbol",
+												"label" : "From Normalized Expression",
+												"displayorder" : 9
+											}
+,
+											"order" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Order in which initial parameter values will be sent out on patcher load. The order can be numeric or symbolic ('first' and 'last')",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "symbol",
+												"defaultValue" : "0",
+												"label" : "Restore Order",
+												"displayorder" : 12
+											}
+,
+											"displayorder" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Order in which parameters will show up in a list of all parameters. The order can be numeric or symbolic ('first' and 'last')",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "symbol",
+												"defaultValue" : "-",
+												"label" : "Display Order",
+												"displayorder" : 13
+											}
+,
+											"sendinit" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Send initial value",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "bool",
+												"defaultValue" : "true",
+												"label" : "Send Init",
+												"displayorder" : 4
+											}
+,
+											"ctlin" : 											{
+												"attrOrProp" : 2,
+												"digest" : "MIDI controller number to control this parameter.",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "number",
+												"label" : "MIDI Controller Number.",
+												"displayorder" : 16
+											}
+,
+											"meta" : 											{
+												"attrOrProp" : 2,
+												"digest" : "A JSON formatted string containing metadata for use by the exported code",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "symbol",
+												"defaultValue" : "",
+												"label" : "Metadata",
+												"displayorder" : 17
+											}
+,
+											"nopreset" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Do not add this value to the preset [DEPRECATED - USE @preset 0 instead].",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 1,
+												"type" : "bool",
+												"defaultValue" : "false"
+											}
+,
+											"preset" : 											{
+												"attrOrProp" : 2,
+												"digest" : "Add this value to the preset.",
+												"isalias" : 0,
+												"aliases" : [  ],
+												"settable" : 1,
+												"attachable" : 0,
+												"isparam" : 0,
+												"deprecated" : 0,
+												"type" : "bool",
+												"defaultValue" : "true",
+												"label" : "Include In Preset",
+												"displayorder" : 11
+											}
+
+										}
+,
+										"inputs" : [ 											{
+												"name" : "value",
+												"type" : "number",
+												"digest" : "Parameter value",
+												"hot" : 1,
+												"docked" : 0
+											}
+, 											{
+												"name" : "normalizedvalue",
+												"type" : "number",
+												"digest" : "Set value normalized. ",
+												"docked" : 0
+											}
+ ],
+										"outputs" : [ 											{
+												"name" : "value",
+												"type" : "number",
+												"digest" : "Parameter value",
+												"hot" : 1,
+												"docked" : 0
+											}
+, 											{
+												"name" : "normalized",
+												"type" : "number",
+												"digest" : "Normalized parameter value.",
+												"docked" : 0
+											}
+ ],
+										"helpname" : "param",
+										"aliasOf" : "param",
+										"classname" : "param",
+										"operator" : 0,
+										"versionId" : -1940971094,
+										"changesPatcherIO" : 0
+									}
+,
+									"text" : "param loadbang 0",
+									"varname" : "loadbang"
 								}
 
 							}
@@ -6630,7 +6806,7 @@
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 685.0, 1750.0, 56.0, 23.0 ],
 									"rnbo_classname" : "loadbang",
-									"rnbo_serial" : 3,
+									"rnbo_serial" : 4,
 									"rnbo_uniqueid" : "loadbang_obj-13",
 									"text" : "loadbang"
 								}
@@ -6765,9 +6941,9 @@
 									"patching_rect" : [ 1090.0, 1755.0, 42.0, 140.0 ],
 									"rnbo_classname" : "gain~",
 									"rnbo_extra_attributes" : 									{
-										"scale" : 7.943,
 										"size" : 158.0,
 										"inc" : 1.072,
+										"scale" : 7.943,
 										"order" : "",
 										"preset" : 0
 									}
@@ -6889,9 +7065,9 @@
 									"patching_rect" : [ 1019.0, 1755.0, 42.0, 140.0 ],
 									"rnbo_classname" : "gain~",
 									"rnbo_extra_attributes" : 									{
-										"scale" : 7.943,
 										"size" : 158.0,
 										"inc" : 1.072,
+										"scale" : 7.943,
 										"order" : "",
 										"preset" : 0
 									}
@@ -6912,7 +7088,7 @@
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 396.0, 2107.5, 56.0, 23.0 ],
 									"rnbo_classname" : "loadbang",
-									"rnbo_serial" : 4,
+									"rnbo_serial" : 5,
 									"rnbo_uniqueid" : "loadbang_obj-224",
 									"text" : "loadbang"
 								}
@@ -7295,7 +7471,7 @@
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 1310.0, 411.0, 56.0, 23.0 ],
 									"rnbo_classname" : "loadbang",
-									"rnbo_serial" : 5,
+									"rnbo_serial" : 6,
 									"rnbo_uniqueid" : "loadbang_obj-4",
 									"text" : "loadbang"
 								}
@@ -7334,8 +7510,8 @@
 									"patching_rect" : [ 453.0, 2097.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -7654,8 +7830,8 @@
 									"patching_rect" : [ 838.0, 2097.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -8247,7 +8423,7 @@
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 558.0, 56.0, 56.0, 23.0 ],
 									"rnbo_classname" : "loadbang",
-									"rnbo_serial" : 6,
+									"rnbo_serial" : 7,
 									"rnbo_uniqueid" : "loadbang_obj-3",
 									"text" : "loadbang"
 								}
@@ -8262,7 +8438,7 @@
 									"outlettype" : [ "" ],
 									"patching_rect" : [ 242.0, 1283.0, 56.0, 23.0 ],
 									"rnbo_classname" : "loadbang",
-									"rnbo_serial" : 7,
+									"rnbo_serial" : 8,
 									"rnbo_uniqueid" : "loadbang_obj-291",
 									"text" : "loadbang"
 								}
@@ -8328,8 +8504,8 @@
 									"patching_rect" : [ 1113.0, 1516.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -8381,10 +8557,10 @@
 									"rnbo_classname" : "pan~",
 									"rnbo_extra_attributes" : 									{
 										"boundmode" : "ignore",
+										"outputs" : 2.0,
 										"fademode" : "eqpower",
 										"inputs" : 1.0,
-										"positionmode" : "phase",
-										"outputs" : 2.0
+										"positionmode" : "phase"
 									}
 ,
 									"rnbo_serial" : 3,
@@ -8627,8 +8803,8 @@
 									"patching_rect" : [ 856.0, 1516.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -8680,10 +8856,10 @@
 									"rnbo_classname" : "pan~",
 									"rnbo_extra_attributes" : 									{
 										"boundmode" : "ignore",
+										"outputs" : 2.0,
 										"fademode" : "eqpower",
 										"inputs" : 1.0,
-										"positionmode" : "phase",
-										"outputs" : 2.0
+										"positionmode" : "phase"
 									}
 ,
 									"rnbo_serial" : 4,
@@ -8926,8 +9102,8 @@
 									"patching_rect" : [ 588.0, 1516.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -8979,10 +9155,10 @@
 									"rnbo_classname" : "pan~",
 									"rnbo_extra_attributes" : 									{
 										"boundmode" : "ignore",
+										"outputs" : 2.0,
 										"fademode" : "eqpower",
 										"inputs" : 1.0,
-										"positionmode" : "phase",
-										"outputs" : 2.0
+										"positionmode" : "phase"
 									}
 ,
 									"rnbo_serial" : 5,
@@ -9225,8 +9401,8 @@
 									"patching_rect" : [ 282.0, 1516.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -9278,10 +9454,10 @@
 									"rnbo_classname" : "pan~",
 									"rnbo_extra_attributes" : 									{
 										"boundmode" : "ignore",
+										"outputs" : 2.0,
 										"fademode" : "eqpower",
 										"inputs" : 1.0,
-										"positionmode" : "phase",
-										"outputs" : 2.0
+										"positionmode" : "phase"
 									}
 ,
 									"rnbo_serial" : 6,
@@ -9502,8 +9678,8 @@
 									"patching_rect" : [ 2316.0, 1061.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -9908,8 +10084,8 @@
 									"patching_rect" : [ 2241.0, 1065.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -9946,8 +10122,8 @@
 									"patching_rect" : [ 2285.0, 1283.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -10038,8 +10214,8 @@
 									"patching_rect" : [ 2269.0, 615.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -10077,8 +10253,8 @@
 									"patching_rect" : [ 2172.0, 766.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -10414,8 +10590,8 @@
 									"patching_rect" : [ 2446.0, 1061.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -10479,8 +10655,8 @@
 									"patching_rect" : [ 1938.0, 1061.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -10885,8 +11061,8 @@
 									"patching_rect" : [ 1863.0, 1065.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -10923,8 +11099,8 @@
 									"patching_rect" : [ 1907.0, 1283.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -11015,8 +11191,8 @@
 									"patching_rect" : [ 1882.0, 615.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -11054,8 +11230,8 @@
 									"patching_rect" : [ 1794.0, 766.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -11391,8 +11567,8 @@
 									"patching_rect" : [ 2068.0, 1061.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -11456,8 +11632,8 @@
 									"patching_rect" : [ 1591.0, 1066.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -11862,8 +12038,8 @@
 									"patching_rect" : [ 1516.0, 1070.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -11900,8 +12076,8 @@
 									"patching_rect" : [ 1560.0, 1288.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -11992,8 +12168,8 @@
 									"patching_rect" : [ 1535.0, 620.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -12031,8 +12207,8 @@
 									"patching_rect" : [ 1447.0, 771.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -12368,8 +12544,8 @@
 									"patching_rect" : [ 1721.0, 1066.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -12433,8 +12609,8 @@
 									"patching_rect" : [ 1180.0, 1056.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -12839,8 +13015,8 @@
 									"patching_rect" : [ 1105.0, 1060.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -12877,8 +13053,8 @@
 									"patching_rect" : [ 1149.0, 1278.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "float",
 										"preset" : 0
@@ -12969,8 +13145,8 @@
 									"patching_rect" : [ 1124.0, 610.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -13008,8 +13184,8 @@
 									"patching_rect" : [ 1036.0, 796.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -13436,8 +13612,8 @@
 									"patching_rect" : [ 1310.0, 1056.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -13787,13 +13963,13 @@
 									"patching_rect" : [ 889.0, 912.0, 123.0, 24.0 ],
 									"rnbo_classname" : "slider",
 									"rnbo_extra_attributes" : 									{
-										"size" : 2.0,
-										"min" : 0.0,
-										"floatoutput" : 1,
 										"mult" : 1.0,
-										"value" : 0.0,
+										"size" : 2.0,
+										"floatoutput" : 1,
+										"min" : 0.0,
 										"order" : "",
-										"preset" : 0
+										"preset" : 0,
+										"value" : 0.0
 									}
 ,
 									"rnbo_serial" : 1,
@@ -13831,13 +14007,13 @@
 									"patching_rect" : [ 742.0, 890.0, 123.0, 24.0 ],
 									"rnbo_classname" : "slider",
 									"rnbo_extra_attributes" : 									{
-										"size" : 2.0,
-										"min" : 0.0,
-										"floatoutput" : 1,
 										"mult" : 1.0,
-										"value" : 0.0,
+										"size" : 2.0,
+										"floatoutput" : 1,
+										"min" : 0.0,
 										"order" : "",
-										"preset" : 0
+										"preset" : 0,
+										"value" : 0.0
 									}
 ,
 									"rnbo_serial" : 2,
@@ -13875,13 +14051,13 @@
 									"patching_rect" : [ 623.0, 938.0, 123.0, 24.0 ],
 									"rnbo_classname" : "slider",
 									"rnbo_extra_attributes" : 									{
-										"size" : 2.0,
-										"min" : 0.0,
-										"floatoutput" : 1,
 										"mult" : 1.0,
-										"value" : 0.0,
+										"size" : 2.0,
+										"floatoutput" : 1,
+										"min" : 0.0,
 										"order" : "",
-										"preset" : 0
+										"preset" : 0,
+										"value" : 0.0
 									}
 ,
 									"rnbo_serial" : 3,
@@ -13919,13 +14095,13 @@
 									"patching_rect" : [ 489.0, 938.0, 123.0, 24.0 ],
 									"rnbo_classname" : "slider",
 									"rnbo_extra_attributes" : 									{
-										"size" : 2.0,
-										"min" : 0.0,
-										"floatoutput" : 1,
 										"mult" : 1.0,
-										"value" : 0.0,
+										"size" : 2.0,
+										"floatoutput" : 1,
+										"min" : 0.0,
 										"order" : "",
-										"preset" : 0
+										"preset" : 0,
+										"value" : 0.0
 									}
 ,
 									"rnbo_serial" : 4,
@@ -13995,8 +14171,8 @@
 									"patching_rect" : [ 914.0, 671.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -14021,13 +14197,13 @@
 									"patching_rect" : [ 860.0, 480.0, 20.0, 140.0 ],
 									"rnbo_classname" : "slider",
 									"rnbo_extra_attributes" : 									{
-										"size" : 128.0,
-										"min" : 0.0,
-										"floatoutput" : 1,
 										"mult" : 1.0,
-										"value" : 0.0,
+										"size" : 128.0,
+										"floatoutput" : 1,
+										"min" : 0.0,
 										"order" : "",
-										"preset" : 0
+										"preset" : 0,
+										"value" : 0.0
 									}
 ,
 									"rnbo_serial" : 5,
@@ -14228,8 +14404,8 @@
 									"patching_rect" : [ 786.0, 671.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -14254,13 +14430,13 @@
 									"patching_rect" : [ 732.0, 493.0, 20.0, 140.0 ],
 									"rnbo_classname" : "slider",
 									"rnbo_extra_attributes" : 									{
-										"size" : 128.0,
-										"min" : 0.0,
-										"floatoutput" : 1,
 										"mult" : 1.0,
-										"value" : 0.0,
+										"size" : 128.0,
+										"floatoutput" : 1,
+										"min" : 0.0,
 										"order" : "",
-										"preset" : 0
+										"preset" : 0,
+										"value" : 0.0
 									}
 ,
 									"rnbo_serial" : 6,
@@ -14461,8 +14637,8 @@
 									"patching_rect" : [ 653.0, 671.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -14487,13 +14663,13 @@
 									"patching_rect" : [ 599.0, 493.0, 20.0, 140.0 ],
 									"rnbo_classname" : "slider",
 									"rnbo_extra_attributes" : 									{
-										"size" : 128.0,
-										"min" : 0.0,
-										"floatoutput" : 1,
 										"mult" : 1.0,
-										"value" : 0.0,
+										"size" : 128.0,
+										"floatoutput" : 1,
+										"min" : 0.0,
 										"order" : "",
-										"preset" : 0
+										"preset" : 0,
+										"value" : 0.0
 									}
 ,
 									"rnbo_serial" : 7,
@@ -14694,8 +14870,8 @@
 									"patching_rect" : [ 525.0, 671.0, 50.0, 23.0 ],
 									"rnbo_classname" : "number",
 									"rnbo_extra_attributes" : 									{
-										"maximum" : "<none>",
 										"minimum" : "<none>",
+										"maximum" : "<none>",
 										"order" : "",
 										"initialFormat" : "integer",
 										"preset" : 0
@@ -14720,13 +14896,13 @@
 									"patching_rect" : [ 471.0, 493.0, 20.0, 140.0 ],
 									"rnbo_classname" : "slider",
 									"rnbo_extra_attributes" : 									{
-										"size" : 128.0,
-										"min" : 0.0,
-										"floatoutput" : 1,
 										"mult" : 1.0,
-										"value" : 0.0,
+										"size" : 128.0,
+										"floatoutput" : 1,
+										"min" : 0.0,
 										"order" : "",
-										"preset" : 0
+										"preset" : 0,
+										"value" : 0.0
 									}
 ,
 									"rnbo_serial" : 8,
@@ -14955,9 +15131,9 @@
 									"patching_rect" : [ 471.0, 731.0, 42.0, 23.0 ],
 									"rnbo_classname" : "cycle~",
 									"rnbo_extra_attributes" : 									{
-										"buffername" : "RNBODefaultSinus",
 										"index" : "freq",
-										"interp" : "linear"
+										"interp" : "linear",
+										"buffername" : "RNBODefaultSinus"
 									}
 ,
 									"rnbo_serial" : 1,
@@ -17282,10 +17458,16 @@
 
 					}
 ,
-					"patching_rect" : [ 633.0, 327.0, 40.0, 22.0 ],
+					"patching_rect" : [ 243.0, 266.0, 40.0, 22.0 ],
 					"rnboattrcache" : 					{
 						"bigpan" : 						{
 							"label" : "bigpan",
+							"isEnum" : 0,
+							"parsestring" : ""
+						}
+,
+						"loadbang" : 						{
+							"label" : "loadbang",
 							"isEnum" : 0,
 							"parsestring" : ""
 						}
@@ -17345,6 +17527,10 @@
 								"value" : 0.0
 							}
 ,
+							"loadbang" : 							{
+								"value" : 0.0
+							}
+,
 							"__presetid" : "88b1dae9-2a27-11f0-9ae9-922388e5bc87"
 						}
 ,
@@ -17369,6 +17555,10 @@
 										}
 ,
 										"bigbang" : 										{
+											"value" : 0.0
+										}
+,
+										"loadbang" : 										{
 											"value" : 0.0
 										}
 ,
@@ -17466,77 +17656,9 @@
 		}
 ,
 		"dependency_cache" : [ 			{
-				"name" : "FemVoice.aif",
-				"bootpath" : "C74:/patchers/m4l/Pluggo for Live resources/samples",
-				"type" : "AIFF",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "ahkey.aiff",
-				"bootpath" : "C74:/media/legacy-tutorials/msp-tut",
-				"type" : "AIFF",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "background.wav",
-				"bootpath" : "~/Games/Glitchblade/assets/sounds",
-				"patcherrelativepath" : "../../../assets/sounds",
-				"type" : "WAVE",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "bigbot.wav",
-				"bootpath" : "~/Games/Glitchblade/assets/sounds",
-				"patcherrelativepath" : "../../../assets/sounds",
-				"type" : "WAVE",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "hit1.wav",
-				"bootpath" : "~/Games/Glitchblade/assets/sounds",
-				"patcherrelativepath" : "../../../assets/sounds",
-				"type" : "WAVE",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "hit2.wav",
-				"bootpath" : "~/Games/Glitchblade/assets/sounds",
-				"patcherrelativepath" : "../../../assets/sounds",
-				"type" : "WAVE",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "hit3.wav",
-				"bootpath" : "~/Games/Glitchblade/assets/sounds",
-				"patcherrelativepath" : "../../../assets/sounds",
-				"type" : "WAVE",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "hit4.wav",
-				"bootpath" : "~/Games/Glitchblade/assets/sounds",
-				"patcherrelativepath" : "../../../assets/sounds",
-				"type" : "WAVE",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "hit5.wav",
-				"bootpath" : "~/Games/Glitchblade/assets/sounds",
-				"patcherrelativepath" : "../../../assets/sounds",
-				"type" : "WAVE",
-				"implicit" : 1
-			}
-, 			{
-				"name" : "littlebot.wav",
-				"bootpath" : "~/Games/Glitchblade/assets/sounds",
-				"patcherrelativepath" : "../../../assets/sounds",
-				"type" : "WAVE",
-				"implicit" : 1
-			}
-, 			{
 				"name" : "untitled_20250505.maxsnap",
 				"bootpath" : "~/Documents/Max 9/Snapshots",
-				"patcherrelativepath" : "../../../../../Documents/Max 9/Snapshots",
+				"patcherrelativepath" : "../../../../Documents/Max 9/Snapshots",
 				"type" : "mx@s",
 				"implicit" : 1
 			}

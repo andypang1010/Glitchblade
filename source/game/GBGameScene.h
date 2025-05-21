@@ -51,20 +51,20 @@ using namespace cugl;
  * really a mini-GameEngine in its own right.  As in 3152, we separate it out
  * so that we can have a separate mode for the loading screen.
  */
-class GameScene : public scene2::Scene2 {
-    
-    //GEORGE's PRIVATE VARS
+class GameScene : public scene2::Scene2
+{
+
+    // GEORGE's PRIVATE VARS
 private:
-    std::unique_ptr<RNBO::CoreObject> _rnbo;    ///< RNBO DSP core
-    SDL_AudioDeviceID                _audioDevice;
-    static void                      audioCallback(void* userdata, Uint8* stream, int len);
-    void                             scheduleInitialNote();
-    Vec2                            getLastEnemyPosition();
-    int  _lastNotifiedWave = -1;  ///< the wave index we last sent a bang for
-    bool _sentBigBang      = false;
-    RNBO::ParameterIndex  _idxBigPan = -1;   ///< cache the RNBO param‑index
-    float                  _maxPanDistance = 20.0f;  ///< how far “full pan” is in world units
-    
+    std::unique_ptr<RNBO::CoreObject> _rnbo; ///< RNBO DSP core
+    SDL_AudioDeviceID _audioDevice;
+    static void audioCallback(void *userdata, Uint8 *stream, int len);
+    void scheduleRNBOEvents();
+    Vec2 getLastEnemyPosition();
+    int _lastNotifiedWave = -1; ///< the wave index we last sent a bang for
+    bool _sentBigBang = false;
+    RNBO::ParameterIndex _idxBigPan = -1; ///< cache the RNBO param‑index
+    float _maxPanDistance = 20.0f;        ///< how far “full pan” is in world units
 
 protected:
     bool _cameraLocked;
@@ -79,7 +79,7 @@ protected:
     std::unique_ptr<CollisionController> _collisionController;
     // delete this input controller
     std::shared_ptr<PlatformInput> _input;
-    
+
     // VIEW
     /** Reference to the current loaded level */
     std::shared_ptr<LevelModel> _currentLevel;
@@ -95,16 +95,16 @@ protected:
     std::shared_ptr<scene2::Label> _playerHPNode;
     /** Reference to the enemy stun label */
     std::shared_ptr<scene2::Label> _enemyStunNode;
-    
+
     // Physics objects for the game
     /** Reference to the player avatar */
     std::shared_ptr<PlayerModel> _player;
-    
+
     // UI
     /** Ingame UI */
     std::shared_ptr<GBIngameUI> _ui;
     bool _isPaused = false;
-    
+
     /** The Box2D world */
     std::shared_ptr<physics2::ObstacleWorld> _world;
     /** The scale between the physics world and the screen (MUST BE UNIFORM) */
@@ -141,9 +141,8 @@ protected:
      * This method is really, really long.  In practice, you would replace this
      * with your serialization loader, which would process a level file.
      */
-    void populate(const std::shared_ptr<LevelModel>& level);
+    void populate(const std::shared_ptr<LevelModel> &level);
 
-    
 public:
 #pragma mark -
 #pragma mark Constructors
@@ -162,12 +161,12 @@ public:
      * static resources, like the input controller.
      */
     ~GameScene() { dispose(); }
-    
+
     /**
      * Disposes of all (non-static) resources allocated to this mode.
      */
     void dispose();
-    
+
     /**
      * Initializes the controller contents, and starts the game
      *
@@ -183,11 +182,10 @@ public:
      *
      * @return true if the controller is initialized properly, false otherwise.
      */
-    bool init(const std::shared_ptr<AssetManager>& assets, std::string levelName);
-    
-    void populateUI(const std::shared_ptr<cugl::AssetManager>& assets);
-    
-    
+    bool init(const std::shared_ptr<AssetManager> &assets, std::string levelName);
+
+    void populateUI(const std::shared_ptr<cugl::AssetManager> &assets);
+
 #pragma mark -
 #pragma mark State Access
     /**
@@ -197,8 +195,8 @@ public:
      *
      * @return true if debug mode is active.
      */
-    bool isDebug( ) const { return _debug; }
-    
+    bool isDebug() const { return _debug; }
+
     /**
      * Sets whether debug mode is active.
      *
@@ -206,8 +204,12 @@ public:
      *
      * @param value whether debug mode is active.
      */
-    void setDebug(bool value) { _debug = value; _debugnode->setVisible(value); }
-    
+    void setDebug(bool value)
+    {
+        _debug = value;
+        _debugnode->setVisible(value);
+    }
+
     /**
      * Returns true if the level is completed.
      *
@@ -215,8 +217,8 @@ public:
      *
      * @return true if the level is completed.
      */
-    bool isComplete( ) const { return _complete; }
-    
+    bool isComplete() const { return _complete; }
+
     /**
      * Sets whether the level is completed.
      *
@@ -227,29 +229,29 @@ public:
     void setComplete(bool value);
 
     /**
-    * Returns true if the level is failed.
-    *
-    * If true, the level will reset after a countdown
-    *
-    * @return true if the level is failed.
-    */
+     * Returns true if the level is failed.
+     *
+     * If true, the level will reset after a countdown
+     *
+     * @return true if the level is failed.
+     */
     bool isFailure() const { return _failed; }
 
     /**
-    * Sets whether the level is failed.
-    *
-    * If true, the level will reset after a countdown
-    *
-    * @param value whether the level is failed.
-    */
+     * Sets whether the level is failed.
+     *
+     * If true, the level will reset after a countdown
+     *
+     * @param value whether the level is failed.
+     */
     void setFailure(bool value);
-    
+
 #pragma mark -
 #pragma mark Collision Handling
 
 #pragma mark -
 #pragma mark Gameplay Handling
-     
+
     /**
      * The method called to indicate the start of a deterministic loop.
      *
@@ -271,7 +273,7 @@ public:
      * @param dt    The amount of time (in seconds) since the last frame
      */
     void preUpdate(float dt);
-    
+
     /**
      * The method called to provide a deterministic application loop.
      *
@@ -324,24 +326,23 @@ public:
      */
     void postUpdate(float remain);
 
-
     /**
      * Resets the status of the game so that we can play again.
      */
     void reset();
 
     /**
-    * Removes the input Bullet from the world.
-    *
-    * @param  bullet   the bullet to remove
-    */
-    void removeProjectile(Projectile* bullet);
-    
+     * Removes the input Bullet from the world.
+     *
+     * @param  bullet   the bullet to remove
+     */
+    void removeProjectile(Projectile *bullet);
+
     /**
      * Loads all background/foreground layers and attaches them as children of _worldnode
      */
     void setBG();
-    
+
     void updateLayersLeft();
     void updateLayersRight();
 
@@ -349,18 +350,18 @@ public:
     bool _shouldResume = false;
     bool _shouldRetry = false;
     bool _shouldContinue = false;
-    
-    
-    void setPaused(bool paused) {
+
+    void setPaused(bool paused)
+    {
         _isPaused = paused;
     }
 
     /**
- * Sets a screen shake effect on current game scene.
- *
- * @param intensity the intensity of the shake
- * @param duration the duration of the shake
- */
+     * Sets a screen shake effect on current game scene.
+     *
+     * @param intensity the intensity of the shake
+     * @param duration the duration of the shake
+     */
     void setScreenShake(float intensity, int duration);
 
     /**
@@ -371,15 +372,16 @@ public:
 
     /**
      * Whether to quit the game & go to the level select
-    */
-    bool doQuit() {
+     */
+    bool doQuit()
+    {
         return _doQuit;
     }
 
-    bool continueNextLevel() {
+    bool continueNextLevel()
+    {
         return _continueNextLevel;
     }
-    
-  };
+};
 
 #endif /* __GB_GAME_SCENE_H__ */
