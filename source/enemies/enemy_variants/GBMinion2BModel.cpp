@@ -71,12 +71,19 @@ void Minion2BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _spawnSprite->setScale(0.5 * 0.0004006410 * Application::get()->getDisplayWidth());
     _spawnSprite->setName("spawn");
 
+    _damagedSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion_damaged"), 3, 3, 7);
+    _damagedSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _damagedSprite->setScale(0.6 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _damagedSprite->setName("damaged");
+    _damagedSprite->setVisible(false);
+
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_guardSprite);
     getSceneNode()->addChild(_attackSprite);
     getSceneNode()->addChild(_stunSprite);
 	getSceneNode()->addChild(_spawnSprite);
+    getSceneNode()->addChild(_damagedSprite);
 }
 
 void Minion2BModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
@@ -265,6 +272,7 @@ void Minion2BModel::updateAnimation()
     playAnimation(_attackSprite);
     playAnimationOnce(_stunSprite);
 	playAnimationOnce(_spawnSprite);
+    playDamagedEffect();
 
     _node->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(1.44 * Vec2(isFacingRight() ? 1 : -1, 1));

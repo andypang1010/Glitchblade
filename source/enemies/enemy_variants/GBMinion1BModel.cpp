@@ -74,6 +74,12 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _spawnSprite->setScale(0.5 * 0.0004006410 * Application::get()->getDisplayWidth());
     _spawnSprite->setName("spawn");
 
+    _damagedSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion_damaged"), 3, 3, 7);
+    _damagedSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _damagedSprite->setScale(0.6 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _damagedSprite->setName("damaged");
+    _damagedSprite->setVisible(false);
+
     getSceneNode()->addChild(_idleSprite);
     getSceneNode()->addChild(_walkSprite);
     getSceneNode()->addChild(_punchSprite);
@@ -83,6 +89,7 @@ void Minion1BModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 	getSceneNode()->addChild(_slamVFXSprite);
 
 	getSceneNode()->addChild(_spawnSprite);
+    getSceneNode()->addChild(_damagedSprite);
 }
 
 void Minion1BModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
@@ -262,6 +269,7 @@ void Minion1BModel::updateAnimation()
 	playVFXAnimation(_slamSprite, _slamVFXSprite, _slam->getHitboxStartFrame() - 1);
 
 	playAnimationOnce(_spawnSprite);
+    playDamagedEffect();
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));

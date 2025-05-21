@@ -69,6 +69,12 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _spawnSprite->setScale(0.5 * 0.0004006410 * Application::get()->getDisplayWidth());
     _spawnSprite->setName("spawn");
 
+    _damagedSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("minion_damaged"), 3, 3, 7);
+    _damagedSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _damagedSprite->setScale(0.6 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _damagedSprite->setName("damaged");
+    _damagedSprite->setVisible(false);
+
     stunFrames = 0;
 
     setName(std::string(ENEMY_NAME));
@@ -80,6 +86,7 @@ void Minion1AModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_explodeVFXSprite);
 
 	getSceneNode()->addChild(_spawnSprite);
+	getSceneNode()->addChild(_damagedSprite);
 }
 
 void Minion1AModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
@@ -275,6 +282,7 @@ void Minion1AModel::updateAnimation()
     playAnimationOnce(_explodeSprite);
 	playAnimationOnce(_spawnSprite);
     playVFXAnimation(_explodeSprite, _explodeVFXSprite, _explode->getHitboxStartFrame() - 1);
+    playDamagedEffect();
    
     if (framenum > 0){
         CULog("ExplodeVfx frame #%d after update",_explodeVFXSprite->getFrame());

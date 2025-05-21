@@ -100,6 +100,7 @@ protected:
     Vec2 _knockDirection;
     /** Whether our feet are on the ground */
     bool _isGrounded;
+    bool _isDamaged = false;
     int _lastDamagedFrame;
     float _scale;
     
@@ -178,6 +179,7 @@ public:
     std::shared_ptr<scene2::SpriteNode> _idleSprite;
     std::shared_ptr<scene2::SpriteNode> _walkSprite;
     std::shared_ptr<scene2::SpriteNode> _stunSprite;
+	std::shared_ptr<scene2::SpriteNode> _damagedSprite;
     std::shared_ptr<scene2::SpriteNode> _deadSprite;
 	std::shared_ptr<scene2::SpriteNode> _spawnSprite;
 public:
@@ -237,6 +239,7 @@ public:
         _moveDuration = 0;
         _movement = 0;
         _lastDamagedFrame = 0;
+		_isDamaged = false;
     };
 
     /**Attach the scene nodes (sprite sheets) to the enemy**/
@@ -278,6 +281,8 @@ public:
         _node = node;
         _node->setPosition(getPosition() * _drawScale);
     }
+
+    virtual void playDamagedEffect();
 
 
 #pragma mark -

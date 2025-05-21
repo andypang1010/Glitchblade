@@ -97,6 +97,29 @@ void EnemyModel::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
 void EnemyModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
     
 }
+
+void EnemyModel::playDamagedEffect() {
+    if (_damagedSprite->isVisible()) {
+        if (_damagedSprite->getFrame() < _damagedSprite->getCount() - 1) {
+            if (frameCounter % E_ANIMATION_UPDATE_FRAME == 0) {
+                _damagedSprite->setFrame((_damagedSprite->getFrame() + 1) % _damagedSprite->getCount());
+            }
+        }
+        else {
+            _damagedSprite->setVisible(false);
+            _isDamaged = false;
+            float r = (rand() % 10) / 10.0f;
+			r = rand() % 2 == 0 ? r : -r;
+            _damagedSprite->setAngle(r * M_PI / 4);
+        }
+    }
+    else {
+        if (_isDamaged) {
+            _damagedSprite->setVisible(true);
+            _damagedSprite->setFrame(0);
+        }
+    }
+}
 #pragma mark -
 #pragma mark Attribute Properties
 
@@ -108,6 +131,7 @@ void EnemyModel::setActions(std::vector<std::shared_ptr<ActionModel>> actions){
 void EnemyModel::damage(float value) {
     // placeholder sfx
     AudioHelper::playSfx("player_damage");
+	_isDamaged = true;
     _hp -= value;
     _hp = _hp < 0 ? 0 : _hp;
     _aggression += value;

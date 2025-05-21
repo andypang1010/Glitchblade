@@ -141,6 +141,12 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     _spawnSprite->setScale(0.75 * 0.0004006410 * Application::get()->getDisplayWidth());
     _spawnSprite->setName("spawn");
 
+    _damagedSprite = scene2::SpriteNode::allocWithSheet(assetRef->get<Texture>("boss_damaged"), 3, 3, 7);
+    _damagedSprite->setPosition(0, 30 * (2 * 0.0004006410 * Application::get()->getDisplayWidth()));
+    _damagedSprite->setScale(0.75 * 0.0004006410 * Application::get()->getDisplayWidth());
+    _damagedSprite->setName("damaged");
+    _damagedSprite->setVisible(false);
+
 	getSceneNode()->addChild(_groundIdleSprite);
 	getSceneNode()->addChild(_airIdleSprite);
 	getSceneNode()->addChild(_groundStunSprite);
@@ -168,6 +174,7 @@ void Boss3Model::attachNodes(const std::shared_ptr<AssetManager>& assetRef) {
     getSceneNode()->addChild(_shootLaserSprite);
 
 	getSceneNode()->addChild(_spawnSprite);
+	getSceneNode()->addChild(_damagedSprite);
 }
 
 void Boss3Model::setActions(std::vector<std::shared_ptr<ActionModel>> actions) {
@@ -657,6 +664,7 @@ void Boss3Model::updateAnimation()
     playVFXAnimation(_shootLaserSprite, _laserVFXSprite, 1);
 
     playAnimationOnce(_spawnSprite);
+    playDamagedEffect();
 
     _node->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
     _node->getChild(_node->getChildCount() - 2)->setScale(Vec2(isFacingRight() ? 1 : -1, 1));
